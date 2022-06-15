@@ -8,7 +8,7 @@ import * as AvatarImages from "../../assets/images/avatars";
 import * as Icons from "../../assets/icons";
 
 const Treasury: NextPage = () => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation();
 
   return (
     <Layout pageTitle="Zebec - Treasury">
@@ -16,7 +16,7 @@ const Treasury: NextPage = () => {
         <div className="container">
           <div className="flex justify-between items-center px-3.5 pb-9">
             <h4 className="text-heading-4 font-semibold text-content-primary">
-              Treasury
+              {t("treasury:title")}
             </h4>
             <div className="flex gap-x-3">
               <Button
@@ -116,7 +116,7 @@ const Treasury: NextPage = () => {
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "treasury"])),
     },
   };
 }
