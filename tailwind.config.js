@@ -126,6 +126,7 @@ module.exports = {
     },
   },
   plugins: [
+    require('@tailwindcss/forms'),
     function ({ addComponents }) {
       addComponents({
         ".container": {

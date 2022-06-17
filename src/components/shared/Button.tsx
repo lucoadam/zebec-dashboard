@@ -52,7 +52,7 @@ export const Button: FC<ButtonProps> = (props) => {
   return (
     <>
       <button
-        className={`flex items-center bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles}`}
+        className={`flex items-center text-content-primary bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles}`}
         {...rest}
       >
         {children ? (

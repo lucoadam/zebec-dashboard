@@ -52,6 +52,7 @@ const TreasuryLists: FC = () => {
                 layout="fixed"
                 width={48}
                 height={48}
+                alt={`Avatar ${index + 1}`}
               />
               <div className="flex flex-col gap-y-4 mt-6">
                 <div className="text-subtitle text-content-primary font-semibold">
