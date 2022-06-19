@@ -6,6 +6,8 @@ import NotebookIcon from "./other-icons/notebook.svg";
 import CopyIcon from "./other-icons/copy.svg";
 import LeftArrowIcon from "./other-icons/left-arrow.svg";
 import CheckIcon from "./other-icons/check.svg";
+import ArrowIcon from "./other-icons/arrow.svg";
+import CrossIcon from "./other-icons/cross.svg";
 
 export {
   CheveronDownIcon,
@@ -16,5 +18,7 @@ export {
   CopyIcon,
   LeftArrowIcon,
   CheckIcon,
+  ArrowIcon,
+  CrossIcon
 };
 export * from "./nav-icons";
