@@ -4,32 +4,10 @@ import * as AvatarImages from "../../assets/images/avatars";
 import * as Icons from "../../assets/icons";
 import { toSubstring } from "../../utils";
 
-const treasuries = [
-  {
-    id: "1",
-    name: "Zebec Safe",
-    owners: 120,
-    vault_address: "1AdXF31AdXF3DuV15DuV15",
-  },
-  {
-    id: "2",
-    name: "Ricks Safe",
-    owners: 120,
-    vault_address: "1AdXF31AdXF3DuV15DuV15",
-  },
-  {
-    id: "3",
-    name: "Web3 DAO",
-    owners: 120,
-    vault_address: "1AdXF31AdXF3DuV15DuV15",
-  },
-  {
-    id: "4",
-    name: "Zebec Safe 2",
-    owners: 120,
-    vault_address: "1AdXF31AdXF3DuV15DuV15",
-  },
-];
+//fakeData
+import { treasuries } from "../../fakedata";
+
+import { RPC_NETWORK } from "../../constants/cluster";
 
 const TreasuryLists: FC = () => {
   const Avatars: StaticImageData[] = [
@@ -44,7 +22,7 @@ const TreasuryLists: FC = () => {
         {treasuries.map((treasury, index) => {
           return (
             <div
-              key={treasury.id}
+              key={treasury._id.$oid}
               className="p-6 bg-background-secondary rounded"
             >
               <Image
@@ -55,16 +33,16 @@ const TreasuryLists: FC = () => {
               />
               <div className="flex flex-col gap-y-4 mt-6">
                 <div className="text-subtitle text-content-primary font-semibold">
-                  {treasury.name}
+                  {treasury.safe_name}
                 </div>
                 <div className="flex gap-x-3 items-center">
                   <div className="flex gap-x-1.5 items-center text-content-primary">
                     <Icons.UserGroupIcon className="text-base" />
-                    <div>{treasury.owners} Owners</div>
+                    <div>{treasury.owners.length} Owners</div>
                   </div>
                   <div className="flex gap-x-1.5 items-center text-content-primary">
                     <Icons.NotebookIcon className="text-base" />
-                    <div>{toSubstring(treasury.vault_address, 6, true)}</div>
+                    <div>{toSubstring(treasury.multisig_vault, 6, true)}</div>
                     <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
                       <Icons.CopyIcon className="text-base" />
                     </div>
