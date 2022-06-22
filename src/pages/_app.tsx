@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 import { FC, useMemo } from "react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -17,10 +16,11 @@ import { ThemeProvider } from "next-themes";
 //Styles
 import "../styles/globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { Cluster } from "../constants";
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Devnet;
+  const network = Cluster.RPC_NETWORK;
   // You can also provide a custom RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   //wallets
