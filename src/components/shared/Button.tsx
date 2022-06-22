@@ -43,6 +43,7 @@ export const Button: FC<ButtonProps> = (props) => {
     StartIcon,
     EndIcon,
     className,
+    btnClassName,
     ...rest
   } = props;
 
@@ -52,13 +53,14 @@ export const Button: FC<ButtonProps> = (props) => {
 
   const isFullWidth = className?.includes("w-full");
 
+
   return (
     <>
       <div className={`button-wrapper ${variant} ${
             className ?? ""
           }`}>
         <button
-          className={`flex justify-center items-center text-content-primary bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles} ${isFullWidth ? "w-full" : ""}`}
+          className={`flex justify-center items-center text-content-primary bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles} ${isFullWidth ? "w-full" : ""} ${btnClassName}`}
           {...rest}
         >
           {children ? (

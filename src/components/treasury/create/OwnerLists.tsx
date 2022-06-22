@@ -6,9 +6,10 @@ import { toSubstring } from "utils";
 import { Owner } from "./CreateTreasury.d";
 
 const OwnerLists: FC<{
-  owners: Owner[],
-  setOwners?: (owners: Owner[]) => void,
-}> = ({owners, setOwners}) => {
+  owners: Owner[];
+  setOwners?: (owners: Owner[]) => void;
+  showCopy?: boolean;
+}> = ({ owners, setOwners, showCopy }) => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
@@ -17,13 +18,9 @@ const OwnerLists: FC<{
 
   return (
     <>
-      <div>
         {owners.map((owner, index) => {
           return (
-            <div
-              key={index}
-              className="w-full flex pb-3 pt-3"
-            >
+            <div key={index} className="w-full flex pb-3 pt-3">
               <Image
                 src={Avatars[index % 3]}
                 layout="fixed"
@@ -37,19 +34,30 @@ const OwnerLists: FC<{
                     {owner.name}
                   </div>
                   <div className="flex items-center text-content-primary text-xs">
-                      {toSubstring(owner.wallet, 6, true)}
+                    {toSubstring(owner.wallet, showCopy ? 12 : 6, true)}{" "}
+                    {showCopy && (
+                      <div className="ml-2 p-2 bg-background-secondary rounded-full">
+                        <Icons.CopyIcon className="text-base text-[8px]" />
+                        </div>
+                    )}
                   </div>
                 </div>
-                {setOwners && <div onClick={()=>{
-                  setOwners(owners.filter(o=>o.wallet!==owner.wallet))
-                }} className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary">
-                        <Icons.CrossIcon className="text-base text-[8px]" />
-                </div>}
+                {setOwners && (
+                  <div
+                    onClick={() => {
+                      setOwners(
+                        owners.filter((o) => o.wallet !== owner.wallet)
+                      );
+                    }}
+                    className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
+                  >
+                    <Icons.CrossIcon className="text-base text-[8px]" />
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
-      </div>
     </>
   );
 };

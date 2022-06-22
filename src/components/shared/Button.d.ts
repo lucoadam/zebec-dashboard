@@ -9,4 +9,5 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   StartIcon?: React.ElementType;
   EndIcon?: React.ElementType;
+  btnClassName?: string;
 }
