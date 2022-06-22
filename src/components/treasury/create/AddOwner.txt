@@ -1,0 +1,131 @@
+// import React, { FC } from "react";
+// import { Button, InputField } from "components/shared";
+// import {
+//   Step,
+//   StepsComponentProps,
+//   StepsContainerProps,
+//   Owner,
+// } from "./CreateTreasury.d";
+// import OwnerLists from "./OwnerLists";
+// import * as Icons from "assets/icons";
+// import { useForm } from "react-hook-form";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as Yup from "yup";
+// import SelectField from "components/shared/SelectField";
+
+// const AddOwner: FC<StepsComponentProps> = (props: StepsComponentProps) => {
+//   const [owners, setOwners] = React.useState<Owner[]>([]);
+//   const validationSchema = Yup.object().shape({
+//     name: Yup.string().required("Name is required"),
+//     wallet: Yup.string().required("Wallet address is required"),
+//   });
+//   const {
+//     register,
+//     handleSubmit,
+//     reset,
+//     getValues,
+//     setValue,
+//     formState: { errors },
+//   } = useForm<Owner>({
+//     resolver: yupResolver(validationSchema),
+//   });
+
+//   const onSubmit = (data: Owner) => {
+//     console.log(data);
+//     if(data.name && data.wallet && !owners.some(owner => owner.name === data.name && owner.wallet === data.wallet)) {
+//     setOwners([...owners, data]);
+//     }
+//     setValue("name", "");
+//     setValue("wallet", "");
+    
+//     const ownerNameField = document.querySelector("input[name='name']") as HTMLInputElement | null;
+//     ownerNameField?.focus();
+//   };
+
+//   return (
+//     <>
+//       <h3 className="leading-7 font-semibold text-base text-content-primary">
+//         Add Owners
+//       </h3>
+//       <p className="text-content-secondary font-normal text-sm mb-[36px]">
+//         Multiple owners will be notified before initializing a transaction. Once
+//         specific no. of owners approve the transaction, the stream will begin.
+//         You won’t be able to add, remove or edit the owners once created.
+//       </p>
+//       <div className="flex md:flex-nowrap sm:flex-wrap mb-2 justify-center items-center">
+//         <div className="flex sm:w-auto sm:w-full">
+//           <div className="sm:w-full md:w-2/6 pe-2">
+//             <InputField
+//               error={!!errors.name?.message}
+//               helper={errors.name?.message}
+//               label="Owner Name"
+//               placeholder="Enter Owner Name"
+//             >
+//               <input type="text" {...register("name")} />
+//             </InputField>
+//           </div>
+//           <div className=" sm:w-full md:w-4/6 pe-2">
+//             <InputField
+//               error={false}
+//               label="Owner Address"
+//               placeholder="Enter Wallet Address"
+//             >
+//               <input
+//                onKeyDown={(e)=>{
+//                 if(e.key === 'Enter') {
+//                   onSubmit(getValues());
+//                 }
+//               }} type="text" {...register("wallet")}
+//               />
+//             </InputField>
+//           </div>
+//         </div>
+//         <div className="w-full md:w-7 pe-2">
+//           <button
+//             onClick={() => {
+//               onSubmit(getValues());
+//             }}
+//             className="w-7 h-7 grid mt-4 place-content-center border border-outline rounded-full cursor-pointer bg-primary"
+//           >
+//             <Icons.AddOwnerIcon className="text-base" />
+//           </button>
+//         </div>
+//       </div>
+//       <Button
+//         size="small"
+//         className="mt-[21px]"
+//         title="Choose from address book"
+//         EndIcon={Icons.ArrowIcon}
+//       />
+//       <p className="text-content-secondary font-normal text-sm mt-6 mb-3">
+//         Added Owners
+//       </p>
+
+//       <OwnerLists owners={owners} setOwners={setOwners} />
+//       <p className="text-content-primary font-normal text-sm mb-[36px]">
+//         Minimum confirmations required for any transactions
+//       </p>
+//       <div className="flex ">
+//         {/* dropdown */}
+//         <div className="w-full md:w-1/2 sm:w-full">
+//           <SelectField totalItems={owners.length}/> out of {owners.length} owners
+//         </div>
+//       </div>
+//       <Button
+//         title="Continue"
+//         variant="gradient"
+//         size="medium"
+//         className="w-full justify-center mt-[32px]"
+//         onClick={() => props.setCurrentStep(2)}
+//       />
+//       <Button
+//         title="Go Back"
+//         size="medium"
+//         className="w-full justify-center mt-[12px]"
+//         onClick={() => props.setCurrentStep(0)}
+//       />
+//     </>
+//   );
+// };
+
+// export default AddOwner;

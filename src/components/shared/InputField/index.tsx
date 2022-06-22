@@ -1,30 +1,33 @@
-import React, { FC, useState } from "react";
+import React, { cloneElement, FC, useState } from "react";
 import { InputProps } from "./index.d";
 
-const InputFieldCmp: FC<InputProps> = (props) => {
-  const { error = false, value = "", helper = "", label = "", ...rest } = props;
+const InputFieldWrapper: FC<InputProps> = (props) => {
+  const { error = false, value = "", helper = "", label = "", children, ...rest } = props;
 
   return (
-    <div className="mb-4">
+    <>
       <label className="block text-content-secondary text-xs ml-[12px] font-medium mb-1">
         {label}
       </label>
-      <input
+      {/* <input
         className={`${error ? "error" : ""} h-[40px] appearance-none w-full`}
         type="text"
-        {...rest}
-        onInput={(e) => {
-          const target = e.target as HTMLInputElement;
-          props.setValue("name", target.value);
-        }}
-      />
+        name={name}
+        onChange={onChange}
+        onInput={onChange}
+        onBlur={onBlur}
+      /> */}
+      {cloneElement(children, {
+        className: `${error ? "error " : ""}h-[40px] appearance-none w-full`,
+        ...rest,
+      })}
       {helper !== "" && (
         <p className="text-content-secondary text-xs ml-[12px] mt-1">
           {helper}
         </p>
       )}
-    </div>
+    </>
   );
 };
 
-export const InputField = InputFieldCmp;
+export const InputField = InputFieldWrapper;

@@ -8,6 +8,7 @@ import LeftArrowIcon from "./other-icons/left-arrow.svg";
 import CheckIcon from "./other-icons/check.svg";
 import ArrowIcon from "./other-icons/arrow.svg";
 import CrossIcon from "./other-icons/cross.svg";
+import AddOwnerIcon from "./other-icons/add-owner.svg";
 
 export {
   CheveronDownIcon,
@@ -19,6 +20,7 @@ export {
   LeftArrowIcon,
   CheckIcon,
   ArrowIcon,
-  CrossIcon
+  CrossIcon,
+  AddOwnerIcon,
 };
 export * from "./nav-icons";

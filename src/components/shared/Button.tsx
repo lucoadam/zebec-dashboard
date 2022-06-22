@@ -50,30 +50,36 @@ export const Button: FC<ButtonProps> = (props) => {
   const iconSizeStyles = getButtonIconStyles(size);
   const variantStyles = getButtonVariantStyles(variant);
 
+  const isFullWidth = className?.includes("w-full");
+
   return (
     <>
-      <button
-        className={`flex items-center text-content-primary bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles} ${className?? ''}`}
-        {...rest}
-      >
-        {children ? (
-          children
-        ) : (
-          <>
-            {StartIcon && (
-              <span className={`${iconSizeStyles}`}>
-                <StartIcon />
-              </span>
-            )}
-            {title}
-            {EndIcon && (
-              <span className={`${iconSizeStyles}`}>
-                <EndIcon />
-              </span>
-            )}
-          </>
-        )}
-      </button>
+      <div className={`button-wrapper ${variant} ${
+            className ?? ""
+          }`}>
+        <button
+          className={`flex justify-center items-center text-content-primary bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles} ${isFullWidth ? "w-full" : ""}`}
+          {...rest}
+        >
+          {children ? (
+            children
+          ) : (
+            <>
+              {StartIcon && (
+                <span className={`${iconSizeStyles}`}>
+                  <StartIcon />
+                </span>
+              )}
+              {title}
+              {EndIcon && (
+                <span className={`${iconSizeStyles}`}>
+                  <EndIcon />
+                </span>
+              )}
+            </>
+          )}
+        </button>
+      </div>
     </>
   );
 };
