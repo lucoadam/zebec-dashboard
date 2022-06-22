@@ -5,24 +5,6 @@ import * as Icons from "assets/icons";
 import { toSubstring } from "utils";
 import { Owner } from "./CreateTreasury.d";
 
-// const owners = [
-//   {
-//     id: "1",
-//     name: "Your",
-//     wallet: "1AdXF3rBme...179frUSDuV",
-//   },
-//   {
-//     id: "2",
-//     name: "Owner1",
-//     wallet: "mu2Meswu9Q...RKFKzZpDXYq",
-//   },
-//   {
-//     id: "3",
-//     name: "Naruto",
-//     wallet: "0x2327e939b...0a18e257bA",
-//   },
-// ];
-
 const OwnerLists: FC<{
   owners: Owner[],
   setOwners?: (owners: Owner[]) => void,
@@ -35,7 +17,7 @@ const OwnerLists: FC<{
 
   return (
     <>
-      <div className="divide-y divide-inherit">
+      <div>
         {owners.map((owner, index) => {
           return (
             <div
@@ -51,10 +33,10 @@ const OwnerLists: FC<{
               />
               <div className="w-full flex justify-between items-center">
                 <div className="flex flex-col mx-3">
-                  <div className="text-xs text-content-primary font-semibold">
+                  <div className="text-subtitle text-content-primary font-semibold">
                     {owner.name}
                   </div>
-                  <div className="flex items-center text-content-primary">
+                  <div className="flex items-center text-content-primary text-xs">
                       {toSubstring(owner.wallet, 6, true)}
                   </div>
                 </div>

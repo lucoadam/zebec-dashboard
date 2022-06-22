@@ -163,10 +163,10 @@ select {
 
   /* background/background-primary */
 
-  background-color: #0d0e0f;
+  background-color: var(--bg-primary);
   /* outline-border */
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--outline-main);
   border-radius: 8px;
 
   /* Inside auto layout */
@@ -176,26 +176,34 @@ select {
   flex-grow: 0;
 }
 
+input::placeholder {
+  color: var(--content-contrast);
+
+  opacity: 1; /* Firefox */
+}
+:-ms-input-placeholder {
+  color: var(--content-contrast);
+}
+::-ms-input-placeholder {
+  color: var(--content-contrast);
+}
+
 input[type="text"] {
   /* input */
-
   box-sizing: border-box;
-
   /* Auto layout */
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px 20px;
-
   height: 40px;
 
   /* background/background-primary */
 
-  background: #0d0e0f;
+  background: var(--bg-primary);
   /* outline-border */
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--outline-main);
   border-radius: 8px;
 
   /* Inside auto layout */
@@ -204,12 +212,14 @@ input[type="text"] {
   order: 1;
   align-self: stretch;
   flex-grow: 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--content-primary);
 }
-
+input[type="text"]:disabled {
+  color: var(--content-contrast);
+}
 input[type="text"]:focus {
   /* focused */
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--content-primary);
   /* Auto layout */
 
   display: flex;

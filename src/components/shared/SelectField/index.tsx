@@ -1,11 +1,9 @@
-import { Listbox } from "@headlessui/react";
-import { CheveronDownIcon } from "assets/icons";
-import React, { FC, ReactElement, useEffect, useState } from "react";
-
+import React, { FC, useEffect, useState } from "react";
 
 interface SelectFieldProps
   extends React.InputHTMLAttributes<HTMLSelectElement> {
   totalItems: number;
+  onSelected: (value: number) => void;
 }
 
 const SelectField: FC<SelectFieldProps> = ({
@@ -13,35 +11,32 @@ const SelectField: FC<SelectFieldProps> = ({
   ...rest
 }: SelectFieldProps) => {
   const [selectedPerson, setSelectedPerson] = useState<number | null>(
-    Number(rest.value) ?? null
+    totalItems > 0 ? Number(rest.value) ?? null : null
   );
   const [items, setItems] = useState<number[]>([]);
-  const [selectRef, setSelectRef] = useState<HTMLSelectElement | null>();
 
   useEffect(() => {
     if (totalItems > 0) {
       setItems(Array.from(Array(totalItems).keys()).map((i) => i + 1));
       setSelectedPerson(Number(rest.value) ?? 1);
+      rest?.onSelected(Number(rest.value) ?? 1);
     }
-  }, [totalItems, rest.value]);
+  }, [totalItems, rest]);
 
   return (
-      <select
-        ref={(ref) => {
-          setSelectRef(ref);
-        }}
-        value={selectedPerson ?? ""}
-        onChange={(e) => {
-          setSelectedPerson(Number(e.target.value));
-        }}
-        {...rest}
-      >
-        {items.map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
+    <select
+      value={selectedPerson ?? ""}
+      onChange={(e) => {
+        setSelectedPerson(Number(e.target.value));
+      }}
+      {...rest}
+    >
+      {items.map((item) => (
+        <option key={item} value={item}>
+          {item}
+        </option>
+      ))}
+    </select>
   );
 };
 

@@ -1,12 +1,4 @@
-import {
-  FieldValues,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormRegisterReturn,
-  UseFormSetValue,
-  UseFormWatch,
-  UseFormHandleSubmit
-} from "react-hook-form";
+import React from "react";
 
 export interface StepsContainerProps {
   isLast: boolean;
@@ -15,10 +7,13 @@ export interface StepsContainerProps {
 export interface Treasury {
   name: string;
   owners: Owner[];
+  minValidator: number;
 }
 
 export interface StepsComponentProps {
   setCurrentStep: (step: number) => void;
+  setTreasury: React.Dispatch<React.SetStateAction<Treasury>>;
+  treasury: Treasury;
 }
 
 export interface Step {
