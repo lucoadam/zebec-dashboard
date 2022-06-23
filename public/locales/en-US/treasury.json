@@ -1,3 +1,5 @@
 {
-  "title": "Treasury"
+  "title": "Treasury",
+  "treasury-name": "Treasury Name",
+  "name-placeholder": "Enter Treasury Name"
 }

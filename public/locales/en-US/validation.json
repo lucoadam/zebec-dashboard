@@ -1,0 +1,8 @@
+{
+    "treasury-name-required": "Please enter a name for your treasury.",
+    "name-required": "Name is required",
+    "name-exists": "Name already exists",
+    "wallet-required":"Wallet address is required",
+    "wallet-invalid":"Invalid wallet address",
+    "wallet-exists":"Wallet address already exists"
+}

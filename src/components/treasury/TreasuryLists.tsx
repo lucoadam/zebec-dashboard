@@ -67,7 +67,9 @@ const TreasuryLists: FC = () => {
                     <Icons.NotebookIcon className="text-base" />
                     <div>{toSubstring(treasury.vault_address, 6, true)}</div>
                     <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                      <Icons.CopyIcon className="text-base" />
+                      <Icons.CopyIcon onClick={()=>{
+                        navigator.clipboard.writeText(treasury.vault_address);
+                      }} className="text-base" />
                     </div>
                   </div>
                 </div>

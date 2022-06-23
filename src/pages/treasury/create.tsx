@@ -18,6 +18,7 @@ const CreateTreasuryPage: NextPage = () => {
               path="/treasury"
               name=""
               type="link"
+              noBackground
               Icon={LeftArrowIcon}
             />
 
@@ -35,7 +36,7 @@ const CreateTreasuryPage: NextPage = () => {
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "treasury"])),
+      ...(await serverSideTranslations(locale, ["common", "treasury", "createTreasury","validation"])),
     },
   };
 }

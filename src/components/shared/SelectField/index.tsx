@@ -16,18 +16,15 @@ const SelectField: FC<SelectFieldProps> = ({
   const [items, setItems] = useState<number[]>([]);
 
   useEffect(() => {
-    if (totalItems > 0) {
       setItems(Array.from(Array(totalItems).keys()).map((i) => i + 1));
-      setSelectedPerson(Number(rest.value) ?? 1);
-      rest?.onSelected(Number(rest.value) ?? 1);
-    }
-  }, [totalItems, rest]);
+  }, [totalItems]);
 
   return (
     <select
       value={selectedPerson ?? ""}
       onChange={(e) => {
         setSelectedPerson(Number(e.target.value));
+        rest?.onSelected(Number(e.target.value) ?? 0);
       }}
       {...rest}
     >
