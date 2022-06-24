@@ -5,6 +5,8 @@ import CoinIcon from "./coin.svg";
 import ThunderIcon from "./thunder.svg";
 import PhoneBookIcon from "./thunder.svg";
 import ArrowUpRightIcon from "./arrow-upright.svg";
+import DayIcon from "./day.svg";
+import NightIcon from "./night.svg";
 
 export {
   HomeIcon,
@@ -14,4 +16,6 @@ export {
   ThunderIcon,
   PhoneBookIcon,
   ArrowUpRightIcon,
+  DayIcon,
+  NightIcon,
 };

@@ -1,43 +1,51 @@
-import React, { FC } from "react";
-// import { useTheme } from "next-themes";
+import React, { FC, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import Image from "next/image";
 import NavLink from "./NavLink";
 import { routes } from "./routes";
-import { Button } from "../shared";
+import { Button, IconButton } from "../shared";
 import NavGroup from "./NavGroup";
 import Profile from "./Profile";
 import * as Images from "../../assets/images";
 import * as Icons from "../../assets/icons";
 
 const Navbar: FC = () => {
-  // const [mounted, setMounted] = useState<boolean>(false);
-  // const { theme, setTheme, systemTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme();
   const useWalletObject = useWallet();
   const useWalletModalObject = useWalletModal();
 
-  // useEffect(() => {
-  //   setMounted(true);
-  // }, []);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  // const themeChanger: () => JSX.Element | null = () => {
-  //   if (!mounted) return null;
-  //   const currentTheme = theme === "system" ? systemTheme : theme;
-  //   if (currentTheme === "dark") {
-  //     return (
-  //       <button className="float-right" onClick={() => setTheme("light")}>
-  //         Light Mode
-  //       </button>
-  //     );
-  //   } else {
-  //     return (
-  //       <button className="float-right" onClick={() => setTheme("dark")}>
-  //         Dark Mode
-  //       </button>
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  //theme toggle
+  const themeChanger: () => JSX.Element | null = () => {
+    if (!mounted) return null;
+    const currentTheme = theme === "system" ? systemTheme : theme;
+    if (currentTheme === "dark") {
+      return (
+        <IconButton
+          icon={<Icons.DayIcon />}
+          variant="plain"
+          size="small"
+          onClick={() => setTheme("light")}
+        />
+      );
+    } else {
+      return (
+        <IconButton
+          icon={<Icons.NightIcon />}
+          variant="plain"
+          size="small"
+          onClick={() => setTheme("dark")}
+        />
+      );
+    }
+  };
 
   const handleConnectWallet: () => void = () => {
     useWalletObject.wallet
@@ -54,6 +62,7 @@ const Navbar: FC = () => {
             Mainnet Beta
           </div>
         </div>
+
         <div className="flex items-center gap-x-8">
           {routes.map((route, index) => {
             switch (route.type) {
@@ -70,8 +79,9 @@ const Navbar: FC = () => {
             onClick={() => alert("Send")}
           />
         </div>
-        {/* <div className="">{themeChanger()}</div> */}
-        <>
+
+        <div className="flex items-center gap-x-4">
+          <>{themeChanger()}</>
           {!useWalletObject.connected ? (
             <Button
               title="Connect Wallet"
@@ -81,7 +91,7 @@ const Navbar: FC = () => {
           ) : (
             <Profile />
           )}
-        </>
+        </div>
       </nav>
     </>
   );

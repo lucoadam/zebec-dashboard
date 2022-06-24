@@ -59,7 +59,7 @@ export const IconButton: FC<IconButtonProps> = (props) => {
   return (
     <>
       <button
-        className={`grid place-content-center text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles} ${className}`}
+        className={`grid place-content-center text-content-primary hover:text-primary-contrast text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles} ${className}`}
         {...rest}
       >
         {children ? children : <>{icon}</>}

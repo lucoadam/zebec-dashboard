@@ -40,14 +40,11 @@ const Profile: FC = () => {
 
   return (
     <>
-      <div className="relative" ref={profileDropdownWrapperRef}>
+      <div className="relative h-8" ref={profileDropdownWrapperRef}>
         {/* Active Profile */}
         <button
           type="button"
-          className={`pl-1 py-1 rounded-lg transition duration-300 focus:outline-0 ${
-            !toggleProfileDropdown &&
-            "hover:bg-background-secondary focus:bg-background-secondary"
-          }`}
+          className={`rounded-lg transition duration-300 focus:outline-0`}
           onClick={() => setToggleProfileDropdown(!toggleProfileDropdown)}
         >
           <div className="flex gap-x-2">
@@ -61,7 +58,7 @@ const Profile: FC = () => {
                   {useWalletObject?.wallet?.adapter.name} Wallet
                 </div>
               </div>
-              <Icons.CheveronDownIcon className="w-5 h-5 cursor-pointer" />
+              <Icons.CheveronDownIcon className="w-5 h-5 text-content-secondary" />
             </div>
           </div>
         </button>
