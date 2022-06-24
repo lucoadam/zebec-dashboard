@@ -9,7 +9,9 @@
     "transactions": "Transactions",
     "yeild-farming": "Agriculture de rendement",
     "dca": "DAC",
-    "more": "Suite"
+    "more": "Suite",
+    "address-book": "Carnet d'adresses",
+    "settings": "Réglages"
   },
   "greeting": "Bonjour le monde!"
 }

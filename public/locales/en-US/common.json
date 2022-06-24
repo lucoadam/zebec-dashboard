@@ -9,7 +9,9 @@
     "transactions": "Transactions",
     "yeild-farming": "Yeild Farming",
     "dca": "DCA",
-    "more": "More"
+    "more": "More",
+    "address-book": "Address Book",
+    "settings": "Settings"
   },
   "greeting": "Hello World!"
 }

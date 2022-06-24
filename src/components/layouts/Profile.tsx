@@ -65,7 +65,7 @@ const Profile: FC = () => {
         {/* Profile Dropdown */}
         <CollapseDropdown
           show={toggleProfileDropdown}
-          className="top-12 w-[306px]"
+          className="!top-12 w-[306px]"
         >
           <div className="px-6 pt-7 pb-8 flex flex-col gap-y-6">
             <div className="flex gap-x-2 ml-4">
