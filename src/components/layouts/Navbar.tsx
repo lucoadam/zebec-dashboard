@@ -56,14 +56,14 @@ const Navbar: FC = () => {
   return (
     <>
       <nav className="px-6 py-4 flex justify-between items-center shadow-2">
-        <div className="flex flex-col">
+        <div className="flex flex-col mr-auto">
           <Image src={Images.ZebecLogo} layout="fixed" width={87} height={24} />
           <div className="ml-10 text-caption text-content-contrast">
             Mainnet Beta
           </div>
         </div>
 
-        <div className="flex items-center gap-x-8">
+        <div className="flex items-center gap-x-8 ml-auto">
           {routes.map((route, index) => {
             switch (route.type) {
               case "link":
@@ -80,7 +80,7 @@ const Navbar: FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-4 ml-auto">
           <>{themeChanger()}</>
           {!useWalletObject.connected ? (
             <Button

@@ -45,11 +45,11 @@ const NavGroup: FC<RoutesArrayProps> = (props) => {
           </div>
         </button>
         {/* Nav Group Dropdown */}
-        <CollapseDropdown show={toggleNavGroupDropdown} className="!top-10">
+        <CollapseDropdown show={toggleNavGroupDropdown}>
           {children?.map((link) => {
             const { name, path, Icon } = link;
             return (
-              <Link key={name} href={path ? path : "/"}>
+              <Link key={name} href={path ?? "/"}>
                 <a className="py-3 pl-4 pr-6 flex items-center gap-x-2 text-subtitle-sm text-content-secondary font-medium group focus:outline-none">
                   <Icon
                     className={`w-5 h-5 transition duration-200 group-focus:text-primary group-hover:text-primary`}

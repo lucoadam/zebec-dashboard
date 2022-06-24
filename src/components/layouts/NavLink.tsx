@@ -14,7 +14,7 @@ const NavLink: FC<RouteProps> = (props) => {
 
   return (
     <>
-      <Link href={path ? path : "/"}>
+      <Link href={path ?? ""}>
         <a className="flex gap-x-3 text-subtitle-sm font-medium group focus:outline-none">
           <div
             className={`h-6 w-6 rounded-md bg-background-secondary text-base grid place-content-center`}

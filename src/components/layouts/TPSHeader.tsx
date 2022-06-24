@@ -43,7 +43,7 @@ const TPSHeader = () => {
                 <Icons.CheveronDownIcon className="w-5 h-5 text-content-secondary" />
               </div>
               {/* Language Dropdown */}
-              <CollapseDropdown show={toggleDropdown}>
+              <CollapseDropdown show={toggleDropdown} className="top-7">
                 {router.locales?.map((locale) => {
                   return (
                     <Link key={locale} href={router.asPath} locale={locale}>

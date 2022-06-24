@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { twMerge } from "tailwind-merge";
 import { ButtonProps, ButtonSize, ButtonVariant } from "./Button.d";
 
 const getButtonSizeStyles = (size: ButtonSize, variant: ButtonVariant) => {
@@ -59,7 +60,10 @@ export const Button: FC<ButtonProps> = (props) => {
   return (
     <>
       <button
-        className={`rounded-lg whitespace-nowrap transition duration-300 text-content-primary hover:text-primary-contrast ${variantStyles} ${className}`}
+        className={twMerge(
+          `rounded-lg whitespace-nowrap transition duration-300 text-content-primary hover:text-primary-contrast ${variantStyles}`,
+          className ?? "",
+        )}
         {...rest}
       >
         {children ? (

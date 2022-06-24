@@ -1,16 +1,33 @@
 import React, { FC, Fragment } from "react";
 import { Transition } from "@headlessui/react";
+import { twMerge } from "tailwind-merge";
+
+type PositionStyle = "right" | "left";
 
 interface CollapseDropdownProps {
   children: React.ReactNode;
   show: boolean;
   className?: string;
+  position?: PositionStyle;
 }
 
+const getPositionStyle = (position: PositionStyle) => {
+  switch (position) {
+    case "left":
+      return `left-0`;
+    case "right":
+      return `right-0`;
+    default:
+      return null;
+  }
+};
+
 export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
-  const { children, show, className } = props;
-  const defaultClasses = `top-7 right-0  bg-background-light divide-y divide-outline-secondary`;
-  //   const defaultClasses = ``;
+  const { children, show, className, position = "right" } = props;
+
+  const positionStyle = getPositionStyle(position);
+  const defaultClasses = `bg-background-light divide-y divide-outline-secondary top-10 ${positionStyle}`;
+
   return (
     <>
       <Transition
@@ -24,7 +41,10 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
         leaveTo="transform opacity-0 scale-75"
       >
         <div
-          className={`absolute flex flex-col rounded-lg ${defaultClasses} ${className}`}
+          className={twMerge(
+            `absolute flex flex-col rounded-lg ${defaultClasses}`,
+            className ?? "",
+          )}
         >
           {children}
         </div>

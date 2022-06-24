@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { twMerge } from "tailwind-merge";
 import {
   IconButtonProps,
   IconButtonVariant,
@@ -59,10 +60,13 @@ export const IconButton: FC<IconButtonProps> = (props) => {
   return (
     <>
       <button
-        className={`grid place-content-center text-content-primary hover:text-primary-contrast text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles} ${className}`}
+        className={twMerge(
+          `grid place-content-center text-content-primary hover:text-primary-contrast text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles}`,
+          className ?? "",
+        )}
         {...rest}
       >
-        {children ? children : <>{icon}</>}
+        {children ? children : icon}
       </button>
     </>
   );

@@ -1,13 +1,8 @@
 import React, { ButtonHTMLAttributes } from "react";
-export type ButtonSize = "medium" | "small" | undefined;
-export type ButtonVariant = "default" | "gradient" | "danger" | undefined;
-export type ButtonShape = "circle" | "round" | undefined;
-export type IconButtonVariant =
-  | "default"
-  | "solid"
-  | "outlined"
-  | "plain"
-  | undefined;
+export type ButtonSize = "medium" | "small";
+export type ButtonVariant = "default" | "gradient" | "danger";
+export type ButtonShape = "circle" | "round";
+export type IconButtonVariant = "default" | "solid" | "outlined" | "plain";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
