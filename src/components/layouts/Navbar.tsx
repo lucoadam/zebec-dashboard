@@ -66,7 +66,7 @@ const Navbar: FC = () => {
           <Button
             title="Send"
             variant="gradient"
-            EndIcon={Icons.ArrowUpRightIcon}
+            endIcon={<Icons.ArrowUpRightIcon />}
             onClick={() => alert("Send")}
           />
         </div>

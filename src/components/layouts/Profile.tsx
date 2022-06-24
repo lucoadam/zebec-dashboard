@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { toSubstring } from "../../utils";
-import { Button, CollapseDropdown } from "../shared";
+import { Button, IconButton, CollapseDropdown } from "../shared";
 import * as Images from "../../assets/images";
 import * as Icons from "../../assets/icons";
 //hooks
@@ -91,21 +91,21 @@ const Profile: FC = () => {
                     {useWalletObject?.wallet?.adapter.name} Wallet
                   </div>
                 </div>
-                <div className="w-7 h-7 grid place-content-center bg-background-secondary border border-outline rounded-full cursor-pointer transform -translate-y-1">
-                  <Icons.CopyIcon />
+                <div className="transform -translate-y-1">
+                  <IconButton icon={<Icons.CopyIcon />} />
                 </div>
               </div>
             </div>
             <div>
               <Button
                 title="Change Wallet"
-                StartIcon={Icons.RefreshIcon}
+                startIcon={<Icons.RefreshIcon />}
                 className="w-full mb-3"
                 onClick={handleChangeWallet}
               />
               <Button
                 title="Disconnect Wallet"
-                StartIcon={Icons.DisconnectIcon}
+                startIcon={<Icons.DisconnectIcon />}
                 className="w-full"
                 onClick={handleDisconnectWallet}
               />

@@ -24,9 +24,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
         leaveTo="transform opacity-0 scale-75"
       >
         <div
-          className={`absolute flex flex-col rounded-lg ${defaultClasses} ${
-            className && className
-          }`}
+          className={`absolute flex flex-col rounded-lg ${defaultClasses} ${className}`}
         >
           {children}
         </div>

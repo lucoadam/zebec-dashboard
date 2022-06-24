@@ -47,9 +47,8 @@ export const Button: FC<ButtonProps> = (props) => {
     size = "medium",
     variant = "default",
     className,
-    StartIcon,
-    EndIcon,
-    iconClassName,
+    startIcon,
+    endIcon,
     ...rest
   } = props;
 
@@ -67,17 +66,11 @@ export const Button: FC<ButtonProps> = (props) => {
           children
         ) : (
           <div className={`flex items-center justify-center ${sizeStyles}`}>
-            {StartIcon && (
-              <span className={`${iconSizeStyles} ${iconClassName}`}>
-                <StartIcon />
-              </span>
+            {startIcon && (
+              <span className={`${iconSizeStyles}`}>{startIcon}</span>
             )}
             {title}
-            {EndIcon && (
-              <span className={`${iconSizeStyles} ${iconClassName}`}>
-                <EndIcon />
-              </span>
-            )}
+            {endIcon && <span className={`${iconSizeStyles}`}>{endIcon}</span>}
           </div>
         )}
       </button>
