@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import Head from "next/head";
 import Navbar from "./Navbar";
+import TPSHeader from "./TPSHeader";
 
 interface LayoutProps {
   pageTitle: string;
@@ -16,8 +17,9 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <TPSHeader />
       <Navbar />
-      <main>{children}</main>
+      <main className="pb-20">{children}</main>
     </>
   );
 };

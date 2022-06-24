@@ -1,9 +1,17 @@
 {
-  "dashboard": "Tableau de bord",
-  "treasury": "Trésorerie",
-  "transactions": "Transactions",
-  "yeild-farming": "Agriculture de rendement",
-  "dca": "DAC",
-  "more": "Suite",
+  "tps-header": {
+    "network": "Réseau Solana",
+    "description": "Le réseau Solana fonctionne actuellement à capacité limitée, vos actions en chaîne ont plus de chances d'échouer."
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "treasury": "Trésorerie",
+    "transactions": "Transactions",
+    "yeild-farming": "Agriculture de rendement",
+    "dca": "DAC",
+    "more": "Suite",
+    "address-book": "Carnet d'adresses",
+    "settings": "Réglages"
+  },
   "greeting": "Bonjour le monde!"
 }

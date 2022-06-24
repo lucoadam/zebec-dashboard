@@ -7,8 +7,6 @@ import { toSubstring } from "../../utils";
 //fakeData
 import { treasuries } from "../../fakedata";
 
-import { RPC_NETWORK } from "../../constants/cluster";
-
 const TreasuryLists: FC = () => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
@@ -27,6 +25,7 @@ const TreasuryLists: FC = () => {
             >
               <Image
                 src={Avatars[index % 3]}
+                alt="Treasuries Avatar"
                 layout="fixed"
                 width={48}
                 height={48}

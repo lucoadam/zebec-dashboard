@@ -21,9 +21,9 @@ const Treasury: NextPage = () => {
               <Button
                 title="Create New Treasury"
                 variant="gradient"
-                EndIcon={Icons.PlusIncircleIcon}
+                endIcon={<Icons.PlusIncircleIcon />}
               />
-              <Button title="See Archived Safe" EndIcon={Icons.TrashIcon} />
+              <Button title="See Archived Safe" endIcon={<Icons.TrashIcon />} />
             </div>
           </div>
           <TreasuryLists />
