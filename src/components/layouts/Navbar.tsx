@@ -57,7 +57,13 @@ const Navbar: FC = () => {
     <>
       <nav className="px-6 py-4 flex justify-between items-center shadow-2">
         <div className="flex flex-col mr-auto">
-          <Image src={Images.ZebecLogo} layout="fixed" width={87} height={24} />
+          <Image
+            src={Images.ZebecLogo}
+            alt="Zebec Logo"
+            layout="fixed"
+            width={87}
+            height={24}
+          />
           <div className="ml-10 text-caption text-content-contrast">
             Mainnet Beta
           </div>

@@ -25,6 +25,7 @@ const TreasuryLists: FC = () => {
             >
               <Image
                 src={Avatars[index % 3]}
+                alt="Treasuries Avatar"
                 layout="fixed"
                 width={48}
                 height={48}

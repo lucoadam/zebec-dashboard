@@ -48,7 +48,13 @@ const Profile: FC = () => {
           onClick={() => setToggleProfileDropdown(!toggleProfileDropdown)}
         >
           <div className="flex gap-x-2">
-            <Image src={Images.Avatar1} layout="fixed" width={32} height={32} />
+            <Image
+              src={Images.Avatar1}
+              alt="Profile Avatar"
+              layout="fixed"
+              width={32}
+              height={32}
+            />
             <div className="flex items-center gap-x-3">
               <div className="flex flex-col items-start justify-between h-full">
                 <div className="text-avatar-title font-medium text-content-primary">
@@ -71,6 +77,7 @@ const Profile: FC = () => {
             <div className="flex gap-x-2 ml-4">
               <Image
                 src={Images.Avatar1}
+                alt="Profile Avatar"
                 layout="fixed"
                 width={32}
                 height={32}
