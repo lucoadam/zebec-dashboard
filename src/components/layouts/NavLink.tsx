@@ -26,11 +26,11 @@ const NavLink: FC<RouteProps> = (props) => {
             />
           </div>
           <span
-            className={`transition duration-200 group-focus:text-content-primary group-hover:text-content-primary ${
+            className={`transition duration-200 group-focus:text-content-primary group-hover:text-content-primary whitespace-nowrap ${
               isActive ? "text-content-primary" : "text-content-secondary"
             }`}
           >
-            {t(`${name}`)}
+            {t(`nav.${name}`)}
           </span>
         </a>
       </Link>

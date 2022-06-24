@@ -42,6 +42,7 @@
     --warning-main: rgba(214, 158, 60, 1);
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
+    --outline-secondary: rgba(255, 255, 255, 0.04);
     /* Font Sizes */
     --fs-2xl: 2rem;
     --fs-xl: 1.75rem;
@@ -106,6 +107,7 @@
     --warning-main: rgba(214, 158, 60, 1);
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
+    --outline-secondary: rgba(255, 255, 255, 0.04);
   }
 
   body {
@@ -115,21 +117,15 @@
 
 /* Custom classes */
 .primary-gradient-border {
-  position: relative;
-  border-inline: 2px solid transparent;
-  background: var(--bg-secondary);
-  background-clip: padding-box;
-  transition: 200ms;
-}
-.primary-gradient-border::after {
-  content: "";
-  position: absolute;
-  inset: -2px -2px -1.8px -1.8px;
-  background: var(--primary-gradient);
-  z-index: -1;
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
   border-radius: 8px;
+  background-image: linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+    var(--primary-gradient);
 }
-.primary-gradient-border:hover::after,
-.primary-gradient-border:focus::after {
-  background: var(--primary-gradient-hover);
+.primary-gradient-border:hover,
+.primary-gradient-border:focus {
+  background-image: linear-gradient(var(--bg-tertiary), var(--bg-tertiary)),
+    var(--primary-gradient-hover);
 }

@@ -37,7 +37,10 @@ module.exports = {
         // Warning
         warning: "var(--warning-main)",
         // Outline
-        outline: "var(--outline-main)",
+        outline: {
+          DEFAULT: "var(--outline-main)",
+          secondary: "var(--outline-secondary)",
+        },
       },
       fontFamily: {
         inter: "'Inter', sans-serif",

@@ -1,12 +1,16 @@
 import React, { FC } from "react";
 import { ButtonProps, ButtonSize, ButtonVariant } from "./Button.d";
 
-const getButtonSizeStyles = (size: ButtonSize) => {
+const getButtonSizeStyles = (size: ButtonSize, variant: ButtonVariant) => {
   switch (size) {
     case "medium":
-      return `px-6 py-2 text-button font-semibold gap-x-2`;
+      return `px-6 text-button font-semibold gap-x-2 ${
+        variant === "gradient" ? "py-1.5" : "py-2"
+      }`;
     case "small":
-      return `px-2 py-1 text-button-sm font-medium gap-x-1`;
+      return `px-2 text-button-sm font-medium gap-x-1 ${
+        variant === "gradient" ? "py-[3px]" : "py-[5px]"
+      }`;
     default:
       return null;
   }
@@ -26,9 +30,11 @@ const getButtonIconStyles = (size: ButtonSize) => {
 const getButtonVariantStyles = (variant: ButtonVariant) => {
   switch (variant) {
     case "default":
-      return `outline outline-1 outline-outline outline-offset-[-1px]`;
+      return `outline outline-1 outline-outline outline-offset-[-1px] bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary`;
     case "gradient":
       return `primary-gradient-border focus:outline-0`;
+    case "danger":
+      return `bg-error focus:outline-0`;
     default:
       return null;
   }
@@ -40,37 +46,39 @@ export const Button: FC<ButtonProps> = (props) => {
     title,
     size = "medium",
     variant = "default",
+    className,
     StartIcon,
     EndIcon,
+    iconClassName,
     ...rest
   } = props;
 
-  const sizeStyles = getButtonSizeStyles(size);
+  const sizeStyles = getButtonSizeStyles(size, variant);
   const iconSizeStyles = getButtonIconStyles(size);
   const variantStyles = getButtonVariantStyles(variant);
 
   return (
     <>
       <button
-        className={`flex items-center bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary rounded-lg whitespace-nowrap ${sizeStyles} ${variantStyles}`}
+        className={`rounded-lg whitespace-nowrap ${variantStyles} ${className}`}
         {...rest}
       >
         {children ? (
           children
         ) : (
-          <>
+          <div className={`flex items-center justify-center ${sizeStyles}`}>
             {StartIcon && (
-              <span className={`${iconSizeStyles}`}>
+              <span className={`${iconSizeStyles} ${iconClassName}`}>
                 <StartIcon />
               </span>
             )}
             {title}
             {EndIcon && (
-              <span className={`${iconSizeStyles}`}>
+              <span className={`${iconSizeStyles} ${iconClassName}`}>
                 <EndIcon />
               </span>
             )}
-          </>
+          </div>
         )}
       </button>
     </>

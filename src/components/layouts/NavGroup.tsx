@@ -14,7 +14,9 @@ const NavGroup: FC<RoutesArrayProps> = (props) => {
           <Icon />
         </div>
         <div className="flex items-center gap-x-1.5 text-content-secondary">
-          <span className="text-subtitle-sm font-medium">{t(`${name}`)}</span>
+          <span className="text-subtitle-sm font-medium">
+            {t(`nav.${name}`)}
+          </span>
           <Icons.CheveronDownIcon className="text-base" />
         </div>
       </div>

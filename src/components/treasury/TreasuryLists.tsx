@@ -7,8 +7,6 @@ import { toSubstring } from "../../utils";
 //fakeData
 import { treasuries } from "../../fakedata";
 
-import { RPC_NETWORK } from "../../constants/cluster";
-
 const TreasuryLists: FC = () => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
