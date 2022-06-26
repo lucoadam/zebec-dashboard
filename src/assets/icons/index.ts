@@ -9,6 +9,9 @@ import CheckIcon from "./other-icons/check.svg";
 import ArrowIcon from "./other-icons/arrow.svg";
 import CrossIcon from "./other-icons/cross.svg";
 import AddOwnerIcon from "./other-icons/add-owner.svg";
+import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
+import DisconnectIcon from "./other-icons/disconnect.svg";
+import RefreshIcon from "./other-icons/refresh.svg";
 
 export {
   CheveronDownIcon,
@@ -22,5 +25,8 @@ export {
   ArrowIcon,
   CrossIcon,
   AddOwnerIcon,
+  WarningTriangleIcon,
+  DisconnectIcon,
+  RefreshIcon,
 };
 export * from "./nav-icons";

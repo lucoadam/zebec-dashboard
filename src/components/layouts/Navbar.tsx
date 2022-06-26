@@ -1,46 +1,51 @@
-import React, { FC } from "react";
-// import Link from "next/link";
-// import { useRouter } from "next/router";
-// import { useTheme } from "next-themes";
+import React, { FC, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import Image from "next/image";
 import NavLink from "./NavLink";
 import { routes } from "./routes";
-import { Button } from "../shared";
+import { Button, IconButton } from "../shared";
 import NavGroup from "./NavGroup";
+import Profile from "./Profile";
 import * as Images from "../../assets/images";
 import * as Icons from "../../assets/icons";
-import { toSubstring } from "../../utils";
 
 const Navbar: FC = () => {
-  // const [mounted, setMounted] = useState<boolean>(false);
-  // const router = useRouter();
-  // const { theme, setTheme, systemTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme();
   const useWalletObject = useWallet();
   const useWalletModalObject = useWalletModal();
 
-  // useEffect(() => {
-  //   setMounted(true);
-  // }, []);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  // const themeChanger: () => JSX.Element | null = () => {
-  //   if (!mounted) return null;
-  //   const currentTheme = theme === "system" ? systemTheme : theme;
-  //   if (currentTheme === "dark") {
-  //     return (
-  //       <button className="float-right" onClick={() => setTheme("light")}>
-  //         Light Mode
-  //       </button>
-  //     );
-  //   } else {
-  //     return (
-  //       <button className="float-right" onClick={() => setTheme("dark")}>
-  //         Dark Mode
-  //       </button>
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  //theme toggle
+  const themeChanger: () => JSX.Element | null = () => {
+    if (!mounted) return null;
+    const currentTheme = theme === "system" ? systemTheme : theme;
+    if (currentTheme === "dark") {
+      return (
+        <IconButton
+          icon={<Icons.DayIcon />}
+          variant="plain"
+          size="small"
+          onClick={() => setTheme("light")}
+        />
+      );
+    } else {
+      return (
+        <IconButton
+          icon={<Icons.NightIcon />}
+          variant="plain"
+          size="small"
+          onClick={() => setTheme("dark")}
+        />
+      );
+    }
+  };
 
   const handleConnectWallet: () => void = () => {
     useWalletObject.wallet
@@ -50,13 +55,20 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <div className="px-6 py-4 flex justify-between items-center shadow-2">
+      <nav className="px-6 py-4 flex justify-between items-center shadow-2">
         <div className="flex flex-col">
-          <Image src={Images.ZebecLogo} alt="Zebec Logo" layout="fixed" width={87} height={24} />
+          <Image
+            src={Images.ZebecLogo}
+            alt="Zebec Logo"
+            layout="fixed"
+            width={87}
+            height={24}
+          />
           <div className="ml-10 text-caption text-content-contrast">
             Mainnet Beta
           </div>
         </div>
+
         <div className="flex items-center gap-x-8">
           {routes.map((route, index) => {
             switch (route.type) {
@@ -69,29 +81,13 @@ const Navbar: FC = () => {
           <Button
             title="Send"
             variant="gradient"
-            EndIcon={Icons.ArrowUpRightIcon}
+            endIcon={<Icons.ArrowUpRightIcon />}
             onClick={() => alert("Send")}
           />
         </div>
-        {/* <div className="">
-          <ul>
-            {router.locales?.map((locale) => {
-              return (
-                <li key={locale}>
-                  <Link href={router.asPath} locale={locale}>
-                    <a>{locale}</a>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <div>
-            <WalletMultiButton />
-            <WalletDisconnectButton />
-          </div>
-        </div> */}
-        {/* <div className="">{themeChanger()}</div> */}
-        <div className="">
+
+        <div className="flex items-center gap-x-4">
+          <>{themeChanger()}</>
           {!useWalletObject.connected ? (
             <Button
               title="Connect Wallet"
@@ -99,32 +95,10 @@ const Navbar: FC = () => {
               onClick={handleConnectWallet}
             />
           ) : (
-            <div className="flex gap-x-2">
-              <Image
-                src={Images.Avatar1}
-                layout="fixed"
-                width={32}
-                height={32}
-              />
-              <div className="flex items-center gap-x-3">
-                <div className="flex flex-col justify-between h-full">
-                  <div className="text-avatar-title font-medium text-content-primary">
-                    {toSubstring(
-                      useWalletObject?.publicKey?.toString(),
-                      4,
-                      true,
-                    )}
-                  </div>
-                  <div className="text-caption leading-[14px] text-content-contrast">
-                    {useWalletObject?.wallet?.adapter.name} Wallet
-                  </div>
-                </div>
-                <Icons.CheveronDownIcon className="text-base cursor-pointer" />
-              </div>
-            </div>
+            <Profile />
           )}
         </div>
-      </div>
+      </nav>
     </>
   );
 };
