@@ -30,7 +30,7 @@ export {
   AddOwnerIcon,
   EyeOpenIcon,
   GearringAltIcon,
-  TransactionIcon
+  TransactionIcon,
   WarningTriangleIcon,
   DisconnectIcon,
   RefreshIcon,

@@ -13,7 +13,7 @@ const CopyButton: React.FC<{
           onClick={(e: Event) => {
             e.stopPropagation();
           }}
-          className="text-base text-primary transition ease-in-out delay-150"
+          className="text-base text-success transition ease-in-out delay-150"
         />
       ) : (
         <Icons.CopyIcon
@@ -22,7 +22,7 @@ const CopyButton: React.FC<{
             setIsClicked(true);
             setTimeout(() => {
               setIsClicked(false);
-            }, 1000);
+            }, 4000);
             navigator.clipboard.writeText(content);
           }}
           className="text-base"

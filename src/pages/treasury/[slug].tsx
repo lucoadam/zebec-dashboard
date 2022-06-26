@@ -15,23 +15,23 @@ const Treasury: NextPage = () => {
       <div className="pt-[76px]">
         <div className="container">
           <div className="flex justify-between items-center pb-[24px]">
-          <div className="flex justify-center items-center px-[1.3rem] pt-2 pb-4">
-          <NavLink
-              path="/treasury"
-              name=""
-              type="link"
-              Icon={Icons.LeftArrowIcon}
-            />
-            <h4 className="text-heading-4 font-semibold text-content-primary">
-              Zebec Safe
-            </h4>
+            <div className="flex justify-center items-center px-[1.3rem] pt-2 pb-4">
+              <NavLink
+                path="/treasury"
+                name=""
+                type="link"
+                Icon={Icons.LeftArrowIcon}
+              />
+              <h4 className="text-heading-4 font-semibold text-content-primary">
+                Zebec Safe
+              </h4>
             </div>
             <div className="flex gap-x-3">
-                <Button
-                  title="Send from Treasury"
-                  variant="gradient"
-                  EndIcon={Icons.ArrowUpRightIcon}
-                />
+              <Button
+                title="Send from Treasury"
+                variant="gradient"
+                endIcon={<Icons.ArrowUpRightIcon />}
+              />
             </div>
           </div>
           <TreasuryDetail />
