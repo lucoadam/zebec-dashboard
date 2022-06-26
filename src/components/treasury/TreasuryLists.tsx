@@ -45,7 +45,7 @@ const TreasuryLists: FC = () => {
                     <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
                     <div className="group">
                   </div>
-                      <CopyButton content={treasury.vault_address}/>
+                      <CopyButton content={treasury.multisig_vault}/>
                       {/* <Icons.CopyIcon onClick={(e: Event)=>{
                         e.stopPropagation();
                         navigator.clipboard.writeText(treasury.vault_address);
@@ -53,6 +53,7 @@ const TreasuryLists: FC = () => {
                       <Icons.CheckIcon className="text-base" /> */}
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
             </Link>

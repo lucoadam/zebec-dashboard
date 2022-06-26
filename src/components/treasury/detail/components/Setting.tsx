@@ -24,11 +24,11 @@ const Setting = () => {
     mode: "all",
     resolver: yupResolver(validationSchema),
     defaultValues: {
-        name: 'Zebec Name'
-    }
+      name: "Zebec Name",
+    },
   });
-  useEffect(()=>{
-    setValue("name", 'Zebec Safe')
+  useEffect(() => {
+    setValue("name", "Zebec Safe");
   }, [setValue]);
   return (
     <div className="flex w-full justify-start">
@@ -76,7 +76,7 @@ const Setting = () => {
           placeholder="Enter Safe Name"
           type="text"
         >
-          <input {...register("name")} autoFocus   />
+          <input {...register("name")} autoFocus />
         </InputField>
         <Button
           title="Save Changes"
@@ -95,39 +95,48 @@ const Setting = () => {
             unarchive it from your settings. Your funds will always be in the
             safe.
           </div>
-          <Button className="w-full" btnClassName="bg-error" title="Archive Safe" EndIcon={Icons.TrashIcon}/>
+          <Button
+            className="w-full"
+            variant="danger"
+            title="Archive Safe"
+            endIcon={<Icons.TrashIcon />}
+          />
         </div>
       </div>
       <div className="w-[274px] ml-[215px]">
-      <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
-            Owners
-          </div>
-        <OwnerLists maxItems={5} owners={[
+        <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
+          Owners
+        </div>
+        <OwnerLists
+          maxItems={5}
+          owners={[
             {
-                name: "Subas Shrestha",
-                wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-                name: "Subas Shrestha",
-                wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-                name: "Subas Shrestha",
-                wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-          },
-          {
-            name: "Subas Shrestha",
-            wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-        },
-        {
-          name: "Subas Shrestha",
-          wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-      }
-        ]} showCopy />
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+            },
+            {
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+            },
+            {
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+            },
+            {
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+            },
+            {
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+            },
+          ]}
+          showCopy
+        />
       </div>
     </div>
   );
