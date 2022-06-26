@@ -1,0 +1,42 @@
+{
+  "first-steper": {
+    "title": "Name your treasury",
+    "description": "Let’s start by giving a name to your treasury",
+    "step": {
+      "name": "Name",
+      "description": "Give your treasury name."
+    }
+  },
+  "second-steper": {
+    "title": "Add Owners",
+    "description": "Multiple owners will be notified before initializing a transaction. Once specific no. of owners approve the transaction, the stream will begin. You won’t be able to add, remove or edit the owners once created.",
+    "step": {
+      "name": "Owners and Confirmations",
+      "description": "Add owners and set no. of confirmations."
+    },
+    "form": {
+      "owner-name": "Owner Name",
+      "owner-name-placeholder": "Enter Name",
+      "owner-address": "Enter Address"
+    },
+    "buttons": {
+      "choose-from-address-book": "Choose from address book"
+    }
+  },
+  "third-steper": {
+    "title": "Review",
+    "description": "Please review all the details carefully before creating the treasury as it cannot be changed afterwards.",
+    "step": {
+      "name": "Review",
+      "description": "Review your details and confirm the creation."
+    }
+  },
+  "creating-treasury": {
+    "title": "Creating Treasury",
+    "description": "Your treasury is being created. It can take up to a minute"
+  },
+  "min-confirmation-required-text": "Minimum confirmations required for any transactions",
+  "sub-text-out-of": "Out of",
+  "owners": "owners",
+  "added-owners": "Added Owners"
+}

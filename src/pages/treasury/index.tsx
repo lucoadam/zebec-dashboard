@@ -5,6 +5,7 @@ import Layout from "../../components/layouts/Layout";
 import { Button } from "../../components/shared";
 import * as Icons from "../../assets/icons";
 import TreasuryLists from "../../components/treasury/TreasuryLists";
+import Link from "next/link";
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation();
@@ -18,11 +19,13 @@ const Treasury: NextPage = () => {
               {t("treasury:title")}
             </h4>
             <div className="flex gap-x-3">
-              <Button
+              <Link href="/treasury/create">
+                <Button
                 title="Create New Treasury"
                 variant="gradient"
                 endIcon={<Icons.PlusIncircleIcon />}
               />
+              </Link>              
               <Button title="See Archived Safe" endIcon={<Icons.TrashIcon />} />
             </div>
           </div>

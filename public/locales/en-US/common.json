@@ -13,5 +13,10 @@
     "address-book": "Address Book",
     "settings": "Settings"
   },
-  "greeting": "Hello World!"
+  "greeting": "Hello World!",
+  "create-new": "Create New",
+  "buttons": {
+    "continue": "Continue",
+    "go-back": "Go back"
+  }
 }

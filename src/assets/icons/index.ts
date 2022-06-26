@@ -4,6 +4,11 @@ import TrashIcon from "./other-icons/trash.svg";
 import UserGroupIcon from "./other-icons/user-group.svg";
 import NotebookIcon from "./other-icons/notebook.svg";
 import CopyIcon from "./other-icons/copy.svg";
+import LeftArrowIcon from "./other-icons/left-arrow.svg";
+import CheckIcon from "./other-icons/check.svg";
+import ArrowIcon from "./other-icons/arrow.svg";
+import CrossIcon from "./other-icons/cross.svg";
+import AddOwnerIcon from "./other-icons/add-owner.svg";
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 import DisconnectIcon from "./other-icons/disconnect.svg";
 import RefreshIcon from "./other-icons/refresh.svg";
@@ -15,6 +20,11 @@ export {
   UserGroupIcon,
   NotebookIcon,
   CopyIcon,
+  LeftArrowIcon,
+  CheckIcon,
+  ArrowIcon,
+  CrossIcon,
+  AddOwnerIcon,
   WarningTriangleIcon,
   DisconnectIcon,
   RefreshIcon,

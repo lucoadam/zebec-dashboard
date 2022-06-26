@@ -29,6 +29,7 @@ const TreasuryLists: FC = () => {
                 layout="fixed"
                 width={48}
                 height={48}
+                alt={`Avatar ${index + 1}`}
               />
               <div className="flex flex-col gap-y-4 mt-6">
                 <div className="text-subtitle text-content-primary font-semibold">
@@ -43,7 +44,9 @@ const TreasuryLists: FC = () => {
                     <Icons.NotebookIcon className="text-base" />
                     <div>{toSubstring(treasury.multisig_vault, 6, true)}</div>
                     <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                      <Icons.CopyIcon className="text-base" />
+                      <Icons.CopyIcon onClick={()=>{
+                        navigator.clipboard.writeText(treasury.vault_address);
+                      }} className="text-base" />
                     </div>
                   </div>
                 </div>

@@ -57,6 +57,8 @@ export const Button: FC<ButtonProps> = (props) => {
   const iconSizeStyles = getButtonIconStyles(size);
   const variantStyles = getButtonVariantStyles(variant);
 
+  const isFullWidth = className?.includes("w-full");
+
   return (
     <>
       <button

@@ -15,7 +15,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
 //Styles
-import "../styles/globals.css";
+import "styles/globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

@@ -12,12 +12,13 @@ const NavLink: FC<RouteProps> = (props) => {
   //isActive state for active link
   const isActive = router.pathname === path;
 
+
   return (
     <>
       <Link href={path ?? ""}>
         <a className="flex gap-x-3 text-subtitle-sm font-medium group focus:outline-none">
           <div
-            className={`h-6 w-6 rounded-md bg-background-secondary text-base grid place-content-center`}
+            className={`h-6 w-6 rounded-md ${props.noBackground ? '': 'bg-background-secondary'} text-base grid place-content-center`}
           >
             <Icon
               className={`transition duration-200 group-focus:text-primary group-hover:text-primary ${

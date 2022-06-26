@@ -13,5 +13,6 @@
     "address-book": "Carnet d'adresses",
     "settings": "Réglages"
   },
-  "greeting": "Bonjour le monde!"
+  "greeting": "Bonjour le monde!",
+  "create-new": "Créer un nouveau"
 }
