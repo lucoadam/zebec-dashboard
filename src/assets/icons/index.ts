@@ -12,7 +12,9 @@ import AddOwnerIcon from "./other-icons/add-owner.svg";
 import EyeOpenIcon from "./other-icons/eye-open.svg";
 import GearringAltIcon from "./other-icons/gearring-alt.svg";
 import TransactionIcon from "./other-icons/transaction.svg";
-
+import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
+import DisconnectIcon from "./other-icons/disconnect.svg";
+import RefreshIcon from "./other-icons/refresh.svg";
 
 export {
   CheveronDownIcon,
@@ -29,5 +31,8 @@ export {
   EyeOpenIcon,
   GearringAltIcon,
   TransactionIcon
+  WarningTriangleIcon,
+  DisconnectIcon,
+  RefreshIcon,
 };
 export * from "./nav-icons";

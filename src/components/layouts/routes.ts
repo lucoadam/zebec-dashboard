@@ -55,6 +55,12 @@ export const routes: RoutesArrayProps[] = [
         Icon: NavIcons.PhoneBookIcon,
         type: "link",
       },
+      {
+        name: "settings",
+        path: "/settings",
+        Icon: NavIcons.GearringIcon,
+        type: "link",
+      },
     ],
   },
 ];

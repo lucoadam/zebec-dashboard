@@ -21,12 +21,12 @@ const Treasury: NextPage = () => {
             <div className="flex gap-x-3">
               <Link href="/treasury/create">
                 <Button
-                  title="Create New Treasury"
-                  variant="gradient"
-                  EndIcon={Icons.PlusIncircleIcon}
-                />
-              </Link>
-              <Button title="See Archived Safe" EndIcon={Icons.TrashIcon} />
+                title="Create New Treasury"
+                variant="gradient"
+                endIcon={<Icons.PlusIncircleIcon />}
+              />
+              </Link>              
+              <Button title="See Archived Safe" endIcon={<Icons.TrashIcon />} />
             </div>
           </div>
           <TreasuryLists />

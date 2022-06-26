@@ -1,10 +1,18 @@
 {
-  "dashboard": "Dashboard",
-  "treasury": "Treasury",
-  "transactions": "Transactions",
-  "yeild-farming": "Yeild Farming",
-  "dca": "DCA",
-  "more": "More",
+  "tps-header": {
+    "network": "Solana Network",
+    "description": "The Solana Network is currently operating at a limited capacity, your on-chain actions have increased chance of failing."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "treasury": "Treasury",
+    "transactions": "Transactions",
+    "yeild-farming": "Yeild Farming",
+    "dca": "DCA",
+    "more": "More",
+    "address-book": "Address Book",
+    "settings": "Settings"
+  },
   "greeting": "Hello World!",
   "create-new": "Create New",
   "buttons": {
