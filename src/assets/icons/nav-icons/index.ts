@@ -6,6 +6,7 @@ import ThunderIcon from "./thunder.svg";
 import PhoneBookIcon from "./phonebook.svg";
 import GearringIcon from "./gearring.svg";
 import ArrowUpRightIcon from "./arrow-upright.svg";
+import ArrowDownLeftIcon from "./arrow-downleft.svg";
 import DayIcon from "./day.svg";
 import NightIcon from "./night.svg";
 
@@ -18,6 +19,7 @@ export {
   PhoneBookIcon,
   GearringIcon,
   ArrowUpRightIcon,
+  ArrowDownLeftIcon
   DayIcon,
   NightIcon,
 };
