@@ -7,20 +7,18 @@ let categories = [
   {
     title: "Overview",
     Icon: Icons.EyeOpenIcon,
-    Component: Setting,
+    Component: Fragment,
   },
   {
     title: "Transactions",
     Icon: Icons.TransactionIcon,
     badge: 3,
     Component: Fragment,
-
   },
   {
     title: "Settings",
     Icon: Icons.GearringAltIcon,
     Component: Setting,
-
   },
 ];
 
@@ -30,7 +28,7 @@ function classNames(...classes: string[]) {
 
 export default function TreasuryDetail() {
   return (
-    <div className="w-full px-2 pb-16 sm:px-0">
+    <div className="w-full pb-16 sm:px-0">
       <Tab.Group>
         <Tab.List className="flex max-w-md space-x-1 rounded-xl p-1">
           {categories.map((category) => (
@@ -71,7 +69,7 @@ export default function TreasuryDetail() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="mt-2">
+        <Tab.Panels className=" mt-[44px]">
           {categories.map(({ Component }, idx) => (
             <Tab.Panel
               key={idx}
@@ -81,7 +79,7 @@ export default function TreasuryDetail() {
               //     "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
               //   )}
             >
-              <Component />
+                <Component />
             </Tab.Panel>
           ))}
         </Tab.Panels>

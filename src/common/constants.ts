@@ -1,3 +1,3 @@
 export const constants = {
-    MAX_OWNERS: 5,
+    MAX_OWNERS: 11,
 }

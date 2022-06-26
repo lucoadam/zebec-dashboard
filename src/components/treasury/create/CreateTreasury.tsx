@@ -5,14 +5,34 @@ import { Step, Treasury } from "./CreateTreasury.d";
 import CreatingTreasury from "./steps/CreatingTreasury";
 import { StepsContainer } from "./steps/styled";
 import { StepsList } from "./steps/data";
+import { useTranslation } from "next-i18next";
+
 
 const CreateTreasury: NextPage = () => {
   const [currentStep, setCurrentStep] = React.useState(0);
+  const { t } = useTranslation();
 
   const [treasury, setTreasury] = React.useState<Treasury>({
     name: "",
-    owners: [],
-    minValidator: 0
+    owners: [
+      {
+        name: "Alish Dahal",
+        wallet: "FbfwE8ZmVdwUbbEXdq4ofhuUEiAxeSk5kaoYrJJekpnZ"
+      },
+      {
+        name: "Subas Shrestha",
+        wallet: "7K3UpbZViPnQDLn2DAM853B9J5GBxd1L1rLHy4KqSmWG"
+      },
+      {
+        name: "Saurav Thakur",
+        wallet: "5y3Lty9fct736LecWKj1ZFpxKv23VKT8cvrzoYFwifzU"
+      },
+      {
+        name: "Abishek Adhikari",
+        wallet: "As1XYY9RdGkjs62isDhLKG3yxMCMatnbanXrqU85XvXW"
+      }
+    ],
+    minValidator: 0,
   });
 
   const getStepState = (index: number, isIcon: boolean = false) => {
@@ -44,9 +64,9 @@ const CreateTreasury: NextPage = () => {
               </div>
               <div className="w-4/5">
                 <h4 className="leading-6 font-medium text-sm text-content-primary">
-                  {step.name}
+                  {t(`createTreasury:${step.name}`)}
                 </h4>
-                <p className="text-content-secondary">{step.subHeading}</p>
+                <p className="text-content-secondary">{t(`createTreasury:${step.subHeading}`)}</p>
               </div>
             </StepsContainer>
           ))}

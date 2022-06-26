@@ -14,8 +14,8 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <div className="flex justify-between items-center px-3.5 pb-4">
-          <div className="flex justify-start items-center px-3.5 pb-9">
+          <div className="flex justify-between items-center pb-[24px]">
+          <div className="flex justify-center items-center px-[1.3rem] pt-2 pb-4">
           <NavLink
               path="/treasury"
               name=""
@@ -28,12 +28,10 @@ const Treasury: NextPage = () => {
             </div>
             <div className="flex gap-x-3">
                 <Button
-                  title="Send"
+                  title="Send from Treasury"
                   variant="gradient"
-                  EndIcon={Icons.PlusIncircleIcon}
+                  EndIcon={Icons.ArrowUpRightIcon}
                 />
-              <Button title="Deposit" EndIcon={Icons.ArrowDownLeftIcon} />
-              <Button title="Withdraw" EndIcon={Icons.ArrowUpRightIcon} />
             </div>
           </div>
           <TreasuryDetail />

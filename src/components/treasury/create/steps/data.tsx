@@ -5,18 +5,18 @@ import ReviewTreasury from "./ReviewTreasury";
 
 export const StepsList: Step[] = [
     {
-      name: "Name",
-      subHeading: "Give your treasury name.",
+      name: "first-steper.step.name",
+      subHeading: "first-steper.step.description",
       component: (props: StepsComponentProps) => <AddTreasuryName {...props} />,
     },
     {
-      name: "Owners and Confirmations",
-      subHeading: "Add owners and set no. of confirmations.",
+      name: "second-steper.step.name",
+      subHeading: "second-steper.step.description",
       component: (props: StepsComponentProps) => <AddOwners {...props} />,
     },
     {
-      name: "Review & Confirm",
-      subHeading: "Review your details and confirm the creation.",
+      name: "third-steper.step.name",
+      subHeading: "third-steper.step.description",
       component: (props: StepsComponentProps) => <ReviewTreasury {...props} />,
     },
   ];

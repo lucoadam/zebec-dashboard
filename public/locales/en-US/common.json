@@ -6,5 +6,9 @@
   "dca": "DCA",
   "more": "More",
   "greeting": "Hello World!",
-  "create-new": "Create New"
+  "create-new": "Create New",
+  "buttons": {
+    "continue": "Continue",
+    "go-back": "Go back"
+  }
 }

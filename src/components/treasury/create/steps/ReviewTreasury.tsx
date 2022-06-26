@@ -1,26 +1,27 @@
 import { Button } from "components/shared";
+import { useTranslation } from "next-i18next";
 import React, { FC } from "react";
 import { Owner, StepsComponentProps } from "../CreateTreasury.d";
 import OwnerLists from "../OwnerLists";
 
 const ReviewTreasury: FC<StepsComponentProps> = (props) => {
+  const {t} = useTranslation();
   return (
     <>
       <h3 className="leading-7 font-semibold text-base text-content-primary">
-        Review
+      {t("createTreasury:third-steper.title")}
       </h3>
       <p className="text-content-secondary font-normal text-sm">
-        Please review all the details carefully before creating the treasury as
-        it cannot be changed afterwards.
+      {t("createTreasury:third-steper.description")}
       </p>
       <p className="font-semibold text-content-primary text-sm mt-[32px]">
-        Treasuy Name
+        {t("treasury:treasury-name")}
       </p>
       <h4 className="leading-6 font-normal text-base text-content-primary mt-[6px]">
         {props.treasury.name}
       </h4>
       <p className="text-content-primary font-semibold text-sm mt-[32px] mb-[6px]">
-        Owners
+        {t("createTreasury:owners")}
       </p>
       <OwnerLists owners={props.treasury.owners} />
       <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">

@@ -10,19 +10,26 @@ import SelectField from "components/shared/SelectField";
 import OwnerLists from "../OwnerLists";
 import { isValidWallet } from "utils/isValidtWallet";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useTranslation } from "next-i18next";
 
 const AddOwners: FC<StepsComponentProps> = (props) => {
   const useWalletObject = useWallet();
 
+  const {t} = useTranslation();
+
   const [owners, setOwners] = React.useState<Owner[]>(props.treasury.owners);
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string()
+      .required(t("validation:name-required"))
+      .test("is-name-unique", t("validation:name-exists"), (value) =>
+        owners.every((owner) => owner.name !== value)
+      ),
     wallet: Yup.string()
-      .required("Wallet address is required")
-      .test("is-valid-address", "Invalid wallet address", (value) =>
+      .required(t("validation:wallet-required"))
+      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
         isValidWallet(value)
       )
-      .test("is-wallet-exists", "Wallet address already exists", (value) =>
+      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
         owners.every((owner) => owner.wallet !== value)
       ),
   });
@@ -32,6 +39,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
     reset,
     handleSubmit,
     setValue,
+    getValues,
   } = useForm({
     mode: "all",
     resolver: yupResolver(validationSchema),
@@ -42,6 +50,13 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
       setValue("wallet", useWalletObject?.publicKey?.toString());
     }
   }, [useWalletObject, owners, setValue]);
+
+  React.useEffect(() => {
+    props.setTreasury((treasury) => ({
+      ...treasury,
+      minValidator: owners.length,
+    }))
+  }, [owners]);
 
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
@@ -55,73 +70,86 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={
+        owners.length!==constants.MAX_OWNERS?
+        handleSubmit(onSubmit):()=>event?.preventDefault()
+      } autoComplete="off">
         <h3 className="leading-7 font-semibold text-base text-content-primary">
-          Add Owners
+        {t("createTreasury:second-steper.title")}    
         </h3>
         <p className="text-content-secondary font-normal text-sm mb-[36px]">
-          Multiple owners will be notified before initializing a transaction.
-          Once specific no. of owners approve the transaction, the stream will
-          begin. You won’t be able to add, remove or edit the owners once
-          created.
+        {t("createTreasury:second-steper.description")}
+
         </p>
         <div className="flex md:flex-nowrap sm:flex-wrap mb-2 justify-center items-center">
           <div className="flex sm:w-auto sm:w-full">
-            <div className="sm:w-full md:w-2/6 pe-3 me-3">
+            <div className="sm:w-full md:w-2/6 pr-2">
               <InputField
                 error={!!errors.name}
                 helper={errors?.name?.message || ""}
-                label="Owner Name"
-                placeholder="Enter Name"
+                label={t("createTreasury:second-steper.form.owner-name")}
+                placeholder={t("createTreasury:second-steper.form.owner-name-placeholder")}
               >
-                <input type="text" {...register("name")} />
+                <input
+                  type="text"
+                  {...register("name")}
+                  disabled={owners.length === constants.MAX_OWNERS}
+                />
               </InputField>
             </div>
-            <div className="sm:w-full md:w-4/6 pe-3 me-3">
+            <div className="sm:w-full md:w-4/6">
               <InputField
                 error={!!errors.wallet}
                 helper={errors?.wallet?.message || ""}
                 label="Owner Address"
-                placeholder="Enter Wallet Address"
+                className="flex items-center"
               >
-                <input
-                  type="text"
-                  {...register("wallet")}
-                  disabled={owners.length === 0}
-                />
+                <div className="flex">
+                  <div className="w-5/6">
+                    <input
+                      type="text"
+                      className={`w-full ${!!errors.wallet? 'error':''}`}
+                      placeholder={t("createTreasury:second-steper.form.owner-address")}
+                      {...register("wallet")}
+                      disabled={
+                        owners.length === 0 ||
+                        owners.length === constants.MAX_OWNERS
+                      }
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-7 h-7 grid ml-2 place-content-center border border-outline rounded-full cursor-pointer bg-primary"
+                  >
+                    <Icons.AddOwnerIcon className="text-base" />
+                  </button>{" "}
+                </div>
               </InputField>
             </div>
           </div>
-          <div className="w-full md:w-7 pt-2">
-            <button
-              type="submit"
-              className="w-7 h-7 grid ml-2 place-content-center border border-outline rounded-full cursor-pointer bg-primary"
-            >
-              <Icons.AddOwnerIcon className="text-base" />
-            </button>
-          </div>
+          {/* <div className="w-full md:w-7 pt-2.5">
+           
+          </div> */}
         </div>
         <Button
           size="small"
           className="mt-[21px]"
-          title="Choose from address book"
+          title={t("createTreasury:second-steper.buttons.choose-from-address-book")}
           EndIcon={Icons.ArrowIcon}
         />
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
-          Added Owners
+        {t("createTreasury:added-owners")}
         </p>
-
         <OwnerLists owners={owners} setOwners={setOwners} />
         <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">
-          Minimum confirmations required for any transactions
+          {t("createTreasury:min-confirmation-required-text")}
         </p>
         <div className="flex ">
           {/* dropdown */}
           <div className="w-full sm:w-full flex justify-start items-center text-content-primary">
             <SelectField
               value={props.treasury.minValidator}
-              onSelected={(value) =>
-                props.setTreasury((treasury) => ({
+              onSelected={(value) =>props.setTreasury((treasury) => ({
                   ...treasury,
                   minValidator: value,
                 }))
@@ -129,7 +157,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
               className="mr-3 w-[70px]"
               totalItems={owners.length}
             />{" "}
-            Out of {owners.length} owners
+            {`${t("createTreasury:sub-text-out-of")} ${owners.length} ${t('createTreasury:owners')}`}
           </div>
         </div>
         <Button

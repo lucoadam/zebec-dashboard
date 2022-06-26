@@ -6,6 +6,7 @@ export interface RouteProps {
   path?: string;
   Icon: React.ElementType;
   type: "link" | "group";
+  noBackground?: boolean;
 }
 
 export interface RoutesArrayProps extends RouteProps {

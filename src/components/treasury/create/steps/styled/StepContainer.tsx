@@ -7,7 +7,7 @@ export const StepsContainer = styled.div<StepsContainerProps>`
     position: absolute;
     left: 11px;
     height: 48px;
-    width: 2.5px;
+    width: 1px;
     top: 48px;
     margin-top: 0.5rem;
     content: ${(props: StepsContainerProps) => (props.isLast ? "none" : '""')};

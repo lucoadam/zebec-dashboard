@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, InputField } from "components/shared";
 import OwnerLists from "components/treasury/create/OwnerLists";
 import { useEffect } from "react";
+import CopyButton from "components/shared/CopyButton";
 
 const Setting = () => {
   const validationSchema = Yup.object().shape({
@@ -30,14 +31,15 @@ const Setting = () => {
     setValue("name", 'Zebec Safe')
   }, [setValue]);
   return (
-    <div className="flex w-full mt-[36px] justify-between">
+    <div className="flex w-full justify-start">
       <div className="w-1/3">
-        <div className="w-full flex pb-3 pt-3">
+        <div className="w-full flex">
           <Image
             src={AvatarImages.Avatar1}
             layout="fixed"
             width={48}
             height={48}
+            objectFit="contain"
             alt="avatar"
           />
           <div className="w-full flex justify-between items-center">
@@ -46,15 +48,15 @@ const Setting = () => {
                 Zebec Safe
               </div>
               <div className="flex gap-x-3 items-center">
-                <div className="flex gap-x-1.5 items-center text-content-primary">
-                  <Icons.UserGroupIcon className="text-base" />
+                <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
+                  <Icons.UserGroupIcon className="text-sm font-normal" />
                   <div>{5} Owners</div>
                 </div>
-                <div className="flex gap-x-1.5 items-center text-content-primary">
-                  <Icons.NotebookIcon className="text-base" />
+                <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
+                  <Icons.NotebookIcon className="text-sm font-normal" />
                   <div>{toSubstring("23423sdfjsdlfjs234230423", 6, true)}</div>
                   <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                    <Icons.CopyIcon className="text-base" />
+                    <CopyButton content="23423sdfjsdlfjs234230423" />
                   </div>
                 </div>
               </div>
@@ -74,7 +76,7 @@ const Setting = () => {
           placeholder="Enter Safe Name"
           type="text"
         >
-          <input {...register("name")} />
+          <input {...register("name")} autoFocus   />
         </InputField>
         <Button
           title="Save Changes"
@@ -96,11 +98,11 @@ const Setting = () => {
           <Button className="w-full" btnClassName="bg-error" title="Archive Safe" EndIcon={Icons.TrashIcon}/>
         </div>
       </div>
-      <div className="w-1/3">
-      <div className="text-subtitle text-content-primary font-semibold">
+      <div className="w-[274px] ml-[215px]">
+      <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
             Owners
           </div>
-        <OwnerLists owners={[
+        <OwnerLists maxItems={5} owners={[
             {
                 name: "Subas Shrestha",
                 wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
@@ -112,7 +114,19 @@ const Setting = () => {
             {
                 name: "Subas Shrestha",
                 wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            }
+            },
+            {
+              name: "Subas Shrestha",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
+          },
+          {
+            name: "Subas Shrestha",
+            wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
+        },
+        {
+          name: "Subas Shrestha",
+          wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
+      }
         ]} showCopy />
       </div>
     </div>

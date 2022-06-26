@@ -1,15 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, InputField } from "components/shared";
+import { useTranslation } from "next-i18next";
 import { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { StepsComponentProps } from "../CreateTreasury.d";
 
 const AddTreasuryName: FC<StepsComponentProps> = (props) => {
+  const { t } = useTranslation("createTreasury");
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Please enter a name for your treasury."),
+    name: Yup.string().required(t("validation:treasury-name-required")),
   });
-
   const {
     register,
     formState: { errors },
@@ -32,24 +33,24 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <h3 className="leading-7 font-semibold text-base text-content-primary">
-          Name Your Treasury
+            {t("createTreasury:first-steper.title")}
         </h3>
         <p className="text-content-secondary font-normal text-sm mb-[32px]">
-          Let’s start by giving a name to your treasury.
+        {t("createTreasury:first-steper.description")}
         </p>
         <InputField
           error={!!errors.name}
           helper={errors?.name?.message || ""}
-          label="Treasury Name"
-          placeholder="Enter Treasury Name"
+          label={t("treasury:treasury-name")}
+          placeholder={t("treasury:name-placeholder")}
           type="text"
         >
-          <input {...register("name")} />
+          <input {...register("name")} autoFocus/>
         </InputField>
         <Button
-          title="Continue"
+          title={t("common:continue")}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"
