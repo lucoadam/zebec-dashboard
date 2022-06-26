@@ -71,5 +71,3 @@ export const IconButton: FC<IconButtonProps> = (props) => {
     </>
   );
 };
-
-export default IconButton;

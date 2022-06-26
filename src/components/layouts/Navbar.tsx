@@ -56,7 +56,7 @@ const Navbar: FC = () => {
   return (
     <>
       <nav className="px-6 py-4 flex justify-between items-center shadow-2">
-        <div className="flex flex-col mr-auto">
+        <div className="flex flex-col">
           <Image
             src={Images.ZebecLogo}
             alt="Zebec Logo"
@@ -69,7 +69,7 @@ const Navbar: FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-x-8 ml-auto">
+        <div className="flex items-center gap-x-8">
           {routes.map((route, index) => {
             switch (route.type) {
               case "link":
@@ -86,7 +86,7 @@ const Navbar: FC = () => {
           />
         </div>
 
-        <div className="flex items-center gap-x-4 ml-auto">
+        <div className="flex items-center gap-x-4">
           <>{themeChanger()}</>
           {!useWalletObject.connected ? (
             <Button

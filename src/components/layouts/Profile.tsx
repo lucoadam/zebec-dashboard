@@ -87,7 +87,7 @@ const Profile: FC = () => {
                   <div className="text-avatar-title font-medium text-content-primary">
                     {toSubstring(
                       useWalletObject?.publicKey?.toString(),
-                      6,
+                      4,
                       true,
                     )}
                   </div>
