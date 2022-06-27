@@ -14,15 +14,14 @@ const getRPCNetwork = () => {
 
 //getClusterApiUrl
 const getClusterApiUrl = () => {
-    if (process.env.RPC_NETWORK === "devnet")
-        return clusterApiUrl("devnet");
-    if (process.env.RPC_NETWORK === "mainnet")
-        return clusterApiUrl("mainnet-beta");
-    if (process.env.RPC_NETWORK === "testnet")
-        return clusterApiUrl("testnet");
-    return clusterApiUrl("devnet");
-}
+  if (process.env.RPC_NETWORK === "devnet") return clusterApiUrl("devnet");
+  if (process.env.RPC_NETWORK === "mainnet")
+    return clusterApiUrl("mainnet-beta");
+  if (process.env.RPC_NETWORK === "testnet") return clusterApiUrl("testnet");
+  return clusterApiUrl("devnet");
+};
 
+//connection
 export const connection = new Connection(getClusterApiUrl());
 
 //Constants
