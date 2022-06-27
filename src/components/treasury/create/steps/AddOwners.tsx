@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { constants } from "common/constants";
+import { constants } from "constants/constants";
 import { Button, InputField } from "components/shared";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
