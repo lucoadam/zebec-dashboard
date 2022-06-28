@@ -19,7 +19,7 @@ export {
   PhoneBookIcon,
   GearringIcon,
   ArrowUpRightIcon,
-  ArrowDownLeftIcon
+  ArrowDownLeftIcon,  
   DayIcon,
   NightIcon,
 };

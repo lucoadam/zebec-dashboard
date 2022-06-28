@@ -135,7 +135,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           size="small"
           className="mt-[21px]"
           title={t("createTreasury:second-steper.buttons.choose-from-address-book")}
-          EndIcon={Icons.ArrowIcon}
+          endIcon={Icons.ArrowIcon}
         />
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
         {t("createTreasury:added-owners")}

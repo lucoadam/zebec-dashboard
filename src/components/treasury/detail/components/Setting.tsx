@@ -95,7 +95,7 @@ const Setting = () => {
             unarchive it from your settings. Your funds will always be in the
             safe.
           </div>
-          <Button className="w-full" btnClassName="bg-error" title="Archive Safe" EndIcon={Icons.TrashIcon}/>
+          <Button className="w-full" variant="danger" title="Archive Safe" endIcon={Icons.TrashIcon}/>
         </div>
       </div>
       <div className="w-[274px] ml-[215px]">

@@ -2,12 +2,13 @@ import { Fragment, useState } from "react";
 import { Tab } from "@headlessui/react";
 import * as Icons from "assets/icons";
 import Setting from "./components/Setting";
+import Overview from "./components/Overview";
 
 let categories = [
   {
     title: "Overview",
     Icon: Icons.EyeOpenIcon,
-    Component: Fragment,
+    Component: Overview,
   },
   {
     title: "Transactions",
@@ -69,7 +70,7 @@ export default function TreasuryDetail() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className=" mt-[44px]">
+        <Tab.Panels className=" mt-[40px]">
           {categories.map(({ Component }, idx) => (
             <Tab.Panel
               key={idx}

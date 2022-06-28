@@ -36,14 +36,18 @@
     --content-contrast: rgba(255, 255, 255, 0.4);
     /* Success */
     --success-main: rgba(88, 189, 125, 1);
+    --success-content: rgba(111, 207, 151, 1);
     /* Error */
     --error-main: rgba(214, 86, 86, 1);
     --error-light: rgba(214, 86, 86, 0.2);
+    --error-content: rgba(235, 87, 87, 1);
+
     /* Warning */
     --warning-main: rgba(214, 158, 60, 1);
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
     --outline-secondary: rgba(255, 255, 255, 0.04);
+ 
     /* Font Sizes */
     --fs-2xl: 2rem;
     --fs-xl: 1.75rem;
@@ -146,7 +150,6 @@ select {
   flex-direction: row;
   align-items: center;
   padding: 8px 16px;
-  height: 40px;
 
   /* background/background-primary */
 
@@ -182,8 +185,7 @@ input[type="text"] {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px 20px;
-  height: 40px;
+  padding: 0px 30px;
 
   /* background/background-primary */
 
@@ -213,9 +215,8 @@ input[type="text"]:focus {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  padding: 0px 20px;
+  padding: 0px 30px;
 
-  height: 40px;
 
   /* background/background-primary */
 

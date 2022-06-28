@@ -30,7 +30,7 @@ const Treasury: NextPage = () => {
                 <Button
                   title="Send from Treasury"
                   variant="gradient"
-                  EndIcon={Icons.ArrowUpRightIcon}
+                  endIcon={Icons.ArrowUpRightIcon}
                 />
             </div>
           </div>

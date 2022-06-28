@@ -15,6 +15,8 @@ import TransactionIcon from "./other-icons/transaction.svg";
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 import DisconnectIcon from "./other-icons/disconnect.svg";
 import RefreshIcon from "./other-icons/refresh.svg";
+import SearchIcon from "./other-icons/search.svg";
+import OutsideLinkIcon from "./other-icons/outside-link.svg";
 
 export {
   CheveronDownIcon,
@@ -30,9 +32,11 @@ export {
   AddOwnerIcon,
   EyeOpenIcon,
   GearringAltIcon,
-  TransactionIcon
+  TransactionIcon,
   WarningTriangleIcon,
   DisconnectIcon,
   RefreshIcon,
+  SearchIcon,
+  OutsideLinkIcon
 };
 export * from "./nav-icons";
