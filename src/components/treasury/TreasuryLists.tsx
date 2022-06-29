@@ -47,17 +47,12 @@ const TreasuryLists: FC = () => {
                       <div>{toSubstring(treasury.multisig_vault, 6, true)}</div>
                       <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
                         <div className="group"></div>
-                        <CopyButton content={treasury.vault_address} />
-                        {/* <Icons.CopyIcon onClick={(e: Event)=>{
-                        e.stopPropagation();
-                        navigator.clipboard.writeText(treasury.vault_address);
-                      }} className="text-base" />
-                      <Icons.CheckIcon className="text-base" /> */}
+                        <CopyButton content={treasury.multisig_vault} />
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                </div>
             </Link>
           );
         })}

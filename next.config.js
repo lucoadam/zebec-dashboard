@@ -4,6 +4,9 @@ const { i18n } = require("./next-i18next.config");
 
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    RPC_NETWORK: process.env.RPC_NETWORK,
+  },
   i18n,
   webpack(config) {
     config.module.rules.push(

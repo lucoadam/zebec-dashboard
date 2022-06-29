@@ -1,5 +1,9 @@
 {
   "title": "Treasury",
   "treasury-name": "Treasury Name",
-  "name-placeholder": "Enter Treasury Name"
+  "name-placeholder": "Enter Treasury Name",
+  "overview": "Overview",
+  "transactions": "Transactions",
+  "settings": "Settings",
+  "send-from-treasury": "Send from Treasury"
 }

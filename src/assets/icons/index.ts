@@ -17,6 +17,7 @@ import DisconnectIcon from "./other-icons/disconnect.svg";
 import RefreshIcon from "./other-icons/refresh.svg";
 import SearchIcon from "./other-icons/search.svg";
 import OutsideLinkIcon from "./other-icons/outside-link.svg";
+import DownArrowIcon from "./other-icons/down-arrow.svg";
 
 export {
   CheveronDownIcon,
@@ -37,6 +38,7 @@ export {
   DisconnectIcon,
   RefreshIcon,
   SearchIcon,
-  OutsideLinkIcon
+  OutsideLinkIcon,
+  DownArrowIcon
 };
 export * from "./nav-icons";

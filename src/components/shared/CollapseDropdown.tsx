@@ -9,6 +9,7 @@ interface CollapseDropdownProps {
   show: boolean;
   className?: string;
   position?: PositionStyle;
+  ref?: React.RefObject<HTMLDivElement>
 }
 
 const getPositionStyle = (position: PositionStyle) => {
@@ -23,7 +24,7 @@ const getPositionStyle = (position: PositionStyle) => {
 };
 
 export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
-  const { children, show, className, position = "right" } = props;
+  const { children, show, className, position = "right", ...rest } = props;
 
   const positionStyle = getPositionStyle(position);
   const defaultClasses = `bg-background-light divide-y divide-outline-secondary top-10 ${positionStyle}`;
@@ -45,6 +46,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
             `absolute flex flex-col rounded-lg ${defaultClasses}`,
             className ?? "",
           )}
+          {...rest}
         >
           {children}
         </div>

@@ -1,0 +1,26 @@
+{
+    "safe-balance": "SAFE BALANCE",
+    "deposted-assets": "DEPOSITED ASSETS",
+    "total-incoming": "TOTAL INCOMING",
+    "total-outgoing": "TOTAL OUTGOING",
+    "acitivity-this-week": "ACTIVITY THIS WEEK",
+    "incoming": "Incoming",
+    "outgoing": "Outgoing",
+    "withdrawal": "Withdrawal",
+    "treasury-help": "Zebec Treasury Help",
+    "token": "Token",
+    "search-token": "Search token",
+    "enter-amount": "Enter Amount",
+    "max": "MAX",
+    "treasury-help-description": "Browse through our support articles or lets get in touch through Discord.",
+    "send-feedback": "Send Feedback",
+    "feedback-description": "We’ll be pleased if you have suggestions on how to improve Zebec.",
+    "deposit": "Deposit",
+    "deposit-description": "Deposit funds into your wallet.",
+    "withdraw": "Withdraw",
+    "withdraw-description": "Withdraw your deposited balance into your wallet.",
+    "check-faq": "Check FAQs",
+    "join-discord": "Join Discord",
+    "send-us-message": "Send us a message"
+
+}

@@ -6,4 +6,5 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     value?: string;
     label?: string;
     children: React.ReactElement;
+    labelMargin?: number;
 }

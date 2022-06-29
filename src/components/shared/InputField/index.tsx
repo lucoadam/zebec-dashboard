@@ -8,26 +8,19 @@ const InputFieldWrapper: FC<InputProps> = (props) => {
     helper = "",
     label = "",
     children,
+    labelMargin = 0,
     ...rest
   } = props;
 
   return (
     <>
       {label !== "" && (
-        <label className="block text-content-primary text-xs ml-[12px] font-medium mb-1">
+        <label className={`block text-content-primary text-xs ${labelMargin > 0 && ` ml-[${labelMargin}px]`} font-medium mb-1`}>
           {label}
         </label>
       )}
-      {/* <input
-        className={`${error ? "error" : ""} h-[40px] appearance-none w-full`}
-        type="text"
-        name={name}
-        onChange={onChange}
-        onInput={onChange}
-        onBlur={onBlur}
-      /> */}
       {cloneElement(children, {
-        className: `${error ? "error " : ""}h-[40px] appearance-none w-full`,
+        className: `${error ? "error " : ""} appearance-none w-full`,
         ...rest,
       })}
       {helper !== "" && (

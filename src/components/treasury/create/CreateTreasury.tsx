@@ -3,7 +3,6 @@ import React from "react";
 import * as Icons from "assets/icons";
 import { Step, Treasury } from "./CreateTreasury.d";
 import CreatingTreasury from "./steps/CreatingTreasury";
-import { StepsContainer } from "./steps/styled";
 import { StepsList } from "./steps/data";
 import { useTranslation } from "next-i18next";
 
@@ -50,9 +49,8 @@ const CreateTreasury: NextPage = () => {
       <div className="flex flex-wrap">
         <div className="flex-none sm:w-1/2 w-full">
           {StepsList.map((step: Step, index: number) => (
-            <StepsContainer
-              isLast={StepsList.length - 1 === index}
-              className={`flex mb-[64px] ${currentStep === index ? "" : ""}`}
+            <div
+              className={`steps-container flex mb-[64px] ${StepsList.length - 1 === index ? "last" : ""}`}
               key={`steps-${index}`}
             >
               <div
@@ -68,7 +66,7 @@ const CreateTreasury: NextPage = () => {
                 </h4>
                 <p className="text-content-secondary">{t(`createTreasury:${step.subHeading}`)}</p>
               </div>
-            </StepsContainer>
+            </div>
           ))}
         </div>
         <div className="flex-auto sm:w-1/2 w-full">

@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { constants } from "common/constants";
+import { constants } from "constants/constants";
 import { Button, InputField } from "components/shared";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,7 @@ import { useTranslation } from "next-i18next";
 const AddOwners: FC<StepsComponentProps> = (props) => {
   const useWalletObject = useWallet();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [owners, setOwners] = React.useState<Owner[]>(props.treasury.owners);
   const validationSchema = Yup.object().shape({
@@ -55,7 +55,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
     props.setTreasury((treasury) => ({
       ...treasury,
       minValidator: owners.length,
-    }))
+    }));
   }, [owners]);
 
   const onSubmit = (data: any) => {
@@ -70,16 +70,19 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
   };
   return (
     <>
-      <form onSubmit={
-        owners.length!==constants.MAX_OWNERS?
-        handleSubmit(onSubmit):()=>event?.preventDefault()
-      } autoComplete="off">
+      <form
+        onSubmit={
+          owners.length !== constants.MAX_OWNERS
+            ? handleSubmit(onSubmit)
+            : () => event?.preventDefault()
+        }
+        autoComplete="off"
+      >
         <h3 className="leading-7 font-semibold text-base text-content-primary">
-        {t("createTreasury:second-steper.title")}    
+          {t("createTreasury:second-steper.title")}
         </h3>
         <p className="text-content-secondary font-normal text-sm mb-[36px]">
-        {t("createTreasury:second-steper.description")}
-
+          {t("createTreasury:second-steper.description")}
         </p>
         <div className="flex md:flex-nowrap sm:flex-wrap mb-2 justify-center items-center">
           <div className="flex sm:w-auto sm:w-full">
@@ -88,7 +91,11 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                 error={!!errors.name}
                 helper={errors?.name?.message || ""}
                 label={t("createTreasury:second-steper.form.owner-name")}
-                placeholder={t("createTreasury:second-steper.form.owner-name-placeholder")}
+                placeholder={t(
+                  "createTreasury:second-steper.form.owner-name-placeholder"
+                )}
+                className={`w-full h-[40px] ${!!errors.name ? "error" : ""}`}
+
               >
                 <input
                   type="text"
@@ -108,8 +115,10 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                   <div className="w-5/6">
                     <input
                       type="text"
-                      className={`w-full ${!!errors.wallet? 'error':''}`}
-                      placeholder={t("createTreasury:second-steper.form.owner-address")}
+                      className={`w-full h-[40px] ${!!errors.wallet ? "error" : ""}`}
+                      placeholder={t(
+                        "createTreasury:second-steper.form.owner-address"
+                      )}
                       {...register("wallet")}
                       disabled={
                         owners.length === 0 ||
@@ -134,11 +143,13 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
         <Button
           size="small"
           className="mt-[21px]"
-          title={t("createTreasury:second-steper.buttons.choose-from-address-book")}
-          endIcon={Icons.ArrowIcon}
+          title={t(
+            "createTreasury:second-steper.buttons.choose-from-address-book"
+          )}
+          endIcon={<Icons.ArrowIcon className="text-xs" />}
         />
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
-        {t("createTreasury:added-owners")}
+          {t("createTreasury:added-owners")}
         </p>
         <OwnerLists owners={owners} setOwners={setOwners} />
         <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">
@@ -149,7 +160,8 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           <div className="w-full sm:w-full flex justify-start items-center text-content-primary">
             <SelectField
               value={props.treasury.minValidator}
-              onSelected={(value) =>props.setTreasury((treasury) => ({
+              onSelected={(value) =>
+                props.setTreasury((treasury) => ({
                   ...treasury,
                   minValidator: value,
                 }))
@@ -157,7 +169,9 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
               className="mr-3 w-[70px]"
               totalItems={owners.length}
             />{" "}
-            {`${t("createTreasury:sub-text-out-of")} ${owners.length} ${t('createTreasury:owners')}`}
+            {`${t("createTreasury:sub-text-out-of")} ${owners.length} ${t(
+              "createTreasury:owners"
+            )}`}
           </div>
         </div>
         <Button
