@@ -19,6 +19,7 @@
     "@solana/web3.js": "^1.43.6",
     "@types/styled-components": "^5.1.25",
     "chart.js": "^3.8.0",
+    "axios": "^0.27.2",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",
     "next-themes": "^0.2.0",
@@ -31,7 +32,7 @@
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
     "@tailwindcss/forms": "^0.5.2",
-    "@types/node": "17.0.40",
+    "@types/node": "^18.0.0",
     "@types/react": "18.0.12",
     "@types/react-dom": "18.0.5",
     "autoprefixer": "^10.4.7",

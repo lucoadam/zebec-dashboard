@@ -7,10 +7,13 @@ import {
   ButtonShape,
 } from "./Button.d";
 
-const getIconButtonSizeStyles = (size: ButtonSize) => {
+const getIconButtonSizeStyles = (
+  size: ButtonSize,
+  variant: IconButtonVariant,
+) => {
   switch (size) {
     case "medium":
-      return `w-7 h-7`;
+      return `${variant === "plain" ? "text-2xl" : "text-sm"} w-7 h-7`;
     case "small":
       return `w-4 h-4`;
     default:
@@ -53,7 +56,7 @@ export const IconButton: FC<IconButtonProps> = (props) => {
     ...rest
   } = props;
 
-  const sizeStyles = getIconButtonSizeStyles(size);
+  const sizeStyles = getIconButtonSizeStyles(size, variant);
   const variantStyles = getIconButtonVariantStyles(variant);
   const shapeStyles = getIconButtonShapeStyles(shape);
 

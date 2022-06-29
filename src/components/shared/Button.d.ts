@@ -4,20 +4,37 @@ export type ButtonVariant = "default" | "gradient" | "danger";
 export type ButtonShape = "circle" | "round";
 export type IconButtonVariant = "default" | "solid" | "outlined" | "plain";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children?: React.ReactNode;
-  title?: string;
+interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variant?: ButtonVariant;
-  startIcon?: React.Element;
-  endIcon?: React.Element;
+  startIcon?: JSX.Element;
+  endIcon?: JSX.Element;
 }
 
-export interface IconButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children?: React.ReactNode;
+interface ButtonChildrenProps extends ButtonBaseProps {
+  children: React.ReactNode;
+  title?: never;
+}
+interface ButtonTitlenProps extends ButtonBaseProps {
+  children?: never;
+  title: string;
+}
+
+export type ButtonProps = ButtonChildrenProps | ButtonTitlenProps;
+
+interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variant?: IconButtonVariant;
   shape?: ButtonShape;
-  icon?: React.Element;
 }
+
+interface IconButtonChildrenProps extends IconButtonBaseProps {
+  children: React.ReactNode;
+  icon?: never;
+}
+interface IconButtonIconProps extends IconButtonBaseProps {
+  children?: never;
+  icon: JSX.Element;
+}
+
+export type IconButtonProps = IconButtonChildrenProps | IconButtonIconProps;

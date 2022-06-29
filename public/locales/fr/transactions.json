@@ -1,0 +1,28 @@
+{
+  "incoming": "Entrante",
+  "outgoing": "Sortante",
+  "incoming-transactions": "Transactions entrantes",
+  "outgoing-transactions": "Transactions sortantes",
+  "all": "Tous les flux",
+  "ongoing": "En cours",
+  "scheduled": "Programmé",
+  "completed": "Complété",
+  "export-report": "Rapport d'exportation",
+  "table": {
+    "progress": "Progrès",
+    "transaction-date": "Date de la transaction",
+    "sender": "Expéditrice",
+    "receiver": "Destinataire",
+    "withdraw": "Se désister",
+    "start-date": "Date de début",
+    "end-date": "Date de fin",
+    "stream-type": "Type de flux",
+    "total-amount": "Montant total",
+    "amount-received": "Montant reçu",
+    "status": "Statut",
+    "transaction": "Transaction",
+    "view-on-explorer": "Afficher sur l'explorateur",
+    "reference": "Référence",
+    "view-reference-file": "Afficher le fichier de référence"
+  }
+}

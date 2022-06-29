@@ -16,8 +16,15 @@ import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 import DisconnectIcon from "./other-icons/disconnect.svg";
 import RefreshIcon from "./other-icons/refresh.svg";
 import SearchIcon from "./other-icons/search.svg";
-import OutsideLinkIcon from "./other-icons/outside-link.svg";
 import DownArrowIcon from "./other-icons/down-arrow.svg";
+import CalenderIcon from "./other-icons/calender.svg";
+import CheckCircleIcon from "./other-icons/check-circle.svg";
+import DoubleCircleDottedLineIcon from "./other-icons/double-circle-dottedline.svg";
+import UserAddIcon from "./other-icons/user-add.svg";
+import IncomingIcon from "./other-icons/incoming.svg";
+import OutsideLinkIcon from "./other-icons/outside-link.svg";
+import PauseIcon from "./other-icons/pause.svg";
+import ResumeIcon from "./other-icons/resume.svg";
 
 export {
   CheveronDownIcon,
@@ -38,7 +45,14 @@ export {
   DisconnectIcon,
   RefreshIcon,
   SearchIcon,
+  DownArrowIcon,
+  CalenderIcon,
+  CheckCircleIcon,
+  DoubleCircleDottedLineIcon,
+  UserAddIcon,
+  IncomingIcon,
   OutsideLinkIcon,
-  DownArrowIcon
+  PauseIcon,
+  ResumeIcon,
 };
 export * from "./nav-icons";
