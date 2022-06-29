@@ -3,36 +3,53 @@ import { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Layout from "components/layouts/Layout";
-import React from "react";
+import Incoming from "components/transactions/Incoming";
+import Outgoing from "components/transactions/Outgoing";
 import { Tab } from "components/shared";
 import * as Icons from "../assets/icons";
 
-const Transactions: NextPage = () => {
-  const { t } = useTranslation();
+const transactionTabs = [
+  {
+    title: "Incoming",
+    icon: <Icons.ArrowDownLeftIcon />,
+    count: 0,
+    Component: <Incoming />,
+  },
+  {
+    title: "Outgoing",
+    icon: <Icons.ArrowUpRightIcon />,
+    count: 2,
+    Component: <Outgoing />,
+  },
+];
 
-  const [activePage, setActivePage] = useState<"incoming" | "outgoing">(
-    "incoming",
-  );
+const Transactions: NextPage = () => {
+  const { t } = useTranslation("transactions");
+
+  const [activePage, setActivePage] = useState<number>(0);
+
   return (
     <>
       <Layout pageTitle="Zebec -Transactions">
         <div className="flex justify-center border-b border-outline">
-          <Tab
-            type="plain"
-            title="Incoming"
-            isActive={activePage === "incoming"}
-            startIcon={<Icons.ArrowDownLeftIcon />}
-            count={3}
-            onClick={() => setActivePage("incoming")}
-          />
-          <Tab
-            type="plain"
-            title="Outgoing"
-            isActive={activePage === "outgoing"}
-            startIcon={<Icons.ArrowUpRightIcon />}
-            count={2}
-            onClick={() => setActivePage("outgoing")}
-          />
+          {/* Tabs */}
+          {transactionTabs.map((transactionTab, index) => {
+            return (
+              <Tab
+                key={transactionTab.title}
+                type="plain"
+                title={`${t(transactionTab.title.toLowerCase())}`}
+                isActive={activePage === index}
+                startIcon={transactionTab.icon}
+                count={transactionTab.count}
+                onClick={() => setActivePage(index)}
+              />
+            );
+          })}
+        </div>
+        <div className="container py-10">
+          {/* Active Tab */}
+          {transactionTabs[activePage].Component}
         </div>
       </Layout>
     </>
@@ -42,7 +59,7 @@ const Transactions: NextPage = () => {
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "transactions"])),
     },
   };
 }

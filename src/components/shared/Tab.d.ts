@@ -3,7 +3,7 @@ import React, { SVGProps, MouseEventHandler } from "react";
 interface TabBaseProps {
   type: "solid" | "plain";
   isActive: boolean;
-  startIcon?: SVGProps;
+  startIcon?: JSX.Element;
   count?: number;
   className?: string;
   onClick: MouseEventHandler<T>;
