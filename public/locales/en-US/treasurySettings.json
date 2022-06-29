@@ -1,0 +1,10 @@
+{
+    "minimum-confirmation": "Minimum Number of Confirmation",
+    "out-of": "out of",
+    "owners": "Owners",
+    "safe-name": "Safe Name",
+    "enter-safe-name": "Enter Safe Name",
+    "save-changes": "Save Changes",
+    "archive-safe": "Archive Safe",
+    "archive-safe-description": "Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe."
+}

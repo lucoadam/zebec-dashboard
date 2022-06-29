@@ -2,21 +2,23 @@ import { Fragment, useState } from "react";
 import { Tab } from "@headlessui/react";
 import * as Icons from "assets/icons";
 import Setting from "./components/Setting";
+import Overview from "./components/Overview";
+import { useTranslation } from "next-i18next";
 
 let categories = [
   {
-    title: "Overview",
+    title: "overview",
     Icon: Icons.EyeOpenIcon,
-    Component: Fragment,
+    Component: Overview,
   },
   {
-    title: "Transactions",
+    title: "transactions",
     Icon: Icons.TransactionIcon,
     badge: 3,
     Component: Fragment,
   },
   {
-    title: "Settings",
+    title: "settings",
     Icon: Icons.GearringAltIcon,
     Component: Setting,
   },
@@ -27,6 +29,9 @@ function classNames(...classes: string[]) {
 }
 
 export default function TreasuryDetail() {
+
+  const {t} = useTranslation();
+
   return (
     <div className="w-full pb-16 sm:px-0">
       <Tab.Group>
@@ -49,7 +54,7 @@ export default function TreasuryDetail() {
                       selected ? "text-primary" : "",
                     )}
                   />
-                  {category.title}{" "}
+                  {t(`treasury:${category.title}`)}{" "}
                   {category.badge ? (
                     <div
                       className={classNames(

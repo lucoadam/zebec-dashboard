@@ -22,15 +22,15 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
     name: Yup.string()
       .required(t("validation:name-required"))
       .test("is-name-unique", t("validation:name-exists"), (value) =>
-        owners.every((owner) => owner.name !== value),
+        owners.every((owner) => owner.name !== value)
       ),
     wallet: Yup.string()
       .required(t("validation:wallet-required"))
       .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-        isValidWallet(value),
+        isValidWallet(value)
       )
       .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-        owners.every((owner) => owner.wallet !== value),
+        owners.every((owner) => owner.wallet !== value)
       ),
   });
   const {
@@ -92,8 +92,10 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                 helper={errors?.name?.message || ""}
                 label={t("createTreasury:second-steper.form.owner-name")}
                 placeholder={t(
-                  "createTreasury:second-steper.form.owner-name-placeholder",
+                  "createTreasury:second-steper.form.owner-name-placeholder"
                 )}
+                className={`w-full h-[40px] ${!!errors.name ? "error" : ""}`}
+
               >
                 <input
                   type="text"
@@ -113,9 +115,9 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                   <div className="w-5/6">
                     <input
                       type="text"
-                      className={`w-full ${!!errors.wallet ? "error" : ""}`}
+                      className={`w-full h-[40px] ${!!errors.wallet ? "error" : ""}`}
                       placeholder={t(
-                        "createTreasury:second-steper.form.owner-address",
+                        "createTreasury:second-steper.form.owner-address"
                       )}
                       {...register("wallet")}
                       disabled={
@@ -142,7 +144,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           size="small"
           className="mt-[21px]"
           title={t(
-            "createTreasury:second-steper.buttons.choose-from-address-book",
+            "createTreasury:second-steper.buttons.choose-from-address-book"
           )}
           endIcon={<Icons.ArrowIcon className="text-xs" />}
         />
@@ -168,7 +170,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
               totalItems={owners.length}
             />{" "}
             {`${t("createTreasury:sub-text-out-of")} ${owners.length} ${t(
-              "createTreasury:owners",
+              "createTreasury:owners"
             )}`}
           </div>
         </div>

@@ -46,6 +46,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
           label={t("treasury:treasury-name")}
           placeholder={t("treasury:name-placeholder")}
           type="text"
+          className="h-[40px] w-full"
         >
           <input {...register("name")} autoFocus/>
         </InputField>

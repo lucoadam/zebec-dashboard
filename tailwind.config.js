@@ -29,6 +29,8 @@ module.exports = {
           primary: "var(--content-primary)",
           secondary: "var(--content-secondary)",
           contrast: "var(--content-contrast)",
+          success: "var(--success-content)",
+          error: "var(--error-content)"
         },
         // Success
         success: "var(--success-main)",

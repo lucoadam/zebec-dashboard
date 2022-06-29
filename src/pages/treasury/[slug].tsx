@@ -4,8 +4,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Layout from "../../components/layouts/Layout";
 import { Button } from "../../components/shared";
 import * as Icons from "../../assets/icons";
-import NavLink from "components/layouts/NavLink";
 import TreasuryDetail from "components/treasury/detail/TreasuryDetail";
+import Link from "next/link";
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation();
@@ -16,12 +16,9 @@ const Treasury: NextPage = () => {
         <div className="container">
           <div className="flex justify-between items-center pb-[24px]">
             <div className="flex justify-center items-center px-[1.3rem] pt-2 pb-4">
-              <NavLink
-                path="/treasury"
-                name=""
-                type="link"
-                Icon={Icons.LeftArrowIcon}
-              />
+              <Link href="/treasury">
+                <Icons.LeftArrowIcon className="cursor-pointer w-[18px] h-[16px] mr-[19px]" />
+              </Link>
               <h4 className="text-heading-4 font-semibold text-content-primary">
                 Zebec Safe
               </h4>
@@ -44,7 +41,13 @@ const Treasury: NextPage = () => {
 export async function getServerSideProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "treasury"])),
+      ...(await serverSideTranslations(locale, [
+        "common",
+        "treasury",
+        "treasuryOverview",
+        "treasurySettings",
+        "validation"
+      ])),
     },
   };
 }

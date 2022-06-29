@@ -4,6 +4,7 @@ import * as AvatarImages from "assets/images/avatars";
 import * as Icons from "assets/icons";
 import { toSubstring } from "utils";
 import { Owner } from "./CreateTreasury.d";
+import { IconButton } from "components/shared";
 
 const OwnerLists: FC<{
   maxItems?: number;
@@ -30,7 +31,7 @@ const OwnerLists: FC<{
     <div className={`divide-y divide-outline ${classes}`} style={styles}>
       {owners.map((owner, index) => {
         return (
-          <div key={index} className="w-full flex pb-[36px]">
+          <div key={index} className="w-full flex py-[16px]">
             <Image
               src={Avatars[index % 3]}
               layout="fixed"
@@ -54,14 +55,13 @@ const OwnerLists: FC<{
                 </div>
               </div>
               {setOwners && (
-                <div
+                <IconButton
                   onClick={() => {
                     setOwners(owners.filter((o) => o.wallet !== owner.wallet));
                   }}
                   className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
-                >
-                  <Icons.CrossIcon className="text-base text-[8px]" />
-                </div>
+                  icon={<Icons.CrossIcon className="text-base text-[8px]" />}
+                />
               )}
             </div>
           </div>
