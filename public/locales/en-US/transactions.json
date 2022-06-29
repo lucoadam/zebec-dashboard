@@ -1,0 +1,28 @@
+{
+  "incoming": "Incoming",
+  "outgoing": "Outgoing",
+  "incoming-transactions": "Incoming Transaction",
+  "outgoing-transactions": "Outgoing Transactions",
+  "all": "All Streams",
+  "ongoing": "Ongoing",
+  "scheduled": "Scheduled",
+  "completed": "Completed",
+  "export-report": "Export Report",
+  "table": {
+    "progress": "Progress",
+    "transaction-date": "Transaction Date",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "withdraw": "Withdraw",
+    "start-date": "Start Date",
+    "end-date": "End Date",
+    "stream-type": "Stream Type",
+    "total-amount": "Total Amount",
+    "amount-received": "Amount Received",
+    "status": "Status",
+    "transaction": "Transaction",
+    "view-on-explorer": "View on Explorer",
+    "reference": "Reference",
+    "view-reference-file": "View Reference File"
+  }
+}

@@ -42,13 +42,17 @@ export const Tab: FC<TabProps> = (props) => {
         onClick={onClick}
       >
         {startIcon && <span className="text-xl">{startIcon}</span>}
-        <span className="text-subtitle-sm">{children ? children : title}</span>
-        {count && (
+        <span className="text-subtitle-sm font-medium">
+          {children ? children : title}
+        </span>
+        {count && count > 0 ? (
           <span
             className={`h-4 px-[5px] text-caption-sm bg-background-tertiary text-primary-contrast grid place-content-center rounded-full outline outline-1 outline-outline outline-offset-[-1px]`}
           >
             {count}
           </span>
+        ) : (
+          ""
         )}
         {type === "plain" && (
           <div
