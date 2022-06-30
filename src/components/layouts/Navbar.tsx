@@ -19,13 +19,13 @@ const Navbar: FC = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [width, setWidth] = useState<number>(0);
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  
+
   useEffect(() => {
     setMounted(true);
     setWidth(window.outerWidth);
-    window.addEventListener("resize",(()=>{
+    window.addEventListener("resize", () => {
       setWidth(window.outerWidth);
-    }));
+    });
   }, []);
 
   //theme toggle
@@ -61,72 +61,70 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <nav className="shadow-2">
-        <div className="flex justify-between items-center py-2">
+      <nav className="shadow-2 px-4 py-4">
+        <div className="flex justify-between gap-x-4 lg:justify-center items-center relative">
           {/* Logo */}
-          <div className="flex flex-col px-4">
-              <Image
-                src={Images.ZebecLogo}
-                alt="Zebec Logo"
-                layout="fixed"
-                width={87}
-                height={24}
-              />
-              <div className="ml-10 text-caption text-content-contrast">
-                Mainnet Beta
-              </div>
+          <div className="flex flex-col lg:absolute lg:left-0">
+            <Image
+              src={Images.ZebecLogo}
+              alt="Zebec Logo"
+              layout="fixed"
+              width={87}
+              height={24}
+            />
+            <div className="ml-10 text-caption text-content-contrast">
+              Mainnet Beta
+            </div>
           </div>
-          
-          {/* NavLinks */}
-          <div className="py-4 flex justify-between items-center">
-            <div className="flex items-center gap-x-3 lg:gap-x-8">
-              {getMainRoutes(width).map((route, index) => {
-                switch (route.type) {
-                  case "link":
-                    return <NavLink key={index} {...route} />;
-                  case "group":
-                    return <NavGroup key={index} {...route} />;
-                }
-              })}
-              <Button
-                title="Send"
-                variant="gradient"
-                endIcon={<Icons.ArrowUpRightIcon />}
-                onClick={() => alert("Send")}
-              />
-            </div>
 
-            <div className="flex items-center gap-x-3 px-4">
-              <>{themeChanger()}</>
-              {!useWalletObject.connected ? (
-                <Button
-                  title="Connect Wallet"
-                  variant="gradient"
-                  onClick={handleConnectWallet}
-                />
-              ) : (
-                <Profile />
-              )}
-            </div>
-            
-            <div className="md:hidden px-4">
-                <IconButton
-                  icon={<Icons.MenuIcon />}
-                  variant="plain"
-                  size="medium"
-                  onClick={() => setShowMenu(!showMenu)}
-                />
+          {/* NavLinks */}
+          <div className="flex items-center gap-x-4 xl:gap-x-8 ml-auto lg:ml-0">
+            {getMainRoutes(width).map((route, index) => {
+              switch (route.type) {
+                case "link":
+                  return <NavLink key={index} {...route} />;
+                case "group":
+                  return <NavGroup key={index} {...route} />;
+              }
+            })}
+            <Button
+              title="Send"
+              variant="gradient"
+              endIcon={<Icons.ArrowUpRightIcon />}
+              onClick={() => alert("Send")}
+            />
+          </div>
+
+          <div className="flex items-center gap-x-3 lg:absolute lg:right-0">
+            <>{themeChanger()}</>
+            {!useWalletObject.connected ? (
+              <Button
+                title="Connect Wallet"
+                variant="gradient"
+                onClick={handleConnectWallet}
+              />
+            ) : (
+              <Profile />
+            )}
+            <div className="lg:hidden">
+              <IconButton
+                icon={<Icons.MenuIcon />}
+                variant="plain"
+                size="medium"
+                onClick={() => setShowMenu(!showMenu)}
+              />
             </div>
           </div>
         </div>
-        {showMenu && <div className={`px-6 divide-y divide-outline`}>
-          {getMenuRoutes(width).map((route, index) => (
-                <div className="py-4" key={index}>
-                  <NavLink key={index} {...route} />
-                </div>
-              ))
-            }
-        </div>}
+        {showMenu && (
+          <div className={`px-6 divide-y divide-outline`}>
+            {getMenuRoutes(width).map((route, index) => (
+              <div className="py-4" key={index}>
+                <NavLink key={index} {...route} />
+              </div>
+            ))}
+          </div>
+        )}
       </nav>
     </>
   );
