@@ -16,7 +16,7 @@ const CreateTreasuryPage: NextPage = () => {
     <Layout pageTitle="Zebec - Create Treasury">
       <div className="pt-[76px]">
         <div className="container w-full">
-          <div className="flex justify-start items-center px-3.5 pb-9">
+          <div className="flex justify-start items-center px-[1.9rem] pb-9">
             <IconButton
               onClick={() => {
                 router.push("/treasury");
@@ -31,6 +31,7 @@ const CreateTreasuryPage: NextPage = () => {
               {`${t("common:create-new")} ${t("treasury:title")}`}
             </h4>
           </div>
+
           <CreateTreasury />
         </div>
       </div>

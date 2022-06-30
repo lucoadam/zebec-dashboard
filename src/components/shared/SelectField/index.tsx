@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 interface SelectFieldProps
   extends React.InputHTMLAttributes<HTMLSelectElement> {
   totalItems: number;
-  onSelected: (value: number) => void;
+  onSelected?: (value: number) => void;
 }
 
 const SelectField: FC<SelectFieldProps> = ({
@@ -16,15 +16,19 @@ const SelectField: FC<SelectFieldProps> = ({
   const [items, setItems] = useState<number[]>([]);
 
   useEffect(() => {
-      setItems(Array.from(Array(totalItems).keys()).map((i) => i + 1));
+    setItems(Array.from(Array(totalItems).keys()).map((i) => i + 1));
   }, [totalItems]);
 
   return (
     <select
       value={selectedPerson ?? ""}
       onChange={(e) => {
-        setSelectedPerson(Number(e.target.value));
-        rest?.onSelected(Number(e.target.value) ?? 0);
+        if (Number(e.target.value) > 1) {
+          setSelectedPerson(Number(e.target.value));
+          if (rest.onSelected) {
+            rest?.onSelected(Number(e.target.value) ?? 0);
+          }
+        }
       }}
       {...rest}
     >

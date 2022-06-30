@@ -35,7 +35,7 @@ export default function TreasuryDetail() {
   return (
     <div className="w-full pb-16 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex max-w-md space-x-1 rounded-xl p-1">
+        <Tab.List className="flex max-w-md space-x-1 rounded-xl">
           {categories.map((category) => (
             <Tab key={category.title} as={Fragment}>
               {({ selected }) => (

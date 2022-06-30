@@ -74,7 +74,7 @@ const Setting = () => {
           &nbsp;2 {t('treasurySettings:out-of')} 3 {t('treasurySettings:owners')}
         </div>
         <InputField
-          error={!!errors.name}
+          error={!!errors?.name}
           helper={errors?.name?.message || ""}
           label={t('treasurySettings:safe-name')}
           placeholder={t('treasurySettings:enter-safe-name')}

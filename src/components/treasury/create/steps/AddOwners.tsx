@@ -147,6 +147,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             "createTreasury:second-steper.buttons.choose-from-address-book"
           )}
           endIcon={<Icons.ArrowIcon className="text-xs" />}
+          type="button"
         />
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
           {t("createTreasury:added-owners")}
@@ -180,8 +181,10 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           size="medium"
           className="w-full justify-center mt-[32px]"
           onClick={() => {
-            if (owners.length > 0) {
+            if (owners.length > 1) {
               props.setCurrentStep(2);
+            }else{
+              handleSubmit(()=>{})
             }
           }}
         />
@@ -190,7 +193,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
         title="Go Back"
         size="medium"
         className="w-full justify-center mt-[12px]"
-        onClick={() => props.setCurrentStep(1)}
+        onClick={() => props.setCurrentStep(0)}
       />
     </>
   );

@@ -26,6 +26,7 @@ const OwnerLists: FC<{
       : {}),
   };
   const classes = owners.length > maxItems ? `${height} overflow-y-scroll` : "";
+  const rowClasses = owners.length > maxItems ? `pr-[8px]` : "";
 
   return (
     <div className={`divide-y divide-outline ${classes}`} style={styles}>
@@ -40,7 +41,7 @@ const OwnerLists: FC<{
               objectFit="contain"
               alt={`Avatar ${index + 1}`}
             />
-            <div className="w-full flex justify-between items-center">
+            <div className={`w-full flex justify-between items-center ${rowClasses}`}>
               <div className="flex flex-col mx-3">
                 <div className="text-subtitle text-content-primary font-semibold">
                   {owner.name}

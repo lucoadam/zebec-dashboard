@@ -20,21 +20,21 @@ const ReviewTreasury: FC<StepsComponentProps> = (props) => {
       <h4 className="leading-6 font-normal text-base text-content-primary mt-[6px]">
         {props.treasury.name}
       </h4>
-      <p className="text-content-primary font-semibold text-sm mt-[32px] mb-[6px]">
+      <p className="text-content-primary capitalize font-semibold text-sm mt-[32px] mb-[6px]">
         {t("createTreasury:owners")}
       </p>
       <OwnerLists owners={props.treasury.owners} />
       <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">
-        Minimum confirmations required for any transactions
+        {t("createTreasury:min-confirmation-required-text")}
       </p>
       <div className="flex ">
         {/* dropdown */}
         <div className="w-full md:w-1/2 sm:w-full flex justify-start items-center text-content-primary">
-          1 out of {props.treasury.owners.length} owners
+          2 {t("createTreasury:sub-text-out-of")} {props.treasury.owners.length} {t("createTreasury:owners")}
         </div>
       </div>
       <Button
-        title="Continue"
+        title={t("common:buttons.confirm-and-create-treasury")}
         variant="gradient"
         type="submit"
         size="medium"
@@ -46,7 +46,7 @@ const ReviewTreasury: FC<StepsComponentProps> = (props) => {
         }}
       />
       <Button
-        title="Go Back"
+        title={t("common:buttons.go-back")}
         size="medium"
         className="w-full justify-center mt-[12px]"
         onClick={() => props.setCurrentStep(1)}

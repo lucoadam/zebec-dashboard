@@ -89,22 +89,22 @@ const Overview = () => {
   });
 
   return (
-    <div className="flex w-full justify-start">
+    <div className="flex flex-wrap md:flex-no-wrap w-full md-justify-start sm:justify-center">
       {/**
        * First Column
        *    1. Safe Balance
        *    2. Incoming/ Outgoing
        *    3. Activity this Week
        */}
-      <div className="w-[357px]">
+      <div className="sm:w-1 md:w-1/3 pr-[12px] flex flex-col justify-between">
         {/**
          * Safe Balance
          */}
-        <div className="w-full h-[144px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
+        <div className="rounded-[4px] w-full h-[144px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:safe-balance")}
           </p>
-          <p className="text-2xl text-content-primary mt-[8px] font-semibold leading-10">
+          <p className="text-heading-3 text-content-primary mt-[8px] font-semibold">
             $15,390,832
             <span className="leading-6 text-base uppercase font-normal text-content-contrast">
               .013
@@ -117,7 +117,7 @@ const Overview = () => {
         {/**
          * Incoming/ Outgoing
          */}
-        <div className="w-full h-[194px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
+        <div className="rounded-[4px] w-full h-[194px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t('treasuryOverview:total-incoming')}
           </p>
@@ -140,12 +140,12 @@ const Overview = () => {
         {/**
          * Activity this week
          */}
-        <div className="w-full bg-background-secondary px-[24px] py-[24px]">
+        <div className="rounded-[4px] w-full bg-background-secondary px-[24px] py-[24px]">
         <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:activity-this-week")}
           </p>
           {/* <canvas id="line-chart" className="w-[40px]"></canvas> */}
-          <div className="w-full  bg-background-secondary max-h-[310px] pr-0.5 overflow-y-scroll">
+          <div className="w-full  bg-background-secondary pr-0.5">
           <table className="table-auto w-full border-separate border-spacing-y-[24px]">
             <tbody>
               <tr>
@@ -220,8 +220,8 @@ const Overview = () => {
        * Second Column
        *   1. Deposited Assets
        * **/}
-      <div className="flex-1 px-[24px]">
-        <div className="w-full bg-background-secondary h-full px-[24px] py-[24px] mb-[24px]">
+      <div className="sm:w-1 md:w-1/3 px-[12px]">
+        <div className="w-full rounded-[4px] bg-background-secondary h-full px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:deposited-assets")}
           </p>
@@ -235,7 +235,7 @@ const Overview = () => {
               />
             </div>
           </InputField>
-          <div className="max-h-[400px] overflow-y-scroll pr-2">
+          <div className="pr-2">
             {depositedAssets.map((item) => (
               <div
                 className="flex w-full h-[32px] mb-[24px] justify-between"
@@ -266,11 +266,11 @@ const Overview = () => {
           </div>
         </div>
       </div>
-      <div className="w-[357px]">
+      <div className="sm:w-1 md:w-1/3 pl-[12px] flex flex-col justify-between">
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full bg-background-secondary mb-[24px]">
+        <div className="w-fullrounded-[4px]  bg-background-secondary mb-[24px]">
           <Tab.Group>
             <Tab.List className="flex">
               <Tab as={Fragment}>
@@ -302,7 +302,7 @@ const Overview = () => {
                 )}
               </Tab>
             </Tab.List>
-            <Tab.Panels className="px-[24px] mt-[24px] pb-[24px] min-h-[270px]">
+            <Tab.Panels className="px-[24px] mt-[24px] pb-[24px] min-h-[210px]">
               <Tab.Panel>
                 <p className="leading-4 text-xs font-normal text-content-contrast">
                   {t("treasuryOverview:deposit-description")}
@@ -320,7 +320,7 @@ const Overview = () => {
                   <div>
                     <div
                       onClick={() => setToggleTokensDropdown(prev=>!prev)}
-                      className="absolute absolute left-[10px] top-[8px]"
+                      className="absolute left-[10px] top-[8px]"
                     >
                       <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-black">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -375,7 +375,7 @@ const Overview = () => {
                   </div>
                 </InputField>
                 <Button
-                  className="w-full mb-[12px]"
+                  className="w-full"
                   variant="gradient"
                   title={t("treasuryOverview:withdraw")}
                 />
@@ -386,7 +386,7 @@ const Overview = () => {
         {/**
          * Zebec Treasury Help
          */}
-        <div className="w-full bg-background-secondary px-[24px] py-[24px] mb-[24px]">
+        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
           <p className="leading-6 text-base font-semibold text-black mb-[8px]">
             {t("treasuryOverview:treasury-help")}
           </p>
@@ -411,7 +411,7 @@ const Overview = () => {
         {/**
          * Send Feedback
          */}
-        <div className="w-full bg-background-secondary px-[24px] pt-[24px] pb-[28px]">
+        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] pt-[24px] pb-[28px]">
           <p className="leading-6 text-base font-semibold text-black mb-[8px]">
             {t("treasuryOverview:send-feedback")}
           </p>
