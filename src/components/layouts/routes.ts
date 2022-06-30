@@ -48,7 +48,7 @@ const routesArray: RoutesArrayProps[] = [
 
 const deviceRoutes: DeviceRoutes[] = [
   {
-    width: 768,
+    width: 1024,
     main: [],
     more: [],
     menu: [
@@ -62,15 +62,15 @@ const deviceRoutes: DeviceRoutes[] = [
     ],
   },
   {
-    width: 1024,
-    main: ["dashboard", "treasury"],
-    more: ["transactions", "yeild-farming", "dca", "address-book", "settings"],
+    width: 1280,
+    main: ["dashboard", "treasury", "transactions"],
+    more: ["yeild-farming", "dca", "address-book", "settings"],
     menu: [],
   },
   {
     width: 1440,
-    main: ["dashboard", "treasury", "transactions"],
-    more: ["yeild-farming", "dca", "address-book", "settings"],
+    main: ["dashboard", "treasury", "transactions", "yeild-farming"],
+    more: ["dca", "address-book", "settings"],
     menu: [],
   },
   {

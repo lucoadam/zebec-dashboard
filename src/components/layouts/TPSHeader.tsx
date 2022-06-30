@@ -28,7 +28,9 @@ const TPSHeader = () => {
               1,450 TPS <Icons.WarningTriangleIcon className="w-4 h-4" />
             </span>
           </div>
-          <div className="ml-2">{t("tps-header.description")}</div>
+          <div className="ml-2 hidden lg:block">
+            {t("tps-header.description")}
+          </div>
 
           <div className="absolute z-10 top-1/2 right-0 transform -translate-y-1/2">
             <div className="relative" ref={languageDropdownWrapperRef}>
