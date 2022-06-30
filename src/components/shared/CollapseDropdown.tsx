@@ -7,9 +7,10 @@ type PositionStyle = "right" | "left";
 interface CollapseDropdownProps {
   children: React.ReactNode;
   show: boolean;
+  variant?: "default" | "light";
   className?: string;
   position?: PositionStyle;
-  ref?: React.RefObject<HTMLDivElement>
+  ref?: React.RefObject<HTMLDivElement>;
 }
 
 const getPositionStyle = (position: PositionStyle) => {
@@ -22,12 +23,30 @@ const getPositionStyle = (position: PositionStyle) => {
       return null;
   }
 };
+const getVariantStyle = (variant: "default" | "light") => {
+  switch (variant) {
+    case "light":
+      return `bg-background-primary`;
+    case "default":
+      return `bg-background-light`;
+    default:
+      return null;
+  }
+};
 
 export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
-  const { children, show, className, position = "right", ...rest } = props;
+  const {
+    children,
+    show,
+    className,
+    position = "right",
+    variant = "default",
+    ...rest
+  } = props;
 
   const positionStyle = getPositionStyle(position);
-  const defaultClasses = `bg-background-light divide-y divide-outline-secondary top-10 ${positionStyle}`;
+  const variantStyles = getVariantStyle(variant);
+  const defaultClasses = `divide-y divide-outline-secondary top-10 ${positionStyle} ${variantStyles}`;
 
   return (
     <>
@@ -44,7 +63,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
         <div
           className={twMerge(
             `absolute flex flex-col rounded-lg ${defaultClasses}`,
-            className ?? "",
+            className ?? ""
           )}
           {...rest}
         >

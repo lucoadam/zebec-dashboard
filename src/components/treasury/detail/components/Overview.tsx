@@ -11,53 +11,67 @@ import { useTranslation } from "next-i18next";
 
 const depositedAssets = [
   {
+    name: "Solana",
     symbol: "SOL",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "USD Coin",
     symbol: "USDC",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.9,
   },
   {
+    name: "Tether",
     symbol: "USDT",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg",
     balance: 201320.72,
     balanceUSD: 201320.72,
+    value: 0.5,
   },
   {
+    name: "Zebec Protocol",
     symbol: "ZBC",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/zebeczgi5fSEtbpfQKVZKCJ3WgYXxjkMUkNNx7fLKAF/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.6,
   },
   {
+    name: "Puff",
     symbol: "PUFF",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "All",
     symbol: "ALL",
     logoURI:
       "https://raw.githubusercontent.com/jamroszk/crypto/main/All_Logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "Winerz",
     symbol: "WNZ",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/WNZzxM1WqWFH8DpDZSqr6EoHKWXeMx9NLLd2R5RzGPA/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.1,
   },
 ];
 
@@ -119,7 +133,7 @@ const Overview = () => {
          */}
         <div className="w-full h-[194px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
-            {t('treasuryOverview:total-incoming')}
+            {t("treasuryOverview:total-incoming")}
           </p>
           <p className="text-2xl items-center flex text-content-primary mt-[8px] font-semibold leading-10 mb-[25px]">
             <span className="leading-6 text-base uppercase font-normal text-content-success pr-[5px] pt-[5px]">
@@ -128,7 +142,7 @@ const Overview = () => {
             $809.05
           </p>
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
-            {t('treasuryOverview:total-outgoing')}
+            {t("treasuryOverview:total-outgoing")}
           </p>
           <p className="flex items-center text-2xl text-content-primary mt-[8px] font-semibold leading-10">
             <span className="leading-6  text-base uppercase font-normal text-content-error pr-[5px] pt-[5px]">
@@ -141,78 +155,78 @@ const Overview = () => {
          * Activity this week
          */}
         <div className="w-full bg-background-secondary px-[24px] py-[24px]">
-        <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
+          <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:activity-this-week")}
           </p>
           {/* <canvas id="line-chart" className="w-[40px]"></canvas> */}
           <div className="w-full  bg-background-secondary max-h-[310px] pr-0.5 overflow-y-scroll">
-          <table className="table-auto w-full border-separate border-spacing-y-[24px]">
-            <tbody>
-              <tr>
-                <td>
-                  <div className="flex text-content-secondary">
-                    <span className="leading-6 text-base uppercase font-normal text-content-success pr-[5px] pt-[2px]">
-                      <Icons.ArrowDownLeftIcon />
-                    </span>
-                    {t("treasuryOverview:incoming")}
-                  </div>
-                </td>
-                <td>
-                  <ActivityDeopsitCurve className="w-[72px]" />
-                </td>
-                <td>
-                  <p className="text-sm leading-6 font-medium text-black text-right ">
-                    {formatCurrency(12321321312, "$")}
-                  </p>
-                  <p className="text-xs font-subtitle text-content-contrast text-right">
-                    {formatCurrency(23423423)} SOL
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className="flex text-content-secondary">
-                    <span className="leading-6 text-base uppercase font-normal text-content-error pr-[5px] pt-[2px]">
-                      <Icons.ArrowUpRightIcon />
-                    </span>
-                    {t("treasuryOverview:outgoing")}
-                  </div>
-                </td>
-                <td>
-                  <ActivityOutgoingCurve className="w-[72px]" />
-                </td>
-                <td>
-                  <p className="text-sm leading-6 font-medium text-black text-right ">
-                    {formatCurrency(12321321312, "$")}
-                  </p>
-                  <p className="text-xs font-subtitle text-content-contrast text-right">
-                    {formatCurrency(23423423)} SOL
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className="flex text-content-secondary">
-                    <span className=" text-content-secondary pr-[7px] pt-[5px]">
-                      <Icons.DownArrowIcon className="w-[12px] h-[10px]" />
-                    </span>
-                    {t("treasuryOverview:withdrawal")}
-                  </div>
-                </td>
-                <td>
-                  <ActivityWithdrawalCurve className="w-[72px]" />
-                </td>
-                <td>
-                  <p className="text-sm leading-6 font-medium text-black text-right ">
-                    {formatCurrency(12321321312, "$")}
-                  </p>
-                  <p className="text-xs font-subtitle text-content-contrast text-right">
-                    {formatCurrency(23423423)} SOL
-                  </p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table className="table-auto w-full border-separate border-spacing-y-[24px]">
+              <tbody>
+                <tr>
+                  <td>
+                    <div className="flex text-content-secondary">
+                      <span className="leading-6 text-base uppercase font-normal text-content-success pr-[5px] pt-[2px]">
+                        <Icons.ArrowDownLeftIcon />
+                      </span>
+                      {t("treasuryOverview:incoming")}
+                    </div>
+                  </td>
+                  <td>
+                    <ActivityDeopsitCurve className="w-[72px]" />
+                  </td>
+                  <td>
+                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                      {formatCurrency(12321321312, "$")}
+                    </p>
+                    <p className="text-xs font-subtitle text-content-contrast text-right">
+                      {formatCurrency(23423423)} SOL
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div className="flex text-content-secondary">
+                      <span className="leading-6 text-base uppercase font-normal text-content-error pr-[5px] pt-[2px]">
+                        <Icons.ArrowUpRightIcon />
+                      </span>
+                      {t("treasuryOverview:outgoing")}
+                    </div>
+                  </td>
+                  <td>
+                    <ActivityOutgoingCurve className="w-[72px]" />
+                  </td>
+                  <td>
+                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                      {formatCurrency(12321321312, "$")}
+                    </p>
+                    <p className="text-xs font-subtitle text-content-contrast text-right">
+                      {formatCurrency(23423423)} SOL
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div className="flex text-content-secondary">
+                      <span className=" text-content-secondary pr-[7px] pt-[5px]">
+                        <Icons.DownArrowIcon className="w-[12px] h-[10px]" />
+                      </span>
+                      {t("treasuryOverview:withdrawal")}
+                    </div>
+                  </td>
+                  <td>
+                    <ActivityWithdrawalCurve className="w-[72px]" />
+                  </td>
+                  <td>
+                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                      {formatCurrency(12321321312, "$")}
+                    </p>
+                    <p className="text-xs font-subtitle text-content-contrast text-right">
+                      {formatCurrency(23423423)} SOL
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -244,11 +258,11 @@ const Overview = () => {
                 <div className="flex items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-white">
-                  <img
-                    className="w-[18px] h-[18px]"
-                    src={item.logoURI}
-                    alt={item.symbol}
-                  />
+                    <img
+                      className="w-[18px] h-[18px]"
+                      src={item.logoURI}
+                      alt={item.symbol}
+                    />
                   </div>
                   <div className="text-black">{item.symbol}</div>
                 </div>
@@ -319,7 +333,7 @@ const Overview = () => {
                 >
                   <div>
                     <div
-                      onClick={() => setToggleTokensDropdown(prev=>!prev)}
+                      onClick={() => setToggleTokensDropdown((prev) => !prev)}
                       className="absolute absolute left-[10px] top-[8px]"
                     >
                       <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-black">
@@ -334,11 +348,22 @@ const Overview = () => {
                         </div>
                         <Icons.CheveronDownIcon className="text-sm w-[28px]" />
                       </div>
-                      <CollapseDropdown
-                        ref={tokensDropdownWrapper}
-                        className="w-max left-[0px]"
-                        show={toggleTokensDropdown}
-                      >
+                    </div>
+
+                    <CollapseDropdown
+                      ref={tokensDropdownWrapper}
+                      className="w-full left-[0px] mt-3"
+                      show={toggleTokensDropdown}
+                      variant="light"
+                    >
+                      <div>
+                        <Icons.SearchIcon className="absolute left-[10px] top-[11px] text-black" />
+                        <input
+                          className="w-full h-[36px]"
+                          placeholder="Search token"
+                          type="text"
+                        />
+
                         {depositedAssets.map((item) => (
                           <div
                             key={item.symbol}
@@ -347,7 +372,7 @@ const Overview = () => {
                               setToggleTokensDropdown(false);
                               setCurrentToken(item);
                             }}
-                            className="px-[10px] flex cursor-pointer overflow-hidden justify-start items-center h-[40px] text-black"
+                            className="px-[10px] flex cursor-pointer overflow-hidden py-10 px-5 justify-start items-center hover:bg-background-light h-[40px]"
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
@@ -355,11 +380,20 @@ const Overview = () => {
                               src={item.logoURI}
                               alt={item.symbol}
                             />
-                            <div className="text-black">{item.symbol}</div>
+                            <div>
+                              <div className="text-black">{item.symbol}</div>
+                              <div className="text-xs text-content-secondary">
+                                {item.name}
+                              </div>
+                            </div>
+
+                            <div className="ml-auto text-content-secondary">
+                              {item.value} {item.symbol}
+                            </div>
                           </div>
                         ))}
-                      </CollapseDropdown>
-                    </div>
+                      </div>
+                    </CollapseDropdown>
 
                     <input
                       className="w-full h-[56px] pl-[120px] is-amount"
