@@ -85,6 +85,7 @@ interface TokenDetails {
 const Overview = () => {
   const { t } = useTranslation();
   const tokensDropdownWrapper = useRef(null);
+  const [searchData,setSearchData] = useState("");
 
   const [toggleTokensDropdown, setToggleTokensDropdown] =
     useState<boolean>(false);
@@ -290,11 +291,10 @@ const Overview = () => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <div
-                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${
-                      selected
-                        ? "border-primary border-b-[3px] text-primary "
-                        : "border-outline border-b-[1px] text-content-secondary "
-                    } flex justify-center items-center`}
+                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${selected
+                      ? "border-primary border-b-[3px] text-primary "
+                      : "border-outline border-b-[1px] text-content-secondary "
+                      } flex justify-center items-center`}
                   >
                     <Icons.ArrowDownLeftIcon className="w-[14px] h-[14px] mr-[12.17px]" />
                     {t("treasuryOverview:deposit")}
@@ -304,11 +304,10 @@ const Overview = () => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <div
-                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${
-                      selected
-                        ? "border-primary border-b-[3px] text-primary "
-                        : "border-outline border-b-[1px] text-content-secondary "
-                    } flex justify-center items-center`}
+                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${selected
+                      ? "border-primary border-b-[3px] text-primary "
+                      : "border-outline border-b-[1px] text-content-secondary "
+                      } flex justify-center items-center`}
                   >
                     <Icons.ArrowUpRightIcon className="w-[14px] h-[14px] mr-[12.17px]" />
                     {t("treasuryOverview:withdraw")}
@@ -347,53 +346,62 @@ const Overview = () => {
                           {currentToken.symbol}
                         </div>
                         <Icons.CheveronDownIcon className="text-sm w-[28px]" />
-                      </div>
-                    </div>
 
+
+                      </div>
+
+                    </div>
                     <CollapseDropdown
                       ref={tokensDropdownWrapper}
-                      className="w-full left-[0px] mt-3"
+                      className="w-full left-[0px] max-h-40  overflow-auto mt-5 "
                       show={toggleTokensDropdown}
                       variant="light"
                     >
-                      <div>
+                      <div className="">
                         <Icons.SearchIcon className="absolute left-[10px] top-[11px] text-black" />
                         <input
-                          className="w-full h-[36px]"
+                          className="w-full h-[32px] bg-background-primary"
                           placeholder="Search token"
                           type="text"
+                          onChange={(e)=>setSearchData(e.target.value)}
                         />
+                        
 
-                        {depositedAssets.map((item) => (
-                          <div
-                            key={item.symbol}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              setToggleTokensDropdown(false);
-                              setCurrentToken(item);
-                            }}
-                            className="px-[10px] flex cursor-pointer overflow-hidden py-10 px-5 justify-start items-center hover:bg-background-light h-[40px]"
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              className="w-[18px] h-[18px] mr-[12px]"
-                              src={item.logoURI}
-                              alt={item.symbol}
-                            />
-                            <div>
-                              <div className="text-black">{item.symbol}</div>
-                              <div className="text-xs text-content-secondary">
-                                {item.name}
+
+
+                          {depositedAssets.filter(depositedAsset => depositedAsset.symbol.includes(searchData.toUpperCase())).map((item) => (
+                            <div
+                              key={item.symbol}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setToggleTokensDropdown(false);
+                                setCurrentToken(item);
+                              }}
+                              className="border-b-[1px] border-outline px-[10px] flex cursor-pointer overflow-hidden py-6 px-5 justify-start items-center hover:bg-background-light h-[40px]"
+                            >
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                className="w-[18px] h-[18px] mr-[12px]  text-content-primary"
+                                src={item.logoURI}
+                                alt={item.symbol}
+                              />
+                              <div>
+                                <div className="text-black ">{item.symbol}</div>
+                                <div className="text-caption text-content-tertiary">
+                                  {item.name}
+                                </div>
+                              </div>
+
+                              <div className="ml-auto text-caption  text-content-secondary">
+                                {item.value} {item.symbol}
                               </div>
                             </div>
-
-                            <div className="ml-auto text-content-secondary">
-                              {item.value} {item.symbol}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                      
                     </CollapseDropdown>
+
+
 
                     <input
                       className="w-full h-[56px] pl-[120px] is-amount"
@@ -462,7 +470,7 @@ const Overview = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
