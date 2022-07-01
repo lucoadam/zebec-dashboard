@@ -5,13 +5,16 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import counterSlice from "features/count/counterSlice";
-import tokenSlice from "features/token/tokenSlice";
+import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice";
+import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice";
 import userSlice from "features/user/userSlice";
-
+import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice";
 const combineReducer = combineReducers({
   counter: counterSlice,
   user: userSlice,
-  token: tokenSlice,
+  tokenDetails: tokenDetailsSlice,
+  zebecBalance: zebecBalanceSlice,
+  treasuryBalance: treasuryBalanceSlice,
 });
 
 // export const store = configureStore({

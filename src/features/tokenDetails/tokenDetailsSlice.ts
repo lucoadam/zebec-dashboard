@@ -1,22 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenListProvider } from "@solana/spl-token-registry";
 import tokenMetaData from "fakedata/tokens.json";
+import { getRPCNetwork } from "../../constants/cluster";
+import { TokenDetailsState } from "./tokenDetailsSlice.d";
 
-interface Token {
-  name: string;
-  symbol: number;
-  image: string;
-  decimal: number;
-  coingeckoId?: string;
-}
-
-interface TokenState {
-  loading: boolean;
-  tokens: Token[];
-  error: string;
-}
-
-const initialState: TokenState = {
+const initialState: TokenDetailsState = {
   loading: false,
   tokens: [],
   error: "",
@@ -26,18 +14,19 @@ const initialState: TokenState = {
 export const fetchTokens: any = createAsyncThunk(
   "token/fetchTokens",
   async () => {
-    const tokenSymbols = tokenMetaData.map((token) => token.symbol);
+    const tokensMint = tokenMetaData.map((token) => token.mint);
     const tokens = await new TokenListProvider().resolve();
     const tokensDetails = tokens
-      .filterByClusterSlug("mainnet-beta")
+      .filterByClusterSlug(getRPCNetwork())
       .getList()
-      .filter((token) => tokenSymbols.includes(token.symbol))
+      .filter((token) => tokensMint.includes(token.address))
       .map((token) => ({
         name: token.name,
         symbol: token.symbol,
         image: token.logoURI,
         decimal: token.decimals,
-        coingeckoId: token?.extensions?.coingeckoId,
+        mint: token.address,
+        coingeckoId: token?.extensions?.coingeckoId || "",
       }));
     return tokensDetails;
   }
