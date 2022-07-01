@@ -2,7 +2,6 @@ import { IconButton } from "components/shared";
 import { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { LeftArrowIcon } from "../../assets/icons";
 import Layout from "../../components/layouts/Layout";

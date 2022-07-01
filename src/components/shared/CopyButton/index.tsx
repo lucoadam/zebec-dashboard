@@ -3,7 +3,8 @@ import * as Icons from "assets/icons";
 
 const CopyButton: React.FC<{
   content: string;
-}> = ({ content }) => {
+  className?: string;
+}> = ({ content, className = '' }) => {
   const [isClicked, setIsClicked] = React.useState<boolean>(false);
 
   return (
@@ -13,7 +14,7 @@ const CopyButton: React.FC<{
           onClick={(e: Event) => {
             e.stopPropagation();
           }}
-          className="text-base text-success transition ease-in-out delay-150"
+          className={`text-base cursor-pointer text-success transition ease-in-out delay-150 ${className}`}
         />
       ) : (
         <Icons.CopyIcon
@@ -22,10 +23,10 @@ const CopyButton: React.FC<{
             setIsClicked(true);
             setTimeout(() => {
               setIsClicked(false);
-            }, 4000);
+            }, 800);
             navigator.clipboard.writeText(content);
           }}
-          className="text-base"
+          className={`text-base cursor-pointer ${className}`}
         />
       )}
     </>

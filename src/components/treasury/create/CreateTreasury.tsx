@@ -6,19 +6,13 @@ import CreatingTreasury from "./steps/CreatingTreasury";
 import { StepsList } from "./steps/data";
 import { useTranslation } from "next-i18next";
 
-
 const CreateTreasury: NextPage = () => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const { t } = useTranslation();
 
   const [treasury, setTreasury] = React.useState<Treasury>({
     name: "",
-    owners: [
-      {
-        name: "Alish Dahal",
-        wallet: "FbfwE8ZmVdwUbbEXdq4ofhuUEiAxeSk5kaoYrJJekpnZ"
-      }
-    ],
+    owners: [],
     minValidator: 0,
   });
 
@@ -38,7 +32,9 @@ const CreateTreasury: NextPage = () => {
         <div className="flex-none sm:w-1/2 w-full">
           {StepsList.map((step: Step, index: number) => (
             <div
-              className={`steps-container flex mb-[64px] ${StepsList.length - 1 === index ? "last" : ""}`}
+              className={`steps-container flex mb-[64px] ${
+                StepsList.length - 1 === index ? "last" : ""
+              }`}
               key={`steps-${index}`}
             >
               <div
@@ -52,7 +48,9 @@ const CreateTreasury: NextPage = () => {
                 <h4 className="leading-6 font-medium text-sm text-content-primary">
                   {t(`createTreasury:${step.name}`)}
                 </h4>
-                <p className="text-content-secondary">{t(`createTreasury:${step.subHeading}`)}</p>
+                <p className="text-content-secondary">
+                  {t(`createTreasury:${step.subHeading}`)}
+                </p>
               </div>
             </div>
           ))}

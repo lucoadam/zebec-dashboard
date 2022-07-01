@@ -5,53 +5,53 @@ import * as Icons from "assets/icons";
 import { toSubstring } from "utils";
 import { Owner } from "./CreateTreasury.d";
 import { IconButton } from "components/shared";
+import CopyButton from "components/shared/CopyButton";
 
 const OwnerLists: FC<{
   maxItems?: number;
   owners: Owner[];
   setOwners?: (owners: Owner[]) => void;
   showCopy?: boolean;
-}> = ({ owners, setOwners, maxItems = 3, showCopy }) => {
+  className?: string;
+}> = ({ owners, setOwners, maxItems = 3, showCopy, className = ""}) => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
     AvatarImages.Avatar4,
   ];
   const height = `h-[${maxItems * 4.5}rem]`;
-  const styles = {
-    ...(owners.length > maxItems
-      ? {
-          height: `${maxItems * 4.5}rem`,
-        }
-      : {}),
-  };
+  // const styles = {
+  //   ...(owners.length > maxItems
+  //     ? {
+  //         height: `${maxItems * 4.5}rem`,
+  //       }
+  //     : {}),
+  // };
   const classes = owners.length > maxItems ? `${height} overflow-y-scroll` : "";
   const rowClasses = owners.length > maxItems ? `pr-[8px]` : "";
 
   return (
-    <div className={`divide-y divide-outline ${classes}`} style={styles}>
+    <div className={`divide-y divide-outline ${classes} ${className}`}>
       {owners.map((owner, index) => {
         return (
-          <div key={index} className="w-full flex py-[16px]">
-            <Image
-              src={Avatars[index % 3]}
-              layout="fixed"
+          <div key={index} className="w-full flex py-[14px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={Avatars[index % 3].src}
               width={48}
               height={48}
-              objectFit="contain"
+              className="object-contain"
               alt={`Avatar ${index + 1}`}
             />
-            <div className={`w-full flex justify-between items-center ${rowClasses}`}>
-              <div className="flex flex-col mx-3">
+            <div className={`flex flex-1 justify-between items-center ${rowClasses}`}>
+              <div className="flex  flex-col mx-3">
                 <div className="text-subtitle text-content-primary font-semibold">
                   {owner.name}
                 </div>
-                <div className="flex items-center text-content-primary text-xs">
+                <div className="flex items-center text-content-primary text-body">
                   {toSubstring(owner.wallet, showCopy ? 12 : 6, true)}{" "}
                   {showCopy && (
-                    <div className="ml-2 p-2 bg-background-secondary rounded-full">
-                      <Icons.CopyIcon className="text-base text-[8px]" />
-                    </div>
+                    <CopyButton className="ml-[5px]" content={owner.wallet}/>
                   )}
                 </div>
               </div>
@@ -61,7 +61,7 @@ const OwnerLists: FC<{
                     setOwners(owners.filter((o) => o.wallet !== owner.wallet));
                   }}
                   className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
-                  icon={<Icons.CrossIcon className="text-base text-[8px]" />}
+                  icon={<Icons.CrossIcon className="text-base" />}
                 />
               )}
             </div>

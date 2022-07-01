@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 interface SelectFieldProps
   extends React.InputHTMLAttributes<HTMLSelectElement> {
   totalItems: number;
-  onSelected?: (value: number) => void;
+  onSelected?: (value: number, error?: boolean) => void;
 }
 
 const SelectField: FC<SelectFieldProps> = ({
@@ -28,6 +28,9 @@ const SelectField: FC<SelectFieldProps> = ({
           if (rest.onSelected) {
             rest?.onSelected(Number(e.target.value) ?? 0);
           }
+        }
+        else if (rest.onSelected) {
+          rest?.onSelected(Number(e.target.value) ?? 0, true);
         }
       }}
       {...rest}

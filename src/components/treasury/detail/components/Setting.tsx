@@ -106,7 +106,7 @@ const Setting = () => {
           />
         </div>
       </div>
-      <div className="w-[274px] ml-[215px]">
+      <div className="min-w-[280px] ml-[215px]">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
         {t('treasurySettings:owners')}
         </div>
