@@ -1,9 +1,12 @@
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
 import { connection } from "constants/cluster";
-import { tokens } from "constants/tokens";
+import { TokenDetails } from "./../features/tokenDetails/tokenDetailsSlice.d";
 
-export const getTokensBalanceOfWallet = async (wallet: String) => {
+export const getTokensBalanceOfWallet = async (
+  wallet: String,
+  tokens: TokenDetails[]
+) => {
   const tokensMint = tokens.map((token) => token.mint);
   const accounts = await connection.getParsedTokenAccountsByOwner(
     new PublicKey(wallet),

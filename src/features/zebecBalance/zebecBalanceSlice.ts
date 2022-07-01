@@ -18,11 +18,10 @@ export const fetchZebecBalance: any = createAsyncThunk(
     const tokens = tokenDetails.tokens;
 
     // fetch wallet tokens
-    const tokensBalance = await getTokensBalanceOfWallet(wallet);
+    const tokensBalance = await getTokensBalanceOfWallet(wallet, tokens);
 
     // fetch USD price of tokens
     const tokensPrice = await getTokensUSDPrice(tokens);
-
     return tokens.map((token) => ({
       symbol: token.symbol,
       balance: tokensBalance[token.mint] || 0,

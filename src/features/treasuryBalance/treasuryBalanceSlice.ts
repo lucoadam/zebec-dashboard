@@ -22,7 +22,7 @@ export const fetchTreasuryBalance: any = createAsyncThunk(
     const tokens = tokenDetails.tokens;
 
     // fetch wallet tokens
-    const tokensBalance = await getTokensBalanceOfWallet(address);
+    const tokensBalance = await getTokensBalanceOfWallet(address, tokens);
 
     // fetch USD price of tokens
     const tokensPrice = await getTokensUSDPrice(tokens);
