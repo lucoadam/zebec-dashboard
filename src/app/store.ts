@@ -1,15 +1,17 @@
 import {
   Action,
+  combineReducers,
   configureStore,
   ThunkAction,
-  combineReducers,
 } from "@reduxjs/toolkit";
 import counterSlice from "features/count/counterSlice";
+import tokenSlice from "features/token/tokenSlice";
 import userSlice from "features/user/userSlice";
 
 const combineReducer = combineReducers({
   counter: counterSlice,
   user: userSlice,
+  token: tokenSlice,
 });
 
 // export const store = configureStore({
