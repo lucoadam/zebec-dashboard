@@ -161,8 +161,8 @@ const Overview = () => {
               <tbody>
                 <tr>
                   <td>
-                    <div className="flex text-content-secondary">
-                      <span className="leading-6 text-base uppercase font-normal text-content-success pr-[5px] pt-[2px]">
+                    <div className="flex text-content-secondary font-semibold uppercase text-caption">
+                      <span className="leading-6 text-xs uppercase font-normal text-content-success pr-[5px] pt-[2px]">
                         <Icons.ArrowDownLeftIcon />
                       </span>
                       {t("treasuryOverview:incoming")}
@@ -172,7 +172,7 @@ const Overview = () => {
                     <ActivityDeopsitCurve className="w-[72px]" />
                   </td>
                   <td>
-                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                    <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                       {formatCurrency(12321321312, "$")}
                     </p>
                     <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -182,7 +182,7 @@ const Overview = () => {
                 </tr>
                 <tr>
                   <td>
-                    <div className="flex text-content-secondary">
+                    <div className="flex text-content-secondary uppercase text-caption font-semibold">
                       <span className="leading-6 text-base uppercase font-normal text-content-error pr-[5px] pt-[2px]">
                         <Icons.ArrowUpRightIcon />
                       </span>
@@ -193,7 +193,7 @@ const Overview = () => {
                     <ActivityOutgoingCurve className="w-[72px]" />
                   </td>
                   <td>
-                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                    <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                       {formatCurrency(12321321312, "$")}
                     </p>
                     <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -203,9 +203,9 @@ const Overview = () => {
                 </tr>
                 <tr>
                   <td>
-                    <div className="flex text-content-secondary">
+                    <div className="flex text-content-secondary uppercase text-caption font-semibold">
                       <span className=" text-content-secondary pr-[7px] pt-[5px]">
-                        <Icons.DownArrowIcon className="w-[12px] h-[10px]" />
+                        <Icons.DownArrowIcon className="w-3 h-2.5" />
                       </span>
                       {t("treasuryOverview:withdrawal")}
                     </div>
@@ -214,7 +214,7 @@ const Overview = () => {
                     <ActivityWithdrawalCurve className="w-[72px]" />
                   </td>
                   <td>
-                    <p className="text-sm leading-6 font-medium text-black text-right ">
+                    <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                       {formatCurrency(12321321312, "$")}
                     </p>
                     <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -238,7 +238,7 @@ const Overview = () => {
           </p>
           <InputField className="h-[36px] my-[24px] relative" error={false}>
             <div>
-              <Icons.SearchIcon className="absolute left-[10px] top-[11px] text-black" />
+              <Icons.SearchIcon className="absolute left-2.5 top-[11px] text-content-primary" />
               <input
                 className="w-full h-[36px]"
                 value={search}
@@ -263,18 +263,18 @@ const Overview = () => {
               >
                 <div className="flex items-center">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-white">
+                  <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-background-primary">
                     <img
                       className="w-[18px] h-[18px]"
                       src={item.logoURI}
                       alt={item.symbol}
                     />
                   </div>
-                  <div className="text-black">{item.symbol}</div>
+                  <div className="text-content-primary">{item.symbol}</div>
                 </div>
 
                 <div>
-                  <p className="text-sm leading-6 font-medium text-black text-right ">
+                  <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                     {formatCurrency(item.balance, "$")}
                   </p>
                   <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -317,7 +317,7 @@ const Overview = () => {
          * Zebec Treasury Help
          */}
         <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
-          <p className="leading-6 text-base font-semibold text-black mb-[8px]">
+          <p className="leading-6 text-base font-semibold text-content-primary mb-[8px]">
             {t("treasuryOverview:treasury-help")}
           </p>
           <p className="leading-5 text-sm font-normal text-content-contrast">
@@ -346,7 +346,7 @@ const Overview = () => {
          * Send Feedback
          */}
         <div className="w-full rounded-[4px] bg-background-secondary px-[24px] pt-[24px] pb-[28px]">
-          <p className="leading-6 text-base font-semibold text-black mb-[8px]">
+          <p className="leading-6 text-base font-semibold text-content-primary mb-[8px]">
             {t("treasuryOverview:send-feedback")}
           </p>
           <p className="leading-5 text-sm font-normal text-content-contrast">

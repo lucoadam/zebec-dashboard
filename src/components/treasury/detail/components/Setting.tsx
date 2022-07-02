@@ -67,7 +67,7 @@ const Setting = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center text-content-primary text-sm mb-[50px]">
+        <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
           <span className="text-sm font-normal text-content-secondary">
           {t('treasurySettings:minimum-confirmation')}:
           </span>

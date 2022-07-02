@@ -164,12 +164,10 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             <SelectField
               value={props.treasury.minValidator}
               onSelected={(value, error = false) => {
-                if (!error) {
-                  props.setTreasury((treasury) => ({
-                    ...treasury,
-                    minValidator: value,
-                  }));
-                }
+                props.setTreasury((treasury) => ({
+                  ...treasury,
+                  minValidator: value,
+                }));
                 setSelectionError(error);
               }}
               className="mr-3 w-[70px]"

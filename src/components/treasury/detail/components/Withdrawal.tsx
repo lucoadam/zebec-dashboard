@@ -31,22 +31,22 @@ export const Withdrawal = () => {
       </p>
       <InputField
         label={t("treasuryOverview:token")}
-        className="mb-[24px] relative text-black"
+        className="mb-[24px] relative text-content-primary"
         error={false}
       >
         <div>
           <div
             onClick={() => setToggleTokensDropdown((prev) => !prev)}
-            className="absolute left-[10px] top-[8px]"
+            className="absolute left-2.5 top-[8px]"
           >
-            <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-black">
+            <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-content-primary">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="w-[18px] h-[18px]"
                 src={currentToken.logoURI}
                 alt={currentToken.symbol}
               />
-              <div className="max-w-[60px] ml-[5px] overflow-x-hidden text-black">
+              <div className="max-w-[60px] ml-[5px] overflow-x-hidden text-content-primary">
                 {currentToken.symbol}
               </div>
               <Icons.CheveronDownIcon className="text-sm w-[28px]" />
@@ -64,15 +64,15 @@ export const Withdrawal = () => {
                     setToggleTokensDropdown(false);
                     setCurrentToken(item);
                   }}
-                  className="px-[10px] flex cursor-pointer overflow-hidden justify-start items-center h-[40px] text-black"
+                  className="px-2.5 flex cursor-pointer overflow-hidden justify-start items-center h-[40px] text-content-primary"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    className="w-[18px] h-[18px] mr-[12px]"
+                    className="w-[18px] h-[18px] mr-3"
                     src={item.logoURI}
                     alt={item.symbol}
                   />
-                  <div className="text-black">{item.symbol}</div>
+                  <div className="text-content-primary">{item.symbol}</div>
                 </div>
               ))}
             </CollapseDropdown>
@@ -87,7 +87,7 @@ export const Withdrawal = () => {
           <Button
             size="small"
             title={t("treasuryOverview:max")}
-            className="h-[40px] absolute right-[10px] top-[8px] text-black"
+            className="h-[40px] absolute right-[10px] top-[8px] text-content-primary"
           />
         </div>
       </InputField>

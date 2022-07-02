@@ -13,25 +13,27 @@ const OwnerLists: FC<{
   setOwners?: (owners: Owner[]) => void;
   showCopy?: boolean;
   className?: string;
-}> = ({ owners, setOwners, maxItems = 3, showCopy, className = ""}) => {
+}> = ({ owners, setOwners, maxItems = 3, showCopy, className = "" }) => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
     AvatarImages.Avatar4,
   ];
-  const height = `h-[${maxItems * 4.5}rem]`;
-  // const styles = {
-  //   ...(owners.length > maxItems
-  //     ? {
-  //         height: `${maxItems * 4.5}rem`,
-  //       }
-  //     : {}),
-  // };
-  const classes = owners.length > maxItems ? `${height} overflow-y-scroll` : "";
-  const rowClasses = owners.length > maxItems ? `pr-[8px]` : "";
+  const styles = {
+    ...(owners.length > maxItems
+      ? {
+          height: `${maxItems * 4.5}rem`,
+        }
+      : {}),
+  };
+  const classes = owners.length > maxItems ? `overflow-y-scroll` : "";
+  const rowClasses = owners.length > maxItems ? `pr-5` : "";
 
   return (
-    <div className={`divide-y divide-outline ${classes} ${className}`}>
+    <div
+      className={`divide-y divide-outline ${classes} ${className}`}
+      style={styles}
+    >
       {owners.map((owner, index) => {
         return (
           <div key={index} className="w-full flex py-[14px]">
@@ -43,7 +45,9 @@ const OwnerLists: FC<{
               className="object-contain"
               alt={`Avatar ${index + 1}`}
             />
-            <div className={`flex flex-1 justify-between items-center ${rowClasses}`}>
+            <div
+              className={`flex flex-1 justify-between items-center ${rowClasses}`}
+            >
               <div className="flex  flex-col mx-3">
                 <div className="text-subtitle text-content-primary font-semibold">
                   {owner.name}
@@ -51,7 +55,9 @@ const OwnerLists: FC<{
                 <div className="flex items-center text-content-primary text-body">
                   {toSubstring(owner.wallet, showCopy ? 12 : 6, true)}{" "}
                   {showCopy && (
-                    <CopyButton className="ml-[5px]" content={owner.wallet}/>
+                    <div className="ml-1.5 w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
+                      <CopyButton content={owner.wallet} />
+                    </div>
                   )}
                 </div>
               </div>
