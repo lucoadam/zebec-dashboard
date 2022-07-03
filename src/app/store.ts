@@ -9,6 +9,7 @@ import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice";
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice";
 import userSlice from "features/user/userSlice";
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice";
+import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice";
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -16,6 +17,7 @@ const combineReducer = combineReducers({
   tokenDetails: tokenDetailsSlice,
   walletBalance: walletBalanceSlice,
   treasuryBalance: treasuryBalanceSlice,
+  zebecBalance: zebecBalanceSlice,
 });
 
 // export const store = configureStore({
