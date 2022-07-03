@@ -17,7 +17,6 @@ export const fetchTokens: any = createAsyncThunk(
     const tokensMint = tokenMetaData
       .filter((token) => token.mint)
       .map((token) => token.mint);
-    console.log(tokensMint);
     const tokens = await new TokenListProvider().resolve();
 
     const tokensDetails = [

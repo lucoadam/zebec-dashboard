@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PublicKey } from "@solana/web3.js";
+import { constants } from "constants/constants";
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance";
 import { getTokensUSDPrice } from "utils/getTokensPrice";
 import { RootState } from "../../app/store";
@@ -11,18 +12,15 @@ const initialState: ZebecTokenState = {
   error: "",
 };
 
-const PROGRAM_ID = "CJJCNAttdC7nkjEJ5AyxNiPpyUmpryn8dtAuR8um7LtH";
-
 //Generates pending, fulfilled and rejected action types
 export const fetchZebecBalance: any = createAsyncThunk(
   "balance/fetchZebecBalance",
   async (wallet: string, { getState }) => {
-    const base58PublicKey = new PublicKey(PROGRAM_ID);
+    const base58PublicKey = new PublicKey(constants.PROGRAM_ID);
     const validProgramAddressPub = await PublicKey.findProgramAddress(
       [new PublicKey(wallet).toBuffer()],
       base58PublicKey
     );
-    console.log(validProgramAddressPub[0].toString());
     const { tokenDetails } = getState() as RootState;
     const tokens = tokenDetails.tokens;
 
@@ -34,7 +32,6 @@ export const fetchZebecBalance: any = createAsyncThunk(
 
     // fetch USD price of tokens
     const tokensPrice = await getTokensUSDPrice(tokens);
-    console.log(tokensPrice);
     return tokens.map((token) => ({
       symbol: token.symbol,
       balance: tokensBalance[token.mint] || 0,
