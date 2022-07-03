@@ -1,6 +1,6 @@
 export interface TokenDetails {
   name: string;
-  symbol: number;
+  symbol: string;
   image: string;
   decimal: number;
   mint: string;

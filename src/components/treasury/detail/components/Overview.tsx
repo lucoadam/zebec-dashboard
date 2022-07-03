@@ -8,6 +8,11 @@ import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg
 import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg";
 import { useClickOutside } from "hooks";
 import { useTranslation } from "next-i18next";
+import { useAppSelector } from "app/hooks";
+import { string } from "yup";
+
+
+
 
 const depositedAssets = [
   {
@@ -76,13 +81,24 @@ const depositedAssets = [
 ];
 
 interface TokenDetails {
+
+  name: string;
   symbol: string;
-  logoURI: string;
-  balance: number;
-  balanceUSD: number;
+  image: string;
+  mint: string;
+  decimal: Number,
+  coingeckoId: string;
 }
 
+
 const Overview = () => {
+  const tokenDetails = useAppSelector(state => state.tokenDetails);
+  const treasuryBalance = useAppSelector(state => state.treasuryBalance);
+  const walletData = useAppSelector(state => state.walletBalance);
+
+  const [depositAmount, setDepositAmount] = useState<number>();
+  const [withdrawAmount, setWithdrawAmount] = useState<number>();
+
   const { t } = useTranslation();
   const tokensDropdownWrapper = useRef(null);
 
@@ -90,7 +106,7 @@ const Overview = () => {
     useState<boolean>(false);
 
   const [currentToken, setCurrentToken] = useState<TokenDetails>(
-    depositedAssets[0]
+    tokenDetails.tokens[0]
   );
 
   const handleClose = () => {
@@ -250,33 +266,39 @@ const Overview = () => {
             </div>
           </InputField>
           <div className="max-h-[400px] overflow-y-scroll pr-2">
-            {depositedAssets.map((item) => (
-              <div
-                className="flex w-full h-[32px] mb-[24px] justify-between"
-                key={item.symbol}
-              >
-                <div className="flex items-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-white">
-                    <img
-                      className="w-[18px] h-[18px]"
-                      src={item.logoURI}
-                      alt={item.symbol}
-                    />
+            {tokenDetails.tokens.map((item, index) => {
+              return (
+                <div
+                  className="flex w-full h-[32px] mb-[24px] justify-between"
+                  key={item.symbol}
+                >
+                  <div className="flex items-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-white">
+                      <img
+                        className="w-[18px] h-[18px]"
+                        src={item.image}
+                        alt={item.symbol} />
+                    </div>
+                    <div className="text-black">{item.symbol}</div>
                   </div>
-                  <div className="text-black">{item.symbol}</div>
-                </div>
 
-                <div>
-                  <p className="text-sm leading-6 font-medium text-black text-right ">
-                    {formatCurrency(item.balance, "$")}
-                  </p>
-                  <p className="text-xs font-subtitle text-content-contrast text-right">
-                    {formatCurrency(item.balanceUSD)} {item.symbol}
-                  </p>
+                  <div>
+                    <p className="text-sm leading-6 font-medium text-black text-right ">
+
+
+                      {/* {console.log("treasure", treasuryBalance.treasury?.tokens[0].usdBalance)} */}
+                      {formatCurrency(Number(treasuryBalance.treasury?.tokens.filter(tokens => tokens.symbol.includes(item.symbol))[0].balance), "$")}
+
+                    </p>
+                    <p className="text-xs font-subtitle text-content-contrast text-right">
+
+                      {treasuryBalance.treasury?.tokens.filter(tokens => tokens.symbol.includes(item.symbol))[0].usdBalance} {item.symbol}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -290,11 +312,10 @@ const Overview = () => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <div
-                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${
-                      selected
-                        ? "border-primary border-b-[3px] text-primary "
-                        : "border-outline border-b-[1px] text-content-secondary "
-                    } flex justify-center items-center`}
+                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${selected
+                      ? "border-primary border-b-[3px] text-primary "
+                      : "border-outline border-b-[1px] text-content-secondary "
+                      } flex justify-center items-center`}
                   >
                     <Icons.ArrowDownLeftIcon className="w-[14px] h-[14px] mr-[12.17px]" />
                     {t("treasuryOverview:deposit")}
@@ -304,11 +325,10 @@ const Overview = () => {
               <Tab as={Fragment}>
                 {({ selected }) => (
                   <div
-                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${
-                      selected
-                        ? "border-primary border-b-[3px] text-primary "
-                        : "border-outline border-b-[1px] text-content-secondary "
-                    } flex justify-center items-center`}
+                    className={`w-1/2  pt-[16px] pb-[8px] outline-0 cursor-pointer ${selected
+                      ? "border-primary border-b-[3px] text-primary "
+                      : "border-outline border-b-[1px] text-content-secondary "
+                      } flex justify-center items-center`}
                   >
                     <Icons.ArrowUpRightIcon className="w-[14px] h-[14px] mr-[12.17px]" />
                     {t("treasuryOverview:withdraw")}
@@ -321,8 +341,6 @@ const Overview = () => {
                 <p className="leading-4 text-xs font-normal text-content-contrast">
                   {t("treasuryOverview:deposit-description")}
                 </p>
-              </Tab.Panel>
-              <Tab.Panel>
                 <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
                   {t("treasuryOverview:withdraw-description")}
                 </p>
@@ -340,7 +358,7 @@ const Overview = () => {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           className="w-[18px] h-[18px]"
-                          src={currentToken.logoURI}
+                          src={currentToken.image}
                           alt={currentToken.symbol}
                         />
                         <div className="max-w-[60px] ml-[5px] overflow-x-hidden text-black">
@@ -364,7 +382,7 @@ const Overview = () => {
                           type="text"
                         />
 
-                        {depositedAssets.map((item) => (
+                        {tokenDetails.tokens.map((item) => (
                           <div
                             key={item.symbol}
                             onClick={(event) => {
@@ -377,8 +395,9 @@ const Overview = () => {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               className="w-[18px] h-[18px] mr-[12px]"
-                              src={item.logoURI}
+                              src={item.image}
                               alt={item.symbol}
+
                             />
                             <div>
                               <div className="text-black">{item.symbol}</div>
@@ -388,7 +407,7 @@ const Overview = () => {
                             </div>
 
                             <div className="ml-auto text-content-secondary">
-                              {item.value} {item.symbol}
+                              {walletData.tokens.filter((token) => token.symbol.includes(item.symbol))[0].balance} {item.symbol}
                             </div>
                           </div>
                         ))}
@@ -400,11 +419,109 @@ const Overview = () => {
                       placeholder={t("treasuryOverview:enter-amount")}
                       type="number"
                       min="0"
+                      value={depositAmount}
+                      onChange={(e) => setDepositAmount(Number(e.target.value))}
                     />
                     <Button
                       size="small"
                       title={t("treasuryOverview:max")}
                       className="h-[40px] absolute right-[10px] top-[8px] text-black"
+                      onClick={() => { setDepositAmount(walletData.tokens.filter((token) => token.symbol.includes(currentToken.symbol))[0].balance) }}
+                    />
+                  </div>
+                </InputField>
+                <Button
+                  className="w-full mb-[12px]"
+                  variant="gradient"
+                  title={t("treasuryOverview:deposit")}
+                />
+              </Tab.Panel>
+              <Tab.Panel>
+                <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
+                  {t("treasuryOverview:withdraw-description")}
+                </p>
+                <InputField
+                  label={t("treasuryOverview:token")}
+                  className="mb-[24px] relative text-black"
+                  error={false}
+                >
+                  <div>
+                    <div
+                      onClick={() => setToggleTokensDropdown((prev) => !prev)}
+                      className="absolute absolute left-[10px] top-[8px]"
+                    >
+                      <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-black">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="w-[18px] h-[18px]"
+                          src={currentToken.image}
+                          alt={currentToken.symbol}
+                        />
+                        <div className="max-w-[60px] ml-[5px] overflow-x-hidden text-black">
+                          {currentToken.symbol}
+                        </div>
+                        <Icons.CheveronDownIcon className="text-sm w-[28px]" />
+                      </div>
+                    </div>
+
+                    <CollapseDropdown
+                      ref={tokensDropdownWrapper}
+                      className="w-full left-[0px] mt-3"
+                      show={toggleTokensDropdown}
+                      variant="light"
+                    >
+                      <div>
+                        <Icons.SearchIcon className="absolute left-[10px] top-[11px] text-black" />
+                        <input
+                          className="w-full h-[36px]"
+                          placeholder="Search token"
+                          type="text"
+                        />
+
+                        {tokenDetails.tokens.map((item) => (
+                          <div
+                            key={item.symbol}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setToggleTokensDropdown(false);
+                              setCurrentToken(item);
+                            }}
+                            className="px-[10px] flex cursor-pointer overflow-hidden py-10 px-5 justify-start items-center hover:bg-background-light h-[40px]"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              className="w-[18px] h-[18px] mr-[12px]"
+                              src={item.image}
+                              alt={item.symbol}
+                            />
+                            <div>
+                              <div className="text-black">{item.symbol}</div>
+                              <div className="text-xs text-content-secondary">
+                                {item.name}
+                              </div>
+                            </div>
+
+                            <div className="ml-auto text-content-secondary">
+                              {walletData.tokens.filter((token) => token.symbol.includes(item.symbol))[0].balance} {item.symbol}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CollapseDropdown>
+
+                    <input
+                      className="w-full h-[56px] pl-[120px] is-amount"
+                      placeholder={t("treasuryOverview:enter-amount")}
+                      type="number"
+                      min="0"
+                      value={withdrawAmount}
+                      onChange={(e) => setWithdrawAmount(Number(e.target.value))}
+                    />
+                    <Button
+                      size="small"
+                      title={t("treasuryOverview:max")}
+                      className="h-[40px] absolute right-[10px] top-[8px] text-black"
+                      onClick={() => { setWithdrawAmount(walletData.tokens.filter((token) => token.symbol.includes(currentToken.symbol))[0].balance) }}
                     />
                   </div>
                 </InputField>
