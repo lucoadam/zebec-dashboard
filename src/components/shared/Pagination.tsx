@@ -2,17 +2,19 @@ import { IncomingMessage } from "http";
 import React, { FC, useState, useEffect, useMemo, Dispatch, SetStateAction } from "react";
 import * as Icons from "assets/icons";
 import { number } from "yup";
+import { RowsPerPage } from "./RowsPerPage";
 
 interface PaginationProps {
     pages: number;
     setCurrentPage: Dispatcher<number>;
     setNoOfRows: Dispatcher<number>;
+    
 
 }
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 export const Pagination: FC<PaginationProps> = (props) => {
 
-
+const [activeClass,setActiveClass]=useState<String>("");
     const {
         pages, setCurrentPage,setNoOfRows
     } = props;
@@ -92,19 +94,8 @@ export const Pagination: FC<PaginationProps> = (props) => {
 
     return (
         <>
-            <div className="flex text-caption">
-                <div className="flex items-center gap-x-2">
-                    <div className="text-content-secondary pl-5" >
-                        <span className="">Rows per page:</span>   
-                    </div>
-                    <div className="text-content-primary "> 
-                        <select className="pr-6 text-caption border-none " id="rowsperpage" onChange={(e)=>setNoOfRows(Number(e.target.value))}>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </select>
-                    </div>
-                </div>
+         <div className="flex text-caption pt-5">
+            <RowsPerPage setNoOfRows={setNoOfRows}/>
                 <div className="flex items-center gap-x-2 ml-auto pr-5">
                     {/* Previous Button */}
                     <button
@@ -112,8 +103,13 @@ export const Pagination: FC<PaginationProps> = (props) => {
                                 ? "opacity-50 cursor-not-allowed"
                                 : "cursor-pointer"
                             }`}
-                        onClick={() =>
+                        onClick={() =>{
+                           
                             setCurrentButton((prev: number) => (prev <= 1 ? prev : prev - 1))
+                           
+
+                        }
+                            
                         }
                     >
                         <Icons.PaginationLeftArrow />
@@ -124,9 +120,9 @@ export const Pagination: FC<PaginationProps> = (props) => {
                         return (
                             <div
                                 key={index}
-                                className={` px-3 py-1.5 text-content-primary  ${currentButton === item
-                                        ? "bg-primary rounded-lg"
-                                        : "bg-background-primary"
+                                className={`px-3 py-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
+                                        ? "transition-colors duration-700 ease-in bg-primary rounded-lg"
+                                        : "bg-background-primary rounded-lg"
                                     }`}
                                 onClick={() => setCurrentButton(item)}
                             >
