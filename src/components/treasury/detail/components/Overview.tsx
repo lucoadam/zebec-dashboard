@@ -13,53 +13,67 @@ import { Withdrawal } from "./Withdrawal";
 
 export const depositedAssets = [
   {
+    name: "Solana",
     symbol: "SOL",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "USD Coin",
     symbol: "USDC",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.9,
   },
   {
+    name: "Tether",
     symbol: "USDT",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg",
     balance: 201320.72,
     balanceUSD: 201320.72,
+    value: 0.5,
   },
   {
+    name: "Zebec Protocol",
     symbol: "ZBC",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/zebeczgi5fSEtbpfQKVZKCJ3WgYXxjkMUkNNx7fLKAF/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.6,
   },
   {
+    name: "Puff",
     symbol: "PUFF",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "All",
     symbol: "ALL",
     logoURI:
       "https://raw.githubusercontent.com/jamroszk/crypto/main/All_Logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.5,
   },
   {
+    name: "Winerz",
     symbol: "WNZ",
     logoURI:
       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/WNZzxM1WqWFH8DpDZSqr6EoHKWXeMx9NLLd2R5RzGPA/logo.png",
     balance: 24320,
     balanceUSD: 8543459.33,
+    value: 0.1,
   },
 ];
 

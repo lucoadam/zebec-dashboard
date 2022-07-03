@@ -14,6 +14,8 @@ import {
 import { clusterApiUrl } from "@solana/web3.js";
 import { appWithTranslation } from "next-i18next";
 import { ThemeProvider } from "next-themes";
+import { Provider } from "react-redux";
+import { store } from "app/store";
 //Styles
 import "styles/globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
@@ -33,15 +35,17 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     [network],
   );
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <ThemeProvider>
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <Provider store={store}>
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <ThemeProvider>
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    </Provider>
   );
 };
 

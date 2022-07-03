@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
-import { RouteProps } from "./routes";
+import { FC } from "react";
+import { RouteProps } from "./routes.d";
 
 const NavLink: FC<RouteProps> = (props) => {
   const { name, path, Icon } = props;
@@ -16,7 +16,7 @@ const NavLink: FC<RouteProps> = (props) => {
   return (
     <>
       <Link href={path ?? ""}>
-        <a className="flex gap-x-3 text-subtitle-sm font-medium group focus:outline-none">
+        <a className="flex gap-x-1.5 lg:gap-x-3 text-subtitle-sm font-medium group focus:outline-none">
           <div
             className={`h-6 w-6 rounded-md ${props.noBackground ? '': 'bg-background-secondary'} text-base grid place-content-center`}
           >
