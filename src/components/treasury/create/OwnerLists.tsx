@@ -53,7 +53,7 @@ const OwnerLists: FC<{
                   {owner.name}
                 </div>
                 <div className="flex items-center text-content-primary text-body">
-                  {toSubstring(owner.wallet, showCopy ? 12 : 6, true)}{" "}
+                  {toSubstring(owner.wallet, 10, true)}{" "}
                   {showCopy && (
                     <div className="ml-1.5 w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
                       <CopyButton content={owner.wallet} />
