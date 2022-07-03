@@ -17,7 +17,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
     handleSubmit,
     setValue,
   } = useForm({
-    mode: "all",
+    mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema),
   });
 
@@ -35,10 +35,10 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <h3 className="leading-7 font-semibold text-base text-content-primary">
-            {t("createTreasury:first-steper.title")}
+          {t("createTreasury:first-steper.title")}
         </h3>
         <p className="text-content-secondary font-normal text-sm mb-[32px]">
-        {t("createTreasury:first-steper.description")}
+          {t("createTreasury:first-steper.description")}
         </p>
         <InputField
           error={!!errors.name}
@@ -48,10 +48,10 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
           type="text"
           className="h-[40px] w-full"
         >
-          <input {...register("name")} autoFocus/>
+          <input {...register("name")} autoFocus />
         </InputField>
         <Button
-          title={t("common:continue")}
+          title={t("common:buttons.continue")}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"

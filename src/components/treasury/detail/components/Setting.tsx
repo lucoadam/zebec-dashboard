@@ -67,14 +67,14 @@ const Setting = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center text-content-primary text-sm mb-[50px]">
+        <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
           <span className="text-sm font-normal text-content-secondary">
           {t('treasurySettings:minimum-confirmation')}:
           </span>
           &nbsp;2 {t('treasurySettings:out-of')} 3 {t('treasurySettings:owners')}
         </div>
         <InputField
-          error={!!errors.name}
+          error={!!errors?.name}
           helper={errors?.name?.message || ""}
           label={t('treasurySettings:safe-name')}
           placeholder={t('treasurySettings:enter-safe-name')}
@@ -106,7 +106,7 @@ const Setting = () => {
           />
         </div>
       </div>
-      <div className="w-[274px] ml-[215px]">
+      <div className="min-w-[280px] ml-[215px]">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
         {t('treasurySettings:owners')}
         </div>

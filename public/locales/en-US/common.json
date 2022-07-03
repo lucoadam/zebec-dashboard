@@ -17,6 +17,7 @@
   "create-new": "Create New",
   "buttons": {
     "continue": "Continue",
-    "go-back": "Go back"
+    "go-back": "Go back",
+    "confirm-and-create-treasury": "Confirm & Create Treasury"
   }
 }
