@@ -22,7 +22,6 @@ export const fetchWalletBalance: any = createAsyncThunk(
 
     // fetch USD price of tokens
     const tokensPrice = await getTokensUSDPrice(tokens);
-    console.log(tokensPrice);
     return tokens.map((token) => ({
       symbol: token.symbol,
       balance: tokensBalance[token.mint] || 0,
