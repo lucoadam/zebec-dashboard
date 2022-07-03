@@ -1,11 +1,11 @@
-export interface ZebecToken {
+export interface WalletToken {
   symbol: string;
   balance: number;
   usdBalance: number | null;
 }
 
-export interface ZebecTokenState {
+export interface WalletTokenState {
   loading: boolean;
-  tokens: ZebecToken[];
+  tokens: WalletToken[];
   error: string;
 }

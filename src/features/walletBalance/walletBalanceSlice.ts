@@ -1,18 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance";
 import { getTokensUSDPrice } from "utils/getTokensPrice";
-import { RootState } from "./../../app/store";
-import { ZebecTokenState } from "./zebecBalanceSlice.d";
+import { RootState } from "../../app/store";
+import { getSolBalanceOfWallet } from "./../../utils/getSolBalance";
+import { WalletTokenState } from "./walletBalanceSlice.d";
 
-const initialState: ZebecTokenState = {
+const initialState: WalletTokenState = {
   loading: false,
   tokens: [],
   error: "",
 };
 
 //Generates pending, fulfilled and rejected action types
-export const fetchZebecBalance: any = createAsyncThunk(
-  "balance/fetchZebecBalance",
+export const fetchWalletBalance: any = createAsyncThunk(
+  "balance/fetchWalletBalance",
   async (wallet: string, { getState }) => {
     const { tokenDetails } = getState() as RootState;
     const tokens = tokenDetails.tokens;
@@ -20,8 +21,11 @@ export const fetchZebecBalance: any = createAsyncThunk(
     // fetch wallet tokens
     const tokensBalance = await getTokensBalanceOfWallet(wallet, tokens);
 
+    const solBalance = await getSolBalanceOfWallet(wallet);
+
     // fetch USD price of tokens
     const tokensPrice = await getTokensUSDPrice(tokens);
+    console.log(tokensPrice);
     return tokens.map((token) => ({
       symbol: token.symbol,
       balance: tokensBalance[token.mint] || 0,
@@ -33,22 +37,22 @@ export const fetchZebecBalance: any = createAsyncThunk(
 );
 
 const zebecBalanceSlice = createSlice({
-  name: "zebecBalance",
+  name: "walletBalance",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchZebecBalance.pending, (state) => {
+    builder.addCase(fetchWalletBalance.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(
-      fetchZebecBalance.fulfilled,
+      fetchWalletBalance.fulfilled,
       (state, action: PayloadAction<typeof initialState.tokens>) => {
         state.loading = false;
         state.tokens = action.payload;
         state.error = "";
       }
     );
-    builder.addCase(fetchZebecBalance.rejected, (state, action) => {
+    builder.addCase(fetchWalletBalance.rejected, (state, action) => {
       state.loading = false;
       state.tokens = [];
       state.error = action.error.message ?? "Something went wrong";

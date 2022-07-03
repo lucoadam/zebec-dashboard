@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenListProvider } from "@solana/spl-token-registry";
+import { getRPCNetwork } from "constants/cluster";
 import tokenMetaData from "fakedata/tokens.json";
-import { getRPCNetwork } from "../../constants/cluster";
 import { TokenDetailsState } from "./tokenDetailsSlice.d";
 
 const initialState: TokenDetailsState = {
@@ -14,20 +14,35 @@ const initialState: TokenDetailsState = {
 export const fetchTokens: any = createAsyncThunk(
   "token/fetchTokens",
   async () => {
-    const tokensMint = tokenMetaData.map((token) => token.mint);
+    const tokensMint = tokenMetaData
+      .filter((token) => token.mint)
+      .map((token) => token.mint);
+    console.log(tokensMint);
     const tokens = await new TokenListProvider().resolve();
-    const tokensDetails = tokens
-      .filterByClusterSlug(getRPCNetwork())
-      .getList()
-      .filter((token) => tokensMint.includes(token.address))
-      .map((token) => ({
-        name: token.name,
-        symbol: token.symbol,
-        image: token.logoURI,
-        decimal: token.decimals,
-        mint: token.address,
-        coingeckoId: token?.extensions?.coingeckoId || "",
-      }));
+
+    const tokensDetails = [
+      {
+        name: "Solana",
+        symbol: "SOL",
+        image:
+          "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+        mint: "solana",
+        decimals: 18,
+        coingeckoId: "solana",
+      },
+      ...tokens
+        .filterByClusterSlug(getRPCNetwork())
+        .getList()
+        .filter((token) => tokensMint.includes(token.address))
+        .map((token) => ({
+          name: token.name,
+          symbol: token.symbol,
+          image: token.logoURI,
+          decimal: token.decimals,
+          mint: token.address,
+          coingeckoId: token?.extensions?.coingeckoId || "",
+        })),
+    ];
     return tokensDetails;
   }
 );

@@ -8,12 +8,13 @@ import counterSlice from "features/count/counterSlice";
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice";
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice";
 import userSlice from "features/user/userSlice";
-import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice";
+import walletBalanceSlice from "features/walletBalance/walletBalanceSlice";
+
 const combineReducer = combineReducers({
   counter: counterSlice,
   user: userSlice,
   tokenDetails: tokenDetailsSlice,
-  zebecBalance: zebecBalanceSlice,
+  walletBalance: walletBalanceSlice,
   treasuryBalance: treasuryBalanceSlice,
 });
 

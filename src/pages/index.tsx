@@ -1,7 +1,7 @@
 import { useAppDispatch } from "app/hooks";
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice";
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice";
-import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice";
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -15,12 +15,12 @@ const Home: NextPage = () => {
     dispatch(fetchTokens());
     setTimeout(() => {
       dispatch(
-        fetchZebecBalance("vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg")
+        fetchWalletBalance("22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv")
       );
       dispatch(
         fetchTreasuryBalance({
           name: "my treasury",
-          address: "vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg",
+          address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv",
         })
       );
     }, 1000);
