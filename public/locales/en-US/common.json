@@ -1,23 +1,29 @@
 {
-  "tps-header": {
-    "network": "Solana Network",
-    "description": "The Solana Network is currently operating at a limited capacity, your on-chain actions have increased chance of failing."
-  },
-  "nav": {
-    "dashboard": "Dashboard",
-    "treasury": "Treasury",
-    "transactions": "Transactions",
-    "yeild-farming": "Yeild Farming",
-    "dca": "DCA",
-    "more": "More",
-    "address-book": "Address Book",
-    "settings": "Settings"
-  },
-  "greeting": "Hello World!",
-  "create-new": "Create New",
-  "buttons": {
-    "continue": "Continue",
-    "go-back": "Go back",
-    "confirm-and-create-treasury": "Confirm & Create Treasury"
-  }
+    "tps-header": {
+        "network": "Solana Network",
+        "description": "The Solana Network is currently operating at a limited capacity, your on-chain actions have increased chance of failing."
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "treasury": "Treasury",
+        "transactions": "Transactions",
+        "yeild-farming": "Yeild Farming",
+        "dca": "DCA",
+        "more": "More",
+        "address-book": "Address Book",
+        "settings": "Settings"
+    },
+    "greeting": "Hello World!",
+    "create-new": "Create New",
+    "buttons": {
+        "continue": "Continue",
+        "go-back": "Go back",
+        "confirm-and-create-treasury": "Confirm & Create Treasury"
+    },
+    "wallet-not-connected": {
+        "title": "Wallet not connected!",
+        "description": "Looks like your wallet is not connected. Please connect your wallet to keep using Zebec.",
+        "connect-previous-wallet": "Connect with Previous Wallet",
+        "connect-different-wallet": "Use a Different Wallet"
+    }
 }
