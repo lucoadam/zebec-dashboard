@@ -1,14 +1,47 @@
-import { useState } from "react";
+import { useAppDispatch } from "app/hooks";
+import { Button, Modal } from "components/shared";
+import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice";
+import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice";
+import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice";
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice";
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice";
+import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/layouts/Layout";
-import { Button, Modal } from "components/shared";
 
 const Home: NextPage = () => {
   const { t } = useTranslation("common");
-  
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchTokens());
+    setTimeout(() => {
+      dispatch(
+        fetchWalletBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf")
+      );
+      dispatch(
+        fetchZebecBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf")
+      );
+      dispatch(
+        fetchTreasuryBalance({
+          name: "my treasury",
+          address: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf",
+        })
+      );
+      dispatch(
+        fetchZebecStreamingBalance(
+          "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
+        )
+      );
+      dispatch(
+        fetchTreasuryStreamingBalance(
+          "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
+        )
+      );
+    }, 1000);
+  }, [dispatch]);
 
   let [isOpen, setIsOpen] = useState(false);
 

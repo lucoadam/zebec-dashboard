@@ -1,81 +1,81 @@
+import { useAppSelector } from "app/hooks";
 import * as Icons from "assets/icons";
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Button, InputField, CollapseDropdown, Tab } from "components/shared";
-import { Tab as Tabs } from "@headlessui/react";
-import { formatCurrency } from "utils";
 import ActivityDeopsitCurve from "assets/images/treasury/activity/activity1.svg";
 import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg";
 import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg";
-import { useClickOutside } from "hooks";
+import { Button, InputField, Tab } from "components/shared";
 import { useTranslation } from "next-i18next";
+import React, { useState } from "react";
+import { formatCurrency } from "utils";
+import { getBalance, getUsdBalance } from "utils/getBalance";
 import { Deposit } from "./Deposit";
 import { Withdrawal } from "./Withdrawal";
 
-export const depositedAssets = [
-  {
-    name: "Solana",
-    symbol: "SOL",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.5,
-  },
-  {
-    name: "USD Coin",
-    symbol: "USDC",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.9,
-  },
-  {
-    name: "Tether",
-    symbol: "USDT",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg",
-    balance: 201320.72,
-    balanceUSD: 201320.72,
-    value: 0.5,
-  },
-  {
-    name: "Zebec Protocol",
-    symbol: "ZBC",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/zebeczgi5fSEtbpfQKVZKCJ3WgYXxjkMUkNNx7fLKAF/logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.6,
-  },
-  {
-    name: "Puff",
-    symbol: "PUFF",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB/logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.5,
-  },
-  {
-    name: "All",
-    symbol: "ALL",
-    logoURI:
-      "https://raw.githubusercontent.com/jamroszk/crypto/main/All_Logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.5,
-  },
-  {
-    name: "Winerz",
-    symbol: "WNZ",
-    logoURI:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/WNZzxM1WqWFH8DpDZSqr6EoHKWXeMx9NLLd2R5RzGPA/logo.png",
-    balance: 24320,
-    balanceUSD: 8543459.33,
-    value: 0.1,
-  },
-];
+// export const depositedAssets = [
+//   {
+//     name: "Solana",
+//     symbol: "SOL",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.5,
+//   },
+//   {
+//     name: "USD Coin",
+//     symbol: "USDC",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.9,
+//   },
+//   {
+//     name: "Tether",
+//     symbol: "USDT",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg",
+//     balance: 201320.72,
+//     balanceUSD: 201320.72,
+//     value: 0.5,
+//   },
+//   {
+//     name: "Zebec Protocol",
+//     symbol: "ZBC",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/zebeczgi5fSEtbpfQKVZKCJ3WgYXxjkMUkNNx7fLKAF/logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.6,
+//   },
+//   {
+//     name: "Puff",
+//     symbol: "PUFF",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB/logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.5,
+//   },
+//   {
+//     name: "All",
+//     symbol: "ALL",
+//     logoURI:
+//       "https://raw.githubusercontent.com/jamroszk/crypto/main/All_Logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.5,
+//   },
+//   {
+//     name: "Winerz",
+//     symbol: "WNZ",
+//     logoURI:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/WNZzxM1WqWFH8DpDZSqr6EoHKWXeMx9NLLd2R5RzGPA/logo.png",
+//     balance: 24320,
+//     balanceUSD: 8543459.33,
+//     value: 0.1,
+//   },
+// ];
 
 const fundTransferTabs = [
   {
@@ -92,25 +92,20 @@ const fundTransferTabs = [
   },
 ];
 
-export interface TokenDetails {
-  symbol: string;
-  logoURI: string;
-  balance: number;
-  balanceUSD: number;
-}
-
 const Overview = () => {
   const { t } = useTranslation();
   const [search, setSearch] = useState<string>("");
 
   const [activePage, setActivePage] = useState<number>(0);
-
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+  const treasuryTokens =
+    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || [];
   const filterTokens = () => {
     if (search !== "")
-      return depositedAssets.filter((item) =>
+      return tokenDetails.filter((item) =>
         item.symbol.toLowerCase().includes(search)
       );
-    return depositedAssets;
+    return tokenDetails;
   };
 
   return (
@@ -264,7 +259,7 @@ const Overview = () => {
               />
             </div>
           </InputField>
-          <div className="pr-2">
+          <div className="h-[512px] overflow-auto pr-2">
             {filterTokens().length === 0 && (
               <p className="text-body font-normal text-content-contrast">
                 No tokens found
@@ -280,7 +275,7 @@ const Overview = () => {
                   <div className="w-[32px] h-[32px] flex justify-center items-center rounded-[8px] mr-[8px] bg-background-primary">
                     <img
                       className="w-[18px] h-[18px]"
-                      src={item.logoURI}
+                      src={item.image}
                       alt={item.symbol}
                     />
                   </div>
@@ -289,10 +284,14 @@ const Overview = () => {
 
                 <div>
                   <p className="text-sm leading-6 font-medium text-content-primary text-right ">
-                    {formatCurrency(item.balance, "$")}
+                    {formatCurrency(
+                      getBalance(treasuryTokens, item.symbol),
+                      "$"
+                    )}
                   </p>
                   <p className="text-xs font-subtitle text-content-contrast text-right">
-                    {formatCurrency(item.balanceUSD)} {item.symbol}
+                    {formatCurrency(getUsdBalance(treasuryTokens, item.symbol))}{" "}
+                    {item.symbol}
                   </p>
                 </div>
               </div>
@@ -339,7 +338,6 @@ const Overview = () => {
           </p>
           <div className="flex">
             <Button
-            
               size="small"
               className="mt-[21px] mr-[8px]"
               title={t("treasuryOverview:check-faq")}
@@ -379,7 +377,7 @@ const Overview = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
