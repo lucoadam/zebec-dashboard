@@ -25,8 +25,23 @@ import IncomingIcon from "./other-icons/incoming.svg";
 import OutsideLinkIcon from "./other-icons/outside-link.svg";
 import PauseIcon from "./other-icons/pause.svg";
 import ResumeIcon from "./other-icons/resume.svg";
+import Info from "./other-icons/info.svg";
+import ArrowDownLeft from "./other-icons/arrow-downleft.svg";
+import ArrowTopRight from "./other-icons/arrow-upright.svg";
+import Line from "./other-icons/line.svg";
+import Equals from "./other-icons/equals.svg";
+import Asterik from "./other-icons/asterik.svg";
+import Warning from "./other-icons/warning.svg";
+
 
 export {
+  Warning,
+  Asterik,
+  Line,
+  Equals,
+  Info,
+  ArrowDownLeft,
+  ArrowTopRight,
   CheveronDownIcon,
   PlusIncircleIcon,
   TrashIcon,
