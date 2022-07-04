@@ -1,8 +1,10 @@
 import { useAppDispatch } from "app/hooks";
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice";
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice";
+import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice";
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice";
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice";
+import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -16,16 +18,26 @@ const Home: NextPage = () => {
     dispatch(fetchTokens());
     setTimeout(() => {
       dispatch(
-        fetchWalletBalance("22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv")
+        fetchWalletBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf")
       );
       dispatch(
-        fetchZebecBalance("22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv")
+        fetchZebecBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf")
       );
       dispatch(
         fetchTreasuryBalance({
           name: "my treasury",
           address: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf",
         })
+      );
+      dispatch(
+        fetchZebecStreamingBalance(
+          "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
+        )
+      );
+      dispatch(
+        fetchTreasuryStreamingBalance(
+          "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
+        )
       );
     }, 1000);
   }, [dispatch]);
