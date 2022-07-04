@@ -25,8 +25,13 @@ import IncomingIcon from "./other-icons/incoming.svg";
 import OutsideLinkIcon from "./other-icons/outside-link.svg";
 import PauseIcon from "./other-icons/pause.svg";
 import ResumeIcon from "./other-icons/resume.svg";
+import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
+import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
+
 
 export {
+  PaginationRightArrow,
+  PaginationLeftArrow,
   CheveronDownIcon,
   PlusIncircleIcon,
   TrashIcon,

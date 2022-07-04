@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        
         black: "var(--black)",
         white: "var(--white)",
         // Background
@@ -29,6 +30,7 @@ module.exports = {
         content: {
           primary: "var(--content-primary)",
           secondary: "var(--content-secondary)",
+          tertiary: "var(--content-tertiary)",
           contrast: "var(--content-contrast)",
           success: "var(--success-content)",
           error: "var(--error-content)"
