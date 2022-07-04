@@ -13,6 +13,7 @@
     --bg-tertiary: rgba(32, 33, 36, 1);
     --bg-light: rgba(43, 45, 51, 1);
     --bg-muted: rgba(53, 57, 69, 1);
+    --bg-backdrop: rgba(0, 0, 0, 0.64);
     /* Primary */
     --primary-main: rgba(55, 132, 251, 1);
     --primary-dark: rgba(49, 118, 224, 1);
@@ -33,6 +34,7 @@
     /* Content */
     --content-primary: rgba(255, 255, 255, 0.9);
     --content-secondary: rgba(255, 255, 255, 0.72);
+    --content-tertiary: rgba(255, 255, 255, 0.4);
     --content-contrast: rgba(255, 255, 255, 0.4);
     /* Success */
     --success-main: rgba(88, 189, 125, 1);
@@ -47,7 +49,7 @@
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
     --outline-secondary: rgba(255, 255, 255, 0.04);
- 
+
     /* Font Sizes */
     --fs-2xl: 2rem;
     --fs-xl: 1.75rem;
@@ -72,6 +74,8 @@
     --bs-shadow-2: 0px 1px 0px #202021;
     --bs-shadow-3: 0px 1px 3px rgba(0, 0, 0, 0.06),
       0px 2px 1px rgba(0, 0, 0, 0.02), 0px 1px 1px rgba(0, 0, 0, 0.04);
+    --bs-shadow-backdrop: 0px 1px 3px rgba(0, 0, 0, 0.1),
+      0px 2px 1px rgba(0, 0, 0, 0.06), 0px 1px 1px rgba(0, 0, 0, 0.08);
   }
 
   [data-theme="dark"] {
@@ -178,7 +182,8 @@ input::placeholder {
   color: var(--content-contrast);
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"],
+input[type="number"] {
   /* input */
   box-sizing: border-box;
   /* Auto layout */
@@ -203,14 +208,30 @@ input[type="text"], input[type="number"] {
   flex-grow: 0;
   color: var(--content-primary);
 }
-input[type="text"]:disabled, input[type="number"]:disabled {
+input[type="text"]:disabled,
+input[type="number"]:disabled {
   color: var(--content-contrast);
 }
-input[type="text"].is-amount, input[type="number"],input[type="text"].is-amount:focus,.is-amount, input[type="number"].is-amount:focus {
-  padding-left: 94px;
+
+input[type="text"].is-amount,
+input[type="number"].is-amount,
+input[type="text"].is-amount:focus,
+.is-amount,
+input[type="number"].is-amount:focus {
+  padding-left: 104px;
   padding-right: 60px;
 }
-input[type="text"]:focus,input[type="number"]:focus {
+
+input[type="text"].is-search,
+input[type="number"].is-search,
+input[type="text"].is-search:focus,
+.is-search,
+input[type="number"].is-search:focus {
+  padding-left: 48px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
   /* focused */
   color: var(--content-primary);
   /* Auto layout */
@@ -220,7 +241,6 @@ input[type="text"]:focus,input[type="number"]:focus {
   align-items: flex-start;
   gap: 10px;
   padding: 0px 30px;
-
 
   /* background/background-primary */
 
@@ -262,7 +282,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -286,7 +306,6 @@ input[type=number] {
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
 }
-
 
 .steps-container {
   position: relative;

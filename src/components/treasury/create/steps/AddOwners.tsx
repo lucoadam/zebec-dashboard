@@ -18,6 +18,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
   const { t } = useTranslation();
 
   const [owners, setOwners] = React.useState<Owner[]>(props.treasury.owners);
+  const [selectError, setSelectionError] = React.useState<boolean>(false);
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required(t("validation:name-required"))
@@ -41,7 +42,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
     setValue,
     getValues,
   } = useForm({
-    mode: "all",
+    mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema),
   });
 
@@ -95,7 +96,6 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                   "createTreasury:second-steper.form.owner-name-placeholder"
                 )}
                 className={`w-full h-[40px] ${!!errors.name ? "error" : ""}`}
-
               >
                 <input
                   type="text"
@@ -115,7 +115,9 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
                   <div className="w-5/6">
                     <input
                       type="text"
-                      className={`w-full h-[40px] ${!!errors.wallet ? "error" : ""}`}
+                      className={`w-full h-[40px] ${
+                        !!errors.wallet ? "error" : ""
+                      }`}
                       placeholder={t(
                         "createTreasury:second-steper.form.owner-address"
                       )}
@@ -147,11 +149,12 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             "createTreasury:second-steper.buttons.choose-from-address-book"
           )}
           endIcon={<Icons.ArrowIcon className="text-xs" />}
+          type="button"
         />
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
           {t("createTreasury:added-owners")}
         </p>
-        <OwnerLists owners={owners} setOwners={setOwners} />
+        <OwnerLists className="w-full" owners={owners} setOwners={setOwners} />
         <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">
           {t("createTreasury:min-confirmation-required-text")}
         </p>
@@ -160,12 +163,13 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           <div className="w-full sm:w-full flex justify-start items-center text-content-primary">
             <SelectField
               value={props.treasury.minValidator}
-              onSelected={(value) =>
+              onSelected={(value, error = false) => {
                 props.setTreasury((treasury) => ({
                   ...treasury,
                   minValidator: value,
-                }))
-              }
+                }));
+                setSelectionError(error);
+              }}
               className="mr-3 w-[70px]"
               totalItems={owners.length}
             />{" "}
@@ -174,14 +178,22 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             )}`}
           </div>
         </div>
+        {selectError && (
+          <p className="text-content-secondary text-xs ml-[12px] mt-1">
+            {t("validation:at-least-two-owners-required")}
+          </p>
+        )}
         <Button
           title="Continue"
           variant="gradient"
+          type="button"
           size="medium"
           className="w-full justify-center mt-[32px]"
           onClick={() => {
-            if (owners.length > 0) {
+            if (owners.length > 1 && !selectError) {
               props.setCurrentStep(2);
+            } else {
+              handleSubmit(() => {});
             }
           }}
         />
@@ -190,7 +202,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
         title="Go Back"
         size="medium"
         className="w-full justify-center mt-[12px]"
-        onClick={() => props.setCurrentStep(1)}
+        onClick={() => props.setCurrentStep(0)}
       />
     </>
   );

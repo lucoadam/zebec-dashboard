@@ -17,7 +17,7 @@ interface ButtonChildrenProps extends ButtonBaseProps {
 }
 interface ButtonTitlenProps extends ButtonBaseProps {
   children?: never;
-  title: string;
+  title?: string;
 }
 
 export type ButtonProps = ButtonChildrenProps | ButtonTitlenProps;
