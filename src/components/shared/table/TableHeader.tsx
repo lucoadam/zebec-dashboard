@@ -10,17 +10,19 @@ interface TableHeaderProps {
   headers: TableHeader[];
 }
 
+const getWidth = (width: string | undefined) => {
+  if (width) {
+    return `w-[${width}]`;
+  }
+  return `w-full`;
+};
+
 export const TableHeader: FC<TableHeaderProps> = (props) => {
   const { t } = useTranslation("transactions");
 
   const { headers } = props;
 
-  const getWidth = (width: string | undefined) => {
-    if (width) {
-      return `min-w-[${width}]`;
-    }
-    return `max-content`;
-  };
+ 
 
   return (
     <>
@@ -30,7 +32,7 @@ export const TableHeader: FC<TableHeaderProps> = (props) => {
             return (
               <td
                 key={header.label}
-                className={`px-6 py-4 text-caption text-content-contrast font-semibold uppercase  w-full ${getWidth(
+                className={`px-6 py-4 text-caption text-content-contrast font-semibold uppercase ${getWidth(
                   header.width
                 )}`}
               >

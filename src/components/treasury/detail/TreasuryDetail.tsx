@@ -11,16 +11,19 @@ let categories = [
   {
     title: "overview",
     count: 0,
+    icon: <Icons.EyeOpenIcon/>,
     Component: <Overview />,
   },
   {
     title: "transactions",
     count: 3,
+    icon: <Icons.TransactionIcon/>,
     Component: <Transactions />,
   },
   {
     title: "settings",
     count: 0,
+    icon: <Icons.GearringIcon/>,
     Component: <Setting />,
   },
 ];

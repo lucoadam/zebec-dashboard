@@ -22,7 +22,7 @@ export const ScheduledTransactions = () => {
         
     },
     {
-      label: "sender",
+      label: "receiver",
       width: '200px',
 
     },

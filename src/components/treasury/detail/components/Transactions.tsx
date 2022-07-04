@@ -2,6 +2,8 @@ import { Tab } from "components/shared";
 import * as Icons from "assets/icons";
 import { Fragment, useState } from "react";
 import { ScheduledTransactions } from "./ScheduledTransactions";
+import { WithdrawalTransactions } from "./WithdrawalTransactions";
+import { HistoryTransactions } from "./HistoryTransactions";
 
 const transactionTabs = [
   {
@@ -12,12 +14,12 @@ const transactionTabs = [
   {
     title: "History",
     count: 0,
-    Component: <Fragment />,
+    Component: <HistoryTransactions />,
   },
   {
     title: "Withdrawals",
     count: 0,
-    Component: <Fragment />,
+    Component: <WithdrawalTransactions />,
   },
 ];
 

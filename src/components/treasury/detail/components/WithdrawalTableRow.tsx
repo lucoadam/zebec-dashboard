@@ -1,19 +1,19 @@
 import React, { FC, Fragment, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
+import { Button, CircularProgress, IconButton } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
 
-interface ScheduledTableRowProps {
+interface WithdrawalTableRowProps {
   index: number;
   transaction: any;
   activeDetailsRow: "" | number;
   handleToggleRow: () => void;
 }
 
-const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
+const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
@@ -36,11 +36,9 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[340px]">
+          <td className="px-6 py-4 w-[280px]">
             <div className="flex items-center gap-x-2.5">
-              <div className="flex justify-center items-center border-4  border-outline-secondary bg-background-secondary rounded-full w-14 h-14 text-content-secondary">
-                <Icons.CalenderIcon className="w-7 h-7"/>
-              </div>
+              <CircularProgress percentage={100}/>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
@@ -52,18 +50,17 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
-            <div className="text-caption text-content-primary">
-              Mar 18, 2022, 12:00 PM <br />
-              to Mar 19, 2022, 11:58 AM
+          <td className="px-6 py-4 w-[125px]">
+            <div className="text-caption bg-success p-1.5 rounded-sm text-center text-content-primary">
+              Confirmed
             </div>
           </td>
-          <td className="w-[134px] px-6 py-4">
+          <td className="w-[222px] px-6 py-4">
             <div className="text-caption text-content-primary">
-              10 min ago
+            INI: Mar 18, 2022, 12:00 PM
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 w-[222px]">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
               1AdXF3...DuV15{" "}
               <IconButton
@@ -72,7 +69,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
               />
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 w-[222px]">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Cancel"
@@ -249,4 +246,4 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
   );
 };
 
-export default ScheduledTableRow;
+export default WithdrawalTableRow;

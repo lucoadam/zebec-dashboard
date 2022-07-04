@@ -305,3 +305,12 @@ input[type=number] {
 .steps-container.last::after {
   content: none;
 }
+
+/** circular-progress **/
+.circular-progress {
+
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: 100;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-in-out;
+}
