@@ -351,8 +351,9 @@ const Overview = () => {
                       </div>
 
                     </div>
+                    <div ref={tokensDropdownWrapper}>
                     <CollapseDropdown
-                      ref={tokensDropdownWrapper}
+                      
                       className="w-full left-[0px] max-h-40  overflow-auto mt-5 "
                       show={toggleTokensDropdown}
                       variant="light"
@@ -400,6 +401,7 @@ const Overview = () => {
                         </div>
                       
                     </CollapseDropdown>
+                    </div>
 
 
 
@@ -437,6 +439,7 @@ const Overview = () => {
           </p>
           <div className="flex">
             <Button
+            
               size="small"
               className="mt-[21px] mr-[8px]"
               title={t("treasuryOverview:check-faq")}
