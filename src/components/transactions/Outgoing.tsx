@@ -10,7 +10,12 @@ const Outgoing: FC = () => {
   const { t } = useTranslation("transactions");
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
 
-  const headers = ["progress", "transaction-date", "receiver", ""];
+  const headers = [
+    { label: "progress" },
+    { label: "transaction-date" },
+    { label: "receiver" },
+    { label: "" },
+  ];
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("");

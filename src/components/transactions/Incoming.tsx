@@ -11,7 +11,25 @@ const Incoming: FC = () => {
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
 
-  const headers = ["progress", "transaction-date", "sender", ""];
+  const headers = [  {
+    label: "progress",
+    width: '340px',
+  },
+  {
+    label: "transaction-date",
+    width: '240px',
+
+  },
+  {
+    label: "sender",
+    width: '240px',
+
+  },
+  {
+    label: "",
+    width: '240px',
+
+  },];
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("");

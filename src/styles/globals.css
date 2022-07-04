@@ -47,6 +47,7 @@
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
     --outline-secondary: rgba(255, 255, 255, 0.04);
+    --outline-dark: rgba(53, 57, 69, 1);
  
     /* Font Sizes */
     --fs-2xl: 2rem;

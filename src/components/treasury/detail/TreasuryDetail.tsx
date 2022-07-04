@@ -5,23 +5,21 @@ import Setting from "./components/Setting";
 import Overview from "./components/Overview";
 import { useTranslation } from "next-i18next";
 import { Tab } from "components/shared";
+import { Transactions } from "./components/Transactions";
 
 let categories = [
   {
     title: "overview",
-    icon: <Icons.EyeOpenIcon />,
     count: 0,
     Component: <Overview />,
   },
   {
     title: "transactions",
-    icon: <Icons.TransactionIcon />,
     count: 3,
-    Component: <Fragment />,
+    Component: <Transactions />,
   },
   {
     title: "settings",
-    icon: <Icons.GearringAltIcon />,
     count: 0,
     Component: <Setting />,
   },
@@ -48,20 +46,8 @@ export default function TreasuryDetail() {
           />
         ))}
       </div>
-      {/* // </Tab.List> */}
-      <div className=" mt-[40px]">
-        {/* {categories.map(({ Component }, idx) => ( */}
-        {/* // <Tab.Panel
-            //   key={idx}
-            //   as={Fragment}
-            //   //   className={classNames(
-            //   //     "rounded-xl bg-white p-3",
-            //   //     "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
-            //   //   )}
-            // > */}
+      <div className=" mt-8">
         {categories[activePage].Component}
-        {/* </Tab.Panel>
-          ))} */}
       </div>
     </div>
   );
