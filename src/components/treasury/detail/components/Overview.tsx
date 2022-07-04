@@ -339,6 +339,7 @@ const Overview = () => {
           </p>
           <div className="flex">
             <Button
+            
               size="small"
               className="mt-[21px] mr-[8px]"
               title={t("treasuryOverview:check-faq")}
@@ -378,7 +379,7 @@ const Overview = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

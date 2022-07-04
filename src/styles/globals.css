@@ -34,6 +34,7 @@
     /* Content */
     --content-primary: rgba(255, 255, 255, 0.9);
     --content-secondary: rgba(255, 255, 255, 0.72);
+    --content-tertiary: rgba(255, 255, 255, 0.4);
     --content-contrast: rgba(255, 255, 255, 0.4);
     /* Success */
     --success-main: rgba(88, 189, 125, 1);
@@ -211,6 +212,9 @@ input[type="text"]:disabled,
 input[type="number"]:disabled {
   color: var(--content-contrast);
 }
+
+input[type="text"].is-amount, input[type="number"],input[type="text"].is-amount:focus,.is-amount, input[type="number"].is-amount:focus {
+  padding-left: 102px;
 input[type="text"].is-amount,
 input[type="number"],
 input[type="text"].is-amount:focus,
