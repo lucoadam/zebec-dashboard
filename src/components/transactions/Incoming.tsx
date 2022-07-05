@@ -3,33 +3,34 @@ import { useTranslation } from "next-i18next";
 import FilterTabs from "./FilterTabs";
 import { Table, TableBody } from "components/shared";
 import IncomingTableRow from "./IncomingTableRow";
-
+import { Pagination } from "components/shared/Pagination";
 import { incomingTransactions } from "fakedata";
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions");
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [NoOfRows, setNoOfRows] = useState(10);
 
-  const headers = [  {
-    label: "progress",
-    width: '340px',
-  },
-  {
-    label: "transaction-date",
-    width: '240px',
-
-  },
-  {
-    label: "sender",
-    width: '240px',
-
-  },
-  {
-    label: "",
-    width: '240px',
-
-  },];
+  const headers = [
+    {
+      label: "progress",
+      width: "340px",
+    },
+    {
+      label: "transaction-date",
+      width: "240px",
+    },
+    {
+      label: "sender",
+      width: "240px",
+    },
+    {
+      label: "",
+      width: "240px",
+    },
+  ];
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("");
@@ -59,6 +60,11 @@ const Incoming: FC = () => {
           })}
         </TableBody>
       </Table>
+      <Pagination
+        pages={100}
+        setCurrentPage={setCurrentPage}
+        setNoOfRows={setNoOfRows}
+      />
     </>
   );
 };
