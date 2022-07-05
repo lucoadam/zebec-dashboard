@@ -8,7 +8,7 @@ import * as Icons from "assets/icons";
 
 
 
-const Withdrawing: FC<withdrawProps> = ({ setCurrentStep }) => {
+const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount }) => {
     const { t } = useTranslation("transactions");
     useEffect(() => {
         setTimeout(() => {
@@ -19,7 +19,7 @@ const Withdrawing: FC<withdrawProps> = ({ setCurrentStep }) => {
         <div className="flex flex-col items-center justify-center h-full">
             <div><img {...Loading} /></div> 
             <div className="text-content-secondary text-heading-5 pt-4">{t("withdraw.withdrawing")}</div>
-            <div className="text-primary-contrast text-heading-5 ">101010 SOL</div>
+            <div className="text-primary-contrast text-heading-5 ">{withdrawAmount} SOL</div>
             <div className="flex justify-center pt-4">
                 <div>
                     <Icons.Asterik />

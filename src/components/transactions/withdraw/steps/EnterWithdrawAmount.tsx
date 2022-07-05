@@ -6,9 +6,9 @@ import { useTranslation } from "next-i18next";
 import { withdrawProps } from "../data";
 
 
-const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep }) => {
+const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount, setWithdrawAmount }) => {
   const { t } = useTranslation("transactions");
-  const [withdrawAmount, setWithdrawAmount] = useState<number>();
+ 
   return (
     <div className="text-content-primary" >
       <div className="text-content-primary text-subtitle">
@@ -28,9 +28,9 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep }) => {
           <div className="pr-2"> <Icons.ArrowTopRight /></div>
           {t("withdraw.withdrawable-amount")} 20000 SOL
         </div>
-        <div className="flex text-content-tertiary ">
-          <div className="pr-2"> <Icons.Info /></div>
-          <div>{t("withdraw.withdraw-info")}</div>
+        <div className="flex items-start ">
+          <div className="pr-2 pt-0.5 text-content-contrast"> <Icons.Info /></div>
+          <div className="text-content-contrast">{t("withdraw.withdraw-info")}</div>
 
         </div>
 
@@ -66,12 +66,12 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep }) => {
       </div>
 
       {/* warning text */}
-      <div className="flex pb-[12px]">
-        <div className="pr-2">
-          <Icons.Warning />
+      <div className="flex pb-[12px]" >
+        <div className="pr-2 text-warning">
+          <Icons.WarningTriangleIcon />
         </div>
-        <div className="text-warning text-caption">
-          {t("withdraw.greater-amount")}
+        <div className="text-warning text-caption" >
+          {t("withdraw.greater-amount")} 
         </div>
       </div>
 
@@ -84,12 +84,13 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep }) => {
           title={t("withdraw.withdraw")}
           onClick={() => {
             setCurrentStep(1);
+            setWithdrawAmount(withdrawAmount)
 
           }}
         />
       </div>
 
-      <div className="flex text-caption text-content-secondary justify-center" >
+      <div className="flex text-caption text-content-secondary items-center justify-center" >
         <div className="pr-2 "> <Icons.Info/></div>
         <div> 0.25% {t("withdraw.withdrawal-fees")}</div>
       </div>

@@ -5,7 +5,7 @@ import * as Icons from "assets/icons";
 import { withdrawProps } from "../data";
 
 
-const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep}) => {
+const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep,withdrawAmount}) => {
     const { t } = useTranslation("transactions");
     return (
         <div>
@@ -23,7 +23,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep}) => {
                 </div>
                 <div className="flex text-content-secondary ">
                     <div className="pr-2"> <Icons.Equals /></div>
-                    <div>{t("withdraw.withdraw-amount")} 2000 SOL</div>
+                    <div>{t("withdraw.withdraw-amount")} {withdrawAmount} SOL</div>
 
                 </div>
 

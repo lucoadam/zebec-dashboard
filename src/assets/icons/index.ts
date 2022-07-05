@@ -31,11 +31,11 @@ import ArrowTopRight from "./other-icons/arrow-upright.svg";
 import Line from "./other-icons/line.svg";
 import Equals from "./other-icons/equals.svg";
 import Asterik from "./other-icons/asterik.svg";
-import Warning from "./other-icons/warning.svg";
+
 
 
 export {
-  Warning,
+  
   Asterik,
   Line,
   Equals,

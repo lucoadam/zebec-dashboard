@@ -1,14 +1,17 @@
-import EnterWithdrawAmount from "./steps/enterWithdrawAmount";
-import ConfirmWithdraw from "./steps/confirmWithdraw";
+import EnterWithdrawAmount from "./steps/EnterWithdrawAmount";
+import ConfirmWithdraw from "./steps/ConfirmWithdraw";
 import Withdrawing from "./steps/Withdrawing";
 
 interface withdrawStep{
     
     component: React.FC<withdrawProps>
+    
 
 }
 export interface withdrawProps{
     setCurrentStep: (step:number)=>void,
+    withdrawAmount: number,
+    setWithdrawAmount: (withdrawAmount:number)=>void,
 }
 
 export const WithdrawStepsList: withdrawStep[] = [
