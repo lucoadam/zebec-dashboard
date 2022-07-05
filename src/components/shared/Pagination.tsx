@@ -41,20 +41,22 @@ const [activeClass,setActiveClass]=useState<String>("");
         let dotsLeft = "... ";
         let dotsRight = " ...";
 
-        if (numberOfPages.length < 6) {
+        if (numberOfPages.length < 5) {
             //num of pages < 6
             tempNumberOfPages = numberOfPages;
-        } else if (currentButton >= 1 && currentButton <= 3) {
+        } else if (currentButton >= 1 && currentButton <2) {
             //current button 1 to 3
-            tempNumberOfPages = [1, 2, 3, 4, dotsInitial, numberOfPages.length];
-        } else if (currentButton === 4) {
+            tempNumberOfPages = [1, 2, 3,  dotsInitial, numberOfPages.length];
+        }
+         else if (currentButton === 3 || currentButton === 2) {
             //current button 4
-            const sliced = numberOfPages.slice(0, 5);
+            const sliced = numberOfPages.slice(0, 4);
             tempNumberOfPages = [...sliced, dotsInitial, numberOfPages.length];
-        } else if (currentButton > 4 && currentButton < numberOfPages.length - 2) {
+        } 
+        else if (currentButton > 3 && currentButton < numberOfPages.length - 1) {
             // from 5 to 8 -> (10 - 2)
             const sliced1 = numberOfPages.slice(currentButton - 2, currentButton); // sliced1 (5-2, 5) -> [4,5]
-            const sliced2 = numberOfPages.slice(currentButton, currentButton + 2); // sliced2 (5, 5+2) -> [6,7]
+            const sliced2 = numberOfPages.slice(currentButton, currentButton + 1); // sliced2 (5, 5+2) -> [6,7]
             tempNumberOfPages = [
                 1,
                 dotsLeft,
@@ -65,7 +67,7 @@ const [activeClass,setActiveClass]=useState<String>("");
             ]; // [1, '...', 4, 5, 6, 7,'...', 10]
         } else if (currentButton > numberOfPages.length - 3) {
             // > 7
-            const sliced = numberOfPages.slice(numberOfPages.length - 4); // slice last 4 [7, 8, 9, 10]
+            const sliced = numberOfPages.slice(numberOfPages.length - 3); // slice last 4 [7, 8, 9, 10]
             tempNumberOfPages = [1, dotsLeft, ...sliced];
         } else if (currentButton === dotsInitial) {
             // [1, 2, 3, 4, "...", 10].length = 6 - 3  = 3
@@ -96,11 +98,11 @@ const [activeClass,setActiveClass]=useState<String>("");
         <>
          <div className="flex text-caption pt-5">
             <RowsPerPage setNoOfRows={setNoOfRows}/>
-                <div className="flex items-center gap-x-2 ml-auto pr-5">
+                <div className="flex items-center gap-x-[2px] ml-auto pr-5">
                     {/* Previous Button */}
                     <button
                         className={`px-3 py-1.5  ${currentButton === 1
-                                ? "opacity-50 cursor-not-allowed"
+                                ? "opacity-50 cursor-default"
                                 : "cursor-pointer"
                             }`}
                         onClick={() =>{
@@ -120,7 +122,7 @@ const [activeClass,setActiveClass]=useState<String>("");
                         return (
                             <div
                                 key={index}
-                                className={`px-3 py-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
+                                className={`w-[32px] text-center p-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
                                         ? "transition-colors duration-700 ease-in bg-primary rounded-lg"
                                         : "bg-background-primary rounded-lg"
                                     }`}
@@ -134,9 +136,9 @@ const [activeClass,setActiveClass]=useState<String>("");
                     {/* Next Button */}
                     <button
                         className={`px-3 py-2 ${currentButton === numberOfPages.length
-                                ? "opacity-50 cursor-not-allowed"
+                                ? "opacity-50 cursor-default"
                                 : numberOfPages.length === 0
-                                    ? "opacity-50 cursor-not-allowed"
+                                    ? "opacity-50 cursor-default"
                                     : "cursor-pointer"
                             }`}
                         onClick={() =>

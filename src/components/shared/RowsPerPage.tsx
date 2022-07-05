@@ -40,15 +40,15 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
 
                 <CollapseDropdown ref={RowsDropdownWrapper}
                     show={toggleNoOfRows}
-                    className="relative text-caption text-content-primary top-4"
-                    variant="light"
+                    className="relative text-caption text-content-primary top-2"
+                    variant="default"
                 >
                     <div
                      onClick={(e)=>{e?.stopPropagation(); 
                      settoggleNoofRows(false); 
                      setNoOfRows(10);
                      setRowPerPage(10)}}
-                     className="border-b-[1px] border-outline px-[10px] flex cursor-pointer overflow-hidden justify-start items-center hover:bg-background-light h-auto">
+                     className="text-content-secondary py-2 pl-4 pr-4  flex cursor-pointer overflow-hidden justify-center items-center hover:text-primary  h-auto">
                         10
                         </div>
                     <div 
@@ -57,7 +57,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
                     setNoOfRows(20);
                     setRowPerPage(20)
                     }}
-                    className="border-b-[1px] border-outline px-[10px] flex cursor-pointer overflow-hidden justify-start items-center hover:bg-background-light h-auto">
+                    className=" text-content-secondary py-2 pl-4 pr-4 flex cursor-pointer overflow-hidden justify-center items-center hover:text-primary h-auto">
                         20
                         </div>
                     <div
@@ -65,7 +65,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
                      settoggleNoofRows(false); 
                      setNoOfRows(30);
                      setRowPerPage(30)}}
-                     className="border-b-[1px] border-outline px-[10px] flex cursor-pointer overflow-hidden  justify-start items-center hover:bg-background-light h-auto">
+                     className="text-content-secondary py-2 pl-4  pr-4  flex cursor-pointer overflow-hidden  justify-center items-center hover:text-primary  h-auto">
                         30
                         </div>
 
