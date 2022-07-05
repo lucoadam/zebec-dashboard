@@ -23,6 +23,11 @@
     "transaction": "Transaction",
     "view-on-explorer": "View on Explorer",
     "reference": "Reference",
-    "view-reference-file": "View Reference File"
+    "view-reference-file": "View Reference File",
+    "initiated": "Initiated",
+    "sender-or-receiver": "Sender/ Receiver",
+    "confirmation": "Confirmation",
+    "withdrawn-or-initiated": "Withdrawn/ Initiated",
+    "requested-by": "Requested By"
   }
 }

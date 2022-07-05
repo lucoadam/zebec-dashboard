@@ -1,19 +1,27 @@
 import React, { FC, Fragment, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
-import { toSubstring } from "utils";
+import { Button, CircularProgress, IconButton } from "components/shared";
+import { formatCurrency, toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
 
-interface IncomingTableRowProps {
+interface HistoryTableRowProps {
   index: number;
   transaction: any;
   activeDetailsRow: "" | number;
   handleToggleRow: () => void;
 }
 
-const IncomingTableRow: FC<IncomingTableRowProps> = ({
+const returnValidPercentage = (percentage: number) =>{
+  if(percentage > 0){
+    return percentage
+  }else{
+    return 0;
+  }
+}
+
+const HistoryTableRow: FC<HistoryTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
@@ -36,27 +44,32 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 w-[340px]">
+          <td className="px-6 py-4 w-[340px]">
             <div className="flex items-center gap-x-2.5">
-              <div className=" w-14 h-14">P</div>
+              <CircularProgress
+                status={transaction.status}
+                percentage={returnValidPercentage(parseInt(formatCurrency((transaction.sent_token * 100) / transaction.amount)))}
+              />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    +{formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)}
                   </span>
                   &nbsp;SOL
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                {formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)} of {transaction.amount} SOL
+                </div>
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-4 w-[200px]">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
               1AdXF3...DuV15{" "}
               <IconButton
@@ -65,7 +78,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               />
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Withdraw"
@@ -197,7 +210,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.status")}
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
-                        <Icons.IncomingIcon className="w-5 h-5" />
+                        <Icons.OutsideLinkIcon className="w-5 h-5" />
                         <span>Ongoing</span>
                       </div>
                     </div>
@@ -242,4 +255,4 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   );
 };
 
-export default IncomingTableRow;
+export default HistoryTableRow;

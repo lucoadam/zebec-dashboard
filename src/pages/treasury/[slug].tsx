@@ -55,7 +55,8 @@ export async function getServerSideProps({ locale }: any) {
         "treasury",
         "treasuryOverview",
         "treasurySettings",
-        "validation"
+        "validation",
+        "transactions",
       ])),
     },
   };
