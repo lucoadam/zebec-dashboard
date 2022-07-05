@@ -52,9 +52,22 @@ const [activeClass,setActiveClass]=useState<String>("");
             //current button 4
             const sliced = numberOfPages.slice(0, 4);
             tempNumberOfPages = [...sliced, dotsInitial, numberOfPages.length];
-        } 
-        else if (currentButton > 3 && currentButton < numberOfPages.length - 1) {
+        } else if (currentButton===numberOfPages.length-2){
+            const sliced1 = numberOfPages.slice(currentButton - 2, currentButton); // sliced1 (5-2, 5) -> [4,5]
+            const sliced2 = numberOfPages.slice(currentButton, currentButton ); // sliced2 (5, 5+2) -> [6,7]
+            tempNumberOfPages = [
+                1,
+                dotsLeft,
+                ...sliced1,
+                ...sliced2,
+                dotsRight,
+                numberOfPages.length,
+            ]; // [1, '...', 4, 5, 6, 7,'...', 10]
+
+        }
+        else if (currentButton > 3 && currentButton < numberOfPages.length -1) {
             // from 5 to 8 -> (10 - 2)
+            
             const sliced1 = numberOfPages.slice(currentButton - 2, currentButton); // sliced1 (5-2, 5) -> [4,5]
             const sliced2 = numberOfPages.slice(currentButton, currentButton + 1); // sliced2 (5, 5+2) -> [6,7]
             tempNumberOfPages = [
