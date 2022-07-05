@@ -3,7 +3,7 @@ import * as Icons from "assets/icons";
 import { Button, CollapseDropdown, InputField } from "components/shared";
 import { useClickOutside } from "hooks";
 import { useTranslation } from "next-i18next";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getBalance } from "utils/getBalance";
 
 export const Withdrawal = () => {
@@ -13,8 +13,7 @@ export const Withdrawal = () => {
   const [searchData, setSearchData] = useState("");
   const [toggleTokensDropdown, setToggleTokensDropdown] =
     useState<boolean>(false);
-  const tokenDetails =
-    useAppSelector((state) => state.tokenDetails.tokens) || [];
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || [];
   const [currentToken, setCurrentToken] = useState(
@@ -37,6 +36,13 @@ export const Withdrawal = () => {
   const handleMaxClick = () => {
     setAmount(getBalance(treasuryTokens, currentToken.symbol).toString());
   };
+
+  useEffect(()=>{
+    if(tokenDetails.length>0){
+      setCurrentToken(tokenDetails[0]);
+    }
+  }, [tokenDetails])
+  
   return (
     <>
       <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
