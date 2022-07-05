@@ -103,7 +103,7 @@ const Overview = () => {
   const filterTokens = () => {
     if (search !== "")
       return tokenDetails.filter((item) =>
-        item.symbol.toLowerCase().includes(search)
+        item.symbol.toLowerCase().includes(search),
       );
     return tokenDetails;
   };
@@ -286,7 +286,7 @@ const Overview = () => {
                   <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                     {formatCurrency(
                       getBalance(treasuryTokens, item.symbol),
-                      "$"
+                      "$",
                     )}
                   </p>
                   <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -303,7 +303,7 @@ const Overview = () => {
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full rounded-[4px] pl-[8px]  bg-background-secondary mb-[24px]">
+        <div className="w-full rounded bg-background-secondary mb-6">
           <div className="flex">
             {fundTransferTabs.map((fundTranfer, index) => {
               return (
@@ -312,7 +312,7 @@ const Overview = () => {
                   type="plain"
                   className="w-1/2"
                   title={`${t(
-                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`
+                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`,
                   )}`}
                   isActive={activePage === index}
                   startIcon={fundTranfer.icon}

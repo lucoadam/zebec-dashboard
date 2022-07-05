@@ -4,7 +4,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        
         black: "var(--black)",
         white: "var(--white)",
         // Background
@@ -143,8 +142,8 @@ module.exports = {
           "maxWidth": "100%",
           "marginLeft": "auto",
           "marginRight": "auto",
-          // "paddingLeft": "1rem",
-          // "paddingRight": "1rem",
+          "paddingLeft": "1rem",
+          "paddingRight": "1rem",
           "@screen sm": {
             maxWidth: "100%",
           },

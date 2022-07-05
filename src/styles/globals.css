@@ -295,11 +295,13 @@ input[type="number"] {
 /* Track */
 ::-webkit-scrollbar-track {
   background: var(--bg-tertiary);
+  border-radius: 3px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #555;
+  border-radius: 3px;
 }
 
 /* Handle on hover */
