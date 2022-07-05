@@ -4,7 +4,7 @@ import * as Icons from "assets/icons";
 import { Button, CollapseDropdown, InputField } from "components/shared";
 import { useClickOutside } from "hooks";
 import { useTranslation } from "next-i18next";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getBalance } from "utils/getBalance";
 
 export const Deposit = () => {
@@ -15,7 +15,7 @@ export const Deposit = () => {
   const [toggleTokensDropdown, setToggleTokensDropdown] =
     useState<boolean>(false);
   const tokenDetails =
-    useAppSelector((state) => state.tokenDetails.tokens) || [];
+    useAppSelector((state) => state.tokenDetails.tokens);
   const walletTokens =
     useAppSelector((state) => state.walletBalance.tokens) || [];
   const [currentToken, setCurrentToken] = useState(
@@ -38,6 +38,13 @@ export const Deposit = () => {
   const handleMaxClick = () => {
     setAmount(getBalance(walletTokens, currentToken.symbol).toString());
   };
+
+  useEffect(()=>{
+    if(tokenDetails.length>0){
+      setCurrentToken(tokenDetails[0]);
+    }
+  }, [tokenDetails])
+
   return (
     <>
       <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
