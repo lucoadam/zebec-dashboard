@@ -2,7 +2,7 @@ import React, { FC, Fragment, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { Button, CircularProgress, IconButton } from "components/shared";
-import { toSubstring } from "utils";
+import { formatCurrency, toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
 
@@ -11,6 +11,14 @@ interface HistoryTableRowProps {
   transaction: any;
   activeDetailsRow: "" | number;
   handleToggleRow: () => void;
+}
+
+const returnValidPercentage = (percentage: number) =>{
+  if(percentage > 0){
+    return percentage
+  }else{
+    return 0;
+  }
 }
 
 const HistoryTableRow: FC<HistoryTableRowProps> = ({
@@ -38,15 +46,20 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 w-[340px]">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress percentage={index * 10}/>
+              <CircularProgress
+                status={transaction.status}
+                percentage={returnValidPercentage(parseInt(formatCurrency((transaction.sent_token * 100) / transaction.amount)))}
+              />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    +{formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)}
                   </span>
                   &nbsp;SOL
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                {formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)} of {transaction.amount} SOL
+                </div>
               </div>
             </div>
           </td>
@@ -68,10 +81,10 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
           <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center float-right gap-x-6">
               <Button
-                title="Cancel"
+                title="Withdraw"
                 size="small"
                 startIcon={
-                  <Icons.CrossIcon className="text-content-contrast" />
+                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
               />
               <IconButton

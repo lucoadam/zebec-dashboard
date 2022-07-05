@@ -1,18 +1,42 @@
+import * as Icons from "assets/icons";
 import React, { FC, useEffect, useState } from "react";
+
+type TransactionStatus = 'completed' | 'scheduled' | 'cancelled' | 'paused';
 
 interface CircularProgressProps {
   percentage?: number;
+  status: TransactionStatus;
   children?: React.ReactNode;
 }
 
-const getBackgroundByPercentage = (percentage: number)=> {
+const statusIconMapping = {
+  completed: <Icons.CheckIcon className="text-success text-lg"/>,
+  scheduled: <Icons.CalenderIcon className="text-content-secondary text-lg"/>,
+  cancelled: <Icons.CrossIcon className="text-error text-lg"/>,
+  paused: <Icons.PauseIcon className="text-content-contrast text-lg"/>
+}
+
+const getIconOrPercentageBasedOnStatus = (status: TransactionStatus, percentage: number) => {
+  if(status in statusIconMapping){
+    return statusIconMapping[status];
+  }
+  return `${percentage}%`
+}
+
+const getBackgroundByPercentage = (percentage: number, status: TransactionStatus)=> {
   if(percentage === 100){
     return 'text-success'
+  }
+  switch (status) {
+    case 'cancelled':
+      return 'text-error'
+    case 'paused':
+      return 'text-content-contrast'
   }
   return 'text-primary'
 }
 
-export const CircularProgress:FC<CircularProgressProps> = ({percentage = 0, children}) => {
+export const CircularProgress:FC<CircularProgressProps> = ({percentage = 0, children, status}) => {
   const sqSize = 56;
   const strokeWidth = 5;
   const radius = (sqSize - strokeWidth) / 2;
@@ -42,7 +66,7 @@ export const CircularProgress:FC<CircularProgressProps> = ({percentage = 0, chil
         strokeWidth={`${strokeWidth}px`}
       />
       <circle
-        className={`${getBackgroundByPercentage(percentage)} transition duration-150`}
+        className={`${getBackgroundByPercentage(percentage, status)} transition duration-150`}
         strokeLinecap="round"
         stroke="currentColor"
         fill="transparent"
@@ -61,7 +85,7 @@ export const CircularProgress:FC<CircularProgressProps> = ({percentage = 0, chil
       width: sqSize,
       height: sqSize
     }}>
-    {children ? children : `${percentage}%`}
+    {getIconOrPercentageBasedOnStatus(status, percentage)}
     </span>
     </div>
   );

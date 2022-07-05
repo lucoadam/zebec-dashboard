@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
+import { Button, CircularProgress, IconButton } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
@@ -38,9 +38,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 w-[340px]">
             <div className="flex items-center gap-x-2.5">
-              <div className="flex justify-center items-center border-4  border-outline-secondary bg-background-secondary rounded-full w-14 h-14 text-content-secondary">
-                <Icons.CalenderIcon className="w-7 h-7"/>
-              </div>
+              <CircularProgress  percentage={0} status="scheduled"/>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">

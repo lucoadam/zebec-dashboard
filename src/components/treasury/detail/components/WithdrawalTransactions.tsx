@@ -1,5 +1,5 @@
 import { Table, TableBody } from "components/shared";
-import { scheduledTransactions } from "fakedata";
+import { withdrawalTransactions } from "fakedata";
 import { useState } from "react";
 import WithdrawalTableRow from "./WithdrawalTableRow";
 
@@ -40,7 +40,7 @@ export const WithdrawalTransactions = () => {
   return (
     <Table headers={headers}>
       <TableBody>
-        {scheduledTransactions.data.map((transaction, index) => {
+        {withdrawalTransactions.map((transaction, index) => {
           return (
             <WithdrawalTableRow
               key={index}

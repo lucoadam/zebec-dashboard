@@ -2,7 +2,7 @@ import React, { FC, Fragment, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 import { Button, CircularProgress, IconButton } from "components/shared";
-import { toSubstring } from "utils";
+import { formatCurrency, toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
 
@@ -12,6 +12,27 @@ interface WithdrawalTableRowProps {
   activeDetailsRow: "" | number;
   handleToggleRow: () => void;
 }
+
+const returnValidPercentage = (percentage: number) =>{
+  if(percentage > 0){
+    return percentage
+  }else{
+    return 0;
+  }
+}
+
+type Confirmations = 'pending' | 'rejected' | 'confirmed'
+
+const confirmationClassesMapping = {
+  pending: 'bg-primary text-content-primary',
+  rejected: 'bg-error text-content-primary',
+  confirmed: 'bg-success text-background-contrast'
+}
+
+const getClassesForConfirmation = (confirmation:Confirmations) => {
+  return confirmationClassesMapping[confirmation];
+}
+
 
 const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
   index,
@@ -38,26 +59,31 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 w-[280px]">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress percentage={100}/>
+              <CircularProgress status={transaction.status}
+                percentage={returnValidPercentage(parseInt(formatCurrency((transaction.sent_token * 100) / transaction.amount)))}
+
+              />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    -{formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)}
                   </span>
                   &nbsp;SOL
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                {formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)} of {transaction.amount} SOL
+                </div>
               </div>
             </div>
           </td>
           <td className="px-6 py-4 w-[125px]">
-            <div className="text-caption bg-success p-1.5 rounded-sm text-center text-content-primary">
-              Confirmed
+            <div className={`text-caption font-medium capitalize p-1.5 rounded-sm text-center ${getClassesForConfirmation(transaction.confirmation)}`}>
+              {transaction.confirmation}
             </div>
           </td>
           <td className="w-[222px] px-6 py-4">
             <div className="text-caption text-content-primary">
-            INI: Mar 18, 2022, 12:00 PM
+             {transaction.status === 'scheduled' && 'INI:'} Mar 18, 2022, 12:00 PM
             </div>
           </td>
           <td className="px-6 py-4 w-[222px]">

@@ -1,5 +1,5 @@
 import { Table, TableBody } from "components/shared";
-import { scheduledTransactions } from "fakedata";
+import { historyTransactions } from "fakedata";
 import { useState } from "react";
 import HistoryTableRow from "./HistoryTableRow";
 
@@ -35,7 +35,7 @@ export const HistoryTransactions = () => {
   return (
     <Table headers={headers}>
       <TableBody>
-        {scheduledTransactions.data.map((transaction, index) => {
+        {historyTransactions.map((transaction, index) => {
           return (
             <HistoryTableRow
               key={index}
