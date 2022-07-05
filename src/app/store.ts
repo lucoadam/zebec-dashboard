@@ -5,13 +5,23 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import counterSlice from "features/count/counterSlice";
-import tokenSlice from "features/token/tokenSlice";
+import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice";
+import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice";
+import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice";
 import userSlice from "features/user/userSlice";
+import walletBalanceSlice from "features/walletBalance/walletBalanceSlice";
+import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice";
+import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice";
 
 const combineReducer = combineReducers({
   counter: counterSlice,
   user: userSlice,
-  token: tokenSlice,
+  tokenDetails: tokenDetailsSlice,
+  walletBalance: walletBalanceSlice,
+  treasuryBalance: treasuryBalanceSlice,
+  zebecBalance: zebecBalanceSlice,
+  zebecStreamingBalance: zebecStreamingSlice,
+  treasuryStreamingBalance: treasuryStreamingSlice,
 });
 
 // export const store = configureStore({

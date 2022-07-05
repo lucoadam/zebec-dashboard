@@ -1,9 +1,9 @@
 //Wallet Adapter
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { Connection, clusterApiUrl } from "@solana/web3.js";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
 
 //getRPC
-const getRPCNetwork = () => {
+export const getRPCNetwork = () => {
   if (process.env.RPC_NETWORK === "devnet") return WalletAdapterNetwork.Devnet;
   if (process.env.RPC_NETWORK === "mainnet")
     return WalletAdapterNetwork.Mainnet;

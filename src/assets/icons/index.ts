@@ -31,11 +31,12 @@ import ArrowTopRight from "./other-icons/arrow-upright.svg";
 import Line from "./other-icons/line.svg";
 import Equals from "./other-icons/equals.svg";
 import Asterik from "./other-icons/asterik.svg";
-
-
+import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
+import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
 
 export {
-  
+  PaginationRightArrow,
+  PaginationLeftArrow,
   Asterik,
   Line,
   Equals,

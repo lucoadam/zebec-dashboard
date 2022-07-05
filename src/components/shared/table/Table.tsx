@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { TableHeader } from "./TableHeader";
 
 interface TableProps {
-  headers: string[];
+  headers: TableHeader[];
   children: React.ReactNode;
 }
 
