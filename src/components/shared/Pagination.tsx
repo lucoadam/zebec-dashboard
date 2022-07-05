@@ -53,7 +53,7 @@ const [activeClass,setActiveClass]=useState<String>("");
             const sliced = numberOfPages.slice(0, 4);
             tempNumberOfPages = [...sliced, dotsInitial, numberOfPages.length];
         } else if (currentButton===numberOfPages.length-2){
-            const sliced1 = numberOfPages.slice(currentButton - 2, currentButton); // sliced1 (5-2, 5) -> [4,5]
+            const sliced1 = numberOfPages.slice(currentButton - 3, currentButton); // sliced1 (5-2, 5) -> [4,5]
             const sliced2 = numberOfPages.slice(currentButton, currentButton ); // sliced2 (5, 5+2) -> [6,7]
             tempNumberOfPages = [
                 1,
