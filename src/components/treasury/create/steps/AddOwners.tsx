@@ -1,16 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { constants } from "constants/constants";
+import { useWallet } from "@solana/wallet-adapter-react";
+import * as Icons from "assets/icons";
 import { Button, InputField } from "components/shared";
+import SelectField from "components/shared/SelectField";
+import { constants } from "constants/constants";
+import { useTranslation } from "next-i18next";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import * as Icons from "assets/icons";
-import { Owner, StepsComponentProps } from "../CreateTreasury.d";
-import SelectField from "components/shared/SelectField";
-import OwnerLists from "../OwnerLists";
 import { isValidWallet } from "utils/isValidtWallet";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useTranslation } from "next-i18next";
+import * as Yup from "yup";
+import { Owner, StepsComponentProps } from "../CreateTreasury.d";
+import OwnerLists from "../OwnerLists";
 
 const AddOwners: FC<StepsComponentProps> = (props) => {
   const useWalletObject = useWallet();
@@ -42,7 +42,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
     setValue,
     getValues,
   } = useForm({
-    mode: "onChange" || "onSubmit",
+    mode: "onChange",
     resolver: yupResolver(validationSchema),
   });
 
@@ -75,7 +75,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
         onSubmit={
           owners.length !== constants.MAX_OWNERS
             ? handleSubmit(onSubmit)
-            : () => event?.preventDefault()
+            : (event) => event.preventDefault()
         }
         autoComplete="off"
       >
@@ -86,7 +86,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           {t("createTreasury:second-steper.description")}
         </p>
         <div className="flex md:flex-nowrap sm:flex-wrap mb-2 justify-center items-center">
-          <div className="flex sm:w-auto sm:w-full">
+          <div className="flex sm:w-auto">
             <div className="sm:w-full md:w-2/6 pr-2">
               <InputField
                 error={!!errors.name}
@@ -190,10 +190,10 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           size="medium"
           className="w-full justify-center mt-[32px]"
           onClick={() => {
-            if (owners.length > 1 && !selectError) {
+            if (owners.length > 2 && !selectError) {
               props.setCurrentStep(2);
             } else {
-              handleSubmit(() => {});
+              setSelectionError(true);
             }
           }}
         />

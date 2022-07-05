@@ -13,6 +13,7 @@ module.exports = {
           tertiary: "var(--bg-tertiary)",
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
+          backdrop: "var(--bg-backdrop)",
         },
         // Primary
         primary: {
@@ -29,9 +30,10 @@ module.exports = {
         content: {
           primary: "var(--content-primary)",
           secondary: "var(--content-secondary)",
+          tertiary: "var(--content-tertiary)",
           contrast: "var(--content-contrast)",
           success: "var(--success-content)",
-          error: "var(--error-content)"
+          error: "var(--error-content)",
         },
         // Success
         success: "var(--success-main)",
@@ -43,7 +45,6 @@ module.exports = {
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
-          dark: "var(--outline-dark)"
         },
       },
       fontFamily: {
@@ -126,6 +127,7 @@ module.exports = {
       boxShadow: {
         2: "var(--bs-shadow-2)",
         3: "var(--bs-shadow-3)",
+        backdrop: "var(--bs-shadow-backdrop)",
       },
       container: {
         center: true,
@@ -133,15 +135,15 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    require("@tailwindcss/forms"),
     function ({ addComponents }) {
       addComponents({
         ".container": {
           "maxWidth": "100%",
           "marginLeft": "auto",
           "marginRight": "auto",
-          // "paddingLeft": "1rem",
-          // "paddingRight": "1rem",
+          "paddingLeft": "1rem",
+          "paddingRight": "1rem",
           "@screen sm": {
             maxWidth: "100%",
           },

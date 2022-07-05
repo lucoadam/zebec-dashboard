@@ -7,3 +7,4 @@ export * from "./Tab";
 export * from "./table/Table";
 export * from "./table/TableBody";
 export * from "./CircularProgress";
+export * from "./Modal";
