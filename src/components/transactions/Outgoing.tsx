@@ -3,17 +3,19 @@ import { useTranslation } from "next-i18next";
 import FilterTabs from "./FilterTabs";
 import { Table, TableBody } from "components/shared";
 import OutgoingTableRow from "./OutgoingTableRow";
-import { Pagination } from "components/shared/Pagination";
 
 import { outgoingTransactions } from "fakedata";
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions");
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
-  const [currentPage,setCurrentPage]=useState(1)
-  const [NoOfRows,setNoOfRows] =useState(10)
 
-  const headers = ["progress", "transaction-date", "receiver", ""];
+  const headers = [
+    { label: "progress" },
+    { label: "transaction-date" },
+    { label: "receiver" },
+    { label: "" },
+  ];
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("");
@@ -43,7 +45,6 @@ const Outgoing: FC = () => {
           })}
         </TableBody>
       </Table>
-      <Pagination pages={100} setCurrentPage={setCurrentPage} setNoOfRows={setNoOfRows}/>
     </>
   );
 };

@@ -8,6 +8,27 @@
   "scheduled": "Scheduled",
   "completed": "Completed",
   "export-report": "Export Report",
+  "withdraw": {
+    "withdraw-modal-header": "Withdraw Incoming Balance",
+    "withdraw-modal-subtitle": "Withdraw balance into your zebec wallet.",
+    "amount-received": "Amount Received:",
+    "withdrawable-amount": "Withdraw-able Amount:",
+    "withdraw-info": "You can withdraw multple times until you've withdrawn the total amount",
+    "enter-amount": "Enter amount",
+    "withdrawal-fees": "withdrawal fees",
+    "senders-insufficient-balance": "The transaction will not succeed because of sender's insufficient balance.",
+    "greater-amount": "The amount you entered is greater than the amount sent to you.",
+    "withdrawable-amount-less": "Your withdraw-able amount is less than the amount you entered.",
+    "yes-withdraw": "Yes, Withdraw",
+    "withdraw": "Withdraw",
+    "cancel": "Cancel",
+    "sure-you-want-to-withdraw": "Are you sure you want to withdraw",
+    "withdrawing": "Withdrawing",
+    "fees": "Fees",
+    "withdraw-amount": "Withdraw Amount",
+    "dont-close-window": "Please don't close your window.",
+    "max": "MAX"
+  },
   "table": {
     "progress": "Progress",
     "transaction-date": "Transaction Date",
@@ -23,6 +44,11 @@
     "transaction": "Transaction",
     "view-on-explorer": "View on Explorer",
     "reference": "Reference",
-    "view-reference-file": "View Reference File"
+    "view-reference-file": "View Reference File",
+    "initiated": "Initiated",
+    "sender-or-receiver": "Sender/ Receiver",
+    "confirmation": "Confirmation",
+    "withdrawn-or-initiated": "Withdrawn/ Initiated",
+    "requested-by": "Requested By"
   }
 }
