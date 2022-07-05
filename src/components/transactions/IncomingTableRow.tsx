@@ -1,10 +1,13 @@
-import React, { FC, Fragment, useRef } from "react";
+import React, { FC, Fragment, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
+import { Button, IconButton, InputField, Modal } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
+import ConfirmWithdraw from "./withdraw/steps/ConfirmWithdraw";
+import { WithdrawStepsList } from "./withdraw/data";
+
 
 interface IncomingTableRowProps {
   index: number;
@@ -21,7 +24,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions");
   const detailsRowRef = useRef<HTMLDivElement>(null);
-
+  const [currentStep, setCurrentStep] = React.useState(-1);
   const styles = {
     detailsRow: {
       height:
@@ -30,13 +33,20 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           : "0px",
     },
   };
+  let [isOpen, setIsOpen] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState<number|any>();
+
+  function toggleModal() {
+    setIsOpen(!isOpen)
+
+  }
 
   return (
     <>
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 w-[340px]">
+          <td className="px-6 py-5 w-full">
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">P</div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -50,13 +60,13 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-5 w-full">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-5 w-full">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
               1AdXF3...DuV15{" "}
               <IconButton
@@ -65,7 +75,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               />
             </div>
           </td>
-          <td className="px-6 py-5 w-[240px]">
+          <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Withdraw"
@@ -73,7 +83,26 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                 startIcon={
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
+                onClick={() => {
+                  setCurrentStep(0)
+                  setIsOpen(true)
+                }}
               />
+
+              <Modal
+                show={currentStep >= 0 && isOpen}
+                toggleModal={toggleModal}
+                className="rounded h-[388px] w-[338px]"
+                hasCloseIcon={!currentStep}
+              >
+                {WithdrawStepsList[currentStep]?.component({
+                  setCurrentStep,
+                  withdrawAmount,
+                  setWithdrawAmount
+                })}
+
+
+              </Modal>
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -87,9 +116,8 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in` : "ease-out"
-              }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
+                }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
