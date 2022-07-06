@@ -25,13 +25,13 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
     return (
         <>
 
-            <div className="flex gap-x-2 absolute ">
+            <div className="flex gap-x-2">
                 <div className="text-content-secondary pl-5" >
                     <span className="">Rows per page:</span>
                 </div>
 
                 <div className="">
-                <div onClick={() => settoggleNoofRows((prev) => !prev)} className="flex text-black max-w-[60px] ml-[5px] overflow-x-hidden text-black">
+                <div onClick={() => settoggleNoofRows((prev) => !prev)} className="flex text-content-primary max-w-[60px] ml-[5px] overflow-x-hidden">
                   
                         {noOfRows}
                     

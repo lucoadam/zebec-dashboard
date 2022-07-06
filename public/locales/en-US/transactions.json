@@ -27,7 +27,9 @@
     "fees": "Fees",
     "withdraw-amount": "Withdraw Amount",
     "dont-close-window": "Please don't close your window.",
-    "max": "MAX"
+    "max": "MAX",
+    "enter-withdraw-amount": "Please enter withdraw amount",
+    "not-zero": "Amount must be greater than zero"
   },
   "table": {
     "progress": "Progress",
@@ -50,5 +52,16 @@
     "confirmation": "Confirmation",
     "withdrawn-or-initiated": "Withdrawn/ Initiated",
     "requested-by": "Requested By"
+  },
+  "outgoing-actions":{
+    "pause-modal-header" : "Are you sure you want to pause the transaction?",
+    "yes-pause": "Yes, Pause",
+    "no-pause": "No, Don’t Pause",
+    "cancel-modal-header": "Are you sure you want to cancel the transaction?",
+    "yes-cancel":"Yes, Cancel",
+    "no-cancel":"No, Don’t Cancel",
+    "resume-modal-header":"Are you sure you want to resume the transaction?",
+    "no-resume": "No, Don’t Resume",
+    "yes-resume": "Yes, Resume"
   }
 }

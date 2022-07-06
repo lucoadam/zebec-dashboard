@@ -1,10 +1,16 @@
-import React, { FC, Fragment, useRef } from "react";
+import React, { FC, Fragment, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
+import { Button, IconButton, Modal } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
+import { useDispatch } from "react-redux";
+import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice";
+import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice";
+import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice";
+
+
 
 interface OutgoingTableRowProps {
   index: number;
@@ -21,6 +27,14 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions");
   const detailsRowRef = useRef<HTMLDivElement>(null);
+  const [currentStep, setCurrentStep] = React.useState(-1);
+  let [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  // function toggleModal() {
+  //   setIsOpen(!isOpen)
+
+  // }
 
   const styles = {
     detailsRow: {
@@ -68,18 +82,23 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
               <div className="flex items-center gap-x-3">
+
                 <Button
                   title="Resume"
                   size="small"
                   startIcon={
                     <Icons.ResumeIcon className="text-content-contrast" />
                   }
+                  onClick={() => { dispatch(toggleResumeModal())}}
+
                 />
                 <Button
                   title="Pause"
                   size="small"
                   startIcon={
                     <Icons.PauseIcon className="text-content-contrast" />
+                  }
+                  onClick={() => { dispatch(togglePauseModal())}
                   }
                 />
                 <Button
@@ -88,6 +107,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   startIcon={
                     <Icons.CrossIcon className="text-content-contrast" />
                   }
+                  onClick={() => { dispatch(toggleCancelModal()) }}
                 />
               </div>
               <IconButton
@@ -103,9 +123,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in` : "ease-out"
-              }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
+                }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">

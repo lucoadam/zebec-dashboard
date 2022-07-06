@@ -5,7 +5,7 @@ import * as Icons from "assets/icons";
 import { withdrawProps } from "../data";
 
 
-const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep,withdrawAmount}) => {
+const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep,withdrawAmount,setWithdrawAmount}) => {
     const { t } = useTranslation("transactions");
     return (
         <div>
@@ -44,12 +44,13 @@ const ConfirmWithdraw: FC<withdrawProps> = ({setCurrentStep,withdrawAmount}) => 
             </div>
             <div className="pb-[12px]">
             <Button
-                className="w-full mb-5"
+                className="w-full "
 
                 title={t("withdraw.cancel")}
                 onClick={() => {
 
                     setCurrentStep(-1);
+                    
                 }}
             />
             </div>

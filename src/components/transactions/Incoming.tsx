@@ -5,6 +5,7 @@ import { Table, TableBody } from "components/shared";
 import IncomingTableRow from "./IncomingTableRow";
 import { Pagination } from "components/shared/Pagination";
 import { incomingTransactions } from "fakedata";
+import { RowsPerPage } from "components/shared/RowsPerPage";
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions");
@@ -60,11 +61,17 @@ const Incoming: FC = () => {
           })}
         </TableBody>
       </Table>
-      <Pagination
-        pages={100}
-        setCurrentPage={setCurrentPage}
-        setNoOfRows={setNoOfRows}
-      />
+      <div className="flex text-caption h-8 pt-5">
+        <RowsPerPage setNoOfRows={setNoOfRows} />
+        <Pagination
+          pages={100}
+          setCurrentPage={setCurrentPage}
+          setNoOfRows={setNoOfRows}
+        />
+
+      </div>
+      
+
     </>
   );
 };

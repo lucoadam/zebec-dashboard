@@ -8,11 +8,12 @@ import * as Icons from "assets/icons";
 
 
 
-const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount }) => {
+const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount,setWithdrawAmount }) => {
     const { t } = useTranslation("transactions");
     useEffect(() => {
         setTimeout(() => {
             setCurrentStep(-1);
+            
         }, 1000);
     }, [])
     return (

@@ -1,5 +1,8 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import Cancel from "components/transactions/outgoing_modals/Cancel";
+import Pause from "components/transactions/outgoing_modals/Pause";
+import Resume from "components/transactions/outgoing_modals/Resume";
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice";
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice";
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice";
@@ -38,6 +41,9 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       </Head>
 
       <TPSHeader />
+      <Pause/>
+      <Resume/>
+      <Cancel/>
       <Navbar />
       <main className="pb-20">{children}</main>
     </>

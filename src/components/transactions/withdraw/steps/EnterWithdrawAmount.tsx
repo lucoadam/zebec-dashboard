@@ -1,13 +1,44 @@
-import React, { FC, Fragment, useRef, useState } from "react";
-import { Button, IconButton, InputField, Modal } from "components/shared";
+import React, { FC, useEffect } from "react";
+import { Button,  InputField } from "components/shared";
 import * as Icons from "assets/icons";
-import * as Images from "assets/images";
 import { useTranslation } from "next-i18next";
 import { withdrawProps } from "../data";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 
 
 const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount, setWithdrawAmount }) => {
   const { t } = useTranslation("transactions");
+
+   const validationSchema = Yup.object().shape({
+    withdrawamount: Yup.string().required(t("withdraw.enter-withdraw-amount"))
+    .test("is-not-zero", t("withdraw.not-zero"), (value) =>{
+    {console.log("value",typeof value)}
+       return typeof value==="string" && parseFloat(value)>0
+        
+    }),
+  });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+  } = useForm({
+    mode: "onChange" || "onSubmit",
+    resolver: yupResolver(validationSchema),
+  });
+  const onSubmit = (data: any) => {
+    setWithdrawAmount(data.withdrawamount)
+    setCurrentStep(1);
+    
+  };
+  useEffect(() => {
+    if (withdrawAmount!=null && withdrawAmount!=0) {
+      setValue("withdrawamount", withdrawAmount);
+    }
+  }, [withdrawAmount, setValue]);
  
   return (
     <div className="text-content-primary" >
@@ -38,35 +69,39 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
 
       </div>
       {/* Input Field */}
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
       <div className="pt-[12px] pb-[12px]">
         <InputField
           label={t("")}
-          className="relative text-black"
-          error={false}>
+          className="relative text-content-primary"
+          helper={errors.withdrawamount?.message?? ""}
+          error={!!errors.withdrawamount?.message}>
           <div>
             <input
-              className="w-full h-10"
+              className={`w-full h-10 ${!!errors.withdrawamount?.message && "error"}` }
               placeholder={t("withdraw.enter-amount")}
               type="number"
-              min="0"
-              value={withdrawAmount}
-              onChange={(e) => setWithdrawAmount(Number(e.target.value))}
-
+              {...register("withdrawamount")}
+              autoFocus
+              
             />
             <Button
               size="small"
               title={t("withdraw.max")}
-              className="absolute right-[10px] top-[8px] text-black"
+              className={`absolute right-2.5 top-2 text-content-primary `} 
               onClick={(e) => { setWithdrawAmount(10) }}
+              type="button"
+              
             />
           </div>
 
 
         </InputField>
       </div>
+      
 
       {/* warning text */}
-      <div className="flex pb-[12px]" >
+      <div className="flex pb-[12px] hidden" >
         <div className="pr-2 text-warning">
           <Icons.WarningTriangleIcon />
         </div>
@@ -79,16 +114,14 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
 
       <div className="pb-[12px]">
         <Button
-          className="w-full "
+          className={`w-full`} 
           variant="gradient"
+          type="submit"
           title={t("withdraw.withdraw")}
-          onClick={() => {
-            setCurrentStep(1);
-            setWithdrawAmount(withdrawAmount)
 
-          }}
         />
       </div>
+      </form>
 
       <div className="flex text-caption text-content-secondary items-center justify-center" >
         <div className="pr-2 "> <Icons.Info/></div>

@@ -109,12 +109,12 @@ const [activeClass,setActiveClass]=useState<String>("");
 
     return (
         <>
-         <div className="flex text-caption pt-5">
-            <RowsPerPage setNoOfRows={setNoOfRows}/>
-                <div className="flex items-center gap-x-[2px] ml-auto pr-5">
+         
+            
+                <div className="flex gap-x-[2px] ml-auto pr-5">
                     {/* Previous Button */}
                     <button
-                        className={`px-3 py-1.5  ${currentButton === 1
+                        className={`w-8  px-3 py-1.5  ${currentButton === 1
                                 ? "opacity-50 cursor-default"
                                 : "cursor-pointer"
                             }`}
@@ -135,7 +135,7 @@ const [activeClass,setActiveClass]=useState<String>("");
                         return (
                             <div
                                 key={index}
-                                className={`w-[32px] text-center p-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
+                                className={`w-8 h-8 text-center p-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
                                         ? "transition-colors duration-700 ease-in bg-primary rounded-lg"
                                         : "bg-background-primary rounded-lg"
                                     }`}
@@ -148,7 +148,7 @@ const [activeClass,setActiveClass]=useState<String>("");
 
                     {/* Next Button */}
                     <button
-                        className={`px-3 py-2 ${currentButton === numberOfPages.length
+                        className={` w-8 px-3 py-2 ${currentButton === numberOfPages.length
                                 ? "opacity-50 cursor-default"
                                 : numberOfPages.length === 0
                                     ? "opacity-50 cursor-default"
@@ -163,7 +163,7 @@ const [activeClass,setActiveClass]=useState<String>("");
                         <Icons.PaginationRightArrow />
                     </button>
                 </div>
-            </div>
+           
         </>
     );
 

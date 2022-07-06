@@ -34,7 +34,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     },
   };
   let [isOpen, setIsOpen] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<number|any>();
+  const [withdrawAmount, setWithdrawAmount] = useState<any>();
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -92,7 +92,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
-                className="rounded h-[388px] w-[338px]"
+                className={`rounded w-[338px] min-h-[388px]`}
                 hasCloseIcon={!currentStep}
               >
                 {WithdrawStepsList[currentStep]?.component({
