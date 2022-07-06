@@ -37,20 +37,20 @@ const Overview = () => {
   const filterTokens = () => {
     if (search !== "")
       return tokenDetails.filter((item) =>
-        item.symbol.toLowerCase().includes(search),
+        item.symbol.toLowerCase().includes(search)
       );
     return tokenDetails;
   };
 
   return (
-    <div className="flex flex-wrap md:flex-no-wrap w-full md-justify-start sm:justify-center">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2">
       {/**
        * First Column
        *    1. Safe Balance
        *    2. Incoming/ Outgoing
        *    3. Activity this Week
        */}
-      <div className="sm:w-1 md:w-1/3 pr-[12px] flex flex-col justify-between">
+      <div className="pr-3 flex flex-col justify-between">
         {/**
          * Safe Balance
          */}
@@ -99,7 +99,7 @@ const Overview = () => {
             {t("treasuryOverview:activity-this-week")}
           </p>
           {/* <canvas id="line-chart" className="w-[40px]"></canvas> */}
-          <div className="w-full  bg-background-secondary pr-0.5">
+          <div className="overflow-x-auto bg-background-secondary pr-0.5">
             <table className="table-auto w-full border-separate border-spacing-y-[24px]">
               <tbody>
                 <tr>
@@ -174,7 +174,7 @@ const Overview = () => {
        * Second Column
        *   1. Deposited Assets
        * **/}
-      <div className="sm:w-1 md:w-1/3 px-[12px]">
+      <div className="md:pr-3">
         <div className="w-full rounded-[4px] bg-background-secondary h-full px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:deposited-assets")}
@@ -220,7 +220,7 @@ const Overview = () => {
                   <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                     {formatCurrency(
                       getBalance(treasuryTokens, item.symbol),
-                      "$",
+                      "$"
                     )}
                   </p>
                   <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -233,7 +233,7 @@ const Overview = () => {
           </div>
         </div>
       </div>
-      <div className="sm:w-1 md:w-1/3 pl-[12px] flex flex-col justify-between">
+      <div className="md:pt-5 lg:pt-0 md:pr-3 flex flex-col justify-between">
         {/**
          * Deposit and Withdrawal
          */}
@@ -246,7 +246,7 @@ const Overview = () => {
                   type="plain"
                   className="w-1/2"
                   title={`${t(
-                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`,
+                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`
                   )}`}
                   isActive={activePage === index}
                   startIcon={fundTranfer.icon}

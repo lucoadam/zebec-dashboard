@@ -1,15 +1,15 @@
-import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as Icons from "assets/icons";
 import * as AvatarImages from "assets/images/avatars";
-import Image from "next/image";
-import { toSubstring } from "utils";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, InputField } from "components/shared";
-import OwnerLists from "components/treasury/create/OwnerLists";
-import { useEffect } from "react";
 import CopyButton from "components/shared/CopyButton";
+import OwnerLists from "components/treasury/create/OwnerLists";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toSubstring } from "utils";
+import * as Yup from "yup";
 
 const Setting = () => {
 
@@ -35,8 +35,8 @@ const Setting = () => {
     setValue("name", "Zebec Safe");
   }, [setValue]);
   return (
-    <div className="flex w-full justify-start">
-      <div className="w-1/3">
+    <div className="flex flex-wrap md:flex-nowrap lg:flex-nowrap w-full justify-start">
+      <div className="sm:w-full md:w-1/3">
         <div className="w-full flex">
           <Image
             src={AvatarImages.Avatar1}
@@ -106,7 +106,7 @@ const Setting = () => {
           />
         </div>
       </div>
-      <div className="min-w-[280px] ml-[215px]">
+      <div className="min-w-full md:min-w-[280px] lg:ml-[215px] mt-5 md:mt-0 sm:ml-0 md:ml-20">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
         {t('treasurySettings:owners')}
         </div>
