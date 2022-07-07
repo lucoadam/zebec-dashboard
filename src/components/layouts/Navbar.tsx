@@ -2,6 +2,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import * as Icons from "../../assets/icons";
 import * as Images from "../../assets/images";
@@ -88,12 +89,13 @@ const Navbar: FC = () => {
                   return <NavGroup key={index} {...route} />;
               }
             })}
-            <Button
-              title="Send"
-              variant="gradient"
-              endIcon={<Icons.ArrowUpRightIcon />}
-              onClick={() => alert("Send")}
-            />
+            <Link href="/send">
+              <Button
+                title="Send"
+                variant="gradient"
+                endIcon={<Icons.ArrowUpRightIcon />}
+              />
+            </Link>
           </div>
 
           <div className="flex items-center gap-x-3 lg:absolute lg:right-0">
