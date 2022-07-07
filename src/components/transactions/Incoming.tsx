@@ -12,7 +12,8 @@ const Incoming: FC = () => {
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [NoOfRows, setNoOfRows] = useState(10);
+  const [noOfRows, setNoOfRows] = useState(10);
+  const noOfOptions =[10,20,30,40]
 
   const headers = [
     {
@@ -61,8 +62,8 @@ const Incoming: FC = () => {
           })}
         </TableBody>
       </Table>
-      <div className="flex text-caption h-8 pt-5">
-        <RowsPerPage setNoOfRows={setNoOfRows} />
+      <div className="flex text-caption pt-5">
+        <RowsPerPage setNoOfRows={setNoOfRows} noOfRows={noOfRows} noOfOptions={noOfOptions}  />
         <Pagination
           pages={100}
           setCurrentPage={setCurrentPage}

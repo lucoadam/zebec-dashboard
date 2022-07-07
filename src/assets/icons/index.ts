@@ -33,8 +33,12 @@ import Equals from "./other-icons/equals.svg";
 import Asterik from "./other-icons/asterik.svg";
 import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
 import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
+import Loading from "./other-icons/loading.svg"
+import WithdrawDownLeft from "./other-icons/left-down-arrow.svg"
 
 export {
+  WithdrawDownLeft,
+  Loading,
   PaginationRightArrow,
   PaginationLeftArrow,
   Asterik,

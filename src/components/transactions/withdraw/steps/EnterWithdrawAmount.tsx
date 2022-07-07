@@ -42,7 +42,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
  
   return (
     <div className="text-content-primary" >
-      <div className="text-content-primary text-subtitle">
+      <div className="text-content-primary text-subtitle font-semibold">
         {t("withdraw.withdraw-modal-header")}
 
       </div>
@@ -80,7 +80,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
             <input
               className={`w-full h-10 ${!!errors.withdrawamount?.message && "error"}` }
               placeholder={t("withdraw.enter-amount")}
-              type="number"
+              type="text"
               {...register("withdrawamount")}
               autoFocus
               
