@@ -33,6 +33,8 @@ import Equals from "./other-icons/equals.svg";
 import Asterik from "./other-icons/asterik.svg";
 import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
 import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
+import ArrowRightIcon from "./other-icons/arrow-right.svg";
+import ArrowDownIcon from "./other-icons/arrow-down.svg";
 
 export {
   PaginationRightArrow,
@@ -70,5 +72,8 @@ export {
   OutsideLinkIcon,
   PauseIcon,
   ResumeIcon,
+  ArrowRightIcon,
+  ArrowDownIcon,
 };
 export * from "./nav-icons";
+export * from "./activity";
