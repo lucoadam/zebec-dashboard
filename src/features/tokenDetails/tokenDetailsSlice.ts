@@ -1,22 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TokenListProvider } from "@solana/spl-token-registry";
+import { getRPCNetwork } from "constants/cluster";
 import tokenMetaData from "fakedata/tokens.json";
+import { TokenDetailsState } from "./tokenDetailsSlice.d";
 
-interface Token {
-  name: string;
-  symbol: number;
-  image: string;
-  decimal: number;
-  coingeckoId?: string;
-}
-
-interface TokenState {
-  loading: boolean;
-  tokens: Token[];
-  error: string;
-}
-
-const initialState: TokenState = {
+const initialState: TokenDetailsState = {
   loading: false,
   tokens: [],
   error: "",
@@ -26,19 +14,34 @@ const initialState: TokenState = {
 export const fetchTokens: any = createAsyncThunk(
   "token/fetchTokens",
   async () => {
-    const tokenSymbols = tokenMetaData.map((token) => token.symbol);
+    const tokensMint = tokenMetaData
+      .filter((token) => token.mint)
+      .map((token) => token.mint);
     const tokens = await new TokenListProvider().resolve();
-    const tokensDetails = tokens
-      .filterByClusterSlug("mainnet-beta")
-      .getList()
-      .filter((token) => tokenSymbols.includes(token.symbol))
-      .map((token) => ({
-        name: token.name,
-        symbol: token.symbol,
-        image: token.logoURI,
-        decimal: token.decimals,
-        coingeckoId: token?.extensions?.coingeckoId,
-      }));
+
+    const tokensDetails = [
+      {
+        name: "Solana",
+        symbol: "SOL",
+        image:
+          "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+        mint: "solana",
+        decimals: 18,
+        coingeckoId: "solana",
+      },
+      ...tokens
+        .filterByClusterSlug(getRPCNetwork())
+        .getList()
+        .filter((token) => tokensMint.includes(token.address))
+        .map((token) => ({
+          name: token.name,
+          symbol: token.symbol,
+          image: token.logoURI,
+          decimal: token.decimals,
+          mint: token.address,
+          coingeckoId: token?.extensions?.coingeckoId || "",
+        })),
+    ];
     return tokensDetails;
   }
 );

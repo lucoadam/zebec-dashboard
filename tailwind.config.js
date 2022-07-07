@@ -30,6 +30,7 @@ module.exports = {
         content: {
           primary: "var(--content-primary)",
           secondary: "var(--content-secondary)",
+          tertiary: "var(--content-tertiary)",
           contrast: "var(--content-contrast)",
           success: "var(--success-content)",
           error: "var(--error-content)",
@@ -141,8 +142,8 @@ module.exports = {
           "maxWidth": "100%",
           "marginLeft": "auto",
           "marginRight": "auto",
-          // "paddingLeft": "1rem",
-          // "paddingRight": "1rem",
+          "paddingLeft": "1rem",
+          "paddingRight": "1rem",
           "@screen sm": {
             maxWidth: "100%",
           },

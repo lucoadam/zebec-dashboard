@@ -1,20 +1,28 @@
+import { useAppSelector } from "app/hooks";
+import * as Icons from "assets/icons";
 import { Button, CollapseDropdown, InputField } from "components/shared";
 import { useClickOutside } from "hooks";
 import { useTranslation } from "next-i18next";
-import { useRef, useState } from "react";
-import { depositedAssets, TokenDetails } from "./Overview";
-import * as Icons from "assets/icons";
+import { useEffect, useRef, useState } from "react";
+import { getBalance } from "utils/getBalance";
 
 export const Withdrawal = () => {
   const { t } = useTranslation();
   const tokensDropdownWrapper = useRef(null);
 
+  const [searchData, setSearchData] = useState("");
   const [toggleTokensDropdown, setToggleTokensDropdown] =
     useState<boolean>(false);
-
-  const [currentToken, setCurrentToken] = useState<TokenDetails>(
-    depositedAssets[0]
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+  const treasuryTokens =
+    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || [];
+  const [currentToken, setCurrentToken] = useState(
+    tokenDetails[0] || {
+      symbol: "",
+      image: "",
+    }
   );
+  const [amount, setAmount] = useState("");
 
   const handleClose = () => {
     setToggleTokensDropdown(false);
@@ -24,6 +32,17 @@ export const Withdrawal = () => {
   useClickOutside(tokensDropdownWrapper, {
     onClickOutside: handleClose,
   });
+
+  const handleMaxClick = () => {
+    setAmount(getBalance(treasuryTokens, currentToken.symbol).toString());
+  };
+
+  useEffect(()=>{
+    if(tokenDetails.length>0){
+      setCurrentToken(tokenDetails[0]);
+    }
+  }, [tokenDetails])
+  
   return (
     <>
       <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
@@ -37,50 +56,81 @@ export const Withdrawal = () => {
         <div>
           <div
             onClick={() => setToggleTokensDropdown((prev) => !prev)}
-            className="absolute left-2.5 top-[8px]"
+            className="absolute left-[10px] top-[8px]"
           >
-            <div className="relative flex cursor-pointer  w-[80px] justify-center items-center h-[40px] text-content-primary">
+            <div className="relative flex cursor-pointer  w-[104px] justify-center items-center h-[40px] text-content-primary">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="w-[18px] h-[18px]"
-                src={currentToken.logoURI}
+                src={currentToken.image}
                 alt={currentToken.symbol}
               />
-              <div className="max-w-[60px] ml-[5px] overflow-x-hidden text-content-primary">
+              <div className="max-w-[68px] ml-[5px] overflow-x-hidden text-content-primary">
                 {currentToken.symbol}
               </div>
               <Icons.CheveronDownIcon className="text-sm w-[28px]" />
             </div>
+          </div>
+          <div ref={tokensDropdownWrapper}>
             <CollapseDropdown
-              ref={tokensDropdownWrapper}
-              className="w-max left-[0px]"
+              className="w-full left-[0px] mt-5 "
               show={toggleTokensDropdown}
+              variant="light"
             >
-              {depositedAssets.map((item) => (
-                <div
-                  key={item.symbol}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setToggleTokensDropdown(false);
-                    setCurrentToken(item);
-                  }}
-                  className="px-2.5 flex cursor-pointer overflow-hidden justify-start items-center h-[40px] text-content-primary"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    className="w-[18px] h-[18px] mr-3"
-                    src={item.logoURI}
-                    alt={item.symbol}
-                  />
-                  <div className="text-content-primary">{item.symbol}</div>
+              <div className="">
+                <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+                <input
+                  className="is-search w-full h-[48px] bg-background-primary"
+                  placeholder="Search token"
+                  type="text"
+                  onChange={(e) => setSearchData(e.target.value)}
+                />
+                <div className="max-h-60  overflow-auto">
+                  {tokenDetails
+                    .filter((token) =>
+                      token.symbol.includes(searchData.toUpperCase())
+                    )
+                    .map((item) => (
+                      <div
+                        key={item.symbol}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setToggleTokensDropdown(false);
+                          setCurrentToken(item);
+                        }}
+                        className="border-b-[1px] border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="w-[18px] h-[18px] mr-[12px]  text-content-primary"
+                          src={item.image}
+                          alt={item.symbol}
+                        />
+                        <div>
+                          <div className="text-content-primary ">
+                            {item.symbol}
+                          </div>
+                          <div className="text-caption text-content-tertiary">
+                            {item.name}
+                          </div>
+                        </div>
+
+                        <div className="ml-auto text-caption  text-content-secondary">
+                          {getBalance(treasuryTokens, item.symbol)}{" "}
+                          {item.symbol}
+                        </div>
+                      </div>
+                    ))}
                 </div>
-              ))}
+              </div>
             </CollapseDropdown>
           </div>
 
           <input
             className="w-full h-[56px] pl-[120px] is-amount"
             placeholder={t("treasuryOverview:enter-amount")}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             type="number"
             min="0"
           />
@@ -88,9 +138,11 @@ export const Withdrawal = () => {
             size="small"
             title={t("treasuryOverview:max")}
             className="h-[40px] absolute right-[10px] top-[8px] text-content-primary"
+            onClick={handleMaxClick}
           />
         </div>
       </InputField>
+
       <Button
         className="w-full"
         variant="gradient"

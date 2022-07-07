@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { Button, Modal } from "components/shared";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useState } from "react";
 import Layout from "../components/layouts/Layout";
-import { Button, Modal } from "components/shared";
 
 const Home: NextPage = () => {
   const { t } = useTranslation("common");
-
   let [isOpen, setIsOpen] = useState(false);
 
   function toggleModal() {

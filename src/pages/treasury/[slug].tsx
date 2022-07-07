@@ -1,17 +1,37 @@
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import TreasuryDetail from "components/treasury/detail/TreasuryDetail";
+import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import * as Icons from "../../assets/icons";
 import Layout from "../../components/layouts/Layout";
 import { Button, IconButton } from "../../components/shared";
-import * as Icons from "../../assets/icons";
-import TreasuryDetail from "components/treasury/detail/TreasuryDetail";
-import Link from "next/link";
-import { useRouter } from "next/router";
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const walletObject = useWallet();
 
+  const tokens = useAppSelector(state => state.tokenDetails.tokens);
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    if(tokens.length>0 && walletObject.publicKey){
+      dispatch(
+        fetchTreasuryBalance({
+          name: "my treasury",
+          address: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf",
+        })
+      );
+      // dispatch(fetchZebecStreamingBalance(walletObject.publicKey));
+      // dispatch(fetchTreasuryStreamingBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"));
+    }
+  }, [dispatch, tokens, walletObject])
+  
   return (
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
@@ -55,7 +75,8 @@ export async function getServerSideProps({ locale }: any) {
         "treasury",
         "treasuryOverview",
         "treasurySettings",
-        "validation"
+        "validation",
+        "transactions"
       ])),
     },
   };
