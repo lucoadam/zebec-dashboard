@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import Image, { StaticImageData } from "next/image";
-import * as AvatarImages from "../../assets/images/avatars";
-import * as Icons from "../../assets/icons";
-import { toSubstring } from "../../utils";
-import Link from "next/link";
 import CopyButton from "components/shared/CopyButton";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { FC } from "react";
+import * as Icons from "../../assets/icons";
+import * as AvatarImages from "../../assets/images/avatars";
+import { toSubstring } from "../../utils";
 
 //fakeData
 import { treasuries } from "../../fakedata";
@@ -45,14 +45,11 @@ const TreasuryLists: FC = () => {
                     <div className="flex gap-x-1.5 items-center text-content-primary">
                       <Icons.NotebookIcon className="text-base" />
                       <div>{toSubstring(treasury.multisig_vault, 6, true)}</div>
-                      <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                        <div className="group"></div>
-                        <CopyButton content={treasury.multisig_vault} />
-                      </div>
+                      <CopyButton content={treasury.multisig_vault} />
                     </div>
                   </div>
                 </div>
-                </div>
+              </div>
             </Link>
           );
         })}

@@ -1,4 +1,4 @@
-import { Table, TableBody } from "components/shared";
+import { EmptyDataState, Table, TableBody } from "components/shared";
 import { withdrawalTransactions } from "fakedata";
 import { useState } from "react";
 import WithdrawalTableRow from "./WithdrawalTableRow";
@@ -40,7 +40,14 @@ export const WithdrawalTransactions = () => {
   return (
     <Table headers={headers}>
       <TableBody>
-        {withdrawalTransactions.map((transaction, index) => {
+      {withdrawalTransactions.data.length === 0 && (
+          <tr>
+            <td colSpan={headers.length}>
+              <EmptyDataState message="There are no transactions. The payments you receive/ withdraw will appear here." />
+            </td>
+          </tr>
+        )}
+        {withdrawalTransactions.data.map((transaction, index) => {
           return (
             <WithdrawalTableRow
               key={index}

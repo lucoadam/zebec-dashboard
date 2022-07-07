@@ -45,6 +45,7 @@ module.exports = {
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
+          dark: "var(--outline-dark)"
         },
       },
       fontFamily: {

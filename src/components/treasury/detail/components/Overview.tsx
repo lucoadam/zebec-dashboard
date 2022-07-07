@@ -237,7 +237,7 @@ const Overview = () => {
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full rounded bg-background-secondary mb-6">
+        <div className="w-full pt-3 rounded bg-background-secondary mb-6">
           <div className="flex">
             {fundTransferTabs.map((fundTranfer, index) => {
               return (

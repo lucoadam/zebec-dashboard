@@ -10,10 +10,10 @@ interface CircularProgressProps {
 }
 
 const statusIconMapping = {
-  completed: <Icons.CheckIcon className="text-success text-lg"/>,
-  scheduled: <Icons.CalenderIcon className="text-content-secondary text-lg"/>,
-  cancelled: <Icons.CrossIcon className="text-error text-lg"/>,
-  paused: <Icons.PauseIcon className="text-content-contrast text-lg"/>
+  completed: <Icons.CheckIcon className="text-success text-xl"/>,
+  scheduled: <Icons.CalenderIcon className="text-content-secondary text-xl"/>,
+  cancelled: <Icons.CrossIcon className="text-error text-xl"/>,
+  paused: <Icons.PauseIcon className="text-content-contrast text-xl"/>
 }
 
 const getIconOrPercentageBasedOnStatus = (status: TransactionStatus, percentage: number) => {

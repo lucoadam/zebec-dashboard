@@ -12,7 +12,6 @@ import { toSubstring } from "utils";
 import * as Yup from "yup";
 
 const Setting = () => {
-
   const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
@@ -54,14 +53,14 @@ const Setting = () => {
               <div className="flex gap-x-3 items-center">
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.UserGroupIcon className="text-sm font-normal" />
-                  <div>{5} {t('treasurySettings:owners')}</div>
+                  <div>
+                    {5} {t("treasurySettings:owners")}
+                  </div>
                 </div>
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.NotebookIcon className="text-sm font-normal" />
                   <div>{toSubstring("23423sdfjsdlfjs234230423", 6, true)}</div>
-                  <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                    <CopyButton content="23423sdfjsdlfjs234230423" />
-                  </div>
+                  <CopyButton content="23423sdfjsdlfjs234230423" />
                 </div>
               </div>
             </div>
@@ -69,22 +68,23 @@ const Setting = () => {
         </div>
         <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
           <span className="text-sm font-normal text-content-secondary">
-          {t('treasurySettings:minimum-confirmation')}:
+            {t("treasurySettings:minimum-confirmation")}:
           </span>
-          &nbsp;2 {t('treasurySettings:out-of')} 3 {t('treasurySettings:owners')}
+          &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
+          {t("treasurySettings:owners")}
         </div>
         <InputField
           error={!!errors?.name}
-          helper={errors?.name?.message || ""}
-          label={t('treasurySettings:safe-name')}
-          placeholder={t('treasurySettings:enter-safe-name')}
+          helper={errors?.name?.message?.toString() || ""}
+          label={t("treasurySettings:safe-name")}
+          placeholder={t("treasurySettings:enter-safe-name")}
           className="h-[40px] w-full"
           type="text"
         >
           <input {...register("name")} autoFocus />
         </InputField>
         <Button
-          title={t('treasurySettings:save-changes')}
+          title={t("treasurySettings:save-changes")}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"
@@ -93,22 +93,22 @@ const Setting = () => {
 
         <div className="mt-[30px]">
           <div className="text-subtitle text-content-primary font-semibold">
-          {t('treasurySettings:archive-safe')}
+            {t("treasurySettings:archive-safe")}
           </div>
           <div className="text-xs font-normal text-content-secondary mb-[16px]">
-          {t('treasurySettings:archive-safe-description')}
+            {t("treasurySettings:archive-safe-description")}
           </div>
           <Button
             className="w-full"
             variant="danger"
-            title={t('treasurySettings:archive-safe')}
+            title={t("treasurySettings:archive-safe")}
             endIcon={<Icons.TrashIcon />}
           />
         </div>
       </div>
       <div className="min-w-full md:min-w-[280px] lg:ml-[215px] mt-5 md:mt-0 sm:ml-0 md:ml-20">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
-        {t('treasurySettings:owners')}
+          {t("treasurySettings:owners")}
         </div>
         <OwnerLists
           maxItems={5}

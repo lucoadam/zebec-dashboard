@@ -12,12 +12,16 @@ import * as Yup from "yup";
 import { Owner, StepsComponentProps } from "../CreateTreasury.d";
 import OwnerLists from "../OwnerLists";
 
-const AddOwners: FC<StepsComponentProps> = (props) => {
+const AddOwners: FC<StepsComponentProps> = ({
+  setCurrentStep,
+  setTreasury,
+  treasury,
+}) => {
   const useWalletObject = useWallet();
 
   const { t } = useTranslation();
 
-  const [owners, setOwners] = React.useState<Owner[]>(props.treasury.owners);
+  const [owners, setOwners] = React.useState<Owner[]>(treasury.owners);
   const [selectError, setSelectionError] = React.useState<boolean>(false);
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -53,7 +57,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
   }, [useWalletObject, owners, setValue]);
 
   React.useEffect(() => {
-    props.setTreasury((treasury) => ({
+    setTreasury((treasury) => ({
       ...treasury,
       minValidator: owners.length,
     }));
@@ -62,7 +66,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
       setOwners([...owners, data]);
-      props.setTreasury((treasury) => ({
+      setTreasury((treasury) => ({
         ...treasury,
         owners: [...owners, data],
       }));
@@ -90,7 +94,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             <div className="sm:w-full md:w-2/6 pr-2">
               <InputField
                 error={!!errors.name}
-                helper={errors?.name?.message || ""}
+                helper={errors?.name?.message?.toString() || ""}
                 label={t("createTreasury:second-steper.form.owner-name")}
                 placeholder={t(
                   "createTreasury:second-steper.form.owner-name-placeholder"
@@ -107,7 +111,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
             <div className="sm:w-full md:w-4/6">
               <InputField
                 error={!!errors.wallet}
-                helper={errors?.wallet?.message || ""}
+                helper={errors?.wallet?.message?.toString() || ""}
                 label="Owner Address"
                 className="flex items-center"
               >
@@ -162,9 +166,9 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           {/* dropdown */}
           <div className="w-full sm:w-full flex justify-start items-center text-content-primary">
             <SelectField
-              value={props.treasury.minValidator}
+              value={treasury.minValidator}
               onSelected={(value, error = false) => {
-                props.setTreasury((treasury) => ({
+                setTreasury((treasury) => ({
                   ...treasury,
                   minValidator: value,
                 }));
@@ -191,7 +195,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
           className="w-full justify-center mt-[32px]"
           onClick={() => {
             if (owners.length > 2 && !selectError) {
-              props.setCurrentStep(2);
+              setCurrentStep(2);
             } else {
               setSelectionError(true);
             }
@@ -202,7 +206,7 @@ const AddOwners: FC<StepsComponentProps> = (props) => {
         title="Go Back"
         size="medium"
         className="w-full justify-center mt-[12px]"
-        onClick={() => props.setCurrentStep(0)}
+        onClick={() => setCurrentStep(0)}
       />
     </>
   );
