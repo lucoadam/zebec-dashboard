@@ -5,15 +5,20 @@ import Image from "next/image";
 import { toSubstring } from "utils";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, InputField } from "components/shared";
+import { Button, InputField, Modal } from "components/shared";
 import OwnerLists from "components/treasury/create/OwnerLists";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CopyButton from "components/shared/CopyButton";
 import { useTranslation } from "next-i18next";
 
 const Setting = () => {
 
   const { t } = useTranslation();
+  let [isOpen, setIsOpen] = useState(false);
+
+  function toggleModal() {
+    setIsOpen(!isOpen);
+  }
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:treasury-name-required")),
@@ -69,7 +74,7 @@ const Setting = () => {
         </div>
         <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
           <span className="text-sm font-normal text-content-secondary">
-          {t('treasurySettings:minimum-confirmation')}:
+            {t('treasurySettings:minimum-confirmation')}:
           </span>
           &nbsp;2 {t('treasurySettings:out-of')} 3 {t('treasurySettings:owners')}
         </div>
@@ -93,22 +98,57 @@ const Setting = () => {
 
         <div className="mt-[30px]">
           <div className="text-subtitle text-content-primary font-semibold">
-          {t('treasurySettings:archive-safe')}
+            {t('treasurySettings:archive-safe')}
           </div>
           <div className="text-xs font-normal text-content-secondary mb-[16px]">
-          {t('treasurySettings:archive-safe-description')}
+            {t('treasurySettings:archive-safe-description')}
           </div>
           <Button
             className="w-full"
             variant="danger"
             title={t('treasurySettings:archive-safe')}
             endIcon={<Icons.TrashIcon />}
+            onClick={() => setIsOpen(true)}
+
           />
+          <Modal
+            show={isOpen}
+            toggleModal={toggleModal}
+            className="rounded-2xl "
+            hasCloseIcon={false}
+          >
+            <div className="">
+              <div className="text-heading-5 text-content-primary">{t('treasurySettings:archive-modal-header')}</div>
+              <div className="text-content-secondary ">{t('treasurySettings:archiving-content')}</div>
+              <div className="pt-[12px] pb-[12px]">
+              <Button
+            className="w-full"
+            variant="danger"
+            title={t('treasurySettings:yes-archive-safe')}
+            startIcon={<Icons.TrashIcon />}
+            onClick={() => setIsOpen(true)}
+
+          />
+
+              </div>
+              <div className="pb-[12px]">
+                <Button
+                  className="w-full"
+
+                  title={t("treasurySettings:cancel")}
+                  onClick={() => {
+
+                    setIsOpen(!isOpen)
+                  }}
+                />
+              </div>
+            </div>
+          </Modal>
         </div>
       </div>
       <div className="min-w-[280px] ml-[215px]">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
-        {t('treasurySettings:owners')}
+          {t('treasurySettings:owners')}
         </div>
         <OwnerLists
           maxItems={5}
