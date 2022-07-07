@@ -38,7 +38,7 @@ const Resume: FC= ({  }) => {
         <Button
             className="w-full "
 
-            title={t("outgoing-actions.no-pause")}
+            title={t("outgoing-actions.no-resume")}
             onClick={() => {
                 dispatch(toggleResumeModal());
 
