@@ -7,7 +7,7 @@ import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
 
 
 const Resume: FC= ({  }) => {
-    const resumeModal= useAppSelector((state)=>state.resume.ResumeModal)
+    const resumeModal= useAppSelector((state)=>state.resume.resumeModal)
     const dispatch =useDispatch();
     const { t } = useTranslation("transactions");
     return (

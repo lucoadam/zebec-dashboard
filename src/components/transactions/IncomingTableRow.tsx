@@ -5,7 +5,6 @@ import { Button, IconButton, InputField, Modal } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
-import ConfirmWithdraw from "./withdraw/steps/ConfirmWithdraw";
 import { WithdrawStepsList } from "./withdraw/data";
 
 
@@ -92,7 +91,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
-                className={`rounded w-[338px] min-h-[388px]`}
+                className={`rounded w-[338px] h-96`}
                 hasCloseIcon={!currentStep}
               >
                 {WithdrawStepsList[currentStep]?.component({

@@ -8,7 +8,7 @@ import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
 
 
 const Cancel: FC = ({ }) => {
-    const cancelModal =useAppSelector((state)=>state.cancel.CancelModal)
+    const cancelModal =useAppSelector((state)=>state.cancel.cancelModal)
     const dispatch = useDispatch();
     const { t } = useTranslation("transactions");
     return (

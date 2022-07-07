@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 //declare types for state
 interface ResumeState {
-    ResumeModal: boolean;
+    resumeModal: boolean;
 }
 
 const initialState: ResumeState = {
-    ResumeModal: false
+    resumeModal: false
 };
 
 export const ResumeSlice = createSlice({
@@ -15,7 +15,7 @@ export const ResumeSlice = createSlice({
     initialState,
     reducers: {
         toggleResumeModal: (state) => {
-            state.ResumeModal = !state.ResumeModal;
+            state.resumeModal = !state.resumeModal;
         },
     }
 })
