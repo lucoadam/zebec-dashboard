@@ -1,12 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Icons from "assets/icons";
 import * as AvatarImages from "assets/images/avatars";
-import { Button, InputField } from "components/shared";
+import { Button, InputField, Modal } from "components/shared";
 import CopyButton from "components/shared/CopyButton";
 import OwnerLists from "components/treasury/create/OwnerLists";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toSubstring } from "utils";
 import * as Yup from "yup";
@@ -17,6 +17,12 @@ const Setting = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:treasury-name-required")),
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const {
     register,
@@ -104,6 +110,39 @@ const Setting = () => {
             title={t("treasurySettings:archive-safe")}
             endIcon={<Icons.TrashIcon />}
           />
+          <Modal
+            show={isOpen}
+            toggleModal={toggleModal}
+            className="rounded-2xl "
+            hasCloseIcon={false}
+          >
+            <div className="">
+              <div className="text-heading-5 text-content-primary">
+                {t("treasurySettings:archive-modal-header")}
+              </div>
+              <div className="text-content-secondary ">
+                {t("treasurySettings:archiving-content")}
+              </div>
+              <div className="pt-[12px] pb-[12px]">
+                <Button
+                  className="w-full"
+                  variant="danger"
+                  title={t("treasurySettings:yes-archive-safe")}
+                  startIcon={<Icons.TrashIcon />}
+                  onClick={() => setIsOpen(true)}
+                />
+              </div>
+              <div className="pb-[12px]">
+                <Button
+                  className="w-full"
+                  title={t("treasurySettings:cancel")}
+                  onClick={() => {
+                    setIsOpen(!isOpen);
+                  }}
+                />
+              </div>
+            </div>
+          </Modal>
         </div>
       </div>
       <div className="min-w-full md:min-w-[280px] lg:ml-[215px] mt-5 md:mt-0 sm:ml-0 md:ml-20">

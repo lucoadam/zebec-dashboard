@@ -6,5 +6,10 @@
     "enter-safe-name": "Enter Safe Name",
     "save-changes": "Save Changes",
     "archive-safe": "Archive Safe",
-    "archive-safe-description": "Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe."
+    "archive-safe-description": "Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe.",
+    "archive-modal-header" :"Are you sure you want to archive safe?",
+    "archiving-content":"Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe.",
+    "yes-archive-safe" :"Yes, Archive Safe",
+    "cancel" : "Cancel"
+
 }
