@@ -109,6 +109,7 @@ const Setting = () => {
             variant="danger"
             title={t("treasurySettings:archive-safe")}
             endIcon={<Icons.TrashIcon />}
+            onClick={()=>setIsOpen(true)}
           />
           <Modal
             show={isOpen}
