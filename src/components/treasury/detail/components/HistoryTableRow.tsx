@@ -45,7 +45,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[340px]">
+          <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <CircularProgress
                 status={transaction.status}
@@ -76,28 +76,28 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 min-w-50">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
+          <td className="px-6 py-4 min-w-51">
+            <div className="flex items-center gap-x-1 text-body text-content-primary">
               {transaction.is_in_address_book
-                ? transaction.name
-                : toSubstring(transaction.sender, 5, true)}{" "}
+                ? toSubstring(transaction.name, 22, false)
+                : toSubstring(transaction.sender,6 , true)}{" "}
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary"
+                  className="bg-background-primary min-w-7 h-7"
                 />
               )}
-              <CopyButton content={transaction.sender} />
+              <CopyButton className="min-w-7" content={transaction.sender} />
             </div>
           </td>
-          <td className="px-6 py-4 w-80">
-            <div className="flex items-center float-right gap-x-6">
+          <td className="px-6 py-4 w-full  float-right">
+            <div className="flex items-center justify-end float-right gap-x-6">
               <div className="flex items-center gap-x-3">
                 <Button
                   title="Resume"

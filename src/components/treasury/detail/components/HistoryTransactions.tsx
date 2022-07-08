@@ -9,19 +9,18 @@ export const HistoryTransactions = () => {
   const headers = [
     {
       label: "progress",
-      width: "340px",
+      width: "85",
     },
     {
       label: "transaction-date",
-      width: "200px",
+      width: "50",
     },
     {
       label: "sender-or-receiver",
-      width: "200px",
+      width: "51",
     },
     {
       label: "",
-      width: "200px",
     },
   ];
 

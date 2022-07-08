@@ -9,11 +9,11 @@ export const ScheduledTransactions = () => {
   const headers = [
     {
       label: "progress",
-      width: "340px",
+      width: "85",
     },
     {
       label: "transaction-date",
-      width: "200px",
+      width: "50",
     },
     {
       label: "initiated",
@@ -21,11 +21,10 @@ export const ScheduledTransactions = () => {
     },
     {
       label: "receiver",
-      width: "200px",
+      width: "50",
     },
     {
       label: "",
-      width: "200px",
     },
   ];
 

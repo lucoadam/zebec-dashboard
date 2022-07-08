@@ -9,26 +9,26 @@ export const WithdrawalTransactions = () => {
   const headers = [
     {
       label: "progress",
-      width: '280px',
+      width: '70',
     },
     {
       label: "confirmation",
-      width: '125px',
+      width: '31.25',
 
     },
     {
       label: "withdrawn-or-initiated",
-      width: '222px',
+      width: '55.5',
 
     },
     {
       label: "requested-by",
-      width: '222px',
+      width: '51',
 
     },
     {
       label: "",
-      width: '222px',
+      width: '55.5',
 
     },
   ];

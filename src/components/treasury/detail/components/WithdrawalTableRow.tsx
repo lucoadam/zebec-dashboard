@@ -60,7 +60,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[280px]">
+          <td className="px-6 py-4 min-w-70">
             <div className="flex items-center gap-x-2.5">
               <CircularProgress
                 status={transaction.status}
@@ -91,7 +91,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[125px]">
+          <td className="px-4 py-4 min-w-31.25">
             <Badge
               className="capitalize"
               type={getClassesForConfirmation(transaction.confirmation)}
@@ -99,27 +99,27 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
               {transaction.confirmation}
             </Badge>
           </td>
-          <td className="w-[222px] px-6 py-4">
+          <td className="min-w-55.5 px-6 py-4">
             <div className="text-caption text-content-primary">
               {transaction.status === "scheduled" && "INI:"} Mar 18, 2022, 12:00
               PM
             </div>
           </td>
-          <td className="px-6 py-4 w-[222px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
+          <td className="px-6 py-4 min-w-51">
+            <div className="flex gap-x-1 text-body text-content-primary">
               {transaction.is_in_address_book
-                ? transaction.name
-                : toSubstring(transaction.sender, 5, true)}{" "}
+                ? toSubstring(transaction.name, 25, false)
+                : toSubstring(transaction.sender,5, true)}{" "}
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary"
+                  className="bg-background-primary min-w-7 h-7"
                 />
               )}
-              <CopyButton content={transaction.sender} />
+              <CopyButton className="min-w-7" content={transaction.sender} />
             </div>
           </td>
-          <td className="px-6 py-4 w-[222px]">
+          <td className="px-6 py-4 min-w-55.5">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Cancel"
