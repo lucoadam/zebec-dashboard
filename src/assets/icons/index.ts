@@ -23,6 +23,8 @@ import NotebookIcon from "./other-icons/notebook.svg";
 import OutgoingIcon from "./other-icons/outgoing.svg";
 import OutsideLinkIcon from "./other-icons/outside-link.svg";
 import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
+import ArrowRightIcon from "./other-icons/arrow-right.svg";
+import ArrowDownIcon from "./other-icons/arrow-down.svg";
 import Loading from "./other-icons/loading.svg";
 import WithdrawDownLeft from "./other-icons/left-down-arrow.svg";
 import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
@@ -37,7 +39,6 @@ import UserAddIcon from "./other-icons/user-add.svg";
 import UserGroupIcon from "./other-icons/user-group.svg";
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 
-export * from "./nav-icons";
 export {
   WithdrawDownLeft,
   Loading,
@@ -77,5 +78,9 @@ export {
   OutgoingIcon,
   PauseIcon,
   ResumeIcon,
+  ArrowRightIcon,
+  ArrowDownIcon,
 };
 
+export * from "./nav-icons";
+export * from "./activity";

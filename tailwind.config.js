@@ -25,6 +25,7 @@ module.exports = {
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
           backdrop: "var(--bg-backdrop)",
+          contrast: "var(--bg-contrast)",
         },
         // Primary
         primary: {
@@ -47,9 +48,15 @@ module.exports = {
           error: "var(--error-content)",
         },
         // Success
-        success: "var(--success-main)",
+        success: {
+          DEFAULT: "var(--success-main)",
+          content: "var(--success-content)",
+        },
         // Error
-        error: "var(--error-main)",
+        error: {
+          DEFAULT: "var(--error-main)",
+          content: "var(--error-content)",
+        },
         // Warning
         warning: "var(--warning-main)",
         // Outline
@@ -140,6 +147,13 @@ module.exports = {
         2: "var(--bs-shadow-2)",
         3: "var(--bs-shadow-3)",
         backdrop: "var(--bs-shadow-backdrop)",
+      },
+      letterSpacing: {
+        1: "var(--ls-tracking-1)",
+      },
+      spacing: {
+        3.5: "14px",
+        4.5: "18px",
       },
       container: {
         center: true,
