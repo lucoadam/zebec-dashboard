@@ -14,6 +14,7 @@
     --bg-light: rgba(43, 45, 51, 1);
     --bg-muted: rgba(53, 57, 69, 1);
     --bg-backdrop: rgba(0, 0, 0, 0.64);
+    --bg-contrast: rgba(20, 20, 20, 1);
     /* Primary */
     --primary-main: rgba(55, 132, 251, 1);
     --primary-dark: rgba(49, 118, 224, 1);
@@ -88,6 +89,8 @@
     --bg-tertiary: rgba(32, 33, 36, 1);
     --bg-light: rgba(43, 45, 51, 1);
     --bg-muted: rgba(53, 57, 69, 1);
+    --bg-backdrop: rgba(0, 0, 0, 0.64);
+    --bg-contrast: rgba(20, 20, 20, 1);
     /* Primary */
     --primary-main: rgba(55, 132, 251, 1);
     --primary-dark: rgba(49, 118, 224, 1);
@@ -122,6 +125,11 @@
 
   body {
     @apply bg-background-primary font-inter text-body;
+  }
+
+  /* Forms */
+  label {
+    @apply text-caption text-content-secondary font-medium mb-1;
   }
 }
 

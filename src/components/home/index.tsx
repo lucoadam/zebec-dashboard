@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import Balances from "./Balances";
 import DepositedAssets from "./DepositedAssets";
 import DepositWithdraw from "./DepositWithdraw";
+import Farms from "./Farms";
+import RecentTransactions from "./RecentTransactions";
 
 const HomePage: FC = () => {
   return (
@@ -12,15 +14,16 @@ const HomePage: FC = () => {
           <Balances />
         </div>
         {/* 2nd and 3rd column */}
-        <div className="md:col-span-2 grid md:grid-cols-2 gap-6">
+        <div className="lg:col-span-2 grid lg:grid-cols-2 gap-6">
           {/* Deposited Assets */}
           <DepositedAssets />
           {/* Deposit | Withdraw and Farms */}
           <div className="grid gap-y-6">
             <DepositWithdraw />
+            <Farms />
           </div>
           {/* Recent Transactions */}
-          <div className="md:col-span-2"></div>
+          <RecentTransactions />
         </div>
       </div>
     </>

@@ -14,6 +14,7 @@ module.exports = {
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
           backdrop: "var(--bg-backdrop)",
+          contrast: "var(--bg-contrast)",
         },
         // Primary
         primary: {
@@ -137,6 +138,10 @@ module.exports = {
       },
       letterSpacing: {
         1: "var(--ls-tracking-1)",
+      },
+      spacing: {
+        3.5: "14px",
+        4.5: "18px",
       },
       container: {
         center: true,
