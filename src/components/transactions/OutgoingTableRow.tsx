@@ -10,8 +10,6 @@ import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice";
 import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice";
 import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice";
 
-
-
 interface OutgoingTableRowProps {
   index: number;
   transaction: any;
@@ -47,6 +45,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
 
   return (
     <>
+      
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
@@ -81,6 +80,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
+
               <div className="flex items-center gap-x-3">
 
                 <Button
@@ -89,7 +89,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   startIcon={
                     <Icons.ResumeIcon className="text-content-contrast" />
                   }
-                  onClick={() => { dispatch(toggleResumeModal())}}
+                  onClick={() => { dispatch(toggleResumeModal()) }}
 
                 />
                 <Button
@@ -98,9 +98,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   startIcon={
                     <Icons.PauseIcon className="text-content-contrast" />
                   }
-                  onClick={() => { dispatch(togglePauseModal())}
+                  onClick={() => { dispatch(togglePauseModal()) }
                   }
                 />
+
                 <Button
                   title="Cancel"
                   size="small"

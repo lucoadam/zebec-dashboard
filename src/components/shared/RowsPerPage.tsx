@@ -28,15 +28,15 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
     return (
         <>
 
-            <div className="flex gap-x-2 items-center justify-center">
-                <div className="text-content-secondary pl-5" >
+            <div className="flex gap-x-2 items-center justify-center" >
+                <div className="text-content-secondary pl-5 " >
                     <span className="">Rows per page:</span>
                 </div>
 
-                <div className="relative " ref={RowsDropdownWrapper} >
+                <div className="relative " ref={RowsDropdownWrapper}  >
                     <div
                         onClick={() => settoggleNoofRows((prev) => !prev)}
-                        className=" flex text-content-primary max-w-[60px] ml-[5px] overflow-x-hidden">
+                        className=" flex text-content-primary max-w-[60px] ml-[5px] overflow-x-hidden cursor-pointer">
 
                         {noOfRows}
 
@@ -47,6 +47,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
                         show={toggleNoOfRows}
                         className="absolute text-caption text-content-primary top-5"
                         variant="default"
+                        
 
                     >
 
@@ -58,6 +59,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
                                         settoggleNoofRows(false);
                                         setNoOfRows(item);
                                     }}
+                                    key={`rows-${index}`}
                                     className="text-content-secondary py-2 pl-4 pr-4  flex cursor-pointer overflow-hidden justify-center items-center hover:text-primary  h-auto">
                                     {item}
                                 </div>

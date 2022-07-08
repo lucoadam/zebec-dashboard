@@ -4,12 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 //declare types for state
 interface PauseState {
     pauseModal: boolean;
-    isPaused: boolean;
+    
 }
 
 const initialState: PauseState = {
     pauseModal: false,
-    isPaused: false
+
 
 };
 
@@ -20,13 +20,11 @@ export const PauseSlice = createSlice({
         togglePauseModal: (state) => {
             state.pauseModal = !state.pauseModal;
         },
-        pausedModal: (state) => {
-            state.isPaused = !state.isPaused;
-        },
+       
     }
 })
 
-export const { togglePauseModal, pausedModal } =
+export const { togglePauseModal } =
     PauseSlice.actions;
 
 export default PauseSlice.reducer;

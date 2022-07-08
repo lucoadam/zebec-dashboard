@@ -4,12 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 //declare types for state
 interface CancelState {
     cancelModal: boolean;
-    isCancelled: boolean
+    
 }
 
 const initialState: CancelState = {
     cancelModal: false,
-    isCancelled: false
+   
 };
 
 export const CancelSlice = createSlice({
@@ -19,13 +19,11 @@ export const CancelSlice = createSlice({
         toggleCancelModal: (state) => {
             state.cancelModal = !state.cancelModal;
         },
-        cancelledModal: (state) => {
-            state.isCancelled = !state.isCancelled;
-        },
+      
     }
 })
 
-export const { toggleCancelModal, cancelledModal } =
+export const { toggleCancelModal } =
     CancelSlice.actions;
 
 export default CancelSlice.reducer;

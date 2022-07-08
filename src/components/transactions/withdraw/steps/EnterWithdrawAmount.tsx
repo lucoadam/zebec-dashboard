@@ -80,7 +80,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
             <input
               className={`w-full h-10 ${!!errors.withdrawamount?.message && "error"}` }
               placeholder={t("withdraw.enter-amount")}
-              type="text"
+              type="number"
               {...register("withdrawamount")}
               autoFocus
               
