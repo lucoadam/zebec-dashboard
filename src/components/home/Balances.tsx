@@ -41,11 +41,11 @@ const Balances: FC = () => {
       {/* Tokens */}
       <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
         <div className="flex justify-between items-center gap-x-6">
-          <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
+          <div className="text-caption text-content-contrast font-semibold uppercase tracking-1 transform -translate-y-1.5">
             TOKEN
           </div>
           {/* Tokens */}
-          <div className="flex gap-x-2 overflow-x-auto">
+          <div className="flex gap-x-2 overflow-x-auto pb-1">
             <button className=" bg-primary text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
               SOL
             </button>

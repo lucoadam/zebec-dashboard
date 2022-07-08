@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import Balances from "./Balances";
 import DepositedAssets from "./DepositedAssets";
+import DepositWithdraw from "./DepositWithdraw";
 
 const HomePage: FC = () => {
   return (
@@ -15,7 +16,9 @@ const HomePage: FC = () => {
           {/* Deposited Assets */}
           <DepositedAssets />
           {/* Deposit | Withdraw and Farms */}
-          <div className="grid gap-y-6"></div>
+          <div className="grid gap-y-6">
+            <DepositWithdraw />
+          </div>
           {/* Recent Transactions */}
           <div className="md:col-span-2"></div>
         </div>
