@@ -327,3 +327,20 @@ input[type="number"] {
 .steps-container.last::after {
   content: none;
 }
+
+.withdrawsteps-container {
+  position: relative;
+}
+.withdrawsteps-container::after {
+  position: absolute;
+  left: 6px;
+  height: 20px;
+  width: 1px;
+  top: 5px;
+  margin-top: 0.5rem;
+  content: "";
+  background-color: var(--outline-main);
+}
+.withdrawsteps-container.last::after {
+  content: none;
+}
