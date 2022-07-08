@@ -50,18 +50,18 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
         {t("withdraw.withdraw-modal-subtitle")}
 
       </div>
-      <div className="bg-background-tertiary text-caption rounded-md p-[16px]">
+      <div className="bg-background-tertiary rounded-md p-[16px]">
         <div className="flex text-content-secondary pb-4">
           <div className="pr-2"> <Icons.ArrowDownLeft /></div>
-          {t("withdraw.amount-received")} 20000 SOL
+         <div className="text-caption ">{t("withdraw.amount-received")} 20000 SOL</div> 
         </div>
         <div className="flex text-content-secondary pb-[12px]">
           <div className="pr-2"> <Icons.ArrowTopRight /></div>
           {t("withdraw.withdrawable-amount")} 20000 SOL
         </div>
-        <div className="flex items-start ">
-          <div className="pr-2 pt-0.5 text-content-contrast"> <Icons.Info /></div>
-          <div className="text-content-contrast">{t("withdraw.withdraw-info")}</div>
+        <div className="flex items-start text-content-contrast">
+          <div className="pr-2 pt-0.5 "> <Icons.Info /></div>
+          <div className="">{t("withdraw.withdraw-info")}</div>
 
         </div>
 
@@ -123,9 +123,9 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
       </div>
       </form>
 
-      <div className="flex text-caption text-content-secondary items-center justify-center" >
-        <div className="pr-2 "> <Icons.Info/></div>
-        <div> 0.25% {t("withdraw.withdrawal-fees")}</div>
+      <div className="flex text-content-secondary items-center justify-center gap-x-2" >
+        <div className=""> <Icons.Info/></div>
+        <div className="text-caption "> 0.25% {t("withdraw.withdrawal-fees")}</div>
       </div>
     </div>
   );

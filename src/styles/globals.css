@@ -334,9 +334,9 @@ input[type="number"] {
 .withdrawsteps-container::after {
   position: absolute;
   left: 6px;
-  height: 20px;
+  height: 18px;
   width: 1px;
-  top: 5px;
+  top: 6px;
   margin-top: 0.5rem;
   content: "";
   background-color: var(--outline-main);
