@@ -77,7 +77,7 @@ export const Withdrawal = () => {
               show={toggleTokensDropdown}
               variant="light"
             >
-              <div className="">
+              <div>
                 <Icons.SearchIcon className="text-lg absolute left-5 top-4 text-content-secondary" />
                 <input
                   className="is-search w-full h-12 bg-background-primary"

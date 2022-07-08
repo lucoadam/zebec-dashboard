@@ -119,7 +119,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
               <CopyButton className="min-w-7" content={transaction.sender} />
             </div>
           </td>
-          <td className="px-6 py-4 min-w-55.5">
+          <td className="px-6 py-4 w-full float-right">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Cancel"

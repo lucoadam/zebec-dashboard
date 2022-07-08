@@ -44,7 +44,6 @@ const AddOwners: FC<StepsComponentProps> = ({
     reset,
     handleSubmit,
     setValue,
-    getValues,
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(validationSchema),
@@ -61,7 +60,7 @@ const AddOwners: FC<StepsComponentProps> = ({
       ...treasury,
       minValidator: owners.length,
     }));
-  }, [owners]);
+  }, [owners, setTreasury]);
 
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
@@ -105,6 +104,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                   type="text"
                   {...register("name")}
                   disabled={owners.length === constants.MAX_OWNERS}
+                  autoFocus
                 />
               </InputField>
             </div>

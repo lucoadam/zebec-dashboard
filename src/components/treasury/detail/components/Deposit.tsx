@@ -49,7 +49,7 @@ export const Deposit = () => {
       </p>
       <InputField
         label={t("treasuryOverview:token")}
-        className="mb-[24px] relative text-content-primary"
+        className="mb-6 relative text-content-primary"
         error={false}
       >
         <div>
@@ -81,25 +81,19 @@ export const Deposit = () => {
               variant="light"
             >
               <div>
-                <div className="w-48 px-3.5 py-3">
-                  <Icons.SearchIcon className="text-lg absolute left-5 top-3.5 text-content-secondary" />
-                  <input
-                    className="is-search w-full  h-6 bg-background-primary"
-                    placeholder="Search token"
-                    type="text"
-                    style={{
-                      paddingLeft: '25px'
-                    }}
-                    onChange={(e) => setSearchData(e.target.value)}
-                  />
-                </div>
+                <Icons.SearchIcon className="text-lg absolute left-5 top-4 text-content-secondary" />
+                <input
+                  className="is-search w-full h-12 bg-background-primary"
+                  placeholder="Search token"
+                  type="text"
+                  onChange={(e) => setSearchData(e.target.value)}
+                />
                 <div className="max-h-48 rounded-lg overflow-auto">
-                  {tokenDetails
-                    .filter((token) =>
-                      token.symbol.includes(searchData.toUpperCase())
-                    ).length === 0 && <div className="py-5 px-4">
-                        No tokens found
-                      </div>}
+                  {tokenDetails.filter((token) =>
+                    token.symbol.includes(searchData.toUpperCase())
+                  ).length === 0 && (
+                    <div className="py-5 px-4">No tokens found</div>
+                  )}
                   {tokenDetails
                     .filter((token) =>
                       token.symbol.includes(searchData.toUpperCase())

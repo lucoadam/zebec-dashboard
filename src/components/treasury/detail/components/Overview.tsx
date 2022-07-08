@@ -43,14 +43,14 @@ const Overview = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
       {/**
        * First Column
        *    1. Safe Balance
        *    2. Incoming/ Outgoing
        *    3. Activity this Week
        */}
-      <div className="pr-3 flex flex-col justify-between">
+      <div className="flex flex-col justify-between">
         {/**
          * Safe Balance
          */}
@@ -174,7 +174,7 @@ const Overview = () => {
        * Second Column
        *   1. Deposited Assets
        * **/}
-      <div className="md:pr-3">
+      <div>
         <div className="w-full rounded-[4px] bg-background-secondary h-full px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:deposited-assets")}
@@ -201,7 +201,7 @@ const Overview = () => {
             )}
             {filterTokens().map((item) => (
               <div
-                className="flex w-full h-[32px] mb-[24px] justify-between"
+                className="flex w-full h-8 mb-6 justify-between"
                 key={item.symbol}
               >
                 <div className="flex items-center">
@@ -233,11 +233,11 @@ const Overview = () => {
           </div>
         </div>
       </div>
-      <div className="md:pt-5 lg:pt-0 md:pr-3 flex flex-col justify-between">
+      <div className="grid md:grid-cols-2 md:gap-6 lg:col-span-1 lg:grid-cols-1 md:col-span-2 md:flex-row md:flex-wrap flex-col justify-between">
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full pt-3 rounded bg-background-secondary mb-6">
+        <div className="w-full pt-3 rounded bg-background-secondary">
           <div className="flex">
             {fundTransferTabs.map((fundTranfer, index) => {
               return (
@@ -263,7 +263,7 @@ const Overview = () => {
         {/**
          * Zebec Treasury Help
          */}
-        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
+        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px]">
           <p className="leading-6 text-base font-semibold text-content-primary mb-[8px]">
             {t("treasuryOverview:treasury-help")}
           </p>

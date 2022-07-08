@@ -1,12 +1,13 @@
-import React, { FC, useState, useRef } from "react";
-import Image from "next/image";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { toSubstring } from "../../utils";
-import { Button, IconButton, CollapseDropdown } from "../shared";
-import * as Images from "../../assets/images";
+import Image from "next/image";
+import { FC, useRef, useState } from "react";
 import * as Icons from "../../assets/icons";
+import * as Images from "../../assets/images";
+import { toSubstring } from "../../utils";
+import { Button, CollapseDropdown } from "../shared";
 //hooks
+import CopyButton from "components/shared/CopyButton";
 import { useClickOutside } from "../../hooks";
 
 const Profile: FC = () => {
@@ -96,8 +97,8 @@ const Profile: FC = () => {
                   </div>
                 </div>
                 <div className="transform -translate-y-1">
-                  <IconButton icon={<Icons.CopyIcon />} />
-                </div>
+                  <CopyButton content={useWalletObject?.publicKey?.toString() ?? ""} />
+                  </div>
               </div>
             </div>
             <div>
