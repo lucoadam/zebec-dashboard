@@ -1,5 +1,5 @@
 import EnterWithdrawAmount from "./steps/EnterWithdrawAmount";
-import ConfirmWithdraw from "./steps/ConfirmWithdraw";
+import ConfirmWithdraw from "./steps/ConfirmWithdraw/ConfirmWithdraw";
 import Withdrawing from "./steps/Withdrawing";
 
 interface withdrawStep{

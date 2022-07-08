@@ -23,6 +23,8 @@ import NotebookIcon from "./other-icons/notebook.svg";
 import OutgoingIcon from "./other-icons/outgoing.svg";
 import OutsideLinkIcon from "./other-icons/outside-link.svg";
 import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg";
+import Loading from "./other-icons/loading.svg";
+import WithdrawDownLeft from "./other-icons/left-down-arrow.svg";
 import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg";
 import PauseIcon from "./other-icons/pause.svg";
 import PlusIncircleIcon from "./other-icons/plus-incircle.svg";
@@ -37,6 +39,8 @@ import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 
 export * from "./nav-icons";
 export {
+  WithdrawDownLeft,
+  Loading,
   PaginationRightArrow,
   PaginationLeftArrow,
   Asterik,

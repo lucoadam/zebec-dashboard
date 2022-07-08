@@ -1,17 +1,14 @@
-import { IncomingMessage } from "http";
-import React, { FC, useState, useEffect, useMemo, Dispatch, SetStateAction } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 import * as Icons from "assets/icons";
-import { number } from "yup";
-import { RowsPerPage } from "./RowsPerPage";
 
 interface PaginationProps {
     pages: number;
-    setCurrentPage: Dispatcher<number>;
-    setNoOfRows: Dispatcher<number>;
+    setCurrentPage: (currentPage: number) => void,
+    setNoOfRows: (noOfRows: number) => void,
     
 
 }
-type Dispatcher<S> = Dispatch<SetStateAction<S>>;
+
 export const Pagination: FC<PaginationProps> = (props) => {
 
 const [activeClass,setActiveClass]=useState<String>("");
@@ -19,7 +16,7 @@ const [activeClass,setActiveClass]=useState<String>("");
         pages, setCurrentPage,setNoOfRows
     } = props;
     const numberOfPages = useMemo(() => {
-        let numOfPages: any = [];
+        const numOfPages: any = [];
         for (let i = 1; i <= pages; i++) {
             numOfPages.push(i);
         }
@@ -37,9 +34,9 @@ const [activeClass,setActiveClass]=useState<String>("");
         let tempNumberOfPages: any = [...arrOfCurrButtons];
 
         //Set dots
-        let dotsInitial = "...";
-        let dotsLeft = "... ";
-        let dotsRight = " ...";
+        const dotsInitial = "...";
+        const dotsLeft = "... ";
+        const dotsRight = " ...";
 
         if (numberOfPages.length < 5) {
             //num of pages < 6
@@ -109,12 +106,12 @@ const [activeClass,setActiveClass]=useState<String>("");
 
     return (
         <>
-         <div className="flex text-caption pt-5">
-            <RowsPerPage setNoOfRows={setNoOfRows}/>
-                <div className="flex items-center gap-x-[2px] ml-auto pr-5">
+         
+            
+                <div className="flex gap-x-0.5 ml-auto pr-5">
                     {/* Previous Button */}
                     <button
-                        className={`px-3 py-1.5  ${currentButton === 1
+                        className={`w-8  px-3 py-1.5  ${currentButton === 1
                                 ? "opacity-50 cursor-default"
                                 : "cursor-pointer"
                             }`}
@@ -135,7 +132,7 @@ const [activeClass,setActiveClass]=useState<String>("");
                         return (
                             <div
                                 key={index}
-                                className={`w-[32px] text-center p-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
+                                className={`w-8 h-8 flex items-center justify-center p-1.5 text-content-primary ${item=="..."?"cursor-default" :"cursor-pointer "} ${currentButton === item
                                         ? "transition-colors duration-700 ease-in bg-primary rounded-lg"
                                         : "bg-background-primary rounded-lg"
                                     }`}
@@ -148,7 +145,7 @@ const [activeClass,setActiveClass]=useState<String>("");
 
                     {/* Next Button */}
                     <button
-                        className={`px-3 py-2 ${currentButton === numberOfPages.length
+                        className={` w-8 px-3 py-2 ${currentButton === numberOfPages.length
                                 ? "opacity-50 cursor-default"
                                 : numberOfPages.length === 0
                                     ? "opacity-50 cursor-default"
@@ -163,7 +160,7 @@ const [activeClass,setActiveClass]=useState<String>("");
                         <Icons.PaginationRightArrow />
                     </button>
                 </div>
-            </div>
+           
         </>
     );
 

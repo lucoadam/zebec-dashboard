@@ -37,8 +37,10 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+
       <TPSHeader />
-      <Navbar />
+      <Navbar/>
+    
       <main className="pb-20">{children}</main>
     </>
   );

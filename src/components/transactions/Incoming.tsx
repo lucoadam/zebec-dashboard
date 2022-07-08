@@ -1,6 +1,7 @@
 import { Table, TableBody } from "components/shared";
 import { Pagination } from "components/shared/Pagination";
 import { incomingTransactions } from "fakedata";
+import { RowsPerPage } from "components/shared/RowsPerPage";
 import { useTranslation } from "next-i18next";
 import { FC, useState } from "react";
 import FilterTabs from "./FilterTabs";
@@ -11,7 +12,8 @@ const Incoming: FC = () => {
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [NoOfRows, setNoOfRows] = useState(10);
+  const [noOfRows, setNoOfRows] = useState(10);
+  const noOfOptions =[10,20,30,40]
 
   const headers = [
     {
@@ -59,11 +61,17 @@ const Incoming: FC = () => {
           })}
         </TableBody>
       </Table>
-      <Pagination
-        pages={100}
-        setCurrentPage={setCurrentPage}
-        setNoOfRows={setNoOfRows}
-      />
+      <div className="flex text-caption pt-5">
+        <RowsPerPage setNoOfRows={setNoOfRows} noOfRows={noOfRows} noOfOptions={noOfOptions}  />
+        <Pagination
+          pages={100}
+          setCurrentPage={setCurrentPage}
+          setNoOfRows={setNoOfRows}
+        />
+
+      </div>
+      
+
     </>
   );
 };
