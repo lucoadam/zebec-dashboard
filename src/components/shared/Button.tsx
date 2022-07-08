@@ -41,7 +41,11 @@ const getButtonVariantStyles = (variant: ButtonVariant) => {
   }
 };
 
-export const Button: FC<ButtonProps> = (props) => {
+export const Button:  FC<ButtonProps> =  React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    props: ButtonProps,
+    ref: React.ForwardedRef<HTMLButtonElement>,
+  ) : JSX.Element => {
   const {
     children,
     title,
@@ -65,6 +69,7 @@ export const Button: FC<ButtonProps> = (props) => {
           className ?? "",
         )}
         {...rest}
+        ref={ref}
       >
         {children ? (
           children
@@ -80,4 +85,6 @@ export const Button: FC<ButtonProps> = (props) => {
       </button>
     </>
   );
-};
+});
+
+Button.displayName = 'Button';

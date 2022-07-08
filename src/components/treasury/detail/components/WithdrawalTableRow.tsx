@@ -1,10 +1,11 @@
-import React, { FC, Fragment, useRef } from "react";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { Button, CircularProgress, IconButton } from "components/shared";
-import { formatCurrency, toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
+import { Badge, Button, CircularProgress, IconButton } from "components/shared";
+import CopyButton from "components/shared/CopyButton";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { FC, Fragment, useRef } from "react";
+import { formatCurrency, toSubstring } from "utils";
 
 interface WithdrawalTableRowProps {
   index: number;
@@ -13,26 +14,28 @@ interface WithdrawalTableRowProps {
   handleToggleRow: () => void;
 }
 
-const returnValidPercentage = (percentage: number) =>{
-  if(percentage > 0){
-    return percentage
-  }else{
+const returnValidPercentage = (percentage: number) => {
+  if (percentage > 0) {
+    return percentage;
+  } else {
     return 0;
   }
-}
+};
 
-type Confirmations = 'pending' | 'rejected' | 'confirmed'
+type Confirmations = "pending" | "rejected" | "confirmed";
 
 const confirmationClassesMapping = {
-  pending: 'bg-primary text-content-primary',
-  rejected: 'bg-error text-content-primary',
-  confirmed: 'bg-success text-background-contrast'
-}
+  pending: "info",
+  rejected: "error",
+  confirmed: "success",
+};
 
-const getClassesForConfirmation = (confirmation:Confirmations) => {
-  return confirmationClassesMapping[confirmation];
-}
-
+const getClassesForConfirmation = (confirmation: Confirmations) => {
+  return confirmationClassesMapping[confirmation] as
+    | "info"
+    | "error"
+    | "success";
+};
 
 const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
   index,
@@ -57,45 +60,66 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[280px]">
+          <td className="px-6 py-4 min-w-70">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress status={transaction.status}
-                percentage={returnValidPercentage(parseInt(formatCurrency((transaction.sent_token * 100) / transaction.amount)))}
-
+              <CircularProgress
+                status={transaction.status}
+                percentage={returnValidPercentage(
+                  parseInt(
+                    formatCurrency(
+                      (transaction.sent_token * 100) / transaction.amount
+                    )
+                  )
+                )}
               />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -{formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)}
+                    -
+                    {formatCurrency(
+                      transaction.sent_token > 0 ? transaction.sent_token : 0
+                    )}
                   </span>
                   &nbsp;SOL
                 </div>
                 <div className="text-caption">
-                {formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)} of {transaction.amount} SOL
+                  {formatCurrency(
+                    transaction.sent_token > 0 ? transaction.sent_token : 0
+                  )}{" "}
+                  of {transaction.amount} SOL
                 </div>
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[125px]">
-            <div className={`text-caption font-medium capitalize p-1.5 rounded-sm text-center ${getClassesForConfirmation(transaction.confirmation)}`}>
+          <td className="px-4 py-4 min-w-31.25">
+            <Badge
+              className="capitalize"
+              type={getClassesForConfirmation(transaction.confirmation)}
+            >
               {transaction.confirmation}
-            </div>
+            </Badge>
           </td>
-          <td className="w-[222px] px-6 py-4">
+          <td className="min-w-55.5 px-6 py-4">
             <div className="text-caption text-content-primary">
-             {transaction.status === 'scheduled' && 'INI:'} Mar 18, 2022, 12:00 PM
+              {transaction.status === "scheduled" && "INI:"} Mar 18, 2022, 12:00
+              PM
             </div>
           </td>
-          <td className="px-6 py-4 w-[222px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              1AdXF3...DuV15{" "}
-              <IconButton
-                icon={<Icons.UserAddIcon />}
-                className="bg-background-primary"
-              />
+          <td className="px-6 py-4 min-w-51">
+            <div className="flex gap-x-1 text-body text-content-primary">
+              {transaction.is_in_address_book
+                ? toSubstring(transaction.name, 25, false)
+                : toSubstring(transaction.sender,5, true)}{" "}
+              {!transaction.is_in_address_book && (
+                <IconButton
+                  icon={<Icons.UserAddIcon />}
+                  className="bg-background-primary min-w-7 h-7"
+                />
+              )}
+              <CopyButton className="min-w-7" content={transaction.sender} />
             </div>
           </td>
-          <td className="px-6 py-4 w-[222px]">
+          <td className="px-6 py-4 w-full float-right">
             <div className="flex items-center float-right gap-x-6">
               <Button
                 title="Cancel"
@@ -198,8 +222,14 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>Continuous</span>
+                        {index % 2 == 1 ? (
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                        ) : (
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                        )}
+                        <span>{`${
+                          index % 2 == 1 ? "Instant" : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
@@ -227,7 +257,11 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                         {t("table.status")}
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
-                        <Icons.OutsideLinkIcon className="w-5 h-5" />
+                        {Math.sign(transaction.sent_token) > 0 ? (
+                          <Icons.IncomingIcon className="w-5 h-5" />
+                        ) : (
+                          <Icons.OutgoingIcon className="w-5 h-5" />
+                        )}
                         <span>Ongoing</span>
                       </div>
                     </div>

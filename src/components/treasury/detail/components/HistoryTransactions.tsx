@@ -1,4 +1,4 @@
-import { Table, TableBody } from "components/shared";
+import { EmptyDataState, Table, TableBody } from "components/shared";
 import { historyTransactions } from "fakedata";
 import { useState } from "react";
 import HistoryTableRow from "./HistoryTableRow";
@@ -9,22 +9,18 @@ export const HistoryTransactions = () => {
   const headers = [
     {
       label: "progress",
-      width: '340px',
+      width: "85",
     },
     {
       label: "transaction-date",
-      width: '200px',
-
+      width: "50",
     },
     {
       label: "sender-or-receiver",
-      width: '200px',
-
+      width: "51",
     },
     {
       label: "",
-      width: '200px',
-
     },
   ];
 
@@ -35,7 +31,14 @@ export const HistoryTransactions = () => {
   return (
     <Table headers={headers}>
       <TableBody>
-        {historyTransactions.map((transaction, index) => {
+        {historyTransactions.data.length === 0 && (
+          <tr>
+            <td colSpan={headers.length}>
+              <EmptyDataState message="There are no transactions. The payments you receive/ withdraw will appear here." />
+            </td>
+          </tr>
+        )}
+        {historyTransactions.data.map((transaction, index) => {
           return (
             <HistoryTableRow
               key={index}

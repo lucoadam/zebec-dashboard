@@ -42,7 +42,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
         </p>
         <InputField
           error={!!errors.name}
-          helper={errors?.name?.message || ""}
+          helper={errors.name?.message?.toString()|| ""}
           label={t("treasury:treasury-name")}
           placeholder={t("treasury:name-placeholder")}
           type="text"

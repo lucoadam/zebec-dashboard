@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import Image, { StaticImageData } from "next/image";
-import * as AvatarImages from "assets/images/avatars";
 import * as Icons from "assets/icons";
-import { toSubstring } from "utils";
-import { Owner } from "./CreateTreasury.d";
+import * as AvatarImages from "assets/images/avatars";
 import { IconButton } from "components/shared";
 import CopyButton from "components/shared/CopyButton";
+import { StaticImageData } from "next/image";
+import { FC } from "react";
+import { toSubstring } from "utils";
+import { Owner } from "./CreateTreasury.d";
 
 const OwnerLists: FC<{
   maxItems?: number;
@@ -54,11 +54,7 @@ const OwnerLists: FC<{
                 </div>
                 <div className="flex items-center text-content-primary text-body">
                   {toSubstring(owner.wallet, 10, true)}{" "}
-                  {showCopy && (
-                    <div className="ml-1.5 w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                      <CopyButton content={owner.wallet} />
-                    </div>
-                  )}
+                  {showCopy && <CopyButton content={owner.wallet} />}
                 </div>
               </div>
               {setOwners && (

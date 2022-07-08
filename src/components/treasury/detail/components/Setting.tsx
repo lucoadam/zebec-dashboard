@@ -1,28 +1,28 @@
-import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as Icons from "assets/icons";
 import * as AvatarImages from "assets/images/avatars";
-import Image from "next/image";
-import { toSubstring } from "utils";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, InputField, Modal } from "components/shared";
-import OwnerLists from "components/treasury/create/OwnerLists";
-import { useEffect, useState } from "react";
 import CopyButton from "components/shared/CopyButton";
+import OwnerLists from "components/treasury/create/OwnerLists";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toSubstring } from "utils";
+import * as Yup from "yup";
 
 const Setting = () => {
-
   const { t } = useTranslation();
-  let [isOpen, setIsOpen] = useState(false);
-
-  function toggleModal() {
-    setIsOpen(!isOpen);
-  }
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:treasury-name-required")),
   });
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const {
     register,
@@ -40,8 +40,8 @@ const Setting = () => {
     setValue("name", "Zebec Safe");
   }, [setValue]);
   return (
-    <div className="flex w-full justify-start">
-      <div className="w-1/3">
+    <div className="flex flex-wrap md:flex-nowrap lg:flex-nowrap w-full justify-start">
+      <div className="sm:w-full md:w-1/3">
         <div className="w-full flex">
           <Image
             src={AvatarImages.Avatar1}
@@ -59,14 +59,14 @@ const Setting = () => {
               <div className="flex gap-x-3 items-center">
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.UserGroupIcon className="text-sm font-normal" />
-                  <div>{5} {t('treasurySettings:owners')}</div>
+                  <div>
+                    {5} {t("treasurySettings:owners")}
+                  </div>
                 </div>
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.NotebookIcon className="text-sm font-normal" />
                   <div>{toSubstring("23423sdfjsdlfjs234230423", 6, true)}</div>
-                  <div className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer">
-                    <CopyButton content="23423sdfjsdlfjs234230423" />
-                  </div>
+                  <CopyButton content="23423sdfjsdlfjs234230423" />
                 </div>
               </div>
             </div>
@@ -74,22 +74,23 @@ const Setting = () => {
         </div>
         <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
           <span className="text-sm font-normal text-content-secondary">
-            {t('treasurySettings:minimum-confirmation')}:
+            {t("treasurySettings:minimum-confirmation")}:
           </span>
-          &nbsp;2 {t('treasurySettings:out-of')} 3 {t('treasurySettings:owners')}
+          &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
+          {t("treasurySettings:owners")}
         </div>
         <InputField
           error={!!errors?.name}
-          helper={errors?.name?.message || ""}
-          label={t('treasurySettings:safe-name')}
-          placeholder={t('treasurySettings:enter-safe-name')}
+          helper={errors?.name?.message?.toString() || ""}
+          label={t("treasurySettings:safe-name")}
+          placeholder={t("treasurySettings:enter-safe-name")}
           className="h-[40px] w-full"
           type="text"
         >
           <input {...register("name")} autoFocus />
         </InputField>
         <Button
-          title={t('treasurySettings:save-changes')}
+          title={t("treasurySettings:save-changes")}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"
@@ -98,18 +99,17 @@ const Setting = () => {
 
         <div className="mt-[30px]">
           <div className="text-subtitle text-content-primary font-semibold">
-            {t('treasurySettings:archive-safe')}
+            {t("treasurySettings:archive-safe")}
           </div>
           <div className="text-xs font-normal text-content-secondary mb-[16px]">
-            {t('treasurySettings:archive-safe-description')}
+            {t("treasurySettings:archive-safe-description")}
           </div>
           <Button
             className="w-full"
             variant="danger"
-            title={t('treasurySettings:archive-safe')}
+            title={t("treasurySettings:archive-safe")}
             endIcon={<Icons.TrashIcon />}
-            onClick={() => setIsOpen(true)}
-
+            onClick={()=>setIsOpen(true)}
           />
           <Modal
             show={isOpen}
@@ -118,27 +118,27 @@ const Setting = () => {
             hasCloseIcon={false}
           >
             <div className="">
-              <div className="text-heading-5 text-content-primary">{t('treasurySettings:archive-modal-header')}</div>
-              <div className="text-content-secondary ">{t('treasurySettings:archiving-content')}</div>
+              <div className="text-heading-5 text-content-primary">
+                {t("treasurySettings:archive-modal-header")}
+              </div>
+              <div className="text-content-secondary ">
+                {t("treasurySettings:archiving-content")}
+              </div>
               <div className="pt-[12px] pb-[12px]">
-              <Button
-            className="w-full"
-            variant="danger"
-            title={t('treasurySettings:yes-archive-safe')}
-            startIcon={<Icons.TrashIcon />}
-            onClick={() => setIsOpen(true)}
-
-          />
-
+                <Button
+                  className="w-full"
+                  variant="danger"
+                  title={t("treasurySettings:yes-archive-safe")}
+                  startIcon={<Icons.TrashIcon />}
+                  onClick={() => setIsOpen(true)}
+                />
               </div>
               <div className="pb-[12px]">
                 <Button
                   className="w-full"
-
                   title={t("treasurySettings:cancel")}
                   onClick={() => {
-
-                    setIsOpen(!isOpen)
+                    setIsOpen(!isOpen);
                   }}
                 />
               </div>
@@ -146,9 +146,9 @@ const Setting = () => {
           </Modal>
         </div>
       </div>
-      <div className="min-w-[280px] ml-[215px]">
+      <div className="min-w-full md:min-w-[280px] lg:ml-[215px] mt-5 md:mt-0 sm:ml-0 md:ml-20">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
-          {t('treasurySettings:owners')}
+          {t("treasurySettings:owners")}
         </div>
         <OwnerLists
           maxItems={5}

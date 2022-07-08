@@ -1,9 +1,9 @@
-import React, { FC, useState, useRef } from "react";
-import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { RoutesArrayProps } from "./routes";
-import { CollapseDropdown } from "../shared";
+import Link from "next/link";
+import { FC, useRef, useState } from "react";
 import * as Icons from "../../assets/icons";
+import { CollapseDropdown } from "../shared";
+import { RoutesArrayProps } from "./routes.d";
 //hooks
 import { useClickOutside } from "../../hooks";
 
