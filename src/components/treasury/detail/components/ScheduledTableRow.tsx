@@ -1,10 +1,11 @@
-import React, { FC, Fragment, useRef } from "react";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { Button, CircularProgress, IconButton } from "components/shared";
-import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
+import { Button, CircularProgress, IconButton } from "components/shared";
+import CopyButton from "components/shared/CopyButton";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
+import { FC, Fragment, useRef } from "react";
+import { toSubstring } from "utils";
 
 interface ScheduledTableRowProps {
   index: number;
@@ -38,7 +39,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 w-[340px]">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress  percentage={0} status="scheduled"/>
+              <CircularProgress percentage={0} status="scheduled" />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
@@ -57,17 +58,20 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
             </div>
           </td>
           <td className="w-[134px] px-6 py-4">
-            <div className="text-caption text-content-primary">
-              10 min ago
-            </div>
+            <div className="text-caption text-content-primary">10 min ago</div>
           </td>
           <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
-              1AdXF3...DuV15{" "}
-              <IconButton
-                icon={<Icons.UserAddIcon />}
-                className="bg-background-primary"
-              />
+              {transaction.is_in_address_book
+                ? transaction.name
+                : toSubstring(transaction.sender, 5, true)}{" "}
+              {!transaction.is_in_address_book && (
+                <IconButton
+                  icon={<Icons.UserAddIcon />}
+                  className="bg-background-primary"
+                />
+              )}
+              <CopyButton content={transaction.sender} />
             </div>
           </td>
           <td className="px-6 py-4 w-[200px]">
@@ -173,8 +177,14 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>Continuous</span>
+                        {index % 2 == 1 ? (
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                        ) : (
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                        )}
+                        <span>{`${
+                          index % 2 == 1 ? "Instant" : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
@@ -202,7 +212,11 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.status")}
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
-                        <Icons.OutsideLinkIcon className="w-5 h-5" />
+                        {Math.sign(transaction.sent_token) > 0 ? (
+                          <Icons.IncomingIcon className="w-5 h-5" />
+                        ) : (
+                          <Icons.OutgoingIcon className="w-5 h-5" />
+                        )}
                         <span>Ongoing</span>
                       </div>
                     </div>

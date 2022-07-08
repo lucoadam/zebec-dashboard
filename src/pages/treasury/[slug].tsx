@@ -36,15 +36,16 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <div className="flex justify-between items-center pb-[24px]">
-          <div className="flex justify-start items-center px-[1.9rem]">
+          <div className="flex justify-between items-center px-[35px] pb-[24px]">
+          <div className="flex justify-start items-center">
             <IconButton
+             className="cursor-pointer mr-[19px]"
               onClick={() => {
                 router.push("/treasury");
               }}
               variant="plain"
               icon={
-                <Icons.LeftArrowIcon className="cursor-pointer w-[18px] h-[16px] mr-[19px]" />
+                <Icons.LeftArrowIcon />
               }
             />
 

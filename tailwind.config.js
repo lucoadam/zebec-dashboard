@@ -3,6 +3,17 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      minWidth:{
+        '7': '28px',
+        '31.25': '125px',
+        '33.5': '134px',
+        '50': '200px',
+        '51': '203px',
+        '55.5': '222px',
+        '60': '240px',
+        '70' : '280px',
+        '85': '340px'
+      },
       colors: {
         black: "var(--black)",
         white: "var(--white)",
@@ -52,6 +63,7 @@ module.exports = {
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
+          dark: "var(--outline-dark)"
         },
       },
       fontFamily: {

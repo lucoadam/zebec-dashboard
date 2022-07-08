@@ -5,7 +5,6 @@ import { Button, IconButton, InputField, Modal } from "components/shared";
 import { toSubstring } from "utils";
 import * as Icons from "assets/icons";
 import * as Images from "assets/images";
-import ConfirmWithdraw from "./withdraw/steps/ConfirmWithdraw";
 import { WithdrawStepsList } from "./withdraw/data";
 
 
@@ -34,7 +33,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     },
   };
   let [isOpen, setIsOpen] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<number|any>();
+  const [withdrawAmount, setWithdrawAmount] = useState<any>();
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -92,8 +91,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
-                className="rounded h-[388px] w-[338px]"
+                className={`rounded h-96`}
                 hasCloseIcon={!currentStep}
+                size="small"
               >
                 {WithdrawStepsList[currentStep]?.component({
                   setCurrentStep,

@@ -228,13 +228,12 @@ input[type="text"].is-amount:focus,
 .is-amount,
 input[type="number"].is-amount:focus {
   padding-left: 104px;
-  padding-right: 60px;
+  padding-right: 96px;
 }
 
 input[type="text"].is-search,
 input[type="number"].is-search,
 input[type="text"].is-search:focus,
-.is-search,
 input[type="number"].is-search:focus {
   padding-left: 48px;
 }
@@ -249,7 +248,7 @@ input[type="number"]:focus {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  padding: 0px 30px;
+  padding: 0px 20px;
 
   /* background/background-primary */
 
@@ -333,5 +332,22 @@ input[type="number"] {
   background-color: var(--outline-main);
 }
 .steps-container.last::after {
+  content: none;
+}
+
+.withdrawsteps-container {
+  position: relative;
+}
+.withdrawsteps-container::after {
+  position: absolute;
+  left: 6px;
+  height: 18px;
+  width: 1px;
+  top: 6px;
+  margin-top: 0.5rem;
+  content: "";
+  background-color: var(--outline-main);
+}
+.withdrawsteps-container.last::after {
   content: none;
 }

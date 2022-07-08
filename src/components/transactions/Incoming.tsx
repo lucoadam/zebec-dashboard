@@ -1,34 +1,35 @@
-import React, { FC, useState } from "react";
-import { useTranslation } from "next-i18next";
-import FilterTabs from "./FilterTabs";
 import { Table, TableBody } from "components/shared";
-import IncomingTableRow from "./IncomingTableRow";
 import { Pagination } from "components/shared/Pagination";
 import { incomingTransactions } from "fakedata";
+import { RowsPerPage } from "components/shared/RowsPerPage";
+import { useTranslation } from "next-i18next";
+import { FC, useState } from "react";
+import FilterTabs from "./FilterTabs";
+import IncomingTableRow from "./IncomingTableRow";
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions");
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [NoOfRows, setNoOfRows] = useState(10);
+  const [noOfRows, setNoOfRows] = useState(10);
+  const noOfOptions =[10,20,30,40]
 
   const headers = [
     {
       label: "progress",
-      width: "340px",
+      width: "85",
     },
     {
       label: "transaction-date",
-      width: "240px",
+      width: "60",
     },
     {
       label: "sender",
-      width: "240px",
+      width: "60",
     },
     {
       label: "",
-      width: "240px",
     },
   ];
 
@@ -60,11 +61,17 @@ const Incoming: FC = () => {
           })}
         </TableBody>
       </Table>
-      <Pagination
-        pages={100}
-        setCurrentPage={setCurrentPage}
-        setNoOfRows={setNoOfRows}
-      />
+      <div className="flex text-caption pt-5">
+        <RowsPerPage setNoOfRows={setNoOfRows} noOfRows={noOfRows} noOfOptions={noOfOptions}  />
+        <Pagination
+          pages={100}
+          setCurrentPage={setCurrentPage}
+          setNoOfRows={setNoOfRows}
+        />
+
+      </div>
+      
+
     </>
   );
 };
