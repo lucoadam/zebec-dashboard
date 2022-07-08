@@ -1,4 +1,4 @@
-import { Table, TableBody } from "components/shared";
+import { EmptyDataState, Table, TableBody } from "components/shared";
 import { scheduledTransactions } from "fakedata";
 import { useState } from "react";
 import ScheduledTableRow from "./ScheduledTableRow";
@@ -9,27 +9,22 @@ export const ScheduledTransactions = () => {
   const headers = [
     {
       label: "progress",
-      width: '340px',
+      width: "85",
     },
     {
       label: "transaction-date",
-      width: '200px',
-
+      width: "50",
     },
     {
       label: "initiated",
-      width: '134px',
-        
+      width: "134px",
     },
     {
       label: "receiver",
-      width: '200px',
-
+      width: "50",
     },
     {
       label: "",
-      width: '200px',
-
     },
   ];
 
@@ -40,6 +35,13 @@ export const ScheduledTransactions = () => {
   return (
     <Table headers={headers}>
       <TableBody>
+        {scheduledTransactions.data.length === 0 && (
+          <tr>
+            <td colSpan={headers.length}>
+              <EmptyDataState message="There are no incoming transactions. The payments you receive will appear here." />
+            </td>
+          </tr>
+        )}
         {scheduledTransactions.data.map((transaction, index) => {
           return (
             <ScheduledTableRow

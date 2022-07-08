@@ -1,5 +1,5 @@
-import React from "react";
 import * as Icons from "assets/icons";
+import React from "react";
 
 const CopyButton: React.FC<{
   content: string;
@@ -8,7 +8,7 @@ const CopyButton: React.FC<{
   const [isClicked, setIsClicked] = React.useState<boolean>(false);
 
   return (
-    <>
+    <div className="grid place-content-center border border-outline bg-background-primary rounded-full  w-7 h-7 text-sm">
       {isClicked ? (
         <Icons.CheckIcon
           onClick={(e: Event) => {
@@ -29,7 +29,7 @@ const CopyButton: React.FC<{
           className={`text-base cursor-pointer ${className}`}
         />
       )}
-    </>
+    </div>
   );
 };
 

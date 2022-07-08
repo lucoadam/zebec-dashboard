@@ -15,14 +15,15 @@ const CreateTreasuryPage: NextPage = () => {
     <Layout pageTitle="Zebec - Create Treasury">
       <div className="pt-[76px]">
         <div className="container w-full">
-          <div className="flex justify-start items-center px-[1.9rem] pb-9">
+          <div className="flex justify-start items-center px-[35px] pb-9">
             <IconButton
+              className="mr-[19px]"
               onClick={() => {
                 router.push("/treasury");
               }}
               variant="plain"
               icon={
-                <LeftArrowIcon className="cursor-pointer w-[18px] h-[16px] mr-[19px]" />
+                <LeftArrowIcon className="cursor-pointer" />
               }
             />
 

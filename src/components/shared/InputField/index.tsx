@@ -1,4 +1,4 @@
-import React, { cloneElement, FC, useState } from "react";
+import { cloneElement, FC } from "react";
 import { InputProps } from "./index.d";
 
 const InputFieldWrapper: FC<InputProps> = (props) => {

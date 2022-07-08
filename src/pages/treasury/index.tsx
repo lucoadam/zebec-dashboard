@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
+import * as Icons from "../../assets/icons";
 import Layout from "../../components/layouts/Layout";
 import { Button } from "../../components/shared";
-import * as Icons from "../../assets/icons";
 import TreasuryLists from "../../components/treasury/TreasuryLists";
-import Link from "next/link";
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation();

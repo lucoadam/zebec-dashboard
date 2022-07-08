@@ -1,5 +1,5 @@
-import React, { FC } from "react";
 import { useTranslation } from "next-i18next";
+import { FC } from "react";
 
 export interface TableHeader {
   label: string;
@@ -12,7 +12,7 @@ interface TableHeaderProps {
 
 const getWidth = (width: string | undefined) => {
   if (width) {
-    return `w-[${width}]`;
+    return `min-w-${width}`;
   }
   return `w-full`;
 };
