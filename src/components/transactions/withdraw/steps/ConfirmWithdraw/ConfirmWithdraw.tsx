@@ -28,7 +28,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount, se
 
 
             </div>
-            <div className="pt-[12px] pb-[12px]">
+            <div className="pt-3 pb-3">
                 <Button
                     className="w-full "
                     variant="gradient"
@@ -40,7 +40,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount, se
                 />
 
             </div>
-            <div className="pb-[12px]">
+            <div className="pb-3">
                 <Button
                     className="w-full "
 

@@ -91,8 +91,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
-                className={`rounded w-[338px] h-96`}
+                className={`rounded h-96`}
                 hasCloseIcon={!currentStep}
+                size="small"
               >
                 {WithdrawStepsList[currentStep]?.component({
                   setCurrentStep,

@@ -46,22 +46,22 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
         {t("withdraw.withdraw-modal-header")}
 
       </div>
-      <div className="text-content-secondary text-caption pb-[16px]">
+      <div className="text-content-secondary text-caption pb-4">
         {t("withdraw.withdraw-modal-subtitle")}
 
       </div>
-      <div className="bg-background-tertiary rounded-md p-[16px]">
+      <div className="bg-background-tertiary rounded-md p-4">
         <div className="flex text-content-secondary pb-4">
           <div className="pr-2"> <Icons.ArrowDownLeft /></div>
          <div className="text-caption ">{t("withdraw.amount-received")} 20000 SOL</div> 
         </div>
-        <div className="flex text-content-secondary pb-[12px]">
+        <div className="flex text-content-secondary pb-3">
           <div className="pr-2"> <Icons.ArrowTopRight /></div>
-          {t("withdraw.withdrawable-amount")} 20000 SOL
+          <div className="text-caption">{t("withdraw.withdrawable-amount")} 20000 SOL</div>
         </div>
         <div className="flex items-start text-content-contrast">
           <div className="pr-2 pt-0.5 "> <Icons.Info /></div>
-          <div className="">{t("withdraw.withdraw-info")}</div>
+          <div className="text-caption">{t("withdraw.withdraw-info")}</div>
 
         </div>
 
@@ -70,7 +70,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
       </div>
       {/* Input Field */}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-      <div className="pt-[12px] pb-[12px]">
+      <div className="pt-3 pb-3">
         <InputField
           label={t("")}
           className="relative text-content-primary"
@@ -101,7 +101,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
       
 
       {/* warning text */}
-      <div className="flex pb-[12px] hidden" >
+      <div className="flex pb-3 hidden" >
         <div className="pr-2 text-warning">
           <Icons.WarningTriangleIcon />
         </div>
@@ -112,7 +112,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({ setCurrentStep,withdrawAmount,
 
       {/* withdraw Button */}
 
-      <div className="pb-[12px]">
+      <div className="pb-3">
         <Button
           className={`w-full`} 
           variant="gradient"
