@@ -9,7 +9,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount, se
     const { t } = useTranslation("transactions");
     return (
         <div>
-            <div className="text-content-secondary">
+            <div className="text-content-secondary font-semibold pb-4">
                 {t("withdraw.sure-you-want-to-withdraw")} 101 SOL?
             </div>
 
@@ -18,7 +18,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount, se
                 {confirmWithdrawStepsList.map((step: confirmWithdrawStep, index: number) => (
                     <div
                         className={`${index == confirmWithdrawStepsList.length - 1 ? "flex gap-x-2 text-content-secondary" : "withdrawsteps-container flex gap-x-2 pb-4 text-content-secondary"}`}
-                        key={`steps-${index}`}
+                        key={`withdrawsteps-${index}`}
                     >
                         {confirmWithdrawStepsList[index].image}
                         <div className="text-caption"> {confirmWithdrawStepsList[index].text} 20000 SOL</div>
