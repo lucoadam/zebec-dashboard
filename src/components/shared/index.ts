@@ -14,3 +14,4 @@ export * from "./Modal";
 export * from "./TokensDropdown";
 export * from "./WithdrawDepositInput";
 export * from "./DepositedTokenAssets";
+export * from "./Balances";

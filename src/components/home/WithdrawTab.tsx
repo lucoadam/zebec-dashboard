@@ -4,17 +4,10 @@ import {
   TokensDropdown,
   WithdrawDepositInput,
 } from "components/shared";
-import { useClickOutside } from "hooks";
+import { useToggle } from "hooks";
 
 const WithdrawTab: FC = () => {
-  const [showTokensDropdown, setShowTokensDropdown] = useState<boolean>(false);
-
-  const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null);
-
-  //handle clicking outside
-  useClickOutside(tokensDropdownWrapperRef, {
-    onClickOutside: () => setShowTokensDropdown(false),
-  });
+  const [show, toggle, setToggle] = useToggle(false);
 
   return (
     <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
@@ -22,13 +15,9 @@ const WithdrawTab: FC = () => {
         Withdraw your deposited balance into your wallet.
       </div>
       <form className="flex flex-col gap-y-6">
-        <WithdrawDepositInput
-          showDropdown={showTokensDropdown}
-          setShowDropdown={setShowTokensDropdown}
-          ref={tokensDropdownWrapperRef}
-        >
+        <WithdrawDepositInput toggle={toggle} setToggle={setToggle}>
           {/* Tokens Dropdown */}
-          <TokensDropdown show={showTokensDropdown} />
+          <TokensDropdown show={show} />
         </WithdrawDepositInput>
 
         <Button

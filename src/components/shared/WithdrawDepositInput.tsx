@@ -1,35 +1,33 @@
-import React, { FC, Dispatch, SetStateAction } from "react";
+import React, { FC, useRef } from "react";
 import { Button } from "./Button";
+import { useClickOutside } from "hooks";
 import * as Icons from "assets/icons";
 
 interface WithdrawDepositInputProps {
-  showDropdown: boolean;
-  setShowDropdown: Dispatch<SetStateAction<boolean>>;
   children: React.ReactNode;
+  toggle: () => void;
+  setToggle: (arg0: false) => void;
 }
 
-export const WithdrawDepositInput = React.forwardRef<
-  HTMLDivElement,
-  WithdrawDepositInputProps
->((props, ref) => {
-  const { showDropdown, setShowDropdown, children } = props;
-
-  //handle Dropdown
-  const handleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+export const WithdrawDepositInput: FC<WithdrawDepositInputProps> = (props) => {
+  const { children, toggle, setToggle } = props;
+  const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null);
+  //handle clicking outside
+  useClickOutside(tokensDropdownWrapperRef, {
+    onClickOutside: () => setToggle(false),
+  });
 
   return (
     <>
       <div className="">
         <label>Token</label>
         <div
-          ref={ref}
+          ref={tokensDropdownWrapperRef}
           className="pl-4.5 pr-6 py-2 flex items-center bg-background-primary border border-outline rounded-lg relative"
         >
           <div
             className="flex items-center gap-x-1.5 cursor-pointer"
-            onClick={handleDropdown}
+            onClick={toggle}
           >
             {/* Icons here */}
             <div className="w-5 h-5 bg-background-secondary"></div>
@@ -56,4 +54,4 @@ export const WithdrawDepositInput = React.forwardRef<
       </div>
     </>
   );
-});
+};
