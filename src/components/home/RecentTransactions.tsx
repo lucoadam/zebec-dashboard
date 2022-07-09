@@ -5,7 +5,7 @@ import * as Icons from "assets/icons";
 const RecentTransactions: FC = () => {
   return (
     <>
-      <div className="md:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
+      <div className="lg:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
         <div className="flex justify-between items-center">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
             RECENT TRANSACTIONS

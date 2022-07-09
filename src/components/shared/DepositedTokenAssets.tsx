@@ -26,7 +26,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                     <td className="pl-4 text-left text-caption text-content-contrast pb-3">
                       Balance
                     </td>
-                    <td className="pl-4 text-left text-caption text-content-contrast pb-3">
+                    <td className="pl-4 pr-1.5 text-left text-caption text-content-contrast pb-3">
                       Streaming
                     </td>
                   </tr>
@@ -52,7 +52,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6 pt-3">
+                    <td className="pl-4 pr-1.5 pb-6 pt-3">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -83,7 +83,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -96,7 +96,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                   </tr>
                   {/* BLOCK */}
                   <tr className="">
-                    <td className="whitespace-nowrap w-[1%]">
+                    <td className="whitespace-nowrap w-[1%] pb-6">
                       <div className="flex flex-col items-center gap-y-1">
                         <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
                         <div className="text-caption text-content-primary">
@@ -104,7 +104,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4">
+                    <td className="pl-4 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -114,7 +114,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4">
+                    <td className="pl-4  pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -127,7 +127,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                   </tr>
                   {/* SOL */}
                   <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6 pt-6">
+                    <td className="whitespace-nowrap w-[1%] pb-6">
                       <div className="flex flex-col items-center gap-y-1">
                         <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
                         <div className="text-caption text-content-primary">
@@ -135,7 +135,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6 pt-6">
+                    <td className="pl-4 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -145,7 +145,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6 pt-6">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -176,7 +176,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -189,7 +189,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                   </tr>
                   {/* BLOCK */}
                   <tr className="">
-                    <td className="whitespace-nowrap w-[1%]">
+                    <td className="whitespace-nowrap w-[1%] pb-6">
                       <div className="flex flex-col items-center gap-y-1">
                         <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
                         <div className="text-caption text-content-primary">
@@ -197,7 +197,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4">
+                    <td className="pl-4 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -207,7 +207,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -220,7 +220,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                   </tr>
                   {/* SOL */}
                   <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6 pt-6">
+                    <td className="whitespace-nowrap w-[1%] pb-6">
                       <div className="flex flex-col items-center gap-y-1">
                         <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
                         <div className="text-caption text-content-primary">
@@ -228,7 +228,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6 pt-6">
+                    <td className="pl-4 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -238,7 +238,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6 pt-6">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -269,7 +269,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4 pb-6">
+                    <td className="pl-4 pr-1.5 pb-6">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33
@@ -300,7 +300,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         </div>
                       </div>
                     </td>
-                    <td className="pl-4">
+                    <td className="pl-4 pr-1.5">
                       <div className="flex flex-col gap-y-2 mt-1">
                         <div className=" text-subtitle-sm text-content-primary font-medium">
                           $8,43,459.33

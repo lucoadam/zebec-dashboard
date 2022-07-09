@@ -125,7 +125,7 @@ export const ActivityThisWeek: FC = () => {
         <tbody>
           {/* Incoming */}
           <tr>
-            <td>
+            <td className="pb-8">
               <div className="flex gap-x-1">
                 <Icons.ArrowDownLeftIcon className="text-base text-success-content" />
                 <div className="text-caption text-content-secondary font-semibold uppercase">
@@ -133,10 +133,10 @@ export const ActivityThisWeek: FC = () => {
                 </div>
               </div>
             </td>
-            <td>
+            <td className="pb-8">
               <Icons.IncomingActivityImg className="w-16 mx-auto" />
             </td>
-            <td className="text-right">
+            <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
                   $8,43,459.33
@@ -149,7 +149,7 @@ export const ActivityThisWeek: FC = () => {
           </tr>
           {/* Outgoing */}
           <tr>
-            <td>
+            <td className="pb-8">
               <div className="flex gap-x-1">
                 <Icons.ArrowUpRightIcon className="text-base text-error-content" />
                 <div className="text-caption text-content-secondary font-semibold uppercase">
@@ -157,10 +157,10 @@ export const ActivityThisWeek: FC = () => {
                 </div>
               </div>
             </td>
-            <td>
+            <td className="pb-8">
               <Icons.OutgoingActivityImg className="w-16 mx-auto" />
             </td>
-            <td className="text-right">
+            <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
                   $8,43,459.33
