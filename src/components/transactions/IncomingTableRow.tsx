@@ -32,7 +32,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           : "0px",
     },
   };
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState<any>();
 
   function toggleModal() {

@@ -38,8 +38,10 @@ import TrashIcon from "./other-icons/trash.svg";
 import UserAddIcon from "./other-icons/user-add.svg";
 import UserGroupIcon from "./other-icons/user-group.svg";
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
+import Unarchive from "./other-icons/unarchive.svg";
 
 export {
+  Unarchive,
   WithdrawDownLeft,
   Loading,
   PaginationRightArrow,

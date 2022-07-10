@@ -25,8 +25,12 @@ const Treasury: NextPage = () => {
                 variant="gradient"
                 endIcon={<Icons.PlusIncircleIcon />}
               />
-              </Link>              
+              </Link>     
+              <Link href="/treasury/archive">
               <Button title="See Archived Safe" endIcon={<Icons.TrashIcon />} />
+              </Link>       
+
+              
             </div>
           </div>
           <TreasuryLists />
