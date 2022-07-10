@@ -288,8 +288,12 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input[type="Text"].date-picker-input {
-  padding-left: 40px;
+input[type="text"].date-picker-input {
+  @apply pl-10;
+}
+
+input[type="text"].token-select {
+  @apply pl-11;
 }
 /* Scrollbar */
 /* width */

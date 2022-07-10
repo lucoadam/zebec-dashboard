@@ -48,16 +48,17 @@
 .rdtPicker .rdtTimeToggle:hover {
   /* background: #eeeeee; */
   cursor: pointer;
-  @apply bg-background-tertiary
+  @apply bg-background-tertiary;
 }
 .rdtPicker td.rdtOld,
 .rdtPicker td.rdtNew {
   color: #999999;
 }
 .rdtPicker td.rdtToday {
-  position: relative;
+  /* position: relative; */
+  @apply border border-outline;
 }
-.rdtPicker td.rdtToday:before {
+/* .rdtPicker td.rdtToday:before {
   content: '';
   display: inline-block;
   border-left: 7px solid transparent;
@@ -66,7 +67,7 @@
   position: absolute;
   bottom: 4px;
   right: 4px;
-}
+} */
 .rdtPicker td.rdtActive,
 .rdtPicker td.rdtActive:hover {
   /* background-color: #428bca; */

@@ -1,20 +1,28 @@
+import { useAppSelector } from "app/hooks";
 import * as Icons from "assets/icons";
 import Layout from "components/layouts/Layout";
-import ContinuousStream from "components/send/continuousStream";
+import { ContinuousStream } from "components/send/continuousStream";
+import { ContinuousStreamFormData } from "components/send/continuousStream.d";
 import { Button } from "components/shared";
 import type { NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useState } from "react";
+import { toSubstring } from "utils";
 
 const Send: NextPage = () => {
   const { t } = useTranslation("common");
-
+  const [formValues, setFormValues] = useState<ContinuousStreamFormData>();
+  const walletTokens = useAppSelector((state) => state.walletBalance.tokens);
   return (
     <Layout pageTitle="Zebec">
       <div className="py-16 container">
         <div className="grid md:grid-cols-2">
           <div className="w-full">
-            <ContinuousStream/>
+            <ContinuousStream
+              setFormValues={setFormValues}
+              tokenBalances={walletTokens}
+            />
           </div>
           <div className="p-10 flex flex-col justify-center text-content-primary w-[400px]">
             <div className="border-dashed border-b pb-4 border-outline">
@@ -22,18 +30,41 @@ const Send: NextPage = () => {
             </div>
             <div className="mt-4 pt-4">
               <p className="text-subtitle text-content-secondary">
-                Stream starts on <span className="text-content-primary">07/04/2022 12:00 AM</span>
+                Stream starts on{" "}
+                <span className="text-content-primary">
+                  {formValues?.startDate || "..."}{" "}
+                  {formValues?.startTime || "..."}
+                </span>
               </p>
               <p className="mt-2 text-subtitle text-content-secondary">
-                <span className="text-content-primary">0 SOL</span>
+                <span className="text-content-primary">
+                  {formValues?.tokenAmount || formValues?.amount || "..."}{" "}
+                  {formValues?.token || "..."}{" "}
+                </span>
                 will be sent to
-                <span className="text-content-primary">..........</span>
+                <span className="text-content-primary">
+                  {" "}
+                  {toSubstring(formValues?.receiverWallet, 12, false)}
+                </span>
               </p>
-              <p className="text-subtitle text-content-secondary">
-                for <span className="text-content-primary">0 days. 0 SOL</span> in total.
-              </p>
+              {(formValues?.noOfTimes ||
+                formValues?.tokenAmount ||
+                formValues?.interval) && (
+                <p className="text-subtitle text-content-secondary">
+                  for{" "}
+                  <span className="text-content-primary">
+                    {formValues?.noOfTimes || "..."}{" "}
+                    {formValues?.interval || "..."}.{" "}
+                    {formValues?.amount || "..."} {formValues?.token || "..."}
+                  </span>{" "}
+                  in total.
+                </p>
+              )}
               <p className="mt-2 text-subtitle text-content-secondary">
-                Stream will end on <span className="text-content-primary">10/04/2022 12:00 AM</span>
+                Stream will end on{" "}
+                <span className="text-content-primary">
+                  {formValues?.endDate || "..."} {formValues?.endTime || "..."}
+                </span>
               </p>
             </div>
             <div className="mt-4 border border-outline p-4 rounded-md">
@@ -41,21 +72,22 @@ const Send: NextPage = () => {
                 Streaming Help
               </div>
               <span className="text-content-tertiary text-subtitle">
-                Browse through our support articles to learn to stream or lets get in touch through Discord.
+                Browse through our support articles to learn to stream or lets
+                get in touch through Discord.
               </span>
               <div className="flex gap-2 mt-4">
                 <Button
                   variant="default"
                   size="small"
                   title="Check FAQs"
-                  endIcon={<Icons.OutsideLinkIcon/>}
-                  />
+                  endIcon={<Icons.OutsideLinkIcon />}
+                />
                 <Button
                   variant="default"
                   size="small"
                   title="Join Discord"
-                  endIcon={<Icons.OutsideLinkIcon/>}
-                  />
+                  endIcon={<Icons.OutsideLinkIcon />}
+                />
               </div>
             </div>
           </div>
