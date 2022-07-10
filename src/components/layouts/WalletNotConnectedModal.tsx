@@ -1,27 +1,26 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { Button, Modal } from "components/shared";
-import type { NextPage } from "next";
-import { useTranslation } from "next-i18next";
-import { useEffect, useState } from "react";
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { Button, Modal } from "components/shared"
+import type { NextPage } from "next"
+import { useTranslation } from "next-i18next"
+import { useEffect, useState } from "react"
 
 const WalletNotConnectedModal: NextPage = () => {
-  const { t } = useTranslation("common");
-  const walletObject = useWallet();
-  const walletModalObject = useWalletModal();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const { t } = useTranslation("common")
+  const walletObject = useWallet()
+  const walletModalObject = useWalletModal()
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
       ? walletObject.connect()
-      : walletModalObject.setVisible(!walletModalObject.visible);
-  };
+      : walletModalObject.setVisible(!walletModalObject.visible)
+  }
   useEffect(() => {
     setTimeout(() => {
-      setIsInitialized(true);
-
-    }, 600);
-  }, []);
+      setIsInitialized(true)
+    }, 600)
+  }, [])
   return (
     <>
       {isInitialized && (
@@ -54,7 +53,7 @@ const WalletNotConnectedModal: NextPage = () => {
         </Modal>
       )}
     </>
-  );
-};
+  )
+}
 
-export default WalletNotConnectedModal;
+export default WalletNotConnectedModal

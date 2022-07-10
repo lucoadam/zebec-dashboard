@@ -1,46 +1,46 @@
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
-import ActivityDeopsitCurve from "assets/images/treasury/activity/activity1.svg";
-import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg";
-import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg";
-import { Button, InputField, Tab } from "components/shared";
-import { useTranslation } from "next-i18next";
-import React, { useState } from "react";
-import { formatCurrency } from "utils";
-import { getBalance, getUsdBalance } from "utils/getBalance";
-import { Deposit } from "./Deposit";
-import { Withdrawal } from "./Withdrawal";
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import ActivityDeopsitCurve from "assets/images/treasury/activity/activity1.svg"
+import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg"
+import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg"
+import { Button, InputField, Tab } from "components/shared"
+import { useTranslation } from "next-i18next"
+import React, { useState } from "react"
+import { formatCurrency } from "utils"
+import { getBalance, getUsdBalance } from "utils/getBalance"
+import { Deposit } from "./Deposit"
+import { Withdrawal } from "./Withdrawal"
 
 const fundTransferTabs = [
   {
     title: "Deposit",
     icon: <Icons.ArrowDownLeftIcon />,
     count: 0,
-    Component: <Deposit />,
+    Component: <Deposit />
   },
   {
     title: "Withdrawal",
     icon: <Icons.ArrowUpRightIcon />,
     count: 0,
-    Component: <Withdrawal />,
-  },
-];
+    Component: <Withdrawal />
+  }
+]
 
 const Overview = () => {
-  const { t } = useTranslation();
-  const [search, setSearch] = useState<string>("");
+  const { t } = useTranslation()
+  const [search, setSearch] = useState<string>("")
 
-  const [activePage, setActivePage] = useState<number>(0);
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+  const [activePage, setActivePage] = useState<number>(0)
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
-    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || [];
+    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   const filterTokens = () => {
     if (search !== "")
       return tokenDetails.filter((item) =>
         item.symbol.toLowerCase().includes(search)
-      );
-    return tokenDetails;
-  };
+      )
+    return tokenDetails
+  }
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
@@ -253,7 +253,7 @@ const Overview = () => {
                   count={fundTranfer.count}
                   onClick={() => setActivePage(index)}
                 />
-              );
+              )
             })}
           </div>
           <div className="px-[24px] mt-[24px] pb-[24px] min-h-[210px]">
@@ -312,7 +312,7 @@ const Overview = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Overview;
+export default Overview

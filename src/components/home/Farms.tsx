@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { Button } from "components/shared";
-import * as Icons from "assets/icons";
+import React, { FC } from "react"
+import { Button } from "components/shared"
+import * as Icons from "assets/icons"
 
 const Farms: FC = () => {
   return (
@@ -18,7 +18,7 @@ const Farms: FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Farms;
+export default Farms

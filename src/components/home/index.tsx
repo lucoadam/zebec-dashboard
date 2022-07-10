@@ -1,9 +1,9 @@
-import React, { FC } from "react";
-import Balances from "./Balances";
-import DepositedAssets from "./DepositedAssets";
-import DepositWithdraw from "./DepositWithdraw";
-import Farms from "./Farms";
-import RecentTransactions from "./RecentTransactions";
+import React, { FC } from "react"
+import Balances from "./Balances"
+import DepositedAssets from "./DepositedAssets"
+import DepositWithdraw from "./DepositWithdraw"
+import Farms from "./Farms"
+import RecentTransactions from "./RecentTransactions"
 
 const HomePage: FC = () => {
   return (
@@ -27,7 +27,7 @@ const HomePage: FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

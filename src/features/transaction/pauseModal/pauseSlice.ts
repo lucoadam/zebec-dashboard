@@ -1,30 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 // import type { RootState } from "app/store";
 
 //declare types for state
 interface PauseState {
-    pauseModal: boolean;
-    
+  pauseModal: boolean
 }
 
 const initialState: PauseState = {
-    pauseModal: false,
-
-
-};
+  pauseModal: false
+}
 
 export const PauseSlice = createSlice({
-    name: "PauseModal",
-    initialState,
-    reducers: {
-        togglePauseModal: (state) => {
-            state.pauseModal = !state.pauseModal;
-        },
-       
+  name: "PauseModal",
+  initialState,
+  reducers: {
+    togglePauseModal: (state) => {
+      state.pauseModal = !state.pauseModal
     }
+  }
 })
 
-export const { togglePauseModal } =
-    PauseSlice.actions;
+export const { togglePauseModal } = PauseSlice.actions
 
-export default PauseSlice.reducer;
+export default PauseSlice.reducer

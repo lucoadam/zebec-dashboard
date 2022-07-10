@@ -1,5 +1,5 @@
-import { cloneElement, FC } from "react";
-import { InputProps } from "./index.d";
+import { cloneElement, FC } from "react"
+import { InputProps } from "./index.d"
 
 const InputFieldWrapper: FC<InputProps> = (props) => {
   const {
@@ -10,7 +10,7 @@ const InputFieldWrapper: FC<InputProps> = (props) => {
     children,
     labelMargin = 0,
     ...rest
-  } = props;
+  } = props
 
   return (
     <>
@@ -25,9 +25,9 @@ const InputFieldWrapper: FC<InputProps> = (props) => {
       )}
       {cloneElement(children, {
         ...rest,
-        className: `appearance-none w-full ${!!rest.className ? rest.className : ""} ${
-          error ? "error" : ""
-        }`,
+        className: `appearance-none w-full ${
+          !!rest.className ? rest.className : ""
+        } ${error ? "error" : ""}`
       })}
       {helper !== "" && (
         <p className="text-content-secondary text-xs ml-[12px] mt-1">
@@ -35,7 +35,7 @@ const InputFieldWrapper: FC<InputProps> = (props) => {
         </p>
       )}
     </>
-  );
-};
+  )
+}
 
-export const InputField = InputFieldWrapper;
+export const InputField = InputFieldWrapper

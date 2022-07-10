@@ -1,15 +1,15 @@
-import React, { FC } from "react";
-import { CollapseDropdown } from "./CollapseDropdown";
-import * as Icons from "assets/icons";
-import { twMerge } from "tailwind-merge";
+import React, { FC } from "react"
+import { CollapseDropdown } from "./CollapseDropdown"
+import * as Icons from "assets/icons"
+import { twMerge } from "tailwind-merge"
 
 interface TokensDropdownProps {
-  show: boolean;
-  className?: string;
+  show: boolean
+  className?: string
 }
 
 export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
-  const { show, className } = props;
+  const { show, className } = props
   return (
     <>
       {/* Tokens Dropdown */}
@@ -17,7 +17,7 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
         show={show}
         className={twMerge(
           `w-full border border-outline top-12 bg-background-primary overflow-hidden`,
-          className,
+          className
         )}
       >
         <div className="">
@@ -78,5 +78,5 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
         </div>
       </CollapseDropdown>
     </>
-  );
-};
+  )
+}

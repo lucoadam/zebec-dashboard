@@ -1,4 +1,4 @@
-import LoadingSvg from "assets/images/treasury/loading.svg";
+import LoadingSvg from "assets/images/treasury/loading.svg"
 
 const CreatingTreasury = () => {
   return (
@@ -11,7 +11,7 @@ const CreatingTreasury = () => {
       </p>
       <LoadingSvg className="w-[92px] h-[92px] mt-[32px]" />
     </>
-  );
-};
+  )
+}
 
-export default CreatingTreasury;
+export default CreatingTreasury
