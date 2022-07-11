@@ -11,11 +11,11 @@ const Outgoing: FC = () => {
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
-    { label: "progress" },
-    { label: "transaction-date" },
-    { label: "receiver" },
-    { label: "" }
-  ]
+    { label: "transactions:table.progress" },
+    { label: "transactions:table.transaction-date" },
+    { label: "transactions:table.receiver" },
+    { label: "" },
+  ];
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
@@ -31,7 +31,7 @@ const Outgoing: FC = () => {
       <FilterTabs />
       {/* Table */}
       <Table headers={headers}>
-        <TableBody>
+        <TableBody className="table px-6 py-5 rounded-lg bg-background-secondary w-full border-separate divide-y divide-outline">
           {outgoingTransactions.data.map((transaction, index) => {
             return (
               <OutgoingTableRow
