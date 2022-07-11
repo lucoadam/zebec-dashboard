@@ -26,11 +26,11 @@ const Send: NextPage = () => {
           </div>
           <div className="p-10 flex flex-col justify-center text-content-primary w-[400px]">
             <div className="border-dashed border-b pb-4 border-outline">
-              <h1 className="text-base font-semibold">Steam Overview</h1>
+              <h1 className="text-base font-semibold">{t("send:stream-overview")}</h1>
             </div>
             <div className="mt-4 pt-4">
               <p className="text-subtitle text-content-secondary">
-                Stream starts on{" "}
+                {t("send:stream-start-details")}{" "}
                 <span className="text-content-primary">
                   {formValues?.startDate || "..."}{" "}
                   {formValues?.startTime || "..."}
@@ -41,7 +41,7 @@ const Send: NextPage = () => {
                   {formValues?.tokenAmount || formValues?.amount || "..."}{" "}
                   {formValues?.token || "..."}{" "}
                 </span>
-                will be sent to
+                {t("send:token-amount-details")}{" "}
                 <span className="text-content-primary">
                   {" "}
                   {toSubstring(formValues?.receiverWallet, 12, false)}
@@ -51,17 +51,17 @@ const Send: NextPage = () => {
                 formValues?.tokenAmount ||
                 formValues?.interval) && (
                 <p className="text-subtitle text-content-secondary">
-                  for{" "}
+                  {t("send:for")}{" "}
                   <span className="text-content-primary">
                     {formValues?.noOfTimes || "..."}{" "}
                     {formValues?.interval || "..."}.{" "}
                     {formValues?.amount || "..."} {formValues?.token || "..."}
                   </span>{" "}
-                  in total.
+                  {t("send:in-total")}
                 </p>
               )}
               <p className="mt-2 text-subtitle text-content-secondary">
-                Stream will end on{" "}
+                {t("send:stream-end-details")}{" "}
                 <span className="text-content-primary">
                   {formValues?.endDate || "..."} {formValues?.endTime || "..."}
                 </span>
@@ -69,23 +69,22 @@ const Send: NextPage = () => {
             </div>
             <div className="mt-4 border border-outline p-4 rounded-md">
               <div className="text-subtitle text-content-primary">
-                Streaming Help
+                {t("send:streaming-help")}
               </div>
               <span className="text-content-tertiary text-subtitle">
-                Browse through our support articles to learn to stream or lets
-                get in touch through Discord.
+                {t("send:streaming-help-details")}
               </span>
               <div className="flex gap-2 mt-4">
                 <Button
                   variant="default"
                   size="small"
-                  title="Check FAQs"
+                  title={t("send:check-faq")}
                   endIcon={<Icons.OutsideLinkIcon />}
                 />
                 <Button
                   variant="default"
                   size="small"
-                  title="Join Discord"
+                  title={t("send:join-discord")}
                   endIcon={<Icons.OutsideLinkIcon />}
                 />
               </div>
@@ -100,8 +99,9 @@ const Send: NextPage = () => {
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common", "validation", "send"])),
     },
   };
 }
+
 export default Send;

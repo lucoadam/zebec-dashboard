@@ -72,7 +72,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 }) => {
   const { t } = useTranslation();
   const validationSchema: any = Yup.object().shape({
-    transactionName: Yup.string().required(t("validation:name-required")),
+    transactionName: Yup.string().required(
+      t("validation:transaction-name-required")
+    ),
     receiverWallet: Yup.string().required(t("validation:wallet-required")),
     remarks: Yup.string().test(
       "check-remarks",
@@ -82,7 +84,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       }
     ),
     token: Yup.string().required(t("validation:token-required")),
-    amount: Yup.string().required(t("validation:amount-required")),
+    amount: Yup.string()
+      .required(t("validation:amount-required"))
+      .test("amount-invalid", t("validation:amount-invalid"), () => {
+        return Number(getValue("amount")) > 0;
+      }),
     startDate: Yup.string()
       .required(t("validation:start-date-time-required"))
       .test(
@@ -153,7 +159,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
         return !!getValue("noOfTimes") || !enableStreamRate;
       })
-      .test("noOfTimes-positive", t("validation:noOfTimes-positive"), () => {
+      .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
         return Number(getValue("noOfTimes")) > 0 || !enableStreamRate;
       }),
     tokenAmount: Yup.string()
@@ -164,13 +170,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           return !!getValue("tokenAmount") || !enableStreamRate;
         }
       )
-      .test(
-        "tokenAmount-positive",
-        t("validation:tokenAmount-positive"),
-        () => {
-          return Number(getValue("tokenAmount")) > 0 || !enableStreamRate;
-        }
-      ),
+      .test("tokenAmount-invalid", t("validation:tokenAmount-invalid"), () => {
+        return Number(getValue("tokenAmount")) > 0 || !enableStreamRate;
+      }),
     interval: Yup.string().test(
       "interval-required",
       t("validation:interval-required"),
@@ -310,17 +312,17 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     <>
       <div className="bg-background-secondary rounded-[4px] p-10">
         <div className="text-heading-4 text-content-primary font-semibold">
-          Continuous Stream
+          {t("send:title")}
         </div>
         <div className="text-caption text-content-tertiary font-normal pt-2">
-          Your receiver will gradually receive the money per second.
+          {t("send:subtitle")}
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Transaction Name and Receiver Wallet */}
           <div className="mt-12 grid lg:grid-cols-2 gap-3">
             <div>
               <InputField
-                label={"Enter Transaction Name"}
+                label={t("send:transaction-name")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
@@ -331,14 +333,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     className={`w-full h-[40px] ${
                       !!errors.transactionName && "error"
                     }`}
-                    placeholder={"Transaction Name"}
+                    placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transactionName")}
                   />
                   {!showRemarks && (
                     <Button
                       size="small"
-                      title={"Add Remarks"}
+                      title={t("send:add-remarks")}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       endIcon={<Icons.PlusIncircleIcon />}
                       onClick={() => setShowRemarks(true)}
@@ -352,7 +354,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <label
                 className={`ml-3 text-content-primary text-xs font-medium mb-1`}
               >
-                Receiver Wallet Address
+                {t("send:receiver-wallet")}
               </label>
               <div
                 className="relative text-content-primary"
@@ -364,7 +366,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     !!errors.receiverWallet && "error"
                   }`}
                   readOnly
-                  placeholder="Enter Receiver wallet"
+                  placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiverWallet")}
                 />
                 <Icons.CheveronDownIcon className="absolute top-3 right-1 text-lg" />
@@ -383,7 +385,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
-                    placeholder="Search Wallet Address"
+                    placeholder={t("send:search-wallet")}
                     type="text"
                     onChange={(e) => setReceiverSearchData(e.target.value)}
                   />
@@ -423,7 +425,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           {showRemarks && (
             <div className="mt-4">
               <InputField
-                label={"Remarks"}
+                label= {t("send:remarks")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
@@ -432,13 +434,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <div>
                   <input
                     className={`w-full h-[40px] ${!!errors.remarks && "error"}`}
-                    placeholder={"Enter the remarks here"}
+                    placeholder={t("send:remarks-placeholder")}
                     type="text"
                     {...register("remarks")}
                   />
                   <Button
                     size="small"
-                    title={"Remove Remarks"}
+                    title={t("send:remove-remarks")}
                     className="absolute right-[8px] top-[8px] text-content-primary"
                     endIcon={<Icons.CrossIcon />}
                     onClick={() => setShowRemarks(false)}
@@ -454,12 +456,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div className="relative" ref={tokensDropdownWrapper}>
               <div className="flex justify-between">
                 <label className="ml-3 text-content-primary text-xs font-medium mb-1">
-                  Token
+                  {t("send:token")}
                 </label>
                 <label
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
-                  Balance{" "}
+                  {t("send:balance")}{" "}
                   {formatCurrency(
                     getBalance(tokenBalances, currentToken.symbol)
                   )}{" "}
@@ -501,7 +503,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
-                    placeholder="Search token"
+                    placeholder={t("send:search-token")}
                     type="text"
                     onChange={(e) => setTokenSearchData(e.target.value)}
                   />
@@ -548,7 +550,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             </div>
             <div>
               <InputField
-                label={"Amount"}
+                label={t("send:amount")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
@@ -557,16 +559,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <div>
                   <input
                     className={`w-full h-[40px] ${!!errors.amount && "error"}`}
-                    placeholder={"Enter amount to send"}
+                    placeholder={t("send:amount-placeholder")}
                     type="number"
-                    min={0}
                     disabled={enableStreamRate}
                     {...register("amount")}
                   />
                   {!enableStreamRate && (
                     <Button
                       size="small"
-                      title={"MAX"}
+                      title={t("send:max")}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       onClick={() =>
                         setValue(
@@ -590,7 +591,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div>
                 <label className="ml-3 text-content-primary text-xs font-medium mb-1">
-                  Stream Start
+                  {t("send:stream-start")}
                 </label>
                 <DateTimePicker
                   placeholder="E.g. 01/01/2022"
@@ -652,7 +653,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div>
                 <label className="ml-3 text-content-primary text-xs font-medium mb-1">
-                  Stream End
+                  {t("send:stream-end")}
                 </label>
                 <DateTimePicker
                   placeholder="E.g. 30/01/2022"
@@ -701,7 +702,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
           {/* Toggle stream rate */}
           <div className="mt-4">
-            <Toggle text="Enable stream rate" onChange={toggleStreamRate} />
+            <Toggle text={t("send:enable-stream-rate")} onChange={toggleStreamRate} />
           </div>
 
           {/* Stream rate field */}
@@ -709,7 +710,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div className="mt-4 grid lg:grid-cols-3 gap-3">
               <div>
                 <InputField
-                  label={"No. of Times"}
+                  label={t("send:no-of-times")}
                   className="relative text-content-primary"
                   error={false}
                   labelMargin={12}
@@ -722,7 +723,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       }`}
                       placeholder={"E.g. 4"}
                       type="number"
-                      min={0}
                       {...register("noOfTimes")}
                       onChange={(e) => {
                         setValue("noOfTimes", e.target.value);
@@ -737,7 +737,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <InputField
                   error={!!errors.tokenAmount}
                   helper={errors.tokenAmount?.message?.toString()}
-                  label={"Token Amount"}
+                  label={t("send:token-amount")}
                   placeholder={"E.g. 10"}
                   type="number"
                   className="w-full h-[40px]"
@@ -759,7 +759,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <label
                   className={`ml-3 text-content-primary text-xs font-medium mb-1`}
                 >
-                  Time Interval
+                  {t("send:time-interval")}
                 </label>
                 <div
                   className="relative text-content-primary"
@@ -806,7 +806,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <Button
               className="w-full"
               variant="gradient"
-              title="Send"
+              title={t("send:send")}
               type="submit"
             />
           </div>
