@@ -1,67 +1,67 @@
-import * as Icons from "assets/icons";
-import React, { FC, useEffect, useState } from "react";
+import * as Icons from "assets/icons"
+import React, { FC, useEffect, useState } from "react"
 
-type TransactionStatus = "completed" | "scheduled" | "cancelled" | "paused";
+type TransactionStatus = "completed" | "scheduled" | "cancelled" | "paused"
 
 interface CircularProgressProps {
-  percentage?: number;
-  status: TransactionStatus;
-  children?: React.ReactNode;
+  percentage?: number
+  status: TransactionStatus
+  children?: React.ReactNode
 }
 
 const statusIconMapping = {
   completed: <Icons.CheckIcon className="text-success text-xl" />,
   scheduled: <Icons.CalenderIcon className="text-content-secondary text-xl" />,
   cancelled: <Icons.CrossIcon className="text-error text-xl" />,
-  paused: <Icons.PauseIcon className="text-content-contrast text-xl" />,
-};
+  paused: <Icons.PauseIcon className="text-content-contrast text-xl" />
+}
 
 const getIconOrPercentageBasedOnStatus = (
   status: TransactionStatus,
   percentage: number
 ) => {
   if (status in statusIconMapping) {
-    return statusIconMapping[status];
+    return statusIconMapping[status]
   }
-  return `${percentage}%`;
-};
+  return `${percentage}%`
+}
 
 const getBackgroundByPercentage = (
   percentage: number,
   status: TransactionStatus
 ) => {
   if (percentage === 100) {
-    return "text-success";
+    return "text-success"
   }
   switch (status) {
     case "cancelled":
-      return "text-error";
+      return "text-error"
     case "paused":
-      return "text-content-contrast";
+      return "text-content-contrast"
   }
-  return "text-primary";
-};
+  return "text-primary"
+}
 
 export const CircularProgress: FC<CircularProgressProps> = ({
   percentage = 0,
   children,
-  status,
+  status
 }) => {
-  const sqSize = 56;
-  const strokeWidth = 5;
-  const radius = (sqSize - strokeWidth) / 2;
-  const viewBox = `0 0 ${sqSize} ${sqSize}`;
-  const dashArray = radius * Math.PI * 2;
-  const [dashOffset, setDashOffset] = useState(dashArray);
+  const sqSize = 56
+  const strokeWidth = 5
+  const radius = (sqSize - strokeWidth) / 2
+  const viewBox = `0 0 ${sqSize} ${sqSize}`
+  const dashArray = radius * Math.PI * 2
+  const [dashOffset, setDashOffset] = useState(dashArray)
 
   useEffect(() => {
     setTimeout(async () => {
       for (let i = 0; i <= percentage; i += percentage / 10) {
-        await new Promise((r) => setTimeout(r, 50));
-        setDashOffset(dashArray - (dashArray * i) / 100);
+        await new Promise((r) => setTimeout(r, 50))
+        setDashOffset(dashArray - (dashArray * i) / 100)
       }
-    }, 500);
-  }, [dashArray, percentage]);
+    }, 500)
+  }, [dashArray, percentage])
 
   return (
     <div className="relative">
@@ -89,7 +89,7 @@ export const CircularProgress: FC<CircularProgressProps> = ({
           r={radius}
           style={{
             strokeDasharray: dashArray,
-            strokeDashoffset: dashOffset,
+            strokeDashoffset: dashOffset
           }}
           strokeWidth={`${strokeWidth}px`}
         />
@@ -98,11 +98,11 @@ export const CircularProgress: FC<CircularProgressProps> = ({
         className={`absolute text-xs font-semibold text-content-primary flex justify-center items-center left-0 top-0`}
         style={{
           width: sqSize,
-          height: sqSize,
+          height: sqSize
         }}
       >
         {getIconOrPercentageBasedOnStatus(status, percentage)}
       </span>
     </div>
-  );
-};
+  )
+}

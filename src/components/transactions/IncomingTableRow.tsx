@@ -1,43 +1,41 @@
-import React, { FC, Fragment, useRef, useState } from "react";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { Button, IconButton, InputField, Modal } from "components/shared";
-import { toSubstring } from "utils";
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-import { WithdrawStepsList } from "./withdraw/data";
-
+import React, { FC, Fragment, useRef, useState } from "react"
+import Image from "next/image"
+import { useTranslation } from "next-i18next"
+import { Button, IconButton, InputField, Modal } from "components/shared"
+import { toSubstring } from "utils"
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { WithdrawStepsList } from "./withdraw/data"
 
 interface IncomingTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
 const IncomingTableRow: FC<IncomingTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
-  const [currentStep, setCurrentStep] = React.useState(-1);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
+  const [currentStep, setCurrentStep] = React.useState(-1)
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
-  const [isOpen, setIsOpen] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState<any>();
+          : "0px"
+    }
+  }
+  let [isOpen, setIsOpen] = useState(false)
+  const [withdrawAmount, setWithdrawAmount] = useState<any>()
 
   function toggleModal() {
     setIsOpen(!isOpen)
-
   }
 
   return (
@@ -100,8 +98,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   withdrawAmount,
                   setWithdrawAmount
                 })}
-
-
               </Modal>
               <IconButton
                 variant="plain"
@@ -116,8 +112,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
-                }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
+                activeDetailsRow === index ? `ease-in` : "ease-out"
+              }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
@@ -267,7 +264,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default IncomingTableRow;
+export default IncomingTableRow

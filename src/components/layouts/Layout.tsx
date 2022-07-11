@@ -1,34 +1,34 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice";
-import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice";
-import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice";
-import Head from "next/head";
-import React, { FC, useEffect } from "react";
-import Navbar from "./Navbar";
-import TPSHeader from "./TPSHeader";
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import Head from "next/head"
+import React, { FC, useEffect } from "react"
+import Navbar from "./Navbar"
+import TPSHeader from "./TPSHeader"
 
 interface LayoutProps {
-  pageTitle: string;
-  children: React.ReactNode;
+  pageTitle: string
+  children: React.ReactNode
 }
 
 const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
-  const walletObject = useWallet();
-  const dispatch = useAppDispatch();
-  const tokens = useAppSelector(state => state.tokenDetails.tokens);
-  
+  const walletObject = useWallet()
+  const dispatch = useAppDispatch()
+  const tokens = useAppSelector((state) => state.tokenDetails.tokens)
+
   useEffect(() => {
-    dispatch(fetchTokens());
-  }, [dispatch]);
-  
+    dispatch(fetchTokens())
+  }, [dispatch])
+
   useEffect(() => {
-    if(tokens.length>0 && walletObject.publicKey){
-      dispatch(fetchWalletBalance(walletObject.publicKey));
-      dispatch(fetchZebecBalance(walletObject.publicKey));
+    if (tokens.length > 0 && walletObject.publicKey) {
+      dispatch(fetchWalletBalance(walletObject.publicKey))
+      dispatch(fetchZebecBalance(walletObject.publicKey))
     }
-  }, [dispatch, walletObject.publicKey, tokens]);
-  
+  }, [dispatch, walletObject.publicKey, tokens])
+
   return (
     <>
       <Head>
@@ -37,13 +37,12 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-
       <TPSHeader />
-      <Navbar/>
-    
+      <Navbar />
+
       <main className="pb-20">{children}</main>
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

@@ -1,20 +1,20 @@
-import CopyButton from "components/shared/CopyButton";
-import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
-import { FC } from "react";
-import * as Icons from "../../assets/icons";
-import * as AvatarImages from "../../assets/images/avatars";
-import { toSubstring } from "../../utils";
+import CopyButton from "components/shared/CopyButton"
+import Image, { StaticImageData } from "next/image"
+import Link from "next/link"
+import { FC } from "react"
+import * as Icons from "../../assets/icons"
+import * as AvatarImages from "../../assets/images/avatars"
+import { toSubstring } from "../../utils"
 
 //fakeData
-import { treasuries } from "../../fakedata";
+import { treasuries } from "../../fakedata"
 
 const TreasuryLists: FC = () => {
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
-    AvatarImages.Avatar4,
-  ];
+    AvatarImages.Avatar4
+  ]
 
   return (
     <>
@@ -51,11 +51,11 @@ const TreasuryLists: FC = () => {
                 </div>
               </div>
             </Link>
-          );
+          )
         })}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default TreasuryLists;
+export default TreasuryLists

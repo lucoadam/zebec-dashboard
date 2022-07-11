@@ -1,22 +1,22 @@
-import React, { useState, useRef } from "react";
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { CollapseDropdown } from "../shared";
-import * as Icons from "../../assets/icons";
+import React, { useState, useRef } from "react"
+import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
+import Link from "next/link"
+import { CollapseDropdown } from "../shared"
+import * as Icons from "../../assets/icons"
 //hooks
-import { useClickOutside } from "../../hooks";
+import { useClickOutside } from "../../hooks"
 
 const TPSHeader = () => {
-  const router = useRouter();
-  const { t } = useTranslation("common");
-  const languageDropdownWrapperRef = useRef(null);
+  const router = useRouter()
+  const { t } = useTranslation("common")
+  const languageDropdownWrapperRef = useRef(null)
 
-  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
+  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
 
   useClickOutside(languageDropdownWrapperRef, {
-    onClickOutside: () => setToggleDropdown(false),
-  });
+    onClickOutside: () => setToggleDropdown(false)
+  })
 
   return (
     <>
@@ -56,7 +56,7 @@ const TPSHeader = () => {
                         {locale}
                       </a>
                     </Link>
-                  );
+                  )
                 })}
               </CollapseDropdown>
             </div>
@@ -64,7 +64,7 @@ const TPSHeader = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default TPSHeader;
+export default TPSHeader

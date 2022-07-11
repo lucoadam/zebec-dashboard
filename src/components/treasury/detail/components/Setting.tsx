@@ -1,44 +1,44 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Icons from "assets/icons";
-import * as AvatarImages from "assets/images/avatars";
-import { Button, InputField, Modal } from "components/shared";
-import CopyButton from "components/shared/CopyButton";
-import OwnerLists from "components/treasury/create/OwnerLists";
-import { useTranslation } from "next-i18next";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toSubstring } from "utils";
-import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as Icons from "assets/icons"
+import * as AvatarImages from "assets/images/avatars"
+import { Button, InputField, Modal } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import OwnerLists from "components/treasury/create/OwnerLists"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toSubstring } from "utils"
+import * as Yup from "yup"
 
 const Setting = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("validation:treasury-name-required")),
-  });
+    name: Yup.string().required(t("validation:treasury-name-required"))
+  })
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleModal = () => {
-    setIsOpen((prev) => !prev);
-  };
+    setIsOpen((prev) => !prev)
+  }
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
+    setValue
   } = useForm({
     mode: "all",
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      name: "Zebec Name",
-    },
-  });
+      name: "Zebec Name"
+    }
+  })
   useEffect(() => {
-    setValue("name", "Zebec Safe");
-  }, [setValue]);
+    setValue("name", "Zebec Safe")
+  }, [setValue])
   return (
     <div className="flex flex-wrap md:flex-nowrap lg:flex-nowrap w-full justify-start">
       <div className="sm:w-full md:w-1/3">
@@ -109,7 +109,7 @@ const Setting = () => {
             variant="danger"
             title={t("treasurySettings:archive-safe")}
             endIcon={<Icons.TrashIcon />}
-            onClick={()=>setIsOpen(true)}
+            onClick={() => setIsOpen(true)}
           />
           <Modal
             show={isOpen}
@@ -138,7 +138,7 @@ const Setting = () => {
                   className="w-full"
                   title={t("treasurySettings:cancel")}
                   onClick={() => {
-                    setIsOpen(!isOpen);
+                    setIsOpen(!isOpen)
                   }}
                 />
               </div>
@@ -155,34 +155,34 @@ const Setting = () => {
           owners={[
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
             },
             {
               name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew",
-            },
+              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
+            }
           ]}
           showCopy
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Setting;
+export default Setting

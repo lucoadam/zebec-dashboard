@@ -1,46 +1,46 @@
 /* eslint-disable @next/next/no-img-element */
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
-import { Button, CollapseDropdown, InputField } from "components/shared";
-import { useClickOutside } from "hooks";
-import { useTranslation } from "next-i18next";
-import { useEffect, useRef, useState } from "react";
-import { getBalance } from "utils/getBalance";
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import { Button, CollapseDropdown, InputField } from "components/shared"
+import { useClickOutside } from "hooks"
+import { useTranslation } from "next-i18next"
+import { useEffect, useRef, useState } from "react"
+import { getBalance } from "utils/getBalance"
 
 export const Deposit = () => {
-  const { t } = useTranslation();
-  const tokensDropdownWrapper = useRef(null);
+  const { t } = useTranslation()
+  const tokensDropdownWrapper = useRef(null)
 
-  const [searchData, setSearchData] = useState("");
+  const [searchData, setSearchData] = useState("")
   const [toggleTokensDropdown, setToggleTokensDropdown] =
-    useState<boolean>(false);
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+    useState<boolean>(false)
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const walletTokens =
-    useAppSelector((state) => state.zebecBalance.tokens) || [];
+    useAppSelector((state) => state.zebecBalance.tokens) || []
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
       symbol: "",
-      image: "",
+      image: ""
     }
-  );
-  const [amount, setAmount] = useState("");
+  )
+  const [amount, setAmount] = useState("")
 
-  const handleClose = () => setToggleTokensDropdown(false);
+  const handleClose = () => setToggleTokensDropdown(false)
 
   //handle clicking outside
   useClickOutside(tokensDropdownWrapper, {
-    onClickOutside: handleClose,
-  });
+    onClickOutside: handleClose
+  })
 
   const handleMaxClick = () => {
-    setAmount(getBalance(walletTokens, currentToken.symbol).toString());
-  };
+    setAmount(getBalance(walletTokens, currentToken.symbol).toString())
+  }
 
   useEffect(() => {
     if (tokenDetails.length > 0) {
-      setCurrentToken(tokenDetails[0]);
+      setCurrentToken(tokenDetails[0])
     }
-  }, [tokenDetails]);
+  }, [tokenDetails])
 
   return (
     <>
@@ -102,9 +102,9 @@ export const Deposit = () => {
                       <div
                         key={item.symbol}
                         onClick={(event) => {
-                          event.stopPropagation();
-                          setToggleTokensDropdown(false);
-                          setCurrentToken(item);
+                          event.stopPropagation()
+                          setToggleTokensDropdown(false)
+                          setCurrentToken(item)
                         }}
                         className="border-b-[1px] last:border-b-0 border-outline flex cursor-pointer overflow-hidden py-4 px-5 justify-start items-center hover:bg-background-light"
                       >
@@ -157,5 +157,5 @@ export const Deposit = () => {
         title={t("treasuryOverview:deposit")}
       />
     </>
-  );
-};
+  )
+}

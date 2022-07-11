@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState } from "react"
 
 export const useToggle = (
-  initialValue = false,
+  initialValue = false
 ): [boolean, () => void, (arg0: boolean) => void] => {
-  const [show, setShow] = useState<boolean>(initialValue);
+  const [show, setShow] = useState<boolean>(initialValue)
 
-  const toggle = () => setShow((prev) => !prev);
-  const setToggle = (value: boolean) => setShow(Boolean(value));
+  const toggle = () => setShow((prev) => !prev)
+  const setToggle = (value: boolean) => setShow(Boolean(value))
 
-  return [show, toggle, setToggle];
-};
+  return [show, toggle, setToggle]
+}

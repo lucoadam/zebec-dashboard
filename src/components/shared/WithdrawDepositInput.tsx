@@ -1,21 +1,21 @@
-import React, { FC, useRef } from "react";
-import { Button } from "./Button";
-import { useClickOutside } from "hooks";
-import * as Icons from "assets/icons";
+import React, { FC, useRef } from "react"
+import { Button } from "./Button"
+import { useClickOutside } from "hooks"
+import * as Icons from "assets/icons"
 
 interface WithdrawDepositInputProps {
-  children: React.ReactNode;
-  toggle: () => void;
-  setToggle: (arg0: false) => void;
+  children: React.ReactNode
+  toggle: () => void
+  setToggle: (arg0: false) => void
 }
 
 export const WithdrawDepositInput: FC<WithdrawDepositInputProps> = (props) => {
-  const { children, toggle, setToggle } = props;
-  const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null);
+  const { children, toggle, setToggle } = props
+  const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
   //handle clicking outside
   useClickOutside(tokensDropdownWrapperRef, {
-    onClickOutside: () => setToggle(false),
-  });
+    onClickOutside: () => setToggle(false)
+  })
 
   return (
     <>
@@ -53,5 +53,5 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> = (props) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

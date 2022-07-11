@@ -1,9 +1,9 @@
-import EmptyState from "assets/images/transactions/empty-state.svg";
-import { FC, ReactNode } from "react";
+import EmptyState from "assets/images/transactions/empty-state.svg"
+import { FC, ReactNode } from "react"
 
 interface EmptyDataProps {
-  button?: ReactNode;
-  message: string;
+  button?: ReactNode
+  message: string
 }
 
 export const EmptyDataState: FC<EmptyDataProps> = ({ button, message }) => {
@@ -14,5 +14,5 @@ export const EmptyDataState: FC<EmptyDataProps> = ({ button, message }) => {
       <div className="text-body text-content-primary mt-10">{message}</div>
       {button && <span className="mt-6">{button ?? ""}</span>}
     </div>
-  );
-};
+  )
+}

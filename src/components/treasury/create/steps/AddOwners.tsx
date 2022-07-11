@@ -1,28 +1,28 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useWallet } from "@solana/wallet-adapter-react";
-import * as Icons from "assets/icons";
-import { Button, InputField } from "components/shared";
-import SelectField from "components/shared/SelectField";
-import { constants } from "constants/constants";
-import { useTranslation } from "next-i18next";
-import React, { FC } from "react";
-import { useForm } from "react-hook-form";
-import { isValidWallet } from "utils/isValidtWallet";
-import * as Yup from "yup";
-import { Owner, StepsComponentProps } from "../CreateTreasury.d";
-import OwnerLists from "../OwnerLists";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useWallet } from "@solana/wallet-adapter-react"
+import * as Icons from "assets/icons"
+import { Button, InputField } from "components/shared"
+import SelectField from "components/shared/SelectField"
+import { constants } from "constants/constants"
+import { useTranslation } from "next-i18next"
+import React, { FC } from "react"
+import { useForm } from "react-hook-form"
+import { isValidWallet } from "utils/isValidtWallet"
+import * as Yup from "yup"
+import { Owner, StepsComponentProps } from "../CreateTreasury.d"
+import OwnerLists from "../OwnerLists"
 
 const AddOwners: FC<StepsComponentProps> = ({
   setCurrentStep,
   setTreasury,
-  treasury,
+  treasury
 }) => {
-  const useWalletObject = useWallet();
+  const useWalletObject = useWallet()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [owners, setOwners] = React.useState<Owner[]>(treasury.owners);
-  const [selectError, setSelectionError] = React.useState<boolean>(false);
+  const [owners, setOwners] = React.useState<Owner[]>(treasury.owners)
+  const [selectError, setSelectionError] = React.useState<boolean>(false)
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required(t("validation:name-required"))
@@ -36,42 +36,42 @@ const AddOwners: FC<StepsComponentProps> = ({
       )
       .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
         owners.every((owner) => owner.wallet !== value)
-      ),
-  });
+      )
+  })
   const {
     register,
     formState: { errors },
     reset,
     handleSubmit,
-    setValue,
+    setValue
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(validationSchema),
-  });
+    resolver: yupResolver(validationSchema)
+  })
 
   React.useEffect(() => {
     if (owners.length === 0) {
-      setValue("wallet", useWalletObject?.publicKey?.toString());
+      setValue("wallet", useWalletObject?.publicKey?.toString())
     }
-  }, [useWalletObject, owners, setValue]);
+  }, [useWalletObject, owners, setValue])
 
   React.useEffect(() => {
     setTreasury((treasury) => ({
       ...treasury,
-      minValidator: owners.length,
-    }));
-  }, [owners, setTreasury]);
+      minValidator: owners.length
+    }))
+  }, [owners, setTreasury])
 
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
-      setOwners([...owners, data]);
+      setOwners([...owners, data])
       setTreasury((treasury) => ({
         ...treasury,
-        owners: [...owners, data],
-      }));
+        owners: [...owners, data]
+      }))
     }
-    reset();
-  };
+    reset()
+  }
   return (
     <>
       <form
@@ -170,9 +170,9 @@ const AddOwners: FC<StepsComponentProps> = ({
               onSelected={(value, error = false) => {
                 setTreasury((treasury) => ({
                   ...treasury,
-                  minValidator: value,
-                }));
-                setSelectionError(error);
+                  minValidator: value
+                }))
+                setSelectionError(error)
               }}
               className="mr-3 w-[70px]"
               totalItems={owners.length}
@@ -195,9 +195,9 @@ const AddOwners: FC<StepsComponentProps> = ({
           className="w-full justify-center mt-[32px]"
           onClick={() => {
             if (owners.length > 2 && !selectError) {
-              setCurrentStep(2);
+              setCurrentStep(2)
             } else {
-              setSelectionError(true);
+              setSelectionError(true)
             }
           }}
         />
@@ -209,7 +209,7 @@ const AddOwners: FC<StepsComponentProps> = ({
         onClick={() => setCurrentStep(0)}
       />
     </>
-  );
-};
+  )
+}
 
-export default AddOwners;
+export default AddOwners

@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { Button } from "components/shared";
-import * as Icons from "assets/icons";
+import React, { FC } from "react"
+import { Button } from "components/shared"
+import * as Icons from "assets/icons"
 
 const RecentTransactions: FC = () => {
   return (
@@ -18,7 +18,7 @@ const RecentTransactions: FC = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default RecentTransactions;
+export default RecentTransactions

@@ -1,13 +1,9 @@
-import React, { FC } from "react";
-import {
-  Button,
-  TokensDropdown,
-  WithdrawDepositInput,
-} from "components/shared";
-import { useToggle } from "hooks";
+import React, { FC } from "react"
+import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import { useToggle } from "hooks"
 
 const DepositTab: FC = () => {
-  const [show, toggle, setToggle] = useToggle(false);
+  const [show, toggle, setToggle] = useToggle(false)
 
   return (
     <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
@@ -27,7 +23,7 @@ const DepositTab: FC = () => {
         />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default DepositTab;
+export default DepositTab

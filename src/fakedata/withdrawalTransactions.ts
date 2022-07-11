@@ -2,7 +2,7 @@ export const withdrawalTransactions = {
   data: [
     {
       _id: {
-        $oid: "62c2f0344e25a6bd8a19701d",
+        $oid: "62c2f0344e25a6bd8a19701d"
       },
       amount: 2.0,
       blocked_amount: 0.0,
@@ -21,7 +21,7 @@ export const withdrawalTransactions = {
       status: "scheduled",
       confirmation: "pending",
       timestamp: {
-        $date: 1656942644523,
+        $date: 1656942644523
       },
       token: "SOL",
       token_name: "SOL",
@@ -31,11 +31,11 @@ export const withdrawalTransactions = {
         "aYx3NRumMo6Qzk29MjQstgjyCGtZr8BRGHEXbTvtW9WG2cr5QnFJvu1KAgLB3vLrCdbwCyHk3zbjV87SXfLBdR5",
       transaction_name: "Salary of Month July",
       transaction_type: "continuous",
-      withdrawn: 0.0,
+      withdrawn: 0.0
     },
     {
       _id: {
-        $oid: "62c12bdf4e25a6bd8a19701c",
+        $oid: "62c12bdf4e25a6bd8a19701c"
       },
       amount: 0.2,
       blocked_amount: 0.0,
@@ -52,7 +52,7 @@ export const withdrawalTransactions = {
       status: "ongoing",
       confirmation: "confirmed",
       timestamp: {
-        $date: 1656826847877,
+        $date: 1656826847877
       },
       token: "SOL",
       token_name: "SOL",
@@ -62,11 +62,11 @@ export const withdrawalTransactions = {
         "4StXUzuwAghqpzWHxqUycfndka7rGE9dRBAte7Lpc4VbE6NJv3DEtxbwAM5fvFXs1pXkqRutDXMs8LMJ49cRNz4k",
       transaction_name: "salary",
       transaction_type: "continuous",
-      withdrawn: 0.2,
+      withdrawn: 0.2
     },
     {
       _id: {
-        $oid: "62c2f0344e25a6bd8a19701d",
+        $oid: "62c2f0344e25a6bd8a19701d"
       },
       amount: 2.0,
       blocked_amount: 0.0,
@@ -85,7 +85,7 @@ export const withdrawalTransactions = {
       status: "paused",
       confirmation: "confirmed",
       timestamp: {
-        $date: 1656942644523,
+        $date: 1656942644523
       },
       token: "SOL",
       token_name: "SOL",
@@ -95,11 +95,11 @@ export const withdrawalTransactions = {
         "aYx3NRumMo6Qzk29MjQstgjyCGtZr8BRGHEXbTvtW9WG2cr5QnFJvu1KAgLB3vLrCdbwCyHk3zbjV87SXfLBdR5",
       transaction_name: "Salary of Month July",
       transaction_type: "continuous",
-      withdrawn: 0.0,
+      withdrawn: 0.0
     },
     {
       _id: {
-        $oid: "62c2f0344e25a6bd8a19701d",
+        $oid: "62c2f0344e25a6bd8a19701d"
       },
       amount: 2.0,
       blocked_amount: 0.0,
@@ -116,7 +116,7 @@ export const withdrawalTransactions = {
       status: "cancelled",
       confirmation: "rejected",
       timestamp: {
-        $date: 1656942644523,
+        $date: 1656942644523
       },
       token: "SOL",
       token_name: "SOL",
@@ -126,11 +126,11 @@ export const withdrawalTransactions = {
         "aYx3NRumMo6Qzk29MjQstgjyCGtZr8BRGHEXbTvtW9WG2cr5QnFJvu1KAgLB3vLrCdbwCyHk3zbjV87SXfLBdR5",
       transaction_name: "Salary of Month July",
       transaction_type: "continuous",
-      withdrawn: 0.0,
+      withdrawn: 0.0
     },
     {
       _id: {
-        $oid: "62c12b3a8f83004788aecf2c",
+        $oid: "62c12b3a8f83004788aecf2c"
       },
       amount: 1.0,
       blocked_amount: 0.0,
@@ -147,7 +147,7 @@ export const withdrawalTransactions = {
       status: "completed",
       confirmation: "confirmed",
       timestamp: {
-        $date: 1656826682685,
+        $date: 1656826682685
       },
       token: "SOL",
       token_name: "SOL",
@@ -157,7 +157,7 @@ export const withdrawalTransactions = {
         "5FzuUp2YK4LzH3NLKWrCvMFcgTeZsMhzXMrGjTcyJzpUfE5rZRTXHJxCr4tDPC8djqfbWLQDE6vSQ56PtjkQzh6L",
       transaction_name: "Subas Salary",
       transaction_type: "continuous",
-      withdrawn: 0.16047917,
-    },
-  ],
-};
+      withdrawn: 0.16047917
+    }
+  ]
+}

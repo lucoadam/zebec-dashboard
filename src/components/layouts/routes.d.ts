@@ -1,18 +1,18 @@
 export interface RouteProps {
-  name: string;
-  path?: string;
-  Icon: React.ElementType;
-  type: "link" | "group";
-  noBackground?: boolean;
+  name: string
+  path?: string
+  Icon: React.ElementType
+  type: "link" | "group"
+  noBackground?: boolean
 }
 
 export interface RoutesArrayProps extends RouteProps {
-  children?: RouteProps[];
+  children?: RouteProps[]
 }
 
 export interface DeviceRoutes {
-  width: number;
-  main: string[];
-  more: string[];
-  menu: string[];
+  width: number
+  main: string[]
+  more: string[]
+  menu: string[]
 }

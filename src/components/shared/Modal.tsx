@@ -1,19 +1,19 @@
-import React, { FC, Fragment } from "react";
-import { Transition, Dialog } from "@headlessui/react";
-import { twMerge } from "tailwind-merge";
-import { IconButton } from "./IconButton";
-import * as Icons from "assets/icons";
+import React, { FC, Fragment } from "react"
+import { Transition, Dialog } from "@headlessui/react"
+import { twMerge } from "tailwind-merge"
+import { IconButton } from "./IconButton"
+import * as Icons from "assets/icons"
 
-type ModalSize = "small" | "medium" | "large";
+type ModalSize = "small" | "medium" | "large"
 
 interface ModalProps {
-  show: boolean;
-  size?: ModalSize;
-  className?: string;
-  toggleModal: () => void;
-  children: React.ReactNode;
-  closeOnOutsideClick?: boolean;
-  hasCloseIcon?: boolean;
+  show: boolean
+  size?: ModalSize
+  className?: string
+  toggleModal: () => void
+  children: React.ReactNode
+  closeOnOutsideClick?: boolean
+  hasCloseIcon?: boolean
 }
 
 export const Modal: FC<ModalProps> = (props) => {
@@ -24,15 +24,15 @@ export const Modal: FC<ModalProps> = (props) => {
     toggleModal,
     children,
     closeOnOutsideClick = false,
-    hasCloseIcon = false,
-  } = props;
+    hasCloseIcon = false
+  } = props
 
   const sizeStyle =
     size === "medium"
       ? "max-w-[420px]"
       : size === "small"
       ? "max-w-[338px]"
-      : "max-w-md";
+      : "max-w-md"
 
   return (
     <>
@@ -67,7 +67,7 @@ export const Modal: FC<ModalProps> = (props) => {
                 <Dialog.Panel
                   className={twMerge(
                     `w-full transform overflow-hidden rounded-lg bg-background-secondary px-6 pt-6 pb-10 text-left shadow-backdrop align-middle transition-all ${sizeStyle}`,
-                    className,
+                    className
                   )}
                 >
                   {hasCloseIcon && (
@@ -85,5 +85,5 @@ export const Modal: FC<ModalProps> = (props) => {
         </Dialog>
       </Transition>
     </>
-  );
-};
+  )
+}

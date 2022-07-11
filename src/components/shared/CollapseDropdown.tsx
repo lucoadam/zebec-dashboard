@@ -1,38 +1,38 @@
-import React, { FC, Fragment } from "react";
-import { Transition } from "@headlessui/react";
-import { twMerge } from "tailwind-merge";
+import React, { FC, Fragment } from "react"
+import { Transition } from "@headlessui/react"
+import { twMerge } from "tailwind-merge"
 
-type PositionStyle = "right" | "left";
+type PositionStyle = "right" | "left"
 
 interface CollapseDropdownProps {
-  children: React.ReactNode;
-  show: boolean;
-  variant?: "default" | "light";
-  className?: string;
-  position?: PositionStyle;
-  ref?: React.RefObject<HTMLDivElement>;
+  children: React.ReactNode
+  show: boolean
+  variant?: "default" | "light"
+  className?: string
+  position?: PositionStyle
+  ref?: React.RefObject<HTMLDivElement>
 }
 
 const getPositionStyle = (position: PositionStyle) => {
   switch (position) {
     case "left":
-      return `left-0`;
+      return `left-0`
     case "right":
-      return `right-0`;
+      return `right-0`
     default:
-      return null;
+      return null
   }
-};
+}
 const getVariantStyle = (variant: "default" | "light") => {
   switch (variant) {
     case "light":
-      return `bg-background-primary`;
+      return `bg-background-primary`
     case "default":
-      return `bg-background-light`;
+      return `bg-background-light`
     default:
-      return null;
+      return null
   }
-};
+}
 
 export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
   const {
@@ -42,11 +42,11 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
     position = "right",
     variant = "default",
     ...rest
-  } = props;
+  } = props
 
-  const positionStyle = getPositionStyle(position);
-  const variantStyles = getVariantStyle(variant);
-  const defaultClasses = `divide-y divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`;
+  const positionStyle = getPositionStyle(position)
+  const variantStyles = getVariantStyle(variant)
+  const defaultClasses = `divide-y divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
 
   return (
     <>
@@ -63,7 +63,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
         <div
           className={twMerge(
             `absolute flex flex-col rounded-lg ${defaultClasses}`,
-            className ?? "",
+            className ?? ""
           )}
           {...rest}
         >
@@ -71,5 +71,5 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
         </div>
       </Transition>
     </>
-  );
-};
+  )
+}

@@ -1,33 +1,33 @@
-import { EmptyDataState, Table, TableBody } from "components/shared";
-import { historyTransactions } from "fakedata";
-import { useState } from "react";
-import HistoryTableRow from "./HistoryTableRow";
+import { EmptyDataState, Table, TableBody } from "components/shared"
+import { historyTransactions } from "fakedata"
+import { useState } from "react"
+import HistoryTableRow from "./HistoryTableRow"
 
 export const HistoryTransactions = () => {
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
+  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
     {
       label: "progress",
-      width: "85",
+      width: "85"
     },
     {
       label: "transaction-date",
-      width: "50",
+      width: "50"
     },
     {
       label: "sender-or-receiver",
-      width: "51",
+      width: "51"
     },
     {
-      label: "",
-    },
-  ];
+      label: ""
+    }
+  ]
 
   const handleToggleRow = (index: number) => {
-    if (index === activeDetailsRow) setActiveDetailsRow("");
-    else setActiveDetailsRow(index);
-  };
+    if (index === activeDetailsRow) setActiveDetailsRow("")
+    else setActiveDetailsRow(index)
+  }
   return (
     <Table headers={headers}>
       <TableBody>
@@ -47,9 +47,9 @@ export const HistoryTransactions = () => {
               activeDetailsRow={activeDetailsRow}
               handleToggleRow={() => handleToggleRow(index)}
             />
-          );
+          )
         })}
       </TableBody>
     </Table>
-  );
-};
+  )
+}

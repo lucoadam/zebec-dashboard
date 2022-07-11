@@ -1,36 +1,36 @@
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-import { Button, CircularProgress, IconButton } from "components/shared";
-import CopyButton from "components/shared/CopyButton";
-import { useTranslation } from "next-i18next";
-import Image from "next/image";
-import { FC, Fragment, useRef } from "react";
-import { toSubstring } from "utils";
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { Button, CircularProgress, IconButton } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { FC, Fragment, useRef } from "react"
+import { toSubstring } from "utils"
 
 interface ScheduledTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
 const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
+          : "0px"
+    }
+  }
 
   return (
     <>
@@ -258,7 +258,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default ScheduledTableRow;
+export default ScheduledTableRow

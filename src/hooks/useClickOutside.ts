@@ -1,11 +1,11 @@
-import { useEffect, RefObject } from "react";
+import { useEffect, RefObject } from "react"
 interface useClickOutsideOptionsProps {
-  onClickOutside: () => void;
+  onClickOutside: () => void
 }
 
 export const useClickOutside = (
   ref: RefObject<HTMLElement | null | undefined>,
-  { onClickOutside }: useClickOutsideOptionsProps,
+  { onClickOutside }: useClickOutsideOptionsProps
 ) => {
   useEffect(() => {
     /**
@@ -13,12 +13,12 @@ export const useClickOutside = (
      */
     function handleClickOutside(event: any) {
       if (ref.current && !ref.current.contains(event.target)) {
-        onClickOutside();
+        onClickOutside()
       }
     }
-    document?.addEventListener("mousedown", handleClickOutside);
+    document?.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document?.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref, onClickOutside]);
-};
+      document?.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [ref, onClickOutside])
+}

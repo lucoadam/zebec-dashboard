@@ -1,10 +1,10 @@
 export interface StreamingToken {
-  symbol: string;
-  balance: number;
+  symbol: string
+  balance: number
 }
 
 export interface StreamingTokenState {
-  loading: boolean;
-  tokens: StreamingToken[];
-  error: string;
+  loading: boolean
+  tokens: StreamingToken[]
+  error: string
 }

@@ -1,37 +1,37 @@
-import { EmptyDataState, Table, TableBody } from "components/shared";
-import { scheduledTransactions } from "fakedata";
-import { useState } from "react";
-import ScheduledTableRow from "./ScheduledTableRow";
+import { EmptyDataState, Table, TableBody } from "components/shared"
+import { scheduledTransactions } from "fakedata"
+import { useState } from "react"
+import ScheduledTableRow from "./ScheduledTableRow"
 
 export const ScheduledTransactions = () => {
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
+  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
     {
       label: "progress",
-      width: "85",
+      width: "85"
     },
     {
       label: "transaction-date",
-      width: "50",
+      width: "50"
     },
     {
       label: "initiated",
-      width: "134px",
+      width: "134px"
     },
     {
       label: "receiver",
-      width: "50",
+      width: "50"
     },
     {
-      label: "",
-    },
-  ];
+      label: ""
+    }
+  ]
 
   const handleToggleRow = (index: number) => {
-    if (index === activeDetailsRow) setActiveDetailsRow("");
-    else setActiveDetailsRow(index);
-  };
+    if (index === activeDetailsRow) setActiveDetailsRow("")
+    else setActiveDetailsRow(index)
+  }
   return (
     <Table headers={headers}>
       <TableBody>
@@ -51,9 +51,9 @@ export const ScheduledTransactions = () => {
               activeDetailsRow={activeDetailsRow}
               handleToggleRow={() => handleToggleRow(index)}
             />
-          );
+          )
         })}
       </TableBody>
     </Table>
-  );
-};
+  )
+}

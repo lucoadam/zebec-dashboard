@@ -1,2 +1,2 @@
-export * from "./toSubstring";
-export * from "./formatCurrency";
+export * from "./toSubstring"
+export * from "./formatCurrency"

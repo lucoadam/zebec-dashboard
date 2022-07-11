@@ -1,59 +1,59 @@
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-import { Badge, Button, CircularProgress, IconButton } from "components/shared";
-import CopyButton from "components/shared/CopyButton";
-import { useTranslation } from "next-i18next";
-import Image from "next/image";
-import { FC, Fragment, useRef } from "react";
-import { formatCurrency, toSubstring } from "utils";
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { Badge, Button, CircularProgress, IconButton } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { FC, Fragment, useRef } from "react"
+import { formatCurrency, toSubstring } from "utils"
 
 interface WithdrawalTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
 const returnValidPercentage = (percentage: number) => {
   if (percentage > 0) {
-    return percentage;
+    return percentage
   } else {
-    return 0;
+    return 0
   }
-};
+}
 
-type Confirmations = "pending" | "rejected" | "confirmed";
+type Confirmations = "pending" | "rejected" | "confirmed"
 
 const confirmationClassesMapping = {
   pending: "info",
   rejected: "error",
-  confirmed: "success",
-};
+  confirmed: "success"
+}
 
 const getClassesForConfirmation = (confirmation: Confirmations) => {
   return confirmationClassesMapping[confirmation] as
     | "info"
     | "error"
-    | "success";
-};
+    | "success"
+}
 
 const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
+          : "0px"
+    }
+  }
 
   return (
     <>
@@ -109,7 +109,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
             <div className="flex gap-x-1 text-body text-content-primary">
               {transaction.is_in_address_book
                 ? toSubstring(transaction.name, 25, false)
-                : toSubstring(transaction.sender,5, true)}{" "}
+                : toSubstring(transaction.sender, 5, true)}{" "}
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
@@ -303,7 +303,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default WithdrawalTableRow;
+export default WithdrawalTableRow

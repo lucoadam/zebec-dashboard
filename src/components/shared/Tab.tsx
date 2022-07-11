@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { twMerge } from "tailwind-merge";
-import { TabProps } from "./Tab.d";
+import React, { FC } from "react"
+import { twMerge } from "tailwind-merge"
+import { TabProps } from "./Tab.d"
 
 const getTabStyles = (type: "solid" | "plain", isActive: boolean) => {
   switch (type) {
@@ -9,13 +9,13 @@ const getTabStyles = (type: "solid" | "plain", isActive: boolean) => {
         isActive
           ? "bg-background-tertiary text-content-primary"
           : "text-content-secondary"
-      }`;
+      }`
     case "plain":
-      return `gap-x-2 ${isActive ? "text-primary" : "text-content-secondary"}`;
+      return `gap-x-2 ${isActive ? "text-primary" : "text-content-secondary"}`
     default:
-      return null;
+      return null
   }
-};
+}
 
 export const Tab: FC<TabProps> = (props) => {
   const {
@@ -26,10 +26,10 @@ export const Tab: FC<TabProps> = (props) => {
     startIcon,
     count,
     className,
-    onClick,
-  } = props;
+    onClick
+  } = props
 
-  const tabStyles = getTabStyles(type, isActive);
+  const tabStyles = getTabStyles(type, isActive)
 
   return (
     <>
@@ -37,7 +37,7 @@ export const Tab: FC<TabProps> = (props) => {
         type="button"
         className={twMerge(
           `relative flex items-center px-6 py-2 w-max focus:outline-0 transition duration-300 ${tabStyles}`,
-          className ?? "",
+          className ?? ""
         )}
         onClick={onClick}
       >
@@ -63,5 +63,5 @@ export const Tab: FC<TabProps> = (props) => {
         )}
       </button>
     </>
-  );
-};
+  )
+}

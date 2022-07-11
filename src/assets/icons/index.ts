@@ -85,8 +85,8 @@ export {
   PauseIcon,
   ResumeIcon,
   ArrowRightIcon,
-  ArrowDownIcon,
-};
+  ArrowDownIcon
+}
 
-export * from "./nav-icons";
-export * from "./activity";
+export * from "./nav-icons"
+export * from "./activity"

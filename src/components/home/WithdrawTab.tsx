@@ -1,13 +1,9 @@
-import React, { FC, useState, useRef } from "react";
-import {
-  Button,
-  TokensDropdown,
-  WithdrawDepositInput,
-} from "components/shared";
-import { useToggle } from "hooks";
+import React, { FC, useState, useRef } from "react"
+import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import { useToggle } from "hooks"
 
 const WithdrawTab: FC = () => {
-  const [show, toggle, setToggle] = useToggle(false);
+  const [show, toggle, setToggle] = useToggle(false)
 
   return (
     <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
@@ -28,7 +24,7 @@ const WithdrawTab: FC = () => {
         />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default WithdrawTab;
+export default WithdrawTab

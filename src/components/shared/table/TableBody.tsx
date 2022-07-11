@@ -16,5 +16,5 @@ export const TableBody: FC<TableBodyProps> = ({ className,children }) => {
         {children}
       </tbody>
     </>
-  );
-};
+  )
+}
