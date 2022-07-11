@@ -1,8 +1,6 @@
 import { useTranslation } from 'next-i18next';
-import React, { FC, Fragment, useRef, useState } from 'react';
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-import { Button, IconButton, InputField, Modal, Table, TableBody } from 'components/shared';
+import React, {  useState } from 'react';
+import { Button, InputField, Modal, Table, TableBody } from 'components/shared';
 import { individualAddressBook } from 'fakedata';
 import IndividualAddresesTableRow from './IndividualAddressesTableRow';
 import * as Yup from "yup";
@@ -21,19 +19,17 @@ export default function IndividualAddresses() {
     const headers = [
         {
             label: "addressBook:name",
-            width: "56",
+            width: "50",
         },
         {
             label: "addressBook:wallet-address",
-            width: "48",
+            width: "50",
         },
         {
             label: "addressBook:actions",
-            width: "64",
+            width: "50",
         },
-        {
-            label: "",
-        },
+        
     ];
     const handleToggleRow = (index: number) => {
         if (index === activeDetailsRow) setActiveDetailsRow("");
@@ -56,7 +52,7 @@ export default function IndividualAddresses() {
     return (
         <>
 
-            <div className="container w-full">
+            <div className="container w-full ">
                 <div className="flex justify-between items-center pb-9">
 
 
@@ -88,7 +84,7 @@ export default function IndividualAddresses() {
                             })}
                         </TableBody>
                     </Table>
-                    <div className='rounded bg-background-secondary p-12 mt-12 w-96 h-96'>
+                    <div className='rounded bg-background-secondary p-10 mt-12 w-[340px] h-96'>
                         <div className='text-content-secondary text-subtitle font-semibold'>
                             {t("addressBook:add-an-address")}
 

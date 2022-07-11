@@ -1,12 +1,7 @@
 import React, { FC, Fragment, useRef, useState } from "react";
-import Image from "next/image";
 import { useTranslation } from "next-i18next";
-import { Button, IconButton, InputField, Modal } from "components/shared";
-import { toSubstring } from "utils";
+import { Button} from "components/shared";
 import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-
-
 
 interface IndividualAddresesTableRow {
   index: number;
@@ -22,7 +17,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   handleToggleRow,
 }) => {
   const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,18 +30,18 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
     <>
       <Fragment>
         {/* Table Body Row */}
-        <tr className={`flex items-center`}>
-          <td className="px-4 py-5 ">
-            <div className=" w-36 h-14 text-subtitle font-semibold">{transaction.name}</div>
+        <tr className={`flex `}>
+          <td className="px-5 py-5 ">
+            <div className="flex items-center w-36 h-14 text-subtitle font-semibold">{transaction.name}</div>
           </td>
-          <td className="px-4 py-5">
-            <div className=" w-36 h-14 flex flex-col text-content-contrast">
+          <td className="px-5 py-5 ">
+            <div className=" w-36 h-14 flex items-center text-content-contrast">
               {transaction.wallet_address}
             </div>
           </td>
-          <td className="px-4 py-5">
+          <td className="px-5 py-5">
             <div className="w-48 h-14 flex items-center gap-x-8">
-              <div className="h-14"><Button
+              <Button
                 title="Send"
                 size="small"
                 startIcon={
@@ -55,8 +50,8 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                 onClick={() => {
 
                 }}
-              /></div>
-              <div className="h-14">
+              />
+              
                 <Button
                   title="Delete"
                   size="small"
@@ -67,11 +62,6 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
 
                   }}
                 />
-
-              </div>
-
-
-
 
             </div>
           </td>
