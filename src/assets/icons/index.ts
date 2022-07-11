@@ -39,8 +39,12 @@ import UserAddIcon from "./other-icons/user-add.svg";
 import UserGroupIcon from "./other-icons/user-group.svg";
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg";
 import Unarchive from "./other-icons/unarchive.svg";
+import IndividualAddress from "./other-icons/individualaddress.svg";
+import AddressGroup from "./other-icons/addressgroup.svg";
 
 export {
+  IndividualAddress,
+  AddressGroup,
   Unarchive,
   WithdrawDownLeft,
   Loading,

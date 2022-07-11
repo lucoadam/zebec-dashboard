@@ -4,3 +4,4 @@ export * from "./outgoingTransactions";
 export * from "./scheduledTransactions";
 export * from "./historyTransactions";
 export * from "./withdrawalTransactions";
+export * from "./individualAddressBook";

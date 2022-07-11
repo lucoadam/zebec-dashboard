@@ -6,5 +6,7 @@
     "wallet-invalid":"Invalid wallet address",
     "wallet-exists":"Wallet address already exists",
     "at-least-two-owners-required": "At least two owners are required",
+    "wallet-address-required":"Wallet Address is required"
+    
     
 }

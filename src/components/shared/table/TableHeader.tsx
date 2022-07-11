@@ -20,7 +20,7 @@ const getWidth = (width: string | undefined) => {
 export const TableHeader: FC<TableHeaderProps> = (props) => {
   const { t } = useTranslation("transactions");
 
-  const { headers } = props;
+  const {  headers } = props;
 
  
 
