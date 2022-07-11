@@ -55,10 +55,10 @@ import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
-import * as Icons from "../../assets/icons"
-import Layout from "../../components/layouts/Layout"
-import { Button } from "../../components/shared"
-import TreasuryLists from "../../components/treasury/TreasuryLists"
+import * as Icons from "assets/icons"
+import Layout from "components/layouts/Layout"
+import { Button } from "components/shared"
+import TreasuryLists from "components/treasury/TreasuryLists"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
@@ -79,7 +79,12 @@ const Treasury: NextPage = () => {
                   endIcon={<Icons.PlusIncircleIcon />}
                 />
               </Link>
-              <Button title="See Archived Safe" endIcon={<Icons.TrashIcon />} />
+              <Link href="/treasury/archived-safes">
+                <Button
+                  title="See Archived Safe"
+                  endIcon={<Icons.TrashIcon />}
+                />
+              </Link>
             </div>
           </div>
           <TreasuryLists />
