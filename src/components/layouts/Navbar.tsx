@@ -1,38 +1,38 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { FC, useEffect, useState } from "react";
-import * as Icons from "../../assets/icons";
-import * as Images from "../../assets/images";
-import { Button, IconButton } from "../shared";
-import NavGroup from "./NavGroup";
-import NavLink from "./NavLink";
-import Profile from "./Profile";
-import { getMainRoutes, getMenuRoutes } from "./routes";
-import WalletNotConnectedModal from "./WalletNotConnectedModal";
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { useTheme } from "next-themes"
+import Image from "next/image"
+import { FC, useEffect, useState } from "react"
+import * as Icons from "../../assets/icons"
+import * as Images from "../../assets/images"
+import { Button, IconButton } from "../shared"
+import NavGroup from "./NavGroup"
+import NavLink from "./NavLink"
+import Profile from "./Profile"
+import { getMainRoutes, getMenuRoutes } from "./routes"
+import WalletNotConnectedModal from "./WalletNotConnectedModal"
 
 const Navbar: FC = () => {
-  const { theme, setTheme, systemTheme } = useTheme();
-  const useWalletObject = useWallet();
-  const useWalletModalObject = useWalletModal();
+  const { theme, setTheme, systemTheme } = useTheme()
+  const useWalletObject = useWallet()
+  const useWalletModalObject = useWalletModal()
 
-  const [mounted, setMounted] = useState<boolean>(false);
-  const [width, setWidth] = useState<number>(0);
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [width, setWidth] = useState<number>(0)
+  const [showMenu, setShowMenu] = useState<boolean>(false)
 
   useEffect(() => {
-    setMounted(true);
-    setWidth(window.outerWidth);
+    setMounted(true)
+    setWidth(window.outerWidth)
     window.addEventListener("resize", () => {
-      setWidth(window.outerWidth);
-    });
-  }, []);
+      setWidth(window.outerWidth)
+    })
+  }, [])
 
   //theme toggle
   const themeChanger: () => JSX.Element | null = () => {
-    if (!mounted) return null;
-    const currentTheme = theme === "system" ? systemTheme : theme;
+    if (!mounted) return null
+    const currentTheme = theme === "system" ? systemTheme : theme
     if (currentTheme === "dark") {
       return (
         <IconButton
@@ -41,7 +41,7 @@ const Navbar: FC = () => {
           size="small"
           onClick={() => setTheme("light")}
         />
-      );
+      )
     } else {
       return (
         <IconButton
@@ -50,15 +50,15 @@ const Navbar: FC = () => {
           size="small"
           onClick={() => setTheme("dark")}
         />
-      );
+      )
     }
-  };
+  }
 
   const handleConnectWallet: () => void = () => {
     useWalletObject.wallet
       ? useWalletObject.connect()
-      : useWalletModalObject.setVisible(!useWalletModalObject.visible);
-  };
+      : useWalletModalObject.setVisible(!useWalletModalObject.visible)
+  }
 
   return (
     <>
@@ -83,9 +83,9 @@ const Navbar: FC = () => {
             {getMainRoutes(width).map((route, index) => {
               switch (route.type) {
                 case "link":
-                  return <NavLink key={index} {...route} />;
+                  return <NavLink key={index} {...route} />
                 case "group":
-                  return <NavGroup key={index} {...route} />;
+                  return <NavGroup key={index} {...route} />
               }
             })}
             <Button
@@ -129,7 +129,7 @@ const Navbar: FC = () => {
         <WalletNotConnectedModal />
       </nav>
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

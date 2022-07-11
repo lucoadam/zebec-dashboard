@@ -1,26 +1,26 @@
-import React, { FC, useState } from "react";
-import { useTranslation } from "next-i18next";
-import FilterTabs from "./FilterTabs";
-import { Table, TableBody } from "components/shared";
-import OutgoingTableRow from "./OutgoingTableRow";
+import React, { FC, useState } from "react"
+import { useTranslation } from "next-i18next"
+import FilterTabs from "./FilterTabs"
+import { Table, TableBody } from "components/shared"
+import OutgoingTableRow from "./OutgoingTableRow"
 
-import { outgoingTransactions } from "fakedata";
+import { outgoingTransactions } from "fakedata"
 
 const Outgoing: FC = () => {
-  const { t } = useTranslation("transactions");
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
+  const { t } = useTranslation("transactions")
+  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
     { label: "progress" },
     { label: "transaction-date" },
     { label: "receiver" },
-    { label: "" },
-  ];
+    { label: "" }
+  ]
 
   const handleToggleRow = (index: number) => {
-    if (index === activeDetailsRow) setActiveDetailsRow("");
-    else setActiveDetailsRow(index);
-  };
+    if (index === activeDetailsRow) setActiveDetailsRow("")
+    else setActiveDetailsRow(index)
+  }
 
   return (
     <>
@@ -41,12 +41,12 @@ const Outgoing: FC = () => {
                 activeDetailsRow={activeDetailsRow}
                 handleToggleRow={() => handleToggleRow(index)}
               />
-            );
+            )
           })}
         </TableBody>
       </Table>
     </>
-  );
-};
+  )
+}
 
-export default Outgoing;
+export default Outgoing

@@ -1,46 +1,42 @@
-import { EmptyDataState, Table, TableBody } from "components/shared";
-import { withdrawalTransactions } from "fakedata";
-import { useState } from "react";
-import WithdrawalTableRow from "./WithdrawalTableRow";
+import { EmptyDataState, Table, TableBody } from "components/shared"
+import { withdrawalTransactions } from "fakedata"
+import { useState } from "react"
+import WithdrawalTableRow from "./WithdrawalTableRow"
 
 export const WithdrawalTransactions = () => {
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("");
+  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
     {
       label: "progress",
-      width: '70',
+      width: "70"
     },
     {
       label: "confirmation",
-      width: '31.25',
-
+      width: "31.25"
     },
     {
       label: "withdrawn-or-initiated",
-      width: '55.5',
-
+      width: "55.5"
     },
     {
       label: "requested-by",
-      width: '51',
-
+      width: "51"
     },
     {
       label: "",
-      width: '55.5',
-
-    },
-  ];
+      width: "55.5"
+    }
+  ]
 
   const handleToggleRow = (index: number) => {
-    if (index === activeDetailsRow) setActiveDetailsRow("");
-    else setActiveDetailsRow(index);
-  };
+    if (index === activeDetailsRow) setActiveDetailsRow("")
+    else setActiveDetailsRow(index)
+  }
   return (
     <Table headers={headers}>
       <TableBody>
-      {withdrawalTransactions.data.length === 0 && (
+        {withdrawalTransactions.data.length === 0 && (
           <tr>
             <td colSpan={headers.length}>
               <EmptyDataState message="There are no transactions. The payments you receive/ withdraw will appear here." />
@@ -56,9 +52,9 @@ export const WithdrawalTransactions = () => {
               activeDetailsRow={activeDetailsRow}
               handleToggleRow={() => handleToggleRow(index)}
             />
-          );
+          )
         })}
       </TableBody>
     </Table>
-  );
-};
+  )
+}

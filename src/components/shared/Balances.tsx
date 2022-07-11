@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { Button } from "./Button";
-import * as Icons from "assets/icons";
+import React, { FC } from "react"
+import { Button } from "./Button"
+import * as Icons from "assets/icons"
 
 /* Deposited Balance */
 export const DepositedBalance: FC = () => {
@@ -14,8 +14,8 @@ export const DepositedBalance: FC = () => {
         <span className=" text-subtitle text-content-contrast">.02213</span>
       </div>
     </div>
-  );
-};
+  )
+}
 
 /* Total Withdrawable Amount */
 export const TotalWithdrawableAmount: FC = () => {
@@ -38,8 +38,8 @@ export const TotalWithdrawableAmount: FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 /* Tokens */
 export const Tokens: FC = () => {
@@ -111,8 +111,8 @@ export const Tokens: FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 /* Activity This Week */
 export const ActivityThisWeek: FC = () => {
@@ -198,5 +198,5 @@ export const ActivityThisWeek: FC = () => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import * as borsh from "@project-serum/borsh";
+import * as borsh from "@project-serum/borsh"
 
 export const streamingSchema = borsh.struct([
   borsh.u64("start_time"),
@@ -9,5 +9,5 @@ export const streamingSchema = borsh.struct([
   borsh.publicKey("sender"),
   borsh.publicKey("recipient"),
   borsh.u64("withdrawn"),
-  borsh.u64("paused_at"),
-]);
+  borsh.u64("paused_at")
+])

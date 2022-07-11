@@ -1,44 +1,44 @@
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
-import { Button, CircularProgress, IconButton } from "components/shared";
-import CopyButton from "components/shared/CopyButton";
-import { useTranslation } from "next-i18next";
-import Image from "next/image";
-import { FC, Fragment, useRef } from "react";
-import { formatCurrency, toSubstring } from "utils";
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { Button, CircularProgress, IconButton } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { FC, Fragment, useRef } from "react"
+import { formatCurrency, toSubstring } from "utils"
 
 interface HistoryTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
 const returnValidPercentage = (percentage: number) => {
   if (percentage > 0) {
-    return percentage;
+    return percentage
   } else {
-    return 0;
+    return 0
   }
-};
+}
 
 const HistoryTableRow: FC<HistoryTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
+          : "0px"
+    }
+  }
 
   return (
     <>
@@ -86,7 +86,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
             <div className="flex items-center gap-x-1 text-body text-content-primary">
               {transaction.is_in_address_book
                 ? toSubstring(transaction.name, 22, false)
-                : toSubstring(transaction.sender,6 , true)}{" "}
+                : toSubstring(transaction.sender, 6, true)}{" "}
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
@@ -296,7 +296,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default HistoryTableRow;
+export default HistoryTableRow

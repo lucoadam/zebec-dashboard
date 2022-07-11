@@ -1,11 +1,11 @@
-import React, { FC } from "react";
+import React, { FC } from "react"
 
 interface DepositedTokenAssetsProps {
-  tableMaxHeight: number;
+  tableMaxHeight: number
 }
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
-  const { tableMaxHeight } = props;
+  const { tableMaxHeight } = props
   return (
     <>
       <div className="p-6 rounded bg-background-secondary h-full">
@@ -318,5 +318,5 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

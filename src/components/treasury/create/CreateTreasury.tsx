@@ -1,30 +1,30 @@
-import { NextPage } from "next";
-import React from "react";
-import * as Icons from "assets/icons";
-import { Step, Treasury } from "./CreateTreasury.d";
-import CreatingTreasury from "./steps/CreatingTreasury";
-import { StepsList } from "./steps/data";
-import { useTranslation } from "next-i18next";
+import { NextPage } from "next"
+import React from "react"
+import * as Icons from "assets/icons"
+import { Step, Treasury } from "./CreateTreasury.d"
+import CreatingTreasury from "./steps/CreatingTreasury"
+import { StepsList } from "./steps/data"
+import { useTranslation } from "next-i18next"
 
 const CreateTreasury: NextPage = () => {
-  const [currentStep, setCurrentStep] = React.useState(0);
-  const { t } = useTranslation();
+  const [currentStep, setCurrentStep] = React.useState(0)
+  const { t } = useTranslation()
 
   const [treasury, setTreasury] = React.useState<Treasury>({
     name: "",
     owners: [],
-    minValidator: 0,
-  });
+    minValidator: 0
+  })
 
   const getStepState = (index: number, isIcon: boolean = false) => {
     if (index === currentStep) {
-      return isIcon ? index + 1 : "bg-primary";
+      return isIcon ? index + 1 : "bg-primary"
     }
     if (index < currentStep) {
-      return isIcon ? <Icons.CheckIcon /> : "bg-success";
+      return isIcon ? <Icons.CheckIcon /> : "bg-success"
     }
-    return isIcon ? index + 1 : "bg-content-contrast";
-  };
+    return isIcon ? index + 1 : "bg-content-contrast"
+  }
 
   return (
     <div className="bg-background-secondary rounded-[4px] py-[76px] px-[120px]">
@@ -61,7 +61,7 @@ const CreateTreasury: NextPage = () => {
               StepsList[currentStep].component({
                 setCurrentStep,
                 setTreasury,
-                treasury,
+                treasury
               })
             ) : (
               <CreatingTreasury />
@@ -70,7 +70,7 @@ const CreateTreasury: NextPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CreateTreasury;
+export default CreateTreasury

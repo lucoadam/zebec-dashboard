@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, { FC } from "react"
 
 interface TableBodyProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const TableBody: FC<TableBodyProps> = ({ children }) => {
@@ -11,5 +11,5 @@ export const TableBody: FC<TableBodyProps> = ({ children }) => {
         {children}
       </tbody>
     </>
-  );
-};
+  )
+}

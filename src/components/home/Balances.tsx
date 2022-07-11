@@ -1,10 +1,10 @@
-import React, { FC } from "react";
+import React, { FC } from "react"
 import {
   ActivityThisWeek,
   DepositedBalance,
   Tokens,
-  TotalWithdrawableAmount,
-} from "components/shared";
+  TotalWithdrawableAmount
+} from "components/shared"
 
 const Balances: FC = () => {
   return (
@@ -18,7 +18,7 @@ const Balances: FC = () => {
       {/* Activity This Week */}
       <ActivityThisWeek />
     </>
-  );
-};
+  )
+}
 
-export default Balances;
+export default Balances
