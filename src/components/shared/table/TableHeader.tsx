@@ -34,7 +34,7 @@ export const TableHeader: FC<TableHeaderProps> = (props) => {
                   header.width
                 )}`}
               >
-                {index !== headers.length - 1 && t(`table.${header.label}`)}
+                {index !== headers.length && t(`${header.label}`)}
               </td>
             )
           })}

@@ -17,15 +17,15 @@ const Incoming: FC = () => {
 
   const headers = [
     {
-      label: "progress",
+      label: "transactions:table.progress",
       width: "85"
     },
     {
-      label: "transaction-date",
+      label: "transactions:table.transaction-date",
       width: "60"
     },
     {
-      label: "sender",
+      label: "transactions:table.sender",
       width: "60"
     },
     {

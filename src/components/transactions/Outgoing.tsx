@@ -11,9 +11,9 @@ const Outgoing: FC = () => {
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
-    { label: "progress" },
-    { label: "transaction-date" },
-    { label: "receiver" },
+    { label: "transactions:table.progress" },
+    { label: "transactions:table.transaction-date" },
+    { label: "transactions:table.receiver" },
     { label: "" }
   ]
 

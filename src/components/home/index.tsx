@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/hooks"
 import { BuildWithZebec, SendFeedback, ZebecHelp } from "components/shared"
 import { FC } from "react"
 import Balances from "./Balances"
@@ -7,6 +8,9 @@ import Farms from "./Farms"
 import RecentTransactions from "./RecentTransactions"
 
 const HomePage: FC = () => {
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const treasuryTokens =
+    useAppSelector((state) => state.zebecBalance?.tokens) || []
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -17,7 +21,10 @@ const HomePage: FC = () => {
         {/* 2nd and 3rd column */}
         <div className="lg:col-span-2 grid lg:grid-cols-2 gap-6">
           {/* Deposited Assets */}
-          <DepositedAssets />
+          <DepositedAssets
+            balanceTokens={treasuryTokens}
+            tokens={tokenDetails}
+          />
           {/* Deposit | Withdraw and Farms */}
           <div className="grid gap-y-6">
             <DepositWithdraw />

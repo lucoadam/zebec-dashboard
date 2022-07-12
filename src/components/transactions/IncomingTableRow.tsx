@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import React, { FC, Fragment, useRef, useState } from "react"
 import { toSubstring } from "utils"
-import { WithdrawStepsList } from "./withdraw/data"
+import { WithdrawStepsList } from "./withdraw/data.d"
 
 interface IncomingTableRowProps {
   index: number
@@ -31,7 +31,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           : "0px"
     }
   }
-  let [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [withdrawAmount, setWithdrawAmount] = useState<any>()
 
   function toggleModal() {

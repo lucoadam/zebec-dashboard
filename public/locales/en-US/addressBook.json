@@ -1,0 +1,21 @@
+{
+    "create-address-book":"Create an Address Group",
+    "address-book":"Address Book",
+    "name":"NAME",
+    "address": "WALLET ADDRESS",
+    "actions":"ACTIONS",
+    "add-an-address":"Add an Address",
+    "address-name" : "Address Name",
+    "enter-name":"Enter Name",
+    "wallet-address":"Wallet Address",
+    "enter-wallet-address":"Enter Wallet Address",
+    "add-address":"Add Address",
+    "send":"Send",
+    "delete":"Delete",
+    "delete-modal-header" :"Are you sure you want to delete this address book?",
+    "delete-modal-subtitle" : "Deleting this address book will remove it permanently.",
+    "yes-delete":"Yes, Delete",
+    "cancel":"Cancel",
+    "undelete-address-book": "Delete address book"
+
+}
