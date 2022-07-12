@@ -1,10 +1,10 @@
-import React, { FC, Fragment, useRef, useState } from "react"
-import Image from "next/image"
-import { useTranslation } from "next-i18next"
-import { Button, IconButton, InputField, Modal } from "components/shared"
-import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
+import { Button, CircularProgress, IconButton, Modal } from "components/shared"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import React, { FC, Fragment, useRef, useState } from "react"
+import { toSubstring } from "utils"
 import { WithdrawStepsList } from "./withdraw/data"
 
 interface IncomingTableRowProps {
@@ -43,9 +43,11 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w-85">
             <div className="flex items-center gap-x-2.5">
-              <div className=" w-14 h-14">P</div>
+              <div className=" w-14 h-14">
+                <CircularProgress status={transaction.status} />
+              </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
@@ -57,13 +59,13 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w-60">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w-60">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
               1AdXF3...DuV15{" "}
               <IconButton

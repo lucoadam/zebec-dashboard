@@ -98,7 +98,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                 placeholder={t(
                   "createTreasury:second-steper.form.owner-name-placeholder"
                 )}
-                className={`w-full h-[40px] ${!!errors.name ? "error" : ""}`}
+                className={`w-full h-10 ${!!errors.name ? "error" : ""}`}
               >
                 <input
                   type="text"
@@ -194,7 +194,7 @@ const AddOwners: FC<StepsComponentProps> = ({
           size="medium"
           className="w-full justify-center mt-[32px]"
           onClick={() => {
-            if (owners.length > 2 && !selectError) {
+            if (owners.length >= 2 && !selectError) {
               setCurrentStep(2)
             } else {
               setSelectionError(true)

@@ -1,4 +1,5 @@
-import React, { FC } from "react"
+import { BuildWithZebec, SendFeedback, ZebecHelp } from "components/shared"
+import { FC } from "react"
 import Balances from "./Balances"
 import DepositedAssets from "./DepositedAssets"
 import DepositWithdraw from "./DepositWithdraw"
@@ -25,6 +26,11 @@ const HomePage: FC = () => {
           {/* Recent Transactions */}
           <RecentTransactions />
         </div>
+      </div>
+      <div className="grid grid-cols-3 gap-x-6 mt-6">
+        <ZebecHelp />
+        <BuildWithZebec />
+        <SendFeedback />
       </div>
     </>
   )
