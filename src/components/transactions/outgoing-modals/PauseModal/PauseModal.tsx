@@ -2,16 +2,17 @@ import React, { FC, useState } from "react"
 import { useTranslation } from "next-i18next"
 import { Button } from "components/shared"
 import { Modal } from "components/shared"
-import { useAppSelector } from "app/hooks"
-import { useDispatch } from "react-redux"
-import { togglePauseLoadingModal, togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import {
+  togglePauseLoadingModal,
+  togglePauseModal
+} from "features/transaction/pauseModal/pauseSlice"
 import * as Icons from "assets/icons"
 
 const PauseModal: FC = ({}) => {
   const pauseModal = useAppSelector((state) => state.pause.pauseModal)
-  const pauseLoadingModal = useAppSelector((state)=>state.pause.pauseLoading)
-  const dispatch = useDispatch()
-  const [onClick, setOnClick] = useState(false)
+  const pauseLoadingModal = useAppSelector((state) => state.pause.pauseLoading)
+  const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
   return (
     <Modal
@@ -30,10 +31,10 @@ const PauseModal: FC = ({}) => {
             <Button
               disabled={pauseLoadingModal}
               endIcon={pauseLoadingModal ? <Icons.Loading /> : <></>}
-              className={`w-full ${pauseLoadingModal ? "cursor-not-allowed" : ""}`}
+              className={`w-full `}
               variant="gradient"
               title={
-                onClick
+                pauseLoadingModal
                   ? t("outgoing-actions.pausing")
                   : t("outgoing-actions.yes-pause")
               }
@@ -48,7 +49,9 @@ const PauseModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full `}
+              className={`w-full ${
+                pauseLoadingModal ? "cursor-not-allowed" : ""
+              } `}
               disabled={pauseLoadingModal}
               title={t("outgoing-actions.no-pause")}
               onClick={() => {

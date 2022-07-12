@@ -7,7 +7,6 @@ import Layout from "components/layouts/Layout"
 import { Button } from "components/shared"
 import TreasuryLists from "components/treasury/TreasuryLists"
 
-
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
 
@@ -36,7 +35,6 @@ const Treasury: NextPage = () => {
             </div>
           </div>
           <TreasuryLists />
-
         </div>
       </div>
     </Layout>

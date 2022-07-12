@@ -5,10 +5,10 @@ import { Button, IconButton, Modal } from "components/shared"
 import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { useDispatch } from "react-redux"
 import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
 import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
 import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
+import { useAppDispatch } from "app/hooks"
 
 interface OutgoingTableRowProps {
   index: number
@@ -25,7 +25,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // function toggleModal() {
   //   setIsOpen(!isOpen)

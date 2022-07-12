@@ -34,7 +34,7 @@ export const ScheduledTransactions = () => {
   }
   return (
     <Table headers={headers}>
-      <TableBody >
+      <TableBody>
         {scheduledTransactions.data.length === 0 && (
           <tr>
             <td colSpan={headers.length}>

@@ -35,7 +35,7 @@ export const WithdrawalTransactions = () => {
   }
   return (
     <Table headers={headers}>
-      <TableBody >
+      <TableBody>
         {withdrawalTransactions.data.length === 0 && (
           <tr>
             <td colSpan={headers.length}>

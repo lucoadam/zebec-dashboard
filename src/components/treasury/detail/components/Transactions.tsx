@@ -1,5 +1,5 @@
 import { Tab } from "components/shared"
-import {  useState } from "react"
+import { useState } from "react"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"

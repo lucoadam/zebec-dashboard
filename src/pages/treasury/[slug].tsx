@@ -65,9 +65,9 @@ const Treasury: NextPage = () => {
           <TreasuryDetail />
         </div>
       </div>
-      <PauseModal/>
-      <CancelModal/>
-      <ResumeModal/>
+      <PauseModal />
+      <CancelModal />
+      <ResumeModal />
     </Layout>
   )
 }

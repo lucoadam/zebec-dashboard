@@ -1,15 +1,19 @@
 import React, { FC } from "react"
 import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
-import { useAppSelector } from "app/hooks"
-import { useDispatch } from "react-redux"
-import { toggleResumeLoadingModal, toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import {
+  toggleResumeLoadingModal,
+  toggleResumeModal
+} from "features/transaction/resumeModal/resumeSlice"
 import * as Icons from "assets/icons"
 
 const ResumeModal: FC = ({}) => {
   const resumeModal = useAppSelector((state) => state.resume.resumeModal)
-  const resumeLoadingModal =useAppSelector((state)=>state.resume.resumeLoadingModal)
-  const dispatch = useDispatch()
+  const resumeLoadingModal = useAppSelector(
+    (state) => state.resume.resumeLoadingModal
+  )
+  const dispatch = useAppDispatch()
   const id = "Resuming"
   const { t } = useTranslation("transactions")
   return (
@@ -27,7 +31,7 @@ const ResumeModal: FC = ({}) => {
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
-              className={`w-full ${resumeLoadingModal ? "cursor-not-allowed" : ""}`}
+              className={`w-full `}
               variant="gradient"
               endIcon={resumeLoadingModal ? <Icons.Loading /> : <></>}
               disabled={resumeLoadingModal}
@@ -40,14 +44,16 @@ const ResumeModal: FC = ({}) => {
                 dispatch(toggleResumeLoadingModal(true))
                 setTimeout(() => {
                   dispatch(toggleResumeModal())
-                 dispatch(toggleResumeLoadingModal(false))
+                  dispatch(toggleResumeLoadingModal(false))
                 }, 5000)
               }}
             />
           </div>
           <div className="">
             <Button
-              className={`w-full `}
+              className={`w-full ${
+                resumeLoadingModal ? "cursor-not-allowed" : ""
+              } `}
               disabled={resumeLoadingModal}
               title={t("outgoing-actions.no-resume")}
               onClick={() => {
