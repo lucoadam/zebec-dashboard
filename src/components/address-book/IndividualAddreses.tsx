@@ -54,7 +54,7 @@ export default function IndividualAddresses() {
                 <div className="flex justify-between items-center pb-9">
 
 
-                    <h4 className="text-heading-4 font-semibold text-content-primary">
+                    <h4 className="text-heading-4 font-semibold text-content-primary pl-4">
                         {`${t("addressBook:address-book")} `}
                     </h4>
 
