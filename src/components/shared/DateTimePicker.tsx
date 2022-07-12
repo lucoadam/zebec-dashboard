@@ -42,7 +42,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
           value: mainProps.value?.toString() || "",
           disabled: mainProps.disabled,
           placeholder: mainProps.placeholder,
-          className: `w-full h-[40px] bg-background-primary date-picker-input outline-none ${
+          className: `w-full h-[40px] bg-background-primary date-picker-input ${
             mainProps.error && "error"
           }`,
         }}

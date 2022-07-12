@@ -9,5 +9,6 @@ export * from "./Modal";
 export * from "./Tab";
 export * from "./table/Table";
 export * from "./table/TableBody";
+export * from "./TimePicker";
 export * from "./Toggle";
 

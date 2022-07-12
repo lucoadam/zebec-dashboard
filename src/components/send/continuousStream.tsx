@@ -7,6 +7,7 @@ import {
   CollapseDropdown,
   DateTimePicker,
   InputField,
+  TimePicker,
   Toggle
 } from "components/shared";
 import { useClickOutside } from "hooks";
@@ -425,7 +426,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           {showRemarks && (
             <div className="mt-4">
               <InputField
-                label= {t("send:remarks")}
+                label={t("send:remarks")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
@@ -622,15 +623,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 </DateTimePicker>
               </div>
               <div className="mt-4">
-                <DateTimePicker
+                <TimePicker
+                  error={!!errors.startTime}
+                  name="startTime"
+                  register={register}
                   placeholder="E.g. 12:00 AM"
                   startIcon={<Icons.ClockIcon />}
                   endIcon={<Icons.CheveronDownIcon />}
-                  dateFormat={false}
-                  timeFormat={true}
-                  value={getValue("startTime")}
                   onChange={(time) => {
-                    setValue("startTime", moment(time).format("LT"));
+                    setValue("startTime", time);
                     trigger("startTime");
                     trigger("startDate");
                     if (!!getValue("endTime") || !!getValue("endDate")) {
@@ -639,10 +640,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     }
                     if (enableStreamRate) handleStreamRate();
                   }}
-                  error={!!errors.startTime}
-                >
-                  <input type="text" readOnly {...register("startTime")} />
-                </DateTimePicker>
+                />
               </div>
               {(!!errors.startDate || !!errors.startTime) && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
@@ -674,23 +672,20 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 </DateTimePicker>
               </div>
               <div className="mt-4">
-                <DateTimePicker
+                <TimePicker
                   placeholder="E.g. 12:00 AM"
+                  name="endTime"
+                  register={register}
                   startIcon={<Icons.ClockIcon />}
                   endIcon={<Icons.CheveronDownIcon />}
-                  dateFormat={false}
-                  timeFormat={true}
                   disabled={enableStreamRate}
-                  value={getValue("endTime")}
                   onChange={(time) => {
-                    setValue("endTime", moment(time).format("LT"));
+                    setValue("endTime", time);
                     trigger("endTime");
                     trigger("endDate");
                   }}
                   error={!!errors.endTime}
-                >
-                  <input type="text" readOnly {...register("endTime")} />
-                </DateTimePicker>
+                />
               </div>
               {(!!errors.endDate || !!errors.endTime) && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
@@ -702,7 +697,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
           {/* Toggle stream rate */}
           <div className="mt-4">
-            <Toggle text={t("send:enable-stream-rate")} onChange={toggleStreamRate} />
+            <Toggle
+              text={t("send:enable-stream-rate")}
+              onChange={toggleStreamRate}
+            />
           </div>
 
           {/* Stream rate field */}
