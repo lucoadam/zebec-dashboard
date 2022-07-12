@@ -1,19 +1,19 @@
-import moment from "moment";
-import { cloneElement, FC } from "react";
-import Datetime from "react-datetime";
+import moment from "moment"
+import { cloneElement, FC } from "react"
+import Datetime from "react-datetime"
 
 interface DateTimePickerProps {
-  startIcon?: JSX.Element;
-  endIcon?: JSX.Element;
-  placeholder?: string;
-  dateFormat?: string | boolean;
-  timeFormat?: string | boolean;
-  onChange?: (value: string | moment.Moment) => void;
-  disabled?: boolean;
-  name?: string;
-  children: React.ReactElement;
-  error?: boolean;
-  value?: string | moment.Moment;
+  startIcon?: JSX.Element
+  endIcon?: JSX.Element
+  placeholder?: string
+  dateFormat?: string | boolean
+  timeFormat?: string | boolean
+  onChange?: (value: string | moment.Moment) => void
+  disabled?: boolean
+  name?: string
+  children: React.ReactElement
+  error?: boolean
+  value?: string | moment.Moment
 }
 export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
   const renderInput = (
@@ -24,11 +24,11 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
     return (
       <>
         {cloneElement(mainProps.children, {
-          ...props,
+          ...props
         })}
       </>
-    );
-  };
+    )
+  }
   return (
     <div className="relative">
       <div className="absolute text-content-primary z-50 top-3 left-5">
@@ -44,7 +44,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
           placeholder: mainProps.placeholder,
           className: `w-full h-[40px] bg-background-primary date-picker-input ${
             mainProps.error && "error"
-          }`,
+          }`
         }}
         dateFormat={mainProps.dateFormat}
         closeOnSelect={true}
@@ -56,5 +56,5 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
         {mainProps.endIcon}
       </div>
     </div>
-  );
-};
+  )
+}

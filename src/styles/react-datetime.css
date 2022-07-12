@@ -2,7 +2,7 @@
  * https://github.com/arqex/react-datetime
  */
 
- .rdt {
+.rdt {
   position: relative;
 }
 .rdtPicker {
@@ -13,9 +13,9 @@
   margin-top: 1px;
   z-index: 9999 !important;
   /* background: #fff; */
-  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   /* border: 1px solid #f9f9f9; */
-  @apply bg-background-primary border border-outline
+  @apply bg-background-primary border border-outline;
 }
 .rdtOpen .rdtPicker {
   display: block;
@@ -97,7 +97,7 @@
 }
 .rdtPicker th {
   /* border-bottom: 1px solid #f9f9f9; */
-  @apply border-b border-outline
+  @apply border-b border-outline;
 }
 .rdtPicker .dow {
   width: 14.2857%;
@@ -117,10 +117,10 @@
 .rdtNext span {
   display: block;
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 }
 
@@ -135,7 +135,7 @@
 }
 .rdtPicker thead tr:first-of-type th:hover {
   /* background: #eeeeee; */
-  @apply bg-background-light
+  @apply bg-background-light;
 }
 
 .rdtPicker tfoot {
@@ -149,7 +149,7 @@
 }
 .rdtPicker button:hover {
   /* background-color: #eee; */
-  @apply bg-background-light
+  @apply bg-background-light;
 }
 
 .rdtPicker thead button {
@@ -166,7 +166,7 @@ td.rdtYear {
 td.rdtMonth:hover,
 td.rdtYear:hover {
   /* background: #eee; */
-  @apply bg-background-light
+  @apply bg-background-light;
 }
 
 .rdtCounters {
@@ -196,15 +196,15 @@ td.rdtYear:hover {
   display: block;
 
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 }
 .rdtCounter .rdtBtn:hover {
   /* background: #eee; */
-  @apply bg-background-light
+  @apply bg-background-light;
 }
 .rdtCounter .rdtCount {
   height: 20%;

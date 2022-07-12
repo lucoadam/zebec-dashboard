@@ -1,42 +1,43 @@
-import React, { FC, useState, useRef } from "react";
-import Image from "next/image";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { toSubstring } from "../../utils";
-import { Button, IconButton, CollapseDropdown } from "../shared";
-import * as Images from "../../assets/images";
-import * as Icons from "../../assets/icons";
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import Image from "next/image"
+import { FC, useRef, useState } from "react"
+import * as Icons from "../../assets/icons"
+import * as Images from "../../assets/images"
+import { toSubstring } from "../../utils"
+import { Button, CollapseDropdown } from "../shared"
 //hooks
-import { useClickOutside } from "../../hooks";
+import CopyButton from "components/shared/CopyButton"
+import { useClickOutside } from "../../hooks"
 
 const Profile: FC = () => {
-  const useWalletObject = useWallet();
-  const useWalletModalObject = useWalletModal();
-  const profileDropdownWrapperRef = useRef(null);
+  const useWalletObject = useWallet()
+  const useWalletModalObject = useWalletModal()
+  const profileDropdownWrapperRef = useRef(null)
 
   const [toggleProfileDropdown, setToggleProfileDropdown] =
-    useState<boolean>(false);
+    useState<boolean>(false)
 
   const handleClose = () => {
-    setToggleProfileDropdown(false);
-  };
+    setToggleProfileDropdown(false)
+  }
 
   //handle clicking outside
   useClickOutside(profileDropdownWrapperRef, {
-    onClickOutside: handleClose,
-  });
+    onClickOutside: handleClose
+  })
 
   //handle change wallet
   const handleChangeWallet = () => {
-    useWalletModalObject.setVisible(!useWalletModalObject.visible);
-    handleClose();
-  };
+    useWalletModalObject.setVisible(!useWalletModalObject.visible)
+    handleClose()
+  }
 
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
-    useWalletObject.disconnect();
-    handleClose();
-  };
+    useWalletObject.disconnect()
+    handleClose()
+  }
 
   return (
     <>
@@ -88,7 +89,7 @@ const Profile: FC = () => {
                     {toSubstring(
                       useWalletObject?.publicKey?.toString(),
                       4,
-                      true,
+                      true
                     )}
                   </div>
                   <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
@@ -96,7 +97,9 @@ const Profile: FC = () => {
                   </div>
                 </div>
                 <div className="transform -translate-y-1">
-                  <IconButton icon={<Icons.CopyIcon />} />
+                  <CopyButton
+                    content={useWalletObject?.publicKey?.toString() ?? ""}
+                  />
                 </div>
               </div>
             </div>
@@ -118,7 +121,7 @@ const Profile: FC = () => {
         </CollapseDropdown>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

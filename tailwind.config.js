@@ -3,6 +3,17 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      minWidth: {
+        7: "28px",
+        31.25: "125px",
+        33.5: "134px",
+        50: "200px",
+        51: "203px",
+        55.5: "222px",
+        60: "240px",
+        70: "280px",
+        85: "340px"
+      },
       colors: {
         black: "var(--black)",
         white: "var(--white)",
@@ -14,6 +25,7 @@ module.exports = {
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
           backdrop: "var(--bg-backdrop)",
+          contrast: "var(--bg-contrast)"
         },
         // Primary
         primary: {
@@ -23,8 +35,8 @@ module.exports = {
           contrast: "var(--primary-contrast)",
           gradient: {
             DEFAULT: "var(--primary-gradient)",
-            hover: "var(--primary-gradient-hover)",
-          },
+            hover: "var(--primary-gradient-hover)"
+          }
         },
         // Content
         content: {
@@ -33,138 +45,152 @@ module.exports = {
           tertiary: "var(--content-tertiary)",
           contrast: "var(--content-contrast)",
           success: "var(--success-content)",
-          error: "var(--error-content)",
+          error: "var(--error-content)"
         },
         // Success
-        success: "var(--success-main)",
+        success: {
+          DEFAULT: "var(--success-main)",
+          content: "var(--success-content)"
+        },
         // Error
-        error: "var(--error-main)",
+        error: {
+          DEFAULT: "var(--error-main)",
+          content: "var(--error-content)"
+        },
         // Warning
         warning: "var(--warning-main)",
         // Outline
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
-        },
+          dark: "var(--outline-dark)"
+        }
       },
       fontFamily: {
-        inter: "'Inter', sans-serif",
+        inter: "'Inter', sans-serif"
       },
       fontSize: {
         "heading-3": [
           "var(--fs-2xl)",
           {
             lineHeight: "var(--lh-leading-10)",
-            letterSpacing: "var(---ls-tracking-1)",
-          },
+            letterSpacing: "var(---ls-tracking-1)"
+          }
         ],
         "heading-4": [
           "var(--fs-xl)",
           {
             lineHeight: "var(--lh-leading-8)",
-            letterSpacing: "var(---ls-tracking-1)",
-          },
+            letterSpacing: "var(---ls-tracking-1)"
+          }
         ],
         "heading-5": [
           "var(--fs-lg)",
           {
             lineHeight: "var(--lh-leading-7)",
-            letterSpacing: "var(---ls-tracking-1)",
-          },
+            letterSpacing: "var(---ls-tracking-1)"
+          }
         ],
-        "subtitle": [
+        subtitle: [
           "var(--fs-base)",
           {
             lineHeight: "var(--lh-leading-6)",
-            letterSpacing: "var(--ls-tracking-1)",
-          },
+            letterSpacing: "var(--ls-tracking-1)"
+          }
         ],
-        "body": [
+        body: [
           "var(--fs-sm)",
           {
-            lineHeight: "var(--lh-leading-5)",
-          },
+            lineHeight: "var(--lh-leading-5)"
+          }
         ],
         "subtitle-sm": [
           "var(--fs-sm)",
           {
             lineHeight: "var(--lh-leading-6)",
-            letterSpacing: "var(---ls-tracking-2)",
-          },
+            letterSpacing: "var(---ls-tracking-2)"
+          }
         ],
         "avatar-title": [
           "var(--fs-sm)",
           {
             lineHeight: "var(--lh-leading-4)",
-            letterSpacing: "var(---ls-tracking-2)",
-          },
+            letterSpacing: "var(---ls-tracking-2)"
+          }
         ],
-        "button": [
+        button: [
           "var(--fs-sm)",
           {
-            lineHeight: "var(--lh-leading-6)",
-          },
+            lineHeight: "var(--lh-leading-6)"
+          }
         ],
-        "caption": [
+        caption: [
           "var(--fs-xs)",
           {
-            lineHeight: "var(--lh-leading-4)",
-          },
+            lineHeight: "var(--lh-leading-4)"
+          }
         ],
         "button-sm": [
           "var(--fs-xs)",
           {
-            lineHeight: "var(--lh-leading-3)",
-          },
+            lineHeight: "var(--lh-leading-3)"
+          }
         ],
         "caption-sm": [
           "var(--fs-xxs)",
           {
-            lineHeight: "var(--lh-leading-3)",
-          },
-        ],
+            lineHeight: "var(--lh-leading-3)"
+          }
+        ]
       },
       boxShadow: {
         2: "var(--bs-shadow-2)",
         3: "var(--bs-shadow-3)",
-        backdrop: "var(--bs-shadow-backdrop)",
+        backdrop: "var(--bs-shadow-backdrop)"
+      },
+      letterSpacing: {
+        1: "var(--ls-tracking-1)"
+      },
+      spacing: {
+        3.5: "14px",
+        4.5: "18px"
       },
       container: {
-        center: true,
-      },
-    },
+        center: true
+      }
+    }
   },
   plugins: [
     require("@tailwindcss/forms"),
     function ({ addComponents }) {
       addComponents({
         ".container": {
-          "maxWidth": "100%",
-          "marginLeft": "auto",
-          "marginRight": "auto",
-          "paddingLeft": "1rem",
-          "paddingRight": "1rem",
+          maxWidth: "100%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
           "@screen sm": {
-            maxWidth: "100%",
+            maxWidth: "100%"
           },
           "@screen md": {
-            maxWidth: "100%",
+            maxWidth: "100%"
           },
           "@screen lg": {
-            maxWidth: "1024px",
+            maxWidth: "1024px"
           },
           "@screen xl": {
             maxWidth: "1200px",
             paddingLeft: "2.5rem",
-            paddingRight: "2.5rem",
+            paddingRight: "2.5rem"
           },
           "@screen 2xl": {
             maxWidth: "1456px",
             paddingLeft: "2.5rem",
-            paddingRight: "2.5rem",
-          },
-        },
-      });
-    },
-  ],
-};
+            paddingRight: "2.5rem"
+          }
+        }
+      })
+    }
+  ]
+}

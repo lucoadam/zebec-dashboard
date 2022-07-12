@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CollapseDropdown } from "components/shared";
-import { useClickOutside } from "hooks";
-import { FC, useEffect, useRef, useState } from "react";
-import { TimePickerProps } from "./index.d";
+import { CollapseDropdown } from "components/shared"
+import { useClickOutside } from "hooks"
+import { FC, useEffect, useRef, useState } from "react"
+import { TimePickerProps } from "./index.d"
 
 const Hours = [
   "01",
@@ -16,8 +16,8 @@ const Hours = [
   "09",
   "10",
   "11",
-  "12",
-];
+  "12"
+]
 const Minutes = [
   "01",
   "02",
@@ -77,9 +77,9 @@ const Minutes = [
   "56",
   "57",
   "58",
-  "59",
-];
-const ap = ["AM", "PM"];
+  "59"
+]
+const ap = ["AM", "PM"]
 
 export const TimePicker: FC<TimePickerProps> = ({
   error,
@@ -89,29 +89,29 @@ export const TimePicker: FC<TimePickerProps> = ({
   onChange,
   startIcon,
   endIcon,
-  disabled,
+  disabled
 }) => {
-  const dropdownWrapper = useRef(null);
-  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
-  const [selectedHour, setSelectedHour] = useState<string>("");
-  const [selectedMinute, setSelectedMinute] = useState<string>("");
-  const [selectedAP, setSelectedAP] = useState<string>("");
+  const dropdownWrapper = useRef(null)
+  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
+  const [selectedHour, setSelectedHour] = useState<string>("")
+  const [selectedMinute, setSelectedMinute] = useState<string>("")
+  const [selectedAP, setSelectedAP] = useState<string>("")
 
   useClickOutside(dropdownWrapper, {
     onClickOutside: () => {
-      setToggleDropdown(false);
-    },
-  });
-  const handleClick = () => {
-    if(!disabled){
-      setToggleDropdown(!toggleDropdown);
+      setToggleDropdown(false)
     }
-  };
+  })
+  const handleClick = () => {
+    if (!disabled) {
+      setToggleDropdown(!toggleDropdown)
+    }
+  }
   useEffect(() => {
     if (selectedHour && selectedMinute && selectedAP) {
-      onChange(`${selectedHour}:${selectedMinute} ${selectedAP}`);
+      onChange(`${selectedHour}:${selectedMinute} ${selectedAP}`)
     }
-  }, [selectedHour, selectedMinute, selectedAP]);
+  }, [selectedHour, selectedMinute, selectedAP])
 
   return (
     <div>
@@ -148,7 +148,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                   }`}
                   key={hour}
                   onClick={() => {
-                    setSelectedHour(hour);
+                    setSelectedHour(hour)
                   }}
                 >
                   <span className="text-content-primary text-sm">{hour}</span>
@@ -165,7 +165,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                   }`}
                   key={minute}
                   onClick={() => {
-                    setSelectedMinute(minute);
+                    setSelectedMinute(minute)
                   }}
                 >
                   <span className="text-content-primary text-sm">{minute}</span>
@@ -182,7 +182,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                   }`}
                   key={a}
                   onClick={() => {
-                    setSelectedAP(a);
+                    setSelectedAP(a)
                   }}
                 >
                   <span className="text-content-primary text-sm">{a}</span>
@@ -193,5 +193,5 @@ export const TimePicker: FC<TimePickerProps> = ({
         </CollapseDropdown>
       </div>
     </div>
-  );
-};
+  )
+}

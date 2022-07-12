@@ -1,0 +1,9 @@
+{
+    "archive-modal-header" :"Are you sure you want to archive safe?",
+    "archive-modal-subtitle" : "Unarchiving safe will add it back to the Treasury. You can always archive it again.",
+    "yes-archive":"Yes, Unarchive",
+    "cancel":"Cancel",
+    "unarchive-safe": "Unarchive Safe"
+
+
+}

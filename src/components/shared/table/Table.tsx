@@ -1,9 +1,9 @@
-import React, { FC } from "react";
-import { TableHeader } from "./TableHeader";
+import React, { FC } from "react"
+import { TableHeader } from "./TableHeader"
 
 interface TableProps {
-  headers: TableHeader[];
-  children: React.ReactNode;
+  headers: TableHeader[]
+  children: React.ReactNode
 }
 
 export const Table: FC<TableProps> = ({ headers, children }) => {
@@ -16,5 +16,5 @@ export const Table: FC<TableProps> = ({ headers, children }) => {
         </table>
       </div>
     </>
-  );
-};
+  )
+}

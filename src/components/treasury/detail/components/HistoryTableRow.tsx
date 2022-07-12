@@ -1,23 +1,24 @@
-import React, { FC, Fragment, useRef } from "react";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { Button, CircularProgress, IconButton } from "components/shared";
-import { formatCurrency, toSubstring } from "utils";
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { Button, CircularProgress, IconButton } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { FC, Fragment, useRef } from "react"
+import { formatCurrency, toSubstring } from "utils"
 
 interface HistoryTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
-const returnValidPercentage = (percentage: number) =>{
-  if(percentage > 0){
+const returnValidPercentage = (percentage: number) => {
+  if (percentage > 0) {
     return percentage
-  }else{
-    return 0;
+  } else {
+    return 0
   }
 }
 
@@ -25,68 +26,101 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
+          : "0px"
+    }
+  }
 
   return (
     <>
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[340px]">
+          <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <CircularProgress
                 status={transaction.status}
-                percentage={returnValidPercentage(parseInt(formatCurrency((transaction.sent_token * 100) / transaction.amount)))}
+                percentage={returnValidPercentage(
+                  parseInt(
+                    formatCurrency(
+                      (transaction.sent_token * 100) / transaction.amount
+                    )
+                  )
+                )}
               />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)}
+                    +
+                    {formatCurrency(
+                      transaction.sent_token > 0 ? transaction.sent_token : 0
+                    )}
                   </span>
                   &nbsp;SOL
                 </div>
                 <div className="text-caption">
-                {formatCurrency(transaction.sent_token > 0 ? transaction.sent_token : 0)} of {transaction.amount} SOL
+                  {formatCurrency(
+                    transaction.sent_token > 0 ? transaction.sent_token : 0
+                  )}{" "}
+                  of {transaction.amount} SOL
                 </div>
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 min-w-50">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              1AdXF3...DuV15{" "}
-              <IconButton
-                icon={<Icons.UserAddIcon />}
-                className="bg-background-primary"
-              />
+          <td className="px-6 py-4 min-w-51">
+            <div className="flex items-center gap-x-1 text-body text-content-primary">
+              {transaction.is_in_address_book
+                ? toSubstring(transaction.name, 22, false)
+                : toSubstring(transaction.sender, 6, true)}{" "}
+              {!transaction.is_in_address_book && (
+                <IconButton
+                  icon={<Icons.UserAddIcon />}
+                  className="bg-background-primary min-w-7 h-7"
+                />
+              )}
+              <CopyButton className="min-w-7" content={transaction.sender} />
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center float-right gap-x-6">
-              <Button
-                title="Withdraw"
-                size="small"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-              />
+          <td className="px-6 py-4 w-full  float-right">
+            <div className="flex items-center justify-end float-right gap-x-6">
+              <div className="flex items-center gap-x-3">
+                <Button
+                  title="Resume"
+                  size="small"
+                  startIcon={
+                    <Icons.ResumeIcon className="text-content-contrast" />
+                  }
+                />
+                <Button
+                  title="Pause"
+                  size="small"
+                  startIcon={
+                    <Icons.PauseIcon className="text-content-contrast" />
+                  }
+                />
+                <Button
+                  title="Cancel"
+                  size="small"
+                  startIcon={
+                    <Icons.CrossIcon className="text-content-contrast" />
+                  }
+                />
+              </div>
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -181,8 +215,14 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>Continuous</span>
+                        {index % 2 == 1 ? (
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                        ) : (
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                        )}
+                        <span>{`${
+                          index % 2 == 1 ? "Instant" : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
@@ -210,7 +250,11 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                         {t("table.status")}
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
-                        <Icons.OutsideLinkIcon className="w-5 h-5" />
+                        {Math.sign(transaction.sent_token) > 0 ? (
+                          <Icons.IncomingIcon className="w-5 h-5" />
+                        ) : (
+                          <Icons.OutgoingIcon className="w-5 h-5" />
+                        )}
                         <span>Ongoing</span>
                       </div>
                     </div>
@@ -252,7 +296,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default HistoryTableRow;
+export default HistoryTableRow

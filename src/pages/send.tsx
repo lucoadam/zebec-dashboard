@@ -1,19 +1,19 @@
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
-import Layout from "components/layouts/Layout";
-import { ContinuousStream } from "components/send/continuousStream";
-import { ContinuousStreamFormData } from "components/send/continuousStream.d";
-import { Button } from "components/shared";
-import type { NextPage } from "next";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
-import { toSubstring } from "utils";
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import Layout from "components/layouts/Layout"
+import { ContinuousStream } from "components/send/continuousStream"
+import { ContinuousStreamFormData } from "components/send/continuousStream.d"
+import { Button } from "components/shared"
+import type { NextPage } from "next"
+import { useTranslation } from "next-i18next"
+import { serverSideTranslations } from "next-i18next/serverSideTranslations"
+import { useState } from "react"
+import { toSubstring } from "utils"
 
 const Send: NextPage = () => {
-  const { t } = useTranslation("common");
-  const [formValues, setFormValues] = useState<ContinuousStreamFormData>();
-  const walletTokens = useAppSelector((state) => state.walletBalance.tokens);
+  const { t } = useTranslation("common")
+  const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
+  const walletTokens = useAppSelector((state) => state.walletBalance.tokens)
   return (
     <Layout pageTitle="Zebec">
       <div className="py-16 container">
@@ -26,7 +26,9 @@ const Send: NextPage = () => {
           </div>
           <div className="p-10 flex flex-col justify-center text-content-primary w-[400px]">
             <div className="border-dashed border-b pb-4 border-outline">
-              <h1 className="text-base font-semibold">{t("send:stream-overview")}</h1>
+              <h1 className="text-base font-semibold">
+                {t("send:stream-overview")}
+              </h1>
             </div>
             <div className="mt-4 pt-4">
               <p className="text-subtitle text-content-secondary">
@@ -93,15 +95,19 @@ const Send: NextPage = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "validation", "send"])),
-    },
-  };
+      ...(await serverSideTranslations(locale, [
+        "common",
+        "validation",
+        "send"
+      ]))
+    }
+  }
 }
 
-export default Send;
+export default Send

@@ -1,29 +1,29 @@
-import React, { FC, useState, useRef } from "react";
-import Link from "next/link";
-import { useTranslation } from "next-i18next";
-import { RoutesArrayProps } from "./routes";
-import { CollapseDropdown } from "../shared";
-import * as Icons from "../../assets/icons";
+import { useTranslation } from "next-i18next"
+import Link from "next/link"
+import { FC, useRef, useState } from "react"
+import * as Icons from "../../assets/icons"
+import { CollapseDropdown } from "../shared"
+import { RoutesArrayProps } from "./routes.d"
 //hooks
-import { useClickOutside } from "../../hooks";
+import { useClickOutside } from "../../hooks"
 
 const NavGroup: FC<RoutesArrayProps> = (props) => {
-  const { name, Icon, children } = props;
+  const { name, Icon, children } = props
 
-  const { t } = useTranslation("common");
-  const navGroupDropdownWrapper = useRef(null);
+  const { t } = useTranslation("common")
+  const navGroupDropdownWrapper = useRef(null)
 
   const [toggleNavGroupDropdown, setToggleNavGroupDropdown] =
-    useState<boolean>(false);
+    useState<boolean>(false)
 
   const handleClose = () => {
-    setToggleNavGroupDropdown(false);
-  };
+    setToggleNavGroupDropdown(false)
+  }
 
   //handle clicking outside
   useClickOutside(navGroupDropdownWrapper, {
-    onClickOutside: handleClose,
-  });
+    onClickOutside: handleClose
+  })
 
   return (
     <>
@@ -47,7 +47,7 @@ const NavGroup: FC<RoutesArrayProps> = (props) => {
         {/* Nav Group Dropdown */}
         <CollapseDropdown show={toggleNavGroupDropdown}>
           {children?.map((link) => {
-            const { name, path, Icon } = link;
+            const { name, path, Icon } = link
             return (
               <Link key={name} href={path ?? "/"}>
                 <a className="py-3 pl-4 pr-6 flex items-center gap-x-2 text-subtitle-sm text-content-secondary font-medium group focus:outline-none">
@@ -61,12 +61,12 @@ const NavGroup: FC<RoutesArrayProps> = (props) => {
                   </span>
                 </a>
               </Link>
-            );
+            )
           })}
         </CollapseDropdown>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default NavGroup;
+export default NavGroup

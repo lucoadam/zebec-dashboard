@@ -1,35 +1,47 @@
-import React, { FC, Fragment, useRef } from "react";
-import Image from "next/image";
-import { useTranslation } from "next-i18next";
-import { Button, IconButton } from "components/shared";
-import { toSubstring } from "utils";
-import * as Icons from "assets/icons";
-import * as Images from "assets/images";
+import React, { FC, Fragment, useRef, useState } from "react"
+import Image from "next/image"
+import { useTranslation } from "next-i18next"
+import { Button, IconButton, Modal } from "components/shared"
+import { toSubstring } from "utils"
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { useDispatch } from "react-redux"
+import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
+import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
+import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
 
 interface OutgoingTableRowProps {
-  index: number;
-  transaction: any;
-  activeDetailsRow: "" | number;
-  handleToggleRow: () => void;
+  index: number
+  transaction: any
+  activeDetailsRow: "" | number
+  handleToggleRow: () => void
 }
 
 const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
-  handleToggleRow,
+  handleToggleRow
 }) => {
-  const { t } = useTranslation("transactions");
-  const detailsRowRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
+  const [currentStep, setCurrentStep] = React.useState(-1)
+  let [isOpen, setIsOpen] = useState(false)
+  const dispatch = useDispatch()
+
+  // function toggleModal() {
+  //   setIsOpen(!isOpen)
+
+  // }
 
   const styles = {
     detailsRow: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-    },
-  };
+          : "0px"
+    }
+  }
 
   return (
     <>
@@ -74,6 +86,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   startIcon={
                     <Icons.ResumeIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(toggleResumeModal())
+                  }}
                 />
                 <Button
                   title="Pause"
@@ -81,13 +96,20 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   startIcon={
                     <Icons.PauseIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(togglePauseModal())
+                  }}
                 />
+
                 <Button
                   title="Cancel"
                   size="small"
                   startIcon={
                     <Icons.CrossIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(toggleCancelModal())
+                  }}
                 />
               </div>
               <IconButton
@@ -255,7 +277,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         </tr>
       </Fragment>
     </>
-  );
-};
+  )
+}
 
-export default OutgoingTableRow;
+export default OutgoingTableRow

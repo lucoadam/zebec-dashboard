@@ -1,36 +1,36 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, InputField } from "components/shared";
-import { useTranslation } from "next-i18next";
-import { FC, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import { StepsComponentProps } from "../CreateTreasury.d";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { Button, InputField } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import * as Yup from "yup"
+import { StepsComponentProps } from "../CreateTreasury.d"
 
 const AddTreasuryName: FC<StepsComponentProps> = (props) => {
-  const { t } = useTranslation("createTreasury");
+  const { t } = useTranslation("createTreasury")
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("validation:treasury-name-required")),
-  });
+    name: Yup.string().required(t("validation:treasury-name-required"))
+  })
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
+    setValue
   } = useForm({
     mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema),
-  });
+    resolver: yupResolver(validationSchema)
+  })
 
   useEffect(() => {
     if (props.treasury.name !== "") {
-      setValue("name", props.treasury.name);
+      setValue("name", props.treasury.name)
     }
-  }, [props.treasury.name, setValue]);
+  }, [props.treasury.name, setValue])
 
   const onSubmit = (data: any) => {
-    props.setCurrentStep(1);
-    props.setTreasury((treasury) => ({ ...treasury, name: data.name }));
-  };
+    props.setCurrentStep(1)
+    props.setTreasury((treasury) => ({ ...treasury, name: data.name }))
+  }
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -42,7 +42,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
         </p>
         <InputField
           error={!!errors.name}
-          helper={errors?.name?.message || ""}
+          helper={errors.name?.message?.toString() || ""}
           label={t("treasury:treasury-name")}
           placeholder={t("treasury:name-placeholder")}
           type="text"
@@ -59,7 +59,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
         />
       </form>
     </>
-  );
-};
+  )
+}
 
-export default AddTreasuryName;
+export default AddTreasuryName

@@ -1,49 +1,49 @@
-import React, { FC } from "react";
-import { twMerge } from "tailwind-merge";
+import React, { FC } from "react"
+import { twMerge } from "tailwind-merge"
 import {
   IconButtonProps,
   IconButtonVariant,
   ButtonSize,
-  ButtonShape,
-} from "./Button.d";
+  ButtonShape
+} from "./Button.d"
 
 const getIconButtonSizeStyles = (
   size: ButtonSize,
-  variant: IconButtonVariant,
+  variant: IconButtonVariant
 ) => {
   switch (size) {
     case "medium":
-      return `${variant === "plain" ? "text-2xl" : "text-sm"} w-7 h-7`;
+      return `${variant === "plain" ? "text-2xl" : "text-sm"} w-7 h-7`
     case "small":
-      return `w-4 h-4`;
+      return `w-4 h-4`
     default:
-      return null;
+      return null
   }
-};
+}
 
 const getIconButtonVariantStyles = (variant: IconButtonVariant) => {
   switch (variant) {
     case "default":
     case "solid":
-      return `border border-outline bg-background-secondary`;
+      return `border border-outline bg-background-secondary`
     case "outlined":
-      return `border border-outline bg-transparent`;
+      return `border border-outline bg-transparent`
     case "plain":
     default:
-      return null;
+      return null
   }
-};
+}
 
 const getIconButtonShapeStyles = (shape: ButtonShape) => {
   switch (shape) {
     case "circle":
-      return `rounded-full`;
+      return `rounded-full`
     case "round":
-      return `rounded-lg`;
+      return `rounded-lg`
     default:
-      return null;
+      return null
   }
-};
+}
 
 export const IconButton: FC<IconButtonProps> = (props) => {
   const {
@@ -54,23 +54,23 @@ export const IconButton: FC<IconButtonProps> = (props) => {
     className,
     icon,
     ...rest
-  } = props;
+  } = props
 
-  const sizeStyles = getIconButtonSizeStyles(size, variant);
-  const variantStyles = getIconButtonVariantStyles(variant);
-  const shapeStyles = getIconButtonShapeStyles(shape);
+  const sizeStyles = getIconButtonSizeStyles(size, variant)
+  const variantStyles = getIconButtonVariantStyles(variant)
+  const shapeStyles = getIconButtonShapeStyles(shape)
 
   return (
     <>
       <button
         className={twMerge(
           `grid place-content-center text-content-primary hover:text-primary-contrast text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles}`,
-          className ?? "",
+          className ?? ""
         )}
         {...rest}
       >
         {children ? children : icon}
       </button>
     </>
-  );
-};
+  )
+}

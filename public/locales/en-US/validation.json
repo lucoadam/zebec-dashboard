@@ -2,9 +2,9 @@
     "treasury-name-required": "Please enter a name for your treasury",
     "name-required": "Name is required",
     "name-exists": "Name already exists",
-    "wallet-required":"Wallet address is required",
-    "wallet-invalid":"Invalid wallet address",
-    "wallet-exists":"Wallet address already exists",
+    "wallet-required": "Wallet address is required",
+    "wallet-invalid": "Invalid wallet address",
+    "wallet-exists": "Wallet address already exists",
     "at-least-two-owners-required": "At least two owners are required",
     "transaction-name-required": "Transaction name is required",
     "remarks-required": "Remarks is required",
@@ -19,5 +19,6 @@
     "noOfTimes-invalid": "Invalid No of Times",
     "tokenAmount-required": "Token Amount is required",
     "tokenAmount-invalid": "Invalid Token Amount",
-    "interval-required": "Interval is required"
+    "interval-required": "Interval is required",
+    "wallet-address-required": "Wallet Address is required"
 }

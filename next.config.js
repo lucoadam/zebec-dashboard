@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 
-const { i18n } = require("./next-i18next.config");
+const { i18n } = require("./next-i18next.config")
 
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    RPC_NETWORK: process.env.RPC_NETWORK,
+    RPC_NETWORK: process.env.RPC_NETWORK
   },
   i18n,
   webpack(config) {
@@ -13,17 +13,17 @@ const nextConfig = {
       {
         test: /\.svg$/i,
         type: "asset",
-        resourceQuery: /url/,
+        resourceQuery: /url/
       },
       {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
         resourceQuery: { not: [/url/] },
-        use: [{ loader: "@svgr/webpack", options: { icon: true } }],
-      },
-    );
-    return config;
-  },
-};
+        use: [{ loader: "@svgr/webpack", options: { icon: true } }]
+      }
+    )
+    return config
+  }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

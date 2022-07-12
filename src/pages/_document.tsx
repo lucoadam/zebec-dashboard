@@ -1,12 +1,12 @@
-import { ReactElement } from "react";
+import { ReactElement } from "react"
 import Document, {
   Html,
   Head,
   Main,
-  NextScript,
+  NextScript
   //   DocumentContext,
   //   DocumentInitialProps,
-} from "next/document";
+} from "next/document"
 
 class CustomDocument extends Document {
   //   static async getInitialProps(
@@ -30,8 +30,8 @@ class CustomDocument extends Document {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }
 
-export default CustomDocument;
+export default CustomDocument

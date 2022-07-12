@@ -1,56 +1,56 @@
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
-import ActivityDeopsitCurve from "assets/images/treasury/activity/activity1.svg";
-import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg";
-import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg";
-import { Button, InputField, Tab } from "components/shared";
-import { useTranslation } from "next-i18next";
-import React, { useState } from "react";
-import { formatCurrency } from "utils";
-import { getBalance, getUsdBalance } from "utils/getBalance";
-import { Deposit } from "./Deposit";
-import { Withdrawal } from "./Withdrawal";
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import ActivityDeopsitCurve from "assets/images/treasury/activity/activity1.svg"
+import ActivityOutgoingCurve from "assets/images/treasury/activity/activity2.svg"
+import ActivityWithdrawalCurve from "assets/images/treasury/activity/activity3.svg"
+import { Button, InputField, Tab } from "components/shared"
+import { useTranslation } from "next-i18next"
+import React, { useState } from "react"
+import { formatCurrency } from "utils"
+import { getBalance, getUsdBalance } from "utils/getBalance"
+import { Deposit } from "./Deposit"
+import { Withdrawal } from "./Withdrawal"
 
 const fundTransferTabs = [
   {
     title: "Deposit",
     icon: <Icons.ArrowDownLeftIcon />,
     count: 0,
-    Component: <Deposit />,
+    Component: <Deposit />
   },
   {
     title: "Withdrawal",
     icon: <Icons.ArrowUpRightIcon />,
     count: 0,
-    Component: <Withdrawal />,
-  },
-];
+    Component: <Withdrawal />
+  }
+]
 
 const Overview = () => {
-  const { t } = useTranslation();
-  const [search, setSearch] = useState<string>("");
+  const { t } = useTranslation()
+  const [search, setSearch] = useState<string>("")
 
-  const [activePage, setActivePage] = useState<number>(0);
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+  const [activePage, setActivePage] = useState<number>(0)
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
-    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || [];
+    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   const filterTokens = () => {
     if (search !== "")
       return tokenDetails.filter((item) =>
-        item.symbol.toLowerCase().includes(search),
-      );
-    return tokenDetails;
-  };
+        item.symbol.toLowerCase().includes(search)
+      )
+    return tokenDetails
+  }
 
   return (
-    <div className="flex flex-wrap md:flex-no-wrap w-full md-justify-start sm:justify-center">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
       {/**
        * First Column
        *    1. Safe Balance
        *    2. Incoming/ Outgoing
        *    3. Activity this Week
        */}
-      <div className="sm:w-1 md:w-1/3 pr-[12px] flex flex-col justify-between">
+      <div className="flex flex-col justify-between">
         {/**
          * Safe Balance
          */}
@@ -99,7 +99,7 @@ const Overview = () => {
             {t("treasuryOverview:activity-this-week")}
           </p>
           {/* <canvas id="line-chart" className="w-[40px]"></canvas> */}
-          <div className="w-full  bg-background-secondary pr-0.5">
+          <div className="overflow-x-auto bg-background-secondary pr-0.5">
             <table className="table-auto w-full border-separate border-spacing-y-[24px]">
               <tbody>
                 <tr>
@@ -174,7 +174,7 @@ const Overview = () => {
        * Second Column
        *   1. Deposited Assets
        * **/}
-      <div className="sm:w-1 md:w-1/3 px-[12px]">
+      <div>
         <div className="w-full rounded-[4px] bg-background-secondary h-full px-[24px] py-[24px] mb-[24px]">
           <p className="leading-4 text-xs uppercase font-semibold text-content-contrast">
             {t("treasuryOverview:deposited-assets")}
@@ -201,7 +201,7 @@ const Overview = () => {
             )}
             {filterTokens().map((item) => (
               <div
-                className="flex w-full h-[32px] mb-[24px] justify-between"
+                className="flex w-full h-8 mb-6 justify-between"
                 key={item.symbol}
               >
                 <div className="flex items-center">
@@ -220,7 +220,7 @@ const Overview = () => {
                   <p className="text-sm leading-6 font-medium text-content-primary text-right ">
                     {formatCurrency(
                       getBalance(treasuryTokens, item.symbol),
-                      "$",
+                      "$"
                     )}
                   </p>
                   <p className="text-xs font-subtitle text-content-contrast text-right">
@@ -233,11 +233,11 @@ const Overview = () => {
           </div>
         </div>
       </div>
-      <div className="sm:w-1 md:w-1/3 pl-[12px] flex flex-col justify-between">
+      <div className="grid md:grid-cols-2 md:gap-6 lg:col-span-1 lg:grid-cols-1 md:col-span-2 md:flex-row md:flex-wrap flex-col justify-between">
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full rounded bg-background-secondary mb-6">
+        <div className="w-full pt-3 rounded bg-background-secondary">
           <div className="flex">
             {fundTransferTabs.map((fundTranfer, index) => {
               return (
@@ -246,14 +246,14 @@ const Overview = () => {
                   type="plain"
                   className="w-1/2"
                   title={`${t(
-                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`,
+                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`
                   )}`}
                   isActive={activePage === index}
                   startIcon={fundTranfer.icon}
                   count={fundTranfer.count}
                   onClick={() => setActivePage(index)}
                 />
-              );
+              )
             })}
           </div>
           <div className="px-[24px] mt-[24px] pb-[24px] min-h-[210px]">
@@ -263,7 +263,7 @@ const Overview = () => {
         {/**
          * Zebec Treasury Help
          */}
-        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px] mb-[24px]">
+        <div className="w-full rounded-[4px] bg-background-secondary px-[24px] py-[24px]">
           <p className="leading-6 text-base font-semibold text-content-primary mb-[8px]">
             {t("treasuryOverview:treasury-help")}
           </p>
@@ -312,7 +312,7 @@ const Overview = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Overview;
+export default Overview

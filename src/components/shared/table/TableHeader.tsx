@@ -1,28 +1,26 @@
-import React, { FC } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next"
+import { FC } from "react"
 
 export interface TableHeader {
-  label: string;
-  width?: string;
+  label: string
+  width?: string
 }
 
 interface TableHeaderProps {
-  headers: TableHeader[];
+  headers: TableHeader[]
 }
 
 const getWidth = (width: string | undefined) => {
   if (width) {
-    return `w-[${width}]`;
+    return `min-w-${width}`
   }
-  return `w-full`;
-};
+  return `w-full`
+}
 
 export const TableHeader: FC<TableHeaderProps> = (props) => {
-  const { t } = useTranslation("transactions");
+  const { t } = useTranslation("transactions")
 
-  const { headers } = props;
-
- 
+  const { headers } = props
 
   return (
     <>
@@ -36,12 +34,12 @@ export const TableHeader: FC<TableHeaderProps> = (props) => {
                   header.width
                 )}`}
               >
-                {index !== headers.length - 1 && t(`table.${header.label}`)}
+                {index !== headers.length && t(`${header.label}`)}
               </td>
-            );
+            )
           })}
         </tr>
       </thead>
     </>
-  );
-};
+  )
+}

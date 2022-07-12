@@ -1,29 +1,28 @@
-import { IconButton } from "components/shared";
-import { NextPage } from "next";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
-import { LeftArrowIcon } from "../../assets/icons";
-import Layout from "../../components/layouts/Layout";
-import CreateTreasury from "../../components/treasury/create/CreateTreasury";
+import { IconButton } from "components/shared"
+import { NextPage } from "next"
+import { useTranslation } from "next-i18next"
+import { serverSideTranslations } from "next-i18next/serverSideTranslations"
+import { useRouter } from "next/router"
+import { LeftArrowIcon } from "../../assets/icons"
+import Layout from "../../components/layouts/Layout"
+import CreateTreasury from "../../components/treasury/create/CreateTreasury"
 
 const CreateTreasuryPage: NextPage = () => {
-  const { t } = useTranslation();
-  const router = useRouter();
+  const { t } = useTranslation()
+  const router = useRouter()
 
   return (
     <Layout pageTitle="Zebec - Create Treasury">
       <div className="pt-[76px]">
         <div className="container w-full">
-          <div className="flex justify-start items-center px-[1.9rem] pb-9">
+          <div className="flex justify-start items-center px-[35px] pb-9">
             <IconButton
+              className="mr-[19px]"
               onClick={() => {
-                router.push("/treasury");
+                router.push("/treasury")
               }}
               variant="plain"
-              icon={
-                <LeftArrowIcon className="cursor-pointer w-[18px] h-[16px] mr-[19px]" />
-              }
+              icon={<LeftArrowIcon className="cursor-pointer" />}
             />
 
             <h4 className="text-heading-4 font-semibold text-content-primary">
@@ -35,8 +34,8 @@ const CreateTreasuryPage: NextPage = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
 export async function getStaticProps({ locale }: any) {
   return {
@@ -45,10 +44,10 @@ export async function getStaticProps({ locale }: any) {
         "common",
         "treasury",
         "createTreasury",
-        "validation",
-      ])),
-    },
-  };
+        "validation"
+      ]))
+    }
+  }
 }
 
-export default CreateTreasuryPage;
+export default CreateTreasuryPage

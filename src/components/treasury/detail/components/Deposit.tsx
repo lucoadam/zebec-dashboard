@@ -1,47 +1,44 @@
 /* eslint-disable @next/next/no-img-element */
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
-import { Button, CollapseDropdown, InputField } from "components/shared";
-import { useClickOutside } from "hooks";
-import { useTranslation } from "next-i18next";
-import { useEffect, useRef, useState } from "react";
-import { getBalance } from "utils/getBalance";
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import { Button, CollapseDropdown, InputField } from "components/shared"
+import { useClickOutside } from "hooks"
+import { useTranslation } from "next-i18next"
+import { useEffect, useRef, useState } from "react"
+import { getBalance } from "utils/getBalance"
 
 export const Deposit = () => {
-  const { t } = useTranslation();
-  const tokensDropdownWrapper = useRef(null);
+  const { t } = useTranslation()
+  const tokensDropdownWrapper = useRef(null)
 
-  const [searchData, setSearchData] = useState("");
+  const [searchData, setSearchData] = useState("")
   const [toggleTokensDropdown, setToggleTokensDropdown] =
-    useState<boolean>(false);
-  const tokenDetails =
-    useAppSelector((state) => state.tokenDetails.tokens);
+    useState<boolean>(false)
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const walletTokens =
-    useAppSelector((state) => state.walletBalance.tokens) || [];
+    useAppSelector((state) => state.zebecBalance.tokens) || []
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
       symbol: "",
-      image: "",
+      image: ""
     }
-  );
-  const [amount, setAmount] = useState("");
+  )
+  const [amount, setAmount] = useState("")
 
-  const handleClose = () => {
-    setToggleTokensDropdown(false);
-  };
+  const handleClose = () => setToggleTokensDropdown(false)
 
   //handle clicking outside
   useClickOutside(tokensDropdownWrapper, {
-    onClickOutside: handleClose,
-  });
+    onClickOutside: handleClose
+  })
 
   const handleMaxClick = () => {
-    setAmount(getBalance(walletTokens, currentToken.symbol).toString());
-  };
+    setAmount(getBalance(walletTokens, currentToken.symbol).toString())
+  }
 
-  useEffect(()=>{
-    if(tokenDetails.length>0){
-      setCurrentToken(tokenDetails[0]);
+  useEffect(() => {
+    if (tokenDetails.length > 0) {
+      setCurrentToken(tokenDetails[0])
     }
   }, [tokenDetails])
 
@@ -52,13 +49,15 @@ export const Deposit = () => {
       </p>
       <InputField
         label={t("treasuryOverview:token")}
-        className="mb-[24px] relative text-content-primary"
+        className="mb-6 relative text-content-primary"
         error={false}
       >
         <div>
           <div
+            onMouseDown={(event) => event.stopPropagation()}
             onClick={() => setToggleTokensDropdown((prev) => !prev)}
-            className="absolute left-[10px] top-[8px]"
+            className="absolute left-2.5 top-2"
+            aria-disabled
           >
             <div className="relative flex cursor-pointer  w-[104px] justify-center items-center h-[40px] text-content-primary">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -72,24 +71,29 @@ export const Deposit = () => {
               <div className="max-w-[68px] ml-[5px] overflow-x-hidden text-content-primary">
                 {currentToken.symbol}
               </div>
-              <Icons.CheveronDownIcon className="text-sm w-[28px]" />
+              <Icons.CheveronDownIcon className="text-sm w-7" />
             </div>
           </div>
           <div ref={tokensDropdownWrapper}>
             <CollapseDropdown
-              className="w-full left-[0px] mt-5 "
+              className="w-full left-0 mt-5 "
               show={toggleTokensDropdown}
               variant="light"
             >
-              <div className="">
-                <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+              <div>
+                <Icons.SearchIcon className="text-lg absolute left-5 top-4 text-content-secondary" />
                 <input
-                  className="is-search w-full h-[48px] bg-background-primary"
+                  className="is-search w-full h-12 bg-background-primary"
                   placeholder="Search token"
                   type="text"
                   onChange={(e) => setSearchData(e.target.value)}
                 />
-                <div className="max-h-60  overflow-auto">
+                <div className="max-h-48 rounded-lg overflow-auto">
+                  {tokenDetails.filter((token) =>
+                    token.symbol.includes(searchData.toUpperCase())
+                  ).length === 0 && (
+                    <div className="py-5 px-4">No tokens found</div>
+                  )}
                   {tokenDetails
                     .filter((token) =>
                       token.symbol.includes(searchData.toUpperCase())
@@ -98,15 +102,15 @@ export const Deposit = () => {
                       <div
                         key={item.symbol}
                         onClick={(event) => {
-                          event.stopPropagation();
-                          setToggleTokensDropdown(false);
-                          setCurrentToken(item);
+                          event.stopPropagation()
+                          setToggleTokensDropdown(false)
+                          setCurrentToken(item)
                         }}
-                        className="border-b-[1px] border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
+                        className="border-b-[1px] last:border-b-0 border-outline flex cursor-pointer overflow-hidden py-4 px-5 justify-start items-center hover:bg-background-light"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          className="w-[18px] h-[18px] mr-[12px]  text-content-primary"
+                          className="w-4 h-4 mr-3  text-content-primary"
                           src={item.image}
                           alt={item.symbol}
                         />
@@ -140,7 +144,7 @@ export const Deposit = () => {
           <Button
             size="small"
             title={t("treasuryOverview:max")}
-            className="h-[40px] absolute right-[10px] top-[8px] text-content-primary"
+            className="h-10 absolute right-2.5 top-2 text-content-primary"
             onClick={handleMaxClick}
           />
         </div>
@@ -149,8 +153,9 @@ export const Deposit = () => {
       <Button
         className="w-full"
         variant="gradient"
+        type="button"
         title={t("treasuryOverview:deposit")}
       />
     </>
-  );
-};
+  )
+}

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppSelector } from "app/hooks";
-import * as Icons from "assets/icons";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
 import {
   Button,
   CollapseDropdown,
@@ -9,69 +9,69 @@ import {
   InputField,
   TimePicker,
   Toggle
-} from "components/shared";
-import { useClickOutside } from "hooks";
-import moment from "moment";
-import { useTranslation } from "next-i18next";
-import { FC, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toSubstring } from "utils";
-import { formatCurrency } from "utils/formatCurrency";
-import { getBalance } from "utils/getBalance";
-import * as Yup from "yup";
+} from "components/shared"
+import { useClickOutside } from "hooks"
+import moment from "moment"
+import { useTranslation } from "next-i18next"
+import { FC, useEffect, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toSubstring } from "utils"
+import { formatCurrency } from "utils/formatCurrency"
+import { getBalance } from "utils/getBalance"
+import * as Yup from "yup"
 import {
   ContinuousStreamFormData,
   ContinuousStreamProps,
   FormKeys
-} from "./continuousStream.d";
+} from "./continuousStream.d"
 
 const addressBook = [
   {
     name: "Alice",
-    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv",
+    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv"
   },
   {
     name: "Bob",
-    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ",
+    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ"
   },
   {
     name: "Charlie",
-    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6",
+    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6"
   },
   {
     name: "Dave",
-    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V",
-  },
-];
+    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V"
+  }
+]
 
 const intervals = [
   {
     key: "Months",
-    value: 24 * 30 * 60,
+    value: 24 * 30 * 60
   },
   {
     key: "Weeks",
-    value: 24 * 7 * 60,
+    value: 24 * 7 * 60
   },
   {
     key: "Days",
-    value: 24 * 60,
+    value: 24 * 60
   },
   {
     key: "Hours",
-    value: 60,
+    value: 60
   },
   {
     key: "Minutes",
-    value: 1,
-  },
-];
+    value: 1
+  }
+]
 
 export const ContinuousStream: FC<ContinuousStreamProps> = ({
   setFormValues,
-  tokenBalances,
+  tokenBalances
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const validationSchema: any = Yup.object().shape({
     transactionName: Yup.string().required(
       t("validation:transaction-name-required")
@@ -81,14 +81,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       "check-remarks",
       t("validation:remarks-required"),
       () => {
-        return !!getValue("remarks") || !showRemarks;
+        return !!getValue("remarks") || !showRemarks
       }
     ),
     token: Yup.string().required(t("validation:token-required")),
     amount: Yup.string()
       .required(t("validation:amount-required"))
       .test("amount-invalid", t("validation:amount-invalid"), () => {
-        return Number(getValue("amount")) > 0;
+        return Number(getValue("amount")) > 0
       }),
     startDate: Yup.string()
       .required(t("validation:start-date-time-required"))
@@ -99,7 +99,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           return moment(
             `${getValue("startDate")} ${getValue("startTime")}`,
             "DD/MM/YYYY LT"
-          ).isAfter(moment());
+          ).isAfter(moment())
         }
       ),
     startTime: Yup.string()
@@ -111,7 +111,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           return moment(
             `${getValue("startDate")} ${getValue("startTime")}`,
             "DD/MM/YYYY LT"
-          ).isAfter(moment());
+          ).isAfter(moment())
         }
       ),
     endDate: Yup.string()
@@ -132,7 +132,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 "DD/MM/YYYY LT"
               )
             )
-          );
+          )
         }
       ),
     endTime: Yup.string()
@@ -153,35 +153,35 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 "DD/MM/YYYY LT"
               )
             )
-          );
+          )
         }
       ),
     noOfTimes: Yup.string()
       .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
-        return !!getValue("noOfTimes") || !enableStreamRate;
+        return !!getValue("noOfTimes") || !enableStreamRate
       })
       .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
-        return Number(getValue("noOfTimes")) > 0 || !enableStreamRate;
+        return Number(getValue("noOfTimes")) > 0 || !enableStreamRate
       }),
     tokenAmount: Yup.string()
       .test(
         "tokenAmount-required",
         t("validation:tokenAmount-required"),
         () => {
-          return !!getValue("tokenAmount") || !enableStreamRate;
+          return !!getValue("tokenAmount") || !enableStreamRate
         }
       )
       .test("tokenAmount-invalid", t("validation:tokenAmount-invalid"), () => {
-        return Number(getValue("tokenAmount")) > 0 || !enableStreamRate;
+        return Number(getValue("tokenAmount")) > 0 || !enableStreamRate
       }),
     interval: Yup.string().test(
       "interval-required",
       t("validation:interval-required"),
       () => {
-        return !!getValue("interval") || !enableStreamRate;
+        return !!getValue("interval") || !enableStreamRate
       }
-    ),
-  });
+    )
+  })
 
   const {
     register,
@@ -191,78 +191,78 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    watch,
+    watch
   } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
-    resolver: yupResolver(validationSchema),
-  });
+    resolver: yupResolver(validationSchema)
+  })
 
-  const tokensDropdownWrapper = useRef(null);
-  const receiverDropdownWrapper = useRef(null);
-  const intervalDropdownWrapper = useRef(null);
+  const tokensDropdownWrapper = useRef(null)
+  const receiverDropdownWrapper = useRef(null)
+  const intervalDropdownWrapper = useRef(null)
 
-  const [tokenSearchData, setTokenSearchData] = useState("");
-  const [receiverSearchData, setReceiverSearchData] = useState("");
+  const [tokenSearchData, setTokenSearchData] = useState("")
+  const [receiverSearchData, setReceiverSearchData] = useState("")
   const [toggleTokensDropdown, setToggleTokensDropdown] =
-    useState<boolean>(false);
+    useState<boolean>(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] =
-    useState<boolean>(false);
+    useState<boolean>(false)
   const [toggleIntervalDropdown, setToggleIntervalDropdown] =
-    useState<boolean>(false);
-  const [showRemarks, setShowRemarks] = useState<boolean>(false);
-  const [enableStreamRate, setEnableStreamRate] = useState<boolean>(false);
+    useState<boolean>(false)
+  const [showRemarks, setShowRemarks] = useState<boolean>(false)
+  const [enableStreamRate, setEnableStreamRate] = useState<boolean>(false)
 
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens);
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
 
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
       symbol: "",
-      image: "",
+      image: ""
     }
-  );
+  )
 
   const handleTokensClose = () => {
-    setToggleTokensDropdown(false);
-  };
+    setToggleTokensDropdown(false)
+  }
   const handleReceiverClose = () => {
-    setToggleReceiverDropdown(false);
-  };
+    setToggleReceiverDropdown(false)
+  }
   const handleIntervalClose = () => {
-    setToggleIntervalDropdown(false);
-  };
+    setToggleIntervalDropdown(false)
+  }
 
   //handle clicking outside
   useClickOutside(tokensDropdownWrapper, {
-    onClickOutside: handleTokensClose,
-  });
+    onClickOutside: handleTokensClose
+  })
   useClickOutside(receiverDropdownWrapper, {
-    onClickOutside: handleReceiverClose,
-  });
+    onClickOutside: handleReceiverClose
+  })
   useClickOutside(intervalDropdownWrapper, {
-    onClickOutside: handleIntervalClose,
-  });
+    onClickOutside: handleIntervalClose
+  })
 
   useEffect(() => {
     if (tokenDetails.length > 0) {
-      setCurrentToken(tokenDetails[0]);
-      setValue("token", tokenDetails[0].symbol);
+      setCurrentToken(tokenDetails[0])
+      setValue("token", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue]);
+  }, [tokenDetails, setValue])
 
   const onSubmit = (data: any) => {
-    console.log(data);
-  };
+    console.log(data)
+  }
 
   const getValue = (key: FormKeys) => {
-    return getValues()[key];
-  };
+    return getValues()[key]
+  }
 
   const handleStreamRate = () => {
-    const selectedNoOfTimes = Number(getValue("noOfTimes")) || 0;
-    const selectedTokenAmount = Number(getValue("tokenAmount")) || 0;
-    const totalAmount = selectedNoOfTimes * selectedTokenAmount;
-    setValue("amount", totalAmount.toString());
-    trigger("amount");
+    const selectedNoOfTimes = Number(getValue("noOfTimes")) || 0
+    const selectedTokenAmount = Number(getValue("tokenAmount")) || 0
+    const totalAmount = selectedNoOfTimes * selectedTokenAmount
+    setValue("amount", totalAmount.toString())
+    trigger("amount")
 
     if (
       getValue("startDate") &&
@@ -271,43 +271,43 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     ) {
       const selectedInterval =
         intervals.find((interval) => interval.key === getValue("interval"))
-          ?.value || 0;
-      const timeDifference = selectedInterval * selectedNoOfTimes;
+          ?.value || 0
+      const timeDifference = selectedInterval * selectedNoOfTimes
       const endDateTime = moment(
         `${getValue("startDate")} ${getValue("startTime")}`,
         "DD/MM/YYYY LT"
-      ).add(timeDifference, "minutes");
-      setValue("endDate", endDateTime.format("DD/MM/YYYY"));
-      setValue("endTime", endDateTime.format("LT"));
-      trigger("endDate");
-      trigger("endTime");
+      ).add(timeDifference, "minutes")
+      setValue("endDate", endDateTime.format("DD/MM/YYYY"))
+      setValue("endTime", endDateTime.format("LT"))
+      trigger("endDate")
+      trigger("endTime")
     }
-  };
+  }
 
   const toggleStreamRate = () => {
     if (!enableStreamRate) {
-      setValue("interval", intervals[0].key);
-      handleStreamRate();
+      setValue("interval", intervals[0].key)
+      handleStreamRate()
     } else {
-      resetField("interval");
-      resetField("noOfTimes");
-      resetField("tokenAmount");
+      resetField("interval")
+      resetField("noOfTimes")
+      resetField("tokenAmount")
     }
 
-    resetField("amount");
-    resetField("endDate");
-    resetField("endTime");
-    setEnableStreamRate(!enableStreamRate);
-  };
+    resetField("amount")
+    resetField("endDate")
+    resetField("endTime")
+    setEnableStreamRate(!enableStreamRate)
+  }
 
   useEffect(() => {
     const subscription = watch(() => {
       if (setFormValues) {
-        setFormValues(getValues());
+        setFormValues(getValues())
       }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, setFormValues, getValues]);
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, setFormValues, getValues])
 
   return (
     <>
@@ -401,10 +401,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                         <div
                           key={user.address}
                           onClick={(event) => {
-                            event.stopPropagation();
-                            setToggleReceiverDropdown(false);
-                            setValue("receiverWallet", user.address);
-                            trigger("receiverWallet");
+                            event.stopPropagation()
+                            setToggleReceiverDropdown(false)
+                            setValue("receiverWallet", user.address)
+                            trigger("receiverWallet")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
@@ -517,11 +517,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                         <div
                           key={item.symbol}
                           onClick={(event) => {
-                            event.stopPropagation();
-                            setToggleTokensDropdown(false);
-                            setCurrentToken(item);
-                            setValue("token", item.symbol);
-                            trigger("token");
+                            event.stopPropagation()
+                            setToggleTokensDropdown(false)
+                            setCurrentToken(item)
+                            setValue("token", item.symbol)
+                            trigger("token")
                           }}
                           className="border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
                         >
@@ -602,14 +602,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   timeFormat={false}
                   value={getValue("startDate")}
                   onChange={(date) => {
-                    setValue("startDate", moment(date).format("DD/MM/YYYY"));
-                    trigger("startDate");
-                    trigger("startTime");
+                    setValue("startDate", moment(date).format("DD/MM/YYYY"))
+                    trigger("startDate")
+                    trigger("startTime")
                     if (!!getValue("endTime") || !!getValue("endDate")) {
-                      trigger("endDate");
-                      trigger("endTime");
+                      trigger("endDate")
+                      trigger("endTime")
                     }
-                    if (enableStreamRate) handleStreamRate();
+                    if (enableStreamRate) handleStreamRate()
                   }}
                   error={!!errors.startDate}
                 >
@@ -631,14 +631,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   startIcon={<Icons.ClockIcon />}
                   endIcon={<Icons.CheveronDownIcon />}
                   onChange={(time) => {
-                    setValue("startTime", time);
-                    trigger("startTime");
-                    trigger("startDate");
+                    setValue("startTime", time)
+                    trigger("startTime")
+                    trigger("startDate")
                     if (!!getValue("endTime") || !!getValue("endDate")) {
-                      trigger("endDate");
-                      trigger("endTime");
+                      trigger("endDate")
+                      trigger("endTime")
                     }
-                    if (enableStreamRate) handleStreamRate();
+                    if (enableStreamRate) handleStreamRate()
                   }}
                 />
               </div>
@@ -662,9 +662,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   disabled={enableStreamRate}
                   value={getValue("endDate")}
                   onChange={(date) => {
-                    setValue("endDate", moment(date).format("DD/MM/YYYY"));
-                    trigger("endDate");
-                    trigger("endTime");
+                    setValue("endDate", moment(date).format("DD/MM/YYYY"))
+                    trigger("endDate")
+                    trigger("endTime")
                   }}
                   error={!!errors.endDate}
                 >
@@ -680,9 +680,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   endIcon={<Icons.CheveronDownIcon />}
                   disabled={enableStreamRate}
                   onChange={(time) => {
-                    setValue("endTime", time);
-                    trigger("endTime");
-                    trigger("endDate");
+                    setValue("endTime", time)
+                    trigger("endTime")
+                    trigger("endDate")
                   }}
                   error={!!errors.endTime}
                 />
@@ -723,9 +723,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       type="number"
                       {...register("noOfTimes")}
                       onChange={(e) => {
-                        setValue("noOfTimes", e.target.value);
-                        handleStreamRate();
-                        trigger("noOfTimes");
+                        setValue("noOfTimes", e.target.value)
+                        handleStreamRate()
+                        trigger("noOfTimes")
                       }}
                     />
                   </div>
@@ -746,9 +746,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     type="number"
                     {...register("tokenAmount")}
                     onChange={(e) => {
-                      setValue("tokenAmount", e.target.value);
-                      handleStreamRate();
-                      trigger("tokenAmount");
+                      setValue("tokenAmount", e.target.value)
+                      handleStreamRate()
+                      trigger("tokenAmount")
                     }}
                   />
                 </InputField>
@@ -782,10 +782,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                         <div
                           key={data.key}
                           onClick={(event) => {
-                            event.stopPropagation();
-                            setToggleIntervalDropdown(false);
-                            setValue("interval", data.key);
-                            handleStreamRate();
+                            event.stopPropagation()
+                            setToggleIntervalDropdown(false)
+                            setValue("interval", data.key)
+                            handleStreamRate()
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
@@ -811,5 +811,5 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         </form>
       </div>
     </>
-  );
-};
+  )
+}
