@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react"
-import { withdrawProps } from "../data"
+import { withdrawProps } from "../data.d"
 import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
 import Loading from "assets/images/gifs/withdrawing.gif"

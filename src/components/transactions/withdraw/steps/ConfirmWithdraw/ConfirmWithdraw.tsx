@@ -1,7 +1,7 @@
-import React, { FC, Fragment, useRef, useState } from "react"
+import React, { FC } from "react"
 import { useTranslation } from "next-i18next"
 import { Button } from "components/shared"
-import { withdrawProps } from "../../data"
+import { withdrawProps } from "../../data.d"
 import { confirmWithdrawStep, confirmWithdrawStepsList } from "./data"
 
 const ConfirmWithdraw: FC<withdrawProps> = ({

@@ -24,14 +24,11 @@ export default function AddressesGroup() {
       width: "50"
     },
     {
-      label: "addressBook:actions",
+      label: "",
       width: "50"
     }
   ]
-  const handleToggleRow = (index: number) => {
-    if (index === activeDetailsRow) setActiveDetailsRow("")
-    else setActiveDetailsRow(index)
-  }
+
   const {
     register,
     formState: { errors },
@@ -47,7 +44,7 @@ export default function AddressesGroup() {
     <>
       <div className="container w-full ">
         <div className="flex justify-between items-center pb-9">
-          <h4 className="text-heading-4 font-semibold text-content-primary">
+          <h4 className="text-heading-4 font-semibold text-content-primary pl-4">
             {`${t("addressBook:address-book")} `}
           </h4>
 
@@ -56,23 +53,8 @@ export default function AddressesGroup() {
             onClick={() => alert("Create an Address Group")}
           />
         </div>
-        <div className="flex justify-between">
-          <Table headers={headers}>
-            <TableBody className="justify between">
-              {individualAddressBook.data.map((transaction, index) => {
-                return (
-                  <IndividualAddresesTableRow
-                    key={index}
-                    index={index}
-                    transaction={transaction}
-                    activeDetailsRow={activeDetailsRow}
-                    handleToggleRow={() => handleToggleRow(index)}
-                  />
-                )
-              })}
-            </TableBody>
-          </Table>
-          <div className="rounded bg-background-secondary p-10 mt-12 w-[340px] h-96">
+        <div className="grid grid-cols-3 gap-8">
+          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96">
             <div className="text-content-secondary text-subtitle font-semibold">
               {t("addressBook:add-an-address")}
             </div>
@@ -130,6 +112,22 @@ export default function AddressesGroup() {
                 />
               </div>
             </form>
+          </div>
+
+          <div className="col-span-2">
+            <Table headers={headers}>
+              <TableBody className="justify between w-full ">
+                {individualAddressBook.data.map((transaction, index) => {
+                  return (
+                    <IndividualAddresesTableRow
+                      key={index}
+                      index={index}
+                      transaction={transaction}
+                    />
+                  )
+                })}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>

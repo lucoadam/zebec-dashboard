@@ -5,7 +5,7 @@ import { Button, IconButton, InputField, Modal } from "components/shared"
 import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { WithdrawStepsList } from "./withdraw/data"
+import { WithdrawStepsList } from "./withdraw/data.d"
 
 interface IncomingTableRowProps {
   index: number
