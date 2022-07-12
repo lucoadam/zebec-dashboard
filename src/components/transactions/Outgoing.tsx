@@ -14,8 +14,8 @@ const Outgoing: FC = () => {
     { label: "transactions:table.progress" },
     { label: "transactions:table.transaction-date" },
     { label: "transactions:table.receiver" },
-    { label: "" },
-  ];
+    { label: "" }
+  ]
 
   const handleToggleRow = (index: number) => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
