@@ -5,6 +5,7 @@ import {
   ThunkAction
 } from "@reduxjs/toolkit"
 import counterSlice from "features/count/counterSlice"
+import exportSlice from "features/export-report/exportSlice"
 import layoutSlice from "features/layout/layoutSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
 import cancelSlice from "features/transaction/cancelModal/cancelSlice"
@@ -29,7 +30,8 @@ const combineReducer = combineReducers({
   pause: pauseSlice,
   cancel: cancelSlice,
   resume: resumeSlice,
-  layout: layoutSlice
+  layout: layoutSlice,
+  exportReport:exportSlice
 })
 
 // export const store = configureStore({

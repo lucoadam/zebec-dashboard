@@ -1,7 +1,10 @@
 import React, { FC, useState } from "react"
 import { useTranslation } from "next-i18next"
-import { Button, Tab } from "components/shared"
+import { Button, Tab,Modal } from "components/shared"
 import * as Icons from "assets/icons"
+import { ExportStepsList } from "./export-report/data"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { toggleExportModal } from "features/export-report/exportSlice"
 
 interface FilterTabProps {
   title: string
@@ -31,6 +34,15 @@ export const filterTabs: FilterTabProps[] = [
 
 const FilterTabs: FC = () => {
   const { t } = useTranslation("transactions")
+  const exportModal=useAppSelector((state)=>state.exportReport.exportModal);
+  const dispatch=useAppDispatch();
+  const [currentStep, setCurrentStep] = useState(-1)
+  const [isOpen, setIsOpen] = useState(false)
+
+
+  function toggleModal() {
+    setIsOpen(!isOpen)
+  }
 
   const [activeTab, setActiveTab] = useState<number>(0)
 
@@ -53,9 +65,22 @@ const FilterTabs: FC = () => {
         })}
       </div>
       {/* Export */}
+      <Modal
+                show={currentStep >= 0 && exportModal}
+                toggleModal={()=>dispatch(toggleExportModal())}
+                className={`rounded h-96`}
+                hasCloseIcon={!currentStep}
+                size="small"
+              >
+                {ExportStepsList[currentStep]?.component({
+                  setCurrentStep,
+                  
+                })}
+              </Modal>
       <Button
         title={`${t("export-report")}`}
-        onClick={() => alert("Export Report")}
+        onClick={() => {setCurrentStep(0)
+          dispatch(toggleExportModal())}}
       />
     </div>
   )
