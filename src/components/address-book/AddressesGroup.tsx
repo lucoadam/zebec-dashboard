@@ -14,7 +14,6 @@ export default function AddressesGroup() {
     addressName: Yup.string().required(t("validation:name-required")),
     walletAddress: Yup.string().required(t("validation:walet-address-required"))
   })
-
   const headers = [
     {
       label: "addressBook:name",

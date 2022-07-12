@@ -1,7 +1,10 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { updateWidth } from "features/layout/layoutSlice"
 import { useTheme } from "next-themes"
 import Image from "next/image"
+import Link from "next/link"
 import { FC, useEffect, useState } from "react"
 import * as Icons from "../../assets/icons"
 import * as Images from "../../assets/images"
@@ -18,14 +21,17 @@ const Navbar: FC = () => {
   const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
-  const [width, setWidth] = useState<number>(0)
+  // const [width, setWidth] = useState<number>(0)
   const [showMenu, setShowMenu] = useState<boolean>(false)
+
+  const width = useAppSelector((state) => state.layout.width)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     setMounted(true)
-    setWidth(window.outerWidth)
+    dispatch(updateWidth(window.outerWidth))
     window.addEventListener("resize", () => {
-      setWidth(window.outerWidth)
+      dispatch(updateWidth(window.outerWidth))
     })
   }, [])
 
@@ -88,12 +94,13 @@ const Navbar: FC = () => {
                   return <NavGroup key={index} {...route} />
               }
             })}
-            <Button
-              title="Send"
-              variant="gradient"
-              endIcon={<Icons.ArrowUpRightIcon />}
-              onClick={() => alert("Send")}
-            />
+            <Link href="/send">
+              <Button
+                title="Send"
+                variant="gradient"
+                endIcon={<Icons.ArrowUpRightIcon />}
+              />
+            </Link>
           </div>
 
           <div className="flex items-center gap-x-3 lg:absolute lg:right-0">

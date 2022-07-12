@@ -16,7 +16,7 @@ const addressBookTabs = [
   },
   {
     title: "Address Groups",
-    icon: <Icons.AddressGroup />,
+    icon: <Icons.UserGroupIcon />,
     Component: <AddressesGroup />
   }
 ]
