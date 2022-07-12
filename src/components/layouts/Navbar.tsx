@@ -1,5 +1,7 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { updateWidth } from "features/layout/layoutSlice"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
@@ -19,14 +21,17 @@ const Navbar: FC = () => {
   const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
-  const [width, setWidth] = useState<number>(0)
+  // const [width, setWidth] = useState<number>(0)
   const [showMenu, setShowMenu] = useState<boolean>(false)
+
+  const width = useAppSelector((state) => state.layout.width)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     setMounted(true)
-    setWidth(window.outerWidth)
+    dispatch(updateWidth(window.outerWidth))
     window.addEventListener("resize", () => {
-      setWidth(window.outerWidth)
+      dispatch(updateWidth(window.outerWidth))
     })
   }, [])
 
