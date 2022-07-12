@@ -16,7 +16,7 @@ const addressBookTabs = [
   },
   {
     title: "Address Groups",
-    icon: <Icons.AddressGroup />,
+    icon: <Icons.UserGroupIcon />,
     Component: <AddressesGroup />
   }
 ]
@@ -59,6 +59,7 @@ export async function getStaticProps({ locale }: any) {
       ...(await serverSideTranslations(locale, [
         "common",
         "transactions",
+        "validation",
         "addressBook"
       ]))
     }

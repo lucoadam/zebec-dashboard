@@ -4,10 +4,12 @@ import { createSlice } from "@reduxjs/toolkit"
 //declare types for state
 interface PauseState {
   pauseModal: boolean
+  pauseLoading: boolean
 }
 
 const initialState: PauseState = {
-  pauseModal: false
+  pauseModal: false,
+  pauseLoading: false
 }
 
 export const PauseSlice = createSlice({
@@ -16,10 +18,13 @@ export const PauseSlice = createSlice({
   reducers: {
     togglePauseModal: (state) => {
       state.pauseModal = !state.pauseModal
+    },
+    togglePauseLoadingModal: (state, action) => {
+      state.pauseLoading = action.payload
     }
   }
 })
 
-export const { togglePauseModal } = PauseSlice.actions
+export const { togglePauseModal, togglePauseLoadingModal } = PauseSlice.actions
 
 export default PauseSlice.reducer

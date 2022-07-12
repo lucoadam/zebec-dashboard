@@ -6,6 +6,10 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { formatCurrency, toSubstring } from "utils"
+import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
+import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
+import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
+import { useDispatch } from "react-redux"
 
 interface HistoryTableRowProps {
   index: number
@@ -29,6 +33,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
   handleToggleRow
 }) => {
   const { t } = useTranslation("transactions")
+  const dispatch = useDispatch()
   const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
@@ -105,6 +110,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                   startIcon={
                     <Icons.ResumeIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(toggleResumeModal())
+                  }}
                 />
                 <Button
                   title="Pause"
@@ -112,6 +120,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                   startIcon={
                     <Icons.PauseIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(togglePauseModal())
+                  }}
                 />
                 <Button
                   title="Cancel"
@@ -119,6 +130,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                   startIcon={
                     <Icons.CrossIcon className="text-content-contrast" />
                   }
+                  onClick={() => {
+                    dispatch(toggleCancelModal())
+                  }}
                 />
               </div>
               <IconButton

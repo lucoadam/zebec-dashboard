@@ -372,7 +372,7 @@ input:checked + .toggle-bg:after {
 }
 .withdrawsteps-container::after {
   position: absolute;
-  left: 6px;
+  left: 5.5px;
   height: 18px;
   width: 1px;
   top: 6px;

@@ -47,7 +47,7 @@ const Incoming: FC = () => {
       <FilterTabs />
       {/* Table */}
       <Table headers={headers}>
-        <TableBody className="w-full">
+        <TableBody>
           {incomingTransactions.data.map((transaction, index) => {
             return (
               <IncomingTableRow

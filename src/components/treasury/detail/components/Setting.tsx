@@ -118,10 +118,10 @@ const Setting = () => {
             hasCloseIcon={false}
           >
             <div className="">
-              <div className="text-heading-5 text-content-primary">
+              <div className="text-heading-5 text-content-primary pb-3">
                 {t("treasurySettings:archive-modal-header")}
               </div>
-              <div className="text-content-secondary ">
+              <div className="text-content-secondary pb-3">
                 {t("treasurySettings:archiving-content")}
               </div>
               <div className="pt-[12px] pb-[12px]">
