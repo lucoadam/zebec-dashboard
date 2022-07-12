@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
+import { isValidWallet } from "utils/isValidtWallet"
 import * as Yup from "yup"
 import {
   ContinuousStreamFormData,
@@ -72,116 +73,125 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   tokenBalances
 }) => {
   const { t } = useTranslation()
-  const validationSchema: any = Yup.object().shape({
-    transactionName: Yup.string().required(
-      t("validation:transaction-name-required")
-    ),
-    receiverWallet: Yup.string().required(t("validation:wallet-required")),
-    remarks: Yup.string().test(
-      "check-remarks",
-      t("validation:remarks-required"),
-      () => {
-        return !!getValue("remarks") || !showRemarks
-      }
-    ),
-    token: Yup.string().required(t("validation:token-required")),
-    amount: Yup.string()
-      .required(t("validation:amount-required"))
-      .test("amount-invalid", t("validation:amount-invalid"), () => {
-        return Number(getValue("amount")) > 0
-      }),
-    startDate: Yup.string()
-      .required(t("validation:start-date-time-required"))
-      .test(
-        "check-start-date",
-        t("validation:start-date-time-before-today"),
+  const validationSchema: Yup.SchemaOf<ContinuousStreamFormData> =
+    Yup.object().shape({
+      transactionName: Yup.string().required(
+        t("validation:transaction-name-required")
+      ),
+      receiverWallet: Yup.string()
+        .required(t("validation:wallet-required"))
+        .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
+          isValidWallet(value)
+        ),
+      remarks: Yup.string().test(
+        "check-remarks",
+        t("validation:remarks-required"),
         () => {
-          return moment(
-            `${getValue("startDate")} ${getValue("startTime")}`,
-            "DD/MM/YYYY LT"
-          ).isAfter(moment())
+          return !!getValue("remarks") || !showRemarks
         }
       ),
-    startTime: Yup.string()
-      .required(t("validation:start-date-time-required"))
-      .test(
-        "check-start-time",
-        t("validation:start-date-time-before-today"),
-        () => {
-          return moment(
-            `${getValue("startDate")} ${getValue("startTime")}`,
-            "DD/MM/YYYY LT"
-          ).isAfter(moment())
-        }
-      ),
-    endDate: Yup.string()
-      .required(t("validation:end-date-time-required"))
-      .test(
-        "check-end-date",
-        t("validation:end-date-time-before-start-date-time"),
-        () => {
-          return (
-            !getValue("startDate") ||
-            !getValue("startTime") ||
-            moment(
+      token: Yup.string().required(t("validation:token-required")),
+      amount: Yup.string()
+        .required(t("validation:amount-required"))
+        .test("amount-invalid", t("validation:amount-invalid"), () => {
+          return Number(getValue("amount")) > 0
+        }),
+      startDate: Yup.string()
+        .required(t("validation:start-date-time-required"))
+        .test(
+          "check-start-date",
+          t("validation:start-date-time-before-today"),
+          () => {
+            return moment(
               `${getValue("startDate")} ${getValue("startTime")}`,
               "DD/MM/YYYY LT"
-            ).isBefore(
-              moment(
-                `${getValue("endDate")} ${getValue("endTime")}`,
-                "DD/MM/YYYY LT"
-              )
-            )
-          )
-        }
-      ),
-    endTime: Yup.string()
-      .required(t("validation:end-date-time-required"))
-      .test(
-        "check-end-time",
-        t("validation:end-date-time-before-start-date-time"),
-        () => {
-          return (
-            !getValue("startDate") ||
-            !getValue("startTime") ||
-            moment(
+            ).isAfter(moment())
+          }
+        ),
+      startTime: Yup.string()
+        .required(t("validation:start-date-time-required"))
+        .test(
+          "check-start-time",
+          t("validation:start-date-time-before-today"),
+          () => {
+            return moment(
               `${getValue("startDate")} ${getValue("startTime")}`,
               "DD/MM/YYYY LT"
-            ).isBefore(
+            ).isAfter(moment())
+          }
+        ),
+      endDate: Yup.string()
+        .required(t("validation:end-date-time-required"))
+        .test(
+          "check-end-date",
+          t("validation:end-date-time-before-start-date-time"),
+          () => {
+            return (
+              !getValue("startDate") ||
+              !getValue("startTime") ||
               moment(
-                `${getValue("endDate")} ${getValue("endTime")}`,
+                `${getValue("startDate")} ${getValue("startTime")}`,
                 "DD/MM/YYYY LT"
+              ).isBefore(
+                moment(
+                  `${getValue("endDate")} ${getValue("endTime")}`,
+                  "DD/MM/YYYY LT"
+                )
               )
             )
-          )
-        }
-      ),
-    noOfTimes: Yup.string()
-      .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
-        return !!getValue("noOfTimes") || !enableStreamRate
-      })
-      .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
-        return Number(getValue("noOfTimes")) > 0 || !enableStreamRate
-      }),
-    tokenAmount: Yup.string()
-      .test(
-        "tokenAmount-required",
-        t("validation:tokenAmount-required"),
+          }
+        ),
+      endTime: Yup.string()
+        .required(t("validation:end-date-time-required"))
+        .test(
+          "check-end-time",
+          t("validation:end-date-time-before-start-date-time"),
+          () => {
+            return (
+              !getValue("startDate") ||
+              !getValue("startTime") ||
+              moment(
+                `${getValue("startDate")} ${getValue("startTime")}`,
+                "DD/MM/YYYY LT"
+              ).isBefore(
+                moment(
+                  `${getValue("endDate")} ${getValue("endTime")}`,
+                  "DD/MM/YYYY LT"
+                )
+              )
+            )
+          }
+        ),
+      noOfTimes: Yup.string()
+        .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
+          return !!getValue("noOfTimes") || !enableStreamRate
+        })
+        .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
+          return Number(getValue("noOfTimes")) > 0 || !enableStreamRate
+        }),
+      tokenAmount: Yup.string()
+        .test(
+          "tokenAmount-required",
+          t("validation:tokenAmount-required"),
+          () => {
+            return !!getValue("tokenAmount") || !enableStreamRate
+          }
+        )
+        .test(
+          "tokenAmount-invalid",
+          t("validation:tokenAmount-invalid"),
+          () => {
+            return Number(getValue("tokenAmount")) > 0 || !enableStreamRate
+          }
+        ),
+      interval: Yup.string().test(
+        "interval-required",
+        t("validation:interval-required"),
         () => {
-          return !!getValue("tokenAmount") || !enableStreamRate
+          return !!getValue("interval") || !enableStreamRate
         }
       )
-      .test("tokenAmount-invalid", t("validation:tokenAmount-invalid"), () => {
-        return Number(getValue("tokenAmount")) > 0 || !enableStreamRate
-      }),
-    interval: Yup.string().test(
-      "interval-required",
-      t("validation:interval-required"),
-      () => {
-        return !!getValue("interval") || !enableStreamRate
-      }
-    )
-  })
+    })
 
   const {
     register,
@@ -249,7 +259,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [tokenDetails, setValue])
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ContinuousStreamFormData) => {
     console.log(data)
   }
 
@@ -262,7 +272,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     const selectedTokenAmount = Number(getValue("tokenAmount")) || 0
     const totalAmount = selectedNoOfTimes * selectedTokenAmount
     setValue("amount", totalAmount.toString())
-    trigger("amount")
 
     if (
       getValue("startDate") &&
@@ -357,20 +366,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               >
                 {t("send:receiver-wallet")}
               </label>
-              <div
-                className="relative text-content-primary"
-                onClick={() => setToggleReceiverDropdown((prev) => !prev)}
-              >
+              <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full ${
+                  className={`h-[40px] w-full pr-12 ${
                     !!errors.receiverWallet && "error"
                   }`}
-                  readOnly
                   placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiverWallet")}
                 />
-                <Icons.CheveronDownIcon className="absolute top-3 right-1 text-lg" />
+                <Icons.CheveronDownIcon
+                  onClick={() => setToggleReceiverDropdown((prev) => !prev)}
+                  className="hover:cursor-pointer absolute top-3 right-1 text-lg"
+                />
               </div>
               {!!errors.receiverWallet && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
@@ -550,8 +558,28 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               </CollapseDropdown>
             </div>
             <div>
+              <div className="flex justify-between">
+                <label
+                  className={`${
+                    enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
+                >
+                  {t("send:amount")}
+                </label>
+                <label
+                  className={`text-content-tertiary text-xs font-normal mb-1`}
+                >
+                  {formatCurrency(
+                    (currentToken.usdPrice || 0) * Number(getValue("amount")) ||
+                      0,
+                    "$"
+                  )}{" "}
+                  {currentToken.symbol}
+                </label>
+              </div>
               <InputField
-                label={t("send:amount")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
@@ -650,7 +678,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             </div>
             <div>
               <div>
-                <label className="ml-3 text-content-primary text-xs font-medium mb-1">
+                <label
+                  className={`${
+                    enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
+                >
                   {t("send:stream-end")}
                 </label>
                 <DateTimePicker

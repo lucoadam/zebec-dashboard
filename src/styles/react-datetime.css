@@ -15,7 +15,7 @@
   /* background: #fff; */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   /* border: 1px solid #f9f9f9; */
-  @apply bg-background-primary border border-outline;
+  @apply bg-background-primary border border-outline rounded-t-lg mt-3 transition-all;
 }
 .rdtOpen .rdtPicker {
   display: block;

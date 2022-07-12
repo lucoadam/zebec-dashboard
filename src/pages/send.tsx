@@ -7,13 +7,13 @@ import { Button } from "components/shared"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useState } from "react"
 import { toSubstring } from "utils"
+import { useState } from "react"
 
 const Send: NextPage = () => {
   const { t } = useTranslation("common")
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
-  const walletTokens = useAppSelector((state) => state.walletBalance.tokens)
+  const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
   return (
     <Layout pageTitle="Zebec">
       <div className="py-16 container">
@@ -21,16 +21,16 @@ const Send: NextPage = () => {
           <div className="w-full">
             <ContinuousStream
               setFormValues={setFormValues}
-              tokenBalances={walletTokens}
+              tokenBalances={zebecBalance}
             />
           </div>
-          <div className="p-10 flex flex-col justify-center text-content-primary w-[400px]">
+          <div className="p-10 md:pl-[79px] flex flex-col justify-center text-content-primary max-w-[400px]">
             <div className="border-dashed border-b pb-4 border-outline">
               <h1 className="text-base font-semibold">
                 {t("send:stream-overview")}
               </h1>
             </div>
-            <div className="mt-4 pt-4">
+            <div className="pt-4">
               <p className="text-subtitle text-content-secondary">
                 {t("send:stream-start-details")}{" "}
                 <span className="text-content-primary">
@@ -98,7 +98,7 @@ const Send: NextPage = () => {
   )
 }
 
-export async function getStaticProps({ locale }: any) {
+export async function getStaticProps({ locale }: { locale: string }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [
