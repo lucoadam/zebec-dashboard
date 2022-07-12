@@ -25,5 +25,6 @@
         "description": "Looks like your wallet is not connected. Please connect your wallet to keep using Zebec.",
         "connect-previous-wallet": "Connect with Previous Wallet",
         "connect-different-wallet": "Use a Different Wallet"
-    }
+    },
+    "zebec-help": "Zebec Help"
 }
