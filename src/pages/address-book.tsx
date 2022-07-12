@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Layout from "components/layouts/Layout"
 import { Tab } from "components/shared"
-import * as Icons from "assets/icons"
+import * as Icons from "../assets/icons"
 import IndividualAddresses from "components/address-book/IndividualAddreses"
 import AddressesGroup from "components/address-book/AddressesGroup"
 
