@@ -4,11 +4,12 @@ import { Button } from "components/shared"
 import { Modal } from "components/shared"
 import { useAppSelector } from "app/hooks"
 import { useDispatch } from "react-redux"
-import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
+import { togglePauseLoadingModal, togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
 import * as Icons from "assets/icons"
 
 const PauseModal: FC = ({}) => {
   const pauseModal = useAppSelector((state) => state.pause.pauseModal)
+  const pauseLoadingModal = useAppSelector((state)=>state.pause.pauseLoading)
   const dispatch = useDispatch()
   const [onClick, setOnClick] = useState(false)
   const { t } = useTranslation("transactions")
@@ -27,9 +28,9 @@ const PauseModal: FC = ({}) => {
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
-              disabled={onClick}
-              endIcon={onClick ? <Icons.Loading /> : <></>}
-              className={`w-full ${onClick ? "cursor-not-allowed" : ""}`}
+              disabled={pauseLoadingModal}
+              endIcon={pauseLoadingModal ? <Icons.Loading /> : <></>}
+              className={`w-full ${pauseLoadingModal ? "cursor-not-allowed" : ""}`}
               variant="gradient"
               title={
                 onClick
@@ -37,17 +38,18 @@ const PauseModal: FC = ({}) => {
                   : t("outgoing-actions.yes-pause")
               }
               onClick={() => {
-                setOnClick(true)
+                dispatch(togglePauseLoadingModal(true))
                 setTimeout(() => {
                   dispatch(togglePauseModal())
-                  setOnClick(false)
+                  dispatch(togglePauseLoadingModal(false))
                 }, 5000)
               }}
             />
           </div>
           <div className="">
             <Button
-              className={`w-full ${onClick ? "hidden" : ""}`}
+              className={`w-full `}
+              disabled={pauseLoadingModal}
               title={t("outgoing-actions.no-pause")}
               onClick={() => {
                 dispatch(togglePauseModal())

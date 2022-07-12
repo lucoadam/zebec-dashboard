@@ -11,6 +11,11 @@
     "enter-wallet-address":"Enter Wallet Address",
     "add-address":"Add Address",
     "send":"Send",
-    "delete":"Delete"
+    "delete":"Delete",
+    "delete-modal-header" :"Are you sure you want to delete this address book?",
+    "delete-modal-subtitle" : "Deleting this address book will remove it permanently.",
+    "yes-delete":"Yes, Delete",
+    "cancel":"Cancel",
+    "undelete-address-book": "Delete address book"
 
 }

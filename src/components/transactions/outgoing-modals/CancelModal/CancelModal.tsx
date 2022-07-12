@@ -3,11 +3,12 @@ import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import { useAppSelector } from "app/hooks"
 import { useDispatch } from "react-redux"
-import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
+import { toggleCancelLoading, toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
 import * as Icons from "assets/icons"
 
 const CancelModal: FC = ({}) => {
   const cancelModal = useAppSelector((state) => state.cancel.cancelModal)
+  const cancelLoadingModal=useAppSelector((state)=>state.cancel.cancelLoading)
 
   const dispatch = useDispatch()
   const [onClick, setOnClick] = useState(false)
@@ -30,25 +31,26 @@ const CancelModal: FC = ({}) => {
             <Button
               className={`w-full ${onClick ? "cursor-not-allowed" : ""}`}
               variant="gradient"
-              disabled={onClick}
-              endIcon={onClick ? <Icons.Loading /> : <></>}
+              disabled={cancelLoadingModal}
+              endIcon={cancelLoadingModal ? <Icons.Loading /> : <></>}
               title={
-                onClick
+                cancelLoadingModal
                   ? t("outgoing-actions.cancelling")
                   : t("outgoing-actions.yes-cancel")
               }
               onClick={() => {
-                setOnClick(true)
+                dispatch(toggleCancelLoading(true))
                 setTimeout(() => {
                   dispatch(toggleCancelModal())
-                  setOnClick(false)
+                  dispatch(toggleCancelLoading(false))
                 }, 5000)
               }}
             />
           </div>
           <div className="">
             <Button
-              className={`w-full ${onClick ? "hidden" : ""}`}
+              className={`w-full`}
+              disabled={cancelLoadingModal}
               title={t("outgoing-actions.no-cancel")}
               onClick={() => {
                 dispatch(toggleCancelModal())

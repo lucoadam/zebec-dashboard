@@ -1,6 +1,5 @@
 import { Tab } from "components/shared"
-import * as Icons from "assets/icons"
-import { Fragment, useState } from "react"
+import {  useState } from "react"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"

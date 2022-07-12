@@ -30,7 +30,7 @@ export const HistoryTransactions = () => {
   }
   return (
     <Table headers={headers}>
-      <TableBody>
+      <TableBody className={""}>
         {historyTransactions.data.length === 0 && (
           <tr>
             <td colSpan={headers.length}>

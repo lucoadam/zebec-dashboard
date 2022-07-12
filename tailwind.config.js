@@ -12,7 +12,9 @@ module.exports = {
         55.5: "222px",
         60: "240px",
         70: "280px",
-        85: "340px"
+        85: "340px",
+        175:"706",
+        
       },
       colors: {
         black: "var(--black)",

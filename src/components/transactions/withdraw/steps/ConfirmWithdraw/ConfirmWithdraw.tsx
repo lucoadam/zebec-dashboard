@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useRef, useState } from "react"
 import { useTranslation } from "next-i18next"
 import { Button } from "components/shared"
-import { withdrawProps } from "../../data"
+import { withdrawProps } from "../../data.d"
 import { confirmWithdrawStep, confirmWithdrawStepsList } from "./data"
 
 const ConfirmWithdraw: FC<withdrawProps> = ({
@@ -23,7 +23,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({
               className={`${
                 index == confirmWithdrawStepsList.length - 1
                   ? "flex gap-x-2 text-content-secondary"
-                  : "withdrawsteps-container flex gap-x-2 pb-4 text-content-secondary"
+                  : "withdrawsteps-container flex gap-x-1 pb-4 text-content-secondary"
               }`}
               key={`withdrawsteps-${index}`}
             >

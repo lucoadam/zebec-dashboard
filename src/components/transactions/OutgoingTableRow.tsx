@@ -25,8 +25,6 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-  const [currentStep, setCurrentStep] = React.useState(-1)
-  let [isOpen, setIsOpen] = useState(false)
   const dispatch = useDispatch()
 
   // function toggleModal() {
