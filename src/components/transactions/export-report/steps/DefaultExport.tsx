@@ -80,7 +80,6 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <div className="text-content-secondary text-caption pb-1 pl-3">
-                
                 {t("exportReport:from")}
               </div>
               <DateTimePicker
