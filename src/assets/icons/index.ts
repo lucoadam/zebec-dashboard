@@ -42,10 +42,14 @@ import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
+import Download from "./other-icons/download.svg"
+import Calendar from "./other-icons/calender.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
 export {
+  Calendar,
+  Download,
   IndividualAddress,
   AddressGroup,
   Unarchive,

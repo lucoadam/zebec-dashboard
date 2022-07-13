@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-
 //declare types for state
 interface ExportState {
   exportModal: boolean

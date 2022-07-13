@@ -348,9 +348,34 @@ input[type="text"].token-select {
   content: "";
   @apply absolute top-1 left-1 bg-background-light rounded-full h-3 w-3 transition;
 }
-input:checked + .toggle-bg:after {
+input[type="checkbox"]:checked + .toggle-bg:after {
   transform: translateX(140%);
   @apply bg-content-primary;
+}
+input[type="radio"]:after {
+  content: "";
+  @apply w-5 h-5 -top-1 -left-1 visible absolute rounded-full bg-background-secondary border-2 border-outline inline-block;
+}
+input[type="radio"]:focus,
+input[type="radio"]:checked:focus {
+  box-shadow: none;
+  @apply outline-0;
+}
+
+input[type="radio"]:checked::after,
+input[type="radio"]:checked:hover::after {
+  content: "";
+  background: var(--bg-primary)
+    url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTIxLjcwNzEgNS4yOTI4OUMyMi4wOTc2IDUuNjgzNDIgMjIuMDk3NiA2LjMxNjU4IDIxLjcwNzEgNi43MDcxMUw5LjcwNzExIDE4LjcwNzFDOS4zMTY1OCAxOS4wOTc2IDguNjgzNDIgMTkuMDk3NiA4LjI5Mjg5IDE4LjcwNzFMMi4yOTI4OSAxMi43MDcxQzEuOTAyMzcgMTIuMzE2NiAxLjkwMjM3IDExLjY4MzQgMi4yOTI4OSAxMS4yOTI5QzIuNjgzNDIgMTAuOTAyNCAzLjMxNjU4IDEwLjkwMjQgMy43MDcxMSAxMS4yOTI5TDkgMTYuNTg1OEwyMC4yOTI5IDUuMjkyODlDMjAuNjgzNCA0LjkwMjM3IDIxLjMxNjYgNC45MDIzNyAyMS43MDcxIDUuMjkyODlaIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjkiLz4NCiAgICA8L3N2Zz4NCiAgICA=");
+  background-position: center;
+  background-size: contain;
+  @apply w-5 h-5 flex justify-center items-center text-content-primary rounded-full -top-1 -left-1  bg-primary border border-outline visible absolute inline-block;
+}
+input[type="radio"] {
+  @apply relative;
+}
+input[type="radio"]:hover::after {
+  @apply bg-background-light;
 }
 
 @layer utilities {

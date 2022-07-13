@@ -1,19 +1,14 @@
-import React, { FC, Fragment, ReactElement, useEffect, useRef, useState } from "react"
+import React, { FC, useEffect } from "react"
 import { useTranslation } from "next-i18next"
 import { exportProps } from "../data"
 import * as Icons from "assets/icons/index"
 import Loading from "assets/images/gifs/withdrawing.gif"
 
-
-const PreparingReport: FC<exportProps> = ({
-  setCurrentStep,
-
-}) => {
- 
+const PreparingReport: FC<exportProps> = ({ setCurrentStep }) => {
   useEffect(() => {
     setTimeout(() => {
       setCurrentStep(2)
-    }, 1000)
+    }, 5000)
   }, [])
 
   const { t } = useTranslation("")
@@ -26,15 +21,14 @@ const PreparingReport: FC<exportProps> = ({
         {t("exportReport:preparing-report")}
       </div>
       <div className="pt-1 text-content-tertiary ">
-      {t("exportReport:preparing-report-description")}
-        
+        {t("exportReport:preparing-report-description")}
       </div>
 
       <div className="flex justify-center pt-4 text-warning">
         <div>
           <Icons.Asterik />
         </div>
-        <div className="text-warning text-caption pl-2 font-semibold">
+        <div className="text-warning text-caption pl-2 font-semibold pb-5">
           {t("exportReport:please-dont-close-window")}
         </div>
       </div>
