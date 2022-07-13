@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
+import ExportModal from "components/modal/export-report/ExportModal"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
@@ -73,6 +74,7 @@ const Incoming: FC = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
+      <ExportModal/>
     </>
   )
 }

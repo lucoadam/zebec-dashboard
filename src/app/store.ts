@@ -7,10 +7,10 @@ import {
 import counterSlice from "features/count/counterSlice"
 import exportSlice from "features/export-report/exportSlice"
 import layoutSlice from "features/layout/layoutSlice"
+import cancelModalSlice from "features/modals/cancelModal/cancelModalSlice"
+import pauseModalSlice from "features/modals/pauseModal/pauseModalSlice"
+import resumeModalSlice from "features/modals/resumeModal/resumeModalSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
-import cancelSlice from "features/transaction/cancelModal/cancelSlice"
-import pauseSlice from "features/transaction/pauseModal/pauseSlice"
-import resumeSlice from "features/transaction/resumeModal/resumeSlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
 import userSlice from "features/user/userSlice"
@@ -27,11 +27,12 @@ const combineReducer = combineReducers({
   zebecBalance: zebecBalanceSlice,
   zebecStreamingBalance: zebecStreamingSlice,
   treasuryStreamingBalance: treasuryStreamingSlice,
-  pause: pauseSlice,
-  cancel: cancelSlice,
-  resume: resumeSlice,
   layout: layoutSlice,
-  exportReport: exportSlice
+  exportReport: exportSlice,
+  pause: pauseModalSlice,
+  cancel:cancelModalSlice,
+  resume:resumeModalSlice
+
 })
 
 // export const store = configureStore({

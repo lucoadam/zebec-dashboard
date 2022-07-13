@@ -5,6 +5,7 @@ import { Table, TableBody } from "components/shared"
 import OutgoingTableRow from "./OutgoingTableRow"
 
 import { outgoingTransactions } from "fakedata"
+import ExportModal from "components/modal/export-report/ExportModal"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
@@ -45,6 +46,7 @@ const Outgoing: FC = () => {
           })}
         </TableBody>
       </Table>
+      <ExportModal/>
     </>
   )
 }

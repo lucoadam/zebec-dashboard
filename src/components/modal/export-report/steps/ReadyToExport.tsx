@@ -1,12 +1,16 @@
-import React, { FC, Fragment, useEffect, useRef, useState } from "react"
-import { exportProps } from "../data"
+import React, { FC} from "react"
+
 import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
 import Loading from "assets/images/gifs/withdrawing.gif"
 import { Button } from "components/shared"
+import { exportProps } from "../ExportModal"
+import { toggleExportModal } from "features/export-report/exportSlice"
+import { useAppDispatch } from "app/hooks"
 
 const ReadyToExport: FC<exportProps> = ({ setCurrentStep }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
@@ -27,7 +31,7 @@ const ReadyToExport: FC<exportProps> = ({ setCurrentStep }) => {
         type="submit"
         title={t("exportReport:download-report")}
         endIcon={<Icons.Download />}
-        onClick={() => setCurrentStep(-1)}
+        onClick={() => {dispatch(toggleExportModal()); setCurrentStep(0)} }
       />
     </div>
   )

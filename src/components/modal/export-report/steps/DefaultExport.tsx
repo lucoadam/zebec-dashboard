@@ -3,10 +3,10 @@ import { Button, DateTimePicker, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
 import moment from "moment"
-import { exportProps } from "../data"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { exportProps } from "../ExportModal"
 
 export type FormKeys = "startDate" | "endDate"
 
@@ -38,7 +38,9 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
             )
           )
         }
-      )
+      ),
+     reportFormat:Yup.string()
+     .required("okay"), 
   })
   const {
     register,
@@ -57,6 +59,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
 
   const onSubmit = (data: any) => {
     console.log(data)
+    setCurrentStep(1)
   }
 
   const getValue = (key: FormKeys) => {
@@ -139,15 +142,15 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
 
           <div className="pt-3 pl-1">
             <label>
-              <input type="radio" className="" name="pdf" />
-              <span className="text-caption  pl-2">
+              <input type="radio" className= {`${!!errors.reportFormat && "error"}`} {...register("reportFormat")} />
+              <span className="text-caption   pl-2">
                 {t("exportReport:csv-format")}
               </span>
             </label>
           </div>
           <div className="pt-3 pl-1">
             <label>
-              <input type="radio" className="" name="pdf" />
+              <input type="radio" className="" {...register("reportFormat")} />
               <span className="text-caption  pl-2 ">
                 {t("exportReport:pdf-format")}
               </span>
@@ -162,7 +165,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
             variant="gradient"
             type="submit"
             title={t("exportReport:prepare-report")}
-            onClick={() => setCurrentStep(1)}
+            
           />
         </div>
       </form>

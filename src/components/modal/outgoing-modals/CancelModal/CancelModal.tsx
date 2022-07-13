@@ -1,26 +1,24 @@
-import React, { FC, useState } from "react"
+import React, { FC } from "react"
 import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import {
-  toggleCancelLoading,
-  toggleCancelModal
-} from "features/transaction/cancelModal/cancelSlice"
+
 import * as Icons from "assets/icons"
+import { setLoading, toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 const CancelModal: FC = ({}) => {
-  const cancelModal = useAppSelector((state) => state.cancel.cancelModal)
-  const cancelLoadingModal = useAppSelector(
-    (state) => state.cancel.cancelLoading
+  const show = useAppSelector((state) => state.cancel.show)
+  const loading = useAppSelector(
+    (state) => state.cancel.loading
   )
 
   const dispatch = useAppDispatch()
-  const [onClick, setOnClick] = useState(false)
+
   const { t } = useTranslation("transactions")
 
   return (
     <Modal
-      show={cancelModal}
+      show={show}
       toggleModal={() => dispatch(toggleCancelModal())}
       className="rounded "
       hasCloseIcon={false}
@@ -35,18 +33,18 @@ const CancelModal: FC = ({}) => {
             <Button
               className={`w-full `}
               variant="gradient"
-              disabled={cancelLoadingModal}
-              endIcon={cancelLoadingModal ? <Icons.Loading /> : <></>}
+              disabled={loading}
+              endIcon={loading ? <Icons.Loading /> : <></>}
               title={
-                cancelLoadingModal
+                loading
                   ? t("outgoing-actions.cancelling")
                   : t("outgoing-actions.yes-cancel")
               }
               onClick={() => {
-                dispatch(toggleCancelLoading(true))
+                dispatch(setLoading(true))
                 setTimeout(() => {
                   dispatch(toggleCancelModal())
-                  dispatch(toggleCancelLoading(false))
+                  dispatch(setLoading(false))
                 }, 5000)
               }}
             />
@@ -54,9 +52,9 @@ const CancelModal: FC = ({}) => {
           <div className="">
             <Button
               className={`w-full ${
-                cancelLoadingModal ? "cursor-not-allowed" : ""
+                loading ? "cursor-not-allowed" : ""
               }`}
-              disabled={cancelLoadingModal}
+              disabled={loading}
               title={t("outgoing-actions.no-cancel")}
               onClick={() => {
                 dispatch(toggleCancelModal())
@@ -69,3 +67,7 @@ const CancelModal: FC = ({}) => {
   )
 }
 export default CancelModal
+function toggleLoading(arg0: boolean): any {
+  throw new Error("Function not implemented.")
+}
+

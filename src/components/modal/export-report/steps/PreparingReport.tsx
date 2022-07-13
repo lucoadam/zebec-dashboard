@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from "react"
 import { useTranslation } from "next-i18next"
-import { exportProps } from "../data"
+
 import * as Icons from "assets/icons/index"
 import Loading from "assets/images/gifs/withdrawing.gif"
+import { exportProps } from "../ExportModal"
 
 const PreparingReport: FC<exportProps> = ({ setCurrentStep }) => {
   useEffect(() => {
