@@ -35,11 +35,3 @@ export interface ContinuousStreamProps {
   tokenBalances: WalletToken[]
   addFile?: boolean
 }
-
-export interface FileState {
-  name: string
-  url: string
-  uploading: boolean
-  error: string
-  progress: number
-}
