@@ -10,16 +10,31 @@ const toastSlice = createSlice({
   initialState,
   reducers: {
     success: (state, action: PayloadAction<ToastObjectProps>) => {
-      state.toasts.push({ type: "success", ...action.payload })
+      const currentTime = Date.now()
+      state.toasts.push({
+        type: "success",
+        id: currentTime,
+        ...action.payload
+      })
     },
     error: (state, action: PayloadAction<ToastObjectProps>) => {
-      state.toasts.push({ type: "error", ...action.payload })
+      const currentTime = Date.now()
+      state.toasts.push({
+        type: "error",
+        id: currentTime,
+        ...action.payload
+      })
     },
     info: (state, action: PayloadAction<ToastObjectProps>) => {
-      state.toasts.push({ type: "info", ...action.payload })
+      const currentTime = Date.now()
+      state.toasts.push({
+        type: "info",
+        id: currentTime,
+        ...action.payload
+      })
     },
     removeToast: (state, action: PayloadAction<number>) => {
-      state.toasts.filter((toast) => toast.id !== action.payload)
+      state.toasts = state.toasts.filter((toast) => toast.id !== action.payload)
     }
   }
 })
@@ -33,6 +48,6 @@ export const toast = {
   error,
   info
 }
-export const removeToast = toastSlice.actions
+export const { removeToast } = toastSlice.actions
 
 export default toastSlice.reducer
