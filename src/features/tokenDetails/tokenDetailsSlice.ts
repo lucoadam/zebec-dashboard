@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { TokenListProvider } from "@solana/spl-token-registry"
 import { getRPCNetwork } from "constants/cluster"
 import tokenMetaData from "fakedata/tokens.json"
+import { getTokensUSDPrice } from "utils/getTokensPrice"
 import { TokenDetailsState } from "./tokenDetailsSlice.d"
 
 const initialState: TokenDetailsState = {
@@ -11,6 +12,7 @@ const initialState: TokenDetailsState = {
 }
 
 //Generates pending, fulfilled and rejected action types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTokens: any = createAsyncThunk(
   "token/fetchTokens",
   async () => {
@@ -26,7 +28,7 @@ export const fetchTokens: any = createAsyncThunk(
         image:
           "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
         mint: "solana",
-        decimals: 18,
+        decimal: 18,
         coingeckoId: "solana"
       },
       ...tokens
@@ -36,13 +38,18 @@ export const fetchTokens: any = createAsyncThunk(
         .map((token) => ({
           name: token.name,
           symbol: token.symbol,
-          image: token.logoURI,
+          image: token.logoURI || "",
           decimal: token.decimals,
           mint: token.address,
           coingeckoId: token?.extensions?.coingeckoId || ""
         }))
     ]
-    return tokensDetails
+    const tokensPrice = await getTokensUSDPrice(tokensDetails)
+    const tokensWithPrice = tokensDetails.map((token) => ({
+      ...token,
+      usdPrice: tokensPrice[token.mint]
+    }))
+    return tokensWithPrice
   }
 )
 

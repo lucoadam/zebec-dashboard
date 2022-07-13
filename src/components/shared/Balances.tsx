@@ -1,5 +1,8 @@
 import * as Icons from "assets/icons"
+import { tokenBalances, weeklyBalances } from "fakedata"
 import { FC } from "react"
+import { twMerge } from "tailwind-merge"
+import { formatCurrency } from "utils"
 import { Button } from "./Button"
 
 /* Deposited Balance */
@@ -47,7 +50,10 @@ export const TotalWithdrawableAmount: FC = () => {
 }
 
 /* Tokens */
-export const Tokens: FC = () => {
+export const Tokens: FC<{
+  currentToken: keyof typeof tokenBalances
+  setCurrentToken: (each: keyof typeof tokenBalances) => void
+}> = ({ currentToken, setCurrentToken }) => {
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
       <div className="flex justify-between items-center gap-x-6">
@@ -56,39 +62,20 @@ export const Tokens: FC = () => {
         </div>
         {/* Tokens */}
         <div className="flex gap-x-2 overflow-x-auto pb-1">
-          <button className=" bg-primary text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            SOL
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDC
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDT
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDC
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDT
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDC
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDT
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDC
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDT
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDC
-          </button>
-          <button className=" bg-background-light text-caption text-content-primary font-medium px-2 py-0.5 rounded-2xl">
-            USDT
-          </button>
+          {Object.keys(tokenBalances).map((each) => (
+            <button
+              key={each}
+              onClick={() => {
+                setCurrentToken(each as keyof typeof tokenBalances)
+              }}
+              className={twMerge(
+                "text-caption min-w-max text-content-primary font-medium px-2 py-0.5 rounded-2xl",
+                currentToken === each ? "bg-primary" : "bg-background-light"
+              )}
+            >
+              {each}
+            </button>
+          ))}
         </div>
       </div>
       {/* Incoming */}
@@ -99,7 +86,7 @@ export const Tokens: FC = () => {
         <div className="flex gap-x-1">
           <Icons.ArrowDownLeftIcon className="text-base text-success-content mt-auto transform -translate-y-1" />
           <div className="text-heading-3 text-content-primary font-semibold">
-            $809.05
+            {formatCurrency(tokenBalances[currentToken]?.incoming ?? 0, "$")}
           </div>
         </div>
       </div>
@@ -111,7 +98,7 @@ export const Tokens: FC = () => {
         <div className="flex gap-x-1">
           <Icons.ArrowUpRightIcon className="text-base text-error-content mt-auto transform -translate-y-1" />
           <div className=" text-heading-3 text-content-primary font-semibold">
-            $2,230.23
+            {formatCurrency(tokenBalances[currentToken]?.outgoing ?? 0, "$")}
           </div>
         </div>
       </div>
@@ -120,7 +107,9 @@ export const Tokens: FC = () => {
 }
 
 /* Activity This Week */
-export const ActivityThisWeek: FC = () => {
+export const ActivityThisWeek: FC<{
+  currentToken: keyof typeof weeklyBalances
+}> = ({ currentToken }) => {
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
@@ -144,10 +133,13 @@ export const ActivityThisWeek: FC = () => {
             <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  $8,43,459.33
+                  {formatCurrency(
+                    weeklyBalances[currentToken]?.incoming ?? 0,
+                    "$"
+                  )}
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 SOL
+                  140.59 {currentToken}
                 </div>
               </div>
             </td>
@@ -168,10 +160,13 @@ export const ActivityThisWeek: FC = () => {
             <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  $8,43,459.33
+                  {formatCurrency(
+                    weeklyBalances[currentToken]?.outgoing ?? 0,
+                    "$"
+                  )}
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 SOL
+                  140.59 {currentToken}
                 </div>
               </div>
             </td>
@@ -192,10 +187,13 @@ export const ActivityThisWeek: FC = () => {
             <td className="text-right">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  $8,43,459.33
+                  {formatCurrency(
+                    weeklyBalances[currentToken]?.withdrawn ?? 0,
+                    "$"
+                  )}
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 SOL
+                  140.59 {currentToken}
                 </div>
               </div>
             </td>

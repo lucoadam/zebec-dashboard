@@ -2,14 +2,18 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import { Button, CircularProgress, IconButton } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
+import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
+import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
+import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { formatCurrency, toSubstring } from "utils"
-import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
-import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
-import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
+
 import { useDispatch } from "react-redux"
+import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 interface HistoryTableRowProps {
   index: number
@@ -162,7 +166,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                     This is the secondary notes with character limit.
                   </div>
                 </div>
-                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
+                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -303,6 +307,105 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                       </div>
                     </div>
                   </div>
+                </div>
+                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                  {/* Left Column */}
+                  <div className="flex flex-col gap-y-4">
+                    {/* Signed Owners */}
+                    <div className="flex gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.signed-by")}
+                      </div>
+                      <div className="grid gap-y-4">
+                        {[1, 2, 3].map((item) => (
+                          <div
+                            key={item}
+                            className="flex items-center  gap-x-2 text-content-primary"
+                          >
+                            <Image
+                              layout="fixed"
+                              alt="Owner Logo"
+                              src={
+                                [
+                                  Images.Avatar1,
+                                  Images.Avatar2,
+                                  Images.Avatar4
+                                ][item % 3]
+                              }
+                              height={24}
+                              width={24}
+                              className="rounded-full"
+                            />
+                            <div className="">
+                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                            </div>
+                            <div className="text-content-tertiary">
+                              10 min ago
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  {/* Right Column */}
+                  <div className="flex flex-col gap-y-4">
+                    {/* Total Amount */}
+                    <div className="flex gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.remaining")}
+                      </div>
+
+                      <div className="grid gap-y-4">
+                        <div className="text-content-primary">
+                          3 out of 4 Owners
+                        </div>
+                        {[1].map((item) => (
+                          <div
+                            key={item}
+                            className="flex items-center  gap-x-2 text-content-primary"
+                          >
+                            <Image
+                              layout="fixed"
+                              alt="Owner Logo"
+                              src={
+                                [
+                                  Images.Avatar1,
+                                  Images.Avatar2,
+                                  Images.Avatar4
+                                ][item % 3]
+                              }
+                              height={24}
+                              width={24}
+                              className="rounded-full"
+                            />
+                            <div className="">
+                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                            </div>
+                            <div className="text-content-tertiary">
+                              10 min ago
+                            </div>
+                          </div>
+                        ))}
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.show-all-remaining")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.ArrowDownIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-x-4 py-6">
+                  <Button
+                    startIcon={<Icons.EditIcon />}
+                    variant="gradient"
+                    title={t("table.sign-and-approve")}
+                  />
+                  <Button startIcon={<Icons.CrossIcon />} title="Reject" />
                 </div>
               </div>
             </div>

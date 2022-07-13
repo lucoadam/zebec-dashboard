@@ -28,9 +28,15 @@
     "withdraw-amount": "Withdraw Amount",
     "dont-close-window": "Please don't close your window.",
     "max": "MAX",
-    "enter-withdraw-amount": "Please enter withdraw amount",
+    "enter-withdraw-amount": "Withdrawal amount is required.",
     "not-zero": "Amount must be greater than zero",
-    "withdraw.not-string":"Please enter a number"
+    "withdraw.not-string": "Please enter a number",
+    "max-amount": "Amount should not exceed max amount."
+  },
+  "deposit": {
+    "enter-deposit-amount": "Deposit amount is required.",
+    "not-zero": "Amount must be greater than zero",
+    "max-amount": "Amount should not exceed max amount."
   },
   "table": {
     "progress": "Progress",
@@ -52,21 +58,24 @@
     "sender-or-receiver": "Sender/ Receiver",
     "confirmation": "Confirmation",
     "withdrawn-or-initiated": "Withdrawn/ Initiated",
-    "requested-by": "Requested By"
+    "requested-by": "Requested By",
+    "sign-and-approve": "Sign & Approve",
+    "signed-by": "Signed By",
+    "remaining": "Remaining",
+    "show-all-remaining": "Show all remaining"
   },
-  "outgoing-actions":{
-    "pause-modal-header" : "Are you sure you want to pause the transaction?",
+  "outgoing-actions": {
+    "pause-modal-header": "Are you sure you want to pause the transaction?",
     "yes-pause": "Yes, Pause",
     "no-pause": "No, Don’t Pause",
     "cancel-modal-header": "Are you sure you want to cancel the transaction?",
-    "yes-cancel":"Yes, Cancel",
-    "no-cancel":"No, Don’t Cancel",
-    "resume-modal-header":"Are you sure you want to resume the transaction?",
+    "yes-cancel": "Yes, Cancel",
+    "no-cancel": "No, Don’t Cancel",
+    "resume-modal-header": "Are you sure you want to resume the transaction?",
     "no-resume": "No, Don’t Resume",
     "yes-resume": "Yes, Resume",
     "resuming": "Resuming",
     "cancelling": "Cancelling",
     "pausing": "Pausing"
-
   }
 }

@@ -16,6 +16,7 @@ import CrossIcon from "./other-icons/cross.svg"
 import DisconnectIcon from "./other-icons/disconnect.svg"
 import DoubleCircleDottedLineIcon from "./other-icons/double-circle-dottedline.svg"
 import DownArrowIcon from "./other-icons/down-arrow.svg"
+import EditIcon from "./other-icons/edit.svg"
 import Equals from "./other-icons/equals.svg"
 import EyeOpenIcon from "./other-icons/eye-open.svg"
 import GearringAltIcon from "./other-icons/gearring-alt.svg"
@@ -42,10 +43,15 @@ import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
+import FileUploadIcon from "./other-icons/file-upload.svg"
+import Download from "./other-icons/download.svg"
+import Calendar from "./other-icons/calender.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
 export {
+  Calendar,
+  Download,
   IndividualAddress,
   AddressGroup,
   Unarchive,
@@ -89,5 +95,7 @@ export {
   ResumeIcon,
   ClockIcon,
   ArrowRightIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  FileUploadIcon
+  EditIcon
 }
