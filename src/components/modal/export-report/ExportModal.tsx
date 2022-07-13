@@ -1,8 +1,7 @@
-import React, { FC,useState } from "react"
+import React, { FC, useState } from "react"
 import { useTranslation } from "next-i18next"
-import {  Modal } from "components/shared"
+import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-
 
 import { toggleExportModal } from "features/export-report/exportSlice"
 import DefaultExport from "./steps/DefaultExport"
@@ -28,7 +27,6 @@ export const ExportStepsList: exportStep[] = [
   }
 ]
 
-
 const ExportModal: FC = ({}) => {
   const exportModal = useAppSelector((state) => state.exportReport.exportModal)
   const dispatch = useAppDispatch()
@@ -38,18 +36,16 @@ const ExportModal: FC = ({}) => {
 
   return (
     <Modal
-    show={exportModal}
-    toggleModal={() => dispatch(toggleExportModal())}
-    className={`rounded h-96`}
-    hasCloseIcon={!currentStep}
-    size="medium"
-  >
-    {ExportStepsList[currentStep]?.component({
-      setCurrentStep
-    })}
-  </Modal>
+      show={exportModal}
+      toggleModal={() => dispatch(toggleExportModal())}
+      className={`rounded h-96`}
+      hasCloseIcon={!currentStep}
+      size="medium"
+    >
+      {ExportStepsList[currentStep]?.component({
+        setCurrentStep
+      })}
+    </Modal>
   )
 }
 export default ExportModal
-
-

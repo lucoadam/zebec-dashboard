@@ -74,7 +74,7 @@ const Incoming: FC = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
-      <ExportModal/>
+      <ExportModal />
     </>
   )
 }

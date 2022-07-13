@@ -28,6 +28,7 @@ export const cancelModalSlice = createSlice({
   }
 })
 
-export const { showModal, toggleCancelModal, setLoading } = cancelModalSlice.actions
+export const { showModal, toggleCancelModal, setLoading } =
+  cancelModalSlice.actions
 
 export default cancelModalSlice.reducer

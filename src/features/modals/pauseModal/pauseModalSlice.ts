@@ -28,6 +28,7 @@ export const pauseModalSlice = createSlice({
   }
 })
 
-export const { showModal, togglePauseModal, setLoading } = pauseModalSlice.actions
+export const { showModal, togglePauseModal, setLoading } =
+  pauseModalSlice.actions
 
 export default pauseModalSlice.reducer

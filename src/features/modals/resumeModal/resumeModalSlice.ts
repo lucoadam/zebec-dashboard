@@ -28,6 +28,7 @@ export const resumeModalSlice = createSlice({
   }
 })
 
-export const { showModal, toggleResumeModal, setLoading } = resumeModalSlice.actions
+export const { showModal, toggleResumeModal, setLoading } =
+  resumeModalSlice.actions
 
 export default resumeModalSlice.reducer

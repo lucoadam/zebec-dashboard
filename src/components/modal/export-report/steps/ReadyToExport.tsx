@@ -1,4 +1,4 @@
-import React, { FC} from "react"
+import React, { FC } from "react"
 
 import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
@@ -31,7 +31,10 @@ const ReadyToExport: FC<exportProps> = ({ setCurrentStep }) => {
         type="submit"
         title={t("exportReport:download-report")}
         endIcon={<Icons.Download />}
-        onClick={() => {dispatch(toggleExportModal()); setCurrentStep(0)} }
+        onClick={() => {
+          dispatch(toggleExportModal())
+          setCurrentStep(0)
+        }}
       />
     </div>
   )

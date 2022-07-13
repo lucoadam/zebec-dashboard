@@ -4,13 +4,14 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
+import {
+  setLoading,
+  toggleCancelModal
+} from "features/modals/cancelModal/cancelModalSlice"
 
 const CancelModal: FC = ({}) => {
   const show = useAppSelector((state) => state.cancel.show)
-  const loading = useAppSelector(
-    (state) => state.cancel.loading
-  )
+  const loading = useAppSelector((state) => state.cancel.loading)
 
   const dispatch = useAppDispatch()
 
@@ -51,9 +52,7 @@ const CancelModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${
-                loading ? "cursor-not-allowed" : ""
-              }`}
+              className={`w-full ${loading ? "cursor-not-allowed" : ""}`}
               disabled={loading}
               title={t("outgoing-actions.no-cancel")}
               onClick={() => {
@@ -70,4 +69,3 @@ export default CancelModal
 function toggleLoading(arg0: boolean): any {
   throw new Error("Function not implemented.")
 }
-

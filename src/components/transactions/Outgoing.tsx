@@ -46,7 +46,7 @@ const Outgoing: FC = () => {
           })}
         </TableBody>
       </Table>
-      <ExportModal/>
+      <ExportModal />
     </>
   )
 }

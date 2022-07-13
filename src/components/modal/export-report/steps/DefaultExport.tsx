@@ -39,8 +39,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           )
         }
       ),
-     reportFormat:Yup.string()
-     .required("okay"), 
+    reportFormat: Yup.string().required("okay")
   })
   const {
     register,
@@ -142,7 +141,11 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
 
           <div className="pt-3 pl-1">
             <label>
-              <input type="radio" className= {`${!!errors.reportFormat && "error"}`} {...register("reportFormat")} />
+              <input
+                type="radio"
+                className={`${!!errors.reportFormat && "error"}`}
+                {...register("reportFormat")}
+              />
               <span className="text-caption   pl-2">
                 {t("exportReport:csv-format")}
               </span>
@@ -165,7 +168,6 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
             variant="gradient"
             type="submit"
             title={t("exportReport:prepare-report")}
-            
           />
         </div>
       </form>

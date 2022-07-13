@@ -30,9 +30,8 @@ const combineReducer = combineReducers({
   layout: layoutSlice,
   exportReport: exportSlice,
   pause: pauseModalSlice,
-  cancel:cancelModalSlice,
-  resume:resumeModalSlice
-
+  cancel: cancelModalSlice,
+  resume: resumeModalSlice
 })
 
 // export const store = configureStore({

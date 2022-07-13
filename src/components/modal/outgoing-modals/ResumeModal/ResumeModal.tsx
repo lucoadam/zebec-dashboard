@@ -4,13 +4,14 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import {
+  setLoading,
+  toggleResumeModal
+} from "features/modals/resumeModal/resumeModalSlice"
 
 const ResumeModal: FC = ({}) => {
   const show = useAppSelector((state) => state.resume.show)
-  const loading = useAppSelector(
-    (state) => state.resume.loading
-  )
+  const loading = useAppSelector((state) => state.resume.loading)
   const dispatch = useAppDispatch()
   const id = "Resuming"
   const { t } = useTranslation("transactions")
@@ -49,9 +50,7 @@ const ResumeModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${
-                loading ? "cursor-not-allowed" : ""
-              } `}
+              className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
               title={t("outgoing-actions.no-resume")}
               onClick={() => {

@@ -14,25 +14,23 @@ interface Address {
 }
 
 export default function IndividualAddresses() {
-  const [addresses, setAddresses] = useState<Address>(
-    {
-      name:"",
-      wallet:[]
-    }
-  )
+  const [addresses, setAddresses] = useState<Address>({
+    name: "",
+    wallet: []
+  })
   const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
     wallet: Yup.string()
-    .required(t("validation:wallet-required"))
-    .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-      isValidWallet(value)
-    )
-    .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-    wallets.every((wallet) => wallet !== value)
-    )
+      .required(t("validation:wallet-required"))
+      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
+        isValidWallet(value)
+      )
+      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
+        wallets.every((wallet) => wallet !== value)
+      )
   })
   const headers = [
     {
@@ -52,13 +50,14 @@ export default function IndividualAddresses() {
   const {
     register,
     formState: { errors },
-    handleSubmit  } = useForm({
+    handleSubmit
+  } = useForm({
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
   const onSubmit = (data: any) => {
-    setWallets([...wallets, data])
-
+    setAddresses(data)
+    setWallets([...wallets, data.wallet])
   }
 
   return (

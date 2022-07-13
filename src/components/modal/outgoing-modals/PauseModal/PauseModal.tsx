@@ -5,7 +5,10 @@ import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
+import {
+  setLoading,
+  togglePauseModal
+} from "features/modals/pauseModal/pauseModalSlice"
 
 const PauseModal: FC = ({}) => {
   const show = useAppSelector((state) => state.pause.show)
@@ -47,9 +50,7 @@ const PauseModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${
-                loading ? "cursor-not-allowed" : ""
-              } `}
+              className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
               title={t("outgoing-actions.no-pause")}
               onClick={() => {
