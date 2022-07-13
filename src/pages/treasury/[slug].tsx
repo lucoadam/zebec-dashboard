@@ -4,17 +4,18 @@ import TreasuryDetail from "components/treasury/detail/TreasuryDetail"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
-// import { useTranslation } from "next-i18next"
+import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
-import * as Icons from "../../assets/icons"
-import Layout from "../../components/layouts/Layout"
-import { Button, CollapseDropdown, IconButton } from "../../components/shared"
+import * as Icons from "assets/icons"
+import Layout from "components/layouts/Layout"
+import { Button, CollapseDropdown, IconButton } from "components/shared"
+import { setTreasurySendActiveTab } from "features/common/commonSlice"
 
 const Treasury: NextPage = () => {
-  // const { t } = useTranslation()
+  const { t } = useTranslation()
   const router = useRouter()
   const walletObject = useWallet()
 
@@ -76,21 +77,27 @@ const Treasury: NextPage = () => {
                 show={toggleDropdown}
               >
                 <div className="pb-2">
-                  <Link href="/send-from-treasury">
-                    <div className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer">
+                  <Link href="/treasury/send">
+                    <div
+                      onClick={() => dispatch(setTreasurySendActiveTab(0))}
+                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
                       <Icons.DoubleCircleDottedLineIcon />
                       <span className="text-content-primary">
-                        Continuous Stream
+                        {t("send:continuous-stream")}
                       </span>
                     </div>
                   </Link>
                 </div>
                 <div className="pt-2">
-                  <Link href="/send-from-treasury">
-                    <div className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer">
+                  <Link href="/treasury/send">
+                    <div
+                      onClick={() => dispatch(setTreasurySendActiveTab(1))}
+                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
                       <Icons.ThunderIcon />
                       <span className="text-content-primary">
-                        Instant Transfer
+                        {t("send:instant-transfer")}
                       </span>
                     </div>
                   </Link>
@@ -114,7 +121,8 @@ export async function getServerSideProps({ locale }: { locale: string }) {
         "treasuryOverview",
         "treasurySettings",
         "validation",
-        "transactions"
+        "transactions",
+        "send"
       ]))
     }
   }

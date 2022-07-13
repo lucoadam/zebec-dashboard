@@ -4,27 +4,32 @@ import { Tab } from "components/shared"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useState } from "react"
 import TreasuryContinuousStream from "components/sendFromTreasury/treasuryContinuousStream"
+import TreasuryInstantStream from "components/sendFromTreasury/treasuryInstantStream"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { setTreasurySendActiveTab } from "features/common/commonSlice"
 
 const transferTabs = [
   {
-    title: "Continuous Stream",
+    title: "send:continuous-stream",
     icon: <Icons.CalenderIcon />,
     count: 0,
     Component: <TreasuryContinuousStream />
   },
   {
-    title: "Instant Transfer",
+    title: "send:instant-transfer",
     icon: <Icons.DoubleCircleDottedLineIcon />,
     count: 0,
-    Component: <div> Instant Transfer </div>
+    Component: <TreasuryInstantStream />
   }
 ]
 
 const SendFromTreasury: NextPage = () => {
   const { t } = useTranslation("common")
-  const [activePage, setActivePage] = useState<number>(0)
+  const activePage = useAppSelector(
+    (state) => state.common.treasurySendActiveTab
+  )
+  const dispatch = useAppDispatch()
 
   return (
     <Layout pageTitle="Zebec">
@@ -39,7 +44,7 @@ const SendFromTreasury: NextPage = () => {
               isActive={activePage === index}
               startIcon={transactionTab.icon}
               count={transactionTab.count}
-              onClick={() => setActivePage(index)}
+              onClick={() => dispatch(setTreasurySendActiveTab(index))}
               className="md:px-[107.5px]"
             />
           )

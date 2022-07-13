@@ -2,17 +2,9 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import {
-  Button,
-  CollapseDropdown,
-  DateTimePicker,
-  InputField,
-  TimePicker,
-  Toggle
-} from "components/shared"
+import { Button, CollapseDropdown, InputField } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { useClickOutside } from "hooks"
-import moment from "moment"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -22,10 +14,10 @@ import { getBalance } from "utils/getBalance"
 import { isValidWallet } from "utils/isValidtWallet"
 import * as Yup from "yup"
 import {
-  ContinuousStreamFormData,
-  ContinuousStreamProps,
-  FormKeys
-} from "./continuousStream.d"
+  InstantFormKeys,
+  InstantStreamFormData,
+  InstantStreamProps
+} from "./instantStream.d"
 
 const addressBook = [
   {
@@ -46,36 +38,13 @@ const addressBook = [
   }
 ]
 
-const intervals = [
-  {
-    key: "Months",
-    value: 24 * 30 * 60
-  },
-  {
-    key: "Weeks",
-    value: 24 * 7 * 60
-  },
-  {
-    key: "Days",
-    value: 24 * 60
-  },
-  {
-    key: "Hours",
-    value: 60
-  },
-  {
-    key: "Minutes",
-    value: 1
-  }
-]
-
-export const ContinuousStream: FC<ContinuousStreamProps> = ({
+export const InstantStream: FC<InstantStreamProps> = ({
   setFormValues,
   tokenBalances,
   addFile
 }) => {
   const { t } = useTranslation()
-  const validationSchema: Yup.SchemaOf<ContinuousStreamFormData> =
+  const validationSchema: Yup.SchemaOf<InstantStreamFormData> =
     Yup.object().shape({
       transactionName: Yup.string().required(
         t("validation:transaction-name-required")
@@ -98,101 +67,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         .test("amount-invalid", t("validation:amount-invalid"), () => {
           return Number(getValue("amount")) > 0
         }),
-      startDate: Yup.string()
-        .required(t("validation:start-date-time-required"))
-        .test(
-          "check-start-date",
-          t("validation:start-date-time-before-today"),
-          () => {
-            return moment(
-              `${getValue("startDate")} ${getValue("startTime")}`,
-              "DD/MM/YYYY LT"
-            ).isAfter(moment())
-          }
-        ),
-      startTime: Yup.string()
-        .required(t("validation:start-date-time-required"))
-        .test(
-          "check-start-time",
-          t("validation:start-date-time-before-today"),
-          () => {
-            return moment(
-              `${getValue("startDate")} ${getValue("startTime")}`,
-              "DD/MM/YYYY LT"
-            ).isAfter(moment())
-          }
-        ),
-      endDate: Yup.string()
-        .required(t("validation:end-date-time-required"))
-        .test(
-          "check-end-date",
-          t("validation:end-date-time-before-start-date-time"),
-          () => {
-            return (
-              !getValue("startDate") ||
-              !getValue("startTime") ||
-              moment(
-                `${getValue("startDate")} ${getValue("startTime")}`,
-                "DD/MM/YYYY LT"
-              ).isBefore(
-                moment(
-                  `${getValue("endDate")} ${getValue("endTime")}`,
-                  "DD/MM/YYYY LT"
-                )
-              )
-            )
-          }
-        ),
-      endTime: Yup.string()
-        .required(t("validation:end-date-time-required"))
-        .test(
-          "check-end-time",
-          t("validation:end-date-time-before-start-date-time"),
-          () => {
-            return (
-              !getValue("startDate") ||
-              !getValue("startTime") ||
-              moment(
-                `${getValue("startDate")} ${getValue("startTime")}`,
-                "DD/MM/YYYY LT"
-              ).isBefore(
-                moment(
-                  `${getValue("endDate")} ${getValue("endTime")}`,
-                  "DD/MM/YYYY LT"
-                )
-              )
-            )
-          }
-        ),
-      noOfTimes: Yup.string()
-        .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
-          return !!getValue("noOfTimes") || !enableStreamRate
-        })
-        .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
-          return Number(getValue("noOfTimes")) > 0 || !enableStreamRate
-        }),
-      tokenAmount: Yup.string()
-        .test(
-          "tokenAmount-required",
-          t("validation:tokenAmount-required"),
-          () => {
-            return !!getValue("tokenAmount") || !enableStreamRate
-          }
-        )
-        .test(
-          "tokenAmount-invalid",
-          t("validation:tokenAmount-invalid"),
-          () => {
-            return Number(getValue("tokenAmount")) > 0 || !enableStreamRate
-          }
-        ),
-      interval: Yup.string().test(
-        "interval-required",
-        t("validation:interval-required"),
-        () => {
-          return !!getValue("interval") || !enableStreamRate
-        }
-      ),
       file: Yup.string()
     })
 
@@ -205,22 +79,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     trigger,
     resetField,
     watch
-  } = useForm<ContinuousStreamFormData>({
+  } = useForm<InstantStreamFormData>({
     mode: "onChange",
     resolver: yupResolver(validationSchema)
   })
 
   const tokensDropdownWrapper = useRef(null)
   const receiverDropdownWrapper = useRef(null)
-  const intervalDropdownWrapper = useRef(null)
 
   const [tokenSearchData, setTokenSearchData] = useState("")
   const [receiverSearchData, setReceiverSearchData] = useState("")
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
-  const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
-  const [enableStreamRate, setEnableStreamRate] = useState(false)
 
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
 
@@ -237,9 +108,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const handleReceiverClose = () => {
     setToggleReceiverDropdown(false)
   }
-  const handleIntervalClose = () => {
-    setToggleIntervalDropdown(false)
-  }
 
   //handle clicking outside
   useClickOutside(tokensDropdownWrapper, {
@@ -247,9 +115,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
   useClickOutside(receiverDropdownWrapper, {
     onClickOutside: handleReceiverClose
-  })
-  useClickOutside(intervalDropdownWrapper, {
-    onClickOutside: handleIntervalClose
   })
 
   useEffect(() => {
@@ -259,54 +124,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [tokenDetails, setValue])
 
-  const onSubmit = (data: ContinuousStreamFormData) => {
+  const onSubmit = (data: InstantStreamFormData) => {
     console.log(data)
   }
 
-  const getValue = (key: FormKeys) => {
+  const getValue = (key: InstantFormKeys) => {
     return getValues()[key]
-  }
-
-  const handleStreamRate = () => {
-    const selectedNoOfTimes = Number(getValue("noOfTimes")) || 0
-    const selectedTokenAmount = Number(getValue("tokenAmount")) || 0
-    const totalAmount = selectedNoOfTimes * selectedTokenAmount
-    setValue("amount", totalAmount.toString())
-
-    if (
-      getValue("startDate") &&
-      getValue("startTime") &&
-      getValue("noOfTimes")
-    ) {
-      const selectedInterval =
-        intervals.find((interval) => interval.key === getValue("interval"))
-          ?.value || 0
-      const timeDifference = selectedInterval * selectedNoOfTimes
-      const endDateTime = moment(
-        `${getValue("startDate")} ${getValue("startTime")}`,
-        "DD/MM/YYYY LT"
-      ).add(timeDifference, "minutes")
-      setValue("endDate", endDateTime.format("DD/MM/YYYY"))
-      setValue("endTime", endDateTime.format("LT"))
-      trigger("endDate")
-      trigger("endTime")
-    }
-  }
-
-  const toggleStreamRate = () => {
-    if (!enableStreamRate) {
-      setValue("interval", intervals[0].key)
-      handleStreamRate()
-    } else {
-      resetField("interval")
-      resetField("noOfTimes")
-      resetField("tokenAmount")
-    }
-
-    resetField("amount")
-    resetField("endDate")
-    resetField("endTime")
-    setEnableStreamRate(!enableStreamRate)
   }
 
   useEffect(() => {
@@ -322,10 +145,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     <>
       <div className="bg-background-secondary rounded-[4px] p-10">
         <div className="text-heading-4 text-content-primary font-semibold">
-          {t("send:continuous-stream")}
+          {t("send:instant-transfer")}
         </div>
         <div className="text-caption text-content-tertiary font-normal pt-2">
-          {t("send:continuous-stream-description")}
+          {t("send:instant-transfer-description")}
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Transaction Name and Receiver Wallet */}
@@ -560,11 +383,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div className="flex justify-between">
                 <label
-                  className={`${
-                    enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
-                  } ml-3 text-xs font-medium mb-1`}
+                  className={`text-content-primary ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:amount")}
                 </label>
@@ -590,253 +409,36 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     className={`w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
-                    disabled={enableStreamRate}
                     {...register("amount")}
                   />
-                  {!enableStreamRate && (
-                    <Button
-                      size="small"
-                      title={t("send:max")}
-                      className="absolute right-[8px] top-[8px] text-content-primary"
-                      onClick={() =>
-                        setValue(
-                          "amount",
-                          getBalance(
-                            tokenBalances,
-                            currentToken.symbol
-                          ).toString()
-                        )
-                      }
-                      type="button"
-                    />
-                  )}
+                  <Button
+                    size="small"
+                    title={t("send:max")}
+                    className="absolute right-[8px] top-[8px] text-content-primary"
+                    onClick={() =>
+                      setValue(
+                        "amount",
+                        getBalance(
+                          tokenBalances,
+                          currentToken.symbol
+                        ).toString()
+                      )
+                    }
+                    type="button"
+                  />
                 </div>
               </InputField>
             </div>
           </div>
 
-          {/* Stream start and Stream end */}
-          <div className="mt-4 grid lg:grid-cols-2 gap-3">
-            <div>
-              <div>
-                <label className="ml-3 text-content-primary text-xs font-medium mb-1">
-                  {t("send:stream-start")}
-                </label>
-                <DateTimePicker
-                  placeholder="E.g. 01/01/2022"
-                  startIcon={<Icons.CalenderIcon />}
-                  endIcon={<Icons.CheveronDownIcon />}
-                  dateFormat="DD/MM/YYYY"
-                  timeFormat={false}
-                  value={getValue("startDate")}
-                  onChange={(date) => {
-                    setValue("startDate", moment(date).format("DD/MM/YYYY"))
-                    trigger("startDate")
-                    trigger("startTime")
-                    if (!!getValue("endTime") || !!getValue("endDate")) {
-                      trigger("endDate")
-                      trigger("endTime")
-                    }
-                    if (enableStreamRate) handleStreamRate()
-                  }}
-                  error={!!errors.startDate}
-                >
-                  <input
-                    className={`w-full h-[40px] ${
-                      !!errors.startDate && "error"
-                    }`}
-                    readOnly
-                    {...register("startDate")}
-                  />
-                </DateTimePicker>
-              </div>
-              <div className="mt-4">
-                <TimePicker
-                  error={!!errors.startTime}
-                  name="startTime"
-                  register={register}
-                  placeholder="E.g. 12:00 AM"
-                  startIcon={<Icons.ClockIcon />}
-                  endIcon={<Icons.CheveronDownIcon />}
-                  onChange={(time) => {
-                    setValue("startTime", time)
-                    trigger("startTime")
-                    trigger("startDate")
-                    if (!!getValue("endTime") || !!getValue("endDate")) {
-                      trigger("endDate")
-                      trigger("endTime")
-                    }
-                    if (enableStreamRate) handleStreamRate()
-                  }}
-                />
-              </div>
-              {(!!errors.startDate || !!errors.startTime) && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {(errors.startDate || errors.startTime)?.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <div>
-                <label
-                  className={`${
-                    enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
-                  } ml-3 text-xs font-medium mb-1`}
-                >
-                  {t("send:stream-end")}
-                </label>
-                <DateTimePicker
-                  placeholder="E.g. 30/01/2022"
-                  startIcon={<Icons.CalenderIcon />}
-                  endIcon={<Icons.CheveronDownIcon />}
-                  dateFormat="DD/MM/YYYY"
-                  timeFormat={false}
-                  disabled={enableStreamRate}
-                  value={getValue("endDate")}
-                  onChange={(date) => {
-                    setValue("endDate", moment(date).format("DD/MM/YYYY"))
-                    trigger("endDate")
-                    trigger("endTime")
-                  }}
-                  error={!!errors.endDate}
-                >
-                  <input type="text" readOnly {...register("endDate")} />
-                </DateTimePicker>
-              </div>
-              <div className="mt-4">
-                <TimePicker
-                  placeholder="E.g. 12:00 AM"
-                  name="endTime"
-                  register={register}
-                  startIcon={<Icons.ClockIcon />}
-                  endIcon={<Icons.CheveronDownIcon />}
-                  disabled={enableStreamRate}
-                  onChange={(time) => {
-                    setValue("endTime", time)
-                    trigger("endTime")
-                    trigger("endDate")
-                  }}
-                  error={!!errors.endTime}
-                />
-              </div>
-              {(!!errors.endDate || !!errors.endTime) && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {(errors.endDate || errors.endTime)?.message?.toString()}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Toggle stream rate and Add file*/}
-          <div className="mt-4 grid lg:grid-cols-2 gap-3">
-            <Toggle
-              text={t("send:enable-stream-rate")}
-              onChange={toggleStreamRate}
-            />
-            {addFile && (
+          {/* Add file*/}
+          {addFile && (
+            <div className="mt-4">
               <FileUpload
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
               />
-            )}
-          </div>
-
-          {/* Stream rate field */}
-          {enableStreamRate && (
-            <div className="mt-4 grid lg:grid-cols-3 gap-3">
-              <div>
-                <InputField
-                  label={t("send:no-of-times")}
-                  className="relative text-content-primary"
-                  error={false}
-                  labelMargin={12}
-                  helper={errors.noOfTimes?.message?.toString()}
-                >
-                  <div>
-                    <input
-                      className={`w-full h-[40px] ${
-                        !!errors.noOfTimes && "error"
-                      }`}
-                      placeholder={"E.g. 4"}
-                      type="number"
-                      {...register("noOfTimes")}
-                      onChange={(e) => {
-                        setValue("noOfTimes", e.target.value)
-                        handleStreamRate()
-                        trigger("noOfTimes")
-                      }}
-                    />
-                  </div>
-                </InputField>
-              </div>
-              <div>
-                <InputField
-                  error={!!errors.tokenAmount}
-                  helper={errors.tokenAmount?.message?.toString()}
-                  label={t("send:token-amount")}
-                  placeholder={"E.g. 10"}
-                  type="number"
-                  className="w-full h-[40px]"
-                  labelMargin={12}
-                >
-                  <input
-                    className={`w-full h-[40px]`}
-                    type="number"
-                    {...register("tokenAmount")}
-                    onChange={(e) => {
-                      setValue("tokenAmount", e.target.value)
-                      handleStreamRate()
-                      trigger("tokenAmount")
-                    }}
-                  />
-                </InputField>
-              </div>
-              <div ref={intervalDropdownWrapper} className="relative">
-                <label
-                  className={`ml-3 text-content-primary text-xs font-medium mb-1`}
-                >
-                  {t("send:time-interval")}
-                </label>
-                <div
-                  className="relative text-content-primary"
-                  onClick={() => setToggleIntervalDropdown((prev) => !prev)}
-                >
-                  <input
-                    type="text"
-                    className="h-[40px] w-full"
-                    readOnly
-                    {...register("interval")}
-                  />
-                  <Icons.CheveronDownIcon className="absolute top-3 right-1 text-lg" />
-                </div>
-                <CollapseDropdown
-                  show={toggleIntervalDropdown}
-                  className="mt-8 w-full z-[99]"
-                  position="left"
-                >
-                  <div className="rounded-lg bg-background-primary border border-outline">
-                    <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                      {intervals.map((data) => (
-                        <div
-                          key={data.key}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            setToggleIntervalDropdown(false)
-                            setValue("interval", data.key)
-                            handleStreamRate()
-                          }}
-                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                        >
-                          <div className="text-content-primary">{data.key}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </CollapseDropdown>
-              </div>
             </div>
           )}
 

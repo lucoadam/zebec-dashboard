@@ -1,28 +1,25 @@
-import { FC } from "react"
-import * as Icons from "assets/icons"
-import { StreamOverviewProps } from "./streamOverview.d"
-import { useTranslation } from "next-i18next"
-import { toSubstring } from "utils"
 import { Button } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC } from "react"
+import { toSubstring } from "utils"
+import { InstantStreamOverviewProps } from "./instantStreamOverview.d"
+import * as Icons from "assets/icons"
 
-export const StreamOverview: FC<StreamOverviewProps> = ({ formValues }) => {
+export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
+  formValues
+}) => {
   const { t } = useTranslation("common")
   return (
     <div className="p-10 md:pl-[79px] flex flex-col justify-center text-content-primary max-w-[400px]">
       <div className="border-dashed border-b pb-4 border-outline">
-        <h1 className="text-base font-semibold">{t("send:stream-overview")}</h1>
+        <h1 className="text-base font-semibold">
+          {t("send:transfer-overview")}
+        </h1>
       </div>
       <div className="pt-4">
-        <p className="text-subtitle text-content-secondary">
-          {t("send:stream-start-details")}{" "}
-          <span className="text-content-primary">
-            {formValues?.startDate || "..."} {formValues?.startTime || "..."}
-          </span>
-        </p>
         <p className="mt-2 text-subtitle text-content-secondary">
           <span className="text-content-primary">
-            {formValues?.tokenAmount || formValues?.amount || "..."}{" "}
-            {formValues?.token || "..."}{" "}
+            {formValues?.amount || "..."} {formValues?.token || "..."}{" "}
           </span>
           {t("send:token-amount-details")}{" "}
           <span className="text-content-primary">
@@ -30,25 +27,8 @@ export const StreamOverview: FC<StreamOverviewProps> = ({ formValues }) => {
             {formValues?.receiverWallet
               ? toSubstring(formValues?.receiverWallet, 12, false)
               : "..."}
-          </span>
-        </p>
-        {(formValues?.noOfTimes ||
-          formValues?.tokenAmount ||
-          formValues?.interval) && (
-          <p className="text-subtitle text-content-secondary">
-            {t("send:for")}{" "}
-            <span className="text-content-primary">
-              {formValues?.noOfTimes || "..."} {formValues?.interval || "..."}.{" "}
-              {formValues?.amount || "..."} {formValues?.token || "..."}
-            </span>{" "}
-            {t("send:in-total")}
-          </p>
-        )}
-        <p className="mt-2 text-subtitle text-content-secondary">
-          {t("send:stream-end-details")}{" "}
-          <span className="text-content-primary">
-            {formValues?.endDate || "..."} {formValues?.endTime || "..."}
-          </span>
+          </span>{" "}
+          {t("send:in-few-seconds")}
         </p>
       </div>
       <div className="mt-4 border border-outline p-4 rounded-md">

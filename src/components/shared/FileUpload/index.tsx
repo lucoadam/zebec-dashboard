@@ -100,7 +100,7 @@ export const FileUpload: FC<FileUploadProps> = ({
         onClick={handleFileClick}
         className="w-max relative flex items-center"
       >
-        <div className="hover:cursor-pointer flex items-center border border-outline px-2 py-[5px] gap-[5px] rounded-lg bg-background-primary">
+        <div className="hover:cursor-pointer flex items-center border border-outline px-2 py-[5px] gap-[5px] rounded-lg bg-background-secondary">
           <span className="text-content-primary">
             {file.uploading
               ? "Uploading file"

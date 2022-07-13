@@ -16,6 +16,7 @@ import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
+import commonSlice from "features/common/commonSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -29,7 +30,8 @@ const combineReducer = combineReducers({
   pause: pauseSlice,
   cancel: cancelSlice,
   resume: resumeSlice,
-  layout: layoutSlice
+  layout: layoutSlice,
+  common: commonSlice
 })
 
 // export const store = configureStore({

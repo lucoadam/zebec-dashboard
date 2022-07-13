@@ -7,13 +7,14 @@ import { StreamOverview } from "components/send/streamOverview"
 
 const TreasuryContinuousStream: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
-  const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
+  const treasuryBalance =
+    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   return (
     <div className="grid md:grid-cols-2">
       <div className="w-full">
         <ContinuousStream
           setFormValues={setFormValues}
-          tokenBalances={zebecBalance}
+          tokenBalances={treasuryBalance}
           addFile={true}
         />
       </div>
