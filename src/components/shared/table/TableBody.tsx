@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { twMerge } from "tailwind-merge"
 
 interface TableBodyProps {
-  className: string
+  className?: string
   children: React.ReactNode
 }
 
@@ -11,7 +11,7 @@ export const TableBody: FC<TableBodyProps> = ({ className, children }) => {
     <>
       <tbody
         className={twMerge(
-          `table px-6 py-5 rounded-lg bg-background-secondary border-separate divide-y divide-outline`,
+          `table px-6 py-5 w-full rounded-lg bg-background-secondary border-separate divide-y divide-outline`,
           className ?? ""
         )}
       >

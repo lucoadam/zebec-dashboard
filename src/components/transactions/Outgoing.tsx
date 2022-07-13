@@ -31,7 +31,7 @@ const Outgoing: FC = () => {
       <FilterTabs />
       {/* Table */}
       <Table headers={headers}>
-        <TableBody className="table px-6 py-5 rounded-lg bg-background-secondary w-full border-separate divide-y divide-outline">
+        <TableBody>
           {outgoingTransactions.data.map((transaction, index) => {
             return (
               <OutgoingTableRow

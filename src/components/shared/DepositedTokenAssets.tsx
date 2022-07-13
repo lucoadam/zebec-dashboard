@@ -1,11 +1,27 @@
-import React, { FC } from "react"
+import * as Icons from "assets/icons"
+import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
+import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
+import { FC, useState } from "react"
+import { formatCurrency } from "utils"
+import { getBalance, getUsdBalance } from "utils/getBalance"
+import { InputField } from "./InputField"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
+  tokens: TokenDetails[]
+  balanceTokens: TreasuryToken[]
 }
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
-  const { tableMaxHeight } = props
+  const { tableMaxHeight, tokens, balanceTokens } = props
+  const [search, setSearch] = useState("")
+
+  const filterTokens = () => {
+    if (search !== "")
+      return tokens.filter((item) => item.symbol.toLowerCase().includes(search))
+    return tokens
+  }
+
   return (
     <>
       <div className="p-6 rounded bg-background-secondary h-full">
@@ -14,6 +30,20 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
             DEPOSITED ASSETS
           </div>
           {/* Assets Table */}
+          <InputField className="h-9 relative" error={false}>
+            <div>
+              <Icons.SearchIcon className="absolute left-2.5 top-[11px] text-content-primary" />
+              <input
+                className="w-full h-9 !pl-8"
+                value={search}
+                placeholder="Search token"
+                onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearch(e.target.value)
+                }
+                type="text"
+              />
+            </div>
+          </InputField>
           <div
             className="flex flex-col gap-y-8 overflow-hidden"
             style={{ maxHeight: tableMaxHeight }}
@@ -33,284 +63,56 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                 </thead>
                 <tbody className="w-full border-separate">
                   {/* SOL */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6 pt-3">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          SOL
+                  {filterTokens().map((token) => (
+                    <tr key={token.symbol} className="">
+                      <td className="whitespace-nowrap w-[1%] pb-6 pt-3">
+                        <div className="flex flex-col items-center gap-y-1">
+                          <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary">
+                            <img
+                              className="w-5 h-5"
+                              src={token.image}
+                              alt={token.symbol}
+                            />
+                          </div>
+                          <div className="text-caption text-content-primary">
+                            {token.symbol}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6 pt-3">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
+                      </td>
+                      <td className="pl-4 pb-6 pt-3">
+                        <div className="flex flex-col gap-y-2 mt-1">
+                          <div className=" text-subtitle-sm text-content-primary font-medium">
+                            {formatCurrency(
+                              getBalance(balanceTokens, token.symbol),
+                              "$"
+                            )}
+                          </div>
+                          <div className=" text-caption text-content-contrast">
+                            {formatCurrency(
+                              getUsdBalance(balanceTokens, token.symbol)
+                            )}{" "}
+                            {token.symbol}
+                          </div>
                         </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
+                      </td>
+                      <td className="pl-4 pr-1.5 pb-6 pt-3">
+                        <div className="flex flex-col gap-y-2 mt-1">
+                          <div className=" text-subtitle-sm text-content-primary font-medium">
+                            {formatCurrency(
+                              getBalance(balanceTokens, token.symbol),
+                              "$"
+                            )}
+                          </div>
+                          <div className=" text-caption text-content-contrast">
+                            {formatCurrency(
+                              getUsdBalance(balanceTokens, token.symbol)
+                            )}{" "}
+                            {token.symbol}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6 pt-3">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* USDC */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          USDC
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* BLOCK */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          BLOCK
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4  pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* SOL */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* USDC */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          USDC
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* BLOCK */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          BLOCK
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* SOL */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* USDC */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%] pb-6">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          USDC
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5 pb-6">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* BLOCK */}
-                  <tr className="">
-                    <td className="whitespace-nowrap w-[1%]">
-                      <div className="flex flex-col items-center gap-y-1">
-                        <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary"></div>
-                        <div className="text-caption text-content-primary">
-                          BLOCK
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                    <td className="pl-4 pr-1.5">
-                      <div className="flex flex-col gap-y-2 mt-1">
-                        <div className=" text-subtitle-sm text-content-primary font-medium">
-                          $8,43,459.33
-                        </div>
-                        <div className=" text-caption text-content-contrast">
-                          140.59 SOL
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

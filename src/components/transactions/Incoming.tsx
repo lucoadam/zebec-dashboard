@@ -1,7 +1,7 @@
 import { Table, TableBody } from "components/shared"
 import { Pagination } from "components/shared/Pagination"
-import { incomingTransactions } from "fakedata"
 import { RowsPerPage } from "components/shared/RowsPerPage"
+import { incomingTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
@@ -47,7 +47,7 @@ const Incoming: FC = () => {
       <FilterTabs />
       {/* Table */}
       <Table headers={headers}>
-        <TableBody className="w-full">
+        <TableBody>
           {incomingTransactions.data.map((transaction, index) => {
             return (
               <IncomingTableRow

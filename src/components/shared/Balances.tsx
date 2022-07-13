@@ -1,6 +1,6 @@
-import React, { FC } from "react"
-import { Button } from "./Button"
 import * as Icons from "assets/icons"
+import { FC } from "react"
+import { Button } from "./Button"
 
 /* Deposited Balance */
 export const DepositedBalance: FC = () => {
@@ -9,9 +9,14 @@ export const DepositedBalance: FC = () => {
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
         DEPOSITED BALANCE
       </div>
-      <div className=" text-heading-3 text-content-primary font-semibold">
-        $15,390,832
-        <span className=" text-subtitle text-content-contrast">.02213</span>
+      <div>
+        <div className=" text-heading-3 text-content-primary font-semibold">
+          $15,390,832
+          <span className=" text-subtitle text-content-contrast">.02213</span>
+        </div>
+        <p className="text-xs font-normal leading-3 text-content-contrast">
+          120,023.23 SOL
+        </p>
       </div>
     </div>
   )
