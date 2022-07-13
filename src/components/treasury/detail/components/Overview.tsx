@@ -9,6 +9,7 @@ import {
   ZebecHelp
 } from "components/shared"
 import { SendFeedback } from "components/shared/SendFeedback"
+import { tokenBalances, weeklyBalances } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { useState } from "react"
 import { Deposit } from "./Deposit"
@@ -36,7 +37,9 @@ const Overview = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
-
+  const [currentToken, setCurrentToken] = useState<
+    keyof typeof tokenBalances | keyof typeof weeklyBalances
+  >("SOL")
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
       {/**
@@ -53,18 +56,22 @@ const Overview = () => {
         {/**
          * Incoming/ Outgoing
          */}
-        <Tokens />
+        <Tokens currentToken={currentToken} setCurrentToken={setCurrentToken} />
         {/**
          * Activity this week
          */}
-        <ActivityThisWeek />
+        <ActivityThisWeek currentToken={currentToken} />
       </div>
       {/**
        * Second Column
        *   1. Deposited Assets
        * **/}
       <div>
-        <DepositedAssets balanceTokens={treasuryTokens} tokens={tokenDetails} />
+        <DepositedAssets
+          tableMaxHeight={636}
+          balanceTokens={treasuryTokens}
+          tokens={tokenDetails}
+        />
       </div>
       <div className="grid md:grid-cols-2 md:gap-6 lg:col-span-1 lg:grid-cols-1 md:col-span-2 md:flex-row md:flex-wrap flex-col justify-between">
         {/**
