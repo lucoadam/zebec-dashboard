@@ -6,13 +6,14 @@ import { FC } from "react"
 const DepositedAssets: FC<{
   tokens?: TokenDetails[]
   balanceTokens?: TreasuryToken[]
-}> = ({ tokens = [], balanceTokens = [] }) => {
+  tableMaxHeight?: number
+}> = ({ tokens = [], balanceTokens = [], tableMaxHeight = 402 }) => {
   return (
     <>
       <DepositedTokenAssets
         balanceTokens={balanceTokens}
         tokens={tokens}
-        tableMaxHeight={424}
+        tableMaxHeight={tableMaxHeight}
       />
     </>
   )

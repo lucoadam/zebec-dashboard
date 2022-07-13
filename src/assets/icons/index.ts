@@ -16,6 +16,7 @@ import CrossIcon from "./other-icons/cross.svg"
 import DisconnectIcon from "./other-icons/disconnect.svg"
 import DoubleCircleDottedLineIcon from "./other-icons/double-circle-dottedline.svg"
 import DownArrowIcon from "./other-icons/down-arrow.svg"
+import EditIcon from "./other-icons/edit.svg"
 import Equals from "./other-icons/equals.svg"
 import EyeOpenIcon from "./other-icons/eye-open.svg"
 import GearringAltIcon from "./other-icons/gearring-alt.svg"
@@ -93,5 +94,6 @@ export {
   ResumeIcon,
   ClockIcon,
   ArrowRightIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  EditIcon
 }

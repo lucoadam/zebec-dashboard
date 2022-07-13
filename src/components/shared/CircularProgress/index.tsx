@@ -1,7 +1,11 @@
 import * as Icons from "assets/icons"
 import React, { FC, useEffect, useState } from "react"
 
-type TransactionStatus = "completed" | "scheduled" | "cancelled" | "paused"
+export type TransactionStatus =
+  | "completed"
+  | "scheduled"
+  | "cancelled"
+  | "paused"
 
 interface CircularProgressProps {
   percentage?: number
@@ -56,11 +60,11 @@ export const CircularProgress: FC<CircularProgressProps> = ({
 
   useEffect(() => {
     setTimeout(async () => {
-      for (let i = 0; i <= percentage; i += percentage / 10) {
-        await new Promise((r) => setTimeout(r, 50))
+      for (let i = 0; i <= percentage; i++) {
+        await new Promise((r) => setTimeout(r, 12))
         setDashOffset(dashArray - (dashArray * i) / 100)
       }
-    }, 500)
+    }, 0.1)
   }, [dashArray, percentage])
 
   return (
