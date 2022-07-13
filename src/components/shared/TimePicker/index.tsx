@@ -19,6 +19,7 @@ const Hours = [
   "12"
 ]
 const Minutes = [
+  "00",
   "01",
   "02",
   "03",
@@ -117,7 +118,11 @@ export const TimePicker: FC<TimePickerProps> = ({
     <div>
       <div className="relative" ref={dropdownWrapper}>
         <div className="relative text-content-primary" onClick={handleClick}>
-          <div className="absolute text-content-primary z-50 top-3 left-5">
+          <div
+            className={`${
+              disabled ? "text-content-tertiary" : "text-content-primary"
+            } absolute z-50 top-3 left-5`}
+          >
             {startIcon}
           </div>
           <input
@@ -128,17 +133,21 @@ export const TimePicker: FC<TimePickerProps> = ({
             disabled={disabled}
             {...(register ? register(name) : null)}
           />
-          <div className="text-lg absolute text-content-primary z-2 top-3 right-1">
+          <div
+            className={`${
+              disabled ? "text-content-tertiary" : "text-content-primary"
+            } text-lg absolute z-2 top-3 right-1`}
+          >
             {endIcon}
           </div>
         </div>
         <CollapseDropdown
           show={toggleDropdown}
-          className="w-[200px] z-[99]"
+          className="mt-3 w-[200px] z-[99]"
           position="left"
         >
           <div className="grid grid-cols-3 rounded-t-lg bg-background-primary border border-outline">
-            <div className="max-h-[184px] overflow-auto no-scrollbar">
+            <div className="max-h-[184px] overflow-auto">
               {Hours.map((hour) => (
                 <div
                   className={`flex items-center justify-center p-2 cursor-pointer ${
@@ -155,7 +164,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                 </div>
               ))}
             </div>
-            <div className="max-h-[184px] overflow-auto no-scrollbar">
+            <div className="max-h-[184px] overflow-auto">
               {Minutes.map((minute) => (
                 <div
                   className={`flex items-center justify-center p-2 cursor-pointer ${
@@ -172,7 +181,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                 </div>
               ))}
             </div>
-            <div className="max-h-[184px] overflow-auto no-scrollbar">
+            <div className="max-h-[184px] overflow-auto">
               {ap.map((a) => (
                 <div
                   className={`flex items-center justify-center p-2 cursor-pointer ${

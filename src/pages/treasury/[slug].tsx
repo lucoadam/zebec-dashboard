@@ -2,13 +2,17 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import TreasuryDetail from "components/treasury/detail/TreasuryDetail"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
+import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
+import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
-import * as Icons from "../../assets/icons"
-import Layout from "../../components/layouts/Layout"
+import { useEffect, useRef, useState } from "react"
+import * as Icons from "assets/icons"
+import Layout from "components/layouts/Layout"
+import { Button, CollapseDropdown, IconButton } from "components/shared"
+import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import { Button, IconButton } from "../../components/shared"
 import CancelModal from "components/modal/outgoing-modals/CancelModal/CancelModal"
 import PauseModal from "components/modal/outgoing-modals/PauseModal/PauseModal"
@@ -21,6 +25,16 @@ const Treasury: NextPage = () => {
 
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
   const dispatch = useAppDispatch()
+
+  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const dropdownWrapper = useRef(null)
+  const handleDropdownClose = () => {
+    setToggleDropdown(false)
+  }
+
+  useClickOutside(dropdownWrapper, {
+    onClickOutside: handleDropdownClose
+  })
 
   useEffect(() => {
     if (tokens.length > 0 && walletObject.publicKey) {
@@ -54,12 +68,45 @@ const Treasury: NextPage = () => {
                 Zebec Safe
               </h4>
             </div>
-            <div className="flex gap-x-3">
+            <div ref={dropdownWrapper} className="flex gap-x-3 relative">
               <Button
                 title="Send from Treasury"
                 variant="gradient"
                 endIcon={<Icons.ArrowUpRightIcon />}
+                onClick={() => setToggleDropdown(!toggleDropdown)}
               />
+              <CollapseDropdown
+                className="p-2 mt-4"
+                position="right"
+                show={toggleDropdown}
+              >
+                <div className="pb-2">
+                  <Link href="/treasury/send">
+                    <div
+                      onClick={() => dispatch(setTreasurySendActiveTab(0))}
+                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
+                      <Icons.DoubleCircleDottedLineIcon />
+                      <span className="text-content-primary">
+                        {t("send:continuous-stream")}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+                <div className="pt-2">
+                  <Link href="/treasury/send">
+                    <div
+                      onClick={() => dispatch(setTreasurySendActiveTab(1))}
+                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
+                      <Icons.ThunderIcon />
+                      <span className="text-content-primary">
+                        {t("send:instant-transfer")}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </CollapseDropdown>
             </div>
           </div>
           <TreasuryDetail />
@@ -72,7 +119,7 @@ const Treasury: NextPage = () => {
   )
 }
 
-export async function getServerSideProps({ locale }: any) {
+export async function getServerSideProps({ locale }: { locale: string }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -81,7 +128,8 @@ export async function getServerSideProps({ locale }: any) {
         "treasuryOverview",
         "treasurySettings",
         "validation",
-        "transactions"
+        "transactions",
+        "send"
       ]))
     }
   }

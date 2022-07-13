@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import moment from "moment"
 import { cloneElement, FC } from "react"
 import Datetime from "react-datetime"
@@ -17,6 +19,7 @@ interface DateTimePickerProps {
 }
 export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
   const renderInput = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     props: any,
     openCalendar: Function,
     closeCalendar: Function
@@ -31,7 +34,11 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
   }
   return (
     <div className="relative">
-      <div className="absolute text-content-primary z-50 top-3 left-3">
+      <div
+        className={`${
+          mainProps.disabled ? "text-content-tertiary" : "text-content-primary"
+        } absolute z-50 top-3 left-5`}
+      >
         {mainProps.startIcon}
       </div>
       <Datetime
@@ -52,7 +59,11 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
         onChange={mainProps.onChange}
         renderInput={renderInput}
       />
-      <div className="text-lg absolute text-content-primary z-2 top-3 right-1">
+      <div
+        className={`${
+          mainProps.disabled ? "text-content-tertiary" : "text-content-primary"
+        } text-lg absolute z-2 top-3 right-1`}
+      >
         {mainProps.endIcon}
       </div>
     </div>

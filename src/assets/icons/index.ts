@@ -43,6 +43,7 @@ import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
+import FileUploadIcon from "./other-icons/file-upload.svg"
 import Download from "./other-icons/download.svg"
 import Calendar from "./other-icons/calender.svg"
 
@@ -95,5 +96,6 @@ export {
   ClockIcon,
   ArrowRightIcon,
   ArrowDownIcon,
+  FileUploadIcon
   EditIcon
 }
