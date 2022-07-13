@@ -155,7 +155,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                     This is the secondary notes with character limit.
                   </div>
                 </div>
-                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
+                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -296,6 +296,105 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                       </div>
                     </div>
                   </div>
+                </div>
+                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                  {/* Left Column */}
+                  <div className="flex flex-col gap-y-4">
+                    {/* Signed Owners */}
+                    <div className="flex gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.signed-by")}
+                      </div>
+                      <div className="grid gap-y-4">
+                        {[1, 2, 3].map((item) => (
+                          <div
+                            key={item}
+                            className="flex items-center  gap-x-2 text-content-primary"
+                          >
+                            <Image
+                              layout="fixed"
+                              alt="Owner Logo"
+                              src={
+                                [
+                                  Images.Avatar1,
+                                  Images.Avatar2,
+                                  Images.Avatar4
+                                ][item % 3]
+                              }
+                              height={24}
+                              width={24}
+                              className="rounded-full"
+                            />
+                            <div className="">
+                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                            </div>
+                            <div className="text-content-tertiary">
+                              10 min ago
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  {/* Right Column */}
+                  <div className="flex flex-col gap-y-4">
+                    {/* Total Amount */}
+                    <div className="flex gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.remaining")}
+                      </div>
+
+                      <div className="grid gap-y-4">
+                        <div className="text-content-primary">
+                          3 out of 4 Owners
+                        </div>
+                        {[1].map((item) => (
+                          <div
+                            key={item}
+                            className="flex items-center  gap-x-2 text-content-primary"
+                          >
+                            <Image
+                              layout="fixed"
+                              alt="Owner Logo"
+                              src={
+                                [
+                                  Images.Avatar1,
+                                  Images.Avatar2,
+                                  Images.Avatar4
+                                ][item % 3]
+                              }
+                              height={24}
+                              width={24}
+                              className="rounded-full"
+                            />
+                            <div className="">
+                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                            </div>
+                            <div className="text-content-tertiary">
+                              10 min ago
+                            </div>
+                          </div>
+                        ))}
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.show-all-remaining")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.ArrowDownIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-x-4 py-6">
+                  <Button
+                    startIcon={<Icons.EditIcon />}
+                    variant="gradient"
+                    title={t("table.sign-and-approve")}
+                  />
+                  <Button startIcon={<Icons.CrossIcon />} title="Reject" />
                 </div>
               </div>
             </div>

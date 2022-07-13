@@ -5,10 +5,11 @@ import { Button, IconButton, Modal } from "components/shared"
 import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { togglePauseModal } from "features/transaction/pauseModal/pauseSlice"
-import { toggleCancelModal } from "features/transaction/cancelModal/cancelSlice"
-import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
+
 import { useAppDispatch } from "app/hooks"
+import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number

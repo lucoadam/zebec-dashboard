@@ -1,0 +1,17 @@
+{
+  "export-report":"Export Report",
+  "export-modal-subtitle":"Export your incoming transaction report.",
+  "from":"From",
+  "to":"To",
+  "select-report-format":"Select a report format",
+  "csv-format":"CSV - Comma Seperated Values",
+  "pdf-format":"PDF - Portable Document Format",
+  "prepare-report":"Prepare Report",
+  "preparing-report":"Preparing Your Report",
+  "preparing-report-description":"It can up to 2 min to prepare your report",
+  "please-dont-close-window":"Please don’t close your window.",
+  "report-ready":"Your Report is Ready",
+  "report-ready-description":"The download should automatically start. If it doesn’t, click the button below.",
+  "download-report":"Download Report"
+
+}

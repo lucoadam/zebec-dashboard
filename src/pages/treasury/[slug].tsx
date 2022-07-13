@@ -13,9 +13,10 @@ import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
 import { Button, CollapseDropdown, IconButton } from "components/shared"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
-import CancelModal from "components/transactions/outgoing-modals/CancelModal/CancelModal"
-import PauseModal from "components/transactions/outgoing-modals/PauseModal/PauseModal"
-import ResumeModal from "components/transactions/outgoing-modals/ResumeModal/ResumeModal"
+import { Button, IconButton } from "../../components/shared"
+import CancelModal from "components/modal/outgoing-modals/CancelModal/CancelModal"
+import PauseModal from "components/modal/outgoing-modals/PauseModal/PauseModal"
+import ResumeModal from "components/modal/outgoing-modals/ResumeModal/ResumeModal"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()

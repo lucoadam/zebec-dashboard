@@ -16,6 +16,7 @@ interface WithdrawDepositInputProps
   setToggle: (arg0: false) => void
   className?: string
   token?: Token
+  errorMessage?: string
 }
 
 export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
@@ -31,6 +32,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
         setMaxAmount,
         token,
         className,
+        errorMessage = "",
         ...rest
       } = props
       const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
@@ -45,14 +47,14 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
             <label>Token</label>
             <div
               ref={tokensDropdownWrapperRef}
-              className="pl-4.5 pr-6 py-2 flex items-center bg-background-primary border border-outline rounded-lg relative"
+              className="pl-4.5 pr-6 flex items-center bg-background-primary border border-outline rounded-lg relative"
             >
               <div
-                className="flex items-center gap-x-1.5 cursor-pointer"
+                className="flex flex-grow-0 items-center gap-x-1.5 cursor-pointer"
                 onClick={toggle}
               >
                 {/* Icons here */}
-                <div className="grid place-content-center w-5 h-5 bg-background-secondary">
+                <div className="grid place-content-center w-5 h-5 bg-background-primary rounded-full">
                   {token?.image && (
                     <>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -69,14 +71,16 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   <Icons.CheveronDownIcon className="text-base text-content-secondary" />
                 </div>
               </div>
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  className="!pl-4 !text-body !leading-6 !border-none !focus:outline-0 !ring-0 w-full"
-                  placeholder="Enter Amount"
-                  {...rest}
-                  ref={ref}
-                />
+              <div className="relative w-full flex items-center">
+                <div>
+                  <input
+                    type="text"
+                    className="!pl-4 !text-body !leading-6 !border-none !focus:outline-0 !ring-0 w-full"
+                    placeholder="Enter Amount"
+                    {...rest}
+                    ref={ref}
+                  />
+                </div>
                 <Button
                   type="button"
                   onClick={() => {
@@ -84,12 +88,20 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   }}
                   title="MAX"
                   size="small"
-                  className="absolute right-px top-2"
+                  className="right-px top-0"
                 />
               </div>
+
               {/* Tokens Dropdown Children */}
               {children}
             </div>
+            {errorMessage &&
+              errorMessage !== "" &&
+              errorMessage !== "undefined" && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                  {errorMessage}
+                </p>
+              )}
           </div>
         </>
       )
