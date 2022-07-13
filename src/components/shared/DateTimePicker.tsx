@@ -31,7 +31,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
   }
   return (
     <div className="relative">
-      <div className="absolute text-content-primary z-50 top-3 left-5">
+      <div className="absolute text-content-primary z-50 top-3 left-3">
         {mainProps.startIcon}
       </div>
       <Datetime
