@@ -42,6 +42,7 @@ import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
+import FileUploadIcon from "./other-icons/file-upload.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
@@ -89,5 +90,6 @@ export {
   ResumeIcon,
   ClockIcon,
   ArrowRightIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  FileUploadIcon
 }

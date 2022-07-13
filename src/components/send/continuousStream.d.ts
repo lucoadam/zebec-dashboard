@@ -13,6 +13,7 @@ export interface ContinuousStreamFormData {
   noOfTimes?: string
   tokenAmount?: string
   interval?: string
+  file?: string
 }
 
 export type FormKeys =
@@ -32,4 +33,13 @@ export type FormKeys =
 export interface ContinuousStreamProps {
   setFormValues?: (values: ContinuousStreamFormData) => void
   tokenBalances: WalletToken[]
+  addFile?: boolean
+}
+
+export interface FileState {
+  name: string
+  url: string
+  uploading: boolean
+  error: string
+  progress: number
 }

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { PublicKey } from "@solana/web3.js"
 import { constants } from "constants/constants"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
@@ -16,7 +17,10 @@ const initialState: ZebecTokenState = {
 export const fetchZebecBalance: any = createAsyncThunk(
   "balance/fetchZebecBalance",
   async (wallet: string, { getState }) => {
-    const base58PublicKey = new PublicKey(constants.PROGRAM_ID)
+    const base58PublicKey = new PublicKey(
+      "AknC341xog56SrnoK6j3mUvaD1Y7tYayx1sxUGpeYWdX"
+    )
+    console.log(TOKEN_PROGRAM_ID.toString())
     const validProgramAddressPub = await PublicKey.findProgramAddress(
       [new PublicKey(wallet).toBuffer()],
       base58PublicKey
