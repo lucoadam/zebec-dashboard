@@ -5,14 +5,32 @@ import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
+import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
 
+interface Address {
+  name: string
+  wallet: string[]
+}
+
 export default function IndividualAddresses() {
+  const [addresses, setAddresses] = useState<Address>({
+    name: "",
+    wallet: []
+  })
+  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   const validationSchema = Yup.object().shape({
-    addressName: Yup.string().required(t("validation:name-required")),
-    walletAddress: Yup.string().required(t("validation:walet-address-required"))
+    name: Yup.string().required(t("validation:name-required")),
+    wallet: Yup.string()
+      .required(t("validation:wallet-required"))
+      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
+        isValidWallet(value)
+      )
+      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
+        wallets.every((wallet) => wallet !== value)
+      )
   })
   const headers = [
     {
@@ -32,13 +50,15 @@ export default function IndividualAddresses() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    setValue
+    handleSubmit
   } = useForm({
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
-  const onSubmit = (data: any) => {}
+  const onSubmit = (data: any) => {
+    setAddresses(data)
+    setWallets([...wallets, data.wallet])
+  }
 
   return (
     <>
@@ -63,17 +83,17 @@ export default function IndividualAddresses() {
                 <InputField
                   label={t("addressBook:address-name")}
                   className="relative text-content-secondary"
-                  error={!!errors.addressName}
-                  helper={errors.addressName?.message?.toString() || ""}
+                  error={!!errors.name}
+                  helper={errors.name?.message?.toString() || ""}
                 >
                   <div>
                     <input
                       className={`w-full h-10 ${
-                        !!errors.addressName?.message && "error"
+                        !!errors.name?.message && "error"
                       }`}
                       placeholder={t("addressBook:enter-name")}
                       type="text"
-                      {...register("addressName")}
+                      {...register("name")}
                       autoFocus
                     />
                   </div>
@@ -84,17 +104,17 @@ export default function IndividualAddresses() {
                 <InputField
                   label={t("addressBook:wallet-address")}
                   className="relative text-content-secondary"
-                  error={!!errors.walletAddress}
-                  helper={errors.walletAddress?.message?.toString() || ""}
+                  error={!!errors.wallet}
+                  helper={errors.wallet?.message?.toString() || ""}
                 >
                   <div>
                     <input
                       className={`w-full h-10 ${
-                        !!errors.walletAddress?.message && "error"
+                        !!errors.wallet?.message && "error"
                       }`}
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
-                      {...register("walletAddress")}
+                      {...register("wallet")}
                       autoFocus
                     />
                   </div>
