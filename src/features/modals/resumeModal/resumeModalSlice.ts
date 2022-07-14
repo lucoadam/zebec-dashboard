@@ -1,15 +1,25 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import axios from "axios"
 
 //declare types for state
 interface ResumeState {
   show: boolean
   loading: boolean
+  error: string
 }
 
 const initialState: ResumeState = {
   show: false,
-  loading: false
+  loading: false,
+  error: ""
 }
+export const resumeTransaction = createAsyncThunk(
+  "resume/resumeTransaction",
+  async () => {
+    const response = await axios.get("url")
+    return response.data
+  }
+)
 
 export const resumeModalSlice = createSlice({
   name: "resume",
@@ -25,6 +35,20 @@ export const resumeModalSlice = createSlice({
     setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
       state.loading = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(resumeTransaction.pending, (state) => {
+      state.loading = true
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    builder.addCase(resumeTransaction.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(resumeTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
   }
 })
 
