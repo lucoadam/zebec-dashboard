@@ -96,6 +96,6 @@ export {
   ClockIcon,
   ArrowRightIcon,
   ArrowDownIcon,
-  FileUploadIcon
+  FileUploadIcon,
   EditIcon
 }
