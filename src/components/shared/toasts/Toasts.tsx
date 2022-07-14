@@ -21,7 +21,6 @@ const getPositionStyle = (position: ToastPropertiesProps["position"]) => {
 
 export const Toasts: FC<ToastPropertiesProps> = (props) => {
   const { position = "bottom-right" } = props
-
   const { toasts } = useAppSelector((state) => state.toasts)
 
   const positionStyle = getPositionStyle(position)
