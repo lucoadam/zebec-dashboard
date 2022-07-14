@@ -66,7 +66,7 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
                   aria-disabled
                   className="px-3.5 py-4 flex items-center gap-x-2.5 transition hover:bg-background-tertiary"
                 >
-                  <div className="grid place-content-center w-7 h-7 rounded-full bg-background-contrast">
+                  <div className="grid place-content-center w-7 h-7 rounded-full bg-background-primary">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       className="w-4 h-4  text-content-primary"

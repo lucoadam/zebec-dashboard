@@ -5,17 +5,19 @@ import {
   ThunkAction
 } from "@reduxjs/toolkit"
 import counterSlice from "features/count/counterSlice"
+import exportSlice from "features/export-report/exportSlice"
 import layoutSlice from "features/layout/layoutSlice"
+import cancelModalSlice from "features/modals/cancelModal/cancelModalSlice"
+import pauseModalSlice from "features/modals/pauseModal/pauseModalSlice"
+import resumeModalSlice from "features/modals/resumeModal/resumeModalSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
-import cancelSlice from "features/transaction/cancelModal/cancelSlice"
-import pauseSlice from "features/transaction/pauseModal/pauseSlice"
-import resumeSlice from "features/transaction/resumeModal/resumeSlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
 import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
+import toastsSlice from "features/toasts/toastsSlice"
 import commonSlice from "features/common/commonSlice"
 
 const combineReducer = combineReducers({
@@ -27,18 +29,15 @@ const combineReducer = combineReducers({
   zebecBalance: zebecBalanceSlice,
   zebecStreamingBalance: zebecStreamingSlice,
   treasuryStreamingBalance: treasuryStreamingSlice,
-  pause: pauseSlice,
-  cancel: cancelSlice,
-  resume: resumeSlice,
   layout: layoutSlice,
-  common: commonSlice
+  toasts: toastsSlice,
+  common: commonSlice,
+  layout: layoutSlice,
+  exportReport: exportSlice,
+  pause: pauseModalSlice,
+  cancel: cancelModalSlice,
+  resume: resumeModalSlice
 })
-
-// export const store = configureStore({
-//   reducer: {
-//     counter: counterSlice,
-//   },
-// });
 
 export const store = configureStore({
   reducer: combineReducer,

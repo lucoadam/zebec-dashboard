@@ -1,5 +1,6 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import { Toasts } from "components/shared"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
@@ -41,6 +42,9 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       <Navbar />
 
       <main className="pb-20">{children}</main>
+
+      {/* Fixed Divs */}
+      <Toasts />
     </>
   )
 }

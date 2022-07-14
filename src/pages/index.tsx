@@ -1,6 +1,6 @@
 import HomePage from "components/home"
 import Layout from "components/layouts/Layout"
-import type { NextPage } from "next"
+import type { GetStaticProps, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 
@@ -16,10 +16,14 @@ const Home: NextPage = () => {
   )
 }
 
-export async function getStaticProps({ locale }: any) {
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "treasuryOverview"]))
+      ...(await serverSideTranslations(locale as string, [
+        "common",
+        "treasuryOverview",
+        "transactions"
+      ]))
     }
   }
 }

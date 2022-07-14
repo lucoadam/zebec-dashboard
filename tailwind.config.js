@@ -13,6 +13,7 @@ module.exports = {
         55.5: "222px",
         60: "240px",
         70: "280px",
+        84: "335px",
         85: "340px",
         175: "706"
       },
@@ -148,7 +149,8 @@ module.exports = {
       boxShadow: {
         2: "var(--bs-shadow-2)",
         3: "var(--bs-shadow-3)",
-        backdrop: "var(--bs-shadow-backdrop)"
+        backdrop: "var(--bs-shadow-backdrop)",
+        toaster: "var(--bs-shadow-toaster)"
       },
       letterSpacing: {
         1: "var(--ls-tracking-1)"
@@ -159,6 +161,15 @@ module.exports = {
       },
       container: {
         center: true
+      },
+      keyframes: {
+        progress: {
+          "0%": { width: "100%" },
+          "100%": { width: "0" }
+        }
+      },
+      animation: {
+        progress: "progress linear"
       }
     }
   },
