@@ -28,7 +28,8 @@ module.exports = {
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
           backdrop: "var(--bg-backdrop)",
-          contrast: "var(--bg-contrast)"
+          contrast: "var(--bg-contrast)",
+          tooltip: "var(--toltip-background)"
         },
         // Primary
         primary: {

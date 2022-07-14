@@ -52,6 +52,8 @@
     --outline-main: rgba(255, 255, 255, 0.08);
     --outline-secondary: rgba(255, 255, 255, 0.04);
     --outline-dark: rgba(53, 57, 69, 1);
+    /* Tooltip */
+    --toltip-background: rgba(43, 45, 51, 0.98);
 
     /* Font Sizes */
     --fs-2xl: 2rem;
@@ -124,6 +126,8 @@
     /* Outline */
     --outline-main: rgba(255, 255, 255, 0.08);
     --outline-secondary: rgba(255, 255, 255, 0.04);
+    /* Tooltip */
+    --toltip-background: rgba(43, 45, 51, 0.98);
   }
 
   body {

@@ -87,7 +87,10 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                               "$"
                             )}
                           </div>
-                          <div className=" text-caption text-content-contrast">
+                          <div
+                            data-tip={getBalance(balanceTokens, token.symbol)}
+                            className=" text-caption text-content-contrast"
+                          >
                             {formatCurrency(
                               getBalance(balanceTokens, token.symbol)
                             )}{" "}
