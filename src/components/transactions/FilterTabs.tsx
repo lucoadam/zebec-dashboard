@@ -1,7 +1,9 @@
 import React, { FC, useState } from "react"
 import { useTranslation } from "next-i18next"
-import { Button, Tab } from "components/shared"
+import { Button, Tab, Modal } from "components/shared"
 import * as Icons from "assets/icons"
+import { useAppDispatch } from "app/hooks"
+import { toggleExportModal } from "features/export-report/exportSlice"
 
 interface FilterTabProps {
   title: string
@@ -31,6 +33,7 @@ export const filterTabs: FilterTabProps[] = [
 
 const FilterTabs: FC = () => {
   const { t } = useTranslation("transactions")
+  const dispatch = useAppDispatch()
 
   const [activeTab, setActiveTab] = useState<number>(0)
 
@@ -53,9 +56,12 @@ const FilterTabs: FC = () => {
         })}
       </div>
       {/* Export */}
+
       <Button
         title={`${t("export-report")}`}
-        onClick={() => alert("Export Report")}
+        onClick={() => {
+          dispatch(toggleExportModal())
+        }}
       />
     </div>
   )

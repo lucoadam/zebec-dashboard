@@ -3,6 +3,8 @@ import { useState } from "react"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"
+import { Pagination } from "components/shared/Pagination"
+import { RowsPerPage } from "components/shared/RowsPerPage"
 
 const transactionTabs = [
   {
@@ -24,6 +26,9 @@ const transactionTabs = [
 
 export const Transactions = () => {
   const [activePage, setActivePage] = useState<number>(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [noOfRows, setNoOfRows] = useState(10)
+  const noOfOptions = [10, 20, 30, 40]
 
   return (
     <div className="w-full">
@@ -46,6 +51,18 @@ export const Transactions = () => {
       <div className="py-10">
         {/* Active Tab */}
         {transactionTabs[activePage].Component}
+      </div>
+      <div className="flex text-caption pt-5">
+        <RowsPerPage
+          setNoOfRows={setNoOfRows}
+          noOfRows={noOfRows}
+          noOfOptions={noOfOptions}
+        />
+        <Pagination
+          pages={100}
+          setCurrentPage={setCurrentPage}
+          setNoOfRows={setNoOfRows}
+        />
       </div>
     </div>
   )

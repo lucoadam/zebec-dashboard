@@ -7,9 +7,9 @@ import Incoming from "components/transactions/Incoming"
 import Outgoing from "components/transactions/Outgoing"
 import { Tab } from "components/shared"
 import * as Icons from "../assets/icons"
-import CancelModal from "components/transactions/outgoing-modals/CancelModal/CancelModal"
-import PauseModal from "components/transactions/outgoing-modals/PauseModal/PauseModal"
-import ResumeModal from "components/transactions/outgoing-modals/ResumeModal/ResumeModal"
+import CancelModal from "components/modal/outgoing-modals/CancelModal/CancelModal"
+import PauseModal from "components/modal/outgoing-modals/PauseModal/PauseModal"
+import ResumeModal from "components/modal/outgoing-modals/ResumeModal/ResumeModal"
 
 const transactionTabs = [
   {
@@ -65,7 +65,12 @@ const Transactions: NextPage = () => {
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "transactions"]))
+      ...(await serverSideTranslations(locale, [
+        "common",
+        "transactions",
+        "validation",
+        "exportReport"
+      ]))
     }
   }
 }

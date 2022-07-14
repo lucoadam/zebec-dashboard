@@ -8,8 +8,12 @@ import { toggleResumeModal } from "features/transaction/resumeModal/resumeSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
-import { useDispatch } from "react-redux"
 import { formatCurrency, toSubstring } from "utils"
+
+import { useDispatch } from "react-redux"
+import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 interface HistoryTableRowProps {
   index: number
