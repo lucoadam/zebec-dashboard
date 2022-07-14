@@ -1,5 +1,5 @@
-import React, { FC, Fragment } from "react"
 import { Transition } from "@headlessui/react"
+import React, { FC, Fragment, useEffect, useState } from "react"
 import { twMerge } from "tailwind-merge"
 
 type PositionStyle = "right" | "left"
@@ -41,15 +41,75 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
     className,
     position = "right",
     variant = "default",
+    // ref,
     ...rest
   } = props
+
+  const [dropDownWrapperRef, setDropdownWrapper] =
+    useState<HTMLDivElement | null>(null)
+
+  const isInViewport = (element: HTMLElement) => {
+    const clientRect = element.getBoundingClientRect()
+    return (
+      clientRect.top >= 0 &&
+      clientRect.left >= 0 &&
+      clientRect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      clientRect.right <=
+        (window.innerWidth || document.documentElement.clientWidth)
+    )
+  }
+
+  useEffect(() => {
+    if (show && dropDownWrapperRef) {
+      if (dropDownWrapperRef.children.length) {
+        console.log(dropDownWrapperRef.firstChild)
+      }
+      setTimeout(() => {
+        const element = dropDownWrapperRef.querySelector(
+          ".absolute"
+        ) as HTMLDivElement
+        if (element && isInViewport(element)) {
+          element.style.top = `${
+            parseInt(
+              element
+                .getAttribute("class")
+                ?.match(/bottom-\d+/)
+                ?.join()
+                .replace("bottom-", "") || "0"
+            ) * 4 || "null"
+          }`
+
+          element.setAttribute(
+            "class",
+            element.getAttribute("class")?.replace("bottom", "top") || ""
+          )
+        } else {
+          element.style.bottom = `${
+            parseInt(
+              element
+                .getAttribute("class")
+                ?.match(/top-\d+/)
+                ?.join()
+                .replace("top-", "") || "0"
+            ) * 4
+          }px`
+
+          element.setAttribute(
+            "class",
+            element.getAttribute("class")?.replace("top", "bottom") || ""
+          )
+        }
+      }, 10)
+    }
+  }, [dropDownWrapperRef, show])
 
   const positionStyle = getPositionStyle(position)
   const variantStyles = getVariantStyle(variant)
   const defaultClasses = `divide-y divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
 
   return (
-    <>
+    <div ref={setDropdownWrapper}>
       <Transition
         as={Fragment}
         show={show}
@@ -70,6 +130,6 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
           {children}
         </div>
       </Transition>
-    </>
+    </div>
   )
 }
