@@ -48,7 +48,6 @@ const getBackgroundByPercentage = (
 
 export const CircularProgress: FC<CircularProgressProps> = ({
   percentage = 0,
-  children,
   status
 }) => {
   const sqSize = 56

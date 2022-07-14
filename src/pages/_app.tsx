@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app"
-import { FC, useMemo } from "react"
+import { useMemo } from "react"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import {
   ConnectionProvider,

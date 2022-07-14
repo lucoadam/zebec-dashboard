@@ -37,7 +37,7 @@ const ArchiveSafePage: NextPage = () => {
   )
 }
 
-export async function getStaticProps({ locale }: any) {
+export async function getStaticProps({ locale }: { locale: string }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [

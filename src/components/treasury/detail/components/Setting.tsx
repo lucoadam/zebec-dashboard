@@ -27,7 +27,6 @@ const Setting = () => {
   const {
     register,
     formState: { errors },
-    handleSubmit,
     setValue
   } = useForm({
     mode: "all",

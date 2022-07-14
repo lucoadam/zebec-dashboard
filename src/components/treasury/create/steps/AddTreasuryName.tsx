@@ -27,6 +27,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
     }
   }, [props.treasury.name, setValue])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     props.setCurrentStep(1)
     props.setTreasury((treasury) => ({ ...treasury, name: data.name }))

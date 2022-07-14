@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react"
-import { useTranslation } from "next-i18next"
+// import { useTranslation } from "next-i18next"
 import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
@@ -32,7 +32,7 @@ const ExportModal: FC = ({}) => {
   const dispatch = useAppDispatch()
   const [currentStep, setCurrentStep] = useState(0)
 
-  const { t } = useTranslation("transactions")
+  // const { t } = useTranslation("transactions")
 
   return (
     <Modal

@@ -90,6 +90,7 @@ export const getMainRoutes = (width: number): RoutesArrayProps[] => {
   if (moreSection.length > 0) {
     mainSection.push({
       name: "more",
+      path: "",
       Icon: NavIcons.ThunderIcon,
       type: "group",
       children: routesArray.filter((r) => routes.more.includes(r.name))

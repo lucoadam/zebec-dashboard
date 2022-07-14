@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useRef } from "react"
+import React, { FC, useState, useRef } from "react"
 import { CollapseDropdown } from "./CollapseDropdown"
 import { useClickOutside } from "hooks"
 import * as Icons from "assets/icons"
@@ -44,7 +44,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
             className="absolute text-caption text-content-primary top-5"
             variant="default"
           >
-            {noOfOptions.map((item: any, index: any) => {
+            {noOfOptions.map((item: number, index: number) => {
               return (
                 <div
                   onClick={(e) => {

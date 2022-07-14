@@ -1,14 +1,10 @@
-import React, { FC, Fragment, useEffect, useRef, useState } from "react"
+import React, { FC, useEffect } from "react"
 import { withdrawProps } from "../data.d"
 import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
 import Loading from "assets/images/gifs/withdrawing.gif"
 
-const Withdrawing: FC<withdrawProps> = ({
-  setCurrentStep,
-  withdrawAmount,
-  setWithdrawAmount
-}) => {
+const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount }) => {
   const { t } = useTranslation("transactions")
   useEffect(() => {
     setTimeout(() => {

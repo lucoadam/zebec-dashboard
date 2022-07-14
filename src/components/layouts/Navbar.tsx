@@ -33,7 +33,7 @@ const Navbar: FC = () => {
     window.addEventListener("resize", () => {
       dispatch(updateWidth(window.outerWidth))
     })
-  }, [])
+  }, [dispatch])
 
   //theme toggle
   const themeChanger: () => JSX.Element | null = () => {

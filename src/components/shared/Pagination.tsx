@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect, useMemo } from "react"
 import * as Icons from "assets/icons"
 
@@ -8,8 +9,7 @@ interface PaginationProps {
 }
 
 export const Pagination: FC<PaginationProps> = (props) => {
-  const [activeClass, setActiveClass] = useState<String>("")
-  const { pages, setCurrentPage, setNoOfRows } = props
+  const { pages, setCurrentPage } = props
   const numberOfPages = useMemo(() => {
     const numOfPages: any = []
     for (let i = 1; i <= pages; i++) {

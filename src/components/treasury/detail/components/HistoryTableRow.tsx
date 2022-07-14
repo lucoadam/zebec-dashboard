@@ -14,6 +14,7 @@ import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 interface HistoryTableRowProps {
   index: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void

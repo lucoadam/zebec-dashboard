@@ -62,6 +62,7 @@ const AddOwners: FC<StepsComponentProps> = ({
     }))
   }, [owners, setTreasury])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
       setOwners([...owners, data])

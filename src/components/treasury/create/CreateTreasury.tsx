@@ -16,7 +16,7 @@ const CreateTreasury: NextPage = () => {
     minValidator: 0
   })
 
-  const getStepState = (index: number, isIcon: boolean = false) => {
+  const getStepState = (index: number, isIcon = false) => {
     if (index === currentStep) {
       return isIcon ? index + 1 : "bg-primary"
     }

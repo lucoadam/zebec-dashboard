@@ -33,6 +33,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setWithdrawAmount(data.withdrawamount)
     setCurrentStep(1)
@@ -84,7 +85,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
           <InputField
             label={t("")}
             className="relative text-content-primary"
-            helper={errors.withdrawamount?.message ?? ""}
+            helper={errors.withdrawamount?.message?.toString() ?? ""}
             error={!!errors.withdrawamount?.message}
           >
             <div>
@@ -101,7 +102,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
                 size="small"
                 title={t("withdraw.max")}
                 className={`absolute right-2.5 top-2 text-content-primary `}
-                onClick={(e) => {
+                onClick={() => {
                   setWithdrawAmount(10)
                 }}
                 type="button"
