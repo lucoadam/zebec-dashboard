@@ -75,7 +75,7 @@ const Treasury: NextPage = () => {
                 onClick={() => setToggleDropdown(!toggleDropdown)}
               />
               <CollapseDropdown
-                className="p-2 mt-4"
+                className="p-2 mt-4 w-[232px]"
                 position="right"
                 show={toggleDropdown}
               >
@@ -83,12 +83,10 @@ const Treasury: NextPage = () => {
                   <Link href="/treasury/send">
                     <div
                       onClick={() => dispatch(setTreasurySendActiveTab(0))}
-                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary"
                     >
-                      <Icons.DoubleCircleDottedLineIcon />
-                      <span className="text-content-primary">
-                        {t("send:continuous-stream")}
-                      </span>
+                      <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                      <span>{t("send:continuous-stream")}</span>
                     </div>
                   </Link>
                 </div>
@@ -96,12 +94,10 @@ const Treasury: NextPage = () => {
                   <Link href="/treasury/send">
                     <div
                       onClick={() => dispatch(setTreasurySendActiveTab(1))}
-                      className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                      className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
                     >
-                      <Icons.ThunderIcon />
-                      <span className="text-content-primary">
-                        {t("send:instant-transfer")}
-                      </span>
+                      <Icons.ThunderIcon className="w-6 h-6" />
+                      <span>{t("send:instant-transfer")}</span>
                     </div>
                   </Link>
                 </div>

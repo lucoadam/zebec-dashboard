@@ -5,8 +5,10 @@ export interface FileState {
   name: string
   url: string
   uploading: boolean
-  error: string
+  error: boolean
   progress: number
+  size: number
+  errorMessage: string
 }
 
 export interface FileUploadProps {

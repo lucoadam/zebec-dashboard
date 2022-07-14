@@ -8,6 +8,7 @@ import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
@@ -41,7 +42,8 @@ const addressBook = [
 export const InstantStream: FC<InstantStreamProps> = ({
   setFormValues,
   tokenBalances,
-  addFile
+  addFile,
+  className
 }) => {
   const { t } = useTranslation()
   const validationSchema: Yup.SchemaOf<InstantStreamFormData> =
@@ -143,7 +145,12 @@ export const InstantStream: FC<InstantStreamProps> = ({
 
   return (
     <>
-      <div className="bg-background-secondary rounded-[4px] p-10">
+      <div
+        className={twMerge(
+          "bg-background-secondary rounded-[4px] p-10",
+          className ?? ""
+        )}
+      >
         <div className="text-heading-4 text-content-primary font-semibold">
           {t("send:instant-transfer")}
         </div>
@@ -163,9 +170,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`w-full h-[40px] ${
-                      !!errors.transactionName && "error"
-                    }`}
+                    className={`${
+                      !showRemarks && "!pr-[124px]"
+                    } w-full h-[40px] ${!!errors.transactionName && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transactionName")}
@@ -192,7 +199,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
               <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full pr-12 ${
+                  className={`h-[40px] w-full !pr-12 ${
                     !!errors.receiverWallet && "error"
                   }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
@@ -200,7 +207,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 />
                 <Icons.CheveronDownIcon
                   onClick={() => setToggleReceiverDropdown((prev) => !prev)}
-                  className="hover:cursor-pointer absolute top-3 right-1 text-lg"
+                  className="hover:cursor-pointer absolute w-6 h-6 top-2 right-4"
                 />
               </div>
               {!!errors.receiverWallet && (
@@ -313,13 +320,13 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  className={`h-[40px] w-full  token-select ${
+                  className={`h-[40px] w-full !pl-11 ${
                     !!errors.token && "error"
                   }`}
                   readOnly
                   {...register("token")}
                 />
-                <Icons.CheveronDownIcon className="absolute top-3 right-1 text-lg" />
+                <Icons.CheveronDownIcon className="w-6 h-6 hover:cursor-pointer absolute top-2 right-4" />
               </div>
               {!!errors.token && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">

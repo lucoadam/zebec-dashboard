@@ -21,6 +21,8 @@
     "tokenAmount-invalid": "Invalid Token Amount",
     "interval-required": "Interval is required",
     "wallet-address-required": "Wallet Address is required",
+    "file-size-error": "File size must be less than 200KB",
+    "file-type-error": "File type not supported",
     "export-end-date-time-before-today-date": "Date must be less or equal to today's date",
     "export-end-date-time-before-start-date":"Date must be after start date",
     "export-start-date-time-before-today":"Start date must be before today",

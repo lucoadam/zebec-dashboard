@@ -34,4 +34,5 @@ export interface ContinuousStreamProps {
   setFormValues?: (values: ContinuousStreamFormData) => void
   tokenBalances: WalletToken[]
   addFile?: boolean
+  className?: string
 }

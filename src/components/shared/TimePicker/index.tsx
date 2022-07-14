@@ -3,6 +3,7 @@ import { CollapseDropdown } from "components/shared"
 import { useClickOutside } from "hooks"
 import { FC, useEffect, useRef, useState } from "react"
 import { TimePickerProps } from "./index.d"
+import * as Icons from "assets/icons"
 
 const Hours = [
   "01",
@@ -121,24 +122,25 @@ export const TimePicker: FC<TimePickerProps> = ({
           <div
             className={`${
               disabled ? "text-content-tertiary" : "text-content-primary"
-            } absolute z-50 top-3 left-5`}
+            } absolute z-50 top-2.5 left-4.5`}
           >
-            {startIcon}
+            {startIcon || <Icons.ClockIcon className="w-5 h-5" />}
           </div>
           <input
             type="text"
             readOnly
             placeholder={placeholder}
-            className={`w-full h-[40px] date-picker-input ${error && "error"}`}
+            className={`w-full h-[40px] !pl-11 ${error && "error"}`}
             disabled={disabled}
             {...(register ? register(name) : null)}
           />
           <div
-            className={`${
+            className={`hover:cursor-pointer ${
               disabled ? "text-content-tertiary" : "text-content-primary"
-            } text-lg absolute z-2 top-3 right-1`}
+            } text-lg absolute z-2 top-2 right-4`}
+            onClick={handleClick}
           >
-            {endIcon}
+            {endIcon || <Icons.CheveronDownIcon className="w-6 h-6" />}
           </div>
         </div>
         <CollapseDropdown

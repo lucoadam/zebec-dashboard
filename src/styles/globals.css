@@ -170,7 +170,7 @@ input::placeholder {
 input[type="text"],
 input[type="number"] {
   /* input */
-  @apply box-border flex order-1 flex-col flex-none flex-grow-0 self-stretch items-start px-5 text-content-primary bg-background-primary border-outline border-[1px] rounded-lg;
+  @apply text-sm box-border flex order-1 flex-col flex-none flex-grow-0 self-stretch items-start px-5 text-content-primary bg-background-primary border-outline border-[1px] rounded-lg;
 }
 input[type="text"]:disabled,
 input[type="number"]:disabled {
@@ -226,13 +226,6 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input[type="text"].date-picker-input {
-  @apply pl-10;
-}
-
-input[type="text"].token-select {
-  @apply pl-11;
-}
 /* Scrollbar */
 /* width */
 ::-webkit-scrollbar {

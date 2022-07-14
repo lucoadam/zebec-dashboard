@@ -1,6 +1,6 @@
 import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
-import { Tab } from "components/shared"
+import { IconButton, Tab } from "components/shared"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
@@ -8,6 +8,7 @@ import TreasuryContinuousStream from "components/sendFromTreasury/treasuryContin
 import TreasuryInstantStream from "components/sendFromTreasury/treasuryInstantStream"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { useRouter } from "next/router"
 
 const transferTabs = [
   {
@@ -30,6 +31,7 @@ const SendFromTreasury: NextPage = () => {
     (state) => state.common.treasurySendActiveTab
   )
   const dispatch = useAppDispatch()
+  const router = useRouter()
 
   return (
     <Layout pageTitle="Zebec">
@@ -50,7 +52,21 @@ const SendFromTreasury: NextPage = () => {
           )
         })}
       </div>
-      <div className="container py-10">
+      <div className="container">
+        <div className="flex justify-start items-center py-10">
+          <IconButton
+            className="cursor-pointer mr-[19px]"
+            onClick={() => {
+              router.back()
+            }}
+            variant="plain"
+            icon={<Icons.LeftArrowIcon />}
+          />
+
+          <h4 className="text-heading-4 font-semibold text-content-primary">
+            Zebec Safe
+          </h4>
+        </div>
         {/* Active Tab */}
         {transferTabs[activePage].Component}
       </div>

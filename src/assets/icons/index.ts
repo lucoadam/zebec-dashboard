@@ -44,6 +44,8 @@ import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
 import FileUploadIcon from "./other-icons/file-upload.svg"
+import SparkleIcon from "./other-icons/sparkle.svg"
+import FileIcon from "./other-icons/file.svg"
 import Download from "./other-icons/download.svg"
 import Calendar from "./other-icons/calender.svg"
 import InformationIcon from "./other-icons/information.svg"
@@ -98,6 +100,8 @@ export {
   ArrowRightIcon,
   ArrowDownIcon,
   FileUploadIcon,
+  SparkleIcon,
+  FileIcon,
   EditIcon,
   InformationIcon
 }
