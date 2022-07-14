@@ -13,14 +13,13 @@ const Send: NextPage = () => {
   return (
     <Layout pageTitle="Zebec">
       <div className="py-16 container">
-        <div className="grid md:grid-cols-2">
-          <div className="w-full">
-            <ContinuousStream
-              setFormValues={setFormValues}
-              tokenBalances={zebecBalance}
-            />
-          </div>
-          <StreamOverview formValues={formValues} />
+        <div className="grid lg:flex">
+          <ContinuousStream
+            setFormValues={setFormValues}
+            tokenBalances={zebecBalance}
+            className="w-full lg:w-[628px]"
+          />
+          <StreamOverview className="lg:ml-[79px]" formValues={formValues} />
         </div>
       </div>
     </Layout>

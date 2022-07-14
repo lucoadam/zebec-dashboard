@@ -21,4 +21,5 @@ export interface InstantStreamProps {
   setFormValues?: (values: InstantStreamFormData) => void
   tokenBalances: WalletToken[]
   addFile?: boolean
+  className?: string
 }

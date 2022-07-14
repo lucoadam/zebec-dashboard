@@ -10,15 +10,14 @@ const TreasuryContinuousStream: NextPage = () => {
   const treasuryBalance =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   return (
-    <div className="grid md:grid-cols-2">
-      <div className="w-full">
-        <ContinuousStream
-          setFormValues={setFormValues}
-          tokenBalances={treasuryBalance}
-          addFile={true}
-        />
-      </div>
-      <StreamOverview formValues={formValues} />
+    <div className="grid lg:flex">
+      <ContinuousStream
+        setFormValues={setFormValues}
+        tokenBalances={treasuryBalance}
+        addFile={true}
+        className="w-full lg:w-[628px]"
+      />
+      <StreamOverview className="lg:ml-[79px]" formValues={formValues} />
     </div>
   )
 }

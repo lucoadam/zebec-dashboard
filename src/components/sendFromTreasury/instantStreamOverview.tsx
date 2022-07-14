@@ -4,20 +4,27 @@ import { FC } from "react"
 import { toSubstring } from "utils"
 import { InstantStreamOverviewProps } from "./instantStreamOverview.d"
 import * as Icons from "assets/icons"
+import { twMerge } from "tailwind-merge"
 
 export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
-  formValues
+  formValues,
+  className
 }) => {
   const { t } = useTranslation("common")
   return (
-    <div className="p-10 md:pl-[79px] flex flex-col justify-center text-content-primary max-w-[400px]">
+    <div
+      className={twMerge(
+        "p-10 flex flex-col justify-center text-content-primary w-[330px]",
+        className ?? ""
+      )}
+    >
       <div className="border-dashed border-b pb-4 border-outline">
         <h1 className="text-base font-semibold">
           {t("send:transfer-overview")}
         </h1>
       </div>
       <div className="pt-4">
-        <p className="mt-2 text-subtitle text-content-secondary">
+        <p className="mt-2 text-sm text-content-secondary">
           <span className="text-content-primary">
             {formValues?.amount || "..."} {formValues?.token || "..."}{" "}
           </span>
@@ -25,17 +32,17 @@ export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
           <span className="text-content-primary">
             {" "}
             {formValues?.receiverWallet
-              ? toSubstring(formValues?.receiverWallet, 12, false)
+              ? toSubstring(formValues?.receiverWallet, 5, true)
               : "..."}
           </span>{" "}
           {t("send:in-few-seconds")}
         </p>
       </div>
-      <div className="mt-4 border border-outline p-4 rounded-md">
+      <div className="mt-12 border border-outline p-4 rounded-md">
         <div className="text-subtitle text-content-primary">
           {t("send:streaming-help")}
         </div>
-        <span className="text-content-tertiary text-subtitle">
+        <span className="text-content-tertiary text-sm">
           {t("send:streaming-help-details")}
         </span>
         <div className="flex gap-2 mt-4">
