@@ -53,7 +53,7 @@ const SendFromTreasury: NextPage = () => {
         })}
       </div>
       <div className="container">
-        <div className="flex justify-start items-center py-10">
+        <div className="flex justify-start items-center px-[35px] py-10">
           <IconButton
             className="cursor-pointer mr-[19px]"
             onClick={() => {

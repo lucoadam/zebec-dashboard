@@ -67,7 +67,7 @@ const Treasury: NextPage = () => {
                 Zebec Safe
               </h4>
             </div>
-            <div ref={dropdownWrapper} className="flex gap-x-3 relative">
+            <div ref={dropdownWrapper} className="relative">
               <Button
                 title="Send from Treasury"
                 variant="gradient"

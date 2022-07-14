@@ -12,7 +12,7 @@
     "amount-required": "Amount is required",
     "amount-invalid": "Invalid Amount",
     "start-date-time-required": "Stream Start is required",
-    "start-date-time-before-today": "Stream Start must be after today",
+    "start-date-time-before-today": "Stream Start must be after current time",
     "end-date-time-required": "Stream completion is required",
     "end-date-time-before-start-date-time": "Stream Completion must be after Stream Start",
     "noOfTimes-required": "No of Times is required",
