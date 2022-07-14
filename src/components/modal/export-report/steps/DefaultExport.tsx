@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from "react"
-import { Button, DateTimePicker, InputField } from "components/shared"
+import React, { FC } from "react"
+import { Button, DateTimePicker } from "components/shared"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
 import moment from "moment"
@@ -13,6 +13,7 @@ export type FormKeys = "startDate" | "endDate"
 const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
   const { t } = useTranslation("transactions")
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validationSchema: any = Yup.object().shape({
     startDate: Yup.string()
       .required(t("validation:export-start-date-time-required"))
@@ -43,14 +44,14 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
         "check-end-date-greater-than-today",
         t("validation:export-end-date-time-before-today-date"),
         () => {
-          return (
-            moment(`${getValue("endDate")} `, "DD/MM/YYYY").isBefore(
-              moment()
-            )
+          return moment(`${getValue("endDate")} `, "DD/MM/YYYY").isBefore(
+            moment()
           )
         }
       ),
-    reportFormat: Yup.mixed().required( t("validation:export-choose-report-format"))
+    reportFormat: Yup.mixed().required(
+      t("validation:export-choose-report-format")
+    )
   })
   const {
     register,
@@ -58,15 +59,13 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
     handleSubmit,
     setValue,
     getValues,
-    trigger,
-    resetField,
-    watch
+    trigger
   } = useForm({
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
-  useEffect(() => {}, [, setValue])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data)
     setCurrentStep(1)
@@ -101,7 +100,10 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                 endIcon={<Icons.CheveronDownIcon />}
                 dateFormat="DD/MM/YYYY"
                 timeFormat={false}
-                value={getValue("startDate") || moment().subtract(30, 'days').format("DD/MM/YYYY")}
+                value={
+                  getValue("startDate") ||
+                  moment().subtract(30, "days").format("DD/MM/YYYY")
+                }
                 onChange={(date) => {
                   setValue("startDate", moment(date).format("DD/MM/YYYY"))
                   trigger("startDate")
@@ -116,14 +118,12 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                   readOnly
                   {...register("startDate")}
                 />
-                
               </DateTimePicker>
               {!!errors.startDate && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
                   {errors.startDate?.message?.toString()}
                 </p>
               )}
-
             </div>
             <div>
               <div className="text-content-secondary text-caption pb-1 pl-3">
@@ -177,17 +177,22 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           </div>
           <div className="pt-3 pl-1">
             <label>
-              <input value={"pdf"} type="radio" className={`${!!errors.reportFormat && "error"}`}{...register("reportFormat")} />
+              <input
+                value={"pdf"}
+                type="radio"
+                className={`${!!errors.reportFormat && "error"}`}
+                {...register("reportFormat")}
+              />
               <span className="text-caption  pl-2 ">
                 {t("exportReport:pdf-format")}
               </span>
             </label>
           </div>
           {!!errors.reportFormat && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-2">
-                  {errors.reportFormat?.message?.toString()}
-                </p>
-              )}
+            <p className="text-content-secondary text-xs ml-[12px] mt-2">
+              {errors.reportFormat?.message?.toString()}
+            </p>
+          )}
         </div>
         {/* prepare Report Button */}
 

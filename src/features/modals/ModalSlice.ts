@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface User {
   id: number
   name: string
@@ -32,6 +33,7 @@ const modalSlice = createSlice({
     builder.addCase(modalTransaction.pending, (state) => {
       state.loading = true
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     builder.addCase(modalTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""

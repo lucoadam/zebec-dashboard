@@ -4,15 +4,14 @@ import axios from "axios"
 //declare types for state
 interface PauseState {
   show: boolean
-  loading: boolean,
-  error:string
+  loading: boolean
+  error: string
 }
 
 const initialState: PauseState = {
   show: false,
   loading: false,
-  error:""
-
+  error: ""
 }
 export const pauseTransaction = createAsyncThunk(
   "pause/pauseTransaction",
@@ -41,6 +40,7 @@ export const pauseModalSlice = createSlice({
     builder.addCase(pauseTransaction.pending, (state) => {
       state.loading = true
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     builder.addCase(pauseTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""

@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next"
-import React, { useState } from "react"
-import { Button, InputField, Modal, Table, TableBody } from "components/shared"
+import React from "react"
+import { Button, InputField, Table, TableBody } from "components/shared"
 import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
@@ -9,7 +9,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 
 export default function AddressesGroup() {
   const { t } = useTranslation()
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   const validationSchema = Yup.object().shape({
     addressName: Yup.string().required(t("validation:name-required")),
     walletAddress: Yup.string().required(t("validation:walet-address-required"))
@@ -32,13 +31,15 @@ export default function AddressesGroup() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    setValue
+    handleSubmit
   } = useForm({
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
-  const onSubmit = (data: any) => {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
 
   return (
     <>
@@ -74,7 +75,6 @@ export default function AddressesGroup() {
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("addressName")}
-                      
                     />
                   </div>
                 </InputField>
@@ -95,7 +95,6 @@ export default function AddressesGroup() {
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
                       {...register("walletAddress")}
-                      
                     />
                   </div>
                 </InputField>

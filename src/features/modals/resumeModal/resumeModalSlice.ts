@@ -4,7 +4,7 @@ import axios from "axios"
 //declare types for state
 interface ResumeState {
   show: boolean
-  loading: boolean,
+  loading: boolean
   error: string
 }
 
@@ -40,6 +40,7 @@ export const resumeModalSlice = createSlice({
     builder.addCase(resumeTransaction.pending, (state) => {
       state.loading = true
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     builder.addCase(resumeTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""

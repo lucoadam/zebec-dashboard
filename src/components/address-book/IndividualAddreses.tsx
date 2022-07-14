@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next"
 import React, { useState } from "react"
-import { Button, InputField, Modal, Table, TableBody } from "components/shared"
+import { Button, InputField, Table, TableBody } from "components/shared"
 import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
@@ -20,7 +20,6 @@ export default function IndividualAddresses() {
   })
   const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
-  const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
     wallet: Yup.string()
@@ -55,6 +54,7 @@ export default function IndividualAddresses() {
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(validationSchema)
   })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setAddresses(data)
     setWallets([...wallets, data.wallet])
@@ -94,7 +94,6 @@ export default function IndividualAddresses() {
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("name")}
-                      
                     />
                   </div>
                 </InputField>
@@ -115,7 +114,6 @@ export default function IndividualAddresses() {
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
                       {...register("wallet")}
-                      
                     />
                   </div>
                 </InputField>

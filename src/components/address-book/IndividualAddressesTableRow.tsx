@@ -1,15 +1,15 @@
-import React, { FC, Fragment, useRef, useState } from "react"
+import React, { FC, Fragment, useState } from "react"
 import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import * as Icons from "assets/icons"
 
 interface IndividualAddresesTableRow {
   index: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
 }
 
 const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
-  index,
   transaction
 }) => {
   const { t } = useTranslation("addressBook")
@@ -43,7 +43,9 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                 startIcon={
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
-                onClick={() => {}}
+                onClick={() => {
+                  console.log("onclick")
+                }}
               />
 
               <Button
@@ -73,8 +75,9 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                   <Button
                     className={`w-full font-semibold`}
                     variant="danger"
-                  endIcon={<Icons.TrashIcon />}
+                    endIcon={<Icons.TrashIcon />}
                     title={t("yes-delete")}
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
                     onClick={() => {}}
                   />
                 </div>

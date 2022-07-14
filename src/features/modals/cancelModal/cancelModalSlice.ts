@@ -3,15 +3,15 @@ import axios from "axios"
 
 //declare types for state
 interface CancelState {
-  show: boolean,
-  loading: boolean,
-  error:string
+  show: boolean
+  loading: boolean
+  error: string
 }
 
 const initialState: CancelState = {
   show: false,
   loading: false,
-  error:""
+  error: ""
 }
 export const cancelTransaction = createAsyncThunk(
   "cancel/cancelTransaction",
@@ -40,6 +40,7 @@ export const cancelModalSlice = createSlice({
     builder.addCase(cancelTransaction.pending, (state) => {
       state.loading = true
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     builder.addCase(cancelTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""
