@@ -72,7 +72,8 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                 <div className="pt-3 pb-3">
                   <Button
                     className={`w-full font-semibold`}
-                    variant="gradient"
+                    variant="danger"
+                  endIcon={<Icons.TrashIcon />}
                     title={t("yes-delete")}
                     onClick={() => {}}
                   />

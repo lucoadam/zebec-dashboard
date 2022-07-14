@@ -10,8 +10,7 @@ import {
 } from "features/modals/resumeModal/resumeModalSlice"
 
 const ResumeModal: FC = ({}) => {
-  const show = useAppSelector((state) => state.resume.show)
-  const loading = useAppSelector((state) => state.resume.loading)
+  const {show,loading} = useAppSelector((state) => state.resume)
   const dispatch = useAppDispatch()
   const id = "Resuming"
   const { t } = useTranslation("transactions")

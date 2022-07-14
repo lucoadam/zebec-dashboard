@@ -68,10 +68,10 @@ export default function IndividualAddresses() {
             {`${t("addressBook:address-book")} `}
           </h4>
 
-          <Button
+          {/* <Button
             title={`${t("addressBook:create-address-book")}`}
             onClick={() => alert("Create an Address Group")}
-          />
+          /> */}
         </div>
         <div className="grid grid-cols-3 gap-8">
           <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96">
@@ -94,7 +94,7 @@ export default function IndividualAddresses() {
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("name")}
-                      autoFocus
+                      
                     />
                   </div>
                 </InputField>
@@ -115,7 +115,7 @@ export default function IndividualAddresses() {
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
                       {...register("wallet")}
-                      autoFocus
+                      
                     />
                   </div>
                 </InputField>

@@ -15,31 +15,42 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
 
   const validationSchema: any = Yup.object().shape({
     startDate: Yup.string()
-      .required(t("validation:start-date-time-required"))
+      .required(t("validation:export-start-date-time-required"))
       .test(
         "check-start-date",
-        t("validation:start-date-time-before-today"),
+        t("validation:export-start-date-time-before-today"),
         () => {
-          return moment(`${getValue("startDate")}`, "DD/MM/YYYY LT").isAfter(
+          return moment(`${getValue("startDate")}`, "DD/MM/YYYY").isBefore(
             moment()
           )
         }
       ),
     endDate: Yup.string()
-      .required(t("validation:end-date-time-required"))
+      .required(t("validation:export-end-date-time-required"))
       .test(
-        "check-end-date",
-        t("validation:end-date-time-before-start-date-time"),
+        "check-end-date-before-start-date",
+        t("validation:export-end-date-time-before-start-date"),
         () => {
           return (
             !getValue("startDate") ||
-            moment(`${getValue("startDate")} `, "DD/MM/YYYY LT").isBefore(
-              moment(`${getValue("endDate")}`, "DD/MM/YYYY LT")
+            moment(`${getValue("endDate")} `, "DD/MM/YYYY").isAfter(
+              moment(`${getValue("startDate")}`, "DD/MM/YYYY")
+            )
+          )
+        }
+      )
+      .test(
+        "check-end-date-greater-than-today",
+        t("validation:export-end-date-time-before-today-date"),
+        () => {
+          return (
+            moment(`${getValue("endDate")} `, "DD/MM/YYYY").isBefore(
+              moment()
             )
           )
         }
       ),
-    reportFormat: Yup.string().required("okay")
+    reportFormat: Yup.mixed().required( t("validation:export-choose-report-format"))
   })
   const {
     register,
@@ -78,7 +89,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
 
       {/* Input Field */}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <div className="pt-3 pb-3">
+        <div className="pt-3 ">
           <div className="grid grid-cols-2 gap-2">
             <div>
               <div className="text-content-secondary text-caption pb-1 pl-3">
@@ -90,7 +101,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                 endIcon={<Icons.CheveronDownIcon />}
                 dateFormat="DD/MM/YYYY"
                 timeFormat={false}
-                value={getValue("startDate")}
+                value={getValue("startDate") || moment().subtract(30, 'days').format("DD/MM/YYYY")}
                 onChange={(date) => {
                   setValue("startDate", moment(date).format("DD/MM/YYYY"))
                   trigger("startDate")
@@ -105,7 +116,14 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                   readOnly
                   {...register("startDate")}
                 />
+                
               </DateTimePicker>
+              {!!errors.startDate && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                  {errors.startDate?.message?.toString()}
+                </p>
+              )}
+
             </div>
             <div>
               <div className="text-content-secondary text-caption pb-1 pl-3">
@@ -118,7 +136,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                 endIcon={<Icons.CheveronDownIcon />}
                 dateFormat="DD/MM/YYYY"
                 timeFormat={false}
-                value={getValue("endDate")}
+                value={getValue("endDate") || moment().format("DD/MM/YYYY")}
                 onChange={(date) => {
                   setValue("endDate", moment(date).format("DD/MM/YYYY"))
                   trigger("endDate")
@@ -131,6 +149,11 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
                   {...register("endDate")}
                 />
               </DateTimePicker>
+              {!!errors.endDate && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                  {errors.endDate?.message?.toString()}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -143,6 +166,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
             <label>
               <input
                 type="radio"
+                value={"csv"}
                 className={`${!!errors.reportFormat && "error"}`}
                 {...register("reportFormat")}
               />
@@ -153,12 +177,17 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           </div>
           <div className="pt-3 pl-1">
             <label>
-              <input type="radio" className="" {...register("reportFormat")} />
+              <input value={"pdf"} type="radio" className={`${!!errors.reportFormat && "error"}`}{...register("reportFormat")} />
               <span className="text-caption  pl-2 ">
                 {t("exportReport:pdf-format")}
               </span>
             </label>
           </div>
+          {!!errors.reportFormat && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-2">
+                  {errors.reportFormat?.message?.toString()}
+                </p>
+              )}
         </div>
         {/* prepare Report Button */}
 

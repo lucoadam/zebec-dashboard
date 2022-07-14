@@ -10,9 +10,8 @@ import {
 } from "features/modals/cancelModal/cancelModalSlice"
 
 const CancelModal: FC = ({}) => {
-  const show = useAppSelector((state) => state.cancel.show)
-  const loading = useAppSelector((state) => state.cancel.loading)
-
+  const {show,loading} = useAppSelector((state) => state.cancel)
+ 
   const dispatch = useAppDispatch()
 
   const { t } = useTranslation("transactions")

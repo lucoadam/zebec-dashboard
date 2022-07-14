@@ -74,7 +74,7 @@ export default function AddressesGroup() {
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("addressName")}
-                      autoFocus
+                      
                     />
                   </div>
                 </InputField>
@@ -95,7 +95,7 @@ export default function AddressesGroup() {
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
                       {...register("walletAddress")}
-                      autoFocus
+                      
                     />
                   </div>
                 </InputField>
