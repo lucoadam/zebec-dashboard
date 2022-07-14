@@ -11,6 +11,6 @@ export const formatCurrency = (amount: number, before = "", fix = 2) => {
   )
 }
 
-export const displayExponentialNumber = (amount: number) => {
+export const displayExponentialNumber = (amount: number | string) => {
   return new BigNumber(amount).toFixed()
 }
