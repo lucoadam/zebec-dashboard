@@ -3,13 +3,16 @@ export const toSubstring = (
   length: number,
   divide: boolean
 ) => {
-  let currentStr = str
-  if (currentStr === undefined) return null
-  else if (divide)
-    return (
-      currentStr.substring(0, length) +
-      "..." +
-      currentStr.substring(currentStr.length - length)
-    )
-  return currentStr?.substring(0, length) + "..."
+  if (str === undefined) return null
+  else if (divide) {
+    if (str.length > length) {
+      return (
+        str.substring(0, length) + "..." + str.substring(str.length - length)
+      )
+    } else {
+      return str
+    }
+  }
+
+  return str?.substring(0, length) + "..."
 }

@@ -43,6 +43,8 @@ import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
 import FileUploadIcon from "./other-icons/file-upload.svg"
+import SparkleIcon from "./other-icons/sparkle.svg"
+import FileIcon from "./other-icons/file.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
@@ -91,5 +93,7 @@ export {
   ClockIcon,
   ArrowRightIcon,
   ArrowDownIcon,
-  FileUploadIcon
+  FileUploadIcon,
+  SparkleIcon,
+  FileIcon
 }
