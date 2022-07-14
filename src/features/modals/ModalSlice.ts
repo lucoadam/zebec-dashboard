@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface User {
   id: number
   name: string
@@ -16,31 +17,32 @@ const initialState: UserState = {
 }
 
 //Generates pending, fulfilled and rejected action types
-export const resumeTransaction = createAsyncThunk(
-  "resume/resumeTransaction",
+export const modalTransaction = createAsyncThunk(
+  "modal/modalTransaction",
   async () => {
     const response = await axios.get("url")
     return response.data
   }
 )
 
-const resumeSlice = createSlice({
-  name: "resume",
+const modalSlice = createSlice({
+  name: "modal",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(resumeTransaction.pending, (state) => {
+    builder.addCase(modalTransaction.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(resumeTransaction.fulfilled, (state, action) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    builder.addCase(modalTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""
     })
-    builder.addCase(resumeTransaction.rejected, (state, action) => {
+    builder.addCase(modalTransaction.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })
   }
 })
 
-export default resumeSlice.reducer
+export default modalSlice.reducer

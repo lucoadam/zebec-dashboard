@@ -271,6 +271,10 @@ input[type="radio"]:after {
   content: "";
   @apply w-5 h-5 -top-1 -left-1 visible absolute rounded-full bg-background-secondary border-2 border-outline inline-block;
 }
+input.error[type="radio"]:after {
+  content: "";
+  @apply w-5 h-5 -top-1 -left-1 visible absolute rounded-full bg-background-secondary border border-error inline-block;
+}
 input[type="radio"]:focus,
 input[type="radio"]:checked:focus {
   box-shadow: none;

@@ -10,8 +10,7 @@ import {
 } from "features/modals/cancelModal/cancelModalSlice"
 
 const CancelModal: FC = ({}) => {
-  const show = useAppSelector((state) => state.cancel.show)
-  const loading = useAppSelector((state) => state.cancel.loading)
+  const { show, loading } = useAppSelector((state) => state.cancel)
 
   const dispatch = useAppDispatch()
 
@@ -66,6 +65,3 @@ const CancelModal: FC = ({}) => {
   )
 }
 export default CancelModal
-function toggleLoading(arg0: boolean): any {
-  throw new Error("Function not implemented.")
-}

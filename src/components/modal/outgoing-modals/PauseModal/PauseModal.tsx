@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC } from "react"
 import { useTranslation } from "next-i18next"
 import { Button } from "components/shared"
 import { Modal } from "components/shared"
@@ -11,8 +11,8 @@ import {
 } from "features/modals/pauseModal/pauseModalSlice"
 
 const PauseModal: FC = ({}) => {
-  const show = useAppSelector((state) => state.pause.show)
-  const loading = useAppSelector((state) => state.pause.loading)
+  const { show, loading } = useAppSelector((state) => state.pause)
+
   const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
   return (
