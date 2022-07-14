@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import { useToggle } from "hooks"
