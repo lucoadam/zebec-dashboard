@@ -3,7 +3,7 @@ type ToastType = "success" | "error" | "info"
 export interface ToastObjectProps {
   title?: string
   message: string
-  link?: string
+  transactionId?: string
   autoClose?: number
 }
 

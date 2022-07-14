@@ -46,6 +46,7 @@ import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
 import FileUploadIcon from "./other-icons/file-upload.svg"
 import Download from "./other-icons/download.svg"
 import Calendar from "./other-icons/calender.svg"
+import InformationIcon from "./other-icons/information.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
@@ -97,5 +98,6 @@ export {
   ArrowRightIcon,
   ArrowDownIcon,
   FileUploadIcon,
-  EditIcon
+  EditIcon,
+  InformationIcon
 }
