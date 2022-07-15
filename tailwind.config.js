@@ -67,6 +67,7 @@ module.exports = {
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
+          icon: "var(--outline-icon)",
           dark: "var(--outline-dark)"
         }
       },
