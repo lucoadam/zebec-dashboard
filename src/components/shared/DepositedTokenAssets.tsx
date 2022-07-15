@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
@@ -13,6 +14,8 @@ interface DepositedTokenAssetsProps {
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
   const { tableMaxHeight, tokens, balanceTokens } = props
+  const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
+
   const [search, setSearch] = useState("")
 
   const filterTokens = () => {
@@ -84,7 +87,11 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         <div className="flex flex-col gap-y-2 mt-1">
                           <div className=" text-subtitle-sm text-content-primary font-medium">
                             {formatCurrency(
-                              getUsdBalance(balanceTokens, token.symbol),
+                              getUsdBalance(
+                                tokensPrice,
+                                balanceTokens,
+                                token.symbol
+                              ),
                               "$"
                             )}
                           </div>
@@ -103,7 +110,11 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         <div className="flex flex-col gap-y-2 mt-1">
                           <div className=" text-subtitle-sm text-content-primary font-medium">
                             {formatCurrency(
-                              getUsdBalance(balanceTokens, token.symbol),
+                              getUsdBalance(
+                                tokensPrice,
+                                balanceTokens,
+                                token.symbol
+                              ),
                               "$"
                             )}
                           </div>

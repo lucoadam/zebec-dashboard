@@ -7,6 +7,9 @@ export const getBalance = (
 ) => walletTokens.find((t) => t.symbol === symbol)?.balance || 0
 
 export const getUsdBalance = (
+  tokenPrice: { [key: string]: number },
   walletTokens: WalletToken[] | TreasuryToken[],
   symbol: string
-) => walletTokens.find((t) => t.symbol === symbol)?.usdBalance || 0
+) =>
+  (walletTokens.find((t) => t.symbol === symbol)?.balance || 0) *
+  (tokenPrice[symbol] || 0)

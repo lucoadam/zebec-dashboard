@@ -95,7 +95,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
 
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const { tokens: tokenDetails, prices } = useAppSelector(
+    (state) => state.tokenDetails
+  )
 
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
@@ -398,11 +400,10 @@ export const InstantStream: FC<InstantStreamProps> = ({
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
                   {formatCurrency(
-                    (currentToken.usdPrice || 0) * Number(getValue("amount")) ||
+                    prices[currentToken.symbol] * Number(getValue("amount")) ||
                       0,
                     "$"
                   )}{" "}
-                  {currentToken.symbol}
                 </label>
               </div>
               <InputField

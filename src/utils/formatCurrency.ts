@@ -14,3 +14,11 @@ export const formatCurrency = (amount: number, before = "", fix = 2) => {
 export const displayExponentialNumber = (amount: number | string) => {
   return new BigNumber(amount).toFixed()
 }
+
+export const splitNumber = (amount: number | string) => {
+  const splittedBalance = new BigNumber(amount).toFixed().split(".")
+  return [
+    splittedBalance[0],
+    splittedBalance[1] ? (splittedBalance[1] + "00").substring(0, 2) : "00"
+  ]
+}

@@ -232,7 +232,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [showRemarks, setShowRemarks] = useState(false)
   const [enableStreamRate, setEnableStreamRate] = useState(false)
 
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const { tokens: tokenDetails, prices } = useAppSelector(
+    (state) => state.tokenDetails
+  )
 
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
@@ -263,11 +265,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
 
   useEffect(() => {
-    if (tokenDetails.length > 0) {
+    if (tokenDetails.length > 0 && !currentToken.symbol) {
       setCurrentToken(tokenDetails[0])
       setValue("token", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue])
+  }, [tokenDetails, setValue, currentToken.symbol])
 
   const onSubmit = (data: ContinuousStreamFormData) => {
     console.log(data)
@@ -589,11 +591,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
                   {formatCurrency(
-                    (currentToken.usdPrice || 0) * Number(getValue("amount")) ||
+                    prices[currentToken.symbol] * Number(getValue("amount")) ||
                       0,
                     "$"
                   )}{" "}
-                  {currentToken.symbol}
                 </label>
               </div>
               <InputField

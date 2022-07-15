@@ -10,7 +10,7 @@ export const getTokensUSDPrice = async (tokens: TokenDetails[]) => {
     `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
   )
   const tokensPrice = tokens.map((token) => [
-    token.mint,
+    token.symbol,
     data[token.coingeckoId]?.usd
   ])
   return Object.fromEntries(tokensPrice)
