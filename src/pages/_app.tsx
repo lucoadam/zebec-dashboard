@@ -19,6 +19,7 @@ import { Provider } from "react-redux"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
+import Common from "components/layouts/Common"
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
@@ -41,6 +42,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           <WalletModalProvider>
             <ThemeProvider>
               <Component {...pageProps} />
+              <Common />
             </ThemeProvider>
           </WalletModalProvider>
         </WalletProvider>

@@ -40,6 +40,10 @@ const Overview = () => {
   const [currentToken, setCurrentToken] = useState<
     keyof typeof tokenBalances | keyof typeof weeklyBalances
   >("SOL")
+  const treasuryBalance = useAppSelector(
+    (state) => state.treasuryBalance.treasury?.tokens
+  )
+  const prices = useAppSelector((state) => state.tokenDetails.prices)
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
       {/**
@@ -52,7 +56,12 @@ const Overview = () => {
         {/**
          * Safe Balance
          */}
-        <DepositedBalance />
+        <DepositedBalance
+          balance={treasuryBalance?.reduce(
+            (a, b) => a + (prices[b.symbol] * b.balance || 0),
+            0
+          )}
+        />
         {/**
          * Incoming/ Outgoing
          */}

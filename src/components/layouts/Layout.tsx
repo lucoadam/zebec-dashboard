@@ -1,9 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useAppDispatch, useAppSelector } from "app/hooks"
 import { Toasts } from "components/shared"
-import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
-import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
-import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import Head from "next/head"
 import React, { FC, useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
@@ -16,14 +11,6 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
-  const walletObject = useWallet()
-  const dispatch = useAppDispatch()
-  const tokens = useAppSelector((state) => state.tokenDetails.tokens)
-
-  useEffect(() => {
-    dispatch(fetchTokens())
-  }, [dispatch])
-
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
     setIsMounted(true)
@@ -31,13 +18,6 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       ReactTooltip.rebuild()
     }, 30)
   }, [])
-
-  useEffect(() => {
-    if (tokens.length > 0 && walletObject.publicKey) {
-      dispatch(fetchWalletBalance(walletObject.publicKey))
-      dispatch(fetchZebecBalance(walletObject.publicKey))
-    }
-  }, [dispatch, walletObject.publicKey, tokens])
 
   return (
     <>

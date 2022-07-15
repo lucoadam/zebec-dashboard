@@ -10,6 +10,8 @@ export interface TokenDetails {
 
 export interface TokenDetailsState {
   loading: boolean
+  fetchingPrice: boolean
   tokens: TokenDetails[]
+  prices: { [key: string]: number }
   error: string
 }

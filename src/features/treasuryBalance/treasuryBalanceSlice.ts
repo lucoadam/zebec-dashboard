@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "app/store"
 import { setTreasuryData } from "data/api"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
-import { getTokensUSDPrice } from "utils/getTokensPrice"
 import { FetchTreasuryProps, TreasuryState } from "./treasuryBalanceSlice.d"
 
 const initialState: TreasuryState = {
@@ -23,6 +22,7 @@ export const updateTreasury = createAsyncThunk(
   }
 )
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTreasuryBalance: any = createAsyncThunk(
   "balance/fetchTreasuryBalance",
   async ({ name, address }: FetchTreasuryProps, { getState }) => {
@@ -32,15 +32,9 @@ export const fetchTreasuryBalance: any = createAsyncThunk(
     // fetch wallet tokens
     const tokensBalance = await getTokensBalanceOfWallet(address, tokens)
 
-    // fetch USD price of tokens
-    const tokensPrice = await getTokensUSDPrice(tokens)
-
     const mappedTokens = tokens.map((token) => ({
       symbol: token.symbol,
-      balance: tokensBalance[token.mint] || 0,
-      usdBalance: tokensPrice[token.mint]
-        ? (tokensBalance[token.mint] || 0) * tokensPrice[token.mint]
-        : null
+      balance: tokensBalance[token.mint] || 0
     }))
     return {
       name,
@@ -51,7 +45,7 @@ export const fetchTreasuryBalance: any = createAsyncThunk(
 )
 
 const zebecBalanceSlice = createSlice({
-  name: "zebecBalance",
+  name: "treasuryBalance",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

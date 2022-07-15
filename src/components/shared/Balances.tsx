@@ -2,11 +2,14 @@ import * as Icons from "assets/icons"
 import { tokenBalances, weeklyBalances } from "fakedata"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
-import { formatCurrency } from "utils"
+import { formatCurrency, splitNumber } from "utils"
 import { Button } from "./Button"
-
+import { DepositedBalanceProps } from "./Balances.d"
 /* Deposited Balance */
-export const DepositedBalance: FC = () => {
+export const DepositedBalance: FC<DepositedBalanceProps> = ({
+  balance = 0
+}) => {
+  const depositedBalance = splitNumber(balance)
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
@@ -14,12 +17,14 @@ export const DepositedBalance: FC = () => {
       </div>
       <div>
         <div className=" text-heading-3 text-content-primary font-semibold">
-          $15,390,832
-          <span className=" text-subtitle text-content-contrast">.02213</span>
+          ${depositedBalance[0]}
+          <span className=" text-subtitle text-content-contrast">
+            .{depositedBalance[1]}
+          </span>
         </div>
-        <p className="text-xs font-normal leading-3 text-content-contrast">
+        {/* <p className="text-xs font-normal leading-3 text-content-contrast">
           120,023.23 SOL
-        </p>
+        </p> */}
       </div>
     </div>
   )

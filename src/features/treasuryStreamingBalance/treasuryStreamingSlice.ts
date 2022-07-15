@@ -13,6 +13,7 @@ const initialState: StreamingTokenState = {
 }
 
 //Generates pending, fulfilled and rejected action types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTreasuryStreamingBalance: any = createAsyncThunk(
   "balance/fetchTreasuryStreamingBalance",
   async (wallet: string, { getState }) => {
