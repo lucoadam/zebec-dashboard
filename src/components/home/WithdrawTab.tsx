@@ -58,6 +58,7 @@ const WithdrawTab: FC = () => {
 
   const [show, toggle, setToggle] = useToggle(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
     console.log(data)
   }
@@ -85,12 +86,7 @@ const WithdrawTab: FC = () => {
           />
         </WithdrawDepositInput>
 
-        <Button
-          title="Withdraw"
-          variant="gradient"
-          onClick={() => {}}
-          className="w-full"
-        />
+        <Button title="Withdraw" variant="gradient" className="w-full" />
       </form>
     </div>
   )

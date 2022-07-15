@@ -12,12 +12,6 @@ interface BadgeProps {
   className?: string
 }
 
-interface CopyBadgeProps extends BadgeProps {
-  type?: "success"
-  content: string
-  show: boolean
-}
-
 export const Badge: FC<BadgeProps & BadgeTypeProps> = (props) => {
   const { children, title, type, size = "medium", className } = props
   const badgeSizeStyles =

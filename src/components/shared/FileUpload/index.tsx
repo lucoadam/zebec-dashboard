@@ -36,10 +36,11 @@ export const FileUpload: FC<FileUploadProps> = ({
     }
     const data = e.target.files?.length ? e.target.files[0] : null
     if (data) {
-      const fileFormat = data.type.split("/")[1]
+      const fileFormat = data.name.split(".")
       const fileSize = data.size
-      console.log(fileFormat, fileSize)
-      if (!constants.ALLOWED_FILES.includes(fileFormat)) {
+      if (
+        !constants.ALLOWED_FILES.includes(fileFormat[fileFormat.length - 1])
+      ) {
         setFile((prev: FileState) => ({
           ...prev,
           name: data.name,

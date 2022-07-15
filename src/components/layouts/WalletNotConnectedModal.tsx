@@ -26,7 +26,7 @@ const WalletNotConnectedModal: NextPage = () => {
       {isInitialized && (
         <Modal
           show={!walletObject.connected}
-          toggleModal={() => {}}
+          toggleModal={() => null}
           className="rounded-2xl"
           hasCloseIcon={false}
         >

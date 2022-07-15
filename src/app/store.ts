@@ -32,7 +32,6 @@ const combineReducer = combineReducers({
   layout: layoutSlice,
   toasts: toastsSlice,
   common: commonSlice,
-  layout: layoutSlice,
   exportReport: exportSlice,
   pause: pauseModalSlice,
   cancel: cancelModalSlice,

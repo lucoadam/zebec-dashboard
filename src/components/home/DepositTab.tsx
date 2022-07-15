@@ -59,6 +59,7 @@ const DepositTab: FC = () => {
 
   const [show, toggle, setToggle] = useToggle(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
     console.log(data)
   }
@@ -86,12 +87,7 @@ const DepositTab: FC = () => {
             setCurrentToken={setCurrentToken}
           />
         </WithdrawDepositInput>
-        <Button
-          title="Deposit"
-          variant="gradient"
-          onClick={() => {}}
-          className="w-full"
-        />
+        <Button title="Deposit" variant="gradient" className="w-full" />
       </form>
     </div>
   )

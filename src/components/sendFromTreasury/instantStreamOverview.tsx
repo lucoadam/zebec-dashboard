@@ -24,7 +24,7 @@ export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
         </h1>
       </div>
       <div className="pt-4">
-        <p className="mt-2 text-sm text-content-secondary">
+        <p className="text-sm text-content-secondary">
           <span className="text-content-primary">
             {formValues?.amount || "..."} {formValues?.token || "..."}{" "}
           </span>

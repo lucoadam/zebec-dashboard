@@ -1,7 +1,7 @@
 import { Button } from "components/shared"
 import { useTranslation } from "next-i18next"
 import React, { FC } from "react"
-import { Owner, StepsComponentProps } from "../CreateTreasury.d"
+import { StepsComponentProps } from "../CreateTreasury.d"
 import OwnerLists from "../OwnerLists"
 
 const ReviewTreasury: FC<StepsComponentProps> = (props) => {

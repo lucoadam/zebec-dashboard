@@ -1,11 +1,11 @@
 import HomePage from "components/home"
 import Layout from "components/layouts/Layout"
 import type { GetStaticProps, NextPage } from "next"
-import { useTranslation } from "next-i18next"
+// import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 
 const Home: NextPage = () => {
-  const { t } = useTranslation("common")
+  // const { t } = useTranslation("common")
 
   return (
     <Layout pageTitle="Zebec">

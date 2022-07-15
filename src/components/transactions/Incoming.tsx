@@ -12,6 +12,7 @@ const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   const [noOfRows, setNoOfRows] = useState(10)
   const noOfOptions = [10, 20, 30, 40]

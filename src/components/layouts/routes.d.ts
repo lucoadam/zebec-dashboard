@@ -1,6 +1,6 @@
 export interface RouteProps {
   name: string
-  path?: string
+  path: string
   Icon: React.ElementType
   type: "link" | "group"
   noBackground?: boolean

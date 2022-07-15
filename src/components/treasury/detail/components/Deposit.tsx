@@ -60,6 +60,7 @@ export const Deposit = () => {
 
   const [show, toggle, setToggle] = useToggle(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
     console.log(data)
   }

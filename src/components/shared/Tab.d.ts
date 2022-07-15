@@ -1,4 +1,4 @@
-import React, { SVGProps, MouseEventHandler } from "react"
+import React, { MouseEventHandler } from "react"
 
 interface TabBaseProps {
   type: "solid" | "plain"

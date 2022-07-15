@@ -9,6 +9,7 @@ import { WithdrawStepsList } from "./withdraw/data.d"
 
 interface IncomingTableRowProps {
   index: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void
@@ -32,6 +33,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     }
   }
   const [isOpen, setIsOpen] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [withdrawAmount, setWithdrawAmount] = useState<any>()
 
   function toggleModal() {

@@ -1,33 +1,48 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
-//declare types for state
-interface ModalState {
-  show: boolean
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface User {
+  id: number
+  name: string
+}
+interface UserState {
   loading: boolean
+  error: string
 }
 
-const initialState: ModalState = {
-  show: false,
-  loading: false
+const initialState: UserState = {
+  loading: false,
+  error: ""
 }
 
-export const modalSlice = createSlice({
+//Generates pending, fulfilled and rejected action types
+export const modalTransaction = createAsyncThunk(
+  "modal/modalTransaction",
+  async () => {
+    const response = await axios.get("url")
+    return response.data
+  }
+)
+
+const modalSlice = createSlice({
   name: "modal",
   initialState,
-  reducers: {
-    showModal: (state) => {
-      state.show = true
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(modalTransaction.pending, (state) => {
+      state.loading = true
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    builder.addCase(modalTransaction.fulfilled, (state, action) => {
       state.loading = false
-    },
-    toggleModal: (state) => {
-      state.show = !state.show
-    },
-    setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
-      state.loading = action.payload
-    }
+      state.error = ""
+    })
+    builder.addCase(modalTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
   }
 })
-
-export const { showModal, toggleModal, setLoading } = modalSlice.actions
 
 export default modalSlice.reducer

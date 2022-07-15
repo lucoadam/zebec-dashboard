@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { useState } from "react"
 // import { Tab } from "@headlessui/react";
 import * as Icons from "assets/icons"
 import Setting from "./components/Setting"
@@ -7,7 +7,7 @@ import { useTranslation } from "next-i18next"
 import { Tab } from "components/shared"
 import { Transactions } from "./components/Transactions"
 
-let categories = [
+const categories = [
   {
     title: "overview",
     count: 0,

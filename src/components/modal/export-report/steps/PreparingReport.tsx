@@ -10,7 +10,7 @@ const PreparingReport: FC<exportProps> = ({ setCurrentStep }) => {
     setTimeout(() => {
       setCurrentStep(2)
     }, 5000)
-  }, [])
+  }, [setCurrentStep])
 
   const { t } = useTranslation("")
   return (

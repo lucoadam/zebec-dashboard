@@ -65,6 +65,7 @@ export const Withdrawal = () => {
     resolver: yupResolver(validationSchema)
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitWitdrawal = (data: any) => {
     console.log(data)
   }

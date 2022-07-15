@@ -1,7 +1,7 @@
-import React, { FC, Fragment, useRef, useState } from "react"
+import React, { FC, Fragment, useRef } from "react"
 import Image from "next/image"
 import { useTranslation } from "next-i18next"
-import { Button, IconButton, Modal } from "components/shared"
+import { Button, IconButton } from "components/shared"
 import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
@@ -13,6 +13,7 @@ import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void
@@ -20,7 +21,6 @@ interface OutgoingTableRowProps {
 
 const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   index,
-  transaction,
   activeDetailsRow,
   handleToggleRow
 }) => {

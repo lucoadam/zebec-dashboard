@@ -9,6 +9,7 @@ import { formatCurrency, toSubstring } from "utils"
 
 interface WithdrawalTableRowProps {
   index: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void

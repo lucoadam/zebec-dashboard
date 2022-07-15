@@ -4,11 +4,7 @@ import { Button } from "components/shared"
 import { withdrawProps } from "../../data.d"
 import { confirmWithdrawStep, confirmWithdrawStepsList } from "./data"
 
-const ConfirmWithdraw: FC<withdrawProps> = ({
-  setCurrentStep,
-  withdrawAmount,
-  setWithdrawAmount
-}) => {
+const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep }) => {
   const { t } = useTranslation("transactions")
   return (
     <div>

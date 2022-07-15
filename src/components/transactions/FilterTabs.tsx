@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
 import { useTranslation } from "next-i18next"
-import { Button, Tab, Modal } from "components/shared"
+import { Button, Tab } from "components/shared"
 import * as Icons from "assets/icons"
 import { useAppDispatch } from "app/hooks"
 import { toggleExportModal } from "features/export-report/exportSlice"

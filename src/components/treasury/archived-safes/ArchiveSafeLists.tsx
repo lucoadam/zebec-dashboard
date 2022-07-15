@@ -83,7 +83,6 @@ const ArchiveSafeLists = () => {
               className={`w-full font-semibold`}
               variant="gradient"
               title={t("yes-archive")}
-              onClick={() => {}}
             />
           </div>
           <div className="">

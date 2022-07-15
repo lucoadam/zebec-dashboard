@@ -4,7 +4,6 @@ import { InputProps } from "./index.d"
 const InputFieldWrapper: FC<InputProps> = (props) => {
   const {
     error = false,
-    value = "",
     helper = "",
     label = "",
     children,

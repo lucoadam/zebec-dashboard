@@ -2,6 +2,7 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
+import BigNumber from "bignumber.js"
 import {
   Button,
   CollapseDropdown,
@@ -118,10 +119,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           "check-start-time",
           t("validation:start-date-time-before-today"),
           () => {
-            return moment(
-              `${getValue("startDate")} ${getValue("startTime")}`,
-              "DD/MM/YYYY LT"
-            ).isAfter(moment())
+            return (
+              !getValue("startDate") ||
+              moment(
+                `${getValue("startDate")} ${getValue("startTime")}`,
+                "DD/MM/YYYY LT"
+              ).isAfter(moment())
+            )
           }
         ),
       endDate: Yup.string()
@@ -171,7 +175,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           return !!getValue("noOfTimes") || !enableStreamRate
         })
         .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
-          return Number(getValue("noOfTimes")) > 0 || !enableStreamRate
+          return (
+            (Number(getValue("noOfTimes")) > 0 &&
+              Number.isInteger(Number(getValue("noOfTimes")))) ||
+            !enableStreamRate
+          )
         }),
       tokenAmount: Yup.string()
         .test(
@@ -272,8 +280,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const handleStreamRate = () => {
     const selectedNoOfTimes = Number(getValue("noOfTimes")) || 0
     const selectedTokenAmount = Number(getValue("tokenAmount")) || 0
-    const totalAmount = selectedNoOfTimes * selectedTokenAmount
-    setValue("amount", totalAmount.toString())
+    const totalAmount = new BigNumber(selectedNoOfTimes)
+      .multipliedBy(new BigNumber(selectedTokenAmount))
+      .toFixed()
+    setValue("amount", totalAmount)
 
     if (
       getValue("startDate") &&
@@ -599,6 +609,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     } w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
+                    step="any"
                     disabled={enableStreamRate}
                     {...register("amount")}
                   />
@@ -639,7 +650,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   onChange={(date) => {
                     setValue("startDate", moment(date).format("DD/MM/YYYY"))
                     trigger("startDate")
-                    trigger("startTime")
+                    if (getValue("startTime")) {
+                      trigger("startTime")
+                    }
                     if (!!getValue("endTime") || !!getValue("endDate")) {
                       trigger("endDate")
                       trigger("endTime")
@@ -666,7 +679,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   onChange={(time) => {
                     setValue("startTime", time)
                     trigger("startTime")
-                    trigger("startDate")
+                    if (getValue("startDate")) {
+                      trigger("startDate")
+                    }
                     if (!!getValue("endTime") || !!getValue("endDate")) {
                       trigger("endDate")
                       trigger("endTime")
@@ -701,7 +716,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   onChange={(date) => {
                     setValue("endDate", moment(date).format("DD/MM/YYYY"))
                     trigger("endDate")
-                    trigger("endTime")
+                    if (getValue("endTime")) {
+                      trigger("endTime")
+                    }
                   }}
                   error={!!errors.endDate}
                 >
@@ -717,7 +734,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   onChange={(time) => {
                     setValue("endTime", time)
                     trigger("endTime")
-                    trigger("endDate")
+                    if (getValue("endDate")) {
+                      trigger("endDate")
+                    }
                   }}
                   error={!!errors.endTime}
                 />
@@ -763,6 +782,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       }`}
                       placeholder={"E.g. 4"}
                       type="number"
+                      step="any"
                       {...register("noOfTimes")}
                       onChange={(e) => {
                         setValue("noOfTimes", e.target.value)
@@ -780,12 +800,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   label={t("send:token-amount")}
                   placeholder={"E.g. 10"}
                   type="number"
+                  step="any"
                   className="w-full h-[40px]"
                   labelMargin={12}
                 >
                   <input
                     className={`w-full h-[40px]`}
                     type="number"
+                    step="any"
                     {...register("tokenAmount")}
                     onChange={(e) => {
                       setValue("tokenAmount", e.target.value)

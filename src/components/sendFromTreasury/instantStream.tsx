@@ -246,10 +246,10 @@ export const InstantStream: FC<InstantStreamProps> = ({
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
-                          <div className="text-caption text-content-tertiary">
+                          <div className="text-content-primary">
                             {user.name}
                           </div>
-                          <div className="text-content-primary">
+                          <div className="text-caption text-content-tertiary">
                             {toSubstring(user.address, 28, false)}
                           </div>
                         </div>
@@ -416,6 +416,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                     className={`w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
+                    step="any"
                     {...register("amount")}
                   />
                   <Button
