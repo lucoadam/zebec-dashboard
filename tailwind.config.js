@@ -28,7 +28,8 @@ module.exports = {
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
           backdrop: "var(--bg-backdrop)",
-          contrast: "var(--bg-contrast)"
+          contrast: "var(--bg-contrast)",
+          tooltip: "var(--toltip-background)"
         },
         // Primary
         primary: {
@@ -66,6 +67,7 @@ module.exports = {
         outline: {
           DEFAULT: "var(--outline-main)",
           secondary: "var(--outline-secondary)",
+          icon: "var(--outline-icon)",
           dark: "var(--outline-dark)"
         }
       },

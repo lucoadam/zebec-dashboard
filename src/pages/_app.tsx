@@ -1,5 +1,3 @@
-import type { AppProps } from "next/app"
-import { FC, useMemo } from "react"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import {
   ConnectionProvider,
@@ -12,13 +10,15 @@ import {
   SolflareWalletAdapter
 } from "@solana/wallet-adapter-wallets"
 import { clusterApiUrl } from "@solana/web3.js"
+import { store } from "app/store"
 import { appWithTranslation } from "next-i18next"
 import { ThemeProvider } from "next-themes"
+import type { AppProps } from "next/app"
+import { useMemo } from "react"
 import { Provider } from "react-redux"
-import { store } from "app/store"
 //Styles
-import "styles/globals.css"
 import "@solana/wallet-adapter-react-ui/styles.css"
+import "styles/globals.css"
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
