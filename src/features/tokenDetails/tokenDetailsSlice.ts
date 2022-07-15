@@ -21,45 +21,35 @@ export const fetchTokens: any = createAsyncThunk(
   async (_, { getState }) => {
     const { tokenDetails } = getState() as RootState
     let tokens = tokenDetails.tokens
-    if (!tokens.length) {
-      console.log("fetching tokens from registry")
-      const tokensMint = tokenMetaData
-        .filter((token) => token.mint)
-        .map((token) => token.mint)
-      const tokensData = await (await new TokenListProvider().resolve())
-        .filterByClusterSlug(getRPCNetwork())
-        .getList()
+    const tokensMint = tokenMetaData
+      .filter((token) => token.mint)
+      .map((token) => token.mint)
+    const tokensData = await (await new TokenListProvider().resolve())
+      .filterByClusterSlug(getRPCNetwork())
+      .getList()
 
-      tokens = [
-        {
-          name: "Solana",
-          symbol: "SOL",
-          image:
-            "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-          mint: "solana",
-          decimal: 18,
-          coingeckoId: "solana"
-        },
-        ...tokensData
-          .filter((token) => tokensMint.includes(token.address))
-          .map((token) => ({
-            name: token.name,
-            symbol: token.symbol,
-            image: token.logoURI || "",
-            decimal: token.decimals,
-            mint: token.address,
-            coingeckoId: token?.extensions?.coingeckoId || ""
-          }))
-      ]
-    } else {
-      console.log("tokens already fetched")
-    }
-    const tokensPrice = await getTokensUSDPrice(tokens)
-    const tokensWithPrice = tokens.map((token) => ({
-      ...token,
-      usdPrice: tokensPrice[token.mint]
-    }))
-    return tokensWithPrice
+    tokens = [
+      {
+        name: "Solana",
+        symbol: "SOL",
+        image:
+          "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+        mint: "solana",
+        decimal: 18,
+        coingeckoId: "solana"
+      },
+      ...tokensData
+        .filter((token) => tokensMint.includes(token.address))
+        .map((token) => ({
+          name: token.name,
+          symbol: token.symbol,
+          image: token.logoURI || "",
+          decimal: token.decimals,
+          mint: token.address,
+          coingeckoId: token?.extensions?.coingeckoId || ""
+        }))
+    ]
+    return tokens
   }
 )
 
