@@ -10,6 +10,14 @@
     "archive-modal-header" :"Are you sure you want to archive safe?",
     "archiving-content":"Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe.",
     "yes-archive-safe" :"Yes, Archive Safe",
-    "cancel" : "Cancel"
+    "cancel" : "Cancel",
+    "reject-modal-header": "Are you sure you wnat to reject transaction?",
+    "signing":"Signing",
+    "yes-sign":"Yes, Sign",
+    "no-sign":"No, Dont Sign",
+    "sign-modal-header":"Are you sure you wnat to sign transaction?",
+    "rejecting": "Rejecting",
+    "yes-reject":"Yes, Reject",
+    "no-reject":"No, Reject"
 
 }

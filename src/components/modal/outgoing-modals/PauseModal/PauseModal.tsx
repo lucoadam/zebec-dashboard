@@ -5,10 +5,7 @@ import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import {
-  setLoading,
-  togglePauseModal
-} from "features/modals/pauseModal/pauseModalSlice"
+import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
 
 const PauseModal: FC = ({}) => {
   const { show, loading } = useAppSelector((state) => state.pause)

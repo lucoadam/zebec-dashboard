@@ -4,16 +4,16 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
+import { setLoading, toggleRejectModal } from "features/modals/rejectModalSlice"
 
-const ResumeModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.resume)
+const RejectTransactionModal: FC = ({}) => {
+  const { show, loading } = useAppSelector((state) => state.rejectTransaction)
   const dispatch = useAppDispatch()
-  const { t } = useTranslation("transactions")
+  const { t } = useTranslation("treasurySettings")
   return (
     <Modal
       show={show}
-      toggleModal={() => dispatch(toggleResumeModal())}
+      toggleModal={() => dispatch(toggleRejectModal())}
       className="rounded "
       hasCloseIcon={false}
       size="small"
@@ -21,23 +21,19 @@ const ResumeModal: FC = ({}) => {
       {
         <>
           <div className="text-content-primary text-subtitle font-semibold">
-            {t("outgoing-actions.resume-modal-header")}
+            {t("reject-modal-header")}
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
               className={`w-full `}
-              variant="gradient"
-              endIcon={loading ? <Icons.Loading /> : <></>}
+              variant="danger"
+              endIcon={loading ? <Icons.Loading /> : <Icons.TrashIcon />}
               disabled={loading}
-              title={
-                loading
-                  ? t("outgoing-actions.resuming")
-                  : t("outgoing-actions.yes-resume")
-              }
+              title={loading ? t("rejecting") : t("yes-reject")}
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
-                  dispatch(toggleResumeModal())
+                  dispatch(toggleRejectModal())
                   dispatch(setLoading(false))
                 }, 5000)
               }}
@@ -47,9 +43,9 @@ const ResumeModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("outgoing-actions.no-resume")}
+              title={t("no-reject")}
               onClick={() => {
-                dispatch(toggleResumeModal())
+                dispatch(toggleRejectModal())
               }}
             />
           </div>
@@ -58,4 +54,4 @@ const ResumeModal: FC = ({}) => {
     </Modal>
   )
 }
-export default ResumeModal
+export default RejectTransactionModal

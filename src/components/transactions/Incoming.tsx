@@ -1,6 +1,5 @@
 import { Table, TableBody } from "components/shared"
-import { Pagination } from "components/shared/Pagination"
-import { RowsPerPage } from "components/shared/RowsPerPage"
+import { Pagination, RowsPerPage } from "components/shared"
 import { incomingTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"

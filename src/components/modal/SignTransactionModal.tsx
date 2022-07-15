@@ -4,16 +4,16 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
+import { setLoading, toggleSignModal } from "features/modals/signModalSlice"
 
-const ResumeModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.resume)
+const SignTransactionModal: FC = ({}) => {
+  const { show, loading } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
-  const { t } = useTranslation("transactions")
+  const { t } = useTranslation("treasurySettings")
   return (
     <Modal
       show={show}
-      toggleModal={() => dispatch(toggleResumeModal())}
+      toggleModal={() => dispatch(toggleSignModal())}
       className="rounded "
       hasCloseIcon={false}
       size="small"
@@ -21,7 +21,7 @@ const ResumeModal: FC = ({}) => {
       {
         <>
           <div className="text-content-primary text-subtitle font-semibold">
-            {t("outgoing-actions.resume-modal-header")}
+            {t("sign-modal-header")}
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
@@ -29,15 +29,11 @@ const ResumeModal: FC = ({}) => {
               variant="gradient"
               endIcon={loading ? <Icons.Loading /> : <></>}
               disabled={loading}
-              title={
-                loading
-                  ? t("outgoing-actions.resuming")
-                  : t("outgoing-actions.yes-resume")
-              }
+              title={loading ? t("signing") : t("yes-sign")}
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
-                  dispatch(toggleResumeModal())
+                  dispatch(toggleSignModal())
                   dispatch(setLoading(false))
                 }, 5000)
               }}
@@ -47,9 +43,9 @@ const ResumeModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("outgoing-actions.no-resume")}
+              title={t("no-sign")}
               onClick={() => {
-                dispatch(toggleResumeModal())
+                dispatch(toggleSignModal())
               }}
             />
           </div>
@@ -58,4 +54,4 @@ const ResumeModal: FC = ({}) => {
     </Modal>
   )
 }
-export default ResumeModal
+export default SignTransactionModal

@@ -5,6 +5,8 @@ import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"
 import { Pagination } from "components/shared/Pagination"
 import { RowsPerPage } from "components/shared/RowsPerPage"
+import RejectTransactionModal from "components/modal/RejectTransactionModal"
+import SignTransactionModal from "components/modal/SignTransactionModal"
 
 const transactionTabs = [
   {
@@ -65,6 +67,8 @@ export const Transactions = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
+      <RejectTransactionModal />
+      <SignTransactionModal />
     </div>
   )
 }

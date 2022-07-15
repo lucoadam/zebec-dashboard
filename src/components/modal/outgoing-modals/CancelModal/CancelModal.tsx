@@ -4,10 +4,7 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import {
-  setLoading,
-  toggleCancelModal
-} from "features/modals/cancelModal/cancelModalSlice"
+import { setLoading, toggleCancelModal } from "features/modals/cancelModalSlice"
 
 const CancelModal: FC = ({}) => {
   const { show, loading } = useAppSelector((state) => state.cancel)

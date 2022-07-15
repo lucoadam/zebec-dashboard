@@ -7,9 +7,9 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 
 import { useAppDispatch } from "app/hooks"
-import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
-import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number
