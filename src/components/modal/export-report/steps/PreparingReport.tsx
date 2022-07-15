@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from "react"
 import { useTranslation } from "next-i18next"
+import Image from "next/image"
 
 import * as Icons from "assets/icons/index"
-import Loading from "assets/images/gifs/withdrawing.gif"
+import * as Images from "assets/images"
 import { exportProps } from "../ExportModal"
 
 const PreparingReport: FC<exportProps> = ({ setCurrentStep }) => {
@@ -16,7 +17,13 @@ const PreparingReport: FC<exportProps> = ({ setCurrentStep }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full ">
       <div className="w-16">
-        <img {...Loading} />
+        <Image
+          src={Images.LoadingGif}
+          alt="loading"
+          layout="fixed"
+          width={64}
+          height={64}
+        />
       </div>
       <div className="text-content-secondary text-heading-5 pt-4 font-semibold">
         {t("exportReport:preparing-report")}

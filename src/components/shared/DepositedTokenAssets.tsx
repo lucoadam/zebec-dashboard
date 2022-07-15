@@ -1,4 +1,5 @@
 import * as Icons from "assets/icons"
+import Image from "next/image"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
 import { FC, useState } from "react"
@@ -68,10 +69,12 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                       <td className="whitespace-nowrap w-[1%] pb-6 pt-3">
                         <div className="flex flex-col items-center gap-y-1">
                           <div className="w-8 h-8 grid place-content-center rounded-full bg-background-primary">
-                            <img
-                              className="w-5 h-5"
+                            <Image
                               src={token.image}
                               alt={token.symbol}
+                              layout="fixed"
+                              width={20}
+                              height={20}
                             />
                           </div>
                           <div className="text-caption text-content-primary">

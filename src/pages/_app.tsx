@@ -15,8 +15,6 @@ import { clusterApiUrl } from "@solana/web3.js"
 import { store } from "app/store"
 import { appWithTranslation } from "next-i18next"
 import { ThemeProvider } from "next-themes"
-import type { AppProps } from "next/app"
-import { useMemo } from "react"
 import { Provider } from "react-redux"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
