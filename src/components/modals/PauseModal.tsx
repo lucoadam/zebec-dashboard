@@ -23,7 +23,7 @@ const PauseModal: FC = ({}) => {
       {
         <>
           <div className="text-content-primary text-subtitle font-semibold ">
-            {t("outgoing-actions.pause-modal-header")}
+            {t("modal-actions.pause-modal-header")}
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
@@ -33,8 +33,8 @@ const PauseModal: FC = ({}) => {
               variant="gradient"
               title={
                 loading
-                  ? t("outgoing-actions.pausing")
-                  : t("outgoing-actions.yes-pause")
+                  ? t("modal-actions.pausing")
+                  : t("modal-actions.yes-pause")
               }
               onClick={() => {
                 dispatch(setLoading(true))
@@ -49,7 +49,7 @@ const PauseModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("outgoing-actions.no-pause")}
+              title={t("modal-actions.no-pause")}
               onClick={() => {
                 dispatch(togglePauseModal())
               }}

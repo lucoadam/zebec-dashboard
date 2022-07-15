@@ -4,16 +4,19 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleRejectModal } from "features/modals/rejectModalSlice"
+import { setLoading, toggleCancelModal } from "features/modals/cancelModalSlice"
 
-const RejectTransactionModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.rejectTransaction)
+const CancelModal: FC = ({}) => {
+  const { show, loading } = useAppSelector((state) => state.cancel)
+
   const dispatch = useAppDispatch()
-  const { t } = useTranslation("treasurySettings")
+
+  const { t } = useTranslation("transactions")
+
   return (
     <Modal
       show={show}
-      toggleModal={() => dispatch(toggleRejectModal())}
+      toggleModal={() => dispatch(toggleCancelModal())}
       className="rounded "
       hasCloseIcon={false}
       size="small"
@@ -21,19 +24,23 @@ const RejectTransactionModal: FC = ({}) => {
       {
         <>
           <div className="text-content-primary text-subtitle font-semibold">
-            {t("reject-modal-header")}
+            {t("modal-actions.cancel-modal-header")}
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
               className={`w-full `}
-              variant="danger"
-              endIcon={loading ? <Icons.Loading /> : <Icons.TrashIcon />}
+              variant="gradient"
               disabled={loading}
-              title={loading ? t("rejecting") : t("yes-reject")}
+              endIcon={loading ? <Icons.Loading /> : <></>}
+              title={
+                loading
+                  ? t("modal-actions.cancelling")
+                  : t("modal-actions.yes-cancel")
+              }
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
-                  dispatch(toggleRejectModal())
+                  dispatch(toggleCancelModal())
                   dispatch(setLoading(false))
                 }, 5000)
               }}
@@ -41,11 +48,11 @@ const RejectTransactionModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
+              className={`w-full ${loading ? "cursor-not-allowed" : ""}`}
               disabled={loading}
-              title={t("no-reject")}
+              title={t("modal-actions.no-cancel")}
               onClick={() => {
-                dispatch(toggleRejectModal())
+                dispatch(toggleCancelModal())
               }}
             />
           </div>
@@ -54,4 +61,4 @@ const RejectTransactionModal: FC = ({}) => {
     </Modal>
   )
 }
-export default RejectTransactionModal
+export default CancelModal

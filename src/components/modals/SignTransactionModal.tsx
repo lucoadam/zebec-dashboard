@@ -9,7 +9,7 @@ import { setLoading, toggleSignModal } from "features/modals/signModalSlice"
 const SignTransactionModal: FC = ({}) => {
   const { show, loading } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
-  const { t } = useTranslation("treasurySettings")
+  const { t } = useTranslation("transactions")
   return (
     <Modal
       show={show}
@@ -21,7 +21,7 @@ const SignTransactionModal: FC = ({}) => {
       {
         <>
           <div className="text-content-primary text-subtitle font-semibold">
-            {t("sign-modal-header")}
+            {t("modal-actions.sign-modal-header")}
           </div>
           <div className="pt-[12px] pb-[12px]">
             <Button
@@ -29,7 +29,7 @@ const SignTransactionModal: FC = ({}) => {
               variant="gradient"
               endIcon={loading ? <Icons.Loading /> : <></>}
               disabled={loading}
-              title={loading ? t("signing") : t("yes-sign")}
+              title={loading ? t("modal-actions.signing") : t("modal-actions.yes-sign")}
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
@@ -43,7 +43,7 @@ const SignTransactionModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("no-sign")}
+              title={t("modal-actions.no-sign")}
               onClick={() => {
                 dispatch(toggleSignModal())
               }}

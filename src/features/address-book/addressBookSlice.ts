@@ -34,7 +34,7 @@ export const fetchAddressBook = createAsyncThunk(
 export const saveAddressBook = createAsyncThunk(
   "addressBook/saveAddressBook",
   async () => {
-    const response = await axios.get(
+    const response = await axios.post(
       "https://jsonplaceholder.typicode.com/addressBook"
     )
     return response.data
@@ -43,7 +43,7 @@ export const saveAddressBook = createAsyncThunk(
 export const deleteAddressBook = createAsyncThunk(
   "addressBook/deleteAddressBook",
   async () => {
-    const response = await axios.get(
+    const response = await axios.delete(
       "https://jsonplaceholder.typicode.com/addressBook"
     )
     return response.data
