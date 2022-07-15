@@ -5,7 +5,8 @@ import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import Head from "next/head"
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useState } from "react"
+import ReactTooltip from "react-tooltip"
 import Navbar from "./Navbar"
 import TPSHeader from "./TPSHeader"
 
@@ -22,6 +23,14 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
   useEffect(() => {
     dispatch(fetchTokens())
   }, [dispatch])
+
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+    setTimeout(() => {
+      ReactTooltip.rebuild()
+    }, 30)
+  }, [])
 
   useEffect(() => {
     if (tokens.length > 0 && walletObject.publicKey) {
@@ -45,6 +54,14 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
 
       {/* Fixed Divs */}
       <Toasts />
+      {isMounted && (
+        <ReactTooltip
+          className="!px-2 !py-1 !rounded"
+          backgroundColor="#2b2d33fa"
+          arrowColor="#2b2d33fa"
+          place="bottom"
+        />
+      )}
     </>
   )
 }
