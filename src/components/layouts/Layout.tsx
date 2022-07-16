@@ -16,7 +16,7 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
     setIsMounted(true)
     setTimeout(() => {
       ReactTooltip.rebuild()
-    }, 30)
+    }, 1500)
   }, [])
 
   return (

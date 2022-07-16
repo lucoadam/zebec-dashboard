@@ -1,13 +1,12 @@
 import { Tab } from "components/shared"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import ReactTooltip from "react-tooltip"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"
 import { Pagination,RowsPerPage } from "components/shared"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
-
-
 
 const transactionTabs = [
   {
@@ -33,6 +32,10 @@ export const Transactions = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [noOfRows, setNoOfRows] = useState(10)
   const noOfOptions = [10, 20, 30, 40]
+
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [activePage])
 
   return (
     <div className="w-full">
