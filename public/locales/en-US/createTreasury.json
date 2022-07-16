@@ -21,7 +21,9 @@
     },
     "buttons": {
       "choose-from-address-book": "Choose from address book"
-    }
+    },
+    "search-address-book": "Search address book",
+    "empty-address-book": "The addresses you save will appear here. Ready to add your first address?"
   },
   "third-steper": {
     "title": "Review",

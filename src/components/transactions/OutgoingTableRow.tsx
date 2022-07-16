@@ -1,15 +1,14 @@
-import React, { FC, Fragment, useRef } from "react"
-import Image from "next/image"
-import { useTranslation } from "next-i18next"
-import { Button, IconButton } from "components/shared"
-import { toSubstring } from "utils"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-
+import { Button, IconButton } from "components/shared"
+import { useTranslation } from "next-i18next"
+import Image from "next/image"
+import { FC, Fragment, useRef } from "react"
+import { toSubstring } from "utils"
 import { useAppDispatch } from "app/hooks"
-import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
-import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number
@@ -47,7 +46,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w85">
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">P</div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -61,13 +60,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w-61">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="px-6 py-5 w-full">
+          <td className="px-6 py-5 min-w-61">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
               1AdXF3...DuV15{" "}
               <IconButton

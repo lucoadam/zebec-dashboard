@@ -7,9 +7,9 @@ import {
 import counterSlice from "features/count/counterSlice"
 import exportSlice from "features/export-report/exportSlice"
 import layoutSlice from "features/layout/layoutSlice"
-import cancelModalSlice from "features/modals/cancelModal/cancelModalSlice"
-import pauseModalSlice from "features/modals/pauseModal/pauseModalSlice"
-import resumeModalSlice from "features/modals/resumeModal/resumeModalSlice"
+import cancelModalSlice from "features/modals/cancelModalSlice"
+import pauseModalSlice from "features/modals/pauseModalSlice"
+import resumeModalSlice from "features/modals/resumeModalSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
@@ -19,6 +19,8 @@ import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
 import toastsSlice from "features/toasts/toastsSlice"
 import commonSlice from "features/common/commonSlice"
+import rejectModalSlice from "features/modals/rejectModalSlice"
+import signModalSlice from "features/modals/signModalSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -35,7 +37,9 @@ const combineReducer = combineReducers({
   exportReport: exportSlice,
   pause: pauseModalSlice,
   cancel: cancelModalSlice,
-  resume: resumeModalSlice
+  resume: resumeModalSlice,
+  rejectTransaction: rejectModalSlice,
+  signTransaction: signModalSlice
 })
 
 export const store = configureStore({

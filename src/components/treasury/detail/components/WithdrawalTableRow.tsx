@@ -1,7 +1,10 @@
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import { Badge, Button, CircularProgress, IconButton } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
+import { toggleRejectModal } from "features/modals/rejectModalSlice"
+import { toggleSignModal } from "features/modals/signModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
@@ -46,6 +49,7 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
+  const dispatch = useAppDispatch()
 
   const styles = {
     detailsRow: {
@@ -108,9 +112,11 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
           </td>
           <td className="px-6 py-4 min-w-51">
             <div className="flex gap-x-1 text-body text-content-primary">
-              {transaction.is_in_address_book
-                ? toSubstring(transaction.name, 25, false)
-                : toSubstring(transaction.sender, 5, true)}{" "}
+              <span data-tip={transaction.sender}>
+                {transaction.is_in_address_book
+                  ? toSubstring(transaction.name, 25, false)
+                  : toSubstring(transaction.sender, 5, true)}{" "}
+              </span>
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
@@ -394,8 +400,13 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                     startIcon={<Icons.EditIcon />}
                     variant="gradient"
                     title={t("table.sign-and-approve")}
+                    onClick={() => dispatch(toggleSignModal())}
                   />
-                  <Button startIcon={<Icons.CrossIcon />} title="Reject" />
+                  <Button
+                    startIcon={<Icons.CrossIcon />}
+                    title="Reject"
+                    onClick={() => dispatch(toggleRejectModal())}
+                  />
                 </div>
               </div>
             </div>

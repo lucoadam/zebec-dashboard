@@ -1,17 +1,35 @@
 import { useTranslation } from "next-i18next"
-import React from "react"
+import React, { useState } from "react"
 import { Button, InputField, Table, TableBody } from "components/shared"
 import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
+import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
 
+interface Address {
+  name: string
+  wallet: string[]
+}
+
 export default function AddressesGroup() {
+  const [addresses, setAddresses] = useState<Address>({
+    name: "",
+    wallet: []
+  })
+  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({
-    addressName: Yup.string().required(t("validation:name-required")),
-    walletAddress: Yup.string().required(t("validation:walet-address-required"))
+    name: Yup.string().required(t("validation:name-required")),
+    wallet: Yup.string()
+      .required(t("validation:wallet-required"))
+      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
+        isValidWallet(value)
+      )
+      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
+        wallets.every((wallet) => wallet !== value)
+      )
   })
   const headers = [
     {
@@ -38,7 +56,8 @@ export default function AddressesGroup() {
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data)
+    setAddresses(data)
+    setWallets([...wallets, data.wallet])
   }
 
   return (
@@ -54,8 +73,27 @@ export default function AddressesGroup() {
             onClick={() => alert("Create an Address Group")}
           />
         </div>
-        <div className="grid grid-cols-3 gap-8">
-          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div className="lg:col-span-2 overflow-hidden">
+            <Table headers={headers}>
+              <TableBody className="justify between">
+                {individualAddressBook.data.map((transaction, index) => {
+                  return (
+                    <IndividualAddresesTableRow
+                      key={index}
+                      index={index}
+                      transaction={transaction}
+                    />
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="md:order-last order-first">
+
+          
+          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
             <div className="text-content-secondary text-subtitle font-semibold">
               {t("addressBook:add-an-address")}
             </div>
@@ -64,17 +102,17 @@ export default function AddressesGroup() {
                 <InputField
                   label={t("addressBook:address-name")}
                   className="relative text-content-secondary"
-                  error={!!errors.addressName}
-                  helper={errors.addressName?.message?.toString() || ""}
+                  error={!!errors.name}
+                  helper={errors.name?.message?.toString() || ""}
                 >
                   <div>
                     <input
                       className={`w-full h-10 ${
-                        !!errors.addressName?.message && "error"
+                        !!errors.name?.message && "error"
                       }`}
                       placeholder={t("addressBook:enter-name")}
                       type="text"
-                      {...register("addressName")}
+                      {...register("name")}
                     />
                   </div>
                 </InputField>
@@ -84,17 +122,17 @@ export default function AddressesGroup() {
                 <InputField
                   label={t("addressBook:wallet-address")}
                   className="relative text-content-secondary"
-                  error={!!errors.walletAddress}
-                  helper={errors.walletAddress?.message?.toString() || ""}
+                  error={!!errors.wallet}
+                  helper={errors.wallet?.message?.toString() || ""}
                 >
                   <div>
                     <input
                       className={`w-full h-10 ${
-                        !!errors.walletAddress?.message && "error"
+                        !!errors.wallet?.message && "error"
                       }`}
                       placeholder={t("addressBook:enter-wallet-address")}
                       type="text"
-                      {...register("walletAddress")}
+                      {...register("wallet")}
                     />
                   </div>
                 </InputField>
@@ -112,21 +150,6 @@ export default function AddressesGroup() {
               </div>
             </form>
           </div>
-
-          <div className="col-span-2">
-            <Table headers={headers}>
-              <TableBody className="justify between w-full ">
-                {individualAddressBook.data.map((transaction, index) => {
-                  return (
-                    <IndividualAddresesTableRow
-                      key={index}
-                      index={index}
-                      transaction={transaction}
-                    />
-                  )
-                })}
-              </TableBody>
-            </Table>
           </div>
         </div>
       </div>

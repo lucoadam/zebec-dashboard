@@ -44,7 +44,11 @@ const TreasuryLists: FC = () => {
                     </div>
                     <div className="flex gap-x-1.5 items-center text-content-primary">
                       <Icons.NotebookIcon className="text-base" />
-                      <div>{toSubstring(treasury.multisig_vault, 6, true)}</div>
+                      <div>
+                        <span data-tip={treasury.multisig_vault}>
+                          {toSubstring(treasury.multisig_vault, 6, true)}
+                        </span>
+                      </div>
                       <CopyButton content={treasury.multisig_vault} />
                     </div>
                   </div>

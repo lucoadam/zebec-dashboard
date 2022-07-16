@@ -6,6 +6,7 @@ import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
 import { FC, useEffect, useState } from "react"
+import ReactTooltip from "react-tooltip"
 import * as Icons from "../../assets/icons"
 import * as Images from "../../assets/images"
 import { Button, IconButton } from "../shared"
@@ -59,6 +60,14 @@ const Navbar: FC = () => {
       )
     }
   }
+
+  useEffect(() => {
+    if (useWalletObject.connected) {
+      setTimeout(() => {
+        ReactTooltip.rebuild()
+      }, 500)
+    }
+  }, [useWalletObject])
 
   const handleConnectWallet: () => void = () => {
     useWalletObject.wallet

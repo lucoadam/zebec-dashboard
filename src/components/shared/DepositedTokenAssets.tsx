@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
@@ -13,6 +14,8 @@ interface DepositedTokenAssetsProps {
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
   const { tableMaxHeight, tokens, balanceTokens } = props
+  const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
+
   const [search, setSearch] = useState("")
 
   const filterTokens = () => {
@@ -83,18 +86,36 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                       <td className="pl-4 pb-6 pt-3">
                         <div className="flex flex-col gap-y-2 mt-1">
                           <div className=" text-subtitle-sm text-content-primary font-medium">
-                            {formatCurrency(
-                              getUsdBalance(balanceTokens, token.symbol),
-                              "$"
-                            )}
+                            <span
+                              data-tip={formatCurrency(
+                                getUsdBalance(
+                                  tokensPrice,
+                                  balanceTokens,
+                                  token.symbol
+                                ),
+                                "$"
+                              )}
+                            >
+                              {formatCurrency(
+                                getUsdBalance(
+                                  tokensPrice,
+                                  balanceTokens,
+                                  token.symbol
+                                ),
+                                "$"
+                              )}
+                            </span>
                           </div>
-                          <div
-                            data-tip={getBalance(balanceTokens, token.symbol)}
-                            className=" text-caption text-content-contrast"
-                          >
-                            {formatCurrency(
-                              getBalance(balanceTokens, token.symbol)
-                            )}{" "}
+                          <div className=" text-caption text-content-contrast">
+                            <span
+                              data-tip={getBalance(balanceTokens, token.symbol)}
+                            >
+                              {formatCurrency(
+                                getBalance(balanceTokens, token.symbol),
+                                "",
+                                4
+                              )}
+                            </span>{" "}
                             {token.symbol}
                           </div>
                         </div>
@@ -103,7 +124,11 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                         <div className="flex flex-col gap-y-2 mt-1">
                           <div className=" text-subtitle-sm text-content-primary font-medium">
                             {formatCurrency(
-                              getUsdBalance(balanceTokens, token.symbol),
+                              getUsdBalance(
+                                tokensPrice,
+                                balanceTokens,
+                                token.symbol
+                              ),
                               "$"
                             )}
                           </div>

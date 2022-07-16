@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PublicKey } from "@solana/web3.js"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
-import { getTokensUSDPrice } from "utils/getTokensPrice"
 import { RootState } from "../../app/store"
 import { ZebecTokenState } from "./zebecBalanceSlice.d"
 
@@ -32,14 +31,9 @@ export const fetchZebecBalance: any = createAsyncThunk(
       tokens
     )
 
-    // fetch USD price of tokens
-    const tokensPrice = await getTokensUSDPrice(tokens)
     return tokens.map((token) => ({
       symbol: token.symbol,
-      balance: tokensBalance[token.mint] || 0,
-      usdBalance: tokensPrice[token.mint]
-        ? (tokensBalance[token.mint] || 0) * tokensPrice[token.mint]
-        : null
+      balance: tokensBalance[token.mint] || 0
     }))
   }
 )
