@@ -1,3 +1,4 @@
+import { useWallet } from "@solana/wallet-adapter-react"
 import * as Icons from "assets/icons"
 import * as AvatarImages from "assets/images/avatars"
 import { IconButton } from "components/shared"
@@ -14,6 +15,7 @@ const OwnerLists: FC<{
   showCopy?: boolean
   className?: string
 }> = ({ owners, setOwners, maxItems = 3, showCopy, className = "" }) => {
+  const { publicKey } = useWallet()
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
@@ -57,15 +59,19 @@ const OwnerLists: FC<{
                   {showCopy && <CopyButton content={owner.wallet} />}
                 </div>
               </div>
-              {setOwners && (
-                <IconButton
-                  onClick={() => {
-                    setOwners(owners.filter((o) => o.wallet !== owner.wallet))
-                  }}
-                  className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
-                  icon={<Icons.CrossIcon className="text-base" />}
-                />
-              )}
+              {setOwners &&
+                !(
+                  owners.length > 1 && owner.wallet === publicKey?.toString()
+                ) && (
+                  <IconButton
+                    onClick={() => {
+                      setOwners(owners.filter((o) => o.wallet !== owner.wallet))
+                    }}
+                    type="button"
+                    className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
+                    icon={<Icons.CrossIcon className="text-base" />}
+                  />
+                )}
             </div>
           </div>
         )

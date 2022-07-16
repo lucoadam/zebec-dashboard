@@ -1,28 +1,63 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import * as Icons from "assets/icons"
-import { Button, InputField } from "components/shared"
+import {
+  Button,
+  CollapseDropdown,
+  EmptyDataState,
+  InputField
+} from "components/shared"
 import SelectField from "components/shared/SelectField"
 import { constants } from "constants/constants"
+import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import React, { FC } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { toSubstring } from "utils"
 import { isValidWallet } from "utils/isValidtWallet"
 import * as Yup from "yup"
 import { Owner, StepsComponentProps } from "../CreateTreasury.d"
 import OwnerLists from "../OwnerLists"
+
+const addressBook = [
+  {
+    name: "Alice",
+    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv"
+  },
+  {
+    name: "Bob",
+    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ"
+  },
+  {
+    name: "Charlie",
+    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6"
+  },
+  {
+    name: "Dave",
+    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V"
+  },
+  {
+    name: "Eve",
+    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7a"
+  }
+]
 
 const AddOwners: FC<StepsComponentProps> = ({
   setCurrentStep,
   setTreasury,
   treasury
 }) => {
+  const receiverDropdownWrapper = useRef(null)
   const useWalletObject = useWallet()
 
   const { t } = useTranslation()
 
-  const [owners, setOwners] = React.useState<Owner[]>(treasury.owners)
-  const [selectError, setSelectionError] = React.useState<boolean>(false)
+  const [owners, setOwners] = useState<Owner[]>(treasury.owners)
+  const [checkedOwners, setCheckedOwners] = useState<Owner[]>([])
+  const [selectError, setSelectionError] = useState<boolean>(false)
+  const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
+  const [receiverSearchData, setReceiverSearchData] = useState("")
+
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required(t("validation:name-required"))
@@ -43,19 +78,20 @@ const AddOwners: FC<StepsComponentProps> = ({
     formState: { errors },
     reset,
     handleSubmit,
-    setValue
+    setValue,
+    trigger
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(validationSchema)
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (owners.length === 0) {
       setValue("wallet", useWalletObject?.publicKey?.toString())
     }
   }, [useWalletObject, owners, setValue])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTreasury((treasury) => ({
       ...treasury,
       minValidator: owners.length
@@ -73,6 +109,22 @@ const AddOwners: FC<StepsComponentProps> = ({
     }
     reset()
   }
+
+  const handleReceiverClose = () => {
+    setToggleReceiverDropdown(false)
+  }
+  useClickOutside(receiverDropdownWrapper, {
+    onClickOutside: handleReceiverClose
+  })
+  const getFilteredAddressBook = () =>
+    addressBook
+      .filter((user) =>
+        user.name.toLowerCase().includes(receiverSearchData.toLowerCase())
+      )
+      .filter(
+        (user) => !owners.map((owner) => owner.wallet).includes(user.address)
+      )
+
   return (
     <>
       <form
@@ -137,25 +189,119 @@ const AddOwners: FC<StepsComponentProps> = ({
                     type="submit"
                     className="w-7 h-7 grid ml-2 place-content-center border border-outline rounded-full cursor-pointer bg-primary"
                   >
-                    <Icons.AddOwnerIcon className="text-base" />
+                    <Icons.AddOwnerIcon className="text-base text-content-primary" />
                   </button>{" "}
                 </div>
               </InputField>
             </div>
           </div>
-          {/* <div className="w-full md:w-7 pt-2.5">
-           
-          </div> */}
         </div>
-        <Button
-          size="small"
-          className="mt-[21px]"
-          title={t(
-            "createTreasury:second-steper.buttons.choose-from-address-book"
-          )}
-          endIcon={<Icons.ArrowIcon className="text-xs" />}
-          type="button"
-        />
+        <div ref={receiverDropdownWrapper} className="mt-[21px] relative">
+          <div
+            onClick={() => {
+              if (toggleReceiverDropdown) setToggleReceiverDropdown(false)
+            }}
+            className="w-full"
+          >
+            <Button
+              size="small"
+              className=""
+              title={t(
+                "createTreasury:second-steper.buttons.choose-from-address-book"
+              )}
+              endIcon={<Icons.ArrowIcon className="text-xs" />}
+              onClick={() => {
+                if (owners.length === 0) {
+                  trigger("name")
+                  return
+                }
+                setToggleReceiverDropdown(!toggleReceiverDropdown)
+              }}
+              type="button"
+            />
+          </div>
+
+          <CollapseDropdown
+            show={toggleReceiverDropdown}
+            className="w-full z-[99]"
+            position="left"
+          >
+            <div className="rounded-t-lg bg-background-primary border border-outline">
+              <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+              <input
+                className="is-search w-full h-[48px] bg-background-primary"
+                placeholder={t(
+                  "createTreasury:second-steper.search-address-book"
+                )}
+                type="text"
+                onChange={(e) => setReceiverSearchData(e.target.value)}
+              />
+              <div className="divide-y divide-outline h-[207px] overflow-auto">
+                {getFilteredAddressBook().map((user) => (
+                  <div
+                    key={user.address}
+                    className="w-full h-[68px] flex gap-[15px] border-outline overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                  >
+                    <input
+                      type="checkbox"
+                      className="hover:cursor-pointer h-5 w-5 rounded-sm focus:ring-offset-0 focus:ring-0 shadow-none outline-none border-2 border-outline bg-transparent"
+                      checked={
+                        owners.some((owner) => owner.wallet === user.address)
+                          ? true
+                          : undefined
+                      }
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCheckedOwners([
+                            ...checkedOwners,
+                            {
+                              name: user.name,
+                              wallet: user.address
+                            }
+                          ])
+                        } else {
+                          setCheckedOwners(
+                            checkedOwners.filter(
+                              (owner) => owner.wallet !== user.address
+                            )
+                          )
+                        }
+                      }}
+                    />
+                    <div>
+                      <p className="text-sm text-content-primary">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-content-tertiary">
+                        {toSubstring(user.address, 28, false)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {getFilteredAddressBook().length === 0 && (
+                  <EmptyDataState
+                    className="bg-transparent !px-[56px] !py-[28px] text-sm"
+                    emptyStateClassName="w-[114px] h-[80px]"
+                    messageClassName="w-[239px] mt-2 text-content-primary text-center"
+                    message={t(
+                      "createTreasury:second-steper.empty-address-book"
+                    )}
+                  />
+                )}
+              </div>
+              <div
+                onClick={() => {
+                  setOwners([...owners, ...checkedOwners])
+                  setCheckedOwners([])
+                  setToggleReceiverDropdown(false)
+                }}
+                className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
+              >
+                {t("createTreasury:second-steper.title")}
+              </div>
+            </div>
+          </CollapseDropdown>
+        </div>
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
           {t("createTreasury:added-owners")}
         </p>
@@ -198,6 +344,8 @@ const AddOwners: FC<StepsComponentProps> = ({
             if (owners.length >= 2 && !selectError) {
               setCurrentStep(2)
             } else {
+              trigger("name")
+              trigger("wallet")
               setSelectionError(true)
             }
           }}
