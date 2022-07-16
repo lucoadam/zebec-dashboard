@@ -1,20 +1,20 @@
-import React, { FC, useState } from "react"
-import { useTranslation } from "next-i18next"
-import FilterTabs from "./FilterTabs"
 import { Table, TableBody } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC, useState } from "react"
+import FilterTabs from "./FilterTabs"
 import OutgoingTableRow from "./OutgoingTableRow"
 
-import { outgoingTransactions } from "fakedata"
 import ExportModal from "components/modal/export-report/ExportModal"
+import { outgoingTransactions } from "fakedata"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
-    { label: "transactions:table.progress" },
-    { label: "transactions:table.transaction-date" },
-    { label: "transactions:table.receiver" },
+    { label: "transactions:table.progress", width: "85" },
+    { label: "transactions:table.transaction-date", width: "61" },
+    { label: "transactions:table.receiver", width: "61" },
     { label: "" }
   ]
 

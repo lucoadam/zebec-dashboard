@@ -69,7 +69,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 min-w-60">
             <div className="flex items-center gap-x-2 text-body text-content-primary">
-              1AdXF3...DuV15{" "}
+              <span data-tip="1AdXF32sdfsdsdDsdfDuV15">1AdXF3...DuV15</span>
               <IconButton
                 icon={<Icons.UserAddIcon />}
                 className="bg-background-primary"

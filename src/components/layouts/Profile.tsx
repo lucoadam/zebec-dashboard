@@ -58,7 +58,10 @@ const Profile: FC = () => {
             />
             <div className="flex items-center gap-x-3">
               <div className="flex flex-col items-start justify-between h-full">
-                <div className="text-avatar-title font-medium text-content-primary">
+                <div
+                  data-tip={useWalletObject?.publicKey?.toString()}
+                  className="text-avatar-title font-medium text-content-primary"
+                >
                   {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
@@ -85,7 +88,10 @@ const Profile: FC = () => {
               />
               <div className="flex items-start gap-x-3">
                 <div className="flex flex-col justify-between h-full">
-                  <div className="text-avatar-title font-medium text-content-primary">
+                  <div
+                    data-tip={useWalletObject?.publicKey?.toString()}
+                    className="text-avatar-title font-medium text-content-primary"
+                  >
                     {toSubstring(
                       useWalletObject?.publicKey?.toString(),
                       4,

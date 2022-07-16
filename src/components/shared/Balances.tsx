@@ -2,9 +2,9 @@ import * as Icons from "assets/icons"
 import { tokenBalances, weeklyBalances } from "fakedata"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
-import { formatCurrency, splitNumber } from "utils"
-import { Button } from "./Button"
+import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
 import { DepositedBalanceProps } from "./Balances.d"
+import { Button } from "./Button"
 /* Deposited Balance */
 export const DepositedBalance: FC<DepositedBalanceProps> = ({
   balance = 0
@@ -17,9 +17,11 @@ export const DepositedBalance: FC<DepositedBalanceProps> = ({
       </div>
       <div>
         <div className=" text-heading-3 text-content-primary font-semibold">
-          ${depositedBalance[0]}
-          <span className=" text-subtitle text-content-contrast">
-            .{depositedBalance[1]}
+          <span data-tip={displayExponentialNumber(balance)}>
+            ${depositedBalance[0]}
+            <span className=" text-subtitle text-content-contrast">
+              .{depositedBalance[1]}
+            </span>
           </span>
         </div>
         {/* <p className="text-xs font-normal leading-3 text-content-contrast">
@@ -91,7 +93,13 @@ export const Tokens: FC<{
         <div className="flex gap-x-1">
           <Icons.ArrowDownLeftIcon className="text-base text-success-content mt-auto transform -translate-y-1" />
           <div className="text-heading-3 text-content-primary font-semibold">
-            {formatCurrency(tokenBalances[currentToken]?.incoming ?? 0, "$")}
+            <span
+              data-tip={displayExponentialNumber(
+                tokenBalances[currentToken]?.incoming
+              )}
+            >
+              {formatCurrency(tokenBalances[currentToken]?.incoming ?? 0, "$")}
+            </span>
           </div>
         </div>
       </div>
@@ -103,7 +111,13 @@ export const Tokens: FC<{
         <div className="flex gap-x-1">
           <Icons.ArrowUpRightIcon className="text-base text-error-content mt-auto transform -translate-y-1" />
           <div className=" text-heading-3 text-content-primary font-semibold">
-            {formatCurrency(tokenBalances[currentToken]?.outgoing ?? 0, "$")}
+            <span
+              data-tip={displayExponentialNumber(
+                tokenBalances[currentToken]?.outgoing
+              )}
+            >
+              {formatCurrency(tokenBalances[currentToken]?.outgoing ?? 0, "$")}
+            </span>
           </div>
         </div>
       </div>
@@ -138,10 +152,16 @@ export const ActivityThisWeek: FC<{
             <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  {formatCurrency(
-                    weeklyBalances[currentToken]?.incoming ?? 0,
-                    "$"
-                  )}
+                  <span
+                    data-tip={displayExponentialNumber(
+                      weeklyBalances[currentToken]?.incoming
+                    )}
+                  >
+                    {formatCurrency(
+                      weeklyBalances[currentToken]?.incoming ?? 0,
+                      "$"
+                    )}
+                  </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
                   140.59 {currentToken}
@@ -165,10 +185,16 @@ export const ActivityThisWeek: FC<{
             <td className="text-right pb-8">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  {formatCurrency(
-                    weeklyBalances[currentToken]?.outgoing ?? 0,
-                    "$"
-                  )}
+                  <span
+                    data-tip={displayExponentialNumber(
+                      weeklyBalances[currentToken]?.outgoing
+                    )}
+                  >
+                    {formatCurrency(
+                      weeklyBalances[currentToken]?.outgoing ?? 0,
+                      "$"
+                    )}
+                  </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
                   140.59 {currentToken}
@@ -192,10 +218,16 @@ export const ActivityThisWeek: FC<{
             <td className="text-right">
               <div className="flex flex-col">
                 <div className=" text-subtitle-sm text-content-primary font-medium">
-                  {formatCurrency(
-                    weeklyBalances[currentToken]?.withdrawn ?? 0,
-                    "$"
-                  )}
+                  <span
+                    data-tip={displayExponentialNumber(
+                      weeklyBalances[currentToken]?.withdrawn
+                    )}
+                  >
+                    {formatCurrency(
+                      weeklyBalances[currentToken]?.withdrawn ?? 0,
+                      "$"
+                    )}
+                  </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
                   140.59 {currentToken}

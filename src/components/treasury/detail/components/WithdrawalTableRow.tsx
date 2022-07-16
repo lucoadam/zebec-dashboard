@@ -108,9 +108,11 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
           </td>
           <td className="px-6 py-4 min-w-51">
             <div className="flex gap-x-1 text-body text-content-primary">
-              {transaction.is_in_address_book
-                ? toSubstring(transaction.name, 25, false)
-                : toSubstring(transaction.sender, 5, true)}{" "}
+              <span data-tip={transaction.sender}>
+                {transaction.is_in_address_book
+                  ? toSubstring(transaction.name, 25, false)
+                  : toSubstring(transaction.sender, 5, true)}{" "}
+              </span>
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}

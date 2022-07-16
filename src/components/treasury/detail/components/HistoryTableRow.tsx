@@ -7,10 +7,10 @@ import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { formatCurrency, toSubstring } from "utils"
 
-import { useDispatch } from "react-redux"
-import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
 import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
+import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import { useDispatch } from "react-redux"
 
 interface HistoryTableRowProps {
   index: number
@@ -91,9 +91,11 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
           </td>
           <td className="px-6 py-4 min-w-51">
             <div className="flex items-center gap-x-1 text-body text-content-primary">
-              {transaction.is_in_address_book
-                ? toSubstring(transaction.name, 22, false)
-                : toSubstring(transaction.sender, 6, true)}{" "}
+              <span data-tip={transaction.sender}>
+                {transaction.is_in_address_book
+                  ? toSubstring(transaction.name, 22, false)
+                  : toSubstring(transaction.sender, 6, true)}{" "}
+              </span>
               {!transaction.is_in_address_book && (
                 <IconButton
                   icon={<Icons.UserAddIcon />}
@@ -182,7 +184,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                           className="rounded-full"
                         />
                         <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                          <span data-tip="0x4f10x4f1U700eU700e">
+                            {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                          </span>
                         </div>
                         <IconButton icon={<Icons.CopyIcon />} />
                       </div>
@@ -202,7 +206,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                           className="rounded-full"
                         />
                         <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                          <span data-tip="0x4f10x4f1U700eU700e">
+                            {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                          </span>
                         </div>
                         <IconButton icon={<Icons.CopyIcon />} />
                       </div>
@@ -249,14 +255,16 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.total-amount")}
                       </div>
-                      <div className="text-content-primary">20,000 SOL</div>
+                      <div data-tip="20000" className="text-content-primary">
+                        20,000 SOL
+                      </div>
                     </div>
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
                         {t("table.amount-received")}
                       </div>
-                      <div className="text-content-primary">
+                      <div data-tip="10000" className="text-content-primary">
                         10,000 SOL (50%)
                       </div>
                     </div>
@@ -335,7 +343,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                               className="rounded-full"
                             />
                             <div className="">
-                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                              <span data-tip="0x4f10x4f1U700eU700e">
+                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                              </span>
                             </div>
                             <div className="text-content-tertiary">
                               10 min ago
@@ -377,7 +387,9 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                               className="rounded-full"
                             />
                             <div className="">
-                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                              <span data-tip="0x4f10x4f1U700eU700e">
+                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                              </span>
                             </div>
                             <div className="text-content-tertiary">
                               10 min ago
