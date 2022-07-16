@@ -1,7 +1,4 @@
 import Layout from "components/layouts/Layout"
-import CancelModal from "components/modal/outgoing-modals/CancelModal/CancelModal"
-import PauseModal from "components/modal/outgoing-modals/PauseModal/PauseModal"
-import ResumeModal from "components/modal/outgoing-modals/ResumeModal/ResumeModal"
 import { Tab } from "components/shared"
 import Incoming from "components/transactions/Incoming"
 import Outgoing from "components/transactions/Outgoing"
@@ -11,6 +8,9 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import * as Icons from "../assets/icons"
+import CancelModal from "components/modals/CancelModal"
+import PauseModal from "components/modals/PauseModal"
+import ResumeModal from "components/modals/ResumeModal"
 
 const transactionTabs = [
   {

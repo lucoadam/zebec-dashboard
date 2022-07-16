@@ -1,11 +1,12 @@
 import { Tab } from "components/shared"
-import { Pagination } from "components/shared/Pagination"
-import { RowsPerPage } from "components/shared/RowsPerPage"
 import { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { HistoryTransactions } from "./HistoryTransactions"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
+import { HistoryTransactions } from "./HistoryTransactions"
+import { Pagination,RowsPerPage } from "components/shared"
+import RejectTransactionModal from "components/modals/RejectTransactionModal"
+import SignTransactionModal from "components/modals/SignTransactionModal"
 
 const transactionTabs = [
   {
@@ -70,6 +71,8 @@ export const Transactions = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
+      <RejectTransactionModal />
+      <SignTransactionModal />
     </div>
   )
 }

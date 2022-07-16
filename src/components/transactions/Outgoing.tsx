@@ -3,9 +3,8 @@ import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import OutgoingTableRow from "./OutgoingTableRow"
-
-import ExportModal from "components/modal/export-report/ExportModal"
 import { outgoingTransactions } from "fakedata"
+import ExportModal from "components/modals/export-report/ExportModal"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")

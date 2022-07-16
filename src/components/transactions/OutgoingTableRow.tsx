@@ -5,11 +5,10 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { toSubstring } from "utils"
-
 import { useAppDispatch } from "app/hooks"
-import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
-import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
-import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number

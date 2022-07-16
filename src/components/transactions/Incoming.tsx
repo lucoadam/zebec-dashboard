@@ -1,12 +1,11 @@
 import { Table, TableBody } from "components/shared"
-import { Pagination } from "components/shared/Pagination"
-import { RowsPerPage } from "components/shared/RowsPerPage"
+import { Pagination, RowsPerPage } from "components/shared"
 import { incomingTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
-import ExportModal from "components/modal/export-report/ExportModal"
+import ExportModal from "components/modals/export-report/ExportModal"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")

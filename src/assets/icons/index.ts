@@ -49,10 +49,12 @@ import FileIcon from "./other-icons/file.svg"
 import Download from "./other-icons/download.svg"
 import Calendar from "./other-icons/calender.svg"
 import InformationIcon from "./other-icons/information.svg"
+import Envelope from "./other-icons/envelope.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
 export {
+  Envelope,
   Calendar,
   Download,
   IndividualAddress,

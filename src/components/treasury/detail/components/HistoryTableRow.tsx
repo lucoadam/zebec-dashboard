@@ -6,11 +6,12 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { formatCurrency, toSubstring } from "utils"
-
-import { toggleCancelModal } from "features/modals/cancelModal/cancelModalSlice"
-import { togglePauseModal } from "features/modals/pauseModal/pauseModalSlice"
-import { toggleResumeModal } from "features/modals/resumeModal/resumeModalSlice"
-import { useDispatch } from "react-redux"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
+import { toggleSignModal } from "features/modals/signModalSlice"
+import { toggleRejectModal } from "features/modals/rejectModalSlice"
+import { useAppDispatch } from "app/hooks"
 
 interface HistoryTableRowProps {
   index: number
@@ -35,7 +36,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
   handleToggleRow
 }) => {
   const { t } = useTranslation("transactions")
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const detailsRowRef = useRef<HTMLDivElement>(null)
 
   const styles = {
@@ -414,8 +415,13 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                     startIcon={<Icons.EditIcon />}
                     variant="gradient"
                     title={t("table.sign-and-approve")}
+                    onClick={() => dispatch(toggleSignModal())}
                   />
-                  <Button startIcon={<Icons.CrossIcon />} title="Reject" />
+                  <Button
+                    startIcon={<Icons.CrossIcon />}
+                    title="Reject"
+                    onClick={() => dispatch(toggleRejectModal())}
+                  />
                 </div>
               </div>
             </div>

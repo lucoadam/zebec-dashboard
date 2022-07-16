@@ -26,5 +26,15 @@
         "connect-previous-wallet": "Connect with Previous Wallet",
         "connect-different-wallet": "Use a Different Wallet"
     },
-    "zebec-help": "Zebec Help"
+    "zebec-help": "Zebec Help",
+    "notifications":{
+        "notification":"Notification",
+        "notified-on":"Notified on",
+        "email-address":"Email Address",
+        "telegram-username":"Telegram Username",
+        "unsubscribe":"Unsubscribe",
+        "unsubscribe-description":"Don’t want to receive any emails or telegram message about your transactions?",
+        "subscribe": "Subscribe",
+        "update":"Update"
+    }
 }
