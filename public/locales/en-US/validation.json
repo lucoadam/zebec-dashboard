@@ -3,6 +3,8 @@
     "name-required": "Name is required",
     "name-exists": "Name already exists",
     "wallet-required": "Wallet address is required",
+    "email-required":"Email Address is required",
+    "telegram-required":"Telegram username is required",
     "wallet-invalid": "Invalid wallet address",
     "wallet-exists": "Wallet address already exists",
     "at-least-two-owners-required": "At least two owners are required",
