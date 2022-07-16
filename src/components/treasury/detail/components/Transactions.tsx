@@ -3,8 +3,11 @@ import { useState } from "react"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"
-import { Pagination } from "components/shared/Pagination"
-import { RowsPerPage } from "components/shared/RowsPerPage"
+import { Pagination,RowsPerPage } from "components/shared"
+import RejectTransactionModal from "components/modals/RejectTransactionModal"
+import SignTransactionModal from "components/modals/SignTransactionModal"
+
+
 
 const transactionTabs = [
   {
@@ -65,6 +68,8 @@ export const Transactions = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
+      <RejectTransactionModal />
+      <SignTransactionModal />
     </div>
   )
 }

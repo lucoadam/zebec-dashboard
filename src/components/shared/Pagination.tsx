@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, useEffect, useMemo } from "react"
 import * as Icons from "assets/icons"
 
@@ -11,7 +10,7 @@ interface PaginationProps {
 export const Pagination: FC<PaginationProps> = (props) => {
   const { pages, setCurrentPage } = props
   const numberOfPages = useMemo(() => {
-    const numOfPages: any = []
+    const numOfPages: (number | string)[] = []
     for (let i = 1; i <= pages; i++) {
       numOfPages.push(i)
     }
@@ -19,14 +18,16 @@ export const Pagination: FC<PaginationProps> = (props) => {
   }, [pages])
 
   // Current active button number
-  const [currentButton, setCurrentButton] = useState<any>(1)
+  const [currentButton, setCurrentButton] = useState<number | string>(1)
 
   // Array of buttons what we see on the page
-  const [arrOfCurrButtons, setArrOfCurrButtons] = useState<any>([])
+  const [arrOfCurrButtons, setArrOfCurrButtons] = useState<(number | string)[]>(
+    []
+  )
 
   useEffect(() => {
     //Temp no of Pages
-    let tempNumberOfPages: any = [...arrOfCurrButtons]
+    let tempNumberOfPages = [...arrOfCurrButtons]
 
     //Set dots
     const dotsInitial = "..."
@@ -57,8 +58,14 @@ export const Pagination: FC<PaginationProps> = (props) => {
     } else if (currentButton > 3 && currentButton < numberOfPages.length - 1) {
       // from 5 to 8 -> (10 - 2)
 
-      const sliced1 = numberOfPages.slice(currentButton - 2, currentButton) // sliced1 (5-2, 5) -> [4,5]
-      const sliced2 = numberOfPages.slice(currentButton, currentButton + 1) // sliced2 (5, 5+2) -> [6,7]
+      const sliced1 = numberOfPages.slice(
+        Number(currentButton) - 2,
+        Number(currentButton)
+      ) // sliced1 (5-2, 5) -> [4,5]
+      const sliced2 = numberOfPages.slice(
+        Number(currentButton),
+        Number(currentButton) + 1
+      ) // sliced2 (5, 5+2) -> [6,7]
       tempNumberOfPages = [
         1,
         dotsLeft,
@@ -77,21 +84,23 @@ export const Pagination: FC<PaginationProps> = (props) => {
       // or
       // [1, 2, 3, 4, 5, "...", 10].length = 7 - 3 = 4
       // [1, 2, 3, 4, 5, "...", 10][4] = 5 + 1 = 6
-      setCurrentButton(arrOfCurrButtons[arrOfCurrButtons.length - 3] + 1)
+      setCurrentButton(
+        Number(arrOfCurrButtons[arrOfCurrButtons.length - 3]) + 1
+      )
     } else if (currentButton === dotsRight) {
       // [1, "...", 5, 6, 7, 8, "...", 10].length = 6 - 3  = 3
       // arrOfCurrButtons[3] = 6 + 2 = 8
-      setCurrentButton(arrOfCurrButtons[3] + 2)
+      setCurrentButton(Number(arrOfCurrButtons[3]) + 2)
     } else if (currentButton === dotsLeft) {
       // [1, "...", 5, 6, 7, 8, "...", 10].length = 6 - 3  = 3
       // arrOfCurrButtons[3] = 6 - 2 = 4
-      setCurrentButton(arrOfCurrButtons[3] - 2)
+      setCurrentButton(Number(arrOfCurrButtons[3]) - 2)
     } else if (numberOfPages.length < currentButton) {
       setCurrentButton(1)
     }
 
     setArrOfCurrButtons(tempNumberOfPages)
-    setCurrentPage(currentButton)
+    setCurrentPage(Number(currentButton))
     // eslint-disable-next-line
   }, [currentButton, numberOfPages, numberOfPages.length])
 
@@ -104,14 +113,14 @@ export const Pagination: FC<PaginationProps> = (props) => {
             currentButton === 1 ? "opacity-50 cursor-default" : "cursor-pointer"
           }`}
           onClick={() => {
-            setCurrentButton((prev: number) => (prev <= 1 ? prev : prev - 1))
+            setCurrentButton((prev) => (prev <= 1 ? prev : Number(prev) - 1))
           }}
         >
           <Icons.PaginationLeftArrow />
         </button>
 
         {/* Array of Current Buttons */}
-        {arrOfCurrButtons.map((item: any, index: any) => {
+        {arrOfCurrButtons.map((item, index) => {
           return (
             <div
               key={index}
@@ -139,8 +148,8 @@ export const Pagination: FC<PaginationProps> = (props) => {
               : "cursor-pointer"
           }`}
           onClick={() =>
-            setCurrentButton((prev: number) =>
-              prev >= numberOfPages.length ? prev : prev + 1
+            setCurrentButton((prev) =>
+              prev >= Number(numberOfPages.length) ? prev : Number(prev) + 1
             )
           }
         >

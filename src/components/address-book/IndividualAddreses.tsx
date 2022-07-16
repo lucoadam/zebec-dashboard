@@ -73,8 +73,27 @@ export default function IndividualAddresses() {
             onClick={() => alert("Create an Address Group")}
           /> */}
         </div>
-        <div className="grid grid-cols-3 gap-8">
-          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div className="lg:col-span-2 overflow-hidden">
+            <Table headers={headers}>
+              <TableBody className="justify between">
+                {individualAddressBook.data.map((transaction, index) => {
+                  return (
+                    <IndividualAddresesTableRow
+                      key={index}
+                      index={index}
+                      transaction={transaction}
+                    />
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="md:order-last order-first">
+
+          
+          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
             <div className="text-content-secondary text-subtitle font-semibold">
               {t("addressBook:add-an-address")}
             </div>
@@ -131,21 +150,6 @@ export default function IndividualAddresses() {
               </div>
             </form>
           </div>
-
-          <div className="col-span-2">
-            <Table headers={headers}>
-              <TableBody className="justify between">
-                {individualAddressBook.data.map((transaction, index) => {
-                  return (
-                    <IndividualAddresesTableRow
-                      key={index}
-                      index={index}
-                      transaction={transaction}
-                    />
-                  )
-                })}
-              </TableBody>
-            </Table>
           </div>
         </div>
       </div>

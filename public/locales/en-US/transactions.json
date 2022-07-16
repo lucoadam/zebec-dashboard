@@ -64,7 +64,7 @@
     "remaining": "Remaining",
     "show-all-remaining": "Show all remaining"
   },
-  "outgoing-actions": {
+  "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",
     "yes-pause": "Yes, Pause",
     "no-pause": "No, Don’t Pause",
@@ -76,6 +76,14 @@
     "yes-resume": "Yes, Resume",
     "resuming": "Resuming",
     "cancelling": "Cancelling",
-    "pausing": "Pausing"
+    "pausing": "Pausing",
+    "reject-modal-header": "Are you sure you wnat to reject transaction?",
+    "signing":"Signing",
+    "yes-sign":"Yes, Sign",
+    "no-sign":"No, Dont Sign",
+    "sign-modal-header":"Are you sure you wnat to sign transaction?",
+    "rejecting": "Rejecting",
+    "yes-reject":"Yes, Reject",
+    "no-reject":"No, Reject"
   }
 }
