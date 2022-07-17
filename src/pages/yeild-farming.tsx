@@ -3,13 +3,16 @@ import type { GetStaticProps, NextPage } from "next"
 import { useAppDispatch } from "app/hooks"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { toast } from "features/toasts/toastsSlice"
-import { Button } from "components/shared"
+import { Breadcrumb, BreadcrumbRightContent, Button } from "components/shared"
 
 const YeildFarming: NextPage = () => {
   const dispatch = useAppDispatch()
   return (
     <Layout pageTitle="Yeild Farming">
       <div className="container pt-10">
+        <Breadcrumb title="Yield Farm" arrowBack={true}>
+          <BreadcrumbRightContent>Tests</BreadcrumbRightContent>
+        </Breadcrumb>
         <Button
           title="Success Toast"
           onClick={() => {

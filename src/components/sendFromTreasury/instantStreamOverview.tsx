@@ -49,13 +49,13 @@ export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
           <Button
             variant="default"
             size="small"
-            title={t("send:check-faq")}
+            title={`${t("send:check-faq")}`}
             endIcon={<Icons.OutsideLinkIcon />}
           />
           <Button
             variant="default"
             size="small"
-            title={t("send:join-discord")}
+            title={`${t("send:join-discord")}`}
             endIcon={<Icons.OutsideLinkIcon />}
           />
         </div>

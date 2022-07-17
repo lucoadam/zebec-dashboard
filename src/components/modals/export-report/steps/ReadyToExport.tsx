@@ -35,7 +35,7 @@ const ReadyToExport: FC<exportProps> = ({ setCurrentStep }) => {
         className={`w-full `}
         variant="gradient"
         type="submit"
-        title={t("exportReport:download-report")}
+        title={`${t("exportReport:download-report")}`}
         endIcon={<Icons.Download />}
         onClick={() => {
           dispatch(toggleExportModal())

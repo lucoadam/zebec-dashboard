@@ -1,6 +1,7 @@
 {
     "create-address-book":"Create an Address Group",
     "address-book":"Address Book",
+    "address-group":"Address Group",
     "name":"NAME",
     "address": "WALLET ADDRESS",
     "actions":"ACTIONS",

@@ -100,7 +100,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
               />
               <Button
                 size="small"
-                title={t("withdraw.max")}
+                title={`${t("withdraw.max")}`}
                 className={`absolute right-2.5 top-2 text-content-primary `}
                 onClick={() => {
                   setWithdrawAmount(10)
@@ -128,7 +128,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
             className={`w-full`}
             variant="gradient"
             type="submit"
-            title={t("withdraw.withdraw")}
+            title={`${t("withdraw.withdraw")}`}
           />
         </div>
       </form>

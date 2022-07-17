@@ -31,8 +31,8 @@ const ResumeModal: FC = ({}) => {
               disabled={loading}
               title={
                 loading
-                  ? t("modal-actions.resuming")
-                  : t("modal-actions.yes-resume")
+                  ? `${t("modal-actions.resuming")}`
+                  : `${t("modal-actions.yes-resume")}`
               }
               onClick={() => {
                 dispatch(setLoading(true))
@@ -47,7 +47,7 @@ const ResumeModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("modal-actions.no-resume")}
+              title={`${t("modal-actions.no-resume")}`}
               onClick={() => {
                 dispatch(toggleResumeModal())
               }}

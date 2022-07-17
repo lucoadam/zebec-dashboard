@@ -22,7 +22,7 @@ const ArchiveSafeLists = () => {
   const { t } = useTranslation("archiveTreasury")
   return (
     <>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {treasuries.map((treasury, index) => {
           return (
             <div
@@ -40,7 +40,7 @@ const ArchiveSafeLists = () => {
                 <div className="text-subtitle text-content-primary font-semibold">
                   {treasury.safe_name}
                 </div>
-                <div className="flex gap-x-3 items-center">
+                <div className="flex gap-x-3 items-center flex-wrap">
                   <div className="flex gap-x-1.5 items-center text-content-primary">
                     <Icons.UserGroupIcon className="text-base" />
                     <div>{treasury.owners.length} Owners</div>
@@ -54,7 +54,7 @@ const ArchiveSafeLists = () => {
               </div>
               <div className="pt-6">
                 <Button
-                  title={t("unarchive-safe")}
+                  title={`${t("unarchive-safe")}`}
                   className="w-full"
                   endIcon={<Icons.Unarchive className="text-content-primary" />}
                   onClick={() => {
@@ -82,13 +82,13 @@ const ArchiveSafeLists = () => {
             <Button
               className={`w-full font-semibold`}
               variant="gradient"
-              title={t("yes-archive")}
+              title={`${t("yes-archive")}`}
             />
           </div>
           <div className="">
             <Button
               className={`w-full font-semibold`}
-              title={t("cancel")}
+              title={`${t("cancel")}`}
               onClick={() => {
                 setIsOpen(!isOpen)
               }}

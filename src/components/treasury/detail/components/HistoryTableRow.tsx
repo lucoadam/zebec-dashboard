@@ -414,7 +414,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                   <Button
                     startIcon={<Icons.EditIcon />}
                     variant="gradient"
-                    title={t("table.sign-and-approve")}
+                    title={`${t("table.sign-and-approve")}`}
                     onClick={() => dispatch(toggleSignModal())}
                   />
                   <Button

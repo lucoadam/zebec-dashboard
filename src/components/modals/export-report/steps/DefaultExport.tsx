@@ -201,7 +201,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
             className={`w-full`}
             variant="gradient"
             type="submit"
-            title={t("exportReport:prepare-report")}
+            title={`${t("exportReport:prepare-report")}`}
           />
         </div>
       </form>

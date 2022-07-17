@@ -1,4 +1,4 @@
-import { IconButton } from "components/shared"
+import { Breadcrumb, IconButton } from "components/shared"
 import ArchiveSafeLists from "components/treasury/archived-safes/ArchiveSafeLists"
 import { NextPage } from "next"
 import { useTranslation } from "next-i18next"
@@ -15,21 +15,13 @@ const ArchiveSafePage: NextPage = () => {
     <Layout pageTitle="Zebec - Archived Safes">
       <div className="pt-[76px]">
         <div className="container w-full">
-          <div className="flex items-center gap-x-4 px-8 pb-10">
-            <IconButton
-              className=""
-              onClick={() => {
-                router.push("/treasury")
-              }}
-              variant="plain"
-              icon={<LeftArrowIcon className="cursor-pointer" />}
-            />
+          <Breadcrumb
+            title={`${t("treasurySettings:archive-safe")}`}
+            arrowBack={true}
+            className="mb-9"
+          />
 
-            <h4 className="text-heading-4 font-semibold text-content-primary">
-              {`${t("treasurySettings:archive-safe")}`}
-            </h4>
-          </div>
-
+          {/* Archived Safes List */}
           <ArchiveSafeLists />
         </div>
       </div>

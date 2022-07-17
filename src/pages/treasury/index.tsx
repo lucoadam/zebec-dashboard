@@ -1,6 +1,6 @@
 import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
-import { Button } from "components/shared"
+import { Breadcrumb, BreadcrumbRightContent, Button } from "components/shared"
 import TreasuryLists from "components/treasury/TreasuryLists"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
@@ -14,26 +14,27 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <div className="flex justify-between items-center px-3.5 pb-9">
-            <h4 className="text-heading-4 font-semibold text-content-primary">
-              {t("treasury:title")}
-            </h4>
-            <div className="flex gap-x-3">
-              <Link href="/treasury/create">
-                <Button
-                  title="Create New Treasury"
-                  variant="gradient"
-                  endIcon={<Icons.PlusIncircleIcon />}
-                />
-              </Link>
-              <Link href="/treasury/archived-safes">
-                <Button
-                  title="See Archived Safe"
-                  endIcon={<Icons.TrashIcon />}
-                />
-              </Link>
-            </div>
-          </div>
+          <Breadcrumb title={`${t("treasury:title")}`} className="mb-9">
+            <BreadcrumbRightContent>
+              <div className="flex gap-x-3">
+                <Link href="/treasury/create">
+                  <Button
+                    title={`${t("treasury:create-new-treasury")}`}
+                    variant="gradient"
+                    endIcon={<Icons.PlusIncircleIcon />}
+                  />
+                </Link>
+                <Link href="/treasury/archived-safes">
+                  <Button
+                    title={`${t("treasury:see-archived-safe")}`}
+                    endIcon={<Icons.TrashIcon />}
+                  />
+                </Link>
+              </div>
+            </BreadcrumbRightContent>
+          </Breadcrumb>
+
+          {/* Treasury Lists */}
           <TreasuryLists />
         </div>
       </div>

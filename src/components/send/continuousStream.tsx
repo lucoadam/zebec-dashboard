@@ -369,7 +369,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   {!showRemarks && (
                     <Button
                       size="small"
-                      title={t("send:add-remarks")}
+                      title={`${t("send:add-remarks")}`}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       endIcon={<Icons.PlusIncircleIcon />}
                       onClick={() => setShowRemarks(true)}
@@ -468,7 +468,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   />
                   <Button
                     size="small"
-                    title={t("send:remove-remarks")}
+                    title={`${t("send:remove-remarks")}`}
                     className="absolute right-[8px] top-[8px] text-content-primary"
                     endIcon={<Icons.CrossIcon />}
                     onClick={() => setShowRemarks(false)}
@@ -617,7 +617,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   {!enableStreamRate && (
                     <Button
                       size="small"
-                      title={t("send:max")}
+                      title={`${t("send:max")}`}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       onClick={() =>
                         setValue(
@@ -869,7 +869,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <Button
               className="w-full"
               variant="gradient"
-              title={t("send:send")}
+              title={`${t("send:send")}`}
               type="submit"
             />
           </div>

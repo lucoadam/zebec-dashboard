@@ -35,7 +35,7 @@ const ReviewTreasury: FC<StepsComponentProps> = (props) => {
         </div>
       </div>
       <Button
-        title={t("common:buttons.confirm-and-create-treasury")}
+        title={`${t("common:buttons.confirm-and-create-treasury")}`}
         variant="gradient"
         type="submit"
         size="medium"
@@ -47,7 +47,7 @@ const ReviewTreasury: FC<StepsComponentProps> = (props) => {
         }}
       />
       <Button
-        title={t("common:buttons.go-back")}
+        title={`${t("common:buttons.go-back")}`}
         size="medium"
         className="w-full justify-center mt-[12px]"
         onClick={() => props.setCurrentStep(1)}

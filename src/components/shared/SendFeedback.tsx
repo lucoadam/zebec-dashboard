@@ -16,7 +16,7 @@ export const SendFeedback = () => {
         <Button
           size="small"
           className="mt-[21px]"
-          title={t("treasuryOverview:send-us-message")}
+          title={`${t("treasuryOverview:send-us-message")}`}
           endIcon={<Icons.OutsideLinkIcon className="text-content-contrast" />}
         />
       </div>

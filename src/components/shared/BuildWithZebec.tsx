@@ -16,7 +16,7 @@ export const BuildWithZebec = () => {
         <Button
           size="small"
           className="mt-[21px]"
-          title={t("treasuryOverview:check-documentation")}
+          title={`${t("treasuryOverview:check-documentation")}`}
           endIcon={<Icons.OutsideLinkIcon className="text-content-contrast" />}
         />
       </div>
