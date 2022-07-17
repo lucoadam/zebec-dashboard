@@ -33,8 +33,8 @@ const PauseModal: FC = ({}) => {
               variant="gradient"
               title={
                 loading
-                  ? t("modal-actions.pausing")
-                  : t("modal-actions.yes-pause")
+                  ? `${t("modal-actions.pausing")}`
+                  : `${t("modal-actions.yes-pause")}`
               }
               onClick={() => {
                 dispatch(setLoading(true))
@@ -49,7 +49,7 @@ const PauseModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("modal-actions.no-pause")}
+              title={`${t("modal-actions.no-pause")}`}
               onClick={() => {
                 dispatch(togglePauseModal())
               }}

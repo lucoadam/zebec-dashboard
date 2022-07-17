@@ -206,9 +206,9 @@ const AddOwners: FC<StepsComponentProps> = ({
             <Button
               size="small"
               className=""
-              title={t(
+              title={`${t(
                 "createTreasury:second-steper.buttons.choose-from-address-book"
-              )}
+              )}`}
               endIcon={<Icons.ArrowIcon className="text-xs" />}
               onClick={() => {
                 if (owners.length === 0) {

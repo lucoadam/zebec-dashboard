@@ -1,4 +1,4 @@
-import { Table, TableBody } from "components/shared"
+import { Breadcrumb, Table, TableBody } from "components/shared"
 import { Pagination, RowsPerPage } from "components/shared"
 import { incomingTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
@@ -41,9 +41,7 @@ const Incoming: FC = () => {
 
   return (
     <>
-      <h4 className="px-3.5 pb-6 text-heading-4 font-semibold text-content-primary">
-        {t("incoming-transactions")}
-      </h4>
+      <Breadcrumb title={`${t("incoming-transactions")}`} />
       {/* Tabs */}
       <FilterTabs />
       {/* Table */}

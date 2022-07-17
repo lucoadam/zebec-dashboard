@@ -19,13 +19,13 @@ export const ZebecHelp: FC<{
         <Button
           size="small"
           className="mt-[21px] mr-[8px]"
-          title={t("treasuryOverview:check-faq")}
+          title={`${t("treasuryOverview:check-faq")}`}
           endIcon={<Icons.OutsideLinkIcon className="text-content-contrast" />}
         />
         <Button
           size="small"
           className="mt-[21px]"
-          title={t("treasuryOverview:join-discord")}
+          title={`${t("treasuryOverview:join-discord")}`}
           endIcon={<Icons.OutsideLinkIcon className="text-content-contrast" />}
         />
       </div>

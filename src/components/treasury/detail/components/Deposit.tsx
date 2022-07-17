@@ -59,7 +59,7 @@ export const Deposit = () => {
         </WithdrawDepositInput>
 
         <Button
-          title={t("treasuryOverview:deposit")}
+          title={`${t("treasuryOverview:deposit")}`}
           variant="gradient"
           className="w-full"
         />

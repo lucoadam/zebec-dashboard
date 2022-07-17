@@ -34,8 +34,8 @@ const CancelModal: FC = ({}) => {
               endIcon={loading ? <Icons.Loading /> : <></>}
               title={
                 loading
-                  ? t("modal-actions.cancelling")
-                  : t("modal-actions.yes-cancel")
+                  ? `${t("modal-actions.cancelling")}`
+                  : `${t("modal-actions.yes-cancel")}`
               }
               onClick={() => {
                 dispatch(setLoading(true))
@@ -50,7 +50,7 @@ const CancelModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""}`}
               disabled={loading}
-              title={t("modal-actions.no-cancel")}
+              title={`${t("modal-actions.no-cancel")}`}
               onClick={() => {
                 dispatch(toggleCancelModal())
               }}

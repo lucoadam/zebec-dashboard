@@ -29,7 +29,11 @@ const SignTransactionModal: FC = ({}) => {
               variant="gradient"
               endIcon={loading ? <Icons.Loading /> : <></>}
               disabled={loading}
-              title={loading ? t("modal-actions.signing") : t("modal-actions.yes-sign")}
+              title={
+                loading
+                  ? `${t("modal-actions.signing")}`
+                  : `${t("modal-actions.yes-sign")}`
+              }
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
@@ -43,7 +47,7 @@ const SignTransactionModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("modal-actions.no-sign")}
+              title={`${t("modal-actions.no-sign")}`}
               onClick={() => {
                 dispatch(toggleSignModal())
               }}

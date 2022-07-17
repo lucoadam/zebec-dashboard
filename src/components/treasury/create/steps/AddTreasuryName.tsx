@@ -52,7 +52,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
           <input {...register("name")} autoFocus />
         </InputField>
         <Button
-          title={t("common:buttons.continue")}
+          title={`${t("common:buttons.continue")}`}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"

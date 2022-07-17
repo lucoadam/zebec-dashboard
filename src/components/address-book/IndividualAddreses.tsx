@@ -1,6 +1,12 @@
 import { useTranslation } from "next-i18next"
 import React, { useState } from "react"
-import { Button, InputField, Table, TableBody } from "components/shared"
+import {
+  Breadcrumb,
+  Button,
+  InputField,
+  Table,
+  TableBody
+} from "components/shared"
 import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
@@ -63,18 +69,9 @@ export default function IndividualAddresses() {
   return (
     <>
       <div className="container w-full ">
-        <div className="flex justify-between items-center pb-9">
-          <h4 className="text-heading-4 font-semibold text-content-primary pl-4">
-            {`${t("addressBook:address-book")} `}
-          </h4>
+        <Breadcrumb title={`${t("addressBook:address-book")}`} />
 
-          {/* <Button
-            title={`${t("addressBook:create-address-book")}`}
-            onClick={() => alert("Create an Address Group")}
-          /> */}
-        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
@@ -91,65 +88,63 @@ export default function IndividualAddresses() {
             </Table>
           </div>
           <div className="md:order-last order-first">
+            <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
+              <div className="text-content-secondary text-subtitle font-semibold">
+                {t("addressBook:add-an-address")}
+              </div>
+              <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                <div className="pt-6 ">
+                  <InputField
+                    label={t("addressBook:address-name")}
+                    className="relative text-content-secondary"
+                    error={!!errors.name}
+                    helper={errors.name?.message?.toString() || ""}
+                  >
+                    <div>
+                      <input
+                        className={`w-full h-10 ${
+                          !!errors.name?.message && "error"
+                        }`}
+                        placeholder={t("addressBook:enter-name")}
+                        type="text"
+                        {...register("name")}
+                      />
+                    </div>
+                  </InputField>
+                </div>
 
-          
-          <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
-            <div className="text-content-secondary text-subtitle font-semibold">
-              {t("addressBook:add-an-address")}
+                <div className="pt-6 pb-6 ">
+                  <InputField
+                    label={t("addressBook:wallet-address")}
+                    className="relative text-content-secondary"
+                    error={!!errors.wallet}
+                    helper={errors.wallet?.message?.toString() || ""}
+                  >
+                    <div>
+                      <input
+                        className={`w-full h-10 ${
+                          !!errors.wallet?.message && "error"
+                        }`}
+                        placeholder={t("addressBook:enter-wallet-address")}
+                        type="text"
+                        {...register("wallet")}
+                      />
+                    </div>
+                  </InputField>
+                </div>
+
+                {/* submit Button */}
+
+                <div className="">
+                  <Button
+                    className={`w-full`}
+                    variant="gradient"
+                    type="submit"
+                    title={`${t("addressBook:add-address")}`}
+                  />
+                </div>
+              </form>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-              <div className="pt-6 ">
-                <InputField
-                  label={t("addressBook:address-name")}
-                  className="relative text-content-secondary"
-                  error={!!errors.name}
-                  helper={errors.name?.message?.toString() || ""}
-                >
-                  <div>
-                    <input
-                      className={`w-full h-10 ${
-                        !!errors.name?.message && "error"
-                      }`}
-                      placeholder={t("addressBook:enter-name")}
-                      type="text"
-                      {...register("name")}
-                    />
-                  </div>
-                </InputField>
-              </div>
-
-              <div className="pt-6 pb-6 ">
-                <InputField
-                  label={t("addressBook:wallet-address")}
-                  className="relative text-content-secondary"
-                  error={!!errors.wallet}
-                  helper={errors.wallet?.message?.toString() || ""}
-                >
-                  <div>
-                    <input
-                      className={`w-full h-10 ${
-                        !!errors.wallet?.message && "error"
-                      }`}
-                      placeholder={t("addressBook:enter-wallet-address")}
-                      type="text"
-                      {...register("wallet")}
-                    />
-                  </div>
-                </InputField>
-              </div>
-
-              {/* submit Button */}
-
-              <div className="">
-                <Button
-                  className={`w-full`}
-                  variant="gradient"
-                  type="submit"
-                  title={t("addressBook:add-address")}
-                />
-              </div>
-            </form>
-          </div>
           </div>
         </div>
       </div>

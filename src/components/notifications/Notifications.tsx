@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Button, InputField } from "components/shared"
+import { Breadcrumb, Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 
 interface Notification {
@@ -36,11 +36,11 @@ export default function NotificationsComponent() {
   return (
     <>
       <div className="container w-full ">
-        <div className="flex justify-between items-center pb-4">
-          <h4 className="text-heading-4 font-semibold text-content-primary pl-10 pt-10">
-            {`${t("notifications.notification")} `}
-          </h4>
-        </div>
+        <Breadcrumb
+          title={`${t("notifications.notification")}`}
+          className="mt-20"
+        />
+
         <div className="rounded bg-background-secondary p-10 mt-12 max-w-96">
           <div className="text-subtitle font-semibold">{`${t(
             "notifications.notified-on"
@@ -94,7 +94,7 @@ export default function NotificationsComponent() {
                   className={`w-full ${userNotification ? "hidden" : ""}`}
                   variant="gradient"
                   type="submit"
-                  title={t("notifications.subscribe")}
+                  title={`${t("notifications.subscribe")}`}
                 />
 
                 {userNotification && (
@@ -107,7 +107,7 @@ export default function NotificationsComponent() {
                       variant="danger"
                       endIcon={<Icons.Envelope />}
                       type="button"
-                      title={t("notifications.unsubscribe")}
+                      title={`${t("notifications.unsubscribe")}`}
                     />
                   </>
                 )}

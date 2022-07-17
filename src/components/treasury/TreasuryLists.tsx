@@ -18,7 +18,7 @@ const TreasuryLists: FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {treasuries.map((treasury, index) => {
           return (
             <Link
@@ -37,7 +37,7 @@ const TreasuryLists: FC = () => {
                   <div className="text-subtitle text-content-primary font-semibold">
                     {treasury.safe_name}
                   </div>
-                  <div className="flex gap-x-3 items-center">
+                  <div className="flex gap-x-3 items-center flex-wrap">
                     <div className="flex gap-x-1.5 items-center text-content-primary">
                       <Icons.UserGroupIcon className="text-base" />
                       <div>{treasury.owners.length} Owners</div>

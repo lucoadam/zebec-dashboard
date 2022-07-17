@@ -1,4 +1,4 @@
-import { Table, TableBody } from "components/shared"
+import { Breadcrumb, Table, TableBody } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
@@ -24,9 +24,8 @@ const Outgoing: FC = () => {
 
   return (
     <>
-      <h4 className="px-3.5 pb-6 text-heading-4 font-semibold text-content-primary">
-        {t("outgoing-transactions")}
-      </h4>
+      <Breadcrumb title={`${t("outgoing-transactions")}`} />
+
       {/* Tabs */}
       <FilterTabs />
       {/* Table */}

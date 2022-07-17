@@ -89,7 +89,7 @@ const Setting = () => {
           <input {...register("name")} autoFocus />
         </InputField>
         <Button
-          title={t("treasurySettings:save-changes")}
+          title={`${t("treasurySettings:save-changes")}`}
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"
@@ -106,7 +106,7 @@ const Setting = () => {
           <Button
             className="w-full"
             variant="danger"
-            title={t("treasurySettings:archive-safe")}
+            title={`${t("treasurySettings:archive-safe")}`}
             endIcon={<Icons.TrashIcon />}
             onClick={() => setIsOpen(true)}
           />
@@ -127,7 +127,7 @@ const Setting = () => {
                 <Button
                   className="w-full"
                   variant="danger"
-                  title={t("treasurySettings:yes-archive-safe")}
+                  title={`${t("treasurySettings:yes-archive-safe")}`}
                   startIcon={<Icons.TrashIcon />}
                   onClick={() => setIsOpen(true)}
                 />
@@ -135,7 +135,7 @@ const Setting = () => {
               <div className="pb-[12px]">
                 <Button
                   className="w-full"
-                  title={t("treasurySettings:cancel")}
+                  title={`${t("treasurySettings:cancel")}`}
                   onClick={() => {
                     setIsOpen(!isOpen)
                   }}

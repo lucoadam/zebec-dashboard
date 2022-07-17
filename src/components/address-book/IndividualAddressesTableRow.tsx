@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState } from "react"
 import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import * as Icons from "assets/icons"
+import CopyButton from "components/shared/CopyButton"
 
 interface IndividualAddresesTableRow {
   index: number
@@ -25,18 +26,24 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex max-w-full`}>
-          <td className="px-3 py-5 min-w-50">
-            <div className="flex items-center  h-14 text-content-primary text-subtitle font-semibold">
+          <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
+            <div className="text-content-primary text-subtitle font-semibold">
               {transaction.name}
             </div>
           </td>
-          <td className="px-6 py-5 min-w-31.25">
-            <div className="  h-14 flex items-center text-content-primary">
-              {transaction.wallet_address}
+          <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
+            <div className="flex items-center gap-x-2 text-content-primary">
+              {transaction.wallet_address}{" "}
+              <div className="flex-shrink-0">
+                <CopyButton
+                  content={transaction.wallet_address}
+                  className="flex-shrink-0"
+                />
+              </div>
             </div>
           </td>
-          <td className="px-4 py-5 w-full  ">
-            <div className="h-14 flex items-center gap-x-8 justify-end ">
+          <td className="px-6 pt-4.5 pb-6 w-full my-auto">
+            <div className="flex items-center gap-x-8 justify-end ">
               <Button
                 title="Send"
                 size="small"
@@ -76,7 +83,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     className={`w-full font-semibold`}
                     variant="danger"
                     endIcon={<Icons.TrashIcon />}
-                    title={t("yes-delete")}
+                    title={`${t("yes-delete")}`}
                     // eslint-disable-next-line @typescript-eslint/no-empty-function
                     onClick={() => {}}
                   />
@@ -84,7 +91,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                 <div className="">
                   <Button
                     className={`w-full font-semibold`}
-                    title={t("cancel")}
+                    title={`${t("cancel")}`}
                     onClick={() => {
                       setIsOpen(!isOpen)
                     }}

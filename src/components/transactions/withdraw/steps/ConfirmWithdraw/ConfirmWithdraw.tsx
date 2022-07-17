@@ -36,7 +36,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep }) => {
         <Button
           className="w-full "
           variant="gradient"
-          title={t("withdraw.yes-withdraw")}
+          title={`${t("withdraw.yes-withdraw")}`}
           onClick={() => {
             setCurrentStep(2)
           }}
@@ -45,7 +45,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep }) => {
       <div className="pb-3">
         <Button
           className="w-full "
-          title={t("withdraw.cancel")}
+          title={`${t("withdraw.cancel")}`}
           onClick={() => {
             setCurrentStep(-1)
           }}

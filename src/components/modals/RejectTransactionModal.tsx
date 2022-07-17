@@ -29,7 +29,11 @@ const RejectTransactionModal: FC = ({}) => {
               variant="danger"
               endIcon={loading ? <Icons.Loading /> : <Icons.TrashIcon />}
               disabled={loading}
-              title={loading ? t("modal-actions.rejecting") : t("modal-actions.yes-reject")}
+              title={
+                loading
+                  ? `${t("modal-actions.rejecting")}`
+                  : `${t("modal-actions.yes-reject")}`
+              }
               onClick={() => {
                 dispatch(setLoading(true))
                 setTimeout(() => {
@@ -43,7 +47,7 @@ const RejectTransactionModal: FC = ({}) => {
             <Button
               className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
               disabled={loading}
-              title={t("modal-actions.no-reject")}
+              title={`${t("modal-actions.no-reject")}`}
               onClick={() => {
                 dispatch(toggleRejectModal())
               }}
