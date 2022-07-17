@@ -1,15 +1,12 @@
-import { Breadcrumb, IconButton } from "components/shared"
+import { Breadcrumb } from "components/shared"
 import ArchiveSafeLists from "components/treasury/archived-safes/ArchiveSafeLists"
 import { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useRouter } from "next/router"
-import { LeftArrowIcon } from "assets/icons"
 import Layout from "components/layouts/Layout"
 
 const ArchiveSafePage: NextPage = () => {
   const { t } = useTranslation()
-  const router = useRouter()
 
   return (
     <Layout pageTitle="Zebec - Archived Safes">
