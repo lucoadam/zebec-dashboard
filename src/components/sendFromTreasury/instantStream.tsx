@@ -18,7 +18,7 @@ import {
   InstantFormKeys,
   InstantStreamFormData,
   InstantStreamProps
-} from "./instantStream.d"
+} from "./InstantStream.d"
 
 const addressBook = [
   {

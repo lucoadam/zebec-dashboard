@@ -1,11 +1,11 @@
 import { useAppSelector } from "app/hooks"
 import Layout from "components/layouts/Layout"
-import { ContinuousStream } from "components/send/continuousStream"
-import { ContinuousStreamFormData } from "components/send/continuousStream.d"
+import { ContinuousStream } from "components/send/ContinuousStream"
+import { ContinuousStreamFormData } from "components/send/ContinuousStream.d"
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useState } from "react"
-import { StreamOverview } from "components/send/streamOverview"
+import { StreamOverview } from "components/send/StreamOverview"
 
 const Send: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()

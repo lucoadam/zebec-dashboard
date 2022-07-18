@@ -27,7 +27,7 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps,
   FormKeys
-} from "./continuousStream.d"
+} from "./ContinuousStream.d"
 
 const addressBook = [
   {

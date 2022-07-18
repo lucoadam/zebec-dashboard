@@ -1,6 +1,6 @@
 import { FC } from "react"
 import * as Icons from "assets/icons"
-import { StreamOverviewProps } from "./streamOverview.d"
+import { StreamOverviewProps } from "./StreamOverview.d"
 import { useTranslation } from "next-i18next"
 import { toSubstring } from "utils"
 import { Button } from "components/shared"

@@ -1,4 +1,4 @@
-import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
+import { WalletToken } from "features/walletBalanceSlice/walletBalanceSlice.d"
 
 export interface ContinuousStreamFormData {
   transactionName: string
