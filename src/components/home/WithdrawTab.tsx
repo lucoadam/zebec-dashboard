@@ -14,6 +14,7 @@ const WithdrawTab: FC = () => {
     //toggle
     show,
     toggle,
+    t,
     setToggle,
     //max value
     setMaxAmount,
@@ -33,7 +34,7 @@ const WithdrawTab: FC = () => {
   return (
     <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
-        Withdraw your deposited balance into your wallet.
+        {t("common:deposit-withdrawal.withdraw-title")}
       </div>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-y-6">
         <WithdrawDepositInput
@@ -54,7 +55,11 @@ const WithdrawTab: FC = () => {
           />
         </WithdrawDepositInput>
 
-        <Button title="Withdraw" variant="gradient" className="w-full" />
+        <Button
+          title={`${t("common:buttons.withdraw")}`}
+          variant="gradient"
+          className="w-full"
+        />
       </form>
     </div>
   )

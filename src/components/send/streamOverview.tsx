@@ -1,10 +1,9 @@
-import { FC } from "react"
-import * as Icons from "assets/icons"
-import { StreamOverviewProps } from "./streamOverview.d"
+import { SupportCard } from "components/shared"
 import { useTranslation } from "next-i18next"
-import { toSubstring } from "utils"
-import { Button } from "components/shared"
+import { FC } from "react"
 import { twMerge } from "tailwind-merge"
+import { toSubstring } from "utils"
+import { StreamOverviewProps } from "./streamOverview.d"
 
 export const StreamOverview: FC<StreamOverviewProps> = ({
   formValues,
@@ -60,7 +59,20 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
           </span>
         </p>
       </div>
-      <div className="mt-12 border border-outline p-4 rounded-md">
+      <SupportCard
+        className="mt-12 bg-transparent p-0"
+        title="send:streaming-help"
+        description="send:streaming-help-details"
+        buttons={[
+          {
+            title: "common:support.check-faq"
+          },
+          {
+            title: "common:support.join-discord"
+          }
+        ]}
+      />
+      {/* <div className="mt-12 border border-outline p-4 rounded-md">
         <div className="text-subtitle text-content-primary">
           {t("send:streaming-help")}
         </div>
@@ -81,7 +93,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
             endIcon={<Icons.OutsideLinkIcon />}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
