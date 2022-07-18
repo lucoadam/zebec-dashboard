@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface AddressBook {
-  name: number
+  name: string
   address: string
 }
 interface AddressBookState {
@@ -17,7 +17,31 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
-  addressBooks: [],
+  addressBooks: [ {
+    
+    name: "Jane Doe",
+    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+  },
+  {
+    
+    name: "okay Doe",
+    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+  },
+  {
+    
+    name: "John Doe",
+    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+  },
+  {
+    
+    name: "Jane Doe",
+    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+  },
+  {
+    
+    name: "Jane Doe",
+    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+  }],
   error: ""
 }
 

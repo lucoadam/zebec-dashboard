@@ -3,12 +3,16 @@ import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import * as Icons from "assets/icons"
 import CopyButton from "components/shared/CopyButton"
+import { toSubstring } from "utils"
+
 
 interface IndividualAddresesTableRow {
   index: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
 }
+
+
 
 const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   transaction
@@ -32,11 +36,12 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
-            <div className="flex items-center gap-x-2 text-content-primary">
-              {transaction.wallet_address}{" "}
+            <div className="flex items-center gap-x-2 text-content-primary" data-tip={transaction.address}>
+           {toSubstring(transaction.address.toString(), 4, true)}
+            
               <div className="flex-shrink-0">
                 <CopyButton
-                  content={transaction.wallet_address}
+                  content={transaction.address}
                   className="flex-shrink-0"
                 />
               </div>
@@ -45,7 +50,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
           <td className="px-6 pt-4.5 pb-6 w-full my-auto">
             <div className="flex items-center gap-x-8 justify-end ">
               <Button
-                title="Send"
+                title={`${t("send")}`}
                 size="small"
                 startIcon={
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
@@ -56,7 +61,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
               />
 
               <Button
-                title="Delete"
+                title={`${t("delete")}`}
                 size="small"
                 startIcon={
                   <Icons.CrossIcon className="text-content-contrast" />

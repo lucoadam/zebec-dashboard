@@ -10,35 +10,35 @@ export const individualAddressBook = {
         $oid: "62a5b1bd41b7ff97ad34dcaa"
       },
       name: "Jane Doe",
-      wallet_address: "0x8w478s...h3489034"
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      _id: {
+        $oid: "62a5b1bd41b7ff97ad34dcaa"
+      },
+      name: "okay Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      _id: {
+        $oid: "62a5b1bd41b7ff97ad34dcaa"
+      },
+      name: "John Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
     },
     {
       _id: {
         $oid: "62a5b1bd41b7ff97ad34dcaa"
       },
       name: "Jane Doe",
-      wallet_address: "0x8w478s...h3489034"
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
     },
     {
       _id: {
         $oid: "62a5b1bd41b7ff97ad34dcaa"
       },
       name: "Jane Doe",
-      wallet_address: "0x8w478s...h3489034"
-    },
-    {
-      _id: {
-        $oid: "62a5b1bd41b7ff97ad34dcaa"
-      },
-      name: "Jane Doe",
-      wallet_address: "0x8w478s...h3489034"
-    },
-    {
-      _id: {
-        $oid: "62a5b1bd41b7ff97ad34dcaa"
-      },
-      name: "Jane Doe",
-      wallet_address: "0x8w478s...h3489034"
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
     }
   ]
 }

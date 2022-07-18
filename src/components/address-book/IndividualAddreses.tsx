@@ -7,24 +7,24 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppSelector } from "app/hooks"
 
 interface Address {
   name: string
-  wallet: string[]
+  wallet: string
 }
 
 export default function IndividualAddresses() {
   const [addresses, setAddresses] = useState<Address>({
     name: "",
-    wallet: []
+    wallet: ""
   })
-  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
+  const addressBook = useAppSelector((state)=>state.address.addressBooks)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
@@ -34,7 +34,7 @@ export default function IndividualAddresses() {
         isValidWallet(value)
       )
       .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-        wallets.every((wallet) => wallet !== value)
+         (addresses.wallet !== value)
       )
   })
   const headers = [
@@ -63,7 +63,7 @@ export default function IndividualAddresses() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setAddresses(data)
-    setWallets([...wallets, data.wallet])
+    
   }
 
   return (
@@ -75,7 +75,7 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {individualAddressBook.data.map((transaction, index) => {
+                {addressBook.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}

@@ -8,12 +8,12 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppSelector } from "app/hooks"
 
 interface Address {
   name: string
@@ -25,6 +25,7 @@ export default function AddressesGroup() {
     name: "",
     wallet: []
   })
+  const addressBook = useAppSelector((state)=>state.address.addressBooks)
   const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({
@@ -83,7 +84,7 @@ export default function AddressesGroup() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {individualAddressBook.data.map((transaction, index) => {
+                {addressBook.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}
