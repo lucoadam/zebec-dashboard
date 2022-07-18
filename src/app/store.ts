@@ -21,6 +21,7 @@ import toastsSlice from "features/toasts/toastsSlice"
 import commonSlice from "features/common/commonSlice"
 import rejectModalSlice from "features/modals/rejectModalSlice"
 import signModalSlice from "features/modals/signModalSlice"
+import addressBookSlice from "features/address-book/addressBookSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -38,6 +39,7 @@ const combineReducer = combineReducers({
   pause: pauseModalSlice,
   cancel: cancelModalSlice,
   resume: resumeModalSlice,
+  address: addressBookSlice,
   rejectTransaction: rejectModalSlice,
   signTransaction: signModalSlice
 })
