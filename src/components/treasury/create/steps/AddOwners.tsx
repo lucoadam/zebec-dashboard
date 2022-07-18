@@ -79,7 +79,8 @@ const AddOwners: FC<StepsComponentProps> = ({
     reset,
     handleSubmit,
     setValue,
-    trigger
+    trigger,
+    clearErrors
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(validationSchema)
@@ -91,21 +92,19 @@ const AddOwners: FC<StepsComponentProps> = ({
     }
   }, [useWalletObject, owners, setValue])
 
-  useEffect(() => {
-    setTreasury((treasury) => ({
-      ...treasury,
-      minValidator: owners.length
-    }))
-  }, [owners, setTreasury])
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (owners.length < constants.MAX_OWNERS) {
-      setOwners([...owners, data])
+      if ([...owners, data].length > 1) {
+        setSelectionError(false)
+        clearErrors()
+      }
       setTreasury((treasury) => ({
         ...treasury,
-        owners: [...owners, data]
+        owners: [...owners, data],
+        minValidator: [...owners, data].length
       }))
+      setOwners([...owners, data])
     }
     reset()
   }
@@ -291,6 +290,15 @@ const AddOwners: FC<StepsComponentProps> = ({
               </div>
               <div
                 onClick={() => {
+                  if ([...owners, ...checkedOwners].length > 1) {
+                    setSelectionError(false)
+                    clearErrors()
+                  }
+                  setTreasury((treasury) => ({
+                    ...treasury,
+                    owners: [...owners, ...checkedOwners],
+                    minValidator: [...owners, ...checkedOwners].length
+                  }))
                   setOwners([...owners, ...checkedOwners])
                   setCheckedOwners([])
                   setToggleReceiverDropdown(false)
@@ -344,8 +352,10 @@ const AddOwners: FC<StepsComponentProps> = ({
             if (owners.length >= 2 && !selectError) {
               setCurrentStep(2)
             } else {
-              trigger("name")
-              trigger("wallet")
+              if (owners.length < 2) {
+                trigger("name")
+                trigger("wallet")
+              }
               setSelectionError(true)
             }
           }}
