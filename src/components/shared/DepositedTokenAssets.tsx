@@ -32,7 +32,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
             DEPOSITED ASSETS
           </div>
           {/* Assets Table */}
-          <div className="w-full border border-outline  bg-background-primary overflow-hidden">
+          <div className="w-full border border-outline  bg-background-primary overflow-hidden rounded-md">
             <div className="flex items-center px-4.5 border-b border-outline">
               <Icons.SearchIcon className="text-base text-content-tertiary" />
 
@@ -123,19 +123,31 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                       <td className="pl-4 pr-1.5 pb-6 pt-3">
                         <div className="flex flex-col gap-y-2 mt-1">
                           <div className=" text-subtitle-sm text-content-primary font-medium">
-                            {formatCurrency(
-                              getUsdBalance(
+                            <span
+                              data-tip={getUsdBalance(
                                 tokensPrice,
                                 balanceTokens,
                                 token.symbol
-                              ),
-                              "$"
-                            )}
+                              )}
+                            >
+                              {formatCurrency(
+                                getUsdBalance(
+                                  tokensPrice,
+                                  balanceTokens,
+                                  token.symbol
+                                ),
+                                "$"
+                              )}
+                            </span>
                           </div>
                           <div className=" text-caption text-content-contrast">
-                            {formatCurrency(
-                              getBalance(balanceTokens, token.symbol)
-                            )}{" "}
+                            <span
+                              data-tip={getBalance(balanceTokens, token.symbol)}
+                            >
+                              {formatCurrency(
+                                getBalance(balanceTokens, token.symbol)
+                              )}{" "}
+                            </span>
                             {token.symbol}
                           </div>
                         </div>

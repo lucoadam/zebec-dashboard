@@ -1,5 +1,6 @@
 import * as Icons from "assets/icons"
 import { useClickOutside } from "hooks"
+import { useTranslation } from "next-i18next"
 import React, { FC, useRef } from "react"
 import { Button } from "./Button"
 
@@ -36,6 +37,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
         ...rest
       } = props
       const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
+      const { t } = useTranslation()
       //handle clicking outside
       useClickOutside(tokensDropdownWrapperRef, {
         onClickOutside: () => setToggle(false)
@@ -44,7 +46,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
       return (
         <>
           <div className={className}>
-            <label>Token</label>
+            <label> {t("common:balances.token")}</label>
             <div
               ref={tokensDropdownWrapperRef}
               className="pl-4.5 pr-6 flex items-center bg-background-primary border border-outline rounded-lg relative"
@@ -86,7 +88,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   onClick={() => {
                     setMaxAmount()
                   }}
-                  title="MAX"
+                  title={`${t("common:buttons.max")}`}
                   size="small"
                   className="right-px top-0"
                 />

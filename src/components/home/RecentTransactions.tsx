@@ -8,6 +8,7 @@ import {
   TransactionStatus
 } from "components/shared"
 import { recentTransactions } from "fakedata"
+import { useTranslation } from "next-i18next"
 import { FC } from "react"
 
 const getValidTokenAmount = (amount: number) => {
@@ -19,24 +20,25 @@ const getValidTokenAmount = (amount: number) => {
 
 const RecentTransactions: FC = () => {
   const walletObject = useWallet()
+  const { t } = useTranslation()
   return (
     <>
       <div className="lg:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
         <div className="flex justify-between items-center">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-            RECENT TRANSACTIONS
+            {t("home:recent.title")}
           </div>
           <Button
             size="small"
-            title="View All"
+            title={`${t("common:buttons.view-all")}`}
             endIcon={<Icons.ArrowRightIcon />}
           />
         </div>
         {recentTransactions.data.length === 0 && (
-          <EmptyDataState message="There are no recent transactions. The recent payments you make and receive will appear here." />
+          <EmptyDataState message={t("home:recent.empty")} />
         )}
         <table className="w-full whitespace-nowrap">
-          <TableBody className="px-0 py-0">
+          <TableBody className="px-0 py-0 divide-y-2 border-collapse">
             {recentTransactions.data.map((transaction) => (
               <tr key={transaction._id.$oid ?? ""}>
                 <td className=" py-5 min-w-60">
