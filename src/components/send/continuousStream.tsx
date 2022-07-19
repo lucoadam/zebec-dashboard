@@ -134,7 +134,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
 
   useEffect(() => {
-    if (tokenDetails.length > 0 && !currentToken.symbol) {
+    if (tokenDetails.length > 0) {
       setCurrentToken(tokenDetails[0])
       setValue("token", tokenDetails[0].symbol)
     }
@@ -376,7 +376,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  value={getValues().token}
                   className={`h-[40px] w-full !pl-11 ${
                     !!errors.token && "error"
                   }`}
