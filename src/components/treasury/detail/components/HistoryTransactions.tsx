@@ -8,15 +8,15 @@ export const HistoryTransactions = () => {
 
   const headers = [
     {
-      label: "progress",
+      label: "table.progress",
       width: "85"
     },
     {
-      label: "transaction-date",
+      label: "table.transaction-date",
       width: "50"
     },
     {
-      label: "sender-or-receiver",
+      label: "table.sender-or-receiver",
       width: "51"
     },
     {

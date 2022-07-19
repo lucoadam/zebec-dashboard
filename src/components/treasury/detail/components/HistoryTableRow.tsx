@@ -1,17 +1,21 @@
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton } from "components/shared"
-import CopyButton from "components/shared/CopyButton"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  UserAddress
+} from "components/shared"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleRejectModal } from "features/modals/rejectModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { toggleSignModal } from "features/modals/signModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { formatCurrency, toSubstring } from "utils"
-import { toggleResumeModal } from "features/modals/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModalSlice"
-import { toggleCancelModal } from "features/modals/cancelModalSlice"
-import { toggleSignModal } from "features/modals/signModalSlice"
-import { toggleRejectModal } from "features/modals/rejectModalSlice"
-import { useAppDispatch } from "app/hooks"
 
 interface HistoryTableRowProps {
   index: number
@@ -91,20 +95,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-4 min-w-51">
-            <div className="flex items-center gap-x-1 text-body text-content-primary">
-              <span data-tip={transaction.sender}>
-                {transaction.is_in_address_book
-                  ? toSubstring(transaction.name, 22, false)
-                  : toSubstring(transaction.sender, 6, true)}{" "}
-              </span>
-              {!transaction.is_in_address_book && (
-                <IconButton
-                  icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary min-w-7 h-7"
-                />
-              )}
-              <CopyButton className="min-w-7" content={transaction.sender} />
-            </div>
+            <UserAddress wallet={transaction.sender} />
           </td>
           <td className="px-6 py-4 w-full  float-right">
             <div className="flex items-center justify-end float-right gap-x-6">

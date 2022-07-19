@@ -38,7 +38,7 @@ const RecentTransactions: FC = () => {
           <EmptyDataState message={t("home:recent.empty")} />
         )}
         <table className="w-full whitespace-nowrap">
-          <TableBody className="px-0 py-0 divide-y-2 border-collapse">
+          <TableBody className="px-0 py-0 divide-y border-collapse">
             {recentTransactions.data.map((transaction) => (
               <tr key={transaction._id.$oid ?? ""}>
                 <td className=" py-5 min-w-60">

@@ -78,12 +78,12 @@
     "cancelling": "Cancelling",
     "pausing": "Pausing",
     "reject-modal-header": "Are you sure you wnat to reject transaction?",
-    "signing":"Signing",
-    "yes-sign":"Yes, Sign",
-    "no-sign":"No, Dont Sign",
-    "sign-modal-header":"Are you sure you wnat to sign transaction?",
+    "signing": "Signing",
+    "yes-sign": "Yes, Sign",
+    "no-sign": "No, Dont Sign",
+    "sign-modal-header": "Are you sure you wnat to sign transaction?",
     "rejecting": "Rejecting",
-    "yes-reject":"Yes, Reject",
-    "no-reject":"No, Reject"
+    "yes-reject": "Yes, Reject",
+    "no-reject": "No, Reject"
   }
 }

@@ -1,14 +1,14 @@
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, IconButton } from "components/shared"
+import { Button, CircularProgress, IconButton } from "components/shared"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useRef } from "react"
 import { toSubstring } from "utils"
-import { useAppDispatch } from "app/hooks"
-import { toggleResumeModal } from "features/modals/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModalSlice"
-import { toggleCancelModal } from "features/modals/cancelModalSlice"
 
 interface OutgoingTableRowProps {
   index: number
@@ -21,7 +21,8 @@ interface OutgoingTableRowProps {
 const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   index,
   activeDetailsRow,
-  handleToggleRow
+  handleToggleRow,
+  transaction
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
@@ -48,7 +49,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-5 min-w85">
             <div className="flex items-center gap-x-2.5">
-              <div className=" w-14 h-14">P</div>
+              <div className=" w-14 h-14">
+                {" "}
+                <CircularProgress status={transaction.status} />
+              </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">

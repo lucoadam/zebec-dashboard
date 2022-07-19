@@ -14,5 +14,5 @@ export const toSubstring = (
     }
   }
 
-  return str?.substring(0, length) + "..."
+  return str?.substring(0, length) + (str?.length > length ? "..." : "")
 }
