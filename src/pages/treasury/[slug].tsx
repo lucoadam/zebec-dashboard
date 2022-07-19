@@ -20,6 +20,7 @@ import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
 import ResumeModal from "components/modals/ResumeModal"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
@@ -50,6 +51,17 @@ const Treasury: NextPage = () => {
       // dispatch(fetchTreasuryStreamingBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"));
     }
   }, [dispatch, tokens, walletObject])
+
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
 
   return (
     <Layout pageTitle="Zebec - Treasury">

@@ -8,6 +8,8 @@ import TreasuryContinuousStream from "components/sendFromTreasury/TreasuryContin
 import TreasuryInstantStream from "components/sendFromTreasury/TreasuryInstantStream"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { useEffect } from "react"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const transferTabs = [
   {
@@ -30,7 +32,16 @@ const SendFromTreasury: NextPage = () => {
     (state) => state.common.treasurySendActiveTab
   )
   const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
 
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
   return (
     <Layout pageTitle="Zebec">
       <div className="flex justify-center border-b border-outline">
