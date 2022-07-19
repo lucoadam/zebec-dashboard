@@ -1,5 +1,5 @@
 import EnterWithdrawAmount from "./steps/EnterWithdrawAmount"
-import ConfirmWithdraw from "./steps/ConfirmWithdraw/ConfirmWithdraw"
+import ConfirmWithdraw from "./steps/ConfirmWithdraw"
 import Withdrawing from "./steps/Withdrawing"
 
 interface withdrawStep {
@@ -9,6 +9,7 @@ export interface withdrawProps {
   setCurrentStep: (step: number) => void
   withdrawAmount: number
   setWithdrawAmount: (withdrawAmount: number) => void
+  fees: number
 }
 
 export const WithdrawStepsList: withdrawStep[] = [

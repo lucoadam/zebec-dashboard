@@ -29,7 +29,6 @@ const AddressBook: NextPage = () => {
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [activePage])
-  
 
   return (
     <>

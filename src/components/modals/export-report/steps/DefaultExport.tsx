@@ -158,19 +158,19 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           </div>
         </div>
         <div>
-          <div className="text-subtitle-sm pt-3 ">
+          <div className="text-subtitle-sm  text-content-primary pt-3 ">
             {t("exportReport:select-report-format")}
           </div>
 
           <div className="pt-3 pl-1">
             <label>
               <input
-                type="radio"
                 value={"csv"}
+                type="radio"
                 className={`${!!errors.reportFormat && "error"}`}
                 {...register("reportFormat")}
               />
-              <span className="text-caption   pl-2">
+              <span className="text-caption  pl-2 ">
                 {t("exportReport:csv-format")}
               </span>
             </label>

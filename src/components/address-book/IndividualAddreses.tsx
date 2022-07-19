@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form"
 import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
+//import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
 
 interface Address {
   name: string
@@ -24,7 +25,8 @@ export default function IndividualAddresses() {
     name: "",
     wallet: ""
   })
-  const addressBook = useAppSelector((state)=>state.address.addressBooks)
+  //const dispatch = useAppDispatch()
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
@@ -33,10 +35,16 @@ export default function IndividualAddresses() {
       .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
         isValidWallet(value)
       )
-      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-         (addresses.wallet !== value)
+      .test(
+        "is-wallet-exists",
+        t("validation:wallet-exists"),
+        (value) => addresses.wallet !== value
       )
   })
+  //   useEffect(() => {
+  //     dispatch(fetchAddressBook());
+
+  // }, [dispatch,addresses])
   const headers = [
     {
       label: "addressBook:name",
@@ -63,7 +71,7 @@ export default function IndividualAddresses() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setAddresses(data)
-    
+    //dispatch(saveAddressBook(data))
   }
 
   return (
@@ -75,7 +83,7 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {addressBook.map((transaction, index) => {
+                {addressBook?.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}
