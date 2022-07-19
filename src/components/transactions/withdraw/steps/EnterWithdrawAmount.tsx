@@ -3,9 +3,9 @@ import { Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
 import { withdrawProps } from "../data.d"
-import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { withdrawAmountSchema } from "utils/validations/withdrawAmountSchema"
 
 const EnterWithdrawAmount: FC<withdrawProps> = ({
   setCurrentStep,
@@ -14,33 +14,23 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
 
-  const validationSchema = Yup.object().shape({
-    withdrawamount: Yup.string()
-      .required(t("withdraw.enter-withdraw-amount"))
-      .test("is-not-zero", t("withdraw.not-zero"), (value) => {
-        {
-          console.log("value", typeof value)
-        }
-        return typeof value === "string" && parseFloat(value) > 0
-      })
-  })
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue
   } = useForm({
-    mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema)
+    mode: "onChange",
+    resolver: yupResolver(withdrawAmountSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    setWithdrawAmount(data.withdrawamount)
+    setWithdrawAmount(data.withdrawAmount)
     setCurrentStep(1)
   }
   useEffect(() => {
     if (withdrawAmount != null && withdrawAmount != 0) {
-      setValue("withdrawamount", withdrawAmount)
+      setValue("withdrawAmount", withdrawAmount)
     }
   }, [withdrawAmount, setValue])
 
@@ -85,17 +75,19 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
           <InputField
             label={t("")}
             className="relative text-content-primary"
-            helper={errors.withdrawamount?.message?.toString() ?? ""}
-            error={!!errors.withdrawamount?.message}
+            helper={t(
+              errors.withdrawAmount?.message?.toString() ?? ""
+            ).toString()}
+            error={!!errors.withdrawAmount?.message}
           >
             <div>
               <input
                 className={`w-full h-10 ${
-                  !!errors.withdrawamount?.message && "error"
+                  !!errors.withdrawAmount?.message && "error"
                 }`}
                 placeholder={t("withdraw.enter-amount")}
                 type="number"
-                {...register("withdrawamount")}
+                {...register("withdrawAmount")}
                 autoFocus
               />
               <Button

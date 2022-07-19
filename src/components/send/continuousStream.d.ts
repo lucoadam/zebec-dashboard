@@ -4,12 +4,14 @@ export interface ContinuousStreamFormData {
   transactionName: string
   receiverWallet: string
   remarks?: string
+  showRemarks?: boolean
   amount: string
   token: string
   startDate: string
   endDate: string
   startTime: string
   endTime: string
+  enableStreamRate?: boolean
   noOfTimes?: string
   tokenAmount?: string
   interval?: string
@@ -20,6 +22,7 @@ export type FormKeys =
   | "transactionName"
   | "receiverWallet"
   | "remarks"
+  | "showRemarks"
   | "amount"
   | "token"
   | "startDate"

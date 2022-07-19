@@ -9,15 +9,10 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
-import * as Yup from "yup"
+import { addTreasuryNameSchema } from "utils/validations/addTreasuryNameSchema"
 
 const Setting = () => {
   const { t } = useTranslation()
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("validation:treasury-name-required"))
-  })
-
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleModal = () => {
@@ -29,8 +24,8 @@ const Setting = () => {
     formState: { errors },
     setValue
   } = useForm({
-    mode: "all",
-    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+    resolver: yupResolver(addTreasuryNameSchema),
     defaultValues: {
       name: "Zebec Name"
     }
@@ -80,7 +75,7 @@ const Setting = () => {
         </div>
         <InputField
           error={!!errors?.name}
-          helper={errors?.name?.message?.toString() || ""}
+          helper={t(errors?.name?.message?.toString() || "").toString()}
           label={t("treasurySettings:safe-name")}
           placeholder={t("treasurySettings:enter-safe-name")}
           className="h-[40px] w-full"

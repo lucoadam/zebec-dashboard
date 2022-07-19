@@ -21,12 +21,10 @@ import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
-import { isValidWallet } from "utils/isValidtWallet"
-import * as Yup from "yup"
+import { continuousSchema } from "utils/validations/continuousStreamSchema"
 import {
   ContinuousStreamFormData,
-  ContinuousStreamProps,
-  FormKeys
+  ContinuousStreamProps
 } from "./ContinuousStream.d"
 
 const addressBook = [
@@ -78,133 +76,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   className
 }) => {
   const { t } = useTranslation()
-  const validationSchema: Yup.SchemaOf<ContinuousStreamFormData> =
-    Yup.object().shape({
-      transactionName: Yup.string().required(
-        t("validation:transaction-name-required")
-      ),
-      receiverWallet: Yup.string()
-        .required(t("validation:wallet-required"))
-        .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-          isValidWallet(value)
-        ),
-      remarks: Yup.string().test(
-        "check-remarks",
-        t("validation:remarks-required"),
-        () => {
-          return !!getValue("remarks") || !showRemarks
-        }
-      ),
-      token: Yup.string().required(t("validation:token-required")),
-      amount: Yup.string()
-        .required(t("validation:amount-required"))
-        .test("amount-invalid", t("validation:amount-invalid"), () => {
-          return Number(getValue("amount")) > 0
-        }),
-      startDate: Yup.string()
-        .required(t("validation:start-date-time-required"))
-        .test(
-          "check-start-date",
-          t("validation:start-date-time-before-today"),
-          () => {
-            return moment(
-              `${getValue("startDate")} ${getValue("startTime")}`,
-              "DD/MM/YYYY LT"
-            ).isAfter(moment())
-          }
-        ),
-      startTime: Yup.string()
-        .required(t("validation:start-date-time-required"))
-        .test(
-          "check-start-time",
-          t("validation:start-date-time-before-today"),
-          () => {
-            return (
-              !getValue("startDate") ||
-              moment(
-                `${getValue("startDate")} ${getValue("startTime")}`,
-                "DD/MM/YYYY LT"
-              ).isAfter(moment())
-            )
-          }
-        ),
-      endDate: Yup.string()
-        .required(t("validation:end-date-time-required"))
-        .test(
-          "check-end-date",
-          t("validation:end-date-time-before-start-date-time"),
-          () => {
-            return (
-              !getValue("startDate") ||
-              !getValue("startTime") ||
-              moment(
-                `${getValue("startDate")} ${getValue("startTime")}`,
-                "DD/MM/YYYY LT"
-              ).isBefore(
-                moment(
-                  `${getValue("endDate")} ${getValue("endTime")}`,
-                  "DD/MM/YYYY LT"
-                )
-              )
-            )
-          }
-        ),
-      endTime: Yup.string()
-        .required(t("validation:end-date-time-required"))
-        .test(
-          "check-end-time",
-          t("validation:end-date-time-before-start-date-time"),
-          () => {
-            return (
-              !getValue("startDate") ||
-              !getValue("startTime") ||
-              moment(
-                `${getValue("startDate")} ${getValue("startTime")}`,
-                "DD/MM/YYYY LT"
-              ).isBefore(
-                moment(
-                  `${getValue("endDate")} ${getValue("endTime")}`,
-                  "DD/MM/YYYY LT"
-                )
-              )
-            )
-          }
-        ),
-      noOfTimes: Yup.string()
-        .test("noOfTimes-required", t("validation:noOfTimes-required"), () => {
-          return !!getValue("noOfTimes") || !enableStreamRate
-        })
-        .test("noOfTimes-invalid", t("validation:noOfTimes-invalid"), () => {
-          return (
-            (Number(getValue("noOfTimes")) > 0 &&
-              Number.isInteger(Number(getValue("noOfTimes")))) ||
-            !enableStreamRate
-          )
-        }),
-      tokenAmount: Yup.string()
-        .test(
-          "tokenAmount-required",
-          t("validation:tokenAmount-required"),
-          () => {
-            return !!getValue("tokenAmount") || !enableStreamRate
-          }
-        )
-        .test(
-          "tokenAmount-invalid",
-          t("validation:tokenAmount-invalid"),
-          () => {
-            return Number(getValue("tokenAmount")) > 0 || !enableStreamRate
-          }
-        ),
-      interval: Yup.string().test(
-        "interval-required",
-        t("validation:interval-required"),
-        () => {
-          return !!getValue("interval") || !enableStreamRate
-        }
-      ),
-      file: Yup.string()
-    })
 
   const {
     register,
@@ -217,7 +88,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     watch
   } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(continuousSchema)
   })
 
   const tokensDropdownWrapper = useRef(null)
@@ -229,8 +100,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
-  const [showRemarks, setShowRemarks] = useState(false)
-  const [enableStreamRate, setEnableStreamRate] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -275,29 +144,25 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     console.log(data)
   }
 
-  const getValue = (key: FormKeys) => {
-    return getValues()[key]
-  }
-
   const handleStreamRate = () => {
-    const selectedNoOfTimes = Number(getValue("noOfTimes")) || 0
-    const selectedTokenAmount = Number(getValue("tokenAmount")) || 0
+    const selectedNoOfTimes = Number(getValues().noOfTimes) || 0
+    const selectedTokenAmount = Number(getValues().tokenAmount) || 0
     const totalAmount = new BigNumber(selectedNoOfTimes)
       .multipliedBy(new BigNumber(selectedTokenAmount))
       .toFixed()
     setValue("amount", totalAmount)
 
     if (
-      getValue("startDate") &&
-      getValue("startTime") &&
-      getValue("noOfTimes")
+      getValues().startDate &&
+      getValues().startTime &&
+      getValues().noOfTimes
     ) {
       const selectedInterval =
-        intervals.find((interval) => interval.key === getValue("interval"))
+        intervals.find((interval) => interval.key === getValues().interval)
           ?.value || 0
       const timeDifference = selectedInterval * selectedNoOfTimes
       const endDateTime = moment(
-        `${getValue("startDate")} ${getValue("startTime")}`,
+        `${getValues().startDate} ${getValues().startTime}`,
         "DD/MM/YYYY LT"
       ).add(timeDifference, "minutes")
       setValue("endDate", endDateTime.format("DD/MM/YYYY"))
@@ -308,7 +173,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const toggleStreamRate = () => {
-    if (!enableStreamRate) {
+    if (!getValues().enableStreamRate) {
       setValue("interval", intervals[0].key)
       handleStreamRate()
     } else {
@@ -320,7 +185,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     resetField("amount")
     resetField("endDate")
     resetField("endTime")
-    setEnableStreamRate(!enableStreamRate)
+    setValue("enableStreamRate", !getValues().enableStreamRate)
   }
 
   useEffect(() => {
@@ -355,24 +220,26 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.transactionName?.message?.toString()}
+                helper={t(
+                  errors.transactionName?.message?.toString() || ""
+                ).toString()}
               >
                 <div>
                   <input
                     className={`${
-                      !showRemarks && "!pr-[124px]"
+                      !getValues().showRemarks && "!pr-[124px]"
                     } w-full h-[40px] ${!!errors.transactionName && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transactionName")}
                   />
-                  {!showRemarks && (
+                  {!getValues().showRemarks && (
                     <Button
                       size="small"
                       title={`${t("send:add-remarks")}`}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       endIcon={<Icons.PlusIncircleIcon />}
-                      onClick={() => setShowRemarks(true)}
+                      onClick={() => setValue("showRemarks", true)}
                       type="button"
                     />
                   )}
@@ -401,7 +268,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               </div>
               {!!errors.receiverWallet && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.receiverWallet?.message?.toString()}
+                  {t(errors.receiverWallet?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -450,14 +317,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           </div>
 
           {/* Remarks */}
-          {showRemarks && (
+          {getValues().showRemarks && (
             <div className="mt-4">
               <InputField
                 label={t("send:remarks")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.remarks?.message?.toString()}
+                helper={t(errors.remarks?.message?.toString() || "").toString()}
               >
                 <div>
                   <input
@@ -471,7 +338,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     title={`${t("send:remove-remarks")}`}
                     className="absolute right-[8px] top-[8px] text-content-primary"
                     endIcon={<Icons.CrossIcon />}
-                    onClick={() => setShowRemarks(false)}
+                    onClick={() => setValue("showRemarks", false)}
                     type="button"
                   />
                 </div>
@@ -509,6 +376,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 )}
                 <input
                   type="text"
+                  value={getValues().token}
                   className={`h-[40px] w-full !pl-11 ${
                     !!errors.token && "error"
                   }`}
@@ -519,7 +387,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               </div>
               {!!errors.token && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.token?.message?.toString()}
+                  {t(errors.token?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -580,7 +448,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div className="flex justify-between">
                 <label
                   className={`${
-                    enableStreamRate
+                    getValues().enableStreamRate
                       ? "text-content-tertiary"
                       : "text-content-primary"
                   } ml-3 text-xs font-medium mb-1`}
@@ -591,7 +459,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
                   {formatCurrency(
-                    prices[currentToken.symbol] * Number(getValue("amount")) ||
+                    prices[currentToken.symbol] * Number(getValues().amount) ||
                       0,
                     "$"
                   )}{" "}
@@ -601,20 +469,20 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.amount?.message?.toString()}
+                helper={t(errors.amount?.message?.toString() || "").toString()}
               >
                 <div>
                   <input
                     className={`${
-                      !enableStreamRate && "!pr-14"
+                      !getValues().enableStreamRate && "!pr-14"
                     } w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
                     step="any"
-                    disabled={enableStreamRate}
+                    disabled={getValues().enableStreamRate}
                     {...register("amount")}
                   />
-                  {!enableStreamRate && (
+                  {!getValues().enableStreamRate && (
                     <Button
                       size="small"
                       title={`${t("send:max")}`}
@@ -647,18 +515,18 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 01/01/2022"
                   dateFormat="DD/MM/YYYY"
                   timeFormat={false}
-                  value={getValue("startDate")}
+                  value={getValues().startDate}
                   onChange={(date) => {
                     setValue("startDate", moment(date).format("DD/MM/YYYY"))
                     trigger("startDate")
-                    if (getValue("startTime")) {
+                    if (getValues().startTime) {
                       trigger("startTime")
                     }
-                    if (!!getValue("endTime") || !!getValue("endDate")) {
+                    if (!!getValues().endTime || !!getValues().endDate) {
                       trigger("endDate")
                       trigger("endTime")
                     }
-                    if (enableStreamRate) handleStreamRate()
+                    if (getValues().enableStreamRate) handleStreamRate()
                   }}
                   error={!!errors.startDate}
                 >
@@ -680,20 +548,24 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   onChange={(time) => {
                     setValue("startTime", time)
                     trigger("startTime")
-                    if (getValue("startDate")) {
+                    if (getValues().startDate) {
                       trigger("startDate")
                     }
-                    if (!!getValue("endTime") || !!getValue("endDate")) {
+                    if (!!getValues().endTime || !!getValues().endDate) {
                       trigger("endDate")
                       trigger("endTime")
                     }
-                    if (enableStreamRate) handleStreamRate()
+                    if (getValues().enableStreamRate) handleStreamRate()
                   }}
                 />
               </div>
               {(!!errors.startDate || !!errors.startTime) && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {(errors.startDate || errors.startTime)?.message?.toString()}
+                  {t(
+                    (
+                      errors.startDate || errors.startTime
+                    )?.message?.toString() || ""
+                  ).toString()}
                 </p>
               )}
             </div>
@@ -701,7 +573,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div>
                 <label
                   className={`${
-                    enableStreamRate
+                    getValues().enableStreamRate
                       ? "text-content-tertiary"
                       : "text-content-primary"
                   } ml-3 text-xs font-medium mb-1`}
@@ -712,12 +584,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 30/01/2022"
                   dateFormat="DD/MM/YYYY"
                   timeFormat={false}
-                  disabled={enableStreamRate}
-                  value={getValue("endDate")}
+                  disabled={getValues().enableStreamRate}
+                  value={getValues().endDate}
                   onChange={(date) => {
                     setValue("endDate", moment(date).format("DD/MM/YYYY"))
                     trigger("endDate")
-                    if (getValue("endTime")) {
+                    if (getValues().endTime) {
                       trigger("endTime")
                     }
                   }}
@@ -731,11 +603,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 12:00 AM"
                   name="endTime"
                   register={register}
-                  disabled={enableStreamRate}
+                  disabled={getValues().enableStreamRate}
                   onChange={(time) => {
                     setValue("endTime", time)
                     trigger("endTime")
-                    if (getValue("endDate")) {
+                    if (getValues().endDate) {
                       trigger("endDate")
                     }
                   }}
@@ -744,7 +616,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               </div>
               {(!!errors.endDate || !!errors.endTime) && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {(errors.endDate || errors.endTime)?.message?.toString()}
+                  {t(
+                    (errors.endDate || errors.endTime)?.message?.toString() ||
+                      ""
+                  ).toString()}
                 </p>
               )}
             </div>
@@ -766,7 +641,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           </div>
 
           {/* Stream rate field */}
-          {enableStreamRate && (
+          {getValues().enableStreamRate && (
             <div className="mt-4 grid lg:grid-cols-3 gap-3">
               <div>
                 <InputField
@@ -774,7 +649,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   className="relative text-content-primary"
                   error={false}
                   labelMargin={12}
-                  helper={errors.noOfTimes?.message?.toString()}
+                  helper={t(
+                    errors.noOfTimes?.message?.toString() || ""
+                  ).toString()}
                 >
                   <div>
                     <input
@@ -797,7 +674,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div>
                 <InputField
                   error={!!errors.tokenAmount}
-                  helper={errors.tokenAmount?.message?.toString()}
+                  helper={t(
+                    errors.tokenAmount?.message?.toString() || ""
+                  ).toString()}
                   label={t("send:token-amount")}
                   placeholder={"E.g. 10"}
                   type="number"

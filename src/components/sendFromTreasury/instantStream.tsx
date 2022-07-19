@@ -12,13 +12,8 @@ import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
-import { isValidWallet } from "utils/isValidtWallet"
-import * as Yup from "yup"
-import {
-  InstantFormKeys,
-  InstantStreamFormData,
-  InstantStreamProps
-} from "./InstantStream.d"
+import { instantStreamSchema } from "utils/validations/instantStreamSchema"
+import { InstantStreamFormData, InstantStreamProps } from "./InstantStream.d"
 
 const addressBook = [
   {
@@ -46,31 +41,6 @@ export const InstantStream: FC<InstantStreamProps> = ({
   className
 }) => {
   const { t } = useTranslation()
-  const validationSchema: Yup.SchemaOf<InstantStreamFormData> =
-    Yup.object().shape({
-      transactionName: Yup.string().required(
-        t("validation:transaction-name-required")
-      ),
-      receiverWallet: Yup.string()
-        .required(t("validation:wallet-required"))
-        .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-          isValidWallet(value)
-        ),
-      remarks: Yup.string().test(
-        "check-remarks",
-        t("validation:remarks-required"),
-        () => {
-          return !!getValue("remarks") || !showRemarks
-        }
-      ),
-      token: Yup.string().required(t("validation:token-required")),
-      amount: Yup.string()
-        .required(t("validation:amount-required"))
-        .test("amount-invalid", t("validation:amount-invalid"), () => {
-          return Number(getValue("amount")) > 0
-        }),
-      file: Yup.string()
-    })
 
   const {
     register,
@@ -83,7 +53,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
     watch
   } = useForm<InstantStreamFormData>({
     mode: "onChange",
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(instantStreamSchema)
   })
 
   const tokensDropdownWrapper = useRef(null)
@@ -132,10 +102,6 @@ export const InstantStream: FC<InstantStreamProps> = ({
     console.log(data)
   }
 
-  const getValue = (key: InstantFormKeys) => {
-    return getValues()[key]
-  }
-
   useEffect(() => {
     const subscription = watch(() => {
       if (setFormValues) {
@@ -168,7 +134,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.transactionName?.message?.toString()}
+                helper={t(errors.transactionName?.message?.toString() ?? "")}
               >
                 <div>
                   <input
@@ -214,7 +180,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
               </div>
               {!!errors.receiverWallet && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.receiverWallet?.message?.toString()}
+                  {t(errors.receiverWallet?.message?.toString() ?? "")}
                 </p>
               )}
               <CollapseDropdown
@@ -270,7 +236,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.remarks?.message?.toString()}
+                helper={t(errors.remarks?.message?.toString() ?? "")}
               >
                 <div>
                   <input
@@ -332,7 +298,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
               </div>
               {!!errors.token && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.token?.message?.toString()}
+                  {t(errors.token?.message?.toString() ?? "")}
                 </p>
               )}
               <CollapseDropdown
@@ -400,7 +366,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
                   {formatCurrency(
-                    prices[currentToken.symbol] * Number(getValue("amount")) ||
+                    prices[currentToken.symbol] * Number(getValues().amount) ||
                       0,
                     "$"
                   )}{" "}
@@ -410,7 +376,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.amount?.message?.toString()}
+                helper={t(errors.amount?.message?.toString() || "")}
               >
                 <div>
                   <input
