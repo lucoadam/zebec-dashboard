@@ -62,7 +62,12 @@
     "sign-and-approve": "Sign & Approve",
     "signed-by": "Signed By",
     "remaining": "Remaining",
-    "show-all-remaining": "Show all remaining"
+    "show-all-remaining": "Show all remaining",
+    "farm": "Farm",
+    "pending-rewards": "Pending Rewards",
+    "deposited": "Deposited",
+    "apy-7d": "APY(7D)",
+    "tvl": "TVL"
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",
@@ -78,12 +83,12 @@
     "cancelling": "Cancelling",
     "pausing": "Pausing",
     "reject-modal-header": "Are you sure you wnat to reject transaction?",
-    "signing":"Signing",
-    "yes-sign":"Yes, Sign",
-    "no-sign":"No, Dont Sign",
-    "sign-modal-header":"Are you sure you wnat to sign transaction?",
+    "signing": "Signing",
+    "yes-sign": "Yes, Sign",
+    "no-sign": "No, Dont Sign",
+    "sign-modal-header": "Are you sure you wnat to sign transaction?",
     "rejecting": "Rejecting",
-    "yes-reject":"Yes, Reject",
-    "no-reject":"No, Reject"
+    "yes-reject": "Yes, Reject",
+    "no-reject": "No, Reject"
   }
 }

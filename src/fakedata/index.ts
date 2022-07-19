@@ -1,4 +1,5 @@
 export * from "./balances"
+export * from "./farms"
 export * from "./historyTransactions"
 export * from "./incomingTransactions"
 export * from "./individualAddressBook"
