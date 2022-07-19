@@ -1,7 +1,12 @@
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton } from "components/shared"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  UserAddress
+} from "components/shared"
 import { toggleCancelModal } from "features/modals/cancelModalSlice"
 import { togglePauseModal } from "features/modals/pauseModalSlice"
 import { toggleResumeModal } from "features/modals/resumeModalSlice"
@@ -71,13 +76,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              1AdXF3...DuV15{" "}
-              <IconButton
-                icon={<Icons.UserAddIcon />}
-                className="bg-background-primary"
-              />
-            </div>
+            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">

@@ -300,7 +300,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Signed Owners */}
