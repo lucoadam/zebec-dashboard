@@ -23,7 +23,7 @@ const ResumeModal: FC = ({}) => {
           <div className="text-content-primary text-subtitle font-semibold">
             {t("modal-actions.resume-modal-header")}
           </div>
-          <div className="pt-[12px] pb-[12px]">
+          <div className="pt-3 pb-3">
             <Button
               className={`w-full `}
               variant="gradient"
