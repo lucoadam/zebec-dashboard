@@ -85,5 +85,24 @@
     "rejecting": "Rejecting",
     "yes-reject":"Yes, Reject",
     "no-reject":"No, Reject"
+  },
+  "yield-farming": {
+    "stake-lp-token":"Stake LP Token",
+    "stake-lp-token-subtitle":"Stake LP tokens to earn rewards.",
+    "token":"Token",
+    "balance":"Balance: ",
+    "enter-amount":"Enter amount",
+    "stake":"Stake",
+    "harvest-rewards":"Harvest Rewards",
+    "harvest-rewards-subtitle":"Harvest pending rewards from your farm.",
+    "harvest":"Harvest",
+    "unstake":"Unstake",
+    "unstake-header":"Unstake LP Token",
+    "unstake-subtitle": "Withdraw your deposit & pending rewards.",
+    "staking":"Staking",
+    "unstaking":"Unstaking",
+    "harvesting":"Harvesting",
+    "max":"MAX"
+
   }
 }
