@@ -25,7 +25,7 @@ const PauseModal: FC = ({}) => {
           <div className="text-content-primary text-subtitle font-semibold ">
             {t("modal-actions.pause-modal-header")}
           </div>
-          <div className="pt-[12px] pb-[12px]">
+          <div className="pt-3 pb-3">
             <Button
               disabled={loading}
               endIcon={loading ? <Icons.Loading /> : <></>}

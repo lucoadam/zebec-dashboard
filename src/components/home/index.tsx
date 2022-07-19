@@ -1,5 +1,5 @@
 import { useAppSelector } from "app/hooks"
-import { BuildWithZebec, SendFeedback, ZebecHelp } from "components/shared"
+import { SupportCard } from "components/shared"
 import { FC } from "react"
 import Balances from "./Balances"
 import DepositedAssets from "./DepositedAssets"
@@ -35,9 +35,36 @@ const HomePage: FC = () => {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-x-6 mt-6">
-        <ZebecHelp />
-        <BuildWithZebec />
-        <SendFeedback />
+        <SupportCard
+          title="common:zebec-help"
+          description="treasuryOverview:treasury-help-description"
+          buttons={[
+            {
+              title: "common:support.check-faq"
+            },
+            {
+              title: "common:support.join-discord"
+            }
+          ]}
+        />
+        <SupportCard
+          title="treasuryOverview:build-with-zebec"
+          description="treasuryOverview:build-description"
+          buttons={[
+            {
+              title: "treasuryOverview:check-documentation"
+            }
+          ]}
+        />
+        <SupportCard
+          title="treasuryOverview:send-feedback"
+          description="treasuryOverview:feedback-description"
+          buttons={[
+            {
+              title: "treasuryOverview:send-us-message"
+            }
+          ]}
+        />
       </div>
     </>
   )

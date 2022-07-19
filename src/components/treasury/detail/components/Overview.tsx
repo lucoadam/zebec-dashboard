@@ -4,11 +4,10 @@ import DepositedAssets from "components/home/DepositedAssets"
 import {
   ActivityThisWeek,
   DepositedBalance,
+  SupportCard,
   Tab,
-  Tokens,
-  ZebecHelp
+  Tokens
 } from "components/shared"
-import { SendFeedback } from "components/shared/SendFeedback"
 import { tokenBalances, weeklyBalances } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { useState } from "react"
@@ -17,13 +16,13 @@ import { Withdrawal } from "./Withdrawal"
 
 const fundTransferTabs = [
   {
-    title: "Deposit",
+    title: "common:buttons.deposit",
     icon: <Icons.ArrowDownLeftIcon />,
     count: 0,
     Component: <Deposit />
   },
   {
-    title: "Withdrawal",
+    title: "common:buttons.withdraw",
     icon: <Icons.ArrowUpRightIcon />,
     count: 0,
     Component: <Withdrawal />
@@ -94,9 +93,7 @@ const Overview = () => {
                   key={fundTranfer.title}
                   type="plain"
                   className="w-1/2"
-                  title={`${t(
-                    `treasuryOverview:${fundTranfer.title.toLowerCase()}`
-                  )}`}
+                  title={`${t(fundTranfer.title)}`}
                   isActive={activePage === index}
                   startIcon={fundTranfer.icon}
                   count={fundTranfer.count}
@@ -112,11 +109,30 @@ const Overview = () => {
         {/**
          * Zebec Treasury Help
          */}
-        <ZebecHelp />
+        <SupportCard
+          title="treasuryOverview:treasury-help"
+          description="treasuryOverview:treasury-help-description"
+          buttons={[
+            {
+              title: "common:support.check-faq"
+            },
+            {
+              title: "common:support.join-discord"
+            }
+          ]}
+        />
         {/**
          * Send Feedback
          */}
-        <SendFeedback />
+        <SupportCard
+          title="treasuryOverview:send-feedback"
+          description="treasuryOverview:feedback-description"
+          buttons={[
+            {
+              title: "treasuryOverview:send-us-message"
+            }
+          ]}
+        />
       </div>
     </div>
   )

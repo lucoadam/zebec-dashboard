@@ -17,8 +17,28 @@
     "create-new": "Create New",
     "buttons": {
         "continue": "Continue",
+        "deposit": "Deposit",
+        "withdraw": "Withdraw",
         "go-back": "Go back",
+        "view-all": "View All",
+        "max": "MAX",
         "confirm-and-create-treasury": "Confirm & Create Treasury"
+    },
+    "balances": {
+        "deposited-balance": "DEPOSITED BALANCE",
+        "total-withdrawable-amount": "TOTAL WITHDRAWABLE AMOUNT",
+        "token": "Token",
+        "total-incoming": "TOTAL INCOMING",
+        "total-outgoing": "TOTAL OUTGOING",
+        "activity-this-week": "ACTIVITY THIS WEEK",
+        "incoming": "INCOMING",
+        "outgoing": "OUTGOING",
+        "withdrawn": "WITHDRAWN",
+        "total-withdrawable-amount-detail": "Whenever you receive money, you have to individually withdraw it from each transaction. Go to incoming tab to perform withdrawal."
+    },
+    "deposit-withdrawal": {
+        "deposit-title": "Deposit balance into your wallet.",
+        "withdraw-title": "Withdraw your deposited balance into your wallet."
     },
     "wallet-not-connected": {
         "title": "Wallet not connected!",
@@ -28,6 +48,10 @@
         "connect-wallet": "Connect Wallet"
     },
     "zebec-help": "Zebec Help",
+    "support": {
+        "check-faq": "Check FAQs",
+        "join-discord": "Join Discord"
+    },
     "notifications": {
         "notification": "Notification",
         "notified-on": "Notified on",

@@ -1,5 +1,6 @@
 import * as Icons from "assets/icons"
 import { tokenBalances, weeklyBalances } from "fakedata"
+import { useTranslation } from "next-i18next"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
@@ -9,11 +10,12 @@ import { Button } from "./Button"
 export const DepositedBalance: FC<DepositedBalanceProps> = ({
   balance = 0
 }) => {
+  const { t } = useTranslation()
   const depositedBalance = splitNumber(balance)
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-        DEPOSITED BALANCE
+        {t("common:balances.deposited-balance")}
       </div>
       <div>
         <div className=" text-heading-3 text-content-primary font-semibold">
@@ -34,11 +36,12 @@ export const DepositedBalance: FC<DepositedBalanceProps> = ({
 
 /* Total Withdrawable Amount */
 export const TotalWithdrawableAmount: FC = () => {
+  const { t } = useTranslation()
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="flex justify-between items-center">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-          TOTAL WITHDRAWABLE AMOUNT
+          {t("common:balances.total-withdrawable-amount")}
         </div>
         <Button size="small" title="View" endIcon={<Icons.ArrowRightIcon />} />
       </div>
@@ -48,8 +51,7 @@ export const TotalWithdrawableAmount: FC = () => {
           <span className=" text-subtitle text-content-contrast">.02213</span>
         </div>
         <div className=" text-caption text-content-contrast">
-          Whenever you receive money, you have to individually withdraw it from
-          each transaction. Go to incoming tab to perform withdrawal.
+          {t("common:balances.total-withdrawable-amount-detail")}
         </div>
       </div>
     </div>
@@ -61,11 +63,13 @@ export const Tokens: FC<{
   currentToken: keyof typeof tokenBalances
   setCurrentToken: (each: keyof typeof tokenBalances) => void
 }> = ({ currentToken, setCurrentToken }) => {
+  const { t } = useTranslation()
+
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
       <div className="flex justify-between items-center gap-x-6">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1 transform -translate-y-1.5">
-          TOKEN
+          {t("common:balances.token")}
         </div>
         {/* Tokens */}
         <div className="flex gap-x-2 overflow-x-auto pb-1">
@@ -88,7 +92,7 @@ export const Tokens: FC<{
       {/* Incoming */}
       <div className="space-y-2">
         <div className="text-caption text-content-contrast font-semibold uppercase">
-          TOTAL INCOMING
+          {t("common:balances.total-incoming")}
         </div>
         <div className="flex gap-x-1">
           <Icons.ArrowDownLeftIcon className="text-base text-success-content mt-auto transform -translate-y-1" />
@@ -106,7 +110,7 @@ export const Tokens: FC<{
       {/* Outgoing */}
       <div className="space-y-2">
         <div className="text-caption text-content-contrast font-semibold uppercase">
-          TOTAL OUTGOING
+          {t("common:balances.total-outgoing")}
         </div>
         <div className="flex gap-x-1">
           <Icons.ArrowUpRightIcon className="text-base text-error-content mt-auto transform -translate-y-1" />
@@ -129,10 +133,11 @@ export const Tokens: FC<{
 export const ActivityThisWeek: FC<{
   currentToken: keyof typeof weeklyBalances
 }> = ({ currentToken }) => {
+  const { t } = useTranslation()
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-        ACTIVITY THIS WEEK
+        {t("common:balances.activity-this-week")}
       </div>
       <table>
         <tbody>
@@ -142,7 +147,7 @@ export const ActivityThisWeek: FC<{
               <div className="flex gap-x-1">
                 <Icons.ArrowDownLeftIcon className="text-base text-success-content" />
                 <div className="text-caption text-content-secondary font-semibold uppercase">
-                  INCOMING
+                  {t("common:balances.incoming")}
                 </div>
               </div>
             </td>
@@ -175,7 +180,7 @@ export const ActivityThisWeek: FC<{
               <div className="flex gap-x-1">
                 <Icons.ArrowUpRightIcon className="text-base text-error-content" />
                 <div className="text-caption text-content-secondary font-semibold uppercase">
-                  OUTGOING
+                  {t("common:balances.outgoing")}
                 </div>
               </div>
             </td>
@@ -208,7 +213,7 @@ export const ActivityThisWeek: FC<{
               <div className="flex gap-x-1">
                 <Icons.ArrowDownIcon className="text-base text-content-secondary" />
                 <div className="text-caption text-content-secondary font-semibold uppercase">
-                  WITHDRAWN
+                  {t("common:balances.withdrawn")}
                 </div>
               </div>
             </td>

@@ -1,18 +1,19 @@
-import React, { FC, useState } from "react"
+import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC, useState } from "react"
 import DepositTab from "./DepositTab"
 import WithdrawTab from "./WithdrawTab"
-import * as Icons from "assets/icons"
 
 const tabs = [
   {
-    title: "Deposit",
+    title: "common:buttons.deposit",
     icon: <Icons.ArrowDownLeftIcon />,
     count: 0,
     Component: <DepositTab />
   },
   {
-    title: "Withdraw",
+    title: "common:buttons.withdraw",
     icon: <Icons.ArrowUpRightIcon />,
     count: 2,
     Component: <WithdrawTab />
@@ -21,6 +22,7 @@ const tabs = [
 
 const DepositWithdraw: FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
+  const { t } = useTranslation()
   return (
     <>
       <div className="rounded bg-background-secondary flex flex-col">
@@ -30,7 +32,7 @@ const DepositWithdraw: FC = () => {
               <Tab
                 key={tab.title}
                 type="plain"
-                title={`${tab.title}`}
+                title={`${t(tab.title)}`}
                 isActive={activeTab === index}
                 onClick={() => setActiveTab(index)}
                 startIcon={tab.icon}

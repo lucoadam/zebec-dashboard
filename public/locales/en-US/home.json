@@ -1,0 +1,12 @@
+{
+  "recent": {
+    "title": "RECENT TRANSACTIONS",
+    "empty": "There are no recent transactions. The recent payments you make and receive will appear here."
+  },
+  "farms": {
+    "title": "FARMS"
+  },
+  "button": {
+    "go-to-farms": "Go to Farms"
+  }
+}

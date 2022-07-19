@@ -23,7 +23,7 @@ const SignTransactionModal: FC = ({}) => {
           <div className="text-content-primary text-subtitle font-semibold">
             {t("modal-actions.sign-modal-header")}
           </div>
-          <div className="pt-[12px] pb-[12px]">
+          <div className="pt-3 pb-3">
             <Button
               className={`w-full `}
               variant="gradient"

@@ -7,23 +7,24 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import { individualAddressBook } from "fakedata"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
+import { useAppSelector } from "app/hooks"
 
 interface Address {
   name: string
-  wallet: string[]
+  wallet: string
 }
 
 export default function IndividualAddresses() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [addresses, setAddresses] = useState<Address>({
     name: "",
-    wallet: []
+    wallet: ""
   })
-  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const headers = [
     {
@@ -43,26 +44,25 @@ export default function IndividualAddresses() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    setError
+    handleSubmit
+    // setError
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(addOwnersSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    if (wallets.some((wallet) => wallet === data.wallet)) {
-      setError(
-        "wallet",
-        { type: "custom", message: "validation:wallet-exists" },
-        {
-          shouldFocus: true
-        }
-      )
-      return
-    }
+    // if (wallets.some((wallet) => wallet === data.wallet)) {
+    //   setError(
+    //     "wallet",
+    //     { type: "custom", message: "validation:wallet-exists" },
+    //     {
+    //       shouldFocus: true
+    //     }
+    //   )
+    //   return
+    // }
     setAddresses(data)
-    setWallets([...wallets, data.wallet])
   }
 
   return (
@@ -74,7 +74,7 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {individualAddressBook.data.map((transaction, index) => {
+                {addressBook.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}
