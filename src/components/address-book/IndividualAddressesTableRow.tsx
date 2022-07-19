@@ -5,14 +5,11 @@ import * as Icons from "assets/icons"
 import CopyButton from "components/shared/CopyButton"
 import { toSubstring } from "utils"
 
-
 interface IndividualAddresesTableRow {
   index: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
 }
-
-
 
 const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   transaction
@@ -36,9 +33,12 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
-            <div className="flex items-center gap-x-2 text-content-primary" data-tip={transaction.address}>
-           {toSubstring(transaction.address.toString(), 4, true)}
-            
+            <div
+              className="flex items-center gap-x-2 text-content-primary"
+              data-tip={transaction.address}
+            >
+              {toSubstring(transaction.address.toString(), 4, true)}
+
               <div className="flex-shrink-0">
                 <CopyButton
                   content={transaction.address}

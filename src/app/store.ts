@@ -46,7 +46,7 @@ const combineReducer = combineReducers({
   rejectTransaction: rejectModalSlice,
   signTransaction: signModalSlice,
   stake: stakeSlice,
-  unstake:unStakeSlice,
+  unstake: unStakeSlice,
   harvest: harvestSlice
 })
 

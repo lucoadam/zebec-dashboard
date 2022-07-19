@@ -52,7 +52,6 @@ export const StakeSlice = createSlice({
   }
 })
 
-export const { showModal, toggleStakeModal, setLoading } =
-  StakeSlice.actions
+export const { showModal, toggleStakeModal, setLoading } = StakeSlice.actions
 
 export default StakeSlice.reducer

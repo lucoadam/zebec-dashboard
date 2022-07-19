@@ -25,7 +25,7 @@ export default function AddressesGroup() {
     name: "",
     wallet: []
   })
-  const addressBook = useAppSelector((state)=>state.address.addressBooks)
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
   const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({

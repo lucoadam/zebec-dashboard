@@ -68,9 +68,9 @@ const Transactions: NextPage = () => {
         <PauseModal />
         <ResumeModal />
         <CancelModal />
-        <StakeModal/>
-        <UnstakeModal/>
-        <HarvestModal/>
+        <StakeModal />
+        <UnstakeModal />
+        <HarvestModal />
       </Layout>
     </>
   )

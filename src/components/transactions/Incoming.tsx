@@ -15,7 +15,7 @@ const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   const [noOfRows, setNoOfRows] = useState(10)
@@ -76,33 +76,28 @@ const Incoming: FC = () => {
           setCurrentPage={setCurrentPage}
           setNoOfRows={setNoOfRows}
         />
-       
       </div>
       <Button
-                title="Stake"
-                size="small"
-              
-                onClick={() => {
-                  dispatch(toggleStakeModal())
-                 
-                }}
-              />
-              <Button
-                title="Unstake"
-                size="small"
-               
-                onClick={() => {
-                  dispatch(toggleUnStakeModal())
-                }}
-              />
-              <Button
-                title="Harvest"
-                size="small"
-               
-                onClick={() => {
-                 dispatch(toggleHarvestModal())
-                }}
-              />
+        title="Stake"
+        size="small"
+        onClick={() => {
+          dispatch(toggleStakeModal())
+        }}
+      />
+      <Button
+        title="Unstake"
+        size="small"
+        onClick={() => {
+          dispatch(toggleUnStakeModal())
+        }}
+      />
+      <Button
+        title="Harvest"
+        size="small"
+        onClick={() => {
+          dispatch(toggleHarvestModal())
+        }}
+      />
       <ExportModal />
     </>
   )

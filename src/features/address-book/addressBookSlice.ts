@@ -17,31 +17,28 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
-  addressBooks: [ {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "okay Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "John Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  }],
+  addressBooks: [
+    {
+      name: "Jane Doe",
+      address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "okay Doe",
+      address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "John Doe",
+      address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "Jane Doe",
+      address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "Jane Doe",
+      address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    }
+  ],
   error: ""
 }
 

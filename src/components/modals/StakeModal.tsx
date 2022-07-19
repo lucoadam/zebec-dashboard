@@ -13,7 +13,7 @@ import { setLoading, toggleStakeModal } from "features/modals/stakeSlice"
 const StakeModal: FC = ({}) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
-  const [stakeAmount,setStakeAmount] = useState<number>()
+  const [stakeAmount, setStakeAmount] = useState<number>()
   const { show, loading } = useAppSelector((state) => state.stake)
   const validationSchema = Yup.object().shape({
     stakeAmount: Yup.string()
@@ -37,14 +37,12 @@ const StakeModal: FC = ({}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data)
-
   }
   useEffect(() => {
     if (stakeAmount != null && stakeAmount != 0) {
       setValue("stakeAmount", stakeAmount)
     }
   }, [stakeAmount, setValue])
-
 
   return (
     <Modal
@@ -66,70 +64,65 @@ const StakeModal: FC = ({}) => {
           <div className="flex mt-4">
             <div className="text-content-secondary text-caption font-medium">
               {t("yield-farming.token")}
-
             </div>
             <div className="ml-auto text-content-tertiary text-caption">
-            {t("yield-farming.balance")} 240 {t("yield-farming.token")}
-
+              {t("yield-farming.balance")} 240 {t("yield-farming.token")}
             </div>
           </div>
-                {/* Input Field */}
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <div className="pt-3 pb-3">
-          <InputField
-            label={t("")}
-            className="relative text-content-primary"
-            helper={errors.stakeAmount?.message?.toString() ?? ""}
-            error={!!errors.stakeAmount?.message}
-          >
-            <div>
-              <input
-                className={`w-full h-10 ${
-                  !!errors.stakeAmount?.message && "error"
-                }`}
-                placeholder={t("yield-farming.enter-amount")}
-                type="number"
-                {...register("stakeAmount")}
-                autoFocus
-              />
+          {/* Input Field */}
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <div className="pt-3 pb-3">
+              <InputField
+                label={t("")}
+                className="relative text-content-primary"
+                helper={errors.stakeAmount?.message?.toString() ?? ""}
+                error={!!errors.stakeAmount?.message}
+              >
+                <div>
+                  <input
+                    className={`w-full h-10 ${
+                      !!errors.stakeAmount?.message && "error"
+                    }`}
+                    placeholder={t("yield-farming.enter-amount")}
+                    type="number"
+                    {...register("stakeAmount")}
+                    autoFocus
+                  />
+                  <Button
+                    size="small"
+                    title={`${t("yield-farming.max")}`}
+                    className={`absolute right-2.5 top-2 text-content-primary `}
+                    onClick={() => {
+                      setStakeAmount(10)
+                    }}
+                    type="button"
+                  />
+                </div>
+              </InputField>
+            </div>
+
+            <div className="pt-3 pb-3">
               <Button
-                size="small"
-                title={`${t("yield-farming.max")}`}
-                className={`absolute right-2.5 top-2 text-content-primary `}
-                onClick={() => {
-                  setStakeAmount(10)
-                }}
+                disabled={loading}
+                endIcon={loading ? <Icons.Loading /> : <></>}
+                className={`w-full `}
+                variant="gradient"
                 type="button"
+                title={
+                  loading
+                    ? `${t("yield-farming.staking")}`
+                    : `${t("yield-farming.stake")}`
+                }
+                onClick={() => {
+                  dispatch(setLoading(true))
+                  setTimeout(() => {
+                    dispatch(toggleStakeModal())
+                    dispatch(setLoading(false))
+                  }, 5000)
+                }}
               />
             </div>
-          </InputField>
-        </div>
-
-        <div className="pt-3 pb-3">
-            <Button
-              disabled={loading}
-              endIcon={loading ? <Icons.Loading /> : <></>}
-              className={`w-full `}
-              variant="gradient"
-              type="button"
-
-              title={
-                loading
-                  ? `${t("yield-farming.staking")}`
-                  : `${t("yield-farming.stake")}`
-              }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(toggleStakeModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
-            />
-          </div>
-
-      </form>
-          
+          </form>
         </>
       }
     </Modal>

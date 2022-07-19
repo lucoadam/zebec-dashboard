@@ -4,7 +4,7 @@ import ReactTooltip from "react-tooltip"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
 import { HistoryTransactions } from "./HistoryTransactions"
-import { Pagination,RowsPerPage } from "components/shared"
+import { Pagination, RowsPerPage } from "components/shared"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
 

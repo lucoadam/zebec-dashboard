@@ -24,7 +24,7 @@ export default function IndividualAddresses() {
     name: "",
     wallet: ""
   })
-  const addressBook = useAppSelector((state)=>state.address.addressBooks)
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
@@ -33,8 +33,10 @@ export default function IndividualAddresses() {
       .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
         isValidWallet(value)
       )
-      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-         (addresses.wallet !== value)
+      .test(
+        "is-wallet-exists",
+        t("validation:wallet-exists"),
+        (value) => addresses.wallet !== value
       )
   })
   const headers = [
@@ -63,7 +65,6 @@ export default function IndividualAddresses() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setAddresses(data)
-    
   }
 
   return (
