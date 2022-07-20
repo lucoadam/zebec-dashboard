@@ -1,4 +1,4 @@
-import { ContinuousStreamFormData } from "./continuousStream.d"
+import { ContinuousStreamFormData } from "./ContinuousStream.d"
 
 export interface StreamOverviewProps {
   formValues?: ContinuousStreamFormData

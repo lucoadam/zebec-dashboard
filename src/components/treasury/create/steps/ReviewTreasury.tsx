@@ -30,8 +30,8 @@ const ReviewTreasury: FC<StepsComponentProps> = (props) => {
       <div className="flex ">
         {/* dropdown */}
         <div className="w-full md:w-1/2 sm:w-full flex justify-start items-center text-content-primary">
-          2 {t("createTreasury:sub-text-out-of")} {props.treasury.owners.length}{" "}
-          {t("createTreasury:owners")}
+          {props.treasury.minValidator} {t("createTreasury:sub-text-out-of")}{" "}
+          {props.treasury.owners.length} {t("createTreasury:owners")}
         </div>
       </div>
       <Button

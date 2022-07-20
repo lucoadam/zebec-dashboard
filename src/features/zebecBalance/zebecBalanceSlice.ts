@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PublicKey } from "@solana/web3.js"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
-import { RootState } from "../../app/store"
+import { RootState } from "app/store"
 import { ZebecTokenState } from "./zebecBalanceSlice.d"
 
 const initialState: ZebecTokenState = {

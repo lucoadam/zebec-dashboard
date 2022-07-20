@@ -1,8 +1,12 @@
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton } from "components/shared"
-import CopyButton from "components/shared/CopyButton"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  UserAddress
+} from "components/shared"
 import { toggleRejectModal } from "features/modals/rejectModalSlice"
 import { toggleSignModal } from "features/modals/signModalSlice"
 import moment from "moment"
@@ -63,18 +67,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
             <div className="text-caption text-content-primary">10 min ago</div>
           </td>
           <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              {transaction.is_in_address_book
-                ? transaction.name
-                : toSubstring(transaction.sender, 5, true)}{" "}
-              {!transaction.is_in_address_book && (
-                <IconButton
-                  icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary"
-                />
-              )}
-              <CopyButton content={transaction.sender} />
-            </div>
+            <UserAddress wallet={transaction.receiver} />
           </td>
           <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center float-right gap-x-6">

@@ -8,11 +8,11 @@ import {
   TableBody
 } from "components/shared"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
-import * as Yup from "yup"
 import { useForm } from "react-hook-form"
-import { isValidWallet } from "utils/isValidtWallet"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { useAppSelector } from "app/hooks"
+//import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
 
 interface Address {
   name: string
@@ -20,12 +20,14 @@ interface Address {
 }
 
 export default function IndividualAddresses() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [addresses, setAddresses] = useState<Address>({
     name: "",
     wallet: ""
   })
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
+<<<<<<< HEAD
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("validation:name-required")),
     wallet: Yup.string()
@@ -39,6 +41,13 @@ export default function IndividualAddresses() {
         (value) => addresses.wallet !== value
       )
   })
+=======
+  //const dispatch = useAppDispatch()
+  //   useEffect(() => {
+  //     dispatch(fetchAddressBook());
+
+  // }, [dispatch,addresses])
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
   const headers = [
     {
       label: "addressBook:name",
@@ -58,13 +67,28 @@ export default function IndividualAddresses() {
     register,
     formState: { errors },
     handleSubmit
+    // setError
   } = useForm({
-    mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema)
+    mode: "onChange",
+    resolver: yupResolver(addOwnersSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
+    // if (wallets.some((wallet) => wallet === data.wallet)) {
+    //   setError(
+    //     "wallet",
+    //     { type: "custom", message: "validation:wallet-exists" },
+    //     {
+    //       shouldFocus: true
+    //     }
+    //   )
+    //   return
+    // }
     setAddresses(data)
+<<<<<<< HEAD
+=======
+    //dispatch(saveAddressBook(data))
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
   }
 
   return (
@@ -76,7 +100,7 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {addressBook.map((transaction, index) => {
+                {addressBook?.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}
@@ -99,7 +123,9 @@ export default function IndividualAddresses() {
                     label={t("addressBook:address-name")}
                     className="relative text-content-secondary"
                     error={!!errors.name}
-                    helper={errors.name?.message?.toString() || ""}
+                    helper={t(
+                      errors.name?.message?.toString() || ""
+                    ).toString()}
                   >
                     <div>
                       <input
@@ -119,7 +145,9 @@ export default function IndividualAddresses() {
                     label={t("addressBook:wallet-address")}
                     className="relative text-content-secondary"
                     error={!!errors.wallet}
-                    helper={errors.wallet?.message?.toString() || ""}
+                    helper={t(
+                      errors.wallet?.message?.toString() || ""
+                    ).toString()}
                   >
                     <div>
                       <input

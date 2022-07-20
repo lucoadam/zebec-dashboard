@@ -1,9 +1,9 @@
 import { useAppSelector } from "app/hooks"
 import type { NextPage } from "next"
 import { useState } from "react"
-import { InstantStream } from "./instantStream"
-import { InstantStreamFormData } from "./instantStream.d"
-import { InstantStreamOverview } from "./instantStreamOverview"
+import { InstantStream } from "./InstantStream"
+import { InstantStreamFormData } from "./InstantStream.d"
+import { InstantStreamOverview } from "./InstantStreamOverview"
 
 const TreasuryInstantStream: NextPage = () => {
   const [formValues, setFormValues] = useState<InstantStreamFormData>()

@@ -1,6 +1,18 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import Layout from "components/layouts/Layout"
+import CancelModal from "components/modals/CancelModal"
+import PauseModal from "components/modals/PauseModal"
+import ResumeModal from "components/modals/ResumeModal"
+import {
+  Breadcrumb,
+  BreadcrumbRightContent,
+  Button,
+  CollapseDropdown
+} from "components/shared"
 import TreasuryDetail from "components/treasury/detail/TreasuryDetail"
+import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
@@ -8,18 +20,7 @@ import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import * as Icons from "assets/icons"
-import Layout from "components/layouts/Layout"
-import {
-  Breadcrumb,
-  BreadcrumbRightContent,
-  Button,
-  CollapseDropdown
-} from "components/shared"
-import { setTreasurySendActiveTab } from "features/common/commonSlice"
-import CancelModal from "components/modals/CancelModal"
-import PauseModal from "components/modals/PauseModal"
-import ResumeModal from "components/modals/ResumeModal"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
@@ -51,11 +52,22 @@ const Treasury: NextPage = () => {
     }
   }, [dispatch, tokens, walletObject])
 
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
+
   return (
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <Breadcrumb title="Zebec Safe" arrowBack={true}>
+          <Breadcrumb title="Zebec Safe" arrowBack={true} className="lg:flex">
             <BreadcrumbRightContent>
               <div ref={dropdownWrapper} className="relative">
                 <Button

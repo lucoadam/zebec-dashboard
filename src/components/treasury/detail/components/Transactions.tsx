@@ -1,12 +1,18 @@
-import { Tab } from "components/shared"
+import RejectTransactionModal from "components/modals/RejectTransactionModal"
+import SignTransactionModal from "components/modals/SignTransactionModal"
+import { Pagination, RowsPerPage, Tab } from "components/shared"
 import { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
+import { HistoryTransactions } from "./HistoryTransactions"
 import { ScheduledTransactions } from "./ScheduledTransactions"
 import { WithdrawalTransactions } from "./WithdrawalTransactions"
+<<<<<<< HEAD
 import { HistoryTransactions } from "./HistoryTransactions"
 import { Pagination, RowsPerPage } from "components/shared"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
+=======
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
 
 const transactionTabs = [
   {

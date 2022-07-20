@@ -8,19 +8,19 @@ export const ScheduledTransactions = () => {
 
   const headers = [
     {
-      label: "progress",
+      label: "table.progress",
       width: "85"
     },
     {
-      label: "transaction-date",
+      label: "table.transaction-date",
       width: "50"
     },
     {
-      label: "initiated",
+      label: "table.initiated",
       width: "134px"
     },
     {
-      label: "receiver",
+      label: "table.receiver",
       width: "50"
     },
     {

@@ -30,7 +30,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     <>
       <div
         className={twMerge(
-          `flex items-center justify-between pl-8 pr-6 mb-5`,
+          `items-center justify-between pl-8 pr-6 mb-5`,
           className
         )}
       >

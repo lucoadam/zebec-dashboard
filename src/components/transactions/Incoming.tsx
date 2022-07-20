@@ -1,4 +1,4 @@
-import { Breadcrumb, Button, Table, TableBody } from "components/shared"
+import { Breadcrumb, Table, TableBody } from "components/shared"
 import { Pagination, RowsPerPage } from "components/shared"
 import { incomingTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
@@ -6,16 +6,12 @@ import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
 import ExportModal from "components/modals/export-report/ExportModal"
-import { useAppDispatch } from "app/hooks"
-import { toggleStakeModal } from "features/modals/stakeSlice"
-import { toggleUnStakeModal } from "features/modals/unStakeSlice"
-import { toggleHarvestModal } from "features/modals/harvestSlice"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
-  const dispatch = useAppDispatch()
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   const [noOfRows, setNoOfRows] = useState(10)
@@ -77,27 +73,7 @@ const Incoming: FC = () => {
           setNoOfRows={setNoOfRows}
         />
       </div>
-      <Button
-        title="Stake"
-        size="small"
-        onClick={() => {
-          dispatch(toggleStakeModal())
-        }}
-      />
-      <Button
-        title="Unstake"
-        size="small"
-        onClick={() => {
-          dispatch(toggleUnStakeModal())
-        }}
-      />
-      <Button
-        title="Harvest"
-        size="small"
-        onClick={() => {
-          dispatch(toggleHarvestModal())
-        }}
-      />
+
       <ExportModal />
     </>
   )

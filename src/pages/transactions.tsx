@@ -11,9 +11,7 @@ import * as Icons from "../assets/icons"
 import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
 import ResumeModal from "components/modals/ResumeModal"
-import StakeModal from "components/modals/StakeModal"
-import UnstakeModal from "components/modals/UnstakeModal"
-import HarvestModal from "components/modals/HarvestModal"
+
 
 const transactionTabs = [
   {
@@ -68,9 +66,7 @@ const Transactions: NextPage = () => {
         <PauseModal />
         <ResumeModal />
         <CancelModal />
-        <StakeModal />
-        <UnstakeModal />
-        <HarvestModal />
+
       </Layout>
     </>
   )

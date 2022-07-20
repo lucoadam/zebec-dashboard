@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { TabProps } from "./Tab.d"
 
@@ -41,7 +41,16 @@ export const Tab: FC<TabProps> = (props) => {
         )}
         onClick={onClick}
       >
-        {startIcon && <span className="text-xl">{startIcon}</span>}
+        {startIcon && (
+          <span
+            className={twMerge(
+              "text-xl",
+              isActive ? "text-primary" : "text-content-contrast"
+            )}
+          >
+            {startIcon}
+          </span>
+        )}
         <span className="text-subtitle-sm font-medium">
           {children ? children : title}
         </span>

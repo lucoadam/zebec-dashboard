@@ -37,7 +37,11 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
               className="flex items-center gap-x-2 text-content-primary"
               data-tip={transaction.address}
             >
+<<<<<<< HEAD
               {toSubstring(transaction.address.toString(), 4, true)}
+=======
+              {toSubstring(transaction.wallet_address.toString(), 4, true)}
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
 
               <div className="flex-shrink-0">
                 <CopyButton
