@@ -39,15 +39,9 @@ const WalletNotConnectedModal: NextPage = () => {
             </p>
             <Button
               className="w-full mt-10"
-              title={`${t("wallet-not-connected.connect-previous-wallet")}`}
+              title={`${t("wallet-not-connected.connect-wallet")}`}
               variant="gradient"
               onClick={handleConnectWallet}
-            />
-            <Button
-              className="w-full mt-3"
-              title={`${t("wallet-not-connected.connect-different-wallet")}`}
-              variant="default"
-              onClick={() => walletModalObject.setVisible(true)}
             />
           </div>
         </Modal>

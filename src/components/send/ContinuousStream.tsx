@@ -2,9 +2,18 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Button, CollapseDropdown, InputField } from "components/shared"
+import BigNumber from "bignumber.js"
+import {
+  Button,
+  CollapseDropdown,
+  DateTimePicker,
+  InputField,
+  TimePicker,
+  Toggle
+} from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { useClickOutside } from "hooks"
+import moment from "moment"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -12,13 +21,11 @@ import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
-import { isValidWallet } from "utils/isValidtWallet"
-import * as Yup from "yup"
+import { continuousSchema } from "utils/validations/continuousStreamSchema"
 import {
-  InstantFormKeys,
-  InstantStreamFormData,
-  InstantStreamProps
-} from "./instantStream.d"
+  ContinuousStreamFormData,
+  ContinuousStreamProps
+} from "./ContinuousStream.d"
 
 const addressBook = [
   {
@@ -39,38 +46,36 @@ const addressBook = [
   }
 ]
 
-export const InstantStream: FC<InstantStreamProps> = ({
+const intervals = [
+  {
+    key: "Months",
+    value: 24 * 30 * 60
+  },
+  {
+    key: "Weeks",
+    value: 24 * 7 * 60
+  },
+  {
+    key: "Days",
+    value: 24 * 60
+  },
+  {
+    key: "Hours",
+    value: 60
+  },
+  {
+    key: "Minutes",
+    value: 1
+  }
+]
+
+export const ContinuousStream: FC<ContinuousStreamProps> = ({
   setFormValues,
   tokenBalances,
   addFile,
   className
 }) => {
   const { t } = useTranslation()
-  const validationSchema: Yup.SchemaOf<InstantStreamFormData> =
-    Yup.object().shape({
-      transactionName: Yup.string().required(
-        t("validation:transaction-name-required")
-      ),
-      receiverWallet: Yup.string()
-        .required(t("validation:wallet-required"))
-        .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-          isValidWallet(value)
-        ),
-      remarks: Yup.string().test(
-        "check-remarks",
-        t("validation:remarks-required"),
-        () => {
-          return !!getValue("remarks") || !showRemarks
-        }
-      ),
-      token: Yup.string().required(t("validation:token-required")),
-      amount: Yup.string()
-        .required(t("validation:amount-required"))
-        .test("amount-invalid", t("validation:amount-invalid"), () => {
-          return Number(getValue("amount")) > 0
-        }),
-      file: Yup.string()
-    })
 
   const {
     register,
@@ -81,19 +86,20 @@ export const InstantStream: FC<InstantStreamProps> = ({
     trigger,
     resetField,
     watch
-  } = useForm<InstantStreamFormData>({
+  } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(continuousSchema)
   })
 
   const tokensDropdownWrapper = useRef(null)
   const receiverDropdownWrapper = useRef(null)
+  const intervalDropdownWrapper = useRef(null)
 
   const [tokenSearchData, setTokenSearchData] = useState("")
   const [receiverSearchData, setReceiverSearchData] = useState("")
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
-  const [showRemarks, setShowRemarks] = useState(false)
+  const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -112,6 +118,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const handleReceiverClose = () => {
     setToggleReceiverDropdown(false)
   }
+  const handleIntervalClose = () => {
+    setToggleIntervalDropdown(false)
+  }
 
   //handle clicking outside
   useClickOutside(tokensDropdownWrapper, {
@@ -120,20 +129,63 @@ export const InstantStream: FC<InstantStreamProps> = ({
   useClickOutside(receiverDropdownWrapper, {
     onClickOutside: handleReceiverClose
   })
+  useClickOutside(intervalDropdownWrapper, {
+    onClickOutside: handleIntervalClose
+  })
 
   useEffect(() => {
     if (tokenDetails.length > 0) {
       setCurrentToken(tokenDetails[0])
       setValue("token", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue])
+  }, [tokenDetails, setValue, currentToken.symbol])
 
-  const onSubmit = (data: InstantStreamFormData) => {
+  const onSubmit = (data: ContinuousStreamFormData) => {
     console.log(data)
   }
 
-  const getValue = (key: InstantFormKeys) => {
-    return getValues()[key]
+  const handleStreamRate = () => {
+    const selectedNoOfTimes = Number(getValues().noOfTimes) || 0
+    const selectedTokenAmount = Number(getValues().tokenAmount) || 0
+    const totalAmount = new BigNumber(selectedNoOfTimes)
+      .multipliedBy(new BigNumber(selectedTokenAmount))
+      .toFixed()
+    setValue("amount", totalAmount)
+
+    if (
+      getValues().startDate &&
+      getValues().startTime &&
+      getValues().noOfTimes
+    ) {
+      const selectedInterval =
+        intervals.find((interval) => interval.key === getValues().interval)
+          ?.value || 0
+      const timeDifference = selectedInterval * selectedNoOfTimes
+      const endDateTime = moment(
+        `${getValues().startDate} ${getValues().startTime}`,
+        "DD/MM/YYYY LT"
+      ).add(timeDifference, "minutes")
+      setValue("endDate", endDateTime.format("DD/MM/YYYY"))
+      setValue("endTime", endDateTime.format("LT"))
+      trigger("endDate")
+      trigger("endTime")
+    }
+  }
+
+  const toggleStreamRate = () => {
+    if (!getValues().enableStreamRate) {
+      setValue("interval", intervals[0].key)
+      handleStreamRate()
+    } else {
+      resetField("interval")
+      resetField("noOfTimes")
+      resetField("tokenAmount")
+    }
+
+    resetField("amount")
+    resetField("endDate")
+    resetField("endTime")
+    setValue("enableStreamRate", !getValues().enableStreamRate)
   }
 
   useEffect(() => {
@@ -154,10 +206,10 @@ export const InstantStream: FC<InstantStreamProps> = ({
         )}
       >
         <div className="text-heading-4 text-content-primary font-semibold">
-          {t("send:instant-transfer")}
+          {t("send:continuous-stream")}
         </div>
         <div className="text-caption text-content-tertiary font-normal pt-2">
-          {t("send:instant-transfer-description")}
+          {t("send:continuous-stream-description")}
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Transaction Name and Receiver Wallet */}
@@ -168,24 +220,26 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.transactionName?.message?.toString()}
+                helper={t(
+                  errors.transactionName?.message?.toString() || ""
+                ).toString()}
               >
                 <div>
                   <input
                     className={`${
-                      !showRemarks && "!pr-[124px]"
+                      !getValues().showRemarks && "!pr-[124px]"
                     } w-full h-[40px] ${!!errors.transactionName && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transactionName")}
                   />
-                  {!showRemarks && (
+                  {!getValues().showRemarks && (
                     <Button
                       size="small"
                       title={`${t("send:add-remarks")}`}
                       className="absolute right-[8px] top-[8px] text-content-primary"
                       endIcon={<Icons.PlusIncircleIcon />}
-                      onClick={() => setShowRemarks(true)}
+                      onClick={() => setValue("showRemarks", true)}
                       type="button"
                     />
                   )}
@@ -214,7 +268,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
               </div>
               {!!errors.receiverWallet && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.receiverWallet?.message?.toString()}
+                  {t(errors.receiverWallet?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -248,7 +302,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
-                          <div className="text-content-primary">
+                          <div className="text-sm text-content-primary">
                             {user.name}
                           </div>
                           <div className="text-caption text-content-tertiary">
@@ -263,14 +317,14 @@ export const InstantStream: FC<InstantStreamProps> = ({
           </div>
 
           {/* Remarks */}
-          {showRemarks && (
+          {getValues().showRemarks && (
             <div className="mt-4">
               <InputField
                 label={t("send:remarks")}
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.remarks?.message?.toString()}
+                helper={t(errors.remarks?.message?.toString() || "").toString()}
               >
                 <div>
                   <input
@@ -284,7 +338,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                     title={`${t("send:remove-remarks")}`}
                     className="absolute right-[8px] top-[8px] text-content-primary"
                     endIcon={<Icons.CrossIcon />}
-                    onClick={() => setShowRemarks(false)}
+                    onClick={() => setValue("showRemarks", false)}
                     type="button"
                   />
                 </div>
@@ -332,7 +386,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
               </div>
               {!!errors.token && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.token?.message?.toString()}
+                  {t(errors.token?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -392,7 +446,11 @@ export const InstantStream: FC<InstantStreamProps> = ({
             <div>
               <div className="flex justify-between">
                 <label
-                  className={`text-content-primary ml-3 text-xs font-medium mb-1`}
+                  className={`${
+                    getValues().enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:amount")}
                 </label>
@@ -400,7 +458,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                   className={`text-content-tertiary text-xs font-normal mb-1`}
                 >
                   {formatCurrency(
-                    prices[currentToken.symbol] * Number(getValue("amount")) ||
+                    prices[currentToken.symbol] * Number(getValues().amount) ||
                       0,
                     "$"
                   )}{" "}
@@ -410,44 +468,277 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={errors.amount?.message?.toString()}
+                helper={t(errors.amount?.message?.toString() || "").toString()}
               >
                 <div>
                   <input
-                    className={`w-full h-[40px] ${!!errors.amount && "error"}`}
+                    className={`${
+                      !getValues().enableStreamRate && "!pr-14"
+                    } w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
                     step="any"
+                    disabled={getValues().enableStreamRate}
                     {...register("amount")}
                   />
-                  <Button
-                    size="small"
-                    title={`${t("send:max")}`}
-                    className="absolute right-[8px] top-[8px] text-content-primary"
-                    onClick={() =>
-                      setValue(
-                        "amount",
-                        getBalance(
-                          tokenBalances,
-                          currentToken.symbol
-                        ).toString()
-                      )
-                    }
-                    type="button"
-                  />
+                  {!getValues().enableStreamRate && (
+                    <Button
+                      size="small"
+                      title={`${t("send:max")}`}
+                      className="absolute right-[8px] top-[8px] text-content-primary"
+                      onClick={() =>
+                        setValue(
+                          "amount",
+                          getBalance(
+                            tokenBalances,
+                            currentToken.symbol
+                          ).toString()
+                        )
+                      }
+                      type="button"
+                    />
+                  )}
                 </div>
               </InputField>
             </div>
           </div>
 
-          {/* Add file*/}
-          {addFile && (
-            <div className="mt-4">
+          {/* Stream start and Stream end */}
+          <div className="mt-4 grid lg:grid-cols-2 gap-3">
+            <div>
+              <div>
+                <label className="ml-3 text-content-primary text-xs font-medium mb-1">
+                  {t("send:stream-start")}
+                </label>
+                <DateTimePicker
+                  placeholder="E.g. 01/01/2022"
+                  dateFormat="DD/MM/YYYY"
+                  timeFormat={false}
+                  value={getValues().startDate}
+                  onChange={(date) => {
+                    setValue("startDate", moment(date).format("DD/MM/YYYY"))
+                    trigger("startDate")
+                    if (getValues().startTime) {
+                      trigger("startTime")
+                    }
+                    if (!!getValues().endTime || !!getValues().endDate) {
+                      trigger("endDate")
+                      trigger("endTime")
+                    }
+                    if (getValues().enableStreamRate) handleStreamRate()
+                  }}
+                  error={!!errors.startDate}
+                >
+                  <input
+                    className={`w-full h-[40px] ${
+                      !!errors.startDate && "error"
+                    }`}
+                    readOnly
+                    {...register("startDate")}
+                  />
+                </DateTimePicker>
+              </div>
+              <div className="mt-4">
+                <TimePicker
+                  error={!!errors.startTime}
+                  name="startTime"
+                  register={register}
+                  placeholder="E.g. 12:00 AM"
+                  onChange={(time) => {
+                    setValue("startTime", time)
+                    trigger("startTime")
+                    if (getValues().startDate) {
+                      trigger("startDate")
+                    }
+                    if (!!getValues().endTime || !!getValues().endDate) {
+                      trigger("endDate")
+                      trigger("endTime")
+                    }
+                    if (getValues().enableStreamRate) handleStreamRate()
+                  }}
+                />
+              </div>
+              {(!!errors.startDate || !!errors.startTime) && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                  {t(
+                    (
+                      errors.startDate || errors.startTime
+                    )?.message?.toString() || ""
+                  ).toString()}
+                </p>
+              )}
+            </div>
+            <div>
+              <div>
+                <label
+                  className={`${
+                    getValues().enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
+                >
+                  {t("send:stream-end")}
+                </label>
+                <DateTimePicker
+                  placeholder="E.g. 30/01/2022"
+                  dateFormat="DD/MM/YYYY"
+                  timeFormat={false}
+                  disabled={getValues().enableStreamRate}
+                  value={getValues().endDate}
+                  onChange={(date) => {
+                    setValue("endDate", moment(date).format("DD/MM/YYYY"))
+                    trigger("endDate")
+                    if (getValues().endTime) {
+                      trigger("endTime")
+                    }
+                  }}
+                  error={!!errors.endDate}
+                >
+                  <input type="text" readOnly {...register("endDate")} />
+                </DateTimePicker>
+              </div>
+              <div className="mt-4">
+                <TimePicker
+                  placeholder="E.g. 12:00 AM"
+                  name="endTime"
+                  register={register}
+                  disabled={getValues().enableStreamRate}
+                  onChange={(time) => {
+                    setValue("endTime", time)
+                    trigger("endTime")
+                    if (getValues().endDate) {
+                      trigger("endDate")
+                    }
+                  }}
+                  error={!!errors.endTime}
+                />
+              </div>
+              {(!!errors.endDate || !!errors.endTime) && (
+                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                  {t(
+                    (errors.endDate || errors.endTime)?.message?.toString() ||
+                      ""
+                  ).toString()}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Toggle stream rate and Add file*/}
+          <div className="mt-4 grid lg:grid-cols-2 gap-3">
+            <Toggle
+              text={t("send:enable-stream-rate")}
+              onChange={toggleStreamRate}
+            />
+            {addFile && (
               <FileUpload
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
               />
+            )}
+          </div>
+
+          {/* Stream rate field */}
+          {getValues().enableStreamRate && (
+            <div className="mt-4 grid lg:grid-cols-3 gap-3">
+              <div>
+                <InputField
+                  label={t("send:no-of-times")}
+                  className="relative text-content-primary"
+                  error={false}
+                  labelMargin={12}
+                  helper={t(
+                    errors.noOfTimes?.message?.toString() || ""
+                  ).toString()}
+                >
+                  <div>
+                    <input
+                      className={`w-full h-[40px] ${
+                        !!errors.noOfTimes && "error"
+                      }`}
+                      placeholder={"E.g. 4"}
+                      type="number"
+                      step="any"
+                      {...register("noOfTimes")}
+                      onChange={(e) => {
+                        setValue("noOfTimes", e.target.value)
+                        handleStreamRate()
+                        trigger("noOfTimes")
+                      }}
+                    />
+                  </div>
+                </InputField>
+              </div>
+              <div>
+                <InputField
+                  error={!!errors.tokenAmount}
+                  helper={t(
+                    errors.tokenAmount?.message?.toString() || ""
+                  ).toString()}
+                  label={t("send:token-amount")}
+                  placeholder={"E.g. 10"}
+                  type="number"
+                  step="any"
+                  className="w-full h-[40px]"
+                  labelMargin={12}
+                >
+                  <input
+                    className={`w-full h-[40px]`}
+                    type="number"
+                    step="any"
+                    {...register("tokenAmount")}
+                    onChange={(e) => {
+                      setValue("tokenAmount", e.target.value)
+                      handleStreamRate()
+                      trigger("tokenAmount")
+                    }}
+                  />
+                </InputField>
+              </div>
+              <div ref={intervalDropdownWrapper} className="relative">
+                <label
+                  className={`ml-3 text-content-primary text-xs font-medium mb-1`}
+                >
+                  {t("send:time-interval")}
+                </label>
+                <div
+                  className="relative text-content-primary"
+                  onClick={() => setToggleIntervalDropdown((prev) => !prev)}
+                >
+                  <input
+                    type="text"
+                    className="h-[40px] w-full"
+                    readOnly
+                    {...register("interval")}
+                  />
+                  <Icons.CheveronDownIcon className="absolute top-3 right-1 text-lg" />
+                </div>
+                <CollapseDropdown
+                  show={toggleIntervalDropdown}
+                  className="mt-8 w-full z-[99]"
+                  position="left"
+                >
+                  <div className="rounded-lg bg-background-primary border border-outline">
+                    <div className="divide-y divide-outline max-h-[206px] overflow-auto">
+                      {intervals.map((data) => (
+                        <div
+                          key={data.key}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            setToggleIntervalDropdown(false)
+                            setValue("interval", data.key)
+                            handleStreamRate()
+                          }}
+                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                        >
+                          <div className="text-content-primary">{data.key}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CollapseDropdown>
+              </div>
             </div>
           )}
 

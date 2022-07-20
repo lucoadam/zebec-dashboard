@@ -24,17 +24,17 @@ const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount }) => {
           height={64}
         />
       </div>
-      <div className="text-content-secondary text-heading-5 pt-4 font-semibold">
+      <div className="text-content-secondary text-heading-5  font-semibold">
         {t("withdraw.withdrawing")}
       </div>
       <div className="text-primary-contrast text-heading-5 ">
         {withdrawAmount} SOL
       </div>
-      <div className="flex justify-center pt-4">
+      <div className="flex text-warning justify-center pt-4">
         <div>
           <Icons.Asterik />
         </div>
-        <div className="text-warning text-caption pl-2 font-semibold">
+        <div className=" text-caption pl-2 font-semibold">
           {t("withdraw.dont-close-window")}
         </div>
       </div>

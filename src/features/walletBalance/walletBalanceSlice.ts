@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
-import { RootState } from "../../app/store"
+import { RootState } from "app/store"
 import { WalletTokenState } from "./walletBalanceSlice.d"
 
 const initialState: WalletTokenState = {

@@ -3,7 +3,7 @@ import axios from "axios"
 
 interface AddressBook {
   name: string
-  address: string
+  wallet_address: string
 }
 interface AddressBookState {
   loading: boolean
@@ -17,31 +17,28 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
-  addressBooks: [ {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "okay Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "John Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  },
-  {
-    
-    name: "Jane Doe",
-    address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-  }],
+  addressBooks: [
+    {
+      name: "Jane Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "okay Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "John Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "Jane Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    },
+    {
+      name: "Jane Doe",
+      wallet_address: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
+    }
+  ],
   error: ""
 }
 
@@ -50,18 +47,22 @@ export const fetchAddressBook = createAsyncThunk(
   "addressBook/fetchAddressBook",
   async () => {
     const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/addressBook"
+      "https://jsonplaceholder.typicode.com//addressBook"
     )
+    console.log(response.data)
     return response.data
   }
 )
-export const saveAddressBook = createAsyncThunk(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const saveAddressBook: any = createAsyncThunk(
   "addressBook/saveAddressBook",
-  async () => {
-    const response = await axios.post(
-      "https://jsonplaceholder.typicode.com/addressBook"
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (data: any) => {
+    const { data: response } = await axios.post(
+      "https://jsonplaceholder.typicode.com/addressBook",
+      { ...data, id: crypto.randomUUID() }
     )
-    return response.data
+    return { name: response.name, wallet_address: response.wallet_address }
   }
 )
 export const deleteAddressBook = createAsyncThunk(
@@ -102,7 +103,7 @@ const addressBookSlice = createSlice({
       saveAddressBook.fulfilled,
       (state, action: PayloadAction<typeof initialState.addressBooks>) => {
         state.loading = false
-        state.addressBooks = action.payload
+        state.addressBooks = [...action.payload]
         state.error = ""
       }
     )

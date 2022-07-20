@@ -1,17 +1,21 @@
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton } from "components/shared"
-import CopyButton from "components/shared/CopyButton"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  UserAddress
+} from "components/shared"
+import { toggleCancelModal } from "features/modals/cancelModalSlice"
+import { togglePauseModal } from "features/modals/pauseModalSlice"
+import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useState } from "react"
-import { formatCurrency, toSubstring } from "utils"
-import { toggleResumeModal } from "features/modals/resumeModalSlice"
-import { togglePauseModal } from "features/modals/pauseModalSlice"
-import { toggleCancelModal } from "features/modals/cancelModalSlice"
-import { useAppDispatch } from "app/hooks"
-import moment from "moment"
 import ReactTooltip from "react-tooltip"
+import { formatCurrency, toSubstring } from "utils"
 
 interface HistoryTableRowProps {
   index: number
@@ -29,9 +33,6 @@ const returnValidPercentage = (percentage: number) => {
   }
 }
 
-
-
-
 const HistoryTableRow: FC<HistoryTableRowProps> = ({
   index,
   transaction,
@@ -40,7 +41,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  
+
   const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
     ReactTooltip.rebuild()
@@ -89,20 +90,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-4 min-w-51">
-            <div className="flex items-center gap-x-1 text-body text-content-primary">
-              <span data-tip={transaction.sender}>
-                {transaction.is_in_address_book
-                  ? toSubstring(transaction.name, 22, false)
-                  : toSubstring(transaction.sender, 6, true)}{" "}
-              </span>
-              {!transaction.is_in_address_book && (
-                <IconButton
-                  icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary min-w-7 h-7"
-                />
-              )}
-              <CopyButton className="min-w-7" content={transaction.sender} />
-            </div>
+            <UserAddress wallet={transaction.sender} />
           </td>
           <td className="px-6 py-4 w-full  float-right">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -148,10 +136,10 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         </tr>
         {/* Table Body Details Row */}
         <tr>
-          <td colSpan={4} >
+          <td colSpan={4}>
             <div
               className={`bg-background-light rounded-lg overflow-y-auto  transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0" 
+                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
               }`}
               //style={styles.detailsRow}
             >
@@ -312,7 +300,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Signed Owners */}
@@ -346,7 +334,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                               </span>
                             </div>
                             <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
+                              {moment("20220620", "YYYYMMDD").fromNow()}
                             </div>
                           </div>
                         ))}
@@ -401,46 +389,50 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                             endIcon={
                               <Icons.ArrowDownIcon className="text-content-contrast" />
                             }
-                            onClick={()=>setShowAllRemaining(!showAllRemaining)}
-
+                            onClick={() =>
+                              setShowAllRemaining(!showAllRemaining)
+                            }
                           />
-                        
                         </div>
-                        {showAllRemaining && ( <div className={`pl-3`}>
-                          <div className="grid gap-y-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
-                              }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
-                            />
-                            <div className="">
-                              <span data-tip="0x4f10x4f1U700eU700e">
-                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                              </span>
-                            </div>
-                            <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
+                        {showAllRemaining && (
+                          <div className={`pl-3`}>
+                            <div className="grid gap-y-4">
+                              {[1, 2, 3].map((item) => (
+                                <div
+                                  key={item}
+                                  className="flex items-center  gap-x-2 text-content-primary"
+                                >
+                                  <Image
+                                    layout="fixed"
+                                    alt="Owner Logo"
+                                    src={
+                                      [
+                                        Images.Avatar1,
+                                        Images.Avatar2,
+                                        Images.Avatar4
+                                      ][item % 3]
+                                    }
+                                    height={24}
+                                    width={24}
+                                    className="rounded-full"
+                                  />
+                                  <div className="">
+                                    <span data-tip="0x4f10x4f1U700eU700e">
+                                      {toSubstring(
+                                        "0x4f10x4f1U700eU700e",
+                                        5,
+                                        true
+                                      )}
+                                    </span>
+                                  </div>
+                                  <div className="text-content-tertiary">
+                                    {moment("20220620", "YYYYMMDD").fromNow()}
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        ))}
-                      </div>
-
-
-                          </div>)}
+                        )}
                       </div>
                     </div>
                   </div>

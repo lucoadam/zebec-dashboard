@@ -26,6 +26,10 @@ const SelectField: FC<SelectFieldProps> = ({
     }
   }, [totalItems])
 
+  useEffect(() => {
+    setSelectedPerson(totalItems > 0 ? Number(value) ?? null : 0)
+  }, [totalItems, value])
+
   return (
     <select
       value={selectedPerson ?? ""}

@@ -1,8 +1,12 @@
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton } from "components/shared"
-import CopyButton from "components/shared/CopyButton"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  UserAddress
+} from "components/shared"
 import { toggleRejectModal } from "features/modals/rejectModalSlice"
 import { toggleSignModal } from "features/modals/signModalSlice"
 import moment from "moment"
@@ -34,8 +38,6 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
     ReactTooltip.rebuild()
   }, [showAllRemaining])
 
-
-
   return (
     <>
       <Fragment>
@@ -65,18 +67,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
             <div className="text-caption text-content-primary">10 min ago</div>
           </td>
           <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              {transaction.is_in_address_book
-                ? transaction.name
-                : toSubstring(transaction.sender, 5, true)}{" "}
-              {!transaction.is_in_address_book && (
-                <IconButton
-                  icon={<Icons.UserAddIcon />}
-                  className="bg-background-primary"
-                />
-              )}
-              <CopyButton content={transaction.sender} />
-            </div>
+            <UserAddress wallet={transaction.receiver} />
           </td>
           <td className="px-6 py-4 w-[200px]">
             <div className="flex items-center float-right gap-x-6">
@@ -103,7 +94,6 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
               className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
                 activeDetailsRow === index ? `ease-in h-max ` : "ease-out h-0"
               }`}
-              
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
@@ -335,55 +325,61 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                           </div>
                         ))}
                         <div className="text-content-primary">
-                        <Button
+                          <Button
                             title={`${t("table.show-all-remaining")}`}
                             size="small"
                             endIcon={
                               <Icons.ArrowDownIcon className="text-content-contrast" />
                             }
-                            onClick={()=>setShowAllRemaining(!showAllRemaining)}
+                            onClick={() =>
+                              setShowAllRemaining(!showAllRemaining)
+                            }
                           />
-                          {showAllRemaining && ( <div className={`pt-3 pl-3`}>
-                          <div className="grid gap-y-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
-                              }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
-                            />
-                            <div className="">
-                              <span data-tip="0x4f10x4f1U700eU700e">
-                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                              </span>
+                          {showAllRemaining && (
+                            <div className={`pt-3 pl-3`}>
+                              <div className="grid gap-y-4">
+                                {[1, 2, 3].map((item) => (
+                                  <div
+                                    key={item}
+                                    className="flex items-center  gap-x-2 text-content-primary"
+                                  >
+                                    <Image
+                                      layout="fixed"
+                                      alt="Owner Logo"
+                                      src={
+                                        [
+                                          Images.Avatar1,
+                                          Images.Avatar2,
+                                          Images.Avatar4
+                                        ][item % 3]
+                                      }
+                                      height={24}
+                                      width={24}
+                                      className="rounded-full"
+                                    />
+                                    <div className="">
+                                      <span data-tip="0x4f10x4f1U700eU700e">
+                                        {toSubstring(
+                                          "0x4f10x4f1U700eU700e",
+                                          5,
+                                          true
+                                        )}
+                                      </span>
+                                    </div>
+                                    <div className="text-content-tertiary">
+                                      {moment("20220620", "YYYYMMDD").fromNow()}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                            <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-
-                          </div>)}
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                 <div className="flex gap-x-4 py-6">
+                <div className="flex gap-x-4 py-6">
                   <Button
                     startIcon={<Icons.EditIcon />}
                     variant="gradient"

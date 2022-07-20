@@ -67,7 +67,8 @@
     "pending-rewards": "Pending Rewards",
     "deposited": "Deposited",
     "apy-7d": "APY(7D)",
-    "tvl": "TVL"
+    "tvl": "TVL",
+    "reject": "Reject"
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",

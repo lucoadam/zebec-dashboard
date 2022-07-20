@@ -14,13 +14,17 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <Breadcrumb title={`${t("treasury:title")}`} className="mb-9">
+          <Breadcrumb
+            title={`${t("treasury:title")}`}
+            className="mb-9 lg:flex "
+          >
             <BreadcrumbRightContent>
-              <div className="flex gap-x-3">
+              <div className="md:flex gap-x-3 pt-4 md:pt-0">
                 <Link href="/treasury/create">
                   <Button
                     title={`${t("treasury:create-new-treasury")}`}
                     variant="gradient"
+                    className="mt-4  md:mt-0"
                     endIcon={<Icons.PlusIncircleIcon />}
                   />
                 </Link>
@@ -28,6 +32,7 @@ const Treasury: NextPage = () => {
                   <Button
                     title={`${t("treasury:see-archived-safe")}`}
                     endIcon={<Icons.TrashIcon />}
+                    className="mt-4  md:mt-0"
                   />
                 </Link>
               </div>

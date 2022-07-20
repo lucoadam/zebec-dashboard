@@ -4,6 +4,7 @@ export interface InstantStreamFormData {
   transactionName: string
   receiverWallet: string
   remarks?: string
+  showRemarks?: boolean
   amount: string
   token: string
   file?: string
@@ -11,6 +12,7 @@ export interface InstantStreamFormData {
 
 export type InstantFormKeys =
   | "transactionName"
+  | "showREMarks"
   | "receiverWallet"
   | "remarks"
   | "amount"
