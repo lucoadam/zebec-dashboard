@@ -3,56 +3,16 @@ import { Button, DateTimePicker } from "components/shared"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
 import moment from "moment"
-import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { exportProps } from "../ExportModal"
+import { exportSchema } from "utils/validations/exportSchema"
 
 export type FormKeys = "startDate" | "endDate"
 
 const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
   const { t } = useTranslation("transactions")
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validationSchema: any = Yup.object().shape({
-    startDate: Yup.string()
-      .required(t("validation:export-start-date-time-required"))
-      .test(
-        "check-start-date",
-        t("validation:export-start-date-time-before-today"),
-        () => {
-          return moment(`${getValue("startDate")}`, "DD/MM/YYYY").isBefore(
-            moment()
-          )
-        }
-      ),
-    endDate: Yup.string()
-      .required(t("validation:export-end-date-time-required"))
-      .test(
-        "check-end-date-before-start-date",
-        t("validation:export-end-date-time-before-start-date"),
-        () => {
-          return (
-            !getValue("startDate") ||
-            moment(`${getValue("endDate")} `, "DD/MM/YYYY").isAfter(
-              moment(`${getValue("startDate")}`, "DD/MM/YYYY")
-            )
-          )
-        }
-      )
-      .test(
-        "check-end-date-greater-than-today",
-        t("validation:export-end-date-time-before-today-date"),
-        () => {
-          return moment(`${getValue("endDate")} `, "DD/MM/YYYY").isBefore(
-            moment()
-          )
-        }
-      ),
-    reportFormat: Yup.mixed().required(
-      t("validation:export-choose-report-format")
-    )
-  })
   const {
     register,
     formState: { errors },
@@ -61,8 +21,8 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
     getValues,
     trigger
   } = useForm({
-    mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema)
+    mode: "onChange",
+    resolver: yupResolver(exportSchema)
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -121,7 +81,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
               </DateTimePicker>
               {!!errors.startDate && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.startDate?.message?.toString()}
+                  {t(errors.startDate?.message?.toString() || "").toString()}
                 </p>
               )}
             </div>
@@ -151,7 +111,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
               </DateTimePicker>
               {!!errors.endDate && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errors.endDate?.message?.toString()}
+                  {t(errors.endDate?.message?.toString() || "").toString()}
                 </p>
               )}
             </div>
@@ -190,7 +150,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
           </div>
           {!!errors.reportFormat && (
             <p className="text-content-secondary text-xs ml-[12px] mt-2">
-              {errors.reportFormat?.message?.toString()}
+              {t(errors.reportFormat?.message?.toString() || "").toString()}
             </p>
           )}
         </div>

@@ -1,10 +1,10 @@
 import { useTranslation } from "next-i18next"
 import React, { useState } from "react"
-import * as Yup from "yup"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Breadcrumb, Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
+import { notificationSchema } from "utils/validations/notificationSchema"
 
 interface Notification {
   email: string
@@ -15,18 +15,13 @@ export default function NotificationsComponent() {
   const { t } = useTranslation("common")
   const [userNotification, setUserNotification] = useState<Notification>()
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().required(t("validation:email-required")),
-    telegram: Yup.string().required(t("validation:telegram-required"))
-  })
-
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm({
-    mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema)
+    mode: "onChange",
+    resolver: yupResolver(notificationSchema)
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,7 +47,7 @@ export default function NotificationsComponent() {
                   label={t("notifications.email-address")}
                   className="relative text-content-secondary"
                   error={!!errors.email}
-                  helper={errors.email?.message?.toString() || ""}
+                  helper={t(errors.email?.message?.toString() || "").toString()}
                 >
                   <div>
                     <input
@@ -72,7 +67,9 @@ export default function NotificationsComponent() {
                   label={t("notifications.telegram-username")}
                   className="relative text-content-secondary"
                   error={!!errors.telegram}
-                  helper={errors.telegram?.message?.toString() || ""}
+                  helper={t(
+                    errors.telegram?.message?.toString() || ""
+                  ).toString()}
                 >
                   <div>
                     <input

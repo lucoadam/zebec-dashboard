@@ -3,22 +3,19 @@ import { Button, InputField } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import * as Yup from "yup"
+import { addTreasuryNameSchema } from "utils/validations/addTreasuryNameSchema"
 import { StepsComponentProps } from "../CreateTreasury.d"
 
 const AddTreasuryName: FC<StepsComponentProps> = (props) => {
   const { t } = useTranslation("createTreasury")
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("validation:treasury-name-required"))
-  })
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue
   } = useForm({
-    mode: "onChange" || "onSubmit",
-    resolver: yupResolver(validationSchema)
+    mode: "onChange",
+    resolver: yupResolver(addTreasuryNameSchema)
   })
 
   useEffect(() => {
@@ -43,7 +40,7 @@ const AddTreasuryName: FC<StepsComponentProps> = (props) => {
         </p>
         <InputField
           error={!!errors.name}
-          helper={errors.name?.message?.toString() || ""}
+          helper={t(errors.name?.message?.toString() || "").toString()}
           label={t("treasury:treasury-name")}
           placeholder={t("treasury:name-placeholder")}
           type="text"

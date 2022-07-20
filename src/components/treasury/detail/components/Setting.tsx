@@ -10,15 +10,10 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
-import * as Yup from "yup"
+import { addTreasuryNameSchema } from "utils/validations/addTreasuryNameSchema"
 
 const Setting = () => {
   const { t } = useTranslation()
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("validation:treasury-name-required"))
-  })
-
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleModal = () => {
@@ -31,8 +26,8 @@ const Setting = () => {
     formState: { errors },
     setValue
   } = useForm({
-    mode: "all",
-    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+    resolver: yupResolver(addTreasuryNameSchema),
     defaultValues: {
       name: "Zebec Name"
     }
@@ -76,12 +71,38 @@ const Setting = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
-            <span className="text-sm font-normal text-content-secondary">
-              {t("treasurySettings:minimum-confirmation")}:
-            </span>
-            &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
-            {t("treasurySettings:owners")}
+        </div>
+        <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
+          <span className="text-sm font-normal text-content-secondary">
+            {t("treasurySettings:minimum-confirmation")}:
+          </span>
+          &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
+          {t("treasurySettings:owners")}
+        </div>
+        <InputField
+          error={!!errors?.name}
+          helper={t(errors?.name?.message?.toString() || "").toString()}
+          label={t("treasurySettings:safe-name")}
+          placeholder={t("treasurySettings:enter-safe-name")}
+          className="h-[40px] w-full"
+          type="text"
+        >
+          <input {...register("name")} autoFocus />
+        </InputField>
+        <Button
+          title={`${t("treasurySettings:save-changes")}`}
+          variant="gradient"
+          size="medium"
+          className="w-full justify-center mt-[32px]"
+          type="submit"
+        />
+
+        <div className="mt-[30px]">
+          <div className="text-subtitle text-content-primary font-semibold">
+            {t("treasurySettings:archive-safe")}
+          </div>
+          <div className="text-xs font-normal text-content-secondary mb-[16px]">
+            {t("treasurySettings:archive-safe-description")}
           </div>
           <InputField
             error={!!errors?.name}

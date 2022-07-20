@@ -1,15 +1,30 @@
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import Layout from "components/layouts/Layout"
-import { ContinuousStream } from "components/send/continuousStream"
-import { ContinuousStreamFormData } from "components/send/continuousStream.d"
-import { StreamOverview } from "components/send/streamOverview"
+import { ContinuousStream } from "components/send/ContinuousStream"
+import { ContinuousStreamFormData } from "components/send/ContinuousStream.d"
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { StreamOverview } from "components/send/StreamOverview"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Send: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
   const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
+
   return (
     <Layout pageTitle="Zebec">
       <div className="py-16 container">

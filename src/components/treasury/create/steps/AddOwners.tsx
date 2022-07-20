@@ -14,8 +14,7 @@ import { useTranslation } from "next-i18next"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
-import { isValidWallet } from "utils/isValidtWallet"
-import * as Yup from "yup"
+import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { Owner, StepsComponentProps } from "../CreateTreasury.d"
 import OwnerLists from "../OwnerLists"
 
@@ -58,31 +57,18 @@ const AddOwners: FC<StepsComponentProps> = ({
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [receiverSearchData, setReceiverSearchData] = useState("")
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .required(t("validation:name-required"))
-      .test("is-name-unique", t("validation:name-exists"), (value) =>
-        owners.every((owner) => owner.name !== value)
-      ),
-    wallet: Yup.string()
-      .required(t("validation:wallet-required"))
-      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
-        isValidWallet(value)
-      )
-      .test("is-wallet-exists", t("validation:wallet-exists"), (value) =>
-        owners.every((owner) => owner.wallet !== value)
-      )
-  })
   const {
     register,
     formState: { errors },
     reset,
     handleSubmit,
     setValue,
-    trigger
+    trigger,
+    clearErrors,
+    setError
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(addOwnersSchema)
   })
 
   useEffect(() => {
@@ -91,21 +77,42 @@ const AddOwners: FC<StepsComponentProps> = ({
     }
   }, [useWalletObject, owners, setValue])
 
-  useEffect(() => {
-    setTreasury((treasury) => ({
-      ...treasury,
-      minValidator: owners.length
-    }))
-  }, [owners, setTreasury])
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
+    if (owners.some((owner) => owner.name === data.name)) {
+      setError(
+        "name",
+        { type: "custom", message: "validation:name-exists" },
+        {
+          shouldFocus: true
+        }
+      )
+      return
+    }
+    if (owners.some((owner) => owner.wallet === data.wallet)) {
+      setError(
+        "wallet",
+        {
+          type: "custom",
+          message: "validation:wallet-exists"
+        },
+        {
+          shouldFocus: true
+        }
+      )
+      return
+    }
     if (owners.length < constants.MAX_OWNERS) {
-      setOwners([...owners, data])
+      if ([...owners, data].length > 1) {
+        setSelectionError(false)
+        clearErrors()
+      }
       setTreasury((treasury) => ({
         ...treasury,
-        owners: [...owners, data]
+        owners: [...owners, data],
+        minValidator: [...owners, data].length
       }))
+      setOwners([...owners, data])
     }
     reset()
   }
@@ -146,7 +153,7 @@ const AddOwners: FC<StepsComponentProps> = ({
             <div className="sm:w-full md:w-2/6 pr-2">
               <InputField
                 error={!!errors.name}
-                helper={errors?.name?.message?.toString() || ""}
+                helper={t(errors?.name?.message?.toString() || "").toString()}
                 label={t("createTreasury:second-steper.form.owner-name")}
                 placeholder={t(
                   "createTreasury:second-steper.form.owner-name-placeholder"
@@ -164,7 +171,7 @@ const AddOwners: FC<StepsComponentProps> = ({
             <div className="sm:w-full md:w-4/6">
               <InputField
                 error={!!errors.wallet}
-                helper={errors?.wallet?.message?.toString() || ""}
+                helper={t(errors?.wallet?.message?.toString() || "").toString()}
                 label="Owner Address"
                 className="flex items-center"
               >
@@ -291,6 +298,15 @@ const AddOwners: FC<StepsComponentProps> = ({
               </div>
               <div
                 onClick={() => {
+                  if ([...owners, ...checkedOwners].length > 1) {
+                    setSelectionError(false)
+                    clearErrors()
+                  }
+                  setTreasury((treasury) => ({
+                    ...treasury,
+                    owners: [...owners, ...checkedOwners],
+                    minValidator: [...owners, ...checkedOwners].length
+                  }))
                   setOwners([...owners, ...checkedOwners])
                   setCheckedOwners([])
                   setToggleReceiverDropdown(false)
@@ -344,8 +360,10 @@ const AddOwners: FC<StepsComponentProps> = ({
             if (owners.length >= 2 && !selectError) {
               setCurrentStep(2)
             } else {
-              trigger("name")
-              trigger("wallet")
+              if (owners.length < 2) {
+                trigger("name")
+                trigger("wallet")
+              }
               setSelectionError(true)
             }
           }}

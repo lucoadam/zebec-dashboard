@@ -1,4 +1,4 @@
-import { ContinuousStreamFormData } from "components/send/continuousStream"
+import { ContinuousStreamFormData } from "components/send/ContinuousStream"
 import { UseFormResetField, UseFormSetValue } from "react-hook-form"
 
 export interface FileState {

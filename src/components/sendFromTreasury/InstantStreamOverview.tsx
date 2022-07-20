@@ -2,7 +2,7 @@ import { Button } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
 import { toSubstring } from "utils"
-import { InstantStreamOverviewProps } from "./instantStreamOverview.d"
+import { InstantStreamOverviewProps } from "./InstantStreamOverview.d"
 import * as Icons from "assets/icons"
 import { twMerge } from "tailwind-merge"
 

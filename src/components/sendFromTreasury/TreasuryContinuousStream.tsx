@@ -1,9 +1,9 @@
 import { useAppSelector } from "app/hooks"
-import { ContinuousStream } from "components/send/continuousStream"
-import { ContinuousStreamFormData } from "components/send/continuousStream.d"
+import { ContinuousStream } from "components/send/ContinuousStream"
+import { ContinuousStreamFormData } from "components/send/ContinuousStream.d"
 import type { NextPage } from "next"
 import { useState } from "react"
-import { StreamOverview } from "components/send/streamOverview"
+import { StreamOverview } from "components/send/StreamOverview"
 
 const TreasuryContinuousStream: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
