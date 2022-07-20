@@ -1,9 +1,9 @@
-import { SupportCard } from "components/shared"
-import { useTranslation } from "next-i18next"
 import { FC } from "react"
+import { StreamOverviewProps } from "./StreamOverview.d"
+import { SupportCard } from "components/shared"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
-import { StreamOverviewProps } from "./streamOverview.d"
+import { useTranslation } from "next-i18next"
 
 export const StreamOverview: FC<StreamOverviewProps> = ({
   formValues,

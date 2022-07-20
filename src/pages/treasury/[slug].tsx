@@ -20,6 +20,7 @@ import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
@@ -51,11 +52,22 @@ const Treasury: NextPage = () => {
     }
   }, [dispatch, tokens, walletObject])
 
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
+
   return (
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <Breadcrumb title="Zebec Safe" arrowBack={true}>
+          <Breadcrumb title="Zebec Safe" arrowBack={true} className="lg:flex">
             <BreadcrumbRightContent>
               <div ref={dropdownWrapper} className="relative">
                 <Button

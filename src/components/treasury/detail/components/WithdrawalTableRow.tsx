@@ -56,12 +56,11 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-    
-  const [showAllRemaining, setShowAllRemaining] = useState(false);
+
+  const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [showAllRemaining])
-
 
   return (
     <>
@@ -140,7 +139,6 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
               className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
                 activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
               }`}
-              
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
@@ -378,43 +376,49 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
                             endIcon={
                               <Icons.ArrowDownIcon className="text-content-contrast" />
                             }
-                            onClick={()=>setShowAllRemaining(!showAllRemaining)}
+                            onClick={() =>
+                              setShowAllRemaining(!showAllRemaining)
+                            }
                           />
-                          {showAllRemaining && ( <div className={`pt-3 pl-3`}>
-                          <div className="grid gap-y-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
-                              }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
-                            />
-                            <div className="">
-                              <span data-tip="0x4f10x4f1U700eU700e">
-                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                              </span>
+                          {showAllRemaining && (
+                            <div className={`pt-3 pl-3`}>
+                              <div className="grid gap-y-4">
+                                {[1, 2, 3].map((item) => (
+                                  <div
+                                    key={item}
+                                    className="flex items-center  gap-x-2 text-content-primary"
+                                  >
+                                    <Image
+                                      layout="fixed"
+                                      alt="Owner Logo"
+                                      src={
+                                        [
+                                          Images.Avatar1,
+                                          Images.Avatar2,
+                                          Images.Avatar4
+                                        ][item % 3]
+                                      }
+                                      height={24}
+                                      width={24}
+                                      className="rounded-full"
+                                    />
+                                    <div className="">
+                                      <span data-tip="0x4f10x4f1U700eU700e">
+                                        {toSubstring(
+                                          "0x4f10x4f1U700eU700e",
+                                          5,
+                                          true
+                                        )}
+                                      </span>
+                                    </div>
+                                    <div className="text-content-tertiary">
+                                      {moment("20220620", "YYYYMMDD").fromNow()}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                            <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-
-                          </div>)}
+                          )}
                         </div>
                       </div>
                     </div>

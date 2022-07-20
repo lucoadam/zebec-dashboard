@@ -1,4 +1,4 @@
-import { InstantStreamFormData } from "./instantStream.d"
+import { InstantStreamFormData } from "./InstantStream.d"
 
 export interface InstantStreamOverviewProps {
   formValues?: InstantStreamFormData

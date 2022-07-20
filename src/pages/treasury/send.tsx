@@ -4,10 +4,12 @@ import { Breadcrumb, Tab } from "components/shared"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import TreasuryContinuousStream from "components/sendFromTreasury/treasuryContinuousStream"
-import TreasuryInstantStream from "components/sendFromTreasury/treasuryInstantStream"
+import TreasuryContinuousStream from "components/sendFromTreasury/TreasuryContinuousStream"
+import TreasuryInstantStream from "components/sendFromTreasury/TreasuryInstantStream"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { useEffect } from "react"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const transferTabs = [
   {
@@ -30,7 +32,16 @@ const SendFromTreasury: NextPage = () => {
     (state) => state.common.treasurySendActiveTab
   )
   const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchTokensPrice())
+    const interval = setInterval(() => {
+      dispatch(fetchTokensPrice())
+    }, 30000)
 
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch])
   return (
     <Layout pageTitle="Zebec">
       <div className="flex justify-center border-b border-outline">

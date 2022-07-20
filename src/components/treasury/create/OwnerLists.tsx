@@ -54,7 +54,7 @@ const OwnerLists: FC<{
                 <div className="text-subtitle text-content-primary font-semibold">
                   {owner.name}
                 </div>
-                <div className="flex items-center text-content-primary text-body">
+                <div className="flex items-center text-content-primary text-body gap-x-2">
                   {toSubstring(owner.wallet, 10, true)}{" "}
                   {showCopy && <CopyButton content={owner.wallet} />}
                 </div>

@@ -41,6 +41,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   const [isOpen, setIsOpen] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [withdrawAmount, setWithdrawAmount] = useState<any>()
+  const fees = 0.25
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -93,14 +94,15 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
-                className={`rounded h-96`}
+                className={`rounded h-96 flex items-center justify-center`}
                 hasCloseIcon={!currentStep}
                 size="small"
               >
                 {WithdrawStepsList[currentStep]?.component({
                   setCurrentStep,
                   withdrawAmount,
-                  setWithdrawAmount
+                  setWithdrawAmount,
+                  fees
                 })}
               </Modal>
               <IconButton
