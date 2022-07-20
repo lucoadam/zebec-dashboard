@@ -12,6 +12,7 @@ import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
 import ResumeModal from "components/modals/ResumeModal"
 
+
 const transactionTabs = [
   {
     title: "Incoming",
@@ -65,6 +66,7 @@ const Transactions: NextPage = () => {
         <PauseModal />
         <ResumeModal />
         <CancelModal />
+
       </Layout>
     </>
   )

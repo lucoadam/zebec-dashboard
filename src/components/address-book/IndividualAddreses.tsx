@@ -27,11 +27,27 @@ export default function IndividualAddresses() {
   })
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
+<<<<<<< HEAD
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t("validation:name-required")),
+    wallet: Yup.string()
+      .required(t("validation:wallet-required"))
+      .test("is-valid-address", t("validation:wallet-invalid"), (value) =>
+        isValidWallet(value)
+      )
+      .test(
+        "is-wallet-exists",
+        t("validation:wallet-exists"),
+        (value) => addresses.wallet !== value
+      )
+  })
+=======
   //const dispatch = useAppDispatch()
   //   useEffect(() => {
   //     dispatch(fetchAddressBook());
 
   // }, [dispatch,addresses])
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
   const headers = [
     {
       label: "addressBook:name",
@@ -69,7 +85,10 @@ export default function IndividualAddresses() {
     //   return
     // }
     setAddresses(data)
+<<<<<<< HEAD
+=======
     //dispatch(saveAddressBook(data))
+>>>>>>> 78544e647d7dd575b46dd5a9abdfd986e416b278
   }
 
   return (
