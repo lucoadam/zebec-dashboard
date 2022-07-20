@@ -10,7 +10,8 @@ import { withdrawAmountSchema } from "utils/validations/withdrawAmountSchema"
 const EnterWithdrawAmount: FC<withdrawProps> = ({
   setCurrentStep,
   withdrawAmount,
-  setWithdrawAmount
+  setWithdrawAmount,
+  fees
 }) => {
   const { t } = useTranslation("transactions")
 
@@ -132,7 +133,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
         </div>
         <div className="text-caption ">
           {" "}
-          0.25% {t("withdraw.withdrawal-fees")}
+          {fees}% {t("withdraw.withdrawal-fees")}
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { useAppSelector } from "app/hooks"
+//import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
 
 interface Address {
   name: string
@@ -26,6 +27,11 @@ export default function IndividualAddresses() {
   })
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
+  //const dispatch = useAppDispatch()
+  //   useEffect(() => {
+  //     dispatch(fetchAddressBook());
+
+  // }, [dispatch,addresses])
   const headers = [
     {
       label: "addressBook:name",
@@ -63,6 +69,7 @@ export default function IndividualAddresses() {
     //   return
     // }
     setAddresses(data)
+    //dispatch(saveAddressBook(data))
   }
 
   return (
@@ -74,7 +81,7 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {addressBook.map((transaction, index) => {
+                {addressBook?.map((transaction, index) => {
                   return (
                     <IndividualAddresesTableRow
                       key={index}

@@ -22,6 +22,7 @@ import commonSlice from "features/common/commonSlice"
 import rejectModalSlice from "features/modals/rejectModalSlice"
 import signModalSlice from "features/modals/signModalSlice"
 import addressBookSlice from "features/address-book/addressBookSlice"
+import treasurySettingsSlice from "features/treasurySettings/treasurySettingsSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -41,7 +42,8 @@ const combineReducer = combineReducers({
   resume: resumeModalSlice,
   address: addressBookSlice,
   rejectTransaction: rejectModalSlice,
-  signTransaction: signModalSlice
+  signTransaction: signModalSlice,
+  treasurysettings: treasurySettingsSlice
 })
 
 export const store = configureStore({

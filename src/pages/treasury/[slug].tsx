@@ -67,7 +67,7 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <Breadcrumb title="Zebec Safe" arrowBack={true}>
+          <Breadcrumb title="Zebec Safe" arrowBack={true} className="lg:flex">
             <BreadcrumbRightContent>
               <div ref={dropdownWrapper} className="relative">
                 <Button
