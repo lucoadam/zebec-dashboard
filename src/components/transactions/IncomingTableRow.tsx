@@ -1,6 +1,12 @@
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CircularProgress, IconButton, Modal } from "components/shared"
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  Modal,
+  UserAddress
+} from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import React, { FC, Fragment, useRef, useState } from "react"
@@ -69,13 +75,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-60">
-            <div className="flex items-center gap-x-2 text-body text-content-primary">
-              <span data-tip="1AdXF32sdfsdsdDsdfDuV15">1AdXF3...DuV15</span>
-              <IconButton
-                icon={<Icons.UserAddIcon />}
-                className="bg-background-primary"
-              />
-            </div>
+            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">

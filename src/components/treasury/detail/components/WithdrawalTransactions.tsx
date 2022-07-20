@@ -8,19 +8,19 @@ export const WithdrawalTransactions = () => {
 
   const headers = [
     {
-      label: "progress",
+      label: "table.progress",
       width: "70"
     },
     {
-      label: "confirmation",
+      label: "table.confirmation",
       width: "31.25"
     },
     {
-      label: "withdrawn-or-initiated",
+      label: "table.withdrawn-or-initiated",
       width: "55.5"
     },
     {
-      label: "requested-by",
+      label: "table.requested-by",
       width: "51"
     },
     {

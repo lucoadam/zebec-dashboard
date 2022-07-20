@@ -1,13 +1,14 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import Image from "next/image"
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import * as Icons from "../../assets/icons"
 import * as Images from "../../assets/images"
 import { toSubstring } from "../../utils"
 import { Button, CollapseDropdown } from "../shared"
 //hooks
 import CopyButton from "components/shared/CopyButton"
+import ReactTooltip from "react-tooltip"
 import { useClickOutside } from "../../hooks"
 
 const Profile: FC = () => {
@@ -39,6 +40,14 @@ const Profile: FC = () => {
     handleClose()
   }
 
+  useEffect(() => {
+    if (useWalletObject?.publicKey && toggleProfileDropdown) {
+      setTimeout(() => {
+        ReactTooltip.rebuild()
+      }, 500)
+    }
+  }, [useWalletObject, toggleProfileDropdown])
+
   return (
     <>
       <div className="relative h-8" ref={profileDropdownWrapperRef}>
@@ -58,10 +67,7 @@ const Profile: FC = () => {
             />
             <div className="flex items-center gap-x-3">
               <div className="flex flex-col items-start justify-between h-full">
-                <div
-                  data-tip={useWalletObject?.publicKey?.toString()}
-                  className="text-avatar-title font-medium text-content-primary"
-                >
+                <div className="text-avatar-title font-medium text-content-primary">
                   {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
@@ -104,6 +110,7 @@ const Profile: FC = () => {
                 </div>
                 <div className="transform -translate-y-1">
                   <CopyButton
+                    className="text-content-primary"
                     content={useWalletObject?.publicKey?.toString() ?? ""}
                   />
                 </div>
