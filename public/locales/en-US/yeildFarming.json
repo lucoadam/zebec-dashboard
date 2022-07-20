@@ -1,0 +1,12 @@
+{
+  "title": "Yeild Farming",
+  "description": "Stake LP tokens and earn token rewards.",
+  "all-farms": "All Farms",
+  "staked-farms": "Staked Farms",
+  "search-farms": "Search Farms",
+  "pending-rewards": "Pending Rewards",
+  "stake": "Stake",
+  "unstake": "Unstake",
+  "harvest": "Harvest",
+  "add-liquidity": "Add Liquidity"
+}

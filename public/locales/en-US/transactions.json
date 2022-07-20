@@ -63,6 +63,11 @@
     "signed-by": "Signed By",
     "remaining": "Remaining",
     "show-all-remaining": "Show all remaining",
+    "farm": "Farm",
+    "pending-rewards": "Pending Rewards",
+    "deposited": "Deposited",
+    "apy-7d": "APY(7D)",
+    "tvl": "TVL",
     "reject": "Reject"
   },
   "modal-actions": {
