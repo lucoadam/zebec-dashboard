@@ -3,7 +3,7 @@ import * as Icons from "assets/icons"
 import { Button, IconButton } from "components/shared"
 import { toggleHarvestModal } from "features/modals/harvestSlice"
 import { toggleStakeModal } from "features/modals/stakeSlice"
-import { toggleUnStakeModal } from "features/modals/unStakeSlice"
+import { toggleUnStakeModal } from "features/modals/unstakeSlice"
 import { useTranslation } from "next-i18next"
 import { FC, Fragment, useEffect } from "react"
 import ReactTooltip from "react-tooltip"
@@ -137,13 +137,17 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         startIcon={<Icons.LockIcon />}
                         className="text-content-primary"
                         title={`${t("yeildFarming:stake")}`}
-                        onClick={()=>{dispatch(toggleStakeModal())}}
+                        onClick={() => {
+                          dispatch(toggleStakeModal())
+                        }}
                       />
                       <Button
                         className="text-content-primary"
                         startIcon={<Icons.ArrowDownLeft />}
                         title={`${t("yeildFarming:unstake")}`}
-                        onClick={()=>{dispatch(toggleUnStakeModal())}}
+                        onClick={() => {
+                          dispatch(toggleUnStakeModal())
+                        }}
                       />
                     </div>
                   </div>

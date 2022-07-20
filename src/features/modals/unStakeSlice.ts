@@ -2,27 +2,27 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 //declare types for state
-interface UnStakeState {
+interface UnstakeState {
   show: boolean
   loading: boolean
   error: string
 }
 
-const initialState: UnStakeState = {
+const initialState: UnstakeState = {
   show: false,
   loading: false,
   error: ""
 }
-export const unStakeTransaction = createAsyncThunk(
-  "unStake/unStakeTransaction",
+export const unstakeTransaction = createAsyncThunk(
+  "unstake/unstakeTransaction",
   async () => {
     const response = await axios.get("url")
     return response.data
   }
 )
 
-export const unStakeSlice = createSlice({
-  name: "unStake",
+export const unstakeSlice = createSlice({
+  name: "unstake",
   initialState,
   reducers: {
     showModal: (state) => {
@@ -37,15 +37,15 @@ export const unStakeSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(unStakeTransaction.pending, (state) => {
+    builder.addCase(unstakeTransaction.pending, (state) => {
       state.loading = true
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    builder.addCase(unStakeTransaction.fulfilled, (state, action) => {
+    builder.addCase(unstakeTransaction.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""
     })
-    builder.addCase(unStakeTransaction.rejected, (state, action) => {
+    builder.addCase(unstakeTransaction.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })
@@ -53,6 +53,6 @@ export const unStakeSlice = createSlice({
 })
 
 export const { showModal, toggleUnStakeModal, setLoading } =
-  unStakeSlice.actions
+  unstakeSlice.actions
 
-export default unStakeSlice.reducer
+export default unstakeSlice.reducer

@@ -23,7 +23,7 @@ import rejectModalSlice from "features/modals/rejectModalSlice"
 import signModalSlice from "features/modals/signModalSlice"
 import addressBookSlice from "features/address-book/addressBookSlice"
 import stakeSlice from "features/modals/stakeSlice"
-import unStakeSlice from "features/modals/unStakeSlice"
+import unstakeSlice from "features/modals/unstakeSlice"
 import harvestSlice from "features/modals/harvestSlice"
 
 const combineReducer = combineReducers({
@@ -46,7 +46,7 @@ const combineReducer = combineReducers({
   rejectTransaction: rejectModalSlice,
   signTransaction: signModalSlice,
   stake: stakeSlice,
-  unstake: unStakeSlice,
+  unstake: unstakeSlice,
   harvest: harvestSlice
 })
 
