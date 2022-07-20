@@ -29,9 +29,6 @@ const returnValidPercentage = (percentage: number) => {
   }
 }
 
-
-
-
 const HistoryTableRow: FC<HistoryTableRowProps> = ({
   index,
   transaction,
@@ -40,7 +37,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  
+
   const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
     ReactTooltip.rebuild()
@@ -148,10 +145,10 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         </tr>
         {/* Table Body Details Row */}
         <tr>
-          <td colSpan={4} >
+          <td colSpan={4}>
             <div
               className={`bg-background-light rounded-lg overflow-y-auto  transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0" 
+                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
               }`}
               //style={styles.detailsRow}
             >
@@ -312,7 +309,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Signed Owners */}
@@ -346,7 +343,7 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                               </span>
                             </div>
                             <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
+                              {moment("20220620", "YYYYMMDD").fromNow()}
                             </div>
                           </div>
                         ))}
@@ -401,46 +398,50 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
                             endIcon={
                               <Icons.ArrowDownIcon className="text-content-contrast" />
                             }
-                            onClick={()=>setShowAllRemaining(!showAllRemaining)}
-
+                            onClick={() =>
+                              setShowAllRemaining(!showAllRemaining)
+                            }
                           />
-                        
                         </div>
-                        {showAllRemaining && ( <div className={`pl-3`}>
-                          <div className="grid gap-y-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
-                              }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
-                            />
-                            <div className="">
-                              <span data-tip="0x4f10x4f1U700eU700e">
-                                {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                              </span>
-                            </div>
-                            <div className="text-content-tertiary">
-                            {moment("20220620", "YYYYMMDD").fromNow()}
+                        {showAllRemaining && (
+                          <div className={`pl-3`}>
+                            <div className="grid gap-y-4">
+                              {[1, 2, 3].map((item) => (
+                                <div
+                                  key={item}
+                                  className="flex items-center  gap-x-2 text-content-primary"
+                                >
+                                  <Image
+                                    layout="fixed"
+                                    alt="Owner Logo"
+                                    src={
+                                      [
+                                        Images.Avatar1,
+                                        Images.Avatar2,
+                                        Images.Avatar4
+                                      ][item % 3]
+                                    }
+                                    height={24}
+                                    width={24}
+                                    className="rounded-full"
+                                  />
+                                  <div className="">
+                                    <span data-tip="0x4f10x4f1U700eU700e">
+                                      {toSubstring(
+                                        "0x4f10x4f1U700eU700e",
+                                        5,
+                                        true
+                                      )}
+                                    </span>
+                                  </div>
+                                  <div className="text-content-tertiary">
+                                    {moment("20220620", "YYYYMMDD").fromNow()}
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        ))}
-                      </div>
-
-
-                          </div>)}
+                        )}
                       </div>
                     </div>
                   </div>

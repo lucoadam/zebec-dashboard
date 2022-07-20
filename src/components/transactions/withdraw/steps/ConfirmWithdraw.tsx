@@ -1,13 +1,34 @@
-import React, { FC } from "react"
+import React, { FC, ReactElement } from "react"
 import { useTranslation } from "next-i18next"
 import { Button } from "components/shared"
-import { withdrawProps } from "../../data.d"
-import { confirmWithdrawStep, confirmWithdrawStepsList } from "./data"
+import { withdrawProps } from "../data.d"
+import * as Icons from "assets/icons"
 
-const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep }) => {
+export interface confirmWithdrawStep {
+  text: string
+  image: ReactElement
+}
+
+const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep, fees }) => {
   const { t } = useTranslation("transactions")
+
+  const confirmWithdrawStepsList: confirmWithdrawStep[] = [
+    {
+      text: `${t("withdraw.withdrawing")}`,
+      image: <Icons.WithdrawDownLeft />
+    },
+    {
+      text: `${t("withdraw.fees")} (${fees}%)`,
+      image: <Icons.Line />
+    },
+    {
+      text: `${t("withdraw.withdraw-amount")}`,
+      image: <Icons.Equals />
+    }
+  ]
+
   return (
-    <div>
+    <div className="">
       <div className="text-content-secondary font-semibold pb-4">
         {t("withdraw.sure-you-want-to-withdraw")} 101 SOL?
       </div>
@@ -42,7 +63,7 @@ const ConfirmWithdraw: FC<withdrawProps> = ({ setCurrentStep }) => {
           }}
         />
       </div>
-      <div className="pb-3">
+      <div className="">
         <Button
           className="w-full "
           title={`${t("withdraw.cancel")}`}

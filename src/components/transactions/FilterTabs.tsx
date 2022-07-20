@@ -38,9 +38,9 @@ const FilterTabs: FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
 
   return (
-    <div className="flex justify-between items-center gap-x-6 pb-10">
+    <div className="lg:flex justify-between items-center gap-x-6 pb-10">
       {/* Filter */}
-      <div className="flex gap-x-2 items-center">
+      <div className="lg:flex gap-x-2 items-center">
         {filterTabs.map((filterTab, index) => {
           return (
             <Tab
