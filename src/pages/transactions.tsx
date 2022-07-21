@@ -77,7 +77,8 @@ export async function getStaticProps({ locale }: { locale: string }) {
         "common",
         "transactions",
         "validation",
-        "exportReport"
+        "exportReport",
+        "addressBook"
       ]))
     }
   }

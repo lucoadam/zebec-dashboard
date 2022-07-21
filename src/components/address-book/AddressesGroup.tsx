@@ -14,7 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { useAppSelector } from "app/hooks"
 
-interface Address {
+export interface Address {
   name: string
   wallet: string[]
 }

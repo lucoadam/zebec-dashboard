@@ -1,8 +1,17 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import * as Icons from "assets/icons"
-import { FC } from "react"
+import { Address } from "components/address-book/AddressesGroup"
+import { useClickOutside } from "hooks"
+import { useTranslation } from "next-i18next"
+import React, { FC, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
+import { addOwnersSchema } from "utils/validations/addOwnersSchema"
+import { Button } from "./Button"
+import { CollapseDropdown } from "./CollapseDropdown"
 import CopyButton from "./CopyButton"
 import { IconButton } from "./IconButton"
+import { InputField } from "./InputField"
 
 const walletAddressMap = [
   {
@@ -17,13 +26,59 @@ const walletAddressMap = [
 
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  wallet: string
-}> = ({ wallet }) => {
+  wallet: string,
+  dropDown: boolean
+}> = ({ wallet,dropDown }) => {
   const isInAddressBook = walletAddressMap.some(
     (item) => item.wallet === wallet
   )
+  const AddressDropdownWrapperRef = useRef(null)
+  const [addresses, setAddresses] = useState<Address>({
+    name: "",
+    wallet: []
+  })
+  const { t } = useTranslation()
+  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
+
+  const [toggleAddressDropdown, setToggleAddressDropdown] =
+    useState<boolean>(false)
+    const {
+      register,
+      formState: { errors },
+      handleSubmit,
+      setError
+    } = useForm({
+      mode: "onChange",
+      resolver: yupResolver(addOwnersSchema)
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onSubmit = (data: any) => {
+      if (wallets.some((wallet) => wallet === data.wallet)) {
+        setError(
+          "wallet",
+          { type: "custom", message: "validation:wallet-exists" },
+          {
+            shouldFocus: true
+          }
+        )
+        return
+      }
+      setAddresses(data)
+      setWallets([...wallets, data.wallet])
+      
+      
+    }
+
+  const handleClose = () => {
+    setToggleAddressDropdown(false)
+  }
+
+  //handle clicking outside
+  useClickOutside(AddressDropdownWrapperRef, {
+    onClickOutside: handleClose
+  })
   return (
-    <div className="flex gap-x-1 items-center text-body text-content-primary">
+    <div className="flex gap-x-1 items-center text-body text-content-primary" ref={AddressDropdownWrapperRef}>
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
@@ -37,9 +92,67 @@ export const UserAddress: FC<{
         <IconButton
           icon={<Icons.UserAddIcon />}
           className="bg-background-primary min-w-7 h-7"
+          onClick={() => setToggleAddressDropdown(!toggleAddressDropdown)}
         />
+        
       )}
-      <CopyButton className="min-w-7" content={wallet} />
+      <div className="relative ">
+
+{dropDown && (<CollapseDropdown
+          show={toggleAddressDropdown}
+          className="w-[306px]"
+          autoPosition={false}
+        >
+          <div className="p-5 max-w-96">
+          <div className="text-content-secondary text-subtitle font-semibold">
+                {t("addressBook:add-an-address")}
+              </div>
+              <div className="text-caption text-content-secondary pt-2 ">
+              {t("addressBook:add-address-to-your-addressBook")}
+              </div>
+
+           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+                <div className="pt-4 pb-4">
+                  <InputField
+                    label={t("addressBook:wallet-address")}
+                    className="relative text-content-secondary"
+                    error={!!errors.wallet}
+                    helper={t(
+                      errors.wallet?.message?.toString() || ""
+                    ).toString()}
+                  >
+                    <div>
+                      <input
+                        className={`w-full h-10 ${
+                          !!errors.name?.message && "error"
+                        }`}
+                        placeholder={t("addressBook:enter-wallet-address")}
+                        type="text"
+                        {...register("wallet")}
+                      />
+                    </div>
+                  </InputField>
+                </div>
+
+              
+                {/* submit Button */}
+
+                <div className="">
+                  <Button
+                    className={`w-full`}
+                    variant="gradient"
+                    type="submit"
+                    title={`${t("addressBook:add-address")}`}
+                  />
+                </div>
+                </form>
+                </div>
+
+        </CollapseDropdown>
+       
+)} 
+ </div>
+     <CopyButton className="min-w-7" content={wallet} />
     </div>
   )
 }
