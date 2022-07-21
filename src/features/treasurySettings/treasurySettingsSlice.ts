@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface SafeNameState {
@@ -16,12 +16,13 @@ const initialState: SafeNameState = {
 //Generates pending, fulfilled and rejected action types
 export const updateSafeName = createAsyncThunk(
   "safeName/fetchSafeName",
-  async () => {
+  async (data: { name: string }) => {
+    console.log("sdlfjsd")
     const response = await axios.put(
       "https://jsonplaceholder.typicode.com/safeName"
     )
     console.log(response.data)
-    return response.data
+    return data.name
   }
 )
 
@@ -43,7 +44,7 @@ const treasurySettingsSlice = createSlice({
     )
     builder.addCase(updateSafeName.rejected, (state, action) => {
       state.updating = false
-      state.safeNames = ""
+      // state.safeNames = ""
       state.error = action.error.message ?? "Something went wrong"
     })
   }

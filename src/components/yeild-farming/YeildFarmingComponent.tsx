@@ -3,12 +3,12 @@ import ReactTooltip from "react-tooltip"
 
 // import { Tab } from "@headlessui/react";
 import * as Icons from "assets/icons"
+import HarvestModal from "components/modals/HarvestModal"
+import StakeModal from "components/modals/StakeModal"
+import UnstakeModal from "components/modals/UnstakeModal"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { Farms } from "./components/Farms"
-import StakeModal from "components/modals/StakeModal"
-import UnstakeModal from "components/modals/UnstakeModal"
-import HarvestModal from "components/modals/HarvestModal"
 
 const categories = [
   {
@@ -39,7 +39,6 @@ export default function YeildFarmingComponent() {
             startIcon={category.icon}
             count={category.count}
             onClick={() => {
-              console.log("clicked")
               setTimeout(() => {
                 ReactTooltip.rebuild()
               }, 1000)
@@ -49,11 +48,11 @@ export default function YeildFarmingComponent() {
         ))}
       </div>
       <div className=" mt-8">
-        <Farms />
+        <Farms disabled={categories[activePage].title === "all-farms"} />
       </div>
       <StakeModal />
-        <UnstakeModal />
-        <HarvestModal />
+      <UnstakeModal />
+      <HarvestModal />
     </div>
   )
 }

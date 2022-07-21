@@ -15,6 +15,7 @@ interface FarmsTableRowProps {
   liquidity: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void
+  disableOthers?: boolean
 }
 
 const returnValidPercentage = (percentage: number) => {
@@ -29,7 +30,8 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   index,
   liquidity,
   activeDetailsRow,
-  handleToggleRow
+  handleToggleRow,
+  disableOthers = false
 }) => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
@@ -136,6 +138,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       <Button
                         startIcon={<Icons.LockIcon />}
                         className="text-content-primary"
+                        disabled={disableOthers}
                         title={`${t("yeildFarming:stake")}`}
                         onClick={() => {
                           dispatch(toggleStakeModal())
@@ -143,6 +146,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       />
                       <Button
                         className="text-content-primary"
+                        disabled={disableOthers}
                         startIcon={<Icons.ArrowDownLeft />}
                         title={`${t("yeildFarming:unstake")}`}
                         onClick={() => {
@@ -166,6 +170,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       <Button
                         startIcon={<Icons.ArrowDownLeft />}
                         className="text-content-primary"
+                        disabled={disableOthers}
                         title={`${t("yeildFarming:harvest")}`}
                         onClick={() => {
                           dispatch(toggleHarvestModal())
