@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next"
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import {
   Breadcrumb,
   Button,
@@ -11,27 +11,29 @@ import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
 //import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
 
-interface Address {
-  name: string
-  wallet: string
-}
+
 
 export default function IndividualAddresses() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [addresses, setAddresses] = useState<Address>({
-    name: "",
-    wallet: ""
-  })
+
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
-  //const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   //   useEffect(() => {
-  //     dispatch(fetchAddressBook());
+      
 
-  // }, [dispatch,addresses])
+
+
+  // }, [dispatch, addresses, addressBook])
+
+  useEffect(()=>{
+    dispatch(fetchAddressBook());
+ 
+  },[ dispatch])
   const headers = [
     {
       label: "addressBook:name",
@@ -68,7 +70,8 @@ export default function IndividualAddresses() {
     //   )
     //   return
     // }
-    setAddresses(data)
+    dispatch(saveAddressBook(data));
+
     //dispatch(saveAddressBook(data))
   }
 

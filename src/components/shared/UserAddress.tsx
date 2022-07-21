@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Address } from "components/address-book/AddressesGroup"
+import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import React, { FC, useRef, useState } from "react"
@@ -33,12 +34,13 @@ export const UserAddress: FC<{
     (item) => item.wallet === wallet
   )
   const AddressDropdownWrapperRef = useRef(null)
-  const [addresses, setAddresses] = useState<Address>({
-    name: "",
-    wallet: []
-  })
+
   const { t } = useTranslation()
-  const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
+ 
+ 
+
+  const dispatch = useAppDispatch()
+
 
   const [toggleAddressDropdown, setToggleAddressDropdown] =
     useState<boolean>(false)
@@ -46,25 +48,13 @@ export const UserAddress: FC<{
       register,
       formState: { errors },
       handleSubmit,
-      setError
     } = useForm({
       mode: "onChange",
       resolver: yupResolver(addOwnersSchema)
     })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSubmit = (data: any) => {
-      if (wallets.some((wallet) => wallet === data.wallet)) {
-        setError(
-          "wallet",
-          { type: "custom", message: "validation:wallet-exists" },
-          {
-            shouldFocus: true
-          }
-        )
-        return
-      }
-      setAddresses(data)
-      setWallets([...wallets, data.wallet])
+      dispatch(saveAddressBook(data));
       
       
     }

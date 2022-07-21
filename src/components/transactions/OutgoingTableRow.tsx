@@ -76,7 +76,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" />
+            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" dropDown={true} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
