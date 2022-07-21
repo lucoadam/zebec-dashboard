@@ -9,7 +9,8 @@ import { constants } from "constants/constants"
 export const FileUpload: FC<FileUploadProps> = ({
   name,
   resetField,
-  setValue
+  setValue,
+  isReset
 }) => {
   const { t } = useTranslation()
   // For file upload
@@ -135,6 +136,21 @@ export const FileUpload: FC<FileUploadProps> = ({
   useEffect(() => {
     setSource(axios.CancelToken.source())
   }, [])
+
+  useEffect(() => {
+    if (isReset) {
+      setFile({
+        name: "",
+        url: "",
+        uploading: false,
+        progress: 0,
+        error: false,
+        errorMessage: "",
+        size: 0
+      })
+    }
+  }, [isReset])
+
   return (
     <div>
       <div className="w-full relative flex items-center">

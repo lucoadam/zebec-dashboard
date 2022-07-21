@@ -16,6 +16,7 @@ const TreasuryContinuousStream: NextPage = () => {
         tokenBalances={treasuryBalance}
         addFile={true}
         className="w-full lg:w-[628px]"
+        type="treasury"
       />
       <StreamOverview className="lg:ml-[79px]" formValues={formValues} />
     </div>

@@ -15,4 +15,5 @@ export interface FileUploadProps {
   resetField: UseFormResetField<ContinuousStreamFormData>
   setValue: UseFormSetValue<ContinuousStreamFormData>
   name: ContinuousStreamFormData
+  isReset?: boolean
 }

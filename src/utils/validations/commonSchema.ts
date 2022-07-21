@@ -96,7 +96,7 @@ export const token = {
 export const amount = {
   amount: Yup.string()
     .required("validation:amount-required")
-    .test("amount-invalid", "validation:amount-invalid", (amount) => {
+    .test("amount-negative", "validation:amount-negative", (amount) => {
       return Number(amount) > 0
     })
 }

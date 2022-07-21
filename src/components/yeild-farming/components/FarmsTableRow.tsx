@@ -3,8 +3,9 @@ import * as Icons from "assets/icons"
 import { Button, IconButton } from "components/shared"
 import { toggleHarvestModal } from "features/modals/harvestSlice"
 import { toggleStakeModal } from "features/modals/stakeSlice"
-import { toggleUnStakeModal } from "features/modals/unstakeSlice"
+import { toggleUnStakeModal } from "features/modals/unStakeSlice"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { FC, Fragment, useEffect } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, getTokenImage } from "utils"
@@ -18,13 +19,13 @@ interface FarmsTableRowProps {
   disableOthers?: boolean
 }
 
-const returnValidPercentage = (percentage: number) => {
-  if (percentage > 0) {
-    return percentage
-  } else {
-    return 0
-  }
-}
+// const returnValidPercentage = (percentage: number) => {
+//   if (percentage > 0) {
+//     return percentage
+//   } else {
+//     return 0
+//   }
+// }
 
 const FarmsTableRow: FC<FarmsTableRowProps> = ({
   index,
@@ -34,6 +35,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   disableOthers = false
 }) => {
   const { t } = useTranslation("transactions")
+  const router = useRouter()
   const dispatch = useAppDispatch()
 
   const { tokens: tokenDetails } = useAppSelector((state) => state.tokenDetails)
@@ -99,6 +101,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                 startIcon={
                   <Icons.PlusIncircleIcon className="text-content-contrast" />
                 }
+                onClick={() =>
+                  router.push(
+                    `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                  )
+                }
               />
               <IconButton
                 variant="plain"
@@ -134,6 +141,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         startIcon={<Icons.PlusIncircleIcon />}
                         title={`${t("yeildFarming:add-liquidity")}`}
                         variant="gradient"
+                        onClick={() =>
+                          router.push(
+                            `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                          )
+                        }
                       />
                       <Button
                         startIcon={<Icons.LockIcon />}
