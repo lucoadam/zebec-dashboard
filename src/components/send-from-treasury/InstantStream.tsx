@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, CollapseDropdown, InputField } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
+import { sendTreasuryInstantTransfer } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useRef, useState } from "react"
@@ -41,6 +42,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
   className
 }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -50,6 +52,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
     getValues,
     trigger,
     resetField,
+    reset,
     watch
   } = useForm<InstantStreamFormData>({
     mode: "onChange",
@@ -64,6 +67,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
+  const [resetFile, setResetFile] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -99,7 +103,11 @@ export const InstantStream: FC<InstantStreamProps> = ({
   }, [tokenDetails, setValue])
 
   const onSubmit = (data: InstantStreamFormData) => {
-    console.log(data)
+    reset()
+    setResetFile(true)
+    dispatch(sendTreasuryInstantTransfer(data))
+    setCurrentToken(tokenDetails[0])
+    setValue("token", tokenDetails[0].symbol)
   }
 
   useEffect(() => {
@@ -413,6 +421,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
+                isReset={resetFile}
               />
             </div>
           )}

@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleUnStakeModal } from "features/modals/unstakeSlice"
+import { setLoading, toggleUnStakeModal } from "features/modals/unStakeSlice"
 
 const UnStakeModal: FC = ({}) => {
   const dispatch = useAppDispatch()

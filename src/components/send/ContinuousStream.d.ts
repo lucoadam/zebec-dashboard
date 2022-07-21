@@ -40,4 +40,5 @@ export interface ContinuousStreamProps {
   tokenBalances: WalletToken[]
   addFile?: boolean
   className?: string
+  type?: "send" | "treasury"
 }

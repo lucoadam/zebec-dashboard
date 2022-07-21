@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
 import {
@@ -12,6 +12,10 @@ import {
   Toggle
 } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
+import {
+  sendContinuousStream,
+  sendTreasuryContinuousStream
+} from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
@@ -73,9 +77,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   setFormValues,
   tokenBalances,
   addFile,
-  className
+  className,
+  type = "send"
 }) => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -85,7 +91,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    watch
+    watch,
+    reset
   } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
     resolver: yupResolver(continuousSchema)
@@ -100,6 +107,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
+  const [resetFile, setResetFile] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -141,7 +149,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }, [tokenDetails, setValue, currentToken.symbol])
 
   const onSubmit = (data: ContinuousStreamFormData) => {
-    console.log(data)
+    reset()
+    setResetFile(true)
+    if (type === "send") {
+      dispatch(sendContinuousStream(data))
+    } else {
+      dispatch(sendTreasuryContinuousStream(data))
+    }
+    setCurrentToken(tokenDetails[0])
+    setValue("token", tokenDetails[0].symbol)
   }
 
   const handleStreamRate = () => {
@@ -635,6 +651,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
+                isReset={resetFile}
               />
             )}
           </div>
