@@ -1,20 +1,10 @@
 import { useAppSelector } from "app/hooks"
 import BigNumber from "bignumber.js"
 import { Button } from "components/shared"
-import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { useTranslation } from "next-i18next"
-import { AddLiquidityFormData } from "pages/add-liquidity"
 import { FC, useEffect, useState } from "react"
-import { UseFormRegister, UseFormSetValue } from "react-hook-form"
+import { AmountFieldProps } from "./AmountField.d"
 
-interface AmountFieldProps {
-  tokenSymbol: string
-  tokens: TokenDetails[]
-  register: UseFormRegister<AddLiquidityFormData>
-  setValue: UseFormSetValue<AddLiquidityFormData>
-  name: "amount0" | "amount1"
-  error?: string
-}
 export const AmountField: FC<AmountFieldProps> = ({
   tokenSymbol,
   tokens,
@@ -107,7 +97,9 @@ export const AmountField: FC<AmountFieldProps> = ({
         </div>
       </div>
       {error && (
-        <p className="text-content-secondary text-xs ml-[12px] mt-1">{error}</p>
+        <p className="text-content-secondary text-xs ml-[12px] mt-1">
+          {t(error)}
+        </p>
       )}
     </div>
   )

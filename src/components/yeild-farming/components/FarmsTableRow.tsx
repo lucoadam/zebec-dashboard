@@ -2,6 +2,7 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, IconButton } from "components/shared"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { FC, Fragment, useEffect } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, getTokenImage } from "utils"
@@ -29,7 +30,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   handleToggleRow
 }) => {
   const { t } = useTranslation("transactions")
-
+  const router = useRouter()
   const { tokens: tokenDetails } = useAppSelector((state) => state.tokenDetails)
 
   useEffect(() => {
@@ -93,6 +94,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                 startIcon={
                   <Icons.PlusIncircleIcon className="text-content-contrast" />
                 }
+                onClick={() =>
+                  router.push(
+                    `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                  )
+                }
               />
               <IconButton
                 variant="plain"
@@ -128,6 +134,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         startIcon={<Icons.PlusIncircleIcon />}
                         title={`${t("yeildFarming:add-liquidity")}`}
                         variant="gradient"
+                        onClick={() =>
+                          router.push(
+                            `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                          )
+                        }
                       />
                       <Button
                         startIcon={<Icons.LockIcon />}
