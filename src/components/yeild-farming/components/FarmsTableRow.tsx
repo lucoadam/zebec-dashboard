@@ -1,6 +1,9 @@
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, IconButton } from "components/shared"
+import { toggleHarvestModal } from "features/modals/harvestSlice"
+import { toggleStakeModal } from "features/modals/stakeSlice"
+import { toggleUnStakeModal } from "features/modals/unStakeSlice"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
 import { FC, Fragment, useEffect } from "react"
@@ -15,13 +18,13 @@ interface FarmsTableRowProps {
   handleToggleRow: () => void
 }
 
-const returnValidPercentage = (percentage: number) => {
-  if (percentage > 0) {
-    return percentage
-  } else {
-    return 0
-  }
-}
+// const returnValidPercentage = (percentage: number) => {
+//   if (percentage > 0) {
+//     return percentage
+//   } else {
+//     return 0
+//   }
+// }
 
 const FarmsTableRow: FC<FarmsTableRowProps> = ({
   index,
@@ -31,6 +34,8 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const router = useRouter()
+  const dispatch = useAppDispatch()
+
   const { tokens: tokenDetails } = useAppSelector((state) => state.tokenDetails)
 
   useEffect(() => {
@@ -144,13 +149,17 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         startIcon={<Icons.LockIcon />}
                         className="text-content-primary"
                         title={`${t("yeildFarming:stake")}`}
-                        disabled
+                        onClick={() => {
+                          dispatch(toggleStakeModal())
+                        }}
                       />
                       <Button
                         className="text-content-primary"
                         startIcon={<Icons.ArrowDownLeft />}
                         title={`${t("yeildFarming:unstake")}`}
-                        disabled
+                        onClick={() => {
+                          dispatch(toggleUnStakeModal())
+                        }}
                       />
                     </div>
                   </div>
@@ -170,7 +179,9 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         startIcon={<Icons.ArrowDownLeft />}
                         className="text-content-primary"
                         title={`${t("yeildFarming:harvest")}`}
-                        disabled
+                        onClick={() => {
+                          dispatch(toggleHarvestModal())
+                        }}
                       />
                     </div>
                   </div>

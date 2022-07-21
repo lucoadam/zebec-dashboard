@@ -6,6 +6,9 @@ import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { Farms } from "./components/Farms"
+import StakeModal from "components/modals/StakeModal"
+import UnstakeModal from "components/modals/UnstakeModal"
+import HarvestModal from "components/modals/HarvestModal"
 
 const categories = [
   {
@@ -48,6 +51,9 @@ export default function YeildFarmingComponent() {
       <div className=" mt-8">
         <Farms />
       </div>
+      <StakeModal />
+        <UnstakeModal />
+        <HarvestModal />
     </div>
   )
 }
