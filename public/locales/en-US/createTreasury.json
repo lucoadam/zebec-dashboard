@@ -23,7 +23,9 @@
       "choose-from-address-book": "Choose from address book"
     },
     "search-address-book": "Search address book",
-    "empty-address-book": "The addresses you save will appear here. Ready to add your first address?"
+    "empty-address-book": "The addresses you save will appear here. Ready to add your first address?",
+    "all-address-added": "All the addresses from address book are added. Ready to add more addresses?",
+    "add-address": "Add Address"
   },
   "third-steper": {
     "title": "Review",
