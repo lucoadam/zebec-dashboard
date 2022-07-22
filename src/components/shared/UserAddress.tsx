@@ -4,7 +4,7 @@ import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
@@ -28,8 +28,7 @@ const walletAddressMap = [
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   wallet: string
-  dropDown?: boolean
-}> = ({ wallet, dropDown }) => {
+}> = ({ wallet }) => {
   const isInAddressBook = walletAddressMap.some(
     (item) => item.wallet === wallet
   )
@@ -44,14 +43,22 @@ export const UserAddress: FC<{
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
+    setValue,
   } = useForm({
-    mode: "onChange",
+    mode: "onChange", 
     resolver: yupResolver(addOwnersSchema)
   })
+
+  useEffect(()=>{
+   
+    setValue("wallet",wallet)
+  },[errors, setValue, wallet])
+  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    dispatch(saveAddressBook(data))
+    
+    dispatch(saveAddressBook({name:data.name, wallet:data.wallet}))
   }
 
   const handleClose = () => {
@@ -84,7 +91,7 @@ export const UserAddress: FC<{
         />
       )}
       <div className="relative ">
-        {dropDown && (
+        
           <CollapseDropdown
             show={toggleAddressDropdown}
             className="w-[306px]"
@@ -101,11 +108,11 @@ export const UserAddress: FC<{
               <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 <div className="pt-4 pb-4">
                   <InputField
-                    label={t("addressBook:wallet-address")}
+                    label={t("addressBook:name")}
                     className="relative text-content-secondary"
-                    error={!!errors.wallet}
+                    error={!!errors.name}
                     helper={t(
-                      errors.wallet?.message?.toString() || ""
+                      errors.name?.message?.toString() || ""
                     ).toString()}
                   >
                     <div>
@@ -113,9 +120,9 @@ export const UserAddress: FC<{
                         className={`w-full h-10 ${
                           !!errors.name?.message && "error"
                         }`}
-                        placeholder={t("addressBook:enter-wallet-address")}
+                        placeholder={t("addressBook:enter-name")}
                         type="text"
-                        {...register("wallet")}
+                        {...register("name")}
                       />
                     </div>
                   </InputField>
@@ -134,7 +141,7 @@ export const UserAddress: FC<{
               </form>
             </div>
           </CollapseDropdown>
-        )}
+        
       </div>
       <CopyButton className="min-w-7" content={wallet} />
     </div>
