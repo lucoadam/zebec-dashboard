@@ -99,10 +99,10 @@ export const UserAddress: FC<{
           >
             <div className="p-5 max-w-96">
               <div className="text-content-secondary text-subtitle font-semibold">
-                {t("addressBook:add-an-address")}
+                {t("addressBook:add-an-address-name")}
               </div>
               <div className="text-caption text-content-secondary pt-2 ">
-                {t("addressBook:add-address-to-your-addressBook")}
+                {t("addressBook:add-address-name-to-your-addressBook")}
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -135,7 +135,7 @@ export const UserAddress: FC<{
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
-                    title={`${t("addressBook:add-address")}`}
+                    title={`${t("addressBook:add-address-name")}`}
                   />
                 </div>
               </form>
