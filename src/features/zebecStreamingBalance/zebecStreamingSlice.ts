@@ -61,7 +61,6 @@ export const fetchZebecStreamingBalance: any = createAsyncThunk(
       )
       return streamingBalance
     } catch (error) {
-      console.log(error)
       throw error
     }
   }

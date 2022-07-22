@@ -17,11 +17,7 @@ const initialState: SafeNameState = {
 export const updateSafeName = createAsyncThunk(
   "safeName/fetchSafeName",
   async (data: { name: string }) => {
-    console.log("sdlfjsd")
-    const response = await axios.put(
-      "https://jsonplaceholder.typicode.com/safeName"
-    )
-    console.log(response.data)
+    await axios.put("https://jsonplaceholder.typicode.com/safeName")
     return data.name
   }
 )

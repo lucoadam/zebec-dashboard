@@ -84,11 +84,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    {formatCurrency(liquidity.tvl, "$")}
+                    ~{formatCurrency(liquidity.tvl, "$")}
                   </span>
                 </div>
                 <div className="text-caption">
-                  {formatCurrency(liquidity.tvl)} LP
+                  ~{formatCurrency(liquidity.tvl)} LP
                 </div>
               </div>
             </div>

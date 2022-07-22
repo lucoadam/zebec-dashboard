@@ -29,9 +29,8 @@ export const Withdrawal = () => {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submitWitdrawal = (data: any) => {
+  const submitWitdrawal = () => {
     // submitted withdrawal
-    console.log("data", JSON.stringify(data, null, 2))
   }
 
   return (

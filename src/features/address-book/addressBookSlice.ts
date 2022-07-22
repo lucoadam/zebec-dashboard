@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface AddressBook {
@@ -49,7 +49,6 @@ export const fetchAddressBook = createAsyncThunk(
     const response = await axios.get(
       "https://jsonplaceholder.typicode.com//addressBook"
     )
-    console.log(response.data)
     return response.data
   }
 )

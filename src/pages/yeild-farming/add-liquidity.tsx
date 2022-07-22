@@ -1,15 +1,15 @@
-import Layout from "components/layouts/Layout"
-import type { GetStaticProps, NextPage } from "next"
-import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { Button, IconButton } from "components/shared"
-import { useTranslation } from "next-i18next"
-import { AmountField } from "components/add-liquidity/AmountField"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
+import { AmountField } from "components/add-liquidity/AmountField"
+import Layout from "components/layouts/Layout"
+import { Button, IconButton } from "components/shared"
+import type { GetStaticProps, NextPage } from "next"
+import { useTranslation } from "next-i18next"
+import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useAppSelector } from "app/hooks"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { addLiquiditySchema } from "utils/validations/addLiquiditySchema"
 
 export interface AddLiquidityFormData {
@@ -52,8 +52,8 @@ const AddLiquidity: NextPage = () => {
     }
   }, [router, tokenDetails])
 
-  const onSubmit = (data: AddLiquidityFormData) => {
-    console.log(data, tokens)
+  const onSubmit = () => {
+    // on liquidity data added
   }
 
   return (

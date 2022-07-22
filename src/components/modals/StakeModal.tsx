@@ -17,12 +17,11 @@ const StakeModal: FC = ({}) => {
   const validationSchema = Yup.object().shape({
     stakeAmount: Yup.string()
       .required(t("yield-farming.enter-yield-farming-amount"))
-      .test("is-not-zero", t("yield-farming.not-zero"), (value) => {
-        {
-          console.log("value", typeof value)
-        }
-        return typeof value === "string" && parseFloat(value) > 0
-      })
+      .test(
+        "is-not-zero",
+        t("yield-farming.not-zero"),
+        (value) => typeof value === "string" && parseFloat(value) > 0
+      )
   })
   const {
     register,
@@ -34,8 +33,8 @@ const StakeModal: FC = ({}) => {
     resolver: yupResolver(validationSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = () => {
+    // on data submit
   }
   useEffect(() => {
     if (stakeAmount != null && stakeAmount != 0) {

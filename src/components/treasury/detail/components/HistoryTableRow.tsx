@@ -13,7 +13,7 @@ import { toggleResumeModal } from "features/modals/resumeModalSlice"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useEffect, useState } from "react"
+import { FC, Fragment, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, toSubstring } from "utils"
 
@@ -40,6 +40,15 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
   handleToggleRow
 }) => {
   const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
+  const styles = {
+    detailsRow: {
+      height:
+        activeDetailsRow === index
+          ? `${detailsRowRef.current?.scrollHeight}px`
+          : "0px"
+    }
+  }
   const dispatch = useAppDispatch()
 
   const [showAllRemaining, setShowAllRemaining] = useState(false)
@@ -138,10 +147,11 @@ const HistoryTableRow: FC<HistoryTableRowProps> = ({
         <tr>
           <td colSpan={4}>
             <div
+              ref={detailsRowRef}
               className={`bg-background-light rounded-lg overflow-y-auto  transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
+                activeDetailsRow === index ? `ease-in` : "ease-out"
               }`}
-              //style={styles.detailsRow}
+              style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">

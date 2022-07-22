@@ -62,9 +62,6 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
 
   useEffect(() => {
     if (show && dropDownWrapperRef) {
-      if (dropDownWrapperRef.children.length) {
-        console.log(dropDownWrapperRef.firstChild)
-      }
       setTimeout(() => {
         const element = dropDownWrapperRef.querySelector(
           ".absolute"

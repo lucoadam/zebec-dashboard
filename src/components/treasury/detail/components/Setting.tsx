@@ -46,19 +46,13 @@ const Setting = () => {
   }, [setValue, safeName])
 
   const submitForm = (data: { name: string }) => {
-    console.log(
-      "data",
-      JSON.stringify(data, null, 2),
-      safeName,
-      data.name !== safeName
-    )
     if (safeName !== data.name) {
       dispatch(updateSafeName(data))
     }
   }
   return (
-    <div className="flex flex-wrap md:flex-nowrap lg:flex-nowrap w-full justify-start">
-      <div className="sm:w-full md:w-1/3">
+    <div className="flex flex-wrap md:flex-nowrap lg:flex-nowrap w-full md:justify-start sm:justify-center">
+      <div className="mt-[30px] md:w-96">
         <div className="w-full flex">
           <Image
             src={AvatarImages.Avatar1}
@@ -76,7 +70,7 @@ const Setting = () => {
               <div className="flex gap-x-3 items-center">
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.UserGroupIcon className="text-sm font-normal" />
-                  <div>
+                  <div className="w-20">
                     {5} {t("treasurySettings:owners")}
                   </div>
                 </div>
@@ -89,8 +83,8 @@ const Setting = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center  mt-[18px] text-content-primary text-sm mb-[50px]">
-          <span className="text-sm font-normal text-content-secondary">
+        <div className="block lg:flex mt-[18px] text-content-primary text-sm mb-[50px]">
+          <span className="text-sm font-normal text-content-secondary block">
             {t("treasurySettings:minimum-confirmation")}:
           </span>
           &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
@@ -167,7 +161,7 @@ const Setting = () => {
           </Modal>
         </div>
       </div>
-      <div className="min-w-full md:min-w-[360px] lg:ml-[300px] mt-5 md:mt-0 sm:ml-0 md:ml-20">
+      <div className="w-full md:min-w-[360px] lg:ml-[300px] mt-5 md:mt-0 sm:ml-0 md:ml-32">
         <div className="text-subtitle pb-[26px] text-content-primary font-semibold">
           {t("treasurySettings:owners")}
         </div>

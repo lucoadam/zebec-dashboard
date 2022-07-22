@@ -61,7 +61,6 @@ export const fetchTreasuryStreamingBalance: any = createAsyncThunk(
       )
       return streamingBalance
     } catch (error) {
-      console.log(error)
       throw error
     }
   }
