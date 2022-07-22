@@ -151,8 +151,8 @@ const AddOwners: FC<StepsComponentProps> = ({
           {t("createTreasury:second-steper.description")}
         </p>
         <div className="flex md:flex-nowrap sm:flex-wrap mb-2 justify-center items-center">
-          <div className="flex sm:w-auto">
-            <div className="sm:w-full md:w-2/6 pr-2">
+          <div className="flex flex-wrap wrap sm:w-auto">
+            <div className="w-full lg:w-2/6 pr-2">
               <InputField
                 error={!!errors.name}
                 helper={t(errors?.name?.message?.toString() || "").toString()}
@@ -170,7 +170,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                 />
               </InputField>
             </div>
-            <div className="sm:w-full md:w-4/6">
+            <div className="w-full lg:w-4/6 mt-2 lg:mt-0">
               <InputField
                 error={!!errors.wallet}
                 helper={t(errors?.wallet?.message?.toString() || "").toString()}
@@ -178,7 +178,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                 className="flex items-center"
               >
                 <div className="flex">
-                  <div className="w-5/6">
+                  <div className="flex-1">
                     <input
                       type="text"
                       className={`w-full h-[40px] ${
@@ -249,7 +249,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                 {getFilteredAddressBook().map((user) => (
                   <div
                     key={user.address}
-                    className="w-full h-[68px] flex gap-[15px] border-outline overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                    className="w-full h-[68px] flex gap-[15px] border-outline p-4 justify-start items-center hover:bg-background-light"
                   >
                     <input
                       type="checkbox"

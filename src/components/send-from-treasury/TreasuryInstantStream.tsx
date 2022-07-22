@@ -10,12 +10,12 @@ const TreasuryInstantStream: NextPage = () => {
   const treasuryBalance =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   return (
-    <div className="grid lg:flex">
+    <div className="grid lg:flex 2xl:w-screen">
       <InstantStream
         setFormValues={setFormValues}
         tokenBalances={treasuryBalance}
         addFile={true}
-        className="w-full lg:w-[628px]"
+        className="w-full lg:w-[628px] 2xl:w-[40%]"
       />
       <InstantStreamOverview className="lg:ml-[79px]" formValues={formValues} />
     </div>

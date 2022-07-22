@@ -33,7 +33,7 @@ const OwnerLists: FC<{
 
   return (
     <div
-      className={`divide-y divide-outline ${classes} ${className}`}
+      className={`divide-y divide-outline overflow-auto ${classes} ${className}`}
       style={styles}
     >
       {owners.map((owner, index) => {
@@ -50,7 +50,7 @@ const OwnerLists: FC<{
             <div
               className={`flex flex-1 justify-between items-center ${rowClasses}`}
             >
-              <div className="flex  flex-col mx-3">
+              <div className="flex flex-col mx-3">
                 <div className="text-subtitle text-content-primary font-semibold">
                   {owner.name}
                 </div>
