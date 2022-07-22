@@ -11,6 +11,7 @@ import SelectField from "components/shared/SelectField"
 import { constants } from "constants/constants"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import React, { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
@@ -50,6 +51,7 @@ const AddOwners: FC<StepsComponentProps> = ({
   const useWalletObject = useWallet()
 
   const { t } = useTranslation()
+  const router = useRouter()
 
   const [owners, setOwners] = useState<Owner[]>(treasury.owners)
   const [checkedOwners, setCheckedOwners] = useState<Owner[]>([])
@@ -285,7 +287,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                     </div>
                   </div>
                 ))}
-                {getFilteredAddressBook().length === 0 && (
+                {addressBook.length === 0 && (
                   <EmptyDataState
                     className="bg-transparent !px-[56px] !py-[28px] text-sm"
                     emptyStateClassName="w-[114px] h-[80px]"
@@ -295,26 +297,46 @@ const AddOwners: FC<StepsComponentProps> = ({
                     )}
                   />
                 )}
+                {addressBook.length > 0 &&
+                  getFilteredAddressBook().length === 0 && (
+                    <EmptyDataState
+                      className="bg-transparent !px-[56px] !py-[28px] text-sm"
+                      emptyStateClassName="w-[114px] h-[80px]"
+                      messageClassName="w-[239px] mt-2 text-content-primary text-center"
+                      message={t(
+                        "createTreasury:second-steper.all-address-added"
+                      )}
+                    />
+                  )}
               </div>
-              <div
-                onClick={() => {
-                  if ([...owners, ...checkedOwners].length > 1) {
-                    setSelectionError(false)
-                    clearErrors()
-                  }
-                  setTreasury((treasury) => ({
-                    ...treasury,
-                    owners: [...owners, ...checkedOwners],
-                    minValidator: [...owners, ...checkedOwners].length
-                  }))
-                  setOwners([...owners, ...checkedOwners])
-                  setCheckedOwners([])
-                  setToggleReceiverDropdown(false)
-                }}
-                className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
-              >
-                {t("createTreasury:second-steper.title")}
-              </div>
+              {getFilteredAddressBook().length !== 0 ? (
+                <div
+                  onClick={() => {
+                    if ([...owners, ...checkedOwners].length > 1) {
+                      setSelectionError(false)
+                      clearErrors()
+                    }
+                    setTreasury((treasury) => ({
+                      ...treasury,
+                      owners: [...owners, ...checkedOwners],
+                      minValidator: [...owners, ...checkedOwners].length
+                    }))
+                    setOwners([...owners, ...checkedOwners])
+                    setCheckedOwners([])
+                    setToggleReceiverDropdown(false)
+                  }}
+                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
+                >
+                  {t("createTreasury:second-steper.title")}
+                </div>
+              ) : (
+                <div
+                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
+                  onClick={() => router.push("/address-book")}
+                >
+                  {t("createTreasury:second-steper.add-address")}
+                </div>
+              )}
             </div>
           </CollapseDropdown>
         </div>
