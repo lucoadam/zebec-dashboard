@@ -11,6 +11,7 @@ interface CollapseDropdownProps {
   className?: string
   position?: PositionStyle
   ref?: React.RefObject<HTMLDivElement>
+  autoPosition?: boolean
 }
 
 const getPositionStyle = (position: PositionStyle) => {
@@ -41,6 +42,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
     className,
     position = "right",
     variant = "default",
+    autoPosition = true,
     // ref,
     ...rest
   } = props

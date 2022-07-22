@@ -17,7 +17,8 @@
     "delete-modal-subtitle" : "Deleting this address book will remove it permanently.",
     "yes-delete":"Yes, Delete",
     "cancel":"Cancel",
-    "undelete-address-book": "Delete address book"
+    "undelete-address-book": "Delete address book",
+    "add-address-to-your-addressBook":"Add address to your address book"
     
 
 }
