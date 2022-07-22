@@ -27,37 +27,32 @@ const walletAddressMap = [
 
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  wallet: string,
-  dropDown: boolean
-}> = ({ wallet,dropDown }) => {
+  wallet: string
+  dropDown?: boolean
+}> = ({ wallet, dropDown }) => {
   const isInAddressBook = walletAddressMap.some(
     (item) => item.wallet === wallet
   )
   const AddressDropdownWrapperRef = useRef(null)
 
   const { t } = useTranslation()
- 
- 
 
   const dispatch = useAppDispatch()
 
-
   const [toggleAddressDropdown, setToggleAddressDropdown] =
     useState<boolean>(false)
-    const {
-      register,
-      formState: { errors },
-      handleSubmit,
-    } = useForm({
-      mode: "onChange",
-      resolver: yupResolver(addOwnersSchema)
-    })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onSubmit = (data: any) => {
-      dispatch(saveAddressBook(data));
-      
-      
-    }
+  const {
+    register,
+    formState: { errors },
+    handleSubmit
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(addOwnersSchema)
+  })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data: any) => {
+    dispatch(saveAddressBook(data))
+  }
 
   const handleClose = () => {
     setToggleAddressDropdown(false)
@@ -68,7 +63,10 @@ export const UserAddress: FC<{
     onClickOutside: handleClose
   })
   return (
-    <div className="flex gap-x-1 items-center text-body text-content-primary" ref={AddressDropdownWrapperRef}>
+    <div
+      className="flex gap-x-1 items-center text-body text-content-primary"
+      ref={AddressDropdownWrapperRef}
+    >
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
@@ -84,24 +82,23 @@ export const UserAddress: FC<{
           className="bg-background-primary min-w-7 h-7"
           onClick={() => setToggleAddressDropdown(!toggleAddressDropdown)}
         />
-        
       )}
       <div className="relative ">
-
-{dropDown && (<CollapseDropdown
-          show={toggleAddressDropdown}
-          className="w-[306px]"
-          autoPosition={false}
-        >
-          <div className="p-5 max-w-96">
-          <div className="text-content-secondary text-subtitle font-semibold">
+        {dropDown && (
+          <CollapseDropdown
+            show={toggleAddressDropdown}
+            className="w-[306px]"
+            autoPosition={false}
+          >
+            <div className="p-5 max-w-96">
+              <div className="text-content-secondary text-subtitle font-semibold">
                 {t("addressBook:add-an-address")}
               </div>
               <div className="text-caption text-content-secondary pt-2 ">
-              {t("addressBook:add-address-to-your-addressBook")}
+                {t("addressBook:add-address-to-your-addressBook")}
               </div>
 
-           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+              <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 <div className="pt-4 pb-4">
                   <InputField
                     label={t("addressBook:wallet-address")}
@@ -124,7 +121,6 @@ export const UserAddress: FC<{
                   </InputField>
                 </div>
 
-              
                 {/* submit Button */}
 
                 <div className="">
@@ -135,14 +131,12 @@ export const UserAddress: FC<{
                     title={`${t("addressBook:add-address")}`}
                   />
                 </div>
-                </form>
-                </div>
-
-        </CollapseDropdown>
-       
-)} 
- </div>
-     <CopyButton className="min-w-7" content={wallet} />
+              </form>
+            </div>
+          </CollapseDropdown>
+        )}
+      </div>
+      <CopyButton className="min-w-7" content={wallet} />
     </div>
   )
 }
