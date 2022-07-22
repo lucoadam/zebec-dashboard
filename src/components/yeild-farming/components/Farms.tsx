@@ -1,9 +1,11 @@
 import { EmptyDataState, Table, TableBody } from "components/shared"
 import { farmsData } from "fakedata"
-import { useState } from "react"
+import { FC, useState } from "react"
 import FarmsTableRow from "./FarmsTableRow"
 
-export const Farms = () => {
+export const Farms: FC<{
+  disabled?: boolean
+}> = ({ disabled = false }) => {
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
@@ -52,6 +54,7 @@ export const Farms = () => {
               key={index}
               index={index}
               liquidity={liquidity}
+              disableOthers={disabled}
               activeDetailsRow={activeDetailsRow}
               handleToggleRow={() => handleToggleRow(index)}
             />

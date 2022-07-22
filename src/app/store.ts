@@ -4,29 +4,29 @@ import {
   configureStore,
   ThunkAction
 } from "@reduxjs/toolkit"
+import addressBookSlice from "features/address-book/addressBookSlice"
+import commonSlice from "features/common/commonSlice"
 import counterSlice from "features/count/counterSlice"
 import exportSlice from "features/export-report/exportSlice"
 import layoutSlice from "features/layout/layoutSlice"
 import cancelModalSlice from "features/modals/cancelModalSlice"
+import harvestSlice from "features/modals/harvestSlice"
 import pauseModalSlice from "features/modals/pauseModalSlice"
+import rejectModalSlice from "features/modals/rejectModalSlice"
 import resumeModalSlice from "features/modals/resumeModalSlice"
+import signModalSlice from "features/modals/signModalSlice"
+import stakeSlice from "features/modals/stakeSlice"
+import unstakeSlice from "features/modals/unstakeSlice"
+import streamSlice from "features/stream/streamSlice"
+import toastsSlice from "features/toasts/toastsSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
+import treasurySettingsSlice from "features/treasurySettings/treasurySettingsSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
 import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
-import toastsSlice from "features/toasts/toastsSlice"
-import commonSlice from "features/common/commonSlice"
-import rejectModalSlice from "features/modals/rejectModalSlice"
-import signModalSlice from "features/modals/signModalSlice"
-import addressBookSlice from "features/address-book/addressBookSlice"
-import treasurySettingsSlice from "features/treasurySettings/treasurySettingsSlice"
-import streamSlice from "features/stream/streamSlice"
-import stakeSlice from "features/modals/stakeSlice"
-import unstakeSlice from "features/modals/unStakeSlice"
-import harvestSlice from "features/modals/harvestSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -34,6 +34,7 @@ const combineReducer = combineReducers({
   tokenDetails: tokenDetailsSlice,
   walletBalance: walletBalanceSlice,
   treasuryBalance: treasuryBalanceSlice,
+  treasurySettings: treasurySettingsSlice,
   zebecBalance: zebecBalanceSlice,
   zebecStreamingBalance: zebecStreamingSlice,
   treasuryStreamingBalance: treasuryStreamingSlice,

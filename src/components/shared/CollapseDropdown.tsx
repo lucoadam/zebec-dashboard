@@ -11,7 +11,7 @@ interface CollapseDropdownProps {
   className?: string
   position?: PositionStyle
   ref?: React.RefObject<HTMLDivElement>
-  autoPosition?:boolean
+  autoPosition?: boolean
 }
 
 const getPositionStyle = (position: PositionStyle) => {
@@ -63,10 +63,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
   }
 
   useEffect(() => {
-    if (show && dropDownWrapperRef && autoPosition) {
-      if (dropDownWrapperRef.children.length) {
-        console.log(dropDownWrapperRef.firstChild)
-      }
+    if (show && dropDownWrapperRef) {
       setTimeout(() => {
         const element = dropDownWrapperRef.querySelector(
           ".absolute"

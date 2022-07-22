@@ -1,8 +1,8 @@
-import React, { FC, Fragment, useState } from "react"
-import { useTranslation } from "next-i18next"
-import { Button, Modal } from "components/shared"
 import * as Icons from "assets/icons"
+import { Button, Modal } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
+import { FC, Fragment, useState } from "react"
 import { toSubstring } from "utils"
 
 interface IndividualAddresesTableRow {
@@ -56,7 +56,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
                 onClick={() => {
-                  console.log("onclick")
+                  //on send click
                 }}
               />
 

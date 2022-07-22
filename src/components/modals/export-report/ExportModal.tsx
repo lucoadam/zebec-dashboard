@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react"
 // import { useTranslation } from "next-i18next"
-import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import { Modal } from "components/shared"
 
 import { toggleExportModal } from "features/export-report/exportSlice"
 import DefaultExport from "./steps/DefaultExport"

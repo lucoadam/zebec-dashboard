@@ -1,11 +1,10 @@
-import React, { FC, useEffect, useState } from "react"
-import { useTranslation } from "next-i18next"
-import { Button, InputField } from "components/shared"
-import { Modal } from "components/shared"
-import { useAppDispatch, useAppSelector } from "app/hooks"
-import * as Yup from "yup"
-import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { Button, InputField, Modal } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import * as Yup from "yup"
 
 import * as Icons from "assets/icons"
 import { setLoading, toggleUnStakeModal } from "features/modals/unStakeSlice"
@@ -18,12 +17,11 @@ const UnStakeModal: FC = ({}) => {
   const validationSchema = Yup.object().shape({
     unStakeAmount: Yup.string()
       .required(t("yield-farming.enter-yield-farming-amount"))
-      .test("is-not-zero", t("yield-farming.not-zero"), (value) => {
-        {
-          console.log("value", typeof value)
-        }
-        return typeof value === "string" && parseFloat(value) > 0
-      })
+      .test(
+        "is-not-zero",
+        t("yield-farming.not-zero"),
+        (value) => typeof value === "string" && parseFloat(value) > 0
+      )
   })
   const {
     register,
@@ -35,8 +33,8 @@ const UnStakeModal: FC = ({}) => {
     resolver: yupResolver(validationSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = () => {
+    // on submit
   }
   useEffect(() => {
     if (unStakeAmount != null && unStakeAmount != 0) {
@@ -49,7 +47,8 @@ const UnStakeModal: FC = ({}) => {
       show={show}
       toggleModal={() => dispatch(toggleUnStakeModal())}
       className="rounded "
-      hasCloseIcon={false}
+      hasCloseIcon
+      closeOnOutsideClick
       size="small"
     >
       {

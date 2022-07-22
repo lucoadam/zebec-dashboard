@@ -17,7 +17,7 @@ export const ScheduledTransactions = () => {
     },
     {
       label: "table.initiated",
-      width: "134px"
+      width: "33.5"
     },
     {
       label: "table.receiver",

@@ -16,6 +16,7 @@ interface FarmsTableRowProps {
   liquidity: any
   activeDetailsRow: "" | number
   handleToggleRow: () => void
+  disableOthers?: boolean
 }
 
 // const returnValidPercentage = (percentage: number) => {
@@ -30,7 +31,8 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   index,
   liquidity,
   activeDetailsRow,
-  handleToggleRow
+  handleToggleRow,
+  disableOthers = false
 }) => {
   const { t } = useTranslation("transactions")
   const router = useRouter()
@@ -82,11 +84,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    {formatCurrency(liquidity.tvl, "$")}
+                    ~{formatCurrency(liquidity.tvl, "$")}
                   </span>
                 </div>
                 <div className="text-caption">
-                  {formatCurrency(liquidity.tvl)} LP
+                  ~{formatCurrency(liquidity.tvl)} LP
                 </div>
               </div>
             </div>
@@ -148,6 +150,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       <Button
                         startIcon={<Icons.LockIcon />}
                         className="text-content-primary"
+                        disabled={disableOthers}
                         title={`${t("yeildFarming:stake")}`}
                         onClick={() => {
                           dispatch(toggleStakeModal())
@@ -155,6 +158,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       />
                       <Button
                         className="text-content-primary"
+                        disabled={disableOthers}
                         startIcon={<Icons.ArrowDownLeft />}
                         title={`${t("yeildFarming:unstake")}`}
                         onClick={() => {
@@ -178,6 +182,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                       <Button
                         startIcon={<Icons.ArrowDownLeft />}
                         className="text-content-primary"
+                        disabled={disableOthers}
                         title={`${t("yeildFarming:harvest")}`}
                         onClick={() => {
                           dispatch(toggleHarvestModal())

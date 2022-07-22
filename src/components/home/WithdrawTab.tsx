@@ -28,8 +28,8 @@ const WithdrawTab: FC = () => {
     type: "withdraw"
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
-    console.log(data)
+  const submit = () => {
+    // on withdrawal form submit
   }
   return (
     <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">

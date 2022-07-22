@@ -1,12 +1,12 @@
-import React, { FC } from "react"
-import { Button, DateTimePicker } from "components/shared"
-import * as Icons from "assets/icons"
-import { useTranslation } from "next-i18next"
-import moment from "moment"
-import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { exportProps } from "../ExportModal"
+import * as Icons from "assets/icons"
+import { Button, DateTimePicker } from "components/shared"
+import moment from "moment"
+import { useTranslation } from "next-i18next"
+import { FC } from "react"
+import { useForm } from "react-hook-form"
 import { exportSchema } from "utils/validations/exportSchema"
+import { exportProps } from "../ExportModal"
 
 export type FormKeys = "startDate" | "endDate"
 
@@ -26,8 +26,7 @@ const DefaultExport: FC<exportProps> = ({ setCurrentStep }) => {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = () => {
     setCurrentStep(1)
   }
 

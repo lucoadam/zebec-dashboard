@@ -32,6 +32,15 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
+
+  const styles = {
+    detailsRow: {
+      height:
+        activeDetailsRow === index
+          ? `${detailsRowRef.current?.scrollHeight}px`
+          : "0px"
+    }
+  }
   const dispatch = useAppDispatch()
   const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
@@ -43,7 +52,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-4 w-[340px]">
+          <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <CircularProgress percentage={0} status="scheduled" />
               <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -57,26 +66,33 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 min-w-50">
             <div className="text-caption text-content-primary">
               Mar 18, 2022, 12:00 PM <br />
               to Mar 19, 2022, 11:58 AM
             </div>
           </td>
-          <td className="w-[134px] px-6 py-4">
+          <td className="min-w-33.5 px-6 py-4">
             <div className="text-caption text-content-primary">10 min ago</div>
           </td>
-          <td className="px-6 py-4 w-[200px]">
+          <td className="px-6 py-4 min-w-50">
             <UserAddress wallet={transaction.receiver} />
           </td>
-          <td className="px-6 py-4 w-[200px]">
-            <div className="flex items-center float-right gap-x-6">
+          <td className="px-6 py-4 w-full">
+            <div className="flex items-center justify-end float-right gap-x-6">
               <Button
-                title="Cancel"
+                startIcon={<Icons.EditIcon className="text-content-contrast" />}
                 size="small"
+                title={`${t("table.sign-and-approve")}`}
+                onClick={() => dispatch(toggleSignModal())}
+              />
+              <Button
                 startIcon={
                   <Icons.CrossIcon className="text-content-contrast" />
                 }
+                size="small"
+                title={`${t("table.reject")}`}
+                onClick={() => dispatch(toggleRejectModal())}
               />
               <IconButton
                 variant="plain"
@@ -87,13 +103,15 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
           </td>
         </tr>
         {/* Table Body Details Row */}
+
         <tr>
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
               className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max ` : "ease-out h-0"
+                activeDetailsRow === index ? `ease-in ` : "ease-out"
               }`}
+              style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">

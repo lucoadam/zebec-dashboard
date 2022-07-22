@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface SendState {
@@ -15,9 +15,9 @@ const initialState: SendState = {
 export const sendContinuousStream: any = createAsyncThunk(
   "send/sendContinuousStream",
   async (data) => {
-    console.log(data)
     const response = await axios.post(
-      "https://jsonplaceholder.typicode.com/streams"
+      "https://jsonplaceholder.typicode.com/streams",
+      data
     )
     return response
   }
@@ -26,9 +26,9 @@ export const sendContinuousStream: any = createAsyncThunk(
 export const sendTreasuryContinuousStream: any = createAsyncThunk(
   "send/sendTreasuryContinuousStream",
   async (data) => {
-    console.log(data)
     const response = await axios.post(
-      "https://jsonplaceholder.typicode.com/streams"
+      "https://jsonplaceholder.typicode.com/streams",
+      data
     )
     return response
   }
@@ -37,9 +37,9 @@ export const sendTreasuryContinuousStream: any = createAsyncThunk(
 export const sendTreasuryInstantTransfer: any = createAsyncThunk(
   "send/sendTreasuryInstantTransfer",
   async (data) => {
-    console.log(data)
     const response = await axios.post(
-      "https://jsonplaceholder.typicode.com/stream"
+      "https://jsonplaceholder.typicode.com/stream",
+      data
     )
     return response
   }

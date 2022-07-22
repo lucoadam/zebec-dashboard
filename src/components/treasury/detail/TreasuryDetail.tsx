@@ -48,7 +48,6 @@ export default function TreasuryDetail() {
             startIcon={category.icon}
             count={category.count}
             onClick={() => {
-              console.log("clicked")
               setTimeout(() => {
                 ReactTooltip.rebuild()
               }, 1000)

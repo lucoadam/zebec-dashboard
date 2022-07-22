@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
 interface AddressBook {
@@ -28,7 +28,7 @@ export const fetchAddressBook = createAsyncThunk(
     // const response = await axios.get(
     //   "https://jsonplaceholder.typicode.com//addressBook"
     // )
-    const response =[
+    const response = [
       {
         name: "Jane Doe",
         wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
@@ -50,7 +50,7 @@ export const fetchAddressBook = createAsyncThunk(
         wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
       }
     ]
-    
+
     return response
   }
 )
@@ -74,9 +74,7 @@ export const deleteAddressBook = createAsyncThunk(
       "https://jsonplaceholder.typicode.com/addressBook"
     )
     return response.data
-    
   }
-  
 )
 
 const addressBookSlice = createSlice({
@@ -86,7 +84,6 @@ const addressBookSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAddressBook.pending, (state) => {
       state.loading = true
-       
     })
     builder.addCase(
       fetchAddressBook.fulfilled,
@@ -94,15 +91,13 @@ const addressBookSlice = createSlice({
         state.loading = false
         state.addressBooks = action.payload
         state.error = ""
-        
       }
     )
     builder.addCase(fetchAddressBook.rejected, (state, action) => {
-      console.log('rejected')
+      console.log("rejected")
       state.loading = false
       state.addressBooks = []
       state.error = action.error.message ?? "Something went wrong"
-      
     })
     builder.addCase(saveAddressBook.pending, (state) => {
       console.log("inpenidn")
@@ -124,7 +119,6 @@ const addressBookSlice = createSlice({
       state.saving = false
       state.addressBooks = []
       state.error = action.error.message ?? "Something went wrong"
-    
     })
     builder.addCase(deleteAddressBook.pending, (state) => {
       state.deleting = true

@@ -30,8 +30,8 @@ export const Deposit = () => {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
-    console.log(data)
+  const submit = () => {
+    // on submit
   }
 
   return (

@@ -13,6 +13,7 @@ import {
 } from "components/shared"
 import TreasuryDetail from "components/treasury/detail/TreasuryDetail"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
@@ -20,7 +21,6 @@ import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
@@ -67,7 +67,7 @@ const Treasury: NextPage = () => {
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
-          <Breadcrumb title="Zebec Safe" arrowBack={true} className="lg:flex">
+          <Breadcrumb title="Zebec Safe" arrowBack={true} className="md:flex">
             <BreadcrumbRightContent>
               <div ref={dropdownWrapper} className="relative">
                 <Button
@@ -128,6 +128,7 @@ export async function getServerSideProps({ locale }: { locale: string }) {
         "treasurySettings",
         "validation",
         "transactions",
+        "exportReport",
         "send"
       ]))
     }

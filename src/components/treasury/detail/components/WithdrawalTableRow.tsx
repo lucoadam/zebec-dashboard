@@ -13,7 +13,7 @@ import { toggleSignModal } from "features/modals/signModalSlice"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useEffect, useState } from "react"
+import { FC, Fragment, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, toSubstring } from "utils"
 
@@ -56,6 +56,15 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
+  const detailsRowRef = useRef<HTMLDivElement>(null)
+  const styles = {
+    detailsRow: {
+      height:
+        activeDetailsRow === index
+          ? `${detailsRowRef.current?.scrollHeight}px`
+          : "0px"
+    }
+  }
 
   const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
@@ -118,11 +127,18 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
           <td className="px-6 py-4 w-full float-right">
             <div className="flex items-center float-right gap-x-6">
               <Button
-                title="Cancel"
+                startIcon={<Icons.EditIcon className="text-content-contrast" />}
                 size="small"
+                title={`${t("table.sign-and-approve")}`}
+                onClick={() => dispatch(toggleSignModal())}
+              />
+              <Button
                 startIcon={
                   <Icons.CrossIcon className="text-content-contrast" />
                 }
+                size="small"
+                title={`${t("table.reject")}`}
+                onClick={() => dispatch(toggleRejectModal())}
               />
               <IconButton
                 variant="plain"
@@ -136,9 +152,11 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
         <tr>
           <td colSpan={4}>
             <div
+              ref={detailsRowRef}
               className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
+                activeDetailsRow === index ? `ease-in` : "ease-out"
               }`}
+              style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
