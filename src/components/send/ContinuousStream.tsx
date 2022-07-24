@@ -12,6 +12,7 @@ import {
   Toggle
 } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
+import { Token } from "components/shared/Token"
 import {
   sendContinuousStream,
   sendTreasuryContinuousStream
@@ -146,7 +147,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       setCurrentToken(tokenDetails[0])
       setValue("token", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue, currentToken.symbol])
+  }, [tokenDetails, setValue])
 
   const onSubmit = (data: ContinuousStreamFormData) => {
     reset()
@@ -383,11 +384,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 className="relative text-content-primary"
                 onClick={() => setToggleTokensDropdown((prev) => !prev)}
               >
-                {currentToken.image && (
-                  <img
+                {currentToken.symbol && (
+                  <Token
+                    symbol={currentToken.symbol}
                     className="w-[18px] h-[18px] absolute top-3 left-5 text-lg"
-                    src={currentToken.image}
-                    alt={currentToken.symbol}
                   />
                 )}
                 <input
@@ -435,11 +435,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                           }}
                           className="border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
+                          <Token
+                            symbol={item.symbol}
                             className="w-[18px] h-[18px] mr-[12px]  text-content-primary"
-                            src={item.image}
-                            alt={item.symbol}
                           />
                           <div>
                             <div className="text-content-primary ">

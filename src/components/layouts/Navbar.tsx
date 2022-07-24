@@ -166,16 +166,21 @@ const Navbar: FC = () => {
               onClick={() => setShowMenu(!showMenu)}
             />
             <Sidebar className="w-[290px] p-4" show={showMenu}>
-              <div className="flex gap-x-2 pb-6 px-4 mt-8">
+              <div className={`flex gap-x-2 pb-6 px-4 mt-8`}>
                 <Image
                   src={Images.Avatar1}
                   alt="Profile Avatar"
                   layout="fixed"
                   width={32}
                   height={32}
+                  className={`${!useWalletObject.connected && "blur-[2px]"}`}
                 />
                 <div className="flex flex-1 justify-between items-center">
-                  <div className="flex items-center gap-x-3">
+                  <div
+                    className={`flex items-center gap-x-3 ${
+                      !useWalletObject.connected && "blur-[2px]"
+                    }`}
+                  >
                     <div className="flex flex-col justify-between h-full">
                       <div
                         data-tip={useWalletObject?.publicKey?.toString()}
@@ -192,11 +197,12 @@ const Navbar: FC = () => {
                       </div>
                     </div>
                     <CopyButton
+                      disabled={!useWalletObject.connected}
                       className="text-content-primary"
                       content={useWalletObject?.publicKey?.toString() ?? ""}
                     />
                   </div>
-                  <div className="md:hidden">{themeChanger()}</div>
+                  <div>{themeChanger()}</div>
                 </div>
               </div>
               {getMenuRoutes(width).map((route, index) => (
@@ -215,18 +221,29 @@ const Navbar: FC = () => {
                 </div>
               ))}
               <div className="border-t border-outline pt-6 mt-auto">
-                <Button
-                  title="Change Wallet"
-                  startIcon={<Icons.RefreshIcon />}
-                  className="w-full mb-3 bg-background-primary"
-                  onClick={handleChangeWallet}
-                />
-                <Button
-                  title="Disconnect Wallet"
-                  startIcon={<Icons.DisconnectIcon />}
-                  className="w-full bg-background-primary"
-                  onClick={handleDisconnectWallet}
-                />
+                {useWalletObject.connected ? (
+                  <>
+                    <Button
+                      title="Change Wallet"
+                      startIcon={<Icons.RefreshIcon />}
+                      className="w-full mb-3 bg-background-primary"
+                      onClick={handleChangeWallet}
+                    />
+                    <Button
+                      title="Disconnect Wallet"
+                      startIcon={<Icons.DisconnectIcon />}
+                      className="w-full bg-background-primary"
+                      onClick={handleDisconnectWallet}
+                    />
+                  </>
+                ) : (
+                  <Button
+                    title="Connect Wallet"
+                    variant="gradient"
+                    className="w-full"
+                    onClick={handleConnectWallet}
+                  />
+                )}
               </div>
             </Sidebar>
           </div>

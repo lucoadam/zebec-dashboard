@@ -57,6 +57,8 @@ import BellEditIcon from "./other-icons/bell-edit.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
+export * as TokenIcons from "./token-icons"
+
 export {
   Envelope,
   Calendar,

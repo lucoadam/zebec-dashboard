@@ -1,6 +1,7 @@
 import { useAppSelector } from "app/hooks"
 import BigNumber from "bignumber.js"
 import { Button } from "components/shared"
+import { Token } from "components/shared/Token"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useState } from "react"
 import { AmountFieldProps } from "./AmountField.d"
@@ -44,11 +45,10 @@ export const AmountField: FC<AmountFieldProps> = ({
         </label>
       </div>
       <div className="relative text-content-primary">
-        {currentToken.image && (
-          <img
+        {currentToken.symbol && (
+          <Token
+            symbol={currentToken.symbol}
             className="w-[18px] h-[18px] absolute top-3 left-5 text-lg"
-            src={currentToken.image}
-            alt={currentToken.symbol}
           />
         )}
         <input

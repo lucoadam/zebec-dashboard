@@ -1,4 +1,4 @@
-import { AddLiquidityFormData } from "pages/yeild-farming/add-liquidity"
+import { AddLiquidityFormData } from "pages/farming/add-liquidity"
 import { UseFormRegister, UseFormSetValue } from "react-hook-form"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 
