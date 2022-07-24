@@ -16,7 +16,7 @@ import rejectModalSlice from "features/modals/rejectModalSlice"
 import resumeModalSlice from "features/modals/resumeModalSlice"
 import signModalSlice from "features/modals/signModalSlice"
 import stakeSlice from "features/modals/stakeSlice"
-import unStakeSlice from "features/modals/unStakeSlice"
+import unstakeSlice from "features/modals/unstakeSlice"
 import streamSlice from "features/stream/streamSlice"
 import toastsSlice from "features/toasts/toastsSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
@@ -51,7 +51,7 @@ const combineReducer = combineReducers({
   treasurysettings: treasurySettingsSlice,
   stream: streamSlice,
   stake: stakeSlice,
-  unstake: unStakeSlice,
+  unstake: unstakeSlice,
   harvest: harvestSlice
 })
 
