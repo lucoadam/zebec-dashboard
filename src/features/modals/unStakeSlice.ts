@@ -21,7 +21,7 @@ export const unstakeTransaction = createAsyncThunk(
   }
 )
 
-export const unstakeSlice = createSlice({
+export const unStakeSlice = createSlice({
   name: "unstake",
   initialState,
   reducers: {
@@ -53,6 +53,6 @@ export const unstakeSlice = createSlice({
 })
 
 export const { showModal, toggleUnStakeModal, setLoading } =
-  unstakeSlice.actions
+unStakeSlice.actions
 
-export default unstakeSlice.reducer
+export default unStakeSlice.reducer
