@@ -1,6 +1,7 @@
-import { useAppDispatch, useAppSelector } from "app/hooks"
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, IconButton } from "components/shared"
+import { Token } from "components/shared/Token"
 import { toggleHarvestModal } from "features/modals/harvestSlice"
 import { toggleStakeModal } from "features/modals/stakeSlice"
 import { toggleUnStakeModal } from "features/modals/unstakeSlice"
@@ -8,7 +9,7 @@ import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
 import { FC, Fragment, useEffect } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, getTokenImage } from "utils"
+import { formatCurrency } from "utils"
 
 interface FarmsTableRowProps {
   index: number
@@ -38,8 +39,6 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const { tokens: tokenDetails } = useAppSelector((state) => state.tokenDetails)
-
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [])
@@ -52,17 +51,15 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
           <td className="px-6 py-4 min-w-59.5">
             <div className="flex items-center gap-x-2.5 text-base font-semibold text-content-primary">
               <div className="grid place-content-center w-7 h-7 bg-background-primary rounded-lg">
-                <img
+                <Token
+                  symbol={liquidity.baseToken}
                   className="w-4 h-4 text-lg"
-                  src={getTokenImage(tokenDetails, liquidity.baseToken)}
-                  alt={liquidity.baseToken}
                 />
               </div>
               <div className="grid place-content-center w-7 h-7 bg-background-primary rounded-lg">
-                <img
+                <Token
+                  symbol={liquidity.mintToken}
                   className="w-4 h-4 text-lg"
-                  src={getTokenImage(tokenDetails, liquidity.mintToken)}
-                  alt={liquidity.baseToken}
                 />
               </div>
               {`${liquidity.baseToken}-${liquidity.mintToken}`}
@@ -103,7 +100,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                 }
                 onClick={() =>
                   router.push(
-                    `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                    `/farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
                   )
                 }
               />
@@ -143,7 +140,7 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
                         variant="gradient"
                         onClick={() =>
                           router.push(
-                            `/yeild-farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
+                            `/farming/add-liquidity?token0=${liquidity.baseToken}&token1=${liquidity.mintToken}`
                           )
                         }
                       />

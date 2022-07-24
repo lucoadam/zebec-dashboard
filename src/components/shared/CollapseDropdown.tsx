@@ -11,7 +11,6 @@ interface CollapseDropdownProps {
   className?: string
   position?: PositionStyle
   ref?: React.RefObject<HTMLDivElement>
-  autoPosition?: boolean
 }
 
 const getPositionStyle = (position: PositionStyle) => {

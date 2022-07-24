@@ -44,21 +44,19 @@ export const UserAddress: FC<{
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
+    setValue
   } = useForm({
-    mode: "onChange", 
+    mode: "onChange",
     resolver: yupResolver(addOwnersSchema)
   })
 
-  useEffect(()=>{
-   
-    setValue("wallet",wallet)
-  },[errors, setValue, wallet])
-  
+  useEffect(() => {
+    setValue("wallet", wallet)
+  }, [errors, setValue, wallet])
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    
-    dispatch(saveAddressBook({name:data.name, wallet:data.wallet}))
+    dispatch(saveAddressBook({ name: data.name, wallet: data.wallet }))
   }
 
   const handleClose = () => {
@@ -91,57 +89,49 @@ export const UserAddress: FC<{
         />
       )}
       <div className="relative ">
-        
-          <CollapseDropdown
-            show={toggleAddressDropdown}
-            className="w-[306px]"
-            autoPosition={false}
-          >
-            <div className="p-5 max-w-96">
-              <div className="text-content-secondary text-subtitle font-semibold">
-                {t("addressBook:add-an-address-name")}
-              </div>
-              <div className="text-caption text-content-secondary pt-2 ">
-                {t("addressBook:add-address-name-to-your-addressBook")}
-              </div>
-
-              <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-                <div className="pt-4 pb-4">
-                  <InputField
-                    label={t("addressBook:name")}
-                    className="relative text-content-secondary"
-                    error={!!errors.name}
-                    helper={t(
-                      errors.name?.message?.toString() || ""
-                    ).toString()}
-                  >
-                    <div>
-                      <input
-                        className={`w-full h-10 ${
-                          !!errors.name?.message && "error"
-                        }`}
-                        placeholder={t("addressBook:enter-name")}
-                        type="text"
-                        {...register("name")}
-                      />
-                    </div>
-                  </InputField>
-                </div>
-
-                {/* submit Button */}
-
-                <div className="">
-                  <Button
-                    className={`w-full`}
-                    variant="gradient"
-                    type="submit"
-                    title={`${t("addressBook:add-address-name")}`}
-                  />
-                </div>
-              </form>
+        <CollapseDropdown show={toggleAddressDropdown} className="w-[306px]">
+          <div className="p-5 max-w-96">
+            <div className="text-content-secondary text-subtitle font-semibold">
+              {t("addressBook:add-an-address-name")}
             </div>
-          </CollapseDropdown>
-        
+            <div className="text-caption text-content-secondary pt-2 ">
+              {t("addressBook:add-address-name-to-your-addressBook")}
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+              <div className="pt-4 pb-4">
+                <InputField
+                  label={t("addressBook:name")}
+                  className="relative text-content-secondary"
+                  error={!!errors.name}
+                  helper={t(errors.name?.message?.toString() || "").toString()}
+                >
+                  <div>
+                    <input
+                      className={`w-full h-10 ${
+                        !!errors.name?.message && "error"
+                      }`}
+                      placeholder={t("addressBook:enter-name")}
+                      type="text"
+                      {...register("name")}
+                    />
+                  </div>
+                </InputField>
+              </div>
+
+              {/* submit Button */}
+
+              <div className="">
+                <Button
+                  className={`w-full`}
+                  variant="gradient"
+                  type="submit"
+                  title={`${t("addressBook:add-address-name")}`}
+                />
+              </div>
+            </form>
+          </div>
+        </CollapseDropdown>
       </div>
       <CopyButton className="min-w-7" content={wallet} />
     </div>

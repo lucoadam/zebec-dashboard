@@ -22,7 +22,7 @@ const routesArray: RoutesArrayProps[] = [
   },
   {
     name: "yeild-farming",
-    path: "/yeild-farming",
+    path: "/farming",
     Icon: NavIcons.CoinIcon,
     type: "link"
   },

@@ -5,6 +5,7 @@ import { FC, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { getBalance } from "utils/getBalance"
 import { CollapseDropdown } from "./CollapseDropdown"
+import { Token } from "./Token"
 
 interface TokensDropdownProps {
   show: boolean
@@ -68,10 +69,9 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
                 >
                   <div className="grid place-content-center w-7 h-7 rounded-full bg-background-primary">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      className="w-4 h-4  text-content-primary"
-                      src={token.image}
-                      alt={token.symbol}
+                    <Token
+                      symbol={token.symbol}
+                      className="w-4 h-4 text-content-primary"
                     />
                   </div>
                   <div className="flex flex-col">

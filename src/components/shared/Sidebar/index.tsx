@@ -27,7 +27,7 @@ export const Sidebar: FC<SidebarProps> = ({
     >
       <div
         className={twMerge(
-          `fixed flex flex-col border border-outline top-0 z-20 left-0 bg-background-secondary h-full`,
+          `fixed flex flex-col border border-outline top-0 z-20 left-0 bg-background-secondary overflow-auto h-full`,
           className ?? ""
         )}
         {...rest}

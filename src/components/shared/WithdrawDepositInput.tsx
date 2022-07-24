@@ -3,6 +3,7 @@ import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import React, { FC, useRef } from "react"
 import { Button } from "./Button"
+import { Token } from "./Token"
 
 interface Token {
   symbol: string
@@ -57,13 +58,11 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
               >
                 {/* Icons here */}
                 <div className="grid place-content-center w-5 h-5 bg-background-primary rounded-full">
-                  {token?.image && (
+                  {token?.symbol && (
                     <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Token
+                        symbol={token.symbol}
                         className="w-4 h-4  text-content-primary"
-                        src={token.image}
-                        alt={token.symbol}
                       />
                     </>
                   )}
