@@ -5,16 +5,20 @@ import { updateWidth } from "features/layout/layoutSlice"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import * as Icons from "../../assets/icons"
-import * as Images from "../../assets/images"
-import { Button, IconButton } from "../shared"
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import { Button, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
 import WalletNotConnectedModal from "./WalletNotConnectedModal"
+import { useClickOutside } from "hooks"
+import { toSubstring } from "utils"
+import CopyButton from "components/shared/CopyButton"
+import { useRouter } from "next/router"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
@@ -22,11 +26,13 @@ const Navbar: FC = () => {
   const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
-  // const [width, setWidth] = useState<number>(0)
   const [showMenu, setShowMenu] = useState<boolean>(false)
 
   const width = useAppSelector((state) => state.layout.width)
   const dispatch = useAppDispatch()
+
+  const dropdownWrapperRef = useRef(null)
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -75,22 +81,46 @@ const Navbar: FC = () => {
       : useWalletModalObject.setVisible(!useWalletModalObject.visible)
   }
 
+  useClickOutside(dropdownWrapperRef, {
+    onClickOutside: () => {
+      setShowMenu(false)
+    }
+  })
+
+  const handleClose = () => {
+    setShowMenu(false)
+  }
+
+  //handle change wallet
+  const handleChangeWallet = () => {
+    useWalletModalObject.setVisible(!useWalletModalObject.visible)
+    handleClose()
+  }
+
+  //handle disconnect wallet
+  const handleDisconnectWallet = () => {
+    useWalletObject.disconnect()
+    handleClose()
+  }
   return (
     <>
-      <nav className="shadow-2 px-4 py-4">
-        <div className="flex justify-between gap-x-4 lg:justify-center items-center relative">
+      <nav className="bg-background-primary shadow-2 px-4 py-4 w-full">
+        <div className="w-full flex justify-between gap-x-4 items-center">
           {/* Logo */}
-          <div className="flex flex-col lg:absolute lg:left-0">
-            <Image
-              src={Images.ZebecLogo}
-              alt="Zebec Logo"
-              layout="fixed"
-              width={87}
-              height={24}
-            />
-            <div className="ml-10 text-caption text-content-contrast">
-              Mainnet Beta
+          <div className="flex flex-row gap-8 items-center">
+            <div className="flex flex-col">
+              <Image
+                src={Images.ZebecLogo}
+                alt="Zebec Logo"
+                layout="fixed"
+                width={87}
+                height={24}
+              />
+              <div className="ml-10 text-caption text-content-contrast">
+                Mainnet Beta
+              </div>
             </div>
+            <div className="hidden md:block">{themeChanger()}</div>
           </div>
 
           {/* NavLinks */}
@@ -103,6 +133,7 @@ const Navbar: FC = () => {
                   return <NavGroup key={index} {...route} />
               }
             })}
+            <Icons.BellEditIcon className="cursor-pointer md:hidden text-content-primary w-6 h-6" />
             <Link href="/send">
               <Button
                 title="Send"
@@ -112,36 +143,94 @@ const Navbar: FC = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-x-3 lg:absolute lg:right-0">
-            <>{themeChanger()}</>
-            {!useWalletObject.connected ? (
-              <Button
-                title="Connect Wallet"
-                variant="gradient"
-                onClick={handleConnectWallet}
-              />
-            ) : (
-              <Profile />
-            )}
-            <div className="lg:hidden">
-              <IconButton
-                icon={<Icons.MenuIcon />}
-                variant="plain"
-                size="medium"
-                onClick={() => setShowMenu(!showMenu)}
-              />
+          <div className="hidden md:block">
+            <div className="flex items-center gap-x-[27px]">
+              <Icons.BellEditIcon className="cursor-pointer text-content-primary w-6 h-6" />
+              {!useWalletObject.connected ? (
+                <Button
+                  title="Connect Wallet"
+                  variant="gradient"
+                  onClick={handleConnectWallet}
+                />
+              ) : (
+                <Profile />
+              )}
             </div>
           </div>
-        </div>
-        {showMenu && (
-          <div className={`px-6 divide-y divide-outline`}>
-            {getMenuRoutes(width).map((route, index) => (
-              <div className="py-4" key={index}>
-                <NavLink key={index} {...route} />
+
+          <div ref={dropdownWrapperRef} className="lg:hidden">
+            <IconButton
+              icon={<Icons.MenuIcon />}
+              variant="plain"
+              size="medium"
+              onClick={() => setShowMenu(!showMenu)}
+            />
+            <Sidebar className="w-[290px] p-4" show={showMenu}>
+              <div className="flex gap-x-2 pb-6 px-4 mt-8">
+                <Image
+                  src={Images.Avatar1}
+                  alt="Profile Avatar"
+                  layout="fixed"
+                  width={32}
+                  height={32}
+                />
+                <div className="flex flex-1 justify-between items-center">
+                  <div className="flex items-center gap-x-3">
+                    <div className="flex flex-col justify-between h-full">
+                      <div
+                        data-tip={useWalletObject?.publicKey?.toString()}
+                        className="text-avatar-title font-medium text-content-primary"
+                      >
+                        {toSubstring(
+                          useWalletObject?.publicKey?.toString(),
+                          4,
+                          true
+                        )}
+                      </div>
+                      <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
+                        {useWalletObject?.wallet?.adapter.name} Wallet
+                      </div>
+                    </div>
+                    <CopyButton
+                      className="text-content-primary"
+                      content={useWalletObject?.publicKey?.toString() ?? ""}
+                    />
+                  </div>
+                  <div className="md:hidden">{themeChanger()}</div>
+                </div>
               </div>
-            ))}
+              {getMenuRoutes(width).map((route, index) => (
+                <div
+                  className={`
+                ${
+                  (router.pathname === route.path ||
+                    (route.path !== "/" &&
+                      router.pathname.includes(route.path?.split("/")[1]))) &&
+                  "bg-background-primary"
+                }
+                py-2 px-2 rounded-[4px]`}
+                  key={index}
+                >
+                  <NavLink key={index} {...route} />
+                </div>
+              ))}
+              <div className="border-t border-outline pt-6 mt-auto">
+                <Button
+                  title="Change Wallet"
+                  startIcon={<Icons.RefreshIcon />}
+                  className="w-full mb-3 bg-background-primary"
+                  onClick={handleChangeWallet}
+                />
+                <Button
+                  title="Disconnect Wallet"
+                  startIcon={<Icons.DisconnectIcon />}
+                  className="w-full bg-background-primary"
+                  onClick={handleDisconnectWallet}
+                />
+              </div>
+            </Sidebar>
           </div>
-        )}
+        </div>
         <WalletNotConnectedModal />
       </nav>
     </>
