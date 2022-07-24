@@ -42,7 +42,6 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
     className,
     position = "right",
     variant = "default",
-    autoPosition = true,
     // ref,
     ...rest
   } = props

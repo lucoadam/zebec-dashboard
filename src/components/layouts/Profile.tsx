@@ -92,7 +92,7 @@ const Profile: FC = () => {
                 width={32}
                 height={32}
               />
-              <div className="flex items-start gap-x-3">
+              <div className="flex items-center gap-x-3">
                 <div className="flex flex-col justify-between h-full">
                   <div
                     data-tip={useWalletObject?.publicKey?.toString()}
@@ -108,12 +108,10 @@ const Profile: FC = () => {
                     {useWalletObject?.wallet?.adapter.name} Wallet
                   </div>
                 </div>
-                <div className="transform -translate-y-1">
-                  <CopyButton
-                    className="text-content-primary"
-                    content={useWalletObject?.publicKey?.toString() ?? ""}
-                  />
-                </div>
+                <CopyButton
+                  className="text-content-primary"
+                  content={useWalletObject?.publicKey?.toString() ?? ""}
+                />
               </div>
             </div>
             <div>
