@@ -37,16 +37,16 @@ const Navbar: FC = () => {
       dispatch(updateWidth(window.outerWidth))
     })
   }, [dispatch])
-  const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
+  const [toggleAddressDropdown, setToggleAddressDropdown] =
     useState<boolean>(false)
 
     const handleClose = () => {
-      setToggleNotificationsDropdown(false)
+      setToggleAddressDropdown(false)
     }
-    const NotificationsDropdownWrapperRef = useRef(null)
+    const AddressDropdownWrapperRef = useRef(null)
   
     //handle clicking outside
-    useClickOutside(NotificationsDropdownWrapperRef, {
+    useClickOutside(AddressDropdownWrapperRef, {
       onClickOutside: handleClose
     })
 
@@ -91,7 +91,7 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <nav className="shadow-2 px-4 py-4" ref={NotificationsDropdownWrapperRef}>
+      <nav className="shadow-2 px-4 py-4" >
         <div className="flex justify-between gap-x-4 lg:justify-center items-center relative">
           {/* Logo */}
           <div className="flex flex-col lg:absolute lg:left-0">
@@ -130,7 +130,7 @@ const Navbar: FC = () => {
 
           <div className="flex items-center gap-x-3 lg:absolute lg:right-0">
           <div className="text-content-primary" 
-          onClick={()=>setToggleNotificationsDropdown(!toggleNotificationsDropdown)}>
+          onClick={()=>setToggleAddressDropdown(!toggleAddressDropdown)}>
             <Icons.NotificationIcon/>
 
 
@@ -169,7 +169,7 @@ const Navbar: FC = () => {
       </nav>
       <div className="relative" >
             <CollapseDropdown
-            show={toggleNotificationsDropdown}
+            show={toggleAddressDropdown}
             className=" rounded-lg top-1 right-4 "
           >
             <NotificationsComponent/>

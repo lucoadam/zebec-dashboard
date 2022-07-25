@@ -5,6 +5,7 @@ import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
 import { FC, useState } from "react"
 import { formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
+import { Token } from "./Token"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
@@ -71,12 +72,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                       <td className="whitespace-nowrap w-[1%] pb-6 pt-3">
                         <div className="flex flex-col items-center gap-y-1">
                           <div className="w-8 h-8 grid place-content-center rounded-full bg-background-primary">
-                            <img
-                              src={token.image}
-                              alt={token.symbol}
-                              width={20}
-                              height={20}
-                            />
+                            <Token symbol={token.symbol} className="w-5 h-5" />
                           </div>
                           <div className="text-caption text-content-primary">
                             {token.symbol}
