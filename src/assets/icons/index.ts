@@ -61,7 +61,6 @@ export * as TokenIcons from "./token-icons"
 
 export {
   Envelope,
-  NotificationIcon,
   Calendar,
   Download,
   IndividualAddress,
