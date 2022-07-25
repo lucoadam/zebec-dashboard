@@ -1,8 +1,11 @@
 import { useAppSelector } from "app/hooks"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { useTranslation } from "next-i18next"
+import { getBalance } from "utils/getBalance"
 
 export const Withdrawal = () => {
+  const { t } = useTranslation()
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
@@ -10,27 +13,36 @@ export const Withdrawal = () => {
   const {
     currentToken,
     setCurrentToken,
-    //change
-    t,
-    //toggle
     show,
     toggle,
     setToggle,
-    //max value
-    setMaxAmount,
-    //useForm
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    setValue,
+    trigger,
+    setError
   } = useWithdrawDepositForm({
-    balanceTokens: treasuryTokens,
     tokens: tokenDetails,
     type: "withdraw"
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submitWitdrawal = () => {
-    // submitted withdrawal
+  const submitWitdrawal = (data: any) => {
+    if (Number(data.amount) > getBalance(treasuryTokens, currentToken.symbol)) {
+      setError(
+        "amount",
+        { type: "custom", message: "transactions:deposit.max-amount" },
+        { shouldFocus: true }
+      )
+      return
+    }
+    // handle withdrawal
+  }
+
+  const setMaxAmount = () => {
+    setValue("amount", getBalance(treasuryTokens, currentToken.symbol))
+    trigger("amount")
   }
 
   return (
@@ -47,7 +59,7 @@ export const Withdrawal = () => {
           setMaxAmount={setMaxAmount}
           toggle={toggle}
           setToggle={setToggle}
-          errorMessage={`${errors.amount?.message}`}
+          errorMessage={`${errors.amount?.message?.toString() || ""}`}
           {...register("amount")}
         >
           {/* Tokens Dropdown */}
