@@ -1,15 +1,17 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import NotificationsComponent from "components/notifications/Notifications"
 import { updateWidth } from "features/layout/layoutSlice"
+import { useClickOutside } from "hooks"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import * as Icons from "../../assets/icons"
 import * as Images from "../../assets/images"
-import { Button, IconButton } from "../shared"
+import { Button, CollapseDropdown, IconButton } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
@@ -35,6 +37,18 @@ const Navbar: FC = () => {
       dispatch(updateWidth(window.outerWidth))
     })
   }, [dispatch])
+  const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
+    useState<boolean>(false)
+
+    const handleClose = () => {
+      setToggleNotificationsDropdown(false)
+    }
+    const NotificationsDropdownWrapperRef = useRef(null)
+  
+    //handle clicking outside
+    useClickOutside(NotificationsDropdownWrapperRef, {
+      onClickOutside: handleClose
+    })
 
   //theme toggle
   const themeChanger: () => JSX.Element | null = () => {
@@ -77,7 +91,7 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <nav className="shadow-2 px-4 py-4">
+      <nav className="shadow-2 px-4 py-4" ref={NotificationsDropdownWrapperRef}>
         <div className="flex justify-between gap-x-4 lg:justify-center items-center relative">
           {/* Logo */}
           <div className="flex flex-col lg:absolute lg:left-0">
@@ -111,8 +125,16 @@ const Navbar: FC = () => {
               />
             </Link>
           </div>
+          
+        
 
           <div className="flex items-center gap-x-3 lg:absolute lg:right-0">
+          <div className="text-content-primary" 
+          onClick={()=>setToggleNotificationsDropdown(!toggleNotificationsDropdown)}>
+            <Icons.NotificationIcon/>
+
+
+          </div>
             <>{themeChanger()}</>
             {!useWalletObject.connected ? (
               <Button
@@ -132,7 +154,8 @@ const Navbar: FC = () => {
               />
             </div>
           </div>
-        </div>
+          </div>
+
         {showMenu && (
           <div className={`px-6 divide-y divide-outline`}>
             {getMenuRoutes(width).map((route, index) => (
@@ -144,6 +167,14 @@ const Navbar: FC = () => {
         )}
         <WalletNotConnectedModal />
       </nav>
+      <div className="relative" >
+            <CollapseDropdown
+            show={toggleNotificationsDropdown}
+            className=" rounded-lg top-1 right-4 "
+          >
+            <NotificationsComponent/>
+          </CollapseDropdown>
+          </div>
     </>
   )
 }
