@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Breadcrumb, Button, InputField } from "components/shared"
+import { Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { notificationSchema } from "utils/validations/notificationSchema"
 
@@ -30,18 +30,18 @@ export default function NotificationsComponent() {
   }
   return (
     <>
-      <div className="container w-full ">
+      {/* <div className="container w-full ">
         <Breadcrumb
           title={`${t("notifications.notification")}`}
           className="mt-20"
-        />
+        /> */}
 
-        <div className="rounded bg-background-secondary p-10 mt-12 max-w-96">
-          <div className="text-subtitle font-semibold">{`${t(
+        <div className="rounded bg-background-secondary p-8 ">
+          <div className="text-content-primary font-semibold">{`${t(
             "notifications.notified-on"
           )} `}</div>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-            <div className="w-96">
+            <div className="">
               <div className="pt-6 ">
                 <InputField
                   label={t("notifications.email-address")}
@@ -86,7 +86,7 @@ export default function NotificationsComponent() {
 
               {/* submit Button */}
 
-              <div className="pb-20">
+              <div className="pb-2">
                 <Button
                   className={`w-full ${userNotification ? "hidden" : ""}`}
                   variant="gradient"
@@ -112,7 +112,7 @@ export default function NotificationsComponent() {
             </div>
           </form>
         </div>
-      </div>
+      {/* </div> */}
     </>
   )
 }

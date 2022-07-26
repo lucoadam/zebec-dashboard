@@ -1,10 +1,12 @@
 import * as Icons from "assets/icons"
 import React from "react"
+import { CopyButtonProps } from "./index.d"
 
-const CopyButton: React.FC<{
-  content: string
-  className?: string
-}> = ({ content, className = "" }) => {
+const CopyButton: React.FC<CopyButtonProps> = ({
+  content,
+  className = "",
+  disabled = false
+}) => {
   const [isClicked, setIsClicked] = React.useState<boolean>(false)
 
   return (
@@ -19,6 +21,7 @@ const CopyButton: React.FC<{
       ) : (
         <Icons.CopyIcon
           onClick={(e: Event) => {
+            if (disabled) return
             e.stopPropagation()
             setIsClicked(true)
             setTimeout(() => {

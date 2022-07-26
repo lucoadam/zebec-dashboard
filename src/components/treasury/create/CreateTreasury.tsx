@@ -27,7 +27,7 @@ const CreateTreasury: NextPage = () => {
   }
 
   return (
-    <div className="bg-background-secondary rounded-[4px] py-[76px] px-[120px]">
+    <div className="bg-background-secondary rounded-[4px] py-[76px] px-5 sm:px-10 md:px-20 xl:px-[120px]">
       <div className="flex flex-wrap">
         <div className="flex-none sm:w-1/2 w-full">
           {StepsList.map((step: Step, index: number) => (

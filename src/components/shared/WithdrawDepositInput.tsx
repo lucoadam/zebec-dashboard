@@ -3,6 +3,7 @@ import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import React, { FC, useRef } from "react"
 import { Button } from "./Button"
+import { Token } from "./Token"
 
 interface Token {
   symbol: string
@@ -36,6 +37,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
         errorMessage = "",
         ...rest
       } = props
+
       const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
       const { t } = useTranslation()
       //handle clicking outside
@@ -46,43 +48,52 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
       return (
         <>
           <div className={className}>
-            <label> {t("common:balances.token")}</label>
-            <div
-              ref={tokensDropdownWrapperRef}
-              className="pl-4.5 pr-6 flex items-center bg-background-primary border border-outline rounded-lg relative"
+            <label
+              className={`${
+                props.disabled
+                  ? "text-content-tertiary"
+                  : "text-content-secondary"
+              }`}
             >
+              {" "}
+              {t("common:balances.token")}
+            </label>
+            <div ref={tokensDropdownWrapperRef} className="relative">
               <div
-                className="flex flex-grow-0 items-center gap-x-1.5 cursor-pointer"
-                onClick={toggle}
+                className="cursor-pointer absolute top-3 left-5 flex text-content-primary gap-1.5"
+                onClick={() => {
+                  if (!props.disabled) toggle()
+                }}
               >
                 {/* Icons here */}
-                <div className="grid place-content-center w-5 h-5 bg-background-primary rounded-full">
-                  {token?.image && (
-                    <>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        className="w-4 h-4  text-content-primary"
-                        src={token.image}
-                        alt={token.symbol}
-                      />
-                    </>
-                  )}
-                </div>
-                <div className="flex items-center text-body text-content-primary">
-                  {token?.symbol ?? "SOL"}{" "}
-                  <Icons.CheveronDownIcon className="text-base text-content-secondary" />
-                </div>
-              </div>
-              <div className="relative w-full flex items-center">
-                <div>
-                  <input
-                    type="text"
-                    className="!pl-4 !text-body !leading-6 !border-none !focus:outline-0 !ring-0 w-full"
-                    placeholder="Enter Amount"
-                    {...rest}
-                    ref={ref}
+                {token?.symbol && (
+                  <Token
+                    symbol={token.symbol}
+                    className="w-4 h-4 text-content-primary"
                   />
-                </div>
+                )}
+                <span
+                  className={`${
+                    props.disabled
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  }`}
+                >
+                  {token?.symbol ?? "SOL"}{" "}
+                </span>
+                <Icons.CheveronDownIcon className="text-base text-content-secondary" />
+              </div>
+              <div className="w-full flex items-center">
+                <input
+                  type="number"
+                  step={"any"}
+                  className={`!pl-[104px] !pr-14 w-full h-[40px] ${
+                    errorMessage && "error"
+                  }`}
+                  placeholder="Enter Amount"
+                  {...rest}
+                  ref={ref}
+                />
                 <Button
                   type="button"
                   onClick={() => {
@@ -90,7 +101,11 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   }}
                   title={`${t("common:buttons.max")}`}
                   size="small"
-                  className="right-px top-0"
+                  className={`absolute right-[8px] top-[8px] ${
+                    props.disabled
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  }`}
                 />
               </div>
 
@@ -101,7 +116,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
               errorMessage !== "" &&
               errorMessage !== "undefined" && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {errorMessage}
+                  {t(errorMessage)}
                 </p>
               )}
           </div>

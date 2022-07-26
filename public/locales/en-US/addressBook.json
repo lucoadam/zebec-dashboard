@@ -2,11 +2,13 @@
     "create-address-book":"Create an Address Group",
     "address-book":"Address Book",
     "address-group":"Address Group",
-    "name":"NAME",
+    "name":"Name",
     "address": "WALLET ADDRESS",
     "actions":"ACTIONS",
     "add-an-address":"Add an Address",
+    "add-an-address-name":"Add an Address Name",
     "address-name" : "Address Name",
+    "add-address-name":"Add Address Name",
     "enter-name":"Enter Name",
     "wallet-address":"Wallet Address",
     "enter-wallet-address":"Enter Wallet Address",
@@ -18,7 +20,8 @@
     "yes-delete":"Yes, Delete",
     "cancel":"Cancel",
     "undelete-address-book": "Delete address book",
-    "add-address-to-your-addressBook":"Add address to your address book"
+    "add-address-to-your-addressBook":"Add address to your address book",
+    "add-address-name-to-your-addressBook":"Add address name to your address book"
     
 
 }
