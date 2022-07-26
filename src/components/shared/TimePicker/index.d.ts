@@ -9,4 +9,5 @@ export interface TimePickerProps {
   endIcon?: JSX.Element
   disabled?: boolean
   reset?: () => void
+  value?: string
 }

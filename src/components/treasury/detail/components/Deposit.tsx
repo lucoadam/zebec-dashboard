@@ -107,22 +107,20 @@ export const Deposit = () => {
             className="mt-8 w-full z-[99]"
             position="left"
           >
-            <div className="rounded-t-lg bg-background-primary border border-outline">
-              <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                {["Wallet", "Zebec balance"].map((item) => (
-                  <div
-                    key={item}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setToggleDropdown(false)
-                      setDepositFrom(item)
-                    }}
-                    className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                  >
-                    <div className="text-sm text-content-primary">{item}</div>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+              {["Wallet", "Zebec balance"].map((item) => (
+                <div
+                  key={item}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setToggleDropdown(false)
+                    setDepositFrom(item)
+                  }}
+                  className={`border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light`}
+                >
+                  <div className="text-sm text-content-primary">{item}</div>
+                </div>
+              ))}
             </div>
           </CollapseDropdown>
         </div>

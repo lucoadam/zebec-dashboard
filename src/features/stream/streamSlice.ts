@@ -15,6 +15,7 @@ const initialState: SendState = {
 export const sendContinuousStream: any = createAsyncThunk(
   "send/sendContinuousStream",
   async (data) => {
+    console.log(data)
     const response = await axios.post(
       "https://jsonplaceholder.typicode.com/streams",
       data
@@ -26,6 +27,7 @@ export const sendContinuousStream: any = createAsyncThunk(
 export const sendTreasuryContinuousStream: any = createAsyncThunk(
   "send/sendTreasuryContinuousStream",
   async (data) => {
+    console.log(data)
     const response = await axios.post(
       "https://jsonplaceholder.typicode.com/streams",
       data
@@ -37,6 +39,7 @@ export const sendTreasuryContinuousStream: any = createAsyncThunk(
 export const sendTreasuryInstantTransfer: any = createAsyncThunk(
   "send/sendTreasuryInstantTransfer",
   async (data) => {
+    console.log(data)
     const response = await axios.post(
       "https://jsonplaceholder.typicode.com/stream",
       data

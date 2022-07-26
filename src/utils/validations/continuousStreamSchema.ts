@@ -17,11 +17,11 @@ import {
 } from "./commonSchema"
 
 export const continuousSchema = Yup.object().shape({
-  ...transactionName,
+  transaction_name: transactionName.transactionName,
   showRemarks: toggle.toggle,
-  receiverWallet: wallet.wallet,
+  receiver: wallet.wallet,
   ...remarks,
-  ...token,
+  symbol: token.token,
   ...amount,
   ...startDate,
   ...endDate,

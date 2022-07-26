@@ -1,12 +1,12 @@
 import { WalletToken } from "features/walletBalanceSlice/walletBalanceSlice.d"
 
 export interface ContinuousStreamFormData {
-  transactionName: string
-  receiverWallet: string
+  transaction_name: string
+  receiver: string
   remarks?: string
   showRemarks?: boolean
   amount: string
-  token: string
+  symbol: string
   startDate: string
   endDate: string
   startTime: string

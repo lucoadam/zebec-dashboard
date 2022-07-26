@@ -235,7 +235,7 @@ const AddOwners: FC<StepsComponentProps> = ({
             className="w-full z-[99]"
             position="left"
           >
-            <div className="rounded-t-lg bg-background-primary border border-outline">
+            <div className="rounded-lg bg-background-primary border border-outline">
               <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
               <input
                 className="is-search w-full h-[48px] bg-background-primary"

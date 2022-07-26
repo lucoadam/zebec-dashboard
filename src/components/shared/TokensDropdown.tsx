@@ -32,11 +32,11 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
       <CollapseDropdown
         show={show}
         className={twMerge(
-          `w-full border border-outline top-12 bg-background-primary overflow-hidden`,
+          `w-full border border-outline top-12 bg-background-primary `,
           className
         )}
       >
-        <div className="">
+        <div className="rounded-lg">
           <div className="flex items-center px-4.5 py-3 border-b border-outline">
             <Icons.SearchIcon className="text-base text-content-tertiary" />
             <input

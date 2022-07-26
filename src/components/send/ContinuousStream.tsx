@@ -92,8 +92,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    watch,
-    reset
+    watch
   } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
     resolver: yupResolver(continuousSchema)
@@ -108,7 +107,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
-  const [resetFile, setResetFile] = useState(false)
+  // const [resetFile, setResetFile] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -117,7 +116,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
       symbol: "",
-      image: ""
+      image: "",
+      mint: ""
     }
   )
 
@@ -145,20 +145,34 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   useEffect(() => {
     if (tokenDetails.length > 0) {
       setCurrentToken(tokenDetails[0])
-      setValue("token", tokenDetails[0].symbol)
+      setValue("symbol", tokenDetails[0].symbol)
     }
   }, [tokenDetails, setValue])
 
   const onSubmit = (data: ContinuousStreamFormData) => {
-    reset()
-    setResetFile(true)
-    if (type === "send") {
-      dispatch(sendContinuousStream(data))
-    } else {
-      dispatch(sendTreasuryContinuousStream(data))
+    const formattedData = {
+      transaction_name: data.transaction_name,
+      symbol: data.symbol,
+      amount: data.amount,
+      remarks: data.remarks,
+      receiver: data.receiver,
+      start_time: moment(
+        `${data.startDate} ${data.startTime}`,
+        "DD/MM/YYYY LT"
+      ).unix(),
+      end_time: moment(
+        `${data.endDate} ${data.endTime}`,
+        "DD/MM/YYYY LT"
+      ).unix(),
+      token_mint_address:
+        currentToken.mint === "solana" ? "" : currentToken.mint,
+      file: data.file
     }
-    setCurrentToken(tokenDetails[0])
-    setValue("token", tokenDetails[0].symbol)
+    if (type === "send") {
+      dispatch(sendContinuousStream(formattedData))
+    } else {
+      dispatch(sendTreasuryContinuousStream(formattedData))
+    }
   }
 
   const handleStreamRate = () => {
@@ -238,17 +252,17 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 error={false}
                 labelMargin={12}
                 helper={t(
-                  errors.transactionName?.message?.toString() || ""
+                  errors.transaction_name?.message?.toString() || ""
                 ).toString()}
               >
                 <div>
                   <input
                     className={`${
                       !getValues().showRemarks && "!pr-[124px]"
-                    } w-full h-[40px] ${!!errors.transactionName && "error"}`}
+                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
-                    {...register("transactionName")}
+                    {...register("transaction_name")}
                   />
                   {!getValues().showRemarks && (
                     <Button
@@ -273,19 +287,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <input
                   type="text"
                   className={`h-[40px] w-full !pr-12 ${
-                    !!errors.receiverWallet && "error"
+                    !!errors.receiver && "error"
                   }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
-                  {...register("receiverWallet")}
+                  {...register("receiver")}
                 />
                 <Icons.CheveronDownIcon
                   onClick={() => setToggleReceiverDropdown((prev) => !prev)}
                   className="hover:cursor-pointer absolute w-6 h-6 top-2 right-4"
                 />
               </div>
-              {!!errors.receiverWallet && (
+              {!!errors.receiver && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {t(errors.receiverWallet?.message?.toString() || "")}
+                  {t(errors.receiver?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -293,7 +307,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 className="mt-8 w-full z-[99]"
                 position="left"
               >
-                <div className="rounded-t-lg bg-background-primary border border-outline">
+                <div className="rounded-lg bg-background-primary border border-outline">
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
@@ -314,8 +328,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiverWallet", user.address)
-                            trigger("receiverWallet")
+                            setValue("receiver", user.address)
+                            trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
@@ -393,16 +407,16 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <input
                   type="text"
                   className={`h-[40px] w-full !pl-11 ${
-                    !!errors.token && "error"
+                    !!errors.symbol && "error"
                   }`}
                   readOnly
-                  {...register("token")}
+                  {...register("symbol")}
                 />
                 <Icons.CheveronDownIcon className="w-6 h-6 hover:cursor-pointer absolute top-2 right-4" />
               </div>
-              {!!errors.token && (
+              {!!errors.symbol && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {t(errors.token?.message?.toString() || "")}
+                  {t(errors.symbol?.message?.toString() || "")}
                 </p>
               )}
               <CollapseDropdown
@@ -410,7 +424,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 className="mt-8 w-full z-[99]"
                 position="left"
               >
-                <div className="rounded-t-lg bg-background-primary border border-outline">
+                <div className="rounded-lg bg-background-primary border border-outline">
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
@@ -430,8 +444,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                             event.stopPropagation()
                             setToggleTokensDropdown(false)
                             setCurrentToken(item)
-                            setValue("token", item.symbol)
-                            trigger("token")
+                            setValue("symbol", item.symbol)
+                            trigger("symbol")
                           }}
                           className="border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
                         >
@@ -528,7 +542,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 01/01/2022"
                   dateFormat="DD/MM/YYYY"
                   timeFormat={false}
-                  value={getValues().startDate}
+                  value={getValues().startDate || moment().format("DD/MM/YYYY")}
                   onChange={(date) => {
                     setValue("startDate", moment(date).format("DD/MM/YYYY"))
                     trigger("startDate")
@@ -558,6 +572,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   name="startTime"
                   register={register}
                   placeholder="E.g. 12:00 AM"
+                  value={
+                    getValues().startTime ||
+                    moment().add(5, "minutes").format("hh:mm A")
+                  }
                   onChange={(time) => {
                     setValue("startTime", time)
                     trigger("startTime")
@@ -649,7 +667,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-                isReset={resetFile}
+                // isReset={resetFile}
               />
             )}
           </div>
@@ -731,26 +749,24 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 </div>
                 <CollapseDropdown
                   show={toggleIntervalDropdown}
-                  className="mt-8 w-full z-[99]"
+                  className="mt-8 w-full z-[99] rounded-lg"
                   position="left"
                 >
-                  <div className="rounded-lg bg-background-primary border border-outline">
-                    <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                      {intervals.map((data) => (
-                        <div
-                          key={data.key}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            setToggleIntervalDropdown(false)
-                            setValue("interval", data.key)
-                            handleStreamRate()
-                          }}
-                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                        >
-                          <div className="text-content-primary">{data.key}</div>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+                    {intervals.map((data) => (
+                      <div
+                        key={data.key}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setToggleIntervalDropdown(false)
+                          setValue("interval", data.key)
+                          handleStreamRate()
+                        }}
+                        className={`cursor-pointer p-4 justify-start items-center hover:bg-background-light`}
+                      >
+                        <div className="text-content-primary">{data.key}</div>
+                      </div>
+                    ))}
                   </div>
                 </CollapseDropdown>
               </div>
