@@ -76,7 +76,7 @@ const Overview = () => {
        * **/}
       <div>
         <DepositedAssets
-          tableMaxHeight={636}
+          tableMaxHeight={554}
           balanceTokens={treasuryTokens}
           tokens={tokenDetails}
         />

@@ -5,6 +5,7 @@ import ReactTooltip from "react-tooltip"
 import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
+import { NFTsList } from "./components/NFTsList"
 import Overview from "./components/Overview"
 import Setting from "./components/Setting"
 import { Transactions } from "./components/Transactions"
@@ -21,6 +22,12 @@ const categories = [
     count: 3,
     icon: <Icons.TransactionIcon />,
     Component: <Transactions />
+  },
+  {
+    title: "nft",
+    count: 0,
+    icon: <Icons.SquareBlockMove />,
+    Component: <NFTsList />
   },
   {
     title: "settings",

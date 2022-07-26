@@ -314,3 +314,7 @@ input[type="radio"]:hover::after {
 .withdrawsteps-container.last::after {
   content: none;
 }
+
+.nft-overlay {
+  background: linear-gradient(180deg, rgba(26, 27, 31, 0) 0%, #0d0e0f 100%);
+}

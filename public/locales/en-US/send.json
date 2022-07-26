@@ -37,5 +37,10 @@
   "instant-transfer-description": "Your receiver will instantly receive the money.",
   "in-few-seconds": "in few seconds.",
   "transfer-overview": "Transfer Overview",
-  "add-file": "Add File"
+  "add-file": "Add File",
+  "nft": "NFT",
+  "nft-address": "NFT Address",
+  "choose-nft": "Choose NFT",
+  "enter-nft-address": "Enter NFT address",
+  "nft-description": "Your receiver will instantly receive the NFT one the transaction is signed by all owners."
 }

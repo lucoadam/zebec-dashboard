@@ -34,7 +34,7 @@ const HomePage: FC = () => {
           <RecentTransactions />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-x-6 mt-6">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-y-6 gap-x-6 mt-6">
         <SupportCard
           title="common:zebec-help"
           description="treasuryOverview:treasury-help-description"

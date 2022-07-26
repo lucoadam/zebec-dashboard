@@ -26,7 +26,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
 
   return (
     <>
-      <div className="p-6 rounded bg-background-secondary">
+      <div className="p-6 rounded bg-background-secondary h-full">
         <div className="flex flex-col gap-y-6">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
             DEPOSITED ASSETS
