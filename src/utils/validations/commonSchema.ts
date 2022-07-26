@@ -14,6 +14,14 @@ export const wallet = {
     )
 }
 
+export const nftaddress = {
+  wallet: Yup.string()
+    .required("validation:nft-address-required")
+    .test("is-valid-address", "validation:nft-invalid", (value) =>
+      isValidWallet(value)
+    )
+}
+
 export const treasuryName = {
   name: Yup.string().required("validation:treasury-name-required")
 }

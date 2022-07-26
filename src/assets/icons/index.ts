@@ -6,6 +6,7 @@ import ArrowRightIcon from "./other-icons/arrow-right.svg"
 import ArrowTopRight from "./other-icons/arrow-upright.svg"
 import ArrowIcon from "./other-icons/arrow.svg"
 import Asterik from "./other-icons/asterik.svg"
+import BellEditIcon from "./other-icons/bell-edit.svg"
 import {
   default as Calendar,
   default as CalenderIcon
@@ -47,18 +48,17 @@ import RefreshIcon from "./other-icons/refresh.svg"
 import ResumeIcon from "./other-icons/resume.svg"
 import SearchIcon from "./other-icons/search.svg"
 import SparkleIcon from "./other-icons/sparkle.svg"
+import SquareBlockMove from "./other-icons/square-block-move.svg"
 import TransactionIcon from "./other-icons/transaction.svg"
 import TrashIcon from "./other-icons/trash.svg"
 import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
-import BellEditIcon from "./other-icons/bell-edit.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
-
 export {
   Envelope,
   Calendar,
@@ -113,5 +113,6 @@ export {
   EditIcon,
   InformationIcon,
   LockIcon,
+  SquareBlockMove,
   BellEditIcon
 }

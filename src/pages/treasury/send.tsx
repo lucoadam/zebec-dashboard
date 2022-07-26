@@ -1,15 +1,16 @@
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
+import TreasuryContinuousStream from "components/send-from-treasury/TreasuryContinuousStream"
+import TreasuryInstantStream from "components/send-from-treasury/TreasuryInstantStream"
+import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
 import { Breadcrumb, Tab } from "components/shared"
+import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import TreasuryContinuousStream from "components/send-from-treasury/TreasuryContinuousStream"
-import TreasuryInstantStream from "components/send-from-treasury/TreasuryInstantStream"
-import { useAppDispatch, useAppSelector } from "app/hooks"
-import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import { useEffect } from "react"
-import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const transferTabs = [
   {
@@ -23,6 +24,12 @@ const transferTabs = [
     icon: <Icons.DoubleCircleDottedLineIcon />,
     count: 0,
     Component: <TreasuryInstantStream />
+  },
+  {
+    title: "send:nft",
+    icon: <Icons.SquareBlockMove />,
+    count: 0,
+    Component: <TreasuryNFTStream />
   }
 ]
 

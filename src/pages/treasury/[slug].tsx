@@ -103,6 +103,17 @@ const Treasury: NextPage = () => {
                       </div>
                     </Link>
                   </div>
+                  <div className="pt-2">
+                    <Link href="/treasury/send">
+                      <div
+                        onClick={() => dispatch(setTreasurySendActiveTab(2))}
+                        className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                      >
+                        <Icons.SquareBlockMove className="w-6 h-6" />
+                        <span>{t("send:nft")}</span>
+                      </div>
+                    </Link>
+                  </div>
                 </CollapseDropdown>
               </div>
             </BreadcrumbRightContent>
