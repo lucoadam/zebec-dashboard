@@ -91,7 +91,8 @@ export const TimePicker: FC<TimePickerProps> = ({
   onChange,
   startIcon,
   endIcon,
-  disabled
+  disabled,
+  value = ""
 }) => {
   const dropdownWrapper = useRef(null)
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
@@ -114,6 +115,14 @@ export const TimePicker: FC<TimePickerProps> = ({
       onChange(`${selectedHour}:${selectedMinute} ${selectedAP}`)
     }
   }, [selectedHour, selectedMinute, selectedAP])
+
+  useEffect(() => {
+    if (value) {
+      setSelectedHour(value.substring(0, 2))
+      setSelectedMinute(value.substring(3, 5))
+      setSelectedAP(value.substring(6, 8))
+    }
+  }, [value])
 
   return (
     <div>
@@ -148,7 +157,7 @@ export const TimePicker: FC<TimePickerProps> = ({
           className="mt-3 w-[200px] z-[99]"
           position="left"
         >
-          <div className="grid grid-cols-3 rounded-t-lg bg-background-primary border border-outline">
+          <div className="grid grid-cols-3 rounded-lg bg-background-primary border border-outline">
             <div className="max-h-[184px] overflow-auto">
               {Hours.map((hour) => (
                 <div

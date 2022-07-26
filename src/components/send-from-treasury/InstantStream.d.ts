@@ -1,23 +1,17 @@
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 
 export interface InstantStreamFormData {
-  transactionName: string
-  receiverWallet: string
+  transaction_name: string
+  sender: string
+  receiver: string
   remarks?: string
   showRemarks?: boolean
   amount: string
-  token: string
+  symbol: string
   file?: string
 }
 
-export type InstantFormKeys =
-  | "transactionName"
-  | "showREMarks"
-  | "receiverWallet"
-  | "remarks"
-  | "amount"
-  | "token"
-  | "file"
+export type InstantFormKeys = keyof InstantStreamFormData
 
 export interface InstantStreamProps {
   setFormValues?: (values: InstantStreamFormData) => void

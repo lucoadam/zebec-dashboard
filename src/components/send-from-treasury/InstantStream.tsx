@@ -53,7 +53,6 @@ export const InstantStream: FC<InstantStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    reset,
     watch
   } = useForm<InstantStreamFormData>({
     mode: "onChange",
@@ -68,7 +67,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
-  const [resetFile, setResetFile] = useState(false)
+  // const [resetFile, setResetFile] = useState(false)
 
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
@@ -99,16 +98,22 @@ export const InstantStream: FC<InstantStreamProps> = ({
   useEffect(() => {
     if (tokenDetails.length > 0) {
       setCurrentToken(tokenDetails[0])
-      setValue("token", tokenDetails[0].symbol)
+      setValue("symbol", tokenDetails[0].symbol)
     }
   }, [tokenDetails, setValue])
 
   const onSubmit = (data: InstantStreamFormData) => {
-    reset()
-    setResetFile(true)
-    dispatch(sendTreasuryInstantTransfer(data))
-    setCurrentToken(tokenDetails[0])
-    setValue("token", tokenDetails[0].symbol)
+    const formattedData = {
+      transaction_name: data.transaction_name,
+      symbol: data.symbol,
+      amount: data.amount,
+      remarks: data.remarks,
+      receiver: data.receiver,
+      token_mint_address:
+        currentToken.mint === "solana" ? "" : currentToken.mint,
+      file: data.file
+    }
+    dispatch(sendTreasuryInstantTransfer(formattedData))
   }
 
   useEffect(() => {
@@ -143,16 +148,16 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="relative text-content-primary"
                 error={false}
                 labelMargin={12}
-                helper={t(errors.transactionName?.message?.toString() ?? "")}
+                helper={t(errors.transaction_name?.message?.toString() ?? "")}
               >
                 <div>
                   <input
                     className={`${
                       !showRemarks && "!pr-[124px]"
-                    } w-full h-[40px] ${!!errors.transactionName && "error"}`}
+                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
-                    {...register("transactionName")}
+                    {...register("transaction_name")}
                   />
                   {!showRemarks && (
                     <Button
@@ -177,19 +182,19 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 <input
                   type="text"
                   className={`h-[40px] w-full !pr-12 ${
-                    !!errors.receiverWallet && "error"
+                    !!errors.receiver && "error"
                   }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
-                  {...register("receiverWallet")}
+                  {...register("receiver")}
                 />
                 <Icons.CheveronDownIcon
                   onClick={() => setToggleReceiverDropdown((prev) => !prev)}
                   className="hover:cursor-pointer absolute w-6 h-6 top-2 right-4"
                 />
               </div>
-              {!!errors.receiverWallet && (
+              {!!errors.receiver && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {t(errors.receiverWallet?.message?.toString() ?? "")}
+                  {t(errors.receiver?.message?.toString() ?? "")}
                 </p>
               )}
               <CollapseDropdown
@@ -197,7 +202,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="mt-8 w-full z-[99]"
                 position="left"
               >
-                <div className="rounded-t-lg bg-background-primary border border-outline">
+                <div className="rounded-lg bg-background-primary border border-outline">
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
@@ -218,8 +223,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiverWallet", user.address)
-                            trigger("receiverWallet")
+                            setValue("receiver", user.address)
+                            trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
                         >
@@ -297,16 +302,16 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 <input
                   type="text"
                   className={`h-[40px] w-full !pl-11 ${
-                    !!errors.token && "error"
+                    !!errors.symbol && "error"
                   }`}
                   readOnly
-                  {...register("token")}
+                  {...register("symbol")}
                 />
                 <Icons.CheveronDownIcon className="w-6 h-6 hover:cursor-pointer absolute top-2 right-4" />
               </div>
-              {!!errors.token && (
+              {!!errors.symbol && (
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
-                  {t(errors.token?.message?.toString() ?? "")}
+                  {t(errors.symbol?.message?.toString() ?? "")}
                 </p>
               )}
               <CollapseDropdown
@@ -314,7 +319,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 className="mt-8 w-full z-[99]"
                 position="left"
               >
-                <div className="rounded-t-lg bg-background-primary border border-outline">
+                <div className="rounded-lg bg-background-primary border border-outline">
                   <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                   <input
                     className="is-search w-full h-[48px] bg-background-primary"
@@ -334,8 +339,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
                             event.stopPropagation()
                             setToggleTokensDropdown(false)
                             setCurrentToken(item)
-                            setValue("token", item.symbol)
-                            trigger("token")
+                            setValue("symbol", item.symbol)
+                            trigger("symbol")
                           }}
                           className="border-outline flex cursor-pointer overflow-hidden py-8 px-5 justify-start items-center hover:bg-background-light h-[40px]"
                         >
@@ -420,7 +425,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-                isReset={resetFile}
+                // isReset={resetFile}
               />
             </div>
           )}

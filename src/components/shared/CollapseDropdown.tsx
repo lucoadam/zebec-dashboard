@@ -119,7 +119,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
       >
         <div
           className={twMerge(
-            `absolute flex flex-col rounded-lg ${defaultClasses}`,
+            `absolute flex flex-col rounded-lg overflow-hidden ${defaultClasses}`,
             className ?? ""
           )}
           {...rest}
