@@ -13,7 +13,7 @@ interface Notification {
 }
 
 export default function NotificationsComponent() {
-  const { t } = useTranslation("common")
+  const { t } = useTranslation("")
   const [userNotification, setUserNotification] = useState<Notification>()
 
   const {
@@ -56,15 +56,19 @@ export default function NotificationsComponent() {
           show={toggleNotificationsDropdown}
           className="top-12 w-[306px]"
         >
-          <div className="rounded bg-background-secondary p-8 ">
+          <div className="rounded  p-6  ">
             <div className="text-content-primary font-semibold">{`${t(
-              "notifications.notified-on"
+              "common:notifications.notification-header"
             )} `}</div>
+            <div className="text-content-secondary text-caption pb-4 pt-1 border-b border-outline">{`${t(
+              "common:notifications.notification-subtitle"
+            )} `}</div>
+
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div className="">
                 <div className="pt-6 ">
                   <InputField
-                    label={t("notifications.email-address")}
+                    label={t("common:notifications.email-address")}
                     className="relative text-content-secondary"
                     error={!!errors.email}
                     helper={t(
@@ -76,7 +80,7 @@ export default function NotificationsComponent() {
                         className={`w-full h-10 ${
                           !!errors.email?.message && "error"
                         }`}
-                        placeholder={t("notifications.email-address")}
+                        placeholder={t("common:notifications.email-address")}
                         type="text"
                         {...register("email")}
                       />
@@ -86,7 +90,7 @@ export default function NotificationsComponent() {
 
                 <div className="pt-6 pb-6 ">
                   <InputField
-                    label={t("notifications.telegram-username")}
+                    label={t("common:notifications.telegram-username")}
                     className="relative text-content-secondary"
                     error={!!errors.telegram}
                     helper={t(
@@ -98,7 +102,7 @@ export default function NotificationsComponent() {
                         className={`w-full h-10 ${
                           !!errors.telegram?.message && "error"
                         }`}
-                        placeholder={t("notifications.telegram-username")}
+                        placeholder={t("common:notifications.telegram-username")}
                         type="text"
                         {...register("telegram")}
                       />
@@ -113,26 +117,35 @@ export default function NotificationsComponent() {
                     className={`w-full ${userNotification ? "hidden" : ""}`}
                     variant="gradient"
                     type="submit"
-                    title={`${t("notifications.subscribe")}`}
+                    title={`${t("common:notifications.subscribe")}`}
                   />
 
                   {userNotification && (
                     <>
                       <div className="text-content-secondary pb-4">
-                        {t("notifications.unsubscribe-description")}
+                        {t("common:notifications.unsubscribe-description")}
                       </div>
                       <Button
                         className={`w-full`}
                         variant="danger"
                         endIcon={<Icons.Envelope />}
                         type="button"
-                        title={`${t("notifications.unsubscribe")}`}
+                        title={`${t("common:notifications.unsubscribe")}`}
                       />
                     </>
                   )}
                 </div>
               </div>
             </form>
+            <div className="flex gap-x-1 justify-center mt-4">
+              <div className="text-caption text-content-secondary">
+              {t("common:notifications.powered-by")}
+              </div>
+              <div className="">
+                <Icons.Notif className="w-16"/>
+              </div>
+
+            </div>
           </div>
         </CollapseDropdown>
         {/* </div> */}
