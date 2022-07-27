@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
@@ -13,6 +14,7 @@ import {
 } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
+import { constants } from "constants/constants"
 import {
   sendContinuousStream,
   sendTreasuryContinuousStream
@@ -109,6 +111,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
   // const [resetFile, setResetFile] = useState(false)
 
+  const { publicKey } = useWallet()
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
   )
@@ -149,11 +152,17 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [tokenDetails, setValue])
 
+  useEffect(() => {
+    if (publicKey) {
+      setValue("wallet", publicKey.toString())
+    }
+  }, [publicKey, setValue])
+
   const onSubmit = (data: ContinuousStreamFormData) => {
     const formattedData = {
       transaction_name: data.transaction_name,
       symbol: data.symbol,
-      amount: data.amount,
+      amount: Number(data.amount),
       remarks: data.remarks,
       receiver: data.receiver,
       start_time: moment(
@@ -574,7 +583,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 12:00 AM"
                   value={
                     getValues().startTime ||
-                    moment().add(5, "minutes").format("hh:mm A")
+                    moment()
+                      .add(constants.STREAM_START_ADD, "minutes")
+                      .format("hh:mm A")
                   }
                   onChange={(time) => {
                     setValue("startTime", time)

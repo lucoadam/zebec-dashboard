@@ -1,6 +1,7 @@
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 
 export interface InstantStreamFormData {
+  wallet: string
   transaction_name: string
   sender: string
   receiver: string

@@ -1,6 +1,7 @@
 import { WalletToken } from "features/walletBalanceSlice/walletBalanceSlice.d"
 
 export interface ContinuousStreamFormData {
+  wallet: string
   transaction_name: string
   receiver: string
   remarks?: string
@@ -18,22 +19,7 @@ export interface ContinuousStreamFormData {
   file?: string
 }
 
-export type FormKeys =
-  | "transactionName"
-  | "showREMarks"
-  | "receiverWallet"
-  | "remarks"
-  | "showRemarks"
-  | "amount"
-  | "token"
-  | "startDate"
-  | "endDate"
-  | "startTime"
-  | "endTime"
-  | "enableStreamRate"
-  | "noOfTimes"
-  | "tokenAmount"
-  | "interval"
+export type FormKeys = keyof ContinuousStreamFormData
 
 export interface ContinuousStreamProps {
   setFormValues?: (values: ContinuousStreamFormData) => void

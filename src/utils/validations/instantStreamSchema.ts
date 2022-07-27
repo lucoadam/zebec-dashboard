@@ -2,17 +2,17 @@ import * as Yup from "yup"
 import {
   amount,
   file,
+  receiverWallet,
   remarks,
   toggle,
   token,
-  transactionName,
-  wallet
+  transactionName
 } from "./commonSchema"
 
 export const instantStreamSchema = Yup.object().shape({
   transaction_name: transactionName.transactionName,
   showRemarks: toggle.toggle,
-  receiver: wallet.wallet,
+  ...receiverWallet,
   ...remarks,
   symbol: token.token,
   ...amount,

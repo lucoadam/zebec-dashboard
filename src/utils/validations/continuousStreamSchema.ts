@@ -6,20 +6,20 @@ import {
   file,
   interval,
   noOfTimes,
+  receiverWallet,
   remarks,
   startDate,
   startTime,
   toggle,
   token,
   tokenAmount,
-  transactionName,
-  wallet
+  transactionName
 } from "./commonSchema"
 
 export const continuousSchema = Yup.object().shape({
   transaction_name: transactionName.transactionName,
   showRemarks: toggle.toggle,
-  receiver: wallet.wallet,
+  ...receiverWallet,
   ...remarks,
   symbol: token.token,
   ...amount,

@@ -14,6 +14,17 @@ export const wallet = {
     )
 }
 
+export const receiverWallet = {
+  receiver: Yup.string()
+    .required("validation:receiver-required")
+    .test("is-valid-address", "validation:receiver-invalid", (value) =>
+      isValidWallet(value)
+    )
+    .test("is-own-wallet", "validation:receiver-self", (receiver, context) => {
+      return receiver !== context.parent.wallet
+    })
+}
+
 export const nftaddress = {
   wallet: Yup.string()
     .required("validation:nft-address-required")
