@@ -141,7 +141,7 @@ export default function NotificationsComponent() {
               <div className="text-caption text-content-secondary">
               {t("common:notifications.powered-by")}
               </div>
-              <div className="">
+              <div className="pb-4">
                 <Icons.Notif className="w-16"/>
               </div>
 

@@ -4,6 +4,7 @@
     "name-exists": "Name already exists",
     "wallet-required": "Wallet address is required",
     "email-required": "Email Address is required",
+    "invalid-email":"Email Address must be valid",
     "telegram-required": "Telegram username is required",
     "wallet-invalid": "Invalid wallet address",
     "nft-invalid": "Invalid NFT address",
