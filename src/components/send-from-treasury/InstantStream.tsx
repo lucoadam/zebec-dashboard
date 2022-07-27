@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, CollapseDropdown, InputField } from "components/shared"
@@ -69,6 +70,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [showRemarks, setShowRemarks] = useState(false)
   // const [resetFile, setResetFile] = useState(false)
 
+  const { publicKey } = useWallet()
+
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
   )
@@ -106,7 +109,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
     const formattedData = {
       transaction_name: data.transaction_name,
       symbol: data.symbol,
-      amount: data.amount,
+      amount: Number(data.amount),
       remarks: data.remarks,
       receiver: data.receiver,
       token_mint_address:
@@ -124,6 +127,12 @@ export const InstantStream: FC<InstantStreamProps> = ({
     })
     return () => subscription.unsubscribe()
   }, [watch, setFormValues, getValues])
+
+  useEffect(() => {
+    if (publicKey) {
+      setValue("wallet", publicKey.toString())
+    }
+  }, [publicKey, setValue])
 
   return (
     <>

@@ -1,17 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
 import {
   Button,
   CollapseDropdown,
   TokensDropdown,
   WithdrawDepositInput
 } from "components/shared"
-import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
-import * as Icons from "assets/icons"
-import { useRef, useState } from "react"
 import { useClickOutside } from "hooks"
-import { getBalance } from "utils/getBalance"
+import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
+import { useRef, useState } from "react"
+import { getBalance } from "utils/getBalance"
 
 export const Deposit = () => {
   const { t } = useTranslation()
@@ -23,7 +23,7 @@ export const Deposit = () => {
 
   const dropdownWrapper = useRef(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
-  const [depositFrom, setDepositFrom] = useState("")
+  const [depositFrom, setDepositFrom] = useState("Zebec balance")
 
   const {
     currentToken,
