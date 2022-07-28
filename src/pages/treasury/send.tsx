@@ -51,7 +51,7 @@ const SendFromTreasury: NextPage = () => {
   }, [dispatch])
   return (
     <Layout pageTitle="Zebec">
-      <div className="flex justify-center border-b border-outline">
+      <div className="ml-2 flex justify-center overflow-x-auto overflow-y-hidden border-b border-outline">
         {/* Tabs */}
         {transferTabs.map((transactionTab, index) => {
           return (

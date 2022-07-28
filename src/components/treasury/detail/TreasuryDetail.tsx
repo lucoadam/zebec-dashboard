@@ -44,12 +44,11 @@ export default function TreasuryDetail() {
   return (
     <div className="w-full pb-16 sm:px-0">
       {/* <Tab.Group> */}
-      <div className="flex max-w-md space-x-1 rounded-xl">
+      <div className="flex space-x-1 rounded-xl overflow-auto pb-2">
         {categories.map((category, index) => (
           <Tab
             key={category.title}
             type="solid"
-            className="w-1/2"
             title={`${t(`treasury:${category.title.toLowerCase()}`)}`}
             isActive={activePage === index}
             startIcon={category.icon}

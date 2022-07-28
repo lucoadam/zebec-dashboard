@@ -57,9 +57,8 @@ export const SendNFT: FC<SendNFTProps> = ({
   const receiverDropdownWrapper = useRef(null)
 
   const [receiverSearchData, setReceiverSearchData] = useState("")
-  const [toggleChooseNFT, setToggleChooseNFT] = useState(false)
+  const [toggleChooseNFT, setToggleChooseNFT] = useState(true)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
-  const [isNFTAddressDisabled, setIsNFTAddressDisabled] = useState(false)
 
   const handleReceiverClose = () => {
     setToggleReceiverDropdown(false)
@@ -68,15 +67,13 @@ export const SendNFT: FC<SendNFTProps> = ({
   useEffect(() => {
     if (nft && nft.address) {
       setValue("nftAddress", nft.address)
-      setIsNFTAddressDisabled(true)
       setToggleChooseNFT(true)
+      trigger("nftAddress")
     } else {
-      setValue("nftAddress", "")
-      setIsNFTAddressDisabled(false)
+      resetField("nftAddress")
       setToggleChooseNFT(false)
     }
-    trigger("nftAddress")
-  }, [nft, setValue])
+  }, [nft, setValue, trigger, resetField])
 
   useClickOutside(receiverDropdownWrapper, {
     onClickOutside: handleReceiverClose
@@ -97,7 +94,8 @@ export const SendNFT: FC<SendNFTProps> = ({
   }, [watch, setFormValues, getValues])
 
   const toggleNFT = () => {
-    if (isNFTAddressDisabled && toggleChooseNFT) {
+    resetField("nftAddress")
+    if (toggleChooseNFT) {
       changeNFT && changeNFT(undefined)
     }
     setToggleChooseNFT(!toggleChooseNFT)
@@ -210,14 +208,15 @@ export const SendNFT: FC<SendNFTProps> = ({
               </div>
             </CollapseDropdown>
           </div>
-          {/** NFT address */}
 
+          {/** NFT address */}
           <div>
             <InputField
               label={t("send:nft-address")}
               className="relative text-content-primary"
               error={false}
               labelMargin={12}
+              disabled={toggleChooseNFT}
               helper={t(errors.nftAddress?.message?.toString() ?? "")}
             >
               <div>
@@ -228,7 +227,7 @@ export const SendNFT: FC<SendNFTProps> = ({
                   placeholder={t("send:enter-nft-address")}
                   type="text"
                   {...register("nftAddress")}
-                  disabled={isNFTAddressDisabled}
+                  disabled={toggleChooseNFT}
                 />
               </div>
             </InputField>
