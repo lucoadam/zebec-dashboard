@@ -50,7 +50,7 @@ const Treasury: NextPage = () => {
 export async function getStaticProps({ locale }: { locale: string }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "treasury"]))
+      ...(await serverSideTranslations(locale, ["common", "treasury","validation"]))
     }
   }
 }

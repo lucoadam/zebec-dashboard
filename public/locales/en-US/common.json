@@ -53,6 +53,9 @@
         "join-discord": "Join Discord"
     },
     "notifications": {
+        "notification-header":"Set Up Notifications",
+        "notification-subtitle": "Get notified about the transactions in your email.",
+        "powered-by":"Powered by",
         "notification": "Notification",
         "notified-on": "Notified on",
         "email-address": "Email Address",

@@ -15,7 +15,11 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
-import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
+import {
+  sendContinuousStream,
+  sendTreasuryContinuousStream
+} from "features/stream/streamSlice"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
@@ -158,13 +162,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [publicKey, setValue])
 
-  const onSubmit = (data: ContinuousStreamFormData) => {
+  const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       transaction_name: data.transaction_name,
       symbol: data.symbol,
       amount: Number(data.amount),
-      remarks: data.remarks,
+      remarks: data.remarks || "",
       receiver: data.receiver,
+      sender: data.wallet,
       start_time: moment(
         `${data.startDate} ${data.startTime}`,
         "DD/MM/YYYY LT"
@@ -175,14 +180,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file,
-      sender: publicKey?.toString()
+      file: data.file
     }
     if (type === "send") {
       stream && dispatch(initStreamNative(formattedData, stream))
+      await dispatch(sendContinuousStream(formattedData))
     } else {
-      dispatch(sendTreasuryContinuousStream(formattedData))
+      await dispatch(sendTreasuryContinuousStream(formattedData))
     }
+    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
   }
 
   const handleStreamRate = () => {
@@ -237,6 +243,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     })
     return () => subscription.unsubscribe()
   }, [watch, setFormValues, getValues])
+
+  useEffect(() => {
+    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
+  }, [publicKey, dispatch])
 
   return (
     <>

@@ -9,7 +9,7 @@ import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import { Button, CollapseDropdown, IconButton, Sidebar } from "../shared"
+import { Button, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
@@ -42,18 +42,6 @@ const Navbar: FC = () => {
       dispatch(updateWidth(window.outerWidth))
     })
   }, [dispatch])
-  const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
-  useState<boolean>(false)
-
-  const handleNotificationClose = () => {
-    setToggleNotificationsDropdown(false)
-  }
-  const NotificationsDropdownWrapperRef = useRef(null)
-
-  //handle clicking outside
-  useClickOutside(NotificationsDropdownWrapperRef, {
-    onClickOutside: handleNotificationClose
-  })
 
   //theme toggle
   const themeChanger: () => JSX.Element | null = () => {
@@ -146,12 +134,9 @@ const Navbar: FC = () => {
                   return <NavGroup key={index} {...route} />
               }
             })}
-            
-            <Icons.BellEditIcon className="cursor-pointer md:hidden text-content-primary w-6 h-6" />
-   
 
-          
-            
+            <Icons.BellEditIcon className="cursor-pointer md:hidden text-content-primary w-6 h-6" />
+
             <Link href="/send">
               <Button
                 title="Send"
@@ -163,9 +148,6 @@ const Navbar: FC = () => {
 
           <div className="hidden md:block">
             <div className="flex items-center gap-x-[27px]">
-            <div onClick={()=>setToggleNotificationsDropdown(!toggleNotificationsDropdown)} >
-            <Icons.BellEditIcon className="cursor-pointer text-content-primary w-6 h-6" />
-              </div> 
               {!useWalletObject.connected ? (
                 <Button
                   title="Connect Wallet"
@@ -173,7 +155,10 @@ const Navbar: FC = () => {
                   onClick={handleConnectWallet}
                 />
               ) : (
-                <Profile />
+                <div className="flex gap-x-6">
+                  <NotificationsComponent />
+                  <Profile />
+                </div>
               )}
             </div>
           </div>
@@ -270,14 +255,6 @@ const Navbar: FC = () => {
         </div>
         <WalletNotConnectedModal />
       </nav>
-      <div className="relative" >
-            <CollapseDropdown
-            show={toggleNotificationsDropdown}
-            className=" rounded-lg top-1 right-4 "
-          >
-            <NotificationsComponent/>
-          </CollapseDropdown>
-          </div>
     </>
   )
 }

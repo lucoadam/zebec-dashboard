@@ -44,14 +44,14 @@ export const Tab: FC<TabProps> = (props) => {
         {startIcon && (
           <span
             className={twMerge(
-              "text-xl",
+              "text-xl w-max",
               isActive ? "text-primary" : "text-content-contrast"
             )}
           >
             {startIcon}
           </span>
         )}
-        <span className="text-subtitle-sm font-medium">
+        <span className="text-subtitle-sm font-medium w-max" >
           {children ? children : title}
         </span>
         {count && count > 0 ? (

@@ -3,7 +3,7 @@ import { NFTEach } from "./NFTEach"
 
 export const NFTsList = () => {
   return (
-    <div className="flex gap-6 flex-wrap md:justify-start sm:justify-center">
+    <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:justify-start sm:justify-center">
       {nftLists.map((item) => (
         <NFTEach key={item.address} detail={item} />
       ))}
