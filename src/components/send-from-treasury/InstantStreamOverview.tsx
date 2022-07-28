@@ -1,10 +1,10 @@
+import * as Icons from "assets/icons"
 import { Button } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
+import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { InstantStreamOverviewProps } from "./InstantStreamOverview.d"
-import * as Icons from "assets/icons"
-import { twMerge } from "tailwind-merge"
 
 export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
   formValues,
@@ -26,13 +26,13 @@ export const InstantStreamOverview: FC<InstantStreamOverviewProps> = ({
       <div className="pt-4">
         <p className="text-sm text-content-secondary">
           <span className="text-content-primary">
-            {formValues?.amount || "..."} {formValues?.token || "..."}{" "}
+            {formValues?.amount || "..."} {formValues?.symbol || "..."}{" "}
           </span>
           {t("send:token-amount-details")}{" "}
           <span className="text-content-primary">
             {" "}
-            {formValues?.receiverWallet
-              ? toSubstring(formValues?.receiverWallet, 5, true)
+            {formValues?.receiver
+              ? toSubstring(formValues?.receiver, 5, true)
               : "..."}
           </span>{" "}
           {t("send:in-few-seconds")}
