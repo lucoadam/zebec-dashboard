@@ -12,8 +12,15 @@ import { togglePauseModal } from "features/modals/pauseModalSlice"
 import { toggleResumeModal } from "features/modals/resumeModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useRef } from "react"
+import { FC, Fragment, useEffect, useRef, useState } from "react"
 import { toSubstring } from "utils"
+
+export type TransactionStatus =
+  | "completed"
+  | "outgoing"
+  | "scheduled"
+  | "cancelled"
+  | "paused"
 
 interface OutgoingTableRowProps {
   index: number
@@ -33,10 +40,57 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
 
-  // function toggleModal() {
-  //   setIsOpen(!isOpen)
+  const [streamedToken, setStreamedToken] = useState(0)
+  const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const [currentTime, setCurrentTime] = useState(Date.now() / 1000)
 
-  // }
+  const totalTimeInSec = transaction.end_time - transaction.start_time
+  console.log(`totalTimeInSec`, totalTimeInSec)
+  const streamRatePerSec = transaction.amount / totalTimeInSec
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
+    }, 1000)
+    if (status === "completed") {
+      console.log("test")
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [currentTime, status])
+
+  useEffect(() => {
+    if (currentTime < transaction.start_time) {
+      setStatus("scheduled")
+    } else if (
+      currentTime >= transaction.start_time &&
+      currentTime < transaction.end_time
+    ) {
+      setStatus("outgoing")
+    } else if (currentTime >= transaction.end_time) {
+      setStatus("completed")
+    }
+  }, [status, currentTime])
+
+  console.log(status)
+  console.log(streamedToken)
+  console.log(streamRatePerSec)
+  console.log(streamedToken)
+
+  useEffect(() => {
+    if (status === "completed") {
+      setStreamedToken(transaction.amount)
+    } else if (status === "outgoing") {
+      const interval = setInterval(
+        () =>
+          setStreamedToken(
+            (prevStreamedToken) => prevStreamedToken + streamRatePerSec
+          ),
+        1000
+      )
+      return () => clearInterval(interval)
+    }
+  }, [status])
 
   const styles = {
     detailsRow: {
@@ -56,16 +110,21 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">
                 {" "}
-                <CircularProgress status={transaction.status} />
+                <CircularProgress
+                  status={status}
+                  percentage={(streamedToken * 100) / transaction.amount}
+                />
               </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    +{streamedToken}
                   </span>
-                  &nbsp;SOL
+                  &nbsp;{transaction.symbol}
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                  {streamedToken} of {transaction.amount} {transaction.symbol}
+                </div>
               </div>
             </div>
           </td>
@@ -76,7 +135,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd"/>
+            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">

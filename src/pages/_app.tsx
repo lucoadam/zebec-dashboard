@@ -16,10 +16,11 @@ import { store } from "app/store"
 import { appWithTranslation } from "next-i18next"
 import { ThemeProvider } from "next-themes"
 import { Provider } from "react-redux"
+import { ZebecContextProvider } from "app/zebecContext"
+import Common from "components/layouts/Common"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
-import Common from "components/layouts/Common"
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
@@ -41,8 +42,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
             <ThemeProvider>
-              <Component {...pageProps} />
-              <Common />
+              <ZebecContextProvider>
+                <Component {...pageProps} />
+                <Common />
+              </ZebecContextProvider>
             </ThemeProvider>
           </WalletModalProvider>
         </WalletProvider>

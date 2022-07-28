@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from "react"
 
 export type TransactionStatus =
   | "completed"
+  | "outgoing"
   | "scheduled"
   | "cancelled"
   | "paused"
@@ -24,10 +25,8 @@ const getIconOrPercentageBasedOnStatus = (
   status: TransactionStatus,
   percentage: number
 ) => {
-  if (status in statusIconMapping) {
-    return statusIconMapping[status]
-  }
-  return `${percentage}%`
+  if (status === "outgoing") return `${parseInt(percentage.toString())}%`
+  return statusIconMapping[status]
 }
 
 const getBackgroundByPercentage = (

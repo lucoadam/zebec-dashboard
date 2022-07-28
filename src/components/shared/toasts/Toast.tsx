@@ -9,6 +9,7 @@ import {
 } from "features/toasts/toastsSlice.d"
 import { removeToast } from "features/toasts/toastsSlice"
 import { twMerge } from "tailwind-merge"
+import { RPC_NETWORK } from "constants/cluster"
 import * as Icons from "assets/icons"
 
 interface ActiveTostProps extends ToastProps {
@@ -33,7 +34,7 @@ const getPositionStyle = (position: ToastPropertiesProps["position"]) => {
 export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
   const dispatch = useAppDispatch()
   const [showToast, setShowToast] = useState(false)
-  const { type, id, title, message, transactionId, autoClose } = toast
+  const { type, id, title, message, transactionHash, autoClose } = toast
 
   useEffect(() => {
     //set showToast to true for animation on load
@@ -114,12 +115,18 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
               </div>
               <div className="text-content-secondary text-body">{message}</div>
             </div>
-            {transactionId && (
-              <Button
-                size="small"
-                title="View Explorer"
-                endIcon={<Icons.OutsideLinkIcon />}
-              />
+            {transactionHash && (
+              <a
+                href={`https://solana.fm/tx/${transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Button
+                  size="small"
+                  title="View Explorer"
+                  endIcon={<Icons.OutsideLinkIcon />}
+                />
+              </a>
             )}
           </div>
           <div className="w-full h-0.5 bg-content-contrast relative">

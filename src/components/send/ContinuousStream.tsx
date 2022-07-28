@@ -15,14 +15,11 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
-import {
-  sendContinuousStream,
-  sendTreasuryContinuousStream
-} from "features/stream/streamSlice"
+import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
@@ -33,6 +30,8 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
+import { initStreamNative } from "application"
+import ZebecContext from "app/zebecContext"
 
 const addressBook = [
   {
@@ -85,6 +84,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { publicKey } = useWallet()
+  const { stream } = useContext(ZebecContext)
 
   const {
     register,
@@ -111,7 +112,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
   // const [resetFile, setResetFile] = useState(false)
 
-  const { publicKey } = useWallet()
   const { tokens: tokenDetails, prices } = useAppSelector(
     (state) => state.tokenDetails
   )
@@ -175,10 +175,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file
+      file: data.file,
+      sender: publicKey?.toString()
     }
     if (type === "send") {
-      dispatch(sendContinuousStream(formattedData))
+      stream && dispatch(initStreamNative(formattedData, stream))
     } else {
       dispatch(sendTreasuryContinuousStream(formattedData))
     }

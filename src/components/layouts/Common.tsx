@@ -3,12 +3,14 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
+import ZebecContext from "app/zebecContext"
 
 const Common = () => {
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
+  const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
     dispatch(fetchTokens())
@@ -22,6 +24,11 @@ const Common = () => {
       dispatch(fetchZebecBalance(walletObject.publicKey))
     }
   }, [dispatch, walletObject.publicKey, tokens])
+  useEffect(() => {
+    if (walletObject.connected) {
+      zebecContext.initialize(walletObject)
+    }
+  }, [walletObject.connected])
   return <></>
 }
 
