@@ -17,7 +17,7 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
   return (
     <div
       key={detail.address}
-      className="w-[352px] h-[352px] rounded relative"
+      className="w-full rounded relative"
       onMouseOver={() => {
         setShowOverlay(true)
       }}
@@ -26,10 +26,10 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
       }}
       {...rest}
     >
-      <img src={detail.image} className="min-w-[352px] h-[352px] rounded" />
+      <img src={detail.image} className=" rounded" />
       {showOverlay && (
         <>
-          <div className="min-w-[352px] h-[352px] absolute left-0 top-0 rounded nft-overlay" />
+          <div className="w-full h-full absolute left-0 top-0 rounded nft-overlay" />
           <div className="absolute bottom-6 left-6 cursor-pointer">
             <p className="text-subtitle font-semibold">{detail.name}</p>
             <p className="flex items-center gap-1.5">

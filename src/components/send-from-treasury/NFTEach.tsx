@@ -1,6 +1,6 @@
 import * as Icons from "assets/icons"
-import { Button, IconButton } from "components/shared"
-import { FC, useState } from "react"
+import { Button } from "components/shared"
+import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 
 export interface NFTDetail {
@@ -11,40 +11,38 @@ export interface NFTDetail {
 
 interface NFTEachProps {
   detail: NFTDetail
-  isSelected?: boolean
+  isChoosed?: boolean
+  onChoose?: (detail: NFTDetail | undefined) => void
   onChange?: (deatil: NFTDetail | undefined) => void
   className?: string
 }
 
 export const NFTEach: FC<NFTEachProps> = ({
   detail,
-  isSelected = false,
   onChange,
-  className
+  className,
+  onChoose,
+  isChoosed
 }) => {
-  const [showOverlay, setShowOverlay] = useState(false)
   return (
     <div
       key={detail.address}
       className={twMerge(
-        "w-[140.33px] h-[140.33px] rounded relative",
+        "w-[140.33px] h-[140.33px] rounded relative cursor-pointer",
         className ?? ""
       )}
-      onMouseOver={() => {
-        setShowOverlay(true)
-      }}
-      onMouseLeave={() => {
-        setShowOverlay(false)
+      onClick={() => {
+        onChoose && onChoose(detail)
       }}
     >
       <img
         src={detail.image}
         className={twMerge(
           "min-w-[140.33px] h-[140.33px] rounded",
-          isSelected ? "primary-gradient-border" : ""
+          isChoosed ? "primary-gradient-border" : ""
         )}
       />
-      {showOverlay && (
+      {isChoosed && (
         <>
           <div className="min-w-[140.33px] h-[140.33px] cursor-pointer absolute left-0 top-0 rounded nft-overlay" />
           <div className="absolute bottom-6 left-6 gap-x-1.5 flex items-center">
@@ -55,11 +53,6 @@ export const NFTEach: FC<NFTEachProps> = ({
               startIcon={
                 <Icons.CheckCircleIcon className="text-content-contrast" />
               }
-            />
-            <IconButton
-              className="rounded w-6 h-6"
-              onClick={() => onChange && onChange(undefined)}
-              icon={<Icons.CrossIcon className="text-content-contrast" />}
             />
           </div>
         </>

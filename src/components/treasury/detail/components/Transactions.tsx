@@ -45,8 +45,8 @@ export const Transactions = () => {
 
   return (
     <div className="w-full">
-      <div className="lg:flex justify-between items-center gap-x-6 border-b border-outline">
-        <div className="lg:flex gap-x-2 items-center">
+      <div className="flex flex-wrap justify-between items-center gap-x-6 gap-y-4  border-b border-outline">
+        <div className="flex gap-2 items-center overflow-auto overflow-y-hidden">
           {/* Tabs */}
           {transactionTabs.map((transactionTab, index) => {
             return (
