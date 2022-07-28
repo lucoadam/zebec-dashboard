@@ -1,9 +1,9 @@
-import { FC } from "react"
-import { StreamOverviewProps } from "./StreamOverview.d"
 import { SupportCard } from "components/shared"
+import { useTranslation } from "next-i18next"
+import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
-import { useTranslation } from "next-i18next"
+import { StreamOverviewProps } from "./StreamOverview.d"
 
 export const StreamOverview: FC<StreamOverviewProps> = ({
   formValues,
@@ -30,13 +30,13 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
         <p className="text-sm mt-2 text-content-secondary">
           <span className="text-content-primary">
             {formValues?.tokenAmount || formValues?.amount || "..."}{" "}
-            {formValues?.token || "..."}{" "}
+            {formValues?.symbol || "..."}{" "}
           </span>
           {t("send:token-amount-details")}{" "}
           <span className="text-content-primary">
             {" "}
-            {formValues?.receiverWallet
-              ? toSubstring(formValues?.receiverWallet, 5, true)
+            {formValues?.receiver
+              ? toSubstring(formValues?.receiver, 5, true)
               : "..."}
           </span>
         </p>
@@ -47,7 +47,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
             {t("send:for")}{" "}
             <span className="text-content-primary">
               {formValues?.noOfTimes || "..."} {formValues?.interval || "..."}.{" "}
-              {formValues?.amount || "..."} {formValues?.token || "..."}
+              {formValues?.amount || "..."} {formValues?.symbol || "..."}
             </span>{" "}
             {t("send:in-total")}
           </p>

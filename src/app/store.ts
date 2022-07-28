@@ -20,6 +20,7 @@ import unStakeSlice from "features/modals/unStakeSlice"
 import streamSlice from "features/stream/streamSlice"
 import toastsSlice from "features/toasts/toastsSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
+import tranasctionsSlice from "features/transactions/transactionsSlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
 import treasurySettingsSlice from "features/treasurySettings/treasurySettingsSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
@@ -52,7 +53,8 @@ const combineReducer = combineReducers({
   stream: streamSlice,
   stake: stakeSlice,
   unstake: unStakeSlice,
-  harvest: harvestSlice
+  harvest: harvestSlice,
+  transactions: tranasctionsSlice
 })
 
 export const store = configureStore({
