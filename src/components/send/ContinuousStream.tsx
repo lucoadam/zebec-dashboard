@@ -19,6 +19,7 @@ import {
   sendContinuousStream,
   sendTreasuryContinuousStream
 } from "features/stream/streamSlice"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
@@ -158,13 +159,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [publicKey, setValue])
 
-  const onSubmit = (data: ContinuousStreamFormData) => {
+  const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       transaction_name: data.transaction_name,
       symbol: data.symbol,
       amount: Number(data.amount),
-      remarks: data.remarks,
+      remarks: data.remarks || "",
       receiver: data.receiver,
+      sender: data.wallet,
       start_time: moment(
         `${data.startDate} ${data.startTime}`,
         "DD/MM/YYYY LT"
@@ -178,10 +180,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       file: data.file
     }
     if (type === "send") {
-      dispatch(sendContinuousStream(formattedData))
+      await dispatch(sendContinuousStream(formattedData))
     } else {
-      dispatch(sendTreasuryContinuousStream(formattedData))
+      await dispatch(sendTreasuryContinuousStream(formattedData))
     }
+    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
   }
 
   const handleStreamRate = () => {
@@ -236,6 +239,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     })
     return () => subscription.unsubscribe()
   }, [watch, setFormValues, getValues])
+
+  useEffect(() => {
+    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
+  }, [publicKey, dispatch])
 
   return (
     <>
