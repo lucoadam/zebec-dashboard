@@ -7,13 +7,15 @@ import {
   IconButton,
   UserAddress
 } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
 import { toggleCancelModal } from "features/modals/cancelModalSlice"
 import { togglePauseModal } from "features/modals/pauseModalSlice"
 import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
-import { toSubstring } from "utils"
+import { formatCurrency, toSubstring } from "utils"
 
 export type TransactionStatus =
   | "completed"
@@ -53,7 +55,6 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
     }, 1000)
     if (status === "completed") {
-      console.log("test")
       clearInterval(interval)
     }
     return () => clearInterval(interval)
@@ -69,6 +70,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       setStatus("outgoing")
     } else if (currentTime >= transaction.end_time) {
       setStatus("completed")
+      console.log(transaction.end_time)
     }
   }, [status, currentTime])
 
@@ -81,13 +83,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     if (status === "completed") {
       setStreamedToken(transaction.amount)
     } else if (status === "outgoing") {
-      const interval = setInterval(
-        () =>
-          setStreamedToken(
-            (prevStreamedToken) => prevStreamedToken + streamRatePerSec
-          ),
-        1000
-      )
+      const interval = setInterval(() => {
+        setStreamedToken((prevStreamedToken) =>
+          prevStreamedToken + streamRatePerSec > transaction.amount
+            ? transaction.amount
+            : prevStreamedToken + streamRatePerSec
+        )
+      }, 1000)
       return () => clearInterval(interval)
     }
   }, [status])
@@ -106,7 +108,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 min-w85">
+          <td className="px-6 py-5 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">
                 {" "}
@@ -118,24 +120,32 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{streamedToken}
+                    +{formatCurrency(streamedToken, "", 4)}
                   </span>
                   &nbsp;{transaction.symbol}
                 </div>
                 <div className="text-caption">
-                  {streamedToken} of {transaction.amount} {transaction.symbol}
+                  {formatCurrency(streamedToken, "", 4)} of{" "}
+                  {formatCurrency(transaction.amount, "", 4)}{" "}
+                  {transaction.symbol}
                 </div>
               </div>
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
             <div className="text-caption text-content-primary">
-              Mar 18, 2022, 12:00 PM <br />
-              to Mar 19, 2022, 11:58 AM
+              {moment
+                .unix(transaction.start_time)
+                .format("MMMM Do YYYY, h:mm:ss A")}{" "}
+              <br />
+              to{" "}
+              {moment
+                .unix(transaction.end_time)
+                .format("MMMM Do YYYY, h:mm:ss A")}
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet="XDFSdfwe2re23423sdflsdjsldfjsd" />
+            <UserAddress wallet={transaction.receiver} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
@@ -193,11 +203,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    Feb Salary
+                    {transaction.transaction_name}
                   </div>
-                  <div className="text-body text-content-secondary">
-                    This is the secondary notes with character limit.
-                  </div>
+                  {transaction.remark && (
+                    <div className="text-body text-content-secondary">
+                      {transaction.remark ?? "-"}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
@@ -216,10 +228,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div data-tip={transaction.sender} className="">
+                          {toSubstring(transaction.sender, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
+                        <CopyButton content={transaction.sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -230,16 +242,16 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       <div className="flex items-center gap-x-2 text-content-primary">
                         <Image
                           layout="fixed"
-                          alt="Sender Logo"
+                          alt="Receiver Logo"
                           src={Images.Avatar3}
                           height={24}
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div className="" data-tip={transaction.receiver}>
+                          {toSubstring(transaction.receiver, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
+                        <CopyButton content={transaction.receiver} />
                       </div>
                     </div>
                     {/* Start Date */}
@@ -248,7 +260,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.start-date")}
                       </div>
                       <div className="text-content-primary">
-                        Feb 19, 2022, 09:13 PM
+                        {moment
+                          .unix(transaction.start_time)
+                          .format("MMMM Do YYYY, h:mm:ss A")}
                       </div>
                     </div>
                     {/* End Date */}
@@ -257,7 +271,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.end-date")}
                       </div>
                       <div className="text-content-primary">
-                        Feb 29, 2022, 09:13 PM
+                        {moment
+                          .unix(transaction.end_time)
+                          .format("MMMM Do YYYY, h:mm:ss A")}
                       </div>
                     </div>
                     {/* Stream Type */}
@@ -266,8 +282,16 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>Continuous</span>
+                        {transaction.type === "instant" ? (
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                        ) : (
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                        )}
+                        <span>{`${
+                          transaction.type === "instant"
+                            ? "Instant"
+                            : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
@@ -278,7 +302,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.total-amount")}
                       </div>
-                      <div className="text-content-primary">20,000 SOL</div>
+                      <div className="text-content-primary">
+                        {formatCurrency(transaction.amount, "", 4)}{" "}
+                        {transaction.symbol}
+                      </div>
                     </div>
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
@@ -286,7 +313,14 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        10,000 SOL (50%)
+                        {formatCurrency(streamedToken, "", 4)}{" "}
+                        {transaction.symbol} (
+                        {formatCurrency(
+                          (streamedToken * 100) / transaction.amount,
+                          "",
+                          2
+                        )}
+                        %)
                       </div>
                     </div>
                     {/* Status */}

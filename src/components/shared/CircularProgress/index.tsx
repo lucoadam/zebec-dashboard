@@ -59,11 +59,11 @@ export const CircularProgress: FC<CircularProgressProps> = ({
   useEffect(() => {
     setTimeout(async () => {
       for (
-        let i = status === "outgoing" ? percentage - 1 : 0;
+        let i = status === "outgoing" ? percentage - 0.2 : 0;
         i <= percentage;
-        i++
+        i = i > percentage ? percentage : i + 0.2
       ) {
-        await new Promise((r) => setTimeout(r, 12))
+        await new Promise((r) => setTimeout(r, 0.1))
         setDashOffset(dashArray - (dashArray * i) / 100)
       }
     }, 0.1)
@@ -85,7 +85,7 @@ export const CircularProgress: FC<CircularProgressProps> = ({
           className={`${getBackgroundByPercentage(
             percentage,
             status
-          )} transition duration-150`}
+          )} transition-all duration-[400ms]`}
           strokeLinecap="round"
           stroke="currentColor"
           fill="transparent"
