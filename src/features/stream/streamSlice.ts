@@ -18,23 +18,7 @@ export const sendContinuousStream: any = createAsyncThunk(
     console.log("sendContinuousStream", data)
     const { data: response } = await axios.post(
       "https://internal-ten-cherry.glitch.me/transactions",
-      {
-        ...data,
-        is_transaction_resumed: false,
-        pda: "GzPuKfEzUHi9TWXvHTW7xxy4vrTp15uPetGsEhFJKV9P",
-        remaining_amount: 0.0,
-        remaining_time_in_seconds: 0.0,
-        sent_token: 0.0,
-        status: "ongoing",
-        token: data.token_mint_address,
-        token_name: data.symbol,
-        total_amount_tranfer_per_seconds: 0.0016666666666666668,
-        total_time_in_seconds: 120,
-        transaction_id:
-          "2biwjVTEW5bUst8WoZYgWHMKvcWPwi5MpR2kgqoHsgon8nvfGE1iyk5MmQnhuFa8zh7vAGuu9stDg2tEGZan474M",
-        transaction_type: "continuous",
-        withdrawn: 0.0
-      }
+      data
     )
     return response
   }
@@ -75,7 +59,6 @@ const streamSlice = createSlice({
     builder.addCase(sendContinuousStream.fulfilled, (state, action) => {
       state.loading = false
       state.error = ""
-      console.log("action", JSON.stringify(action, null, 2))
     })
     builder.addCase(sendContinuousStream.rejected, (state, action) => {
       state.loading = false

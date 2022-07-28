@@ -1,15 +1,19 @@
 import { Breadcrumb, EmptyDataState, Table, TableBody } from "components/shared"
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import { useTranslation } from "next-i18next"
-import { FC, useState } from "react"
+import { FC, useState, useEffect } from "react"
 import FilterTabs from "./FilterTabs"
 import OutgoingTableRow from "./OutgoingTableRow"
 import ExportModal from "components/modals/export-report/ExportModal"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
-  const { outgoingTransactions } = useAppSelector((state) => state.stream)
+  const { publicKey } = useWallet()
+  const { outgoingTransactions } = useAppSelector((state) => state.transactions)
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
+  const dispatch = useAppDispatch()
 
   const headers = [
     { label: "transactions:table.progress", width: "85" },
@@ -22,6 +26,12 @@ const Outgoing: FC = () => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
     else setActiveDetailsRow(index)
   }
+
+  useEffect(() => {
+    if (publicKey) {
+      dispatch(fetchOutgoingTransactions(publicKey?.toString()))
+    }
+  }, [publicKey, dispatch])
 
   return (
     <>

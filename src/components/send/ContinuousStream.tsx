@@ -15,11 +15,7 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
-import {
-  sendContinuousStream,
-  sendTreasuryContinuousStream
-} from "features/stream/streamSlice"
-import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
+import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
@@ -180,15 +176,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file
+      file: data.file,
+      transaction_type: "continuous"
     }
     if (type === "send") {
       stream && dispatch(initStreamNative(formattedData, stream))
-      await dispatch(sendContinuousStream(formattedData))
     } else {
       await dispatch(sendTreasuryContinuousStream(formattedData))
     }
-    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
   }
 
   const handleStreamRate = () => {
@@ -243,10 +238,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     })
     return () => subscription.unsubscribe()
   }, [watch, setFormValues, getValues])
-
-  useEffect(() => {
-    dispatch(fetchOutgoingTransactions(publicKey?.toString()))
-  }, [publicKey, dispatch])
 
   return (
     <>
