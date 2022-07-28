@@ -55,11 +55,13 @@ import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
+import Notif from "./other-icons/notif.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
 export {
+  Notif,
   Envelope,
   Calendar,
   Download,

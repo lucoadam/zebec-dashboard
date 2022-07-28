@@ -12,10 +12,11 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
+import {
+  fetchAddressBook,
+  saveAddressBook
+} from "features/address-book/addressBookSlice"
 //import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
-
-
 
 export default function IndividualAddresses() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,16 +25,12 @@ export default function IndividualAddresses() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   //   useEffect(() => {
-      
-
-
 
   // }, [dispatch, addresses, addressBook])
 
-  useEffect(()=>{
-    dispatch(fetchAddressBook());
- 
-  },[ dispatch])
+  useEffect(() => {
+    dispatch(fetchAddressBook())
+  }, [dispatch])
   const headers = [
     {
       label: "addressBook:name",
@@ -70,7 +67,7 @@ export default function IndividualAddresses() {
     //   )
     //   return
     // }
-    dispatch(saveAddressBook(data));
+    dispatch(saveAddressBook(data))
 
     //dispatch(saveAddressBook(data))
   }
