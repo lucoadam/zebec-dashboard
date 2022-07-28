@@ -72,28 +72,6 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
           }
         ]}
       />
-      {/* <div className="mt-12 border border-outline p-4 rounded-md">
-        <div className="text-subtitle text-content-primary">
-          {t("send:streaming-help")}
-        </div>
-        <span className="text-content-tertiary text-sm">
-          {t("send:streaming-help-details")}
-        </span>
-        <div className="flex gap-2 mt-4">
-          <Button
-            variant="default"
-            size="small"
-            title={`${t("send:check-faq")}`}
-            endIcon={<Icons.OutsideLinkIcon />}
-          />
-          <Button
-            variant="default"
-            size="small"
-            title={`${t("send:join-discord")}`}
-            endIcon={<Icons.OutsideLinkIcon />}
-          />
-        </div>
-      </div> */}
     </div>
   )
 }

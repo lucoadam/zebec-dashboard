@@ -8,6 +8,7 @@ import {
   UserAddress
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
+import { RPC_NETWORK } from "constants/cluster"
 import { toggleCancelModal } from "features/modals/cancelModalSlice"
 import { togglePauseModal } from "features/modals/pauseModalSlice"
 import { toggleResumeModal } from "features/modals/resumeModalSlice"
@@ -339,13 +340,19 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.transaction")}
                       </div>
                       <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-on-explorer")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
+                        <a
+                          href={`https://solana.fm/tx/${transaction.transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button
+                            title={`${t("table.view-on-explorer")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </a>
                       </div>
                     </div>
                     {/* Reference */}
