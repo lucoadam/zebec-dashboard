@@ -58,7 +58,11 @@ export const CircularProgress: FC<CircularProgressProps> = ({
 
   useEffect(() => {
     setTimeout(async () => {
-      for (let i = 0; i <= percentage; i++) {
+      for (
+        let i = status === "outgoing" ? percentage - 1 : 0;
+        i <= percentage;
+        i++
+      ) {
         await new Promise((r) => setTimeout(r, 12))
         setDashOffset(dashArray - (dashArray * i) / 100)
       }
