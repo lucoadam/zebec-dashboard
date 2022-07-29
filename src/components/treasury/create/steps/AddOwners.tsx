@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import {
   Button,
@@ -12,35 +13,12 @@ import { constants } from "constants/constants"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
-import React, { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { Owner, StepsComponentProps } from "../CreateTreasury.d"
 import OwnerLists from "../OwnerLists"
-
-const addressBook = [
-  {
-    name: "Alice",
-    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv"
-  },
-  {
-    name: "Bob",
-    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ"
-  },
-  {
-    name: "Charlie",
-    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6"
-  },
-  {
-    name: "Dave",
-    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V"
-  },
-  {
-    name: "Eve",
-    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7a"
-  }
-]
 
 const AddOwners: FC<StepsComponentProps> = ({
   setCurrentStep,
@@ -49,6 +27,7 @@ const AddOwners: FC<StepsComponentProps> = ({
 }) => {
   const receiverDropdownWrapper = useRef(null)
   const useWalletObject = useWallet()
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
 
   const { t } = useTranslation()
   const router = useRouter()
@@ -131,7 +110,7 @@ const AddOwners: FC<StepsComponentProps> = ({
         user.name.toLowerCase().includes(receiverSearchData.toLowerCase())
       )
       .filter(
-        (user) => !owners.map((owner) => owner.wallet).includes(user.address)
+        (user) => !owners.map((owner) => owner.wallet).includes(user.wallet)
       )
 
   return (
@@ -248,14 +227,14 @@ const AddOwners: FC<StepsComponentProps> = ({
               <div className="divide-y divide-outline h-[207px] overflow-auto">
                 {getFilteredAddressBook().map((user) => (
                   <div
-                    key={user.address}
+                    key={user.wallet}
                     className="w-full h-[68px] flex gap-[15px] border-outline p-4 justify-start items-center hover:bg-background-light"
                   >
                     <input
                       type="checkbox"
                       className="hover:cursor-pointer h-5 w-5 rounded-sm focus:ring-offset-0 focus:ring-0 shadow-none outline-none border-2 border-outline bg-transparent"
                       checked={
-                        owners.some((owner) => owner.wallet === user.address)
+                        owners.some((owner) => owner.wallet === user.wallet)
                           ? true
                           : undefined
                       }
@@ -265,13 +244,13 @@ const AddOwners: FC<StepsComponentProps> = ({
                             ...checkedOwners,
                             {
                               name: user.name,
-                              wallet: user.address
+                              wallet: user.wallet
                             }
                           ])
                         } else {
                           setCheckedOwners(
                             checkedOwners.filter(
-                              (owner) => owner.wallet !== user.address
+                              (owner) => owner.wallet !== user.wallet
                             )
                           )
                         }
@@ -282,7 +261,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                         {user.name}
                       </p>
                       <p className="text-xs text-content-tertiary">
-                        {toSubstring(user.address, 28, false)}
+                        {toSubstring(user.wallet, 28, false)}
                       </p>
                     </div>
                   </div>

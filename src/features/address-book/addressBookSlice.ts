@@ -1,16 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
-interface AddressBook {
+export interface AddressBook {
+  id: number
   name: string
   wallet: string
 }
+
 interface AddressBookState {
   loading: boolean
   saving: boolean
   deleting: boolean
   addressBooks: AddressBook[]
   error: string
+}
+
+interface DeleteProps {
+  id: number
+  user: string
 }
 
 const initialState: AddressBookState = {
@@ -21,62 +29,45 @@ const initialState: AddressBookState = {
   error: ""
 }
 
-//Generates pending, fulfilled and rejected action types
-export const fetchAddressBook = createAsyncThunk(
+export const fetchAddressBook: any = createAsyncThunk(
   "addressBook/fetchAddressBook",
-  async () => {
-    // const response = await axios.get(
-    //   "https://jsonplaceholder.typicode.com//addressBook"
-    // )
-    const response = [
-      {
-        name: "Jane Doe",
-        wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-      },
-      {
-        name: "okay Doe",
-        wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-      },
-      {
-        name: "John Doe",
-        wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-      },
-      {
-        name: "Jane Doe",
-        wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-      },
-      {
-        name: "Jane Doe",
-        wallet: "Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs"
-      }
-    ]
-
+  async (user: string) => {
+    const { data: response } = await axios.get(
+      `https://internal-ten-cherry.glitch.me/addressbooks?user=${user}`
+    )
     return response
   }
 )
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export const saveAddressBook: any = createAsyncThunk(
   "addressBook/saveAddressBook",
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async (data: AddressBook) => {
-    const response = await axios.post(
-      "https://jsonplaceholder.typicode.com/addressBook",
+  async (
+    data: AddressBook & {
+      user: string
+    },
+    { dispatch }
+  ) => {
+    const { data: response } = await axios.post(
+      "https://internal-ten-cherry.glitch.me/addressbooks",
       data
     )
-    console.log(response)
-    return data
-  }
-)
-export const deleteAddressBook = createAsyncThunk(
-  "addressBook/deleteAddressBook",
-  async () => {
-    const response = await axios.delete(
-      "https://jsonplaceholder.typicode.com/addressBook"
-    )
-    return response.data
+    dispatch(fetchAddressBook(data.user))
+    return response
   }
 )
 
+export const deleteAddressBook: any = createAsyncThunk(
+  "addressBook/deleteAddressBook",
+  async (data: DeleteProps, { dispatch }) => {
+    const { data: response } = await axios.delete(
+      `https://internal-ten-cherry.glitch.me/addressbooks/${data.id}`
+    )
+    dispatch(fetchAddressBook(data.user))
+    return response
+  }
+)
+
+//Generates pending, fulfilled and rejected action types
 const addressBookSlice = createSlice({
   name: "addressBook",
   initialState,
@@ -94,47 +85,30 @@ const addressBookSlice = createSlice({
       }
     )
     builder.addCase(fetchAddressBook.rejected, (state, action) => {
-      console.log("rejected")
       state.loading = false
-      state.addressBooks = []
-      state.error = action.error.message ?? "Something went wrong"
+      state.error = action?.error?.message ?? "Something went wrong"
     })
     builder.addCase(saveAddressBook.pending, (state) => {
-      console.log("inpenidn")
-
-      state.loading = true
+      state.saving = true
     })
-    builder.addCase(
-      saveAddressBook.fulfilled,
-      (state, action: PayloadAction<typeof initialState.addressBooks>) => {
-        console.log("infulfilled", action.payload)
-        console.log(action.payload)
-        state.loading = false
-        state.addressBooks = [...action.payload]
-        state.error = ""
-      }
-    )
-    builder.addCase(saveAddressBook.rejected, (state, action) => {
-      console.log("in reject")
+    builder.addCase(saveAddressBook.fulfilled, (state) => {
       state.saving = false
-      state.addressBooks = []
-      state.error = action.error.message ?? "Something went wrong"
+      state.error = ""
+    })
+    builder.addCase(saveAddressBook.rejected, (state, action) => {
+      state.saving = false
+      state.error = action?.error?.message ?? "Something went wrong"
     })
     builder.addCase(deleteAddressBook.pending, (state) => {
       state.deleting = true
     })
-    builder.addCase(
-      deleteAddressBook.fulfilled,
-      (state, action: PayloadAction<typeof initialState.addressBooks>) => {
-        state.deleting = false
-        state.addressBooks = action.payload
-        state.error = ""
-      }
-    )
+    builder.addCase(deleteAddressBook.fulfilled, (state) => {
+      state.deleting = false
+      state.error = ""
+    })
     builder.addCase(deleteAddressBook.rejected, (state, action) => {
       state.deleting = false
-      state.addressBooks = []
-      state.error = action.error.message ?? "Something went wrong"
+      state.error = action?.error?.message ?? "Something went wrong"
     })
   }
 })

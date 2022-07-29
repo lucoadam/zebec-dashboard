@@ -4,7 +4,7 @@ import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import React, { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
@@ -52,7 +52,7 @@ export const UserAddress: FC<{
 
   useEffect(() => {
     setValue("wallet", wallet)
-  }, [errors, setValue, wallet])
+  }, [setValue, wallet])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
