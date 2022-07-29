@@ -1,3 +1,4 @@
+import { WalletApprovalMessageModal } from "components/modals"
 import { Toasts } from "components/shared"
 import Head from "next/head"
 import React, { FC, useEffect, useState } from "react"
@@ -31,6 +32,9 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       <Navbar />
 
       <main className="pb-20">{children}</main>
+
+      {/* Common Modals */}
+      <WalletApprovalMessageModal />
 
       {/* Fixed Divs */}
       <Toasts />

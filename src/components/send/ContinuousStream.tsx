@@ -32,6 +32,7 @@ import {
 } from "./ContinuousStream.d"
 import { initStreamNative } from "application"
 import ZebecContext from "app/zebecContext"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 const addressBook = [
   {
@@ -85,7 +86,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { publicKey } = useWallet()
-  const { stream } = useContext(ZebecContext)
+  const { stream, token } = useContext(ZebecContext)
 
   const {
     register,
@@ -179,10 +180,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       file: data.file,
       transaction_type: "continuous"
     }
+    dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
-      stream && dispatch(initStreamNative(formattedData, stream))
+      if (data.symbol === "SOL")
+        stream && dispatch(initStreamNative(formattedData, stream))
+      else token && dispatch(initStreamNative(formattedData, token))
     } else {
-      await dispatch(sendTreasuryContinuousStream(formattedData))
+      dispatch(sendTreasuryContinuousStream(formattedData))
     }
   }
 
