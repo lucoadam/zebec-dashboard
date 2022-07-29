@@ -12,6 +12,7 @@ interface CircularProgressProps {
   percentage?: number
   status: TransactionStatus
   children?: React.ReactNode
+  spin?: boolean
 }
 
 const statusIconMapping = {
@@ -47,7 +48,8 @@ const getBackgroundByPercentage = (
 
 export const CircularProgress: FC<CircularProgressProps> = ({
   percentage = 0,
-  status
+  status,
+  spin
 }) => {
   const sqSize = 56
   const strokeWidth = 5
@@ -55,9 +57,12 @@ export const CircularProgress: FC<CircularProgressProps> = ({
   const viewBox = `0 0 ${sqSize} ${sqSize}`
   const dashArray = radius * Math.PI * 2
   const [dashOffset, setDashOffset] = useState(dashArray)
+  const [enableTransition, setEnableTransition] = useState(false)
 
   useEffect(() => {
     setTimeout(async () => {
+      setEnableTransition(true)
+
       for (
         let i = status === "outgoing" ? percentage - 0.2 : 0;
         i <= percentage;
@@ -66,12 +71,21 @@ export const CircularProgress: FC<CircularProgressProps> = ({
         await new Promise((r) => setTimeout(r, 0.1))
         setDashOffset(dashArray - (dashArray * i) / 100)
       }
+      setEnableTransition(false)
     }, 0.1)
+    console.log("dashArray", dashArray)
   }, [dashArray, percentage])
 
   return (
     <div className="relative">
-      <svg width={sqSize} height={sqSize} viewBox={viewBox}>
+      <svg
+        style={{
+          animation: spin ? "animation-rotate 9s linear infinite" : ""
+        }}
+        width={sqSize}
+        height={sqSize}
+        viewBox={viewBox}
+      >
         <circle
           className="text-outline-dark"
           stroke="currentColor"
@@ -95,7 +109,8 @@ export const CircularProgress: FC<CircularProgressProps> = ({
           r={radius}
           style={{
             strokeDasharray: dashArray,
-            strokeDashoffset: dashOffset
+            strokeDashoffset: dashOffset,
+            transition: enableTransition ? "1ms stroke-dashoffset" : ""
           }}
           strokeWidth={`${strokeWidth}px`}
         />
