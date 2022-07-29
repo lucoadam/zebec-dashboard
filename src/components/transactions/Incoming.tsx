@@ -1,17 +1,25 @@
-import { Breadcrumb, Table, TableBody } from "components/shared"
-import { Pagination, RowsPerPage } from "components/shared"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppDispatch } from "app/hooks"
+import ExportModal from "components/modals/export-report/ExportModal"
+import {
+  Breadcrumb,
+  Pagination,
+  RowsPerPage,
+  Table,
+  TableBody
+} from "components/shared"
 import { incomingTransactions } from "fakedata"
+import { fetchIncomingTransactions } from "features/transactions/transactionsSlice"
 import { useTranslation } from "next-i18next"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
-import ExportModal from "components/modals/export-report/ExportModal"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
-
+  const dispatch = useAppDispatch()
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
-
+  const { publicKey } = useWallet()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   const [noOfRows, setNoOfRows] = useState(10)
@@ -39,6 +47,10 @@ const Incoming: FC = () => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
     else setActiveDetailsRow(index)
   }
+
+  useEffect(() => {
+    dispatch(fetchIncomingTransactions(publicKey?.toString()))
+  }, [dispatch, publicKey])
 
   return (
     <>
