@@ -86,7 +86,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { publicKey } = useWallet()
-  const { stream } = useContext(ZebecContext)
+  const { stream, token } = useContext(ZebecContext)
 
   const {
     register,
@@ -182,7 +182,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
-      stream && dispatch(initStreamNative(formattedData, stream))
+      if (data.symbol === "SOL")
+        stream && dispatch(initStreamNative(formattedData, stream))
+      else token && dispatch(initStreamNative(formattedData, token))
     } else {
       dispatch(sendTreasuryContinuousStream(formattedData))
     }
