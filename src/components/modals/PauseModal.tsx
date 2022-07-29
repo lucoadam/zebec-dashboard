@@ -1,17 +1,34 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
-import { Button } from "components/shared"
-import { Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-
-import * as Icons from "assets/icons"
 import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
+import {
+  pauseStreamNative,
+  pauseStreamToken
+} from "application/normal/pauseStream"
+import { Modal, Button } from "components/shared"
+import ZebecContext from "app/zebecContext"
+import * as Icons from "assets/icons"
 
 const PauseModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.pause)
-
-  const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
+  const { stream, token } = useContext(ZebecContext)
+  const dispatch = useAppDispatch()
+  const { show, loading, transaction } = useAppSelector((state) => state.pause)
+
+  const handlePauseTransaction = () => {
+    dispatch(setLoading(true))
+    // data
+    const data = {
+      sender: transaction.sender,
+      receiver: transaction.receiver,
+      escrow: transaction.pda
+    }
+    if (transaction.symbol === "SOL")
+      stream && dispatch(pauseStreamNative(data, stream))
+    else token && dispatch(pauseStreamToken(data, token))
+  }
+
   return (
     <Modal
       show={show}
@@ -36,13 +53,7 @@ const PauseModal: FC = ({}) => {
                   ? `${t("modal-actions.pausing")}`
                   : `${t("modal-actions.yes-pause")}`
               }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(togglePauseModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
+              onClick={handlePauseTransaction}
             />
           </div>
           <div className="">

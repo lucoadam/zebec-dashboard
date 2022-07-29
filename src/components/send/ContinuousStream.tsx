@@ -30,7 +30,7 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
-import { initStreamNative } from "application"
+import { initStreamNative, initStreamToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
@@ -184,7 +184,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     if (type === "send") {
       if (data.symbol === "SOL")
         stream && dispatch(initStreamNative(formattedData, stream))
-      else token && dispatch(initStreamNative(formattedData, token))
+      else token && dispatch(initStreamToken(formattedData, token))
     } else {
       dispatch(sendTreasuryContinuousStream(formattedData))
     }

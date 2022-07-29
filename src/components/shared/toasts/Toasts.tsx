@@ -28,7 +28,10 @@ export const Toasts: FC<ToastPropertiesProps> = (props) => {
   return (
     <>
       <div
-        className={twMerge(`fixed max-w-md w-full space-y-4`, positionStyle)}
+        className={twMerge(
+          `fixed max-w-md w-full space-y-4 z-50`,
+          positionStyle
+        )}
       >
         {toasts.map((toast) => {
           return <Toast key={toast.id} position={position} {...toast} />

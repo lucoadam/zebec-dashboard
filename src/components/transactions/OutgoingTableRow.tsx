@@ -9,9 +9,9 @@ import {
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
-import { toggleCancelModal } from "features/modals/cancelModalSlice"
-import { togglePauseModal } from "features/modals/pauseModalSlice"
-import { toggleResumeModal } from "features/modals/resumeModalSlice"
+import { showCancelModal } from "features/modals/cancelModalSlice"
+import { showPauseModal } from "features/modals/pauseModalSlice"
+import { showResumeModal } from "features/modals/resumeModalSlice"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
@@ -158,7 +158,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                     <Icons.ResumeIcon className="text-content-contrast" />
                   }
                   onClick={() => {
-                    dispatch(toggleResumeModal())
+                    dispatch(showResumeModal(transaction))
                   }}
                 />
                 <Button
@@ -168,7 +168,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                     <Icons.PauseIcon className="text-content-contrast" />
                   }
                   onClick={() => {
-                    dispatch(togglePauseModal())
+                    dispatch(showPauseModal(transaction))
                   }}
                 />
 
@@ -179,7 +179,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                     <Icons.CrossIcon className="text-content-contrast" />
                   }
                   onClick={() => {
-                    dispatch(toggleCancelModal())
+                    dispatch(showCancelModal(transaction))
                   }}
                 />
               </div>

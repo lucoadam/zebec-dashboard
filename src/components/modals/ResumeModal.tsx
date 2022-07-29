@@ -1,15 +1,34 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
-import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-
-import * as Icons from "assets/icons"
 import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
+import {
+  resumeStreamNative,
+  resumeStreamToken
+} from "application/normal/resumeStream"
+import { Button, Modal } from "components/shared"
+import ZebecContext from "app/zebecContext"
+import * as Icons from "assets/icons"
 
 const ResumeModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.resume)
-  const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
+  const { stream, token } = useContext(ZebecContext)
+  const { show, loading, transaction } = useAppSelector((state) => state.resume)
+  const dispatch = useAppDispatch()
+
+  const handleResumeTransaction = () => {
+    dispatch(setLoading(true))
+    // data
+    const data = {
+      sender: transaction.sender,
+      receiver: transaction.receiver,
+      escrow: transaction.pda
+    }
+    if (transaction.symbol === "SOL")
+      stream && dispatch(resumeStreamNative(data, stream))
+    else token && dispatch(resumeStreamToken(data, token))
+  }
+
   return (
     <Modal
       show={show}
@@ -34,13 +53,7 @@ const ResumeModal: FC = ({}) => {
                   ? `${t("modal-actions.resuming")}`
                   : `${t("modal-actions.yes-resume")}`
               }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(toggleResumeModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
+              onClick={handleResumeTransaction}
             />
           </div>
           <div className="">
