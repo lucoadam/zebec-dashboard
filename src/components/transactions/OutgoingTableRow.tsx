@@ -42,14 +42,14 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-
-  const [streamedToken, setStreamedToken] = useState(0)
-  const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const totalTimeInSec = transaction.end_time - transaction.start_time
+  const streamRatePerSec = transaction.amount / totalTimeInSec
   const [currentTime, setCurrentTime] = useState(Date.now() / 1000)
 
-  const totalTimeInSec = transaction.end_time - transaction.start_time
-  console.log(`totalTimeInSec`, totalTimeInSec)
-  const streamRatePerSec = transaction.amount / totalTimeInSec
+  const [streamedToken, setStreamedToken] = useState(
+    streamRatePerSec * (currentTime - transaction.start_time) ?? 0
+  )
+  const [status, setStatus] = useState<TransactionStatus>("scheduled")
 
   useEffect(() => {
     const interval = setInterval(() => {
