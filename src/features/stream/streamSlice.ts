@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 interface SendState {
   loading: boolean
@@ -14,12 +15,12 @@ const initialState: SendState = {
 
 export const sendContinuousStream: any = createAsyncThunk(
   "send/sendContinuousStream",
-  async (data: any) => {
-    console.log("sendContinuousStream", data)
+  async (data: any, { dispatch }) => {
     const { data: response } = await axios.post(
       "https://internal-ten-cherry.glitch.me/transactions",
       data
     )
+    dispatch(fetchOutgoingTransactions(data.sender))
     return response
   }
 )
@@ -56,7 +57,7 @@ const streamSlice = createSlice({
     builder.addCase(sendContinuousStream.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(sendContinuousStream.fulfilled, (state, action) => {
+    builder.addCase(sendContinuousStream.fulfilled, (state) => {
       state.loading = false
       state.error = ""
     })

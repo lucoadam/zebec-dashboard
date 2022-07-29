@@ -28,6 +28,7 @@ import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
+import walletApprovalMessageSlice from "features/modals/walletApprovalMessageSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -54,7 +55,8 @@ const combineReducer = combineReducers({
   stake: stakeSlice,
   unstake: unStakeSlice,
   harvest: harvestSlice,
-  transactions: tranasctionsSlice
+  transactions: tranasctionsSlice,
+  walletApprovalMessage: walletApprovalMessageSlice
 })
 
 export const store = configureStore({

@@ -64,5 +64,9 @@
         "unsubscribe-description": "Don’t want to receive any emails or telegram message about your transactions?",
         "subscribe": "Subscribe",
         "update": "Update"
+    },
+    "modal-actions": {
+        "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",
+        "do-not-close-this-window": "Do not close this window"
     }
 }

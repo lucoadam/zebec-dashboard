@@ -182,7 +182,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     if (type === "send") {
       stream && dispatch(initStreamNative(formattedData, stream))
     } else {
-      await dispatch(sendTreasuryContinuousStream(formattedData))
+      dispatch(sendTreasuryContinuousStream(formattedData))
     }
   }
 
