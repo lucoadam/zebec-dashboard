@@ -1,32 +1,40 @@
 import { ZebecNativeStreamProps } from "./stream.d"
 import { sendContinuousStream } from "features/stream/streamSlice"
-import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 import { toast } from "features/toasts/toastsSlice"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 export const initStreamNative =
   (data: any, stream: ZebecNativeStreamProps) => async (dispatch: any) => {
-    const response = await stream.init(data)
-
-    if (response.status.toLocaleLowerCase() === "success") {
-      dispatch(
-        toast.success({
-          message: response.message ?? "Transaction Success",
+    try {
+      const response = await stream.init(data)
+      if (response.status.toLocaleLowerCase() === "success") {
+        dispatch(
+          toast.success({
+            message: response.message ?? "Transaction Success",
+            transactionHash: response?.data?.transactionHash
+          })
+        )
+        const backendData = {
+          ...data,
+          pda: response?.data?.pda,
           transactionHash: response?.data?.transactionHash
-        })
-      )
-      const dataWithPda = {
-        ...data,
-        pda: response?.data?.pda,
-        transactionHash: response?.data?.transactionHash
+        }
+        dispatch(sendContinuousStream(backendData))
+      } else {
+        dispatch(
+          toast.error({
+            message: response.message ?? "Unknown Error"
+          })
+        )
+        dispatch(toggleWalletApprovalMessageModal())
       }
-      dispatch(sendContinuousStream(dataWithPda))
-      dispatch(fetchOutgoingTransactions(data.sender))
-    } else {
+    } catch (error: any) {
       dispatch(
         toast.error({
-          message: response.message ?? "Unknown Error"
+          message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(toggleWalletApprovalMessageModal())
     }
 
     return null
