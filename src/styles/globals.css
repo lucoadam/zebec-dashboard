@@ -156,6 +156,13 @@
     var(--primary-gradient-hover);
 }
 
+.modal-gradient-border {
+  background-clip: content-box, border-box;
+  @apply border-2 border-transparent bg-origin-border rounded-lg;
+  background-image: linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+    var(--primary-gradient-hover);
+}
+
 select option {
   @apply h-5;
 }
