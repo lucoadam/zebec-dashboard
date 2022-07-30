@@ -44,8 +44,8 @@ export const NFTEach: FC<NFTEachProps> = ({
       />
       {isChoosed && (
         <>
-          <div className="min-w-[140.33px] h-[140.33px] cursor-pointer absolute left-0 top-0 rounded nft-overlay" />
-          <div className="absolute bottom-6 left-6 gap-x-1.5 flex items-center">
+          <div className="min-w-[140.33px] h-[140.33px] cursor-pointer absolute left-0 top-0 rounded" />
+          <div className="absolute bottom-4 left-6 gap-x-1.5 flex items-center">
             <Button
               size="small"
               title={`Confirm`}

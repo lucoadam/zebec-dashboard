@@ -65,10 +65,10 @@ export const SendNFT: FC<SendNFTProps> = ({
   }
 
   useEffect(() => {
-    if (nft && nft.address) {
+    console.log(nft?.address)
+    if (nft) {
       setValue("nftAddress", nft.address)
       setToggleChooseNFT(true)
-      trigger("nftAddress")
     } else {
       resetField("nftAddress")
       setToggleChooseNFT(false)

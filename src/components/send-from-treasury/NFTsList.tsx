@@ -19,7 +19,7 @@ export const NFTsList: FC<{
         className ?? ""
       )}
     >
-      {!nft && (
+      {(!nft || nft?.address === "") && (
         <div className="flex flex-wrap justify-start gap-4">
           {nftLists.map((item) => (
             <NFTEach

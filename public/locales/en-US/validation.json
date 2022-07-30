@@ -35,5 +35,6 @@
     "export-end-date-time-required": "Date is required",
     "export-start-date-time-required": "Date is required",
     "export-choose-report-format": "Choose report format",
-    "receiver-self": "You can't send to yourself"
+    "receiver-self": "You can't send to yourself",
+    "receiver-required": "Receiver address is required."
 }
