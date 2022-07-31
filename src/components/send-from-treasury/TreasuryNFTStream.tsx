@@ -20,7 +20,7 @@ const TreasuryNFTStream: NextPage = () => {
       nftAddress: selectedNFT?.address,
       chooseNFT: true
     })
-  }, [selectedNFT])
+  }, [selectedNFT, formValues])
 
   return (
     <div className="grid lg:flex">
