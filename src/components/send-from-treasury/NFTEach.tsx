@@ -1,5 +1,6 @@
 import * as Icons from "assets/icons"
 import { Button } from "components/shared"
+import Image from "next/image"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 
@@ -35,12 +36,14 @@ export const NFTEach: FC<NFTEachProps> = ({
         onChoose && onChoose(detail)
       }}
     >
-      <img
+      <Image
         src={detail.image}
         className={twMerge(
           "min-w-[140.33px] h-[140.33px] rounded",
           isChoosed ? "primary-gradient-border" : ""
         )}
+        layout="fill"
+        alt={detail.name}
       />
       {isChoosed && (
         <>

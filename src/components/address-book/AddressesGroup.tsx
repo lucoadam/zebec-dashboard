@@ -1,5 +1,5 @@
-import { useTranslation } from "next-i18next"
-import React, { useState } from "react"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useAppSelector } from "app/hooks"
 import {
   Breadcrumb,
   BreadcrumbRightContent,
@@ -8,11 +8,11 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
+import { useTranslation } from "next-i18next"
+import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
-import { useAppSelector } from "app/hooks"
+import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export interface Address {
   name: string
@@ -24,7 +24,7 @@ export default function AddressesGroup() {
     name: "",
     wallet: []
   })
-  const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const addressBooks = useAppSelector((state) => state.address.addressBooks)
   const [wallets, setWallets] = React.useState<string[]>(addresses.wallet)
   const { t } = useTranslation()
   const headers = [
@@ -83,12 +83,11 @@ export default function AddressesGroup() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {addressBook.map((transaction, index) => {
+                {addressBooks.map((addressBook) => {
                   return (
                     <IndividualAddresesTableRow
-                      key={index}
-                      index={index}
-                      transaction={transaction}
+                      key={addressBook.id}
+                      addressBook={addressBook}
                     />
                   )
                 })}

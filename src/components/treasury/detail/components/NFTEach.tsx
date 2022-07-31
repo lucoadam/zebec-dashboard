@@ -1,4 +1,5 @@
 import CopyButton from "components/shared/CopyButton"
+import Image from "next/image"
 import { FC, useState } from "react"
 import { toSubstring } from "utils"
 
@@ -26,7 +27,12 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
       }}
       {...rest}
     >
-      <img src={detail.image} className=" rounded" />
+      <Image
+        src={detail.image}
+        className="rounded"
+        alt={detail.name}
+        layout="fill"
+      />
       {showOverlay && (
         <>
           <div className="w-full h-full absolute left-0 top-0 rounded nft-overlay" />
