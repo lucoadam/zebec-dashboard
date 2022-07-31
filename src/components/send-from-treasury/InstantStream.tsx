@@ -18,25 +18,6 @@ import { getBalance } from "utils/getBalance"
 import { instantStreamSchema } from "utils/validations/instantStreamSchema"
 import { InstantStreamFormData, InstantStreamProps } from "./InstantStream.d"
 
-const addressBook = [
-  {
-    name: "Alice",
-    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv"
-  },
-  {
-    name: "Bob",
-    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ"
-  },
-  {
-    name: "Charlie",
-    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6"
-  },
-  {
-    name: "Dave",
-    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V"
-  }
-]
-
 export const InstantStream: FC<InstantStreamProps> = ({
   setFormValues,
   tokenBalances,
@@ -45,6 +26,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const addressBook = useAppSelector((state) => state.address.addressBooks)
 
   const {
     register,
@@ -228,11 +210,11 @@ export const InstantStream: FC<InstantStreamProps> = ({
                       )
                       .map((user) => (
                         <div
-                          key={user.address}
+                          key={user.wallet}
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiver", user.address)
+                            setValue("receiver", user.wallet)
                             trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
@@ -241,7 +223,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                             {user.name}
                           </div>
                           <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.address, 28, false)}
+                            {toSubstring(user.wallet, 28, false)}
                           </div>
                         </div>
                       ))}

@@ -6,12 +6,43 @@ export const name = {
   name: Yup.string().required("validation:name-required")
 }
 
+export const uniqueName = {
+  name: Yup.string()
+    .required("validation:name-required")
+    .test("uniqueName", "validation:name-exists", async (value, context) => {
+      return !context.parent?.names?.includes(value)
+    })
+}
+
+export const names = {
+  names: Yup.array()
+}
+
 export const wallet = {
   wallet: Yup.string()
     .required("validation:wallet-required")
     .test("is-valid-address", "validation:wallet-invalid", (value) =>
       isValidWallet(value)
     )
+}
+
+export const uniqueWallet = {
+  wallet: Yup.string()
+    .required("validation:wallet-required")
+    .test("is-valid-address", "validation:wallet-invalid", (value) =>
+      isValidWallet(value)
+    )
+    .test(
+      "is-unique-wallet",
+      "validation:wallet-exists",
+      async (value, context) => {
+        return !context.parent?.wallets?.includes(value)
+      }
+    )
+}
+
+export const wallets = {
+  wallets: Yup.array()
 }
 
 export const receiverWallet = {

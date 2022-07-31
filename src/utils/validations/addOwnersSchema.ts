@@ -1,7 +1,9 @@
 import * as Yup from "yup"
-import { name, wallet } from "./commonSchema"
+import { names, uniqueName, uniqueWallet, wallets } from "./commonSchema"
 
 export const addOwnersSchema = Yup.object().shape({
-  ...name,
-  ...wallet
+  ...wallets,
+  ...names,
+  ...uniqueName,
+  ...uniqueWallet
 })
