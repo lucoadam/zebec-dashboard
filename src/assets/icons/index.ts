@@ -56,6 +56,8 @@ import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
 import Notif from "./other-icons/notif.svg"
+import SwapArrowHorizontalIcon from "./other-icons/swap-arrow-horizontal.svg"
+import ChevronUpIcon from "./other-icons/chevron-up.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
@@ -116,5 +118,7 @@ export {
   InformationIcon,
   LockIcon,
   SquareBlockMove,
-  BellEditIcon
+  BellEditIcon,
+  SwapArrowHorizontalIcon,
+  ChevronUpIcon
 }
