@@ -2,10 +2,7 @@ import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
-import {
-  pauseStreamNative,
-  pauseStreamToken
-} from "application/normal/pauseStream"
+import { pauseStreamNative, pauseStreamToken } from "application/normal"
 import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import * as Icons from "assets/icons"

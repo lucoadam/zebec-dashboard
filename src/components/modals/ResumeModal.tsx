@@ -2,10 +2,7 @@ import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
-import {
-  resumeStreamNative,
-  resumeStreamToken
-} from "application/normal/resumeStream"
+import { resumeStreamNative, resumeStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import * as Icons from "assets/icons"

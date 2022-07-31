@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useState } from "react"
 import * as Icons from "assets/icons"
 
 export type TransactionStatus =
@@ -68,6 +68,18 @@ export const CircularProgress: FC<CircularProgressProps> = ({
   const radius = halfSize - lineWidth / 2
   const circleLength = radius * 2 * Math.PI
 
+  const [animatedStroke, setAnimatedStroke] = useState(circleLength)
+
+  useEffect(() => {
+    setAnimatedStroke(
+      animation === "clockwise"
+        ? circleLength * (1 + percentage / 100)
+        : animation === "anti-clockwise"
+        ? circleLength * (1 - percentage / 100)
+        : circleLength * (1 + percentage / 100)
+    )
+  }, [percentage])
+
   return (
     <div
       className={`flex place-content-center place-items-center relative`}
@@ -110,12 +122,7 @@ export const CircularProgress: FC<CircularProgressProps> = ({
                 transitionDuration > 0
                   ? `${transitionDuration}ms stroke-dashoffset`
                   : "",
-              strokeDashoffset:
-                animation === "clockwise"
-                  ? circleLength * (1 + percentage / 100)
-                  : animation === "anti-clockwise"
-                  ? circleLength * (1 - percentage / 100)
-                  : circleLength * (1 + percentage / 100)
+              strokeDashoffset: animatedStroke
             }}
             fill="none"
             strokeDasharray={circleLength}

@@ -3,10 +3,11 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
-  CircularProgress,
+  // CircularProgress,
   IconButton,
   UserAddress
 } from "components/shared"
+import { CircularProgress } from "components/shared/CircularProgress/CircularProgress"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { showCancelModal } from "features/modals/cancelModalSlice"
@@ -42,14 +43,14 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
+
   const totalTimeInSec = transaction.end_time - transaction.start_time
   const streamRatePerSec = transaction.amount / totalTimeInSec
-  const [currentTime, setCurrentTime] = useState(Date.now() / 1000)
 
-  const [streamedToken, setStreamedToken] = useState(
-    streamRatePerSec * (currentTime - transaction.start_time) ?? 0
-  )
+  const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
+  const [streamedToken, setStreamedToken] = useState<number>(0)
   const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const [counter, setCounter] = useState<number>(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,29 +72,35 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       setStatus("outgoing")
     } else if (currentTime >= transaction.end_time) {
       setStatus("completed")
-      console.log(transaction.end_time)
     }
   }, [status, currentTime])
-
-  console.log(status)
-  console.log(streamedToken)
-  console.log(streamRatePerSec)
-  console.log(streamedToken)
 
   useEffect(() => {
     if (status === "completed") {
       setStreamedToken(transaction.amount)
     } else if (status === "outgoing") {
-      const interval = setInterval(() => {
-        setStreamedToken((prevStreamedToken) =>
-          prevStreamedToken + streamRatePerSec > transaction.amount
-            ? transaction.amount
-            : prevStreamedToken + streamRatePerSec
+      if (counter === 0) {
+        setStreamedToken(
+          streamRatePerSec * (currentTime - transaction.start_time)
         )
-      }, 1000)
-      return () => clearInterval(interval)
+        setCounter((counter) => counter + 1)
+      } else {
+        const interval = setInterval(() => {
+          setStreamedToken((prevStreamedToken: number) =>
+            prevStreamedToken + streamRatePerSec > transaction.amount
+              ? transaction.amount
+              : prevStreamedToken + streamRatePerSec
+          )
+        }, 1000)
+        return () => clearInterval(interval)
+      }
     }
-  }, [status])
+  }, [status, counter])
+
+  // console.log(status)
+  // console.log(streamedToken)
+  // console.log(streamRatePerSec)
+  // console.log(streamedToken)
 
   const styles = {
     detailsRow: {
