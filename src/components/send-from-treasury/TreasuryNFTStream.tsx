@@ -7,7 +7,11 @@ import { SendNFTFormData } from "./TreasuryNFTStream.d"
 
 const TreasuryNFTStream: NextPage = () => {
   const [formValues, setFormValues] = useState<SendNFTFormData>()
-  const [selectedNFT, setNFT] = useState<NFTDetail>()
+  const [selectedNFT, setNFT] = useState<NFTDetail | undefined>({
+    address: "",
+    name: "",
+    image: ""
+  })
 
   useEffect(() => {
     setFormValues({
