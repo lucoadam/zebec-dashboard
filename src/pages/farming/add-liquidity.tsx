@@ -3,7 +3,7 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { AmountField } from "components/add-liquidity/AmountField"
 import Layout from "components/layouts/Layout"
-import { Button, IconButton } from "components/shared"
+import { Button, IconButton, LoadingProgress } from "components/shared"
 import type { GetStaticProps, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
@@ -27,16 +27,18 @@ const AddLiquidity: NextPage = () => {
     token1: "USDC"
   })
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+
   const [tokensDisplay, setTokensDisplay] = useState({
     token0: {
-      name: tokens.token0,
-      price: 1
+      name: "",
+      price: 0
     },
     token1: {
-      name: tokens.token1,
-      price: 0.212
+      name: "",
+      price: 0
     }
   })
+
   const [showMore, setShowMore] = useState(false)
 
   const {
@@ -69,9 +71,18 @@ const AddLiquidity: NextPage = () => {
     }
   }, [router, tokenDetails])
 
-  const onSubmit = () => {
-    // on liquidity data added
-  }
+  useEffect(() => {
+    setTokensDisplay({
+      token0: {
+        name: tokens.token0,
+        price: 1
+      },
+      token1: {
+        name: tokens.token1,
+        price: Math.random()
+      }
+    })
+  }, [tokens])
 
   const swapTokensDisplay = () => {
     const { token0, token1 } = tokensDisplay
@@ -83,6 +94,25 @@ const AddLiquidity: NextPage = () => {
       token1: {
         name: token0.name,
         price: token0.price / token1.price
+      }
+    })
+  }
+
+  const onSubmit = () => {
+    // on liquidity data added
+  }
+
+  const onComplete = () => {
+    // fetch tokens rate
+
+    setTokensDisplay({
+      token0: {
+        name: tokens.token0,
+        price: 1
+      },
+      token1: {
+        name: tokens.token1,
+        price: Math.random()
       }
     })
   }
@@ -140,6 +170,7 @@ const AddLiquidity: NextPage = () => {
                   />
                 </div>
                 {/* circular progress */}
+                <LoadingProgress onComplete={onComplete} />
               </div>
 
               <AmountField
