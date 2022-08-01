@@ -55,9 +55,7 @@ export const AmountField: FC<AmountFieldProps> = ({
           type="number"
           step="any"
           placeholder={t("transactions:yield-farming.enter-amount")}
-          className={`h-[40px] w-[258px] !pl-11 !pr-[106px] ${
-            error && "error"
-          }`}
+          className={`h-[40px] w-full !pl-11 !pr-[106px] ${error && "error"}`}
           {...register(name)}
         />
         <div className="flex gap-1 absolute right-2 top-2">
