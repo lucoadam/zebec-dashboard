@@ -22,7 +22,9 @@
         "go-back": "Go back",
         "view-all": "View All",
         "max": "MAX",
-        "confirm-and-create-treasury": "Confirm & Create Treasury"
+        "confirm-and-create-treasury": "Confirm & Create Treasury",
+        "deposit-and-create-dca": "Deposit & Create DCA",
+        "confirm-and-start-dca": "Confirm & Start DCA"
     },
     "balances": {
         "deposited-balance": "DEPOSITED BALANCE",
