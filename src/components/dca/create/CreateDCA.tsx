@@ -9,7 +9,16 @@ export const CreateDCA: NextPage = () => {
   const [currentStep, setCurrentStep] = React.useState(0)
   const { t } = useTranslation()
 
-  const [dca, setDCA] = React.useState<DCA>()
+  const [dca, setDCA] = React.useState<DCA>({
+    depositFrom: "",
+    depositTokenAddress: "",
+    buyTokenAddress: "",
+    depositAmount: 0,
+    buyAmount: 0,
+    frequency: "Daily",
+    dcaStartDate: "",
+    dcaStartTime: ""
+  })
 
   const getStepState = (index: number, isIcon = false) => {
     if (index === currentStep) {
