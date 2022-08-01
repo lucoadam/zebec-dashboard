@@ -5,7 +5,6 @@ import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
 import { pauseStreamNative, pauseStreamToken } from "application/normal"
 import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
-import * as Icons from "assets/icons"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -42,8 +41,8 @@ const PauseModal: FC = ({}) => {
           <div className="pt-3 pb-3">
             <Button
               disabled={loading}
-              endIcon={loading ? <Icons.Loading /> : <></>}
-              className={`w-full `}
+              loading={loading}
+              className={`w-full`}
               variant="gradient"
               title={
                 loading
@@ -55,7 +54,7 @@ const PauseModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
+              className={`w-full`}
               disabled={loading}
               title={`${t("modal-actions.no-pause")}`}
               onClick={() => {

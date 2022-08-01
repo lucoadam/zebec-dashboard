@@ -5,7 +5,6 @@ import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
 import { resumeStreamNative, resumeStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
-import * as Icons from "assets/icons"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -41,9 +40,9 @@ const ResumeModal: FC = ({}) => {
           </div>
           <div className="pt-3 pb-3">
             <Button
-              className={`w-full `}
+              className={`w-full`}
+              loading={loading}
               variant="gradient"
-              endIcon={loading ? <Icons.Loading /> : <></>}
               disabled={loading}
               title={
                 loading
@@ -55,7 +54,7 @@ const ResumeModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${loading ? "cursor-not-allowed" : ""} `}
+              className={`w-full`}
               disabled={loading}
               title={`${t("modal-actions.no-resume")}`}
               onClick={() => {

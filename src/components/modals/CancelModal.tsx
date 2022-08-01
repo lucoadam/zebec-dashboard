@@ -5,7 +5,6 @@ import { setLoading, toggleCancelModal } from "features/modals/cancelModalSlice"
 import { cancelStreamNative, cancelStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
-import * as Icons from "assets/icons"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -41,10 +40,10 @@ const CancelModal: FC = ({}) => {
           </div>
           <div className="pt-3 pb-3">
             <Button
-              className={`w-full `}
+              className={`w-full`}
               variant="gradient"
               disabled={loading}
-              endIcon={loading ? <Icons.Loading /> : <></>}
+              loading={loading}
               title={
                 loading
                   ? `${t("modal-actions.cancelling")}`
@@ -55,7 +54,7 @@ const CancelModal: FC = ({}) => {
           </div>
           <div className="">
             <Button
-              className={`w-full ${loading ? "cursor-not-allowed" : ""}`}
+              className={`w-full`}
               disabled={loading}
               title={`${t("modal-actions.no-cancel")}`}
               onClick={() => {

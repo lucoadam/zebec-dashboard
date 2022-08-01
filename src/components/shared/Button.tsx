@@ -1,6 +1,7 @@
 import React, { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { ButtonProps, ButtonSize, ButtonVariant } from "./Button.d"
+import * as Icons from "assets/icons"
 
 const getButtonSizeStyles = (size: ButtonSize, variant: ButtonVariant) => {
   switch (size) {
@@ -57,6 +58,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       className,
       startIcon,
       endIcon,
+      loading,
       disabled,
       ...rest
     } = props
@@ -69,7 +71,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       <>
         <button
           className={twMerge(
-            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary hover:text-primary-contrast disabled:text-[#ffffff80] ${variantStyles}`,
+            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary hover:text-primary-contrast disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
             className ?? ""
           )}
           {...rest}
@@ -86,6 +88,11 @@ export const Button: FC<ButtonProps> = React.forwardRef<
               {title}
               {endIcon && (
                 <span className={`${iconSizeStyles}`}>{endIcon}</span>
+              )}
+              {loading && (
+                <span className={`${iconSizeStyles}`}>
+                  <Icons.Loading />
+                </span>
               )}
             </div>
           )}
