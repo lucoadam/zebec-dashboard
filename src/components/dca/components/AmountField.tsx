@@ -1,43 +1,31 @@
-import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
 import { Button, TokensDropdown } from "components/shared"
 import { Token } from "components/shared/Token"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useRef, useState } from "react"
 import { AmountFieldProps } from "./AmountField.d"
 
 export const AmountField: FC<AmountFieldProps> = ({
-  tokenSymbol,
   tokens,
   register,
   setValue,
+  walletBalance = [],
   name,
   error,
-  disabled
+  disabled,
+  currentToken,
+  setCurrentToken
 }) => {
   const { t } = useTranslation()
-  const [currentToken, setCurrentToken] = useState({
-    symbol: "",
-    image: ""
-  })
+
   const [toggle, setToggle] = useState(false)
-  const walletBalance = useAppSelector((state) => state.walletBalance.tokens)
+
   const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
   useClickOutside(tokensDropdownWrapperRef, {
     onClickOutside: () => setToggle(false)
   })
-
-  useEffect(() => {
-    if (tokens.length > 0) {
-      const token = tokens.find((token) => token.symbol === tokenSymbol)
-      setCurrentToken({
-        symbol: token?.symbol || "",
-        image: token?.image || ""
-      })
-    }
-  }, [tokens, tokenSymbol])
 
   return (
     <div>
@@ -45,7 +33,7 @@ export const AmountField: FC<AmountFieldProps> = ({
         ref={tokensDropdownWrapperRef}
         className="relative text-content-primary"
       >
-        {currentToken.symbol && (
+        {currentToken?.symbol && (
           <div
             className="cursor-pointer absolute top-3 left-5 flex text-content-primary gap-1.5"
             onClick={() => {
@@ -73,7 +61,7 @@ export const AmountField: FC<AmountFieldProps> = ({
           type="number"
           step="any"
           placeholder={t("createDCA:form.enter-amount")}
-          className={`h-[40px] w-full !pl-24 !pr-[106px] ${error && "error"}`}
+          className={`h-[40px] w-full !pl-28 !pr-[106px] ${error && "error"}`}
           {...register(name)}
         />
         <div className="flex gap-1 absolute right-2 top-2">
@@ -116,6 +104,7 @@ export const AmountField: FC<AmountFieldProps> = ({
           show={toggle}
           tokens={tokens}
           setCurrentToken={(token) => setCurrentToken(token)}
+          toggleShow={setToggle}
         />
       </div>
       {error && (

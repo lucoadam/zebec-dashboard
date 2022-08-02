@@ -7,11 +7,15 @@ export interface DCA {
   frequency: string
   dcaStartDate: string
   dcaStartTime: string
+  symbol?: string
+}
+export interface GeneralObject {
+  [key: string]: string | number
 }
 
 export interface StepsComponentProps {
   setCurrentStep: (step: number) => void
-  setDCA: React.Dispatch<React.SetStateAction<DCA>>
+  setDCA: (args0: GeneralObject) => void
   dca: DCA
 }
 

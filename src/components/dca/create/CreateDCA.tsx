@@ -2,7 +2,7 @@ import * as Icons from "assets/icons"
 import { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import React from "react"
-import { DCA, Step } from "./CreateDCA.d"
+import { DCA, GeneralObject, Step } from "./CreateDCA.d"
 import { StepsList } from "./steps/data"
 
 export const CreateDCA: NextPage = () => {
@@ -19,6 +19,10 @@ export const CreateDCA: NextPage = () => {
     dcaStartDate: "",
     dcaStartTime: ""
   })
+
+  const updateDCA = (arg0: GeneralObject) => {
+    setDCA((val) => ({ ...val, ...arg0 }))
+  }
 
   const getStepState = (index: number, isIcon = false) => {
     if (index === currentStep) {
@@ -63,7 +67,7 @@ export const CreateDCA: NextPage = () => {
           <div className="bg-background-tertiary rounded-[4px] py-[48px] px-[32px]">
             {StepsList[currentStep].component({
               setCurrentStep,
-              setDCA,
+              setDCA: updateDCA,
               dca
             })}
           </div>

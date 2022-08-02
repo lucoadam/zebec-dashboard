@@ -13,9 +13,9 @@ const CreateDCAPage: NextPage = () => {
       <div className="pt-[76px]">
         <div className="container w-full">
           <Breadcrumb
-            title={`${t("common:create-new")} ${t("dca:title")}`}
+            title={`${t("common:dca")}`}
             arrowBack={true}
-            className="mb-9"
+            className="mb-9 uppercase"
           />
 
           <CreateDCA />

@@ -11,9 +11,10 @@ import moment from "moment"
 import { useTranslation } from "next-i18next"
 import { FC, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { formatCurrency } from "utils"
 import { StepsComponentProps } from "../CreateDCA.d"
 
-export const InitializeDCA: FC<StepsComponentProps> = () => {
+export const InitializeDCA: FC<StepsComponentProps> = ({ dca }) => {
   const { t } = useTranslation()
 
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
@@ -21,6 +22,10 @@ export const InitializeDCA: FC<StepsComponentProps> = () => {
   const dropdownWrapper = useRef(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const [frequncy, setFrequency] = useState("Daily")
+  const [currentToken, setCurrentToken] = useState({
+    symbol: "SOL",
+    image: ""
+  })
 
   const {
     handleSubmit,
@@ -47,18 +52,27 @@ export const InitializeDCA: FC<StepsComponentProps> = () => {
         <div className="flex flex-col gap-6">
           {/** Token to buy */}
           <div className="relative">
-            <label
-              className={`text-content-secondary text-xs font-medium mb-1`}
-            >
-              Token to Buy
-            </label>
+            <div className="flex justify-between">
+              <label
+                className={`text-content-secondary text-xs font-medium mb-1`}
+              >
+                Token to Buy
+              </label>
+              <label
+                className={`text-content-tertiary text-xs font-medium mb-1`}
+              >
+                Deposited Fund: {formatCurrency(dca.depositAmount, "", 4)}{" "}
+                {dca.symbol ?? "SOL"}
+              </label>
+            </div>
             <AmountField
               register={register}
               setValue={setValue}
-              tokenSymbol={"SOL"}
               tokens={tokenDetails}
+              currentToken={currentToken}
+              setCurrentToken={setCurrentToken}
               name="amount"
-              error={errors.amount1?.message?.toString()}
+              error={errors.amount?.message?.toString()}
             />
           </div>
           {/** Frequncy to Buy */}
@@ -122,10 +136,6 @@ export const InitializeDCA: FC<StepsComponentProps> = () => {
                     if (getValues().startTime) {
                       trigger("startTime")
                     }
-                    if (!!getValues().endTime || !!getValues().endDate) {
-                      trigger("endDate")
-                      trigger("endTime")
-                    }
                     // if (getValues().enableStreamRate) handleStreamRate()
                   }}
                   error={!!errors.startDate}
@@ -151,10 +161,6 @@ export const InitializeDCA: FC<StepsComponentProps> = () => {
                     trigger("startTime")
                     if (getValues().startDate) {
                       trigger("startDate")
-                    }
-                    if (!!getValues().endTime || !!getValues().endDate) {
-                      trigger("endDate")
-                      trigger("endTime")
                     }
                     // if (getValues().enableStreamRate) handleStreamRate()
                   }}

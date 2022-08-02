@@ -1,28 +1,79 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { AmountField } from "components/dca/components/AmountField"
 import { StepsComponentProps } from "components/dca/create/CreateDCA.d"
 import { Button, CollapseDropdown } from "components/shared"
+import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 import { useTranslation } from "next-i18next"
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { getBalance } from "utils/getBalance"
+import * as Yup from "yup"
 
-export const CreateDCA: FC<StepsComponentProps> = ({ setCurrentStep }) => {
+export const CreateDCA: FC<StepsComponentProps> = ({
+  setCurrentStep,
+  setDCA
+}) => {
   const { t } = useTranslation()
+  const [balances, setBalances] = useState<WalletToken[]>([])
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const walletBalance = useAppSelector((state) => state.walletBalance.tokens)
+  const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
+  const dropdownWrapper = useRef(null)
+  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const [depositFrom, setDepositFrom] = useState("Zebec balance")
+  const [currentToken, setCurrentToken] = useState({
+    symbol: "SOL",
+    image: ""
+  })
+
+  const validationSchema = Yup.object().shape({
+    amount: Yup.number()
+      .required(t(`validation:tokenAmount-required`))
+      .typeError(t("validation:tokenAmount-invalid"))
+      .min(0, "Must be greater than zero")
+      .test("is-max", t("validation:max"), (value) => {
+        if (depositFrom === "Zebec balance") {
+          return (
+            !!value &&
+            value <= getBalance(zebecBalance, currentToken.symbol ?? "SOL")
+          )
+        } else {
+          return (
+            !!value &&
+            value <= getBalance(walletBalance, currentToken.symbol ?? "SOL")
+          )
+        }
+      })
+  })
+
   const {
     handleSubmit,
     register,
     setValue,
     formState: { errors }
-  } = useForm()
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data)
+    setDCA({
+      depositFrom,
+      symbol: currentToken.symbol,
+      depositAmount: data.amount
+    })
+    setCurrentStep(1)
   }
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
-  const dropdownWrapper = useRef(null)
-  const [toggleDropdown, setToggleDropdown] = useState(false)
-  const [depositFrom, setDepositFrom] = useState("Zebec balance")
+
+  useEffect(() => {
+    if (depositFrom === "Zebec balance") {
+      setBalances(zebecBalance)
+    } else {
+      setBalances(walletBalance)
+    }
+  }, [depositFrom, zebecBalance, walletBalance])
 
   return (
     <>
@@ -84,10 +135,12 @@ export const CreateDCA: FC<StepsComponentProps> = ({ setCurrentStep }) => {
             <AmountField
               register={register}
               setValue={setValue}
-              tokenSymbol={"SOL"}
               tokens={tokenDetails}
+              walletBalance={balances}
+              currentToken={currentToken}
+              setCurrentToken={setCurrentToken}
               name="amount"
-              error={errors.amount1?.message?.toString()}
+              error={errors.amount?.message?.toString()}
             />
           </div>
         </div>
@@ -96,10 +149,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({ setCurrentStep }) => {
           variant="gradient"
           size="medium"
           className="w-full justify-center mt-[32px]"
-          type="button"
-          onClick={() => {
-            setCurrentStep(1)
-          }}
+          type="submit"
         />
       </form>
     </>
