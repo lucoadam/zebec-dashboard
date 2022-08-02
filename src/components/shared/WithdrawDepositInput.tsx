@@ -60,7 +60,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
             </label>
             <div ref={tokensDropdownWrapperRef} className="relative">
               <div
-                className="cursor-pointer absolute top-3 left-5 flex text-content-primary gap-1.5"
+                className="cursor-pointer absolute top-3 left-5 flex items-center text-content-primary gap-1.5"
                 onClick={() => {
                   if (!props.disabled) toggle()
                 }}

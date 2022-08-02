@@ -5,11 +5,10 @@ import {
   ActivityThisWeek,
   DepositedBalance,
   SupportCard,
-  Tab,
-  Tokens
+  Tokens,
+  DepositWithdraw
 } from "components/shared"
 import { tokenBalances, weeklyBalances } from "fakedata"
-import { useTranslation } from "next-i18next"
 import { useState } from "react"
 import { Deposit } from "./Deposit"
 import { Withdrawal } from "./Withdrawal"
@@ -30,9 +29,6 @@ const fundTransferTabs = [
 ]
 
 const Overview = () => {
-  const { t } = useTranslation()
-
-  const [activePage, setActivePage] = useState<number>(0)
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
@@ -85,7 +81,7 @@ const Overview = () => {
         {/**
          * Deposit and Withdrawal
          */}
-        <div className="w-full pt-3 rounded bg-background-secondary">
+        {/* <div className="w-full pt-3 rounded bg-background-secondary">
           <div className="flex">
             {fundTransferTabs.map((fundTranfer, index) => {
               return (
@@ -105,7 +101,8 @@ const Overview = () => {
           <div className="px-6 mt-6 pb-6 min-h-[210px]">
             {fundTransferTabs[activePage].Component}
           </div>
-        </div>
+        </div> */}
+        <DepositWithdraw tabs={fundTransferTabs} />
         {/**
          * Zebec Treasury Help
          */}
