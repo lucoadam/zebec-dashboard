@@ -3,18 +3,20 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { AmountField } from "components/add-liquidity/AmountField"
 import Layout from "components/layouts/Layout"
-import { Button, IconButton } from "components/shared"
+import { Button, IconButton, LoadingProgress } from "components/shared"
 import type { GetStaticProps, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { displayExponentialNumber, formatCurrency } from "utils"
 import { addLiquiditySchema } from "utils/validations/addLiquiditySchema"
 
 export interface AddLiquidityFormData {
   amount0: string
   amount1: string
+  slippage: string
 }
 
 const AddLiquidity: NextPage = () => {
@@ -26,14 +28,31 @@ const AddLiquidity: NextPage = () => {
   })
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
 
+  const [tokensDisplay, setTokensDisplay] = useState({
+    token0: {
+      name: "",
+      price: 0
+    },
+    token1: {
+      name: "",
+      price: 0
+    }
+  })
+
+  const [showMore, setShowMore] = useState(false)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
+    setFocus
   } = useForm<AddLiquidityFormData>({
     mode: "onChange",
-    resolver: yupResolver(addLiquiditySchema)
+    resolver: yupResolver(addLiquiditySchema),
+    defaultValues: {
+      slippage: "1"
+    }
   })
 
   useEffect(() => {
@@ -52,8 +71,50 @@ const AddLiquidity: NextPage = () => {
     }
   }, [router, tokenDetails])
 
+  useEffect(() => {
+    setTokensDisplay({
+      token0: {
+        name: tokens.token0,
+        price: 1
+      },
+      token1: {
+        name: tokens.token1,
+        price: Math.random()
+      }
+    })
+  }, [tokens])
+
+  const swapTokensDisplay = () => {
+    const { token0, token1 } = tokensDisplay
+    setTokensDisplay({
+      token0: {
+        name: token1.name,
+        price: token0.price
+      },
+      token1: {
+        name: token0.name,
+        price: token0.price / token1.price
+      }
+    })
+  }
+
   const onSubmit = () => {
     // on liquidity data added
+  }
+
+  const onComplete = () => {
+    // fetch tokens rate
+
+    setTokensDisplay({
+      token0: {
+        name: tokens.token0,
+        price: 1
+      },
+      token1: {
+        name: tokens.token1,
+        price: Math.random()
+      }
+    })
   }
 
   return (
@@ -72,7 +133,7 @@ const AddLiquidity: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full md:w-[628px] h-[700px] bg-background-secondary rounded-[4px] p-10">
+        <div className="w-full md:w-[628px] pb-16 bg-background-secondary rounded-[4px] p-10">
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="text-heading-4 text-content-primary font-semibold">
               {t("yeildFarming:add-liquidity")}
@@ -80,7 +141,7 @@ const AddLiquidity: NextPage = () => {
             <div className="text-caption text-content-tertiary font-normal pt-2">
               {t("yeildFarming:add-liquidity-description")}
             </div>
-            <div className="flex flex-col items-center justify-between md:flex-row md:items-start gap-2 md:gap-0 mt-[50px]">
+            <div className="flex flex-col justify-between gap-[18px] mt-[50px]">
               <AmountField
                 register={register}
                 setValue={setValue}
@@ -89,7 +150,29 @@ const AddLiquidity: NextPage = () => {
                 name="amount0"
                 error={errors.amount0?.message?.toString()}
               />
-              <Icons.PlusIncircleIcon className="md:mt-8 text-content-tertiary" />
+              <div className="flex justify-between relative">
+                <div className="flex justify-start items-center gap-2">
+                  <Icons.PlusIncircleIcon className="text-content-tertiary" />
+                  <span className="text-sm text-content-secondary">
+                    {tokensDisplay.token0.price} {tokensDisplay.token0.name} ={" "}
+                    <span
+                      data-tip={displayExponentialNumber(
+                        tokensDisplay.token1.price
+                      )}
+                    >
+                      {formatCurrency(tokensDisplay.token1.price, "", 4)}
+                    </span>{" "}
+                    {tokensDisplay.token1.name}
+                  </span>
+                  <Icons.SwapArrowHorizontalIcon
+                    className="cursor-pointer text-bg-primary w-4 h-4"
+                    onClick={swapTokensDisplay}
+                  />
+                </div>
+                {/* circular progress */}
+                <LoadingProgress onComplete={onComplete} />
+              </div>
+
               <AmountField
                 register={register}
                 setValue={setValue}
@@ -136,11 +219,59 @@ const AddLiquidity: NextPage = () => {
                 </span>
                 <span className="text-content-secondary">20,604.51 LP</span>
               </div>
+              {showMore && (
+                <>
+                  <div className="flex justify-between text-xs font-normal mt-2">
+                    <div className="flex items-center gap-[2px]">
+                      <span className="text-content-tertiary">
+                        {t("yeildFarming:addresses")}
+                      </span>
+                      <Icons.InformationIcon className="cursor-pointer w-4 h-4 text-content-primary" />
+                    </div>
+
+                    <span className="text-content-secondary">-</span>
+                  </div>
+                  <div className="relative flex justify-between text-xs font-normal mt-2">
+                    <span className="text-content-tertiary">
+                      {t("yeildFarming:slippage-tolerance")}
+                    </span>
+                    <input
+                      className={`${
+                        !!errors.slippage && "error"
+                      } h-6 max-w-[52px] text-sm rounded-2 !pl-3 !pr-5`}
+                      type="number"
+                      step="any"
+                      {...register("slippage")}
+                    />
+                    <span className="absolute text-sm text-content-tertiary right-2 top-1">
+                      %
+                    </span>
+                  </div>
+                </>
+              )}
               <Button
                 className="text-content-primary mt-2 bg-background-secondary"
-                endIcon={<Icons.CheveronDownIcon />}
+                endIcon={
+                  !showMore ? (
+                    <Icons.CheveronDownIcon />
+                  ) : (
+                    <Icons.ChevronUpIcon />
+                  )
+                }
                 size="small"
-                title="More Information"
+                type="button"
+                onClick={() => {
+                  if (!errors.slippage) {
+                    setShowMore(!showMore)
+                  } else {
+                    setFocus("slippage")
+                  }
+                }}
+                title={
+                  !showMore
+                    ? t("yeildFarming:more-information").toString()
+                    : t("yeildFarming:less-information").toString()
+                }
               />
             </div>
             <Button
