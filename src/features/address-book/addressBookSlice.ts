@@ -41,17 +41,13 @@ export const fetchAddressBook: any = createAsyncThunk(
 
 export const saveAddressBook: any = createAsyncThunk(
   "addressBook/saveAddressBook",
-  async (
-    data: AddressBook & {
-      user: string
-    },
-    { dispatch }
-  ) => {
+  async (addressBookData: any, { dispatch }) => {
     const { data: response } = await axios.post(
       "https://internal-ten-cherry.glitch.me/addressbooks",
-      data
+      addressBookData.data
     )
-    dispatch(fetchAddressBook(data.user))
+    dispatch(fetchAddressBook(addressBookData.data.user))
+    addressBookData?.callback()
     return response
   }
 )
