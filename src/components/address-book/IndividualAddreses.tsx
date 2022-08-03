@@ -8,10 +8,7 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import {
-  fetchAddressBook,
-  saveAddressBook
-} from "features/address-book/addressBookSlice"
+import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { useTranslation } from "next-i18next"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
@@ -23,12 +20,6 @@ export default function IndividualAddresses() {
   const addressBooks = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (publicKey) {
-      dispatch(fetchAddressBook(publicKey?.toString()))
-    }
-  }, [dispatch, publicKey])
 
   const headers = [
     {
@@ -51,14 +42,23 @@ export default function IndividualAddresses() {
     handleSubmit,
     setValue,
     trigger,
-    getValues
+    getValues,
+    reset
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(addOwnersSchema)
   })
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    dispatch(saveAddressBook({ user: publicKey?.toString(), ...data }))
+    const addressBookData = {
+      data: {
+        user: publicKey?.toString(),
+        ...data
+      },
+      callback: reset
+    }
+    dispatch(saveAddressBook(addressBookData))
   }
 
   useEffect(() => {
