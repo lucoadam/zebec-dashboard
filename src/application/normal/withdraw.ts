@@ -1,10 +1,13 @@
-import { ZebecNativeStreamProps } from "./stream"
+import {
+  ZebecNativeStreamProps,
+  MDepositWithdrawFromZebecVault
+} from "./stream"
 import { toast } from "features/toasts/toastsSlice"
 import { Dispatch, SetStateAction } from "react"
 
 export const withdrawNative =
   (
-    data: any,
+    data: MDepositWithdrawFromZebecVault,
     stream: ZebecNativeStreamProps,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) =>
@@ -38,7 +41,7 @@ export const withdrawNative =
 
 export const withdrawToken =
   (
-    data: any,
+    data: MDepositWithdrawFromZebecVault,
     token: ZebecNativeStreamProps,
     setLoading: Dispatch<SetStateAction<boolean>>
   ) =>

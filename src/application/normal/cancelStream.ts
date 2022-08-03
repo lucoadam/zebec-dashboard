@@ -1,4 +1,4 @@
-import { ZebecNativeStreamProps } from "./stream.d"
+import { ZebecNativeStreamProps, MPauseResumeWithdrawCancel } from "./stream.d"
 import { toast } from "features/toasts/toastsSlice"
 import {
   // cancelTransaction,
@@ -6,7 +6,8 @@ import {
 } from "features/modals/cancelModalSlice"
 
 export const cancelStreamNative =
-  (data: any, stream: ZebecNativeStreamProps) => async (dispatch: any) => {
+  (data: MPauseResumeWithdrawCancel, stream: ZebecNativeStreamProps) =>
+  async (dispatch: any) => {
     try {
       const response = await stream.cancel(data)
       console.log(response)
@@ -40,7 +41,8 @@ export const cancelStreamNative =
   }
 
 export const cancelStreamToken =
-  (data: any, token: ZebecNativeStreamProps) => async (dispatch: any) => {
+  (data: MPauseResumeWithdrawCancel, token: ZebecNativeStreamProps) =>
+  async (dispatch: any) => {
     try {
       const response = await token.cancel(data)
       console.log(response)

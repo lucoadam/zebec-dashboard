@@ -174,7 +174,7 @@ type MStreamResponse = {
   transactionHash: TransactionSignature
   pda?: PublicKey | string
 }
-type MPauseResumeWithdrawCancel = {
+export type MPauseResumeWithdrawCancel = {
   sender: string
   receiver: string
   escrow: string
