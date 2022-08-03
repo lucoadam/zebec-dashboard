@@ -32,7 +32,7 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
       <CollapseDropdown
         show={show}
         className={twMerge(
-          `w-full border border-outline top-12 bg-background-primary `,
+          `w-full border border-outline top-12 bg-background-primary z-10 `,
           className
         )}
       >
