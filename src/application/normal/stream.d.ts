@@ -147,6 +147,9 @@ export declare class ZebecTransactionBuilder {
   ): Promise<Transaction>
 }
 
+export type MCreateFeeVault = {
+  fee_percentage: number
+}
 export type MDepositWithdrawFromZebecVault = {
   sender: string
   amount: number
@@ -210,6 +213,7 @@ export interface IBaseStream {
   withdrawTokenFromZebecVault(
     data: MDepositWithdrawFromZebecVault
   ): Promise<MZebecResponse>
+  createFeeVault(data: MCreateFeeVault): Promise<MZebecResponse>
 }
 
 export interface ZebecNativeStreamProps extends IBaseStream {

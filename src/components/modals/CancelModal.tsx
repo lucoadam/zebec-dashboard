@@ -18,7 +18,9 @@ const CancelModal: FC = ({}) => {
     const data = {
       sender: transaction.sender,
       receiver: transaction.receiver,
-      escrow: transaction.pda
+      escrow: transaction.pda,
+      token_mint_address:
+        transaction.symbol === "SOL" ? "" : transaction.token_mint_address
     }
     if (transaction.symbol === "SOL")
       stream && dispatch(cancelStreamNative(data, stream))

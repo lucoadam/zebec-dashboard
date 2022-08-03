@@ -18,9 +18,7 @@ const Common = () => {
 
   useEffect(() => {
     if (tokens.length > 0 && walletObject.publicKey) {
-      dispatch(
-        fetchWalletBalance("Am4Wcw9jiVGe4NHKDbBbgXVKK5WGWsP4688GkSnBuELs")
-      )
+      dispatch(fetchWalletBalance(walletObject.publicKey))
       dispatch(fetchZebecBalance(walletObject.publicKey))
     }
   }, [dispatch, walletObject.publicKey, tokens])
