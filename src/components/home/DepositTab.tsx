@@ -70,7 +70,11 @@ const DepositTab: FC = () => {
       <div className="text-caption text-content-tertiary">
         {t("common:deposit-withdrawal.deposit-title")}
       </div>
-      <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-y-6">
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="flex flex-col gap-y-6"
+        autoComplete="off"
+      >
         <WithdrawDepositInput
           token={currentToken}
           setMaxAmount={setMaxAmount}

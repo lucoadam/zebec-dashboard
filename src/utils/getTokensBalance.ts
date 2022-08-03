@@ -5,7 +5,7 @@ import { TokenDetails } from "./../features/tokenDetails/tokenDetailsSlice.d"
 import { getSolBalanceOfWallet } from "./getSolBalance"
 
 export const getTokensBalanceOfWallet = async (
-  wallet: String,
+  wallet: string,
   tokens: TokenDetails[]
 ) => {
   const tokensMint = tokens.map((token) => token.mint)

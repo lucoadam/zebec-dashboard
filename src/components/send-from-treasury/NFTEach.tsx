@@ -1,5 +1,6 @@
 import * as Icons from "assets/icons"
 import { Button } from "components/shared"
+import Image from "next/image"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 
@@ -35,17 +36,19 @@ export const NFTEach: FC<NFTEachProps> = ({
         onChoose && onChoose(detail)
       }}
     >
-      <img
+      <Image
         src={detail.image}
         className={twMerge(
           "min-w-[140.33px] h-[140.33px] rounded",
           isChoosed ? "primary-gradient-border" : ""
         )}
+        layout="fill"
+        alt={detail.name}
       />
       {isChoosed && (
         <>
-          <div className="min-w-[140.33px] h-[140.33px] cursor-pointer absolute left-0 top-0 rounded nft-overlay" />
-          <div className="absolute bottom-6 left-6 gap-x-1.5 flex items-center">
+          <div className="min-w-[140.33px] h-[140.33px] cursor-pointer absolute left-0 top-0 rounded" />
+          <div className="absolute bottom-4 left-6 gap-x-1.5 flex items-center">
             <Button
               size="small"
               title={`Confirm`}

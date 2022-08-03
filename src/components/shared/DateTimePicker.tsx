@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import * as Icons from "assets/icons"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { cloneElement, FC, useRef, useState } from "react"
 import Datetime from "react-datetime"
-import * as Icons from "assets/icons"
 
 interface DateTimePickerProps {
   startIcon?: JSX.Element
@@ -50,7 +50,7 @@ export const DateTimePicker: FC<DateTimePickerProps> = (mainProps) => {
       <div
         className={`${
           mainProps.disabled ? "text-content-tertiary" : "text-content-primary"
-        } absolute z-50 top-2.5 left-4.5`}
+        } absolute z-10 top-2.5 left-4.5`}
       >
         {mainProps.startIcon || <Icons.CalenderIcon className="w-5 h-5" />}
       </div>

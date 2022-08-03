@@ -1,4 +1,5 @@
 import CopyButton from "components/shared/CopyButton"
+import Image from "next/image"
 import { FC, useState } from "react"
 import { toSubstring } from "utils"
 
@@ -13,7 +14,7 @@ interface NFTEachProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
-  const [showOverlay, setShowOverlay] = useState(false)
+  const [showOverlay, setShowOverlay] = useState(true)
   return (
     <div
       key={detail.address}
@@ -26,11 +27,16 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
       }}
       {...rest}
     >
-      <img src={detail.image} className=" rounded" />
+      <Image
+        src={detail.image}
+        className="rounded"
+        alt={detail.name}
+        layout="fill"
+      />
       {showOverlay && (
         <>
           <div className="w-full h-full absolute left-0 top-0 rounded nft-overlay" />
-          <div className="absolute bottom-6 left-6 cursor-pointer">
+          <div className="absolute bottom-6 left-6 cursor-pointer text-content-secondary">
             <p className="text-subtitle font-semibold">{detail.name}</p>
             <p className="flex items-center gap-1.5">
               {toSubstring(detail.address, 5, true)}

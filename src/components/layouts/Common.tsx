@@ -1,5 +1,6 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import { fetchAddressBook } from "features/address-book/addressBookSlice"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
@@ -27,6 +28,13 @@ const Common = () => {
       zebecContext.initialize(walletObject)
     }
   }, [walletObject.connected])
+
+  useEffect(() => {
+    if (walletObject.publicKey) {
+      dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
+    }
+  }, [dispatch, walletObject.publicKey])
+
   return <></>
 }
 

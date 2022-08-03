@@ -1,0 +1,21 @@
+{
+  "first-steper": {
+    "title": "Create DCA",
+    "description": "Deposit token to create DCA. You can always add additional fund.",
+    "step": {
+      "name": "Create DCA",
+      "description": "Deposit the token to create the DCA"
+    }
+  },
+  "second-steper": {
+    "title": "Initialize DCA",
+    "description": "Set the values of your DCA",
+    "step": {
+      "name": "Initialize DCA",
+      "description": "Set the token, amount and frequency"
+    }
+  },
+  "form": {
+    "enter-amount": "Enter Amount"
+  }
+}

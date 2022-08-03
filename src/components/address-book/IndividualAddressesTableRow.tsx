@@ -1,20 +1,26 @@
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, Modal } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
+import {
+  AddressBook,
+  deleteAddressBook
+} from "features/address-book/addressBookSlice"
 import { useTranslation } from "next-i18next"
 import { FC, Fragment, useState } from "react"
 import { toSubstring } from "utils"
 
 interface IndividualAddresesTableRow {
-  index: number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transaction: any
+  addressBook: AddressBook
 }
 
 const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
-  transaction
+  addressBook
 }) => {
   const { t } = useTranslation("addressBook")
+  const { publicKey } = useWallet()
+  const dispatch = useAppDispatch()
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -29,19 +35,19 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
         <tr className={`flex max-w-full`}>
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
             <div className="text-content-primary text-subtitle font-semibold">
-              {transaction.name}
+              {addressBook.name}
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
             <div
               className="flex items-center gap-x-2 text-content-primary"
-              data-tip={transaction.address}
+              data-tip={addressBook.wallet}
             >
-              {toSubstring(transaction.wallet.toString(), 4, true)}
+              {toSubstring(addressBook.wallet, 4, true)}
 
               <div className="flex-shrink-0">
                 <CopyButton
-                  content={transaction.address}
+                  content={addressBook.wallet}
                   className="flex-shrink-0"
                 />
               </div>
@@ -89,8 +95,14 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     variant="danger"
                     endIcon={<Icons.TrashIcon />}
                     title={`${t("yes-delete")}`}
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    onClick={() => {}}
+                    onClick={() =>
+                      dispatch(
+                        deleteAddressBook({
+                          id: addressBook.id,
+                          user: publicKey
+                        })
+                      )
+                    }
                   />
                 </div>
                 <div className="">

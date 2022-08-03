@@ -1,5 +1,6 @@
-import { useTranslation } from "next-i18next"
-import React, { useEffect } from "react"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import {
   Breadcrumb,
   Button,
@@ -7,30 +8,19 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
+import { saveAddressBook } from "features/address-book/addressBookSlice"
+import { useTranslation } from "next-i18next"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
-import { useAppDispatch, useAppSelector } from "app/hooks"
-import {
-  fetchAddressBook,
-  saveAddressBook
-} from "features/address-book/addressBookSlice"
-//import { fetchAddressBook, saveAddressBook } from "features/address-book/addressBookSlice"
+import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-  const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const { publicKey } = useWallet()
+  const addressBooks = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  //   useEffect(() => {
 
-  // }, [dispatch, addresses, addressBook])
-
-  useEffect(() => {
-    dispatch(fetchAddressBook())
-  }, [dispatch])
   const headers = [
     {
       label: "addressBook:name",
@@ -49,28 +39,40 @@ export default function IndividualAddresses() {
   const {
     register,
     formState: { errors },
-    handleSubmit
-    // setError
+    handleSubmit,
+    setValue,
+    trigger,
+    getValues,
+    reset
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(addOwnersSchema)
   })
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    // if (wallets.some((wallet) => wallet === data.wallet)) {
-    //   setError(
-    //     "wallet",
-    //     { type: "custom", message: "validation:wallet-exists" },
-    //     {
-    //       shouldFocus: true
-    //     }
-    //   )
-    //   return
-    // }
-    dispatch(saveAddressBook(data))
-
-    //dispatch(saveAddressBook(data))
+    const addressBookData = {
+      data: {
+        user: publicKey?.toString(),
+        ...data
+      },
+      callback: reset
+    }
+    dispatch(saveAddressBook(addressBookData))
   }
+
+  useEffect(() => {
+    if (addressBooks) {
+      setValue(
+        "wallets",
+        addressBooks.map((addressBook) => addressBook.wallet)
+      )
+      setValue(
+        "names",
+        addressBooks.map((addressBook) => addressBook.name)
+      )
+    }
+  }, [addressBooks, setValue, trigger, getValues])
 
   return (
     <>
@@ -81,12 +83,11 @@ export default function IndividualAddresses() {
           <div className="lg:col-span-2 overflow-hidden">
             <Table headers={headers}>
               <TableBody className="justify between">
-                {addressBook?.map((transaction, index) => {
+                {addressBooks?.map((addressBook) => {
                   return (
                     <IndividualAddresesTableRow
-                      key={index}
-                      index={index}
-                      transaction={transaction}
+                      key={addressBook.id}
+                      addressBook={addressBook}
                     />
                   )
                 })}

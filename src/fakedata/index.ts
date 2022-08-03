@@ -1,4 +1,6 @@
 export * from "./balances"
+export * from "./dcaLists"
+export * from "./dcaTransactions"
 export * from "./farms"
 export * from "./historyTransactions"
 export * from "./incomingTransactions"
