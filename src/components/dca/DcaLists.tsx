@@ -16,7 +16,7 @@ const DcaLists: FC = () => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {dcaLists.map((dca, index) => {
           return (
-            <Link key={index} href={`/dca/${dca.id}`}>
+            <Link key={index} href={`/dca/${dca.token0}-${dca.token1}`}>
               <div className="p-6 pb-8 bg-background-secondary rounded cursor-pointer">
                 <div className="flex flex-col">
                   <div className="relative flex items-center text-base text-content-primary font-semibold">

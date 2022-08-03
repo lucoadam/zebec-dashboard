@@ -2,5 +2,18 @@
   "title": "DCA",
   "see-canceled-dca": "See Canceled DCA",
   "create-new-dca": "Create New DCA",
-  "next": "Next"
+  "next": "Next",
+  "buttons": {
+    "cancel-dca": "Cancel DCA"
+  },
+  "tabs": {
+    "transactions": "Transactions",
+    "overview": "Overview"
+  },
+  "table":{
+    "quantity": "Quantity",
+    "transaction-date":"Transaction Date",
+    "action": "Action",
+    "value":"Value"
+  }
 }

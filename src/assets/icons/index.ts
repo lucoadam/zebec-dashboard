@@ -14,6 +14,7 @@ import {
 import CheckCircleIcon from "./other-icons/check-circle.svg"
 import CheckIcon from "./other-icons/check.svg"
 import CheveronDownIcon from "./other-icons/cheveron-down.svg"
+import ChevronUpIcon from "./other-icons/chevron-up.svg"
 import ClockIcon from "./other-icons/clock.svg"
 import CopyIcon from "./other-icons/copy.svg"
 import CrossIcon from "./other-icons/cross.svg"
@@ -38,26 +39,26 @@ import Line from "./other-icons/line.svg"
 import Loading from "./other-icons/loading.svg"
 import LockIcon from "./other-icons/lock.svg"
 import NotebookIcon from "./other-icons/notebook.svg"
+import Notif from "./other-icons/notif.svg"
 import OutgoingIcon from "./other-icons/outgoing.svg"
 import OutsideLinkIcon from "./other-icons/outside-link.svg"
 import PaginationRightArrow from "./other-icons/pagination-next-Icon.svg"
 import PaginationLeftArrow from "./other-icons/pagination-previous-Icon.svg"
 import PauseIcon from "./other-icons/pause.svg"
 import PlusIncircleIcon from "./other-icons/plus-incircle.svg"
+import PlusIcon from "./other-icons/plus.svg"
 import RefreshIcon from "./other-icons/refresh.svg"
 import ResumeIcon from "./other-icons/resume.svg"
 import SearchIcon from "./other-icons/search.svg"
 import SparkleIcon from "./other-icons/sparkle.svg"
 import SquareBlockMove from "./other-icons/square-block-move.svg"
+import SwapArrowHorizontalIcon from "./other-icons/swap-arrow-horizontal.svg"
 import TransactionIcon from "./other-icons/transaction.svg"
 import TrashIcon from "./other-icons/trash.svg"
 import Unarchive from "./other-icons/unarchive.svg"
 import UserAddIcon from "./other-icons/user-add.svg"
 import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
-import Notif from "./other-icons/notif.svg"
-import SwapArrowHorizontalIcon from "./other-icons/swap-arrow-horizontal.svg"
-import ChevronUpIcon from "./other-icons/chevron-up.svg"
 
 export * from "./activity"
 export * from "./nav-icons"
@@ -120,5 +121,6 @@ export {
   SquareBlockMove,
   BellEditIcon,
   SwapArrowHorizontalIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  PlusIcon
 }
