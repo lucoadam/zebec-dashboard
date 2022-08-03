@@ -106,7 +106,7 @@ export const Pagination: FC<PaginationProps> = (props) => {
 
   return (
     <>
-      <div className="flex gap-x-0.5 ml-auto pr-5">
+      <div className="flex gap-x-0.5 pr-5 text-content-primary text-caption">
         {/* Previous Button */}
         <button
           className={`w-8  px-3 py-1.5  ${
@@ -124,7 +124,7 @@ export const Pagination: FC<PaginationProps> = (props) => {
           return (
             <div
               key={index}
-              className={`w-8 h-8 flex items-center justify-center p-1.5 text-content-primary ${
+              className={`w-8 h-8 flex items-center justify-center p-1.5 ${
                 item == "..." ? "cursor-default" : "cursor-pointer "
               } ${
                 currentButton === item
