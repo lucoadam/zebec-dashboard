@@ -7,6 +7,7 @@ import { getBalance } from "utils/getBalance"
 import { depositNative, depositToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { PublicKey } from "@solana/web3.js"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -53,7 +54,7 @@ const DepositTab: FC = () => {
     } else {
       setLoading(true)
       const depositData = {
-        sender: publicKey?.toString(),
+        sender: (publicKey as PublicKey).toString(),
         amount: +data.amount,
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint

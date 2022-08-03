@@ -113,7 +113,9 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
               >
                 {title ?? <div className=" capitalize">{type}</div>}
               </div>
-              <div className="text-content-secondary text-body">{message}</div>
+              <div className="text-content-secondary text-body">
+                {typeof message === "string" && message}
+              </div>
             </div>
             {transactionHash && (
               <a
