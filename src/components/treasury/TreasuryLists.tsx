@@ -2,14 +2,13 @@ import CopyButton from "components/shared/CopyButton"
 import Image, { StaticImageData } from "next/image"
 import Link from "next/link"
 import { FC } from "react"
-import * as Icons from "../../assets/icons"
-import * as AvatarImages from "../../assets/images/avatars"
-import { toSubstring } from "../../utils"
-
-//fakeData
-import { treasuries } from "../../fakedata"
+import { useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import * as AvatarImages from "assets/images/avatars"
+import { toSubstring } from "utils"
 
 const TreasuryLists: FC = () => {
+  const treasuries = useAppSelector((state) => state.treasury.treasuries)
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
     AvatarImages.Avatar3,
@@ -21,10 +20,7 @@ const TreasuryLists: FC = () => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {treasuries.map((treasury, index) => {
           return (
-            <Link
-              key={treasury._id.$oid}
-              href={`/treasury/${treasury._id.$oid}`}
-            >
+            <Link key={treasury.id} href={`/treasury/${treasury.id}`}>
               <div className="p-6 bg-background-secondary rounded cursor-pointer">
                 <Image
                   src={Avatars[index % 3]}

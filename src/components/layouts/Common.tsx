@@ -2,6 +2,7 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
+import { fetchTreasury } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useEffect } from "react"
@@ -25,6 +26,7 @@ const Common = () => {
   useEffect(() => {
     if (walletObject.publicKey) {
       dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
+      dispatch(fetchTreasury(walletObject.publicKey?.toString()))
     }
   }, [dispatch, walletObject.publicKey])
 

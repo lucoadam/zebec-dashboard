@@ -64,7 +64,7 @@ const CreateTreasury: NextPage = () => {
                 treasury
               })
             ) : (
-              <CreatingTreasury />
+              <CreatingTreasury treasury={treasury} />
             )}
           </div>
         </div>
