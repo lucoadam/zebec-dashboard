@@ -22,18 +22,21 @@ const Common = () => {
       dispatch(fetchWalletBalance(walletObject.publicKey))
       dispatch(fetchZebecBalance(walletObject.publicKey))
     }
-  }, [dispatch, walletObject.publicKey, tokens])
+    // eslint-disable-next-line
+  }, [walletObject.publicKey, tokens])
   useEffect(() => {
     if (walletObject.connected) {
       zebecContext.initialize(walletObject)
     }
+    // eslint-disable-next-line
   }, [walletObject.connected])
 
   useEffect(() => {
     if (walletObject.publicKey) {
       dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
     }
-  }, [dispatch, walletObject.publicKey])
+    // eslint-disable-next-line
+  }, [walletObject.publicKey])
 
   return <></>
 }

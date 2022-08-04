@@ -72,7 +72,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     } else if (currentTime >= transaction.end_time) {
       setStatus("completed")
     }
-  }, [status, currentTime])
+  }, [status, currentTime, transaction.end_time, transaction.start_time])
 
   useEffect(() => {
     if (status === "completed") {
@@ -94,12 +94,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         return () => clearInterval(interval)
       }
     }
+    // eslint-disable-next-line
   }, [status, counter])
-
-  // console.log(status)
-  // console.log(streamedToken)
-  // console.log(streamRatePerSec)
-  // console.log(streamedToken)
 
   const styles = {
     detailsRow: {

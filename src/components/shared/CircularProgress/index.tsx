@@ -10,7 +10,7 @@ export type TransactionStatus =
 
 interface CircularProgressProps {
   status: TransactionStatus
-  percentage: number
+  percentage?: number
   animation?: "clockwise" | "anti-clockwise"
   transitionDuration?: number
   caps?: "round"
@@ -56,7 +56,7 @@ const getBackgroundByPercentage = (
 // Actual component
 export const CircularProgress: FC<CircularProgressProps> = ({
   status,
-  percentage,
+  percentage = 0,
   animation = "clockwise",
   transitionDuration = 3000,
   caps = "round",
@@ -78,7 +78,7 @@ export const CircularProgress: FC<CircularProgressProps> = ({
         ? circleLength * (1 - percentage / 100)
         : circleLength * (1 + percentage / 100)
     )
-  }, [percentage])
+  }, [percentage, animation, circleLength])
 
   return (
     <div
