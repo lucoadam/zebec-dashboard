@@ -76,10 +76,10 @@ export const Deposit = () => {
   }
 
   return (
-    <>
-      <p className="leading-4 text-xs font-normal text-content-contrast mb-[24px]">
+    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
+      <div className="text-caption text-content-tertiary">
         {t("treasuryOverview:deposit-description")}
-      </p>
+      </div>
       <form
         onSubmit={handleSubmit(submit)}
         className="flex flex-col"
@@ -155,6 +155,6 @@ export const Deposit = () => {
           className="w-full mt-6"
         />
       </form>
-    </>
+    </div>
   )
 }

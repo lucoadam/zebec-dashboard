@@ -46,10 +46,10 @@ export const Withdrawal = () => {
   }
 
   return (
-    <>
-      <p className="leading-4 text-xs font-normal text-content-contrast mb-6">
+    <div className="px-6 pt-6 flex flex-col gap-y-6">
+      <div className="text-caption text-content-tertiary">
         {t("treasuryOverview:withdraw-description")}
-      </p>
+      </div>
       <form
         onSubmit={handleSubmit(submitWitdrawal)}
         className="flex flex-col gap-y-6"
@@ -78,6 +78,6 @@ export const Withdrawal = () => {
           className="w-full"
         />
       </form>
-    </>
+    </div>
   )
 }

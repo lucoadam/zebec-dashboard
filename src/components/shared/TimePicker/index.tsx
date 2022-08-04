@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import * as Icons from "assets/icons"
 import { CollapseDropdown } from "components/shared"
 import { useClickOutside } from "hooks"
 import { FC, useEffect, useRef, useState } from "react"
 import { TimePickerProps } from "./index.d"
-import * as Icons from "assets/icons"
 
 const Hours = [
   "01",
@@ -131,7 +131,7 @@ export const TimePicker: FC<TimePickerProps> = ({
           <div
             className={`${
               disabled ? "text-content-tertiary" : "text-content-primary"
-            } absolute z-50 top-2.5 left-4.5`}
+            } absolute z-10 top-2.5 left-4.5`}
           >
             {startIcon || <Icons.ClockIcon className="w-5 h-5" />}
           </div>

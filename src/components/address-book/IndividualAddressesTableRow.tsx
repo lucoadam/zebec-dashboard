@@ -13,10 +13,12 @@ import { toSubstring } from "utils"
 
 interface IndividualAddresesTableRow {
   addressBook: AddressBook
+  onEdit: (addressBook: AddressBook) => void
 }
 
 const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
-  addressBook
+  addressBook,
+  onEdit
 }) => {
   const { t } = useTranslation("addressBook")
   const { publicKey } = useWallet()
@@ -63,6 +65,15 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                 }
                 onClick={() => {
                   //on send click
+                }}
+              />
+
+              <Button
+                title={`${t("Edit")}`}
+                size="small"
+                startIcon={<Icons.EditIcon className="text-content-contrast" />}
+                onClick={() => {
+                  onEdit(addressBook)
                 }}
               />
 

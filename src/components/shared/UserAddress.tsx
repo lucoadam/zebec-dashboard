@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
@@ -14,24 +14,12 @@ import CopyButton from "./CopyButton"
 import { IconButton } from "./IconButton"
 import { InputField } from "./InputField"
 
-const walletAddressMap = [
-  {
-    wallet: "Hxtg59VfeWVo4bEAuW9qm9qmN2y2yYBtH3P9WEyTifkX",
-    name: "Maxim Roye"
-  },
-  {
-    wallet: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv",
-    name: "Lucid Dreamer"
-  }
-]
-
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   wallet: string
 }> = ({ wallet }) => {
-  const isInAddressBook = walletAddressMap.some(
-    (item) => item.wallet === wallet
-  )
+  const { addressBooks } = useAppSelector((state) => state.address)
+  const isInAddressBook = addressBooks.some((item) => item.wallet === wallet)
   const AddressDropdownWrapperRef = useRef(null)
 
   const { t } = useTranslation()
@@ -75,7 +63,7 @@ export const UserAddress: FC<{
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
-              walletAddressMap.find((item) => item.wallet === wallet)?.name,
+              addressBooks.find((item) => item.wallet === wallet)?.name,
               12,
               false
             )
