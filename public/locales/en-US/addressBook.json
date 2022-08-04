@@ -22,5 +22,6 @@
     "add-address-to-your-addressBook": "Add address to your address book",
     "add-address-name-to-your-addressBook": "Add address name to your address book",
     "update-an-address": "Update an Address",
-    "update-address": "Update Address"
+    "update-address": "Update Address",
+    "empty-address-book": "There are no addresses. The addresses you add will appear here."
 }
