@@ -2,7 +2,7 @@ import {
   ZebecNativeStream,
   ZebecTokenStream,
   initAnchorProvider
-} from "@zebec-io/stream"
+} from "zebec-anchor-sdk-npmtest/packages/stream"
 import { createContext, FC, useState } from "react"
 import { CLUSTER_API_URL } from "constants/cluster"
 import { ZebecNativeStreamProps } from "../application/normal/stream.d"
