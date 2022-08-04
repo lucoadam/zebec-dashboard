@@ -1,5 +1,5 @@
-import * as Icons from "assets/icons"
 import React, { FC, useEffect, useState } from "react"
+import * as Icons from "assets/icons"
 
 export type TransactionStatus =
   | "completed"
@@ -9,10 +9,15 @@ export type TransactionStatus =
   | "paused"
 
 interface CircularProgressProps {
-  percentage?: number
   status: TransactionStatus
-  children?: React.ReactNode
+  percentage: number
+  animation?: "clockwise" | "anti-clockwise"
+  transitionDuration?: number
+  caps?: "round"
   spin?: boolean
+  size?: number
+  lineWidth?: number
+  children?: React.ReactNode
 }
 
 const statusIconMapping = {
@@ -42,88 +47,94 @@ const getBackgroundByPercentage = (
       return "text-error"
     case "paused":
       return "text-content-contrast"
+    case "outgoing":
+      return "text-primary"
   }
-  return "text-primary"
+  return ""
 }
 
+// Actual component
 export const CircularProgress: FC<CircularProgressProps> = ({
-  percentage = 0,
   status,
-  spin
+  percentage,
+  animation = "clockwise",
+  transitionDuration = 3000,
+  caps = "round",
+  spin = false,
+  size = 56,
+  lineWidth = 5
 }) => {
-  const sqSize = 56
-  const strokeWidth = 5
-  const radius = (sqSize - strokeWidth) / 2
-  const viewBox = `0 0 ${sqSize} ${sqSize}`
-  const dashArray = radius * Math.PI * 2
-  const [dashOffset, setDashOffset] = useState(dashArray)
-  const [enableTransition, setEnableTransition] = useState(false)
+  const halfSize = size / 2
+  const radius = halfSize - lineWidth / 2
+  const circleLength = radius * 2 * Math.PI
+
+  const [animatedStroke, setAnimatedStroke] = useState(circleLength)
 
   useEffect(() => {
-    setTimeout(async () => {
-      setEnableTransition(true)
-
-      for (
-        let i = status === "outgoing" ? percentage - 0.2 : 0;
-        i <= percentage;
-        i = i > percentage ? percentage : i + 0.2
-      ) {
-        await new Promise((r) => setTimeout(r, 0.1))
-        setDashOffset(dashArray - (dashArray * i) / 100)
-      }
-      setEnableTransition(false)
-    }, 0.1)
-    console.log("dashArray", dashArray)
-  }, [dashArray, percentage])
+    setAnimatedStroke(
+      animation === "clockwise"
+        ? circleLength * (1 + percentage / 100)
+        : animation === "anti-clockwise"
+        ? circleLength * (1 - percentage / 100)
+        : circleLength * (1 + percentage / 100)
+    )
+  }, [percentage])
 
   return (
-    <div className="relative">
+    <div
+      className={`flex place-content-center place-items-center relative`}
+      style={{
+        width: size,
+        height: size
+      }}
+    >
       <svg
+        height={size}
+        width={size}
+        className="absolute"
         style={{
           animation: spin ? "animation-rotate 9s linear infinite" : ""
         }}
-        width={sqSize}
-        height={sqSize}
-        viewBox={viewBox}
+        shapeRendering="geometricPrecision"
       >
-        <circle
-          className="text-outline-dark"
-          stroke="currentColor"
-          fill="transparent"
-          cx={sqSize / 2}
-          cy={sqSize / 2}
-          r={radius}
-          strokeWidth={`${strokeWidth}px`}
-        />
-        <circle
-          className={`${getBackgroundByPercentage(
-            percentage,
-            status
-          )} transition-all duration-[400ms]`}
-          strokeLinecap="round"
-          stroke="currentColor"
-          fill="transparent"
-          cx={sqSize / 2}
-          cy={sqSize / 2}
-          transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
-          r={radius}
+        <g
           style={{
-            strokeDasharray: dashArray,
-            strokeDashoffset: dashOffset,
-            transition: enableTransition ? "1ms stroke-dashoffset" : ""
+            transformOrigin: `${halfSize}px ${halfSize}px`,
+            transform: "scaleX(-1) rotate(-90deg)"
           }}
-          strokeWidth={`${strokeWidth}px`}
-        />
+        >
+          <circle
+            className="text-outline-dark"
+            cx={halfSize}
+            cy={halfSize}
+            r={radius}
+            stroke="currentColor"
+            strokeWidth={lineWidth}
+            fill="none"
+          />
+          <circle
+            className={`${getBackgroundByPercentage(percentage, status)}`}
+            cx={halfSize}
+            cy={halfSize}
+            r={radius}
+            style={{
+              transition:
+                transitionDuration > 0
+                  ? `${transitionDuration}ms stroke-dashoffset`
+                  : "",
+              strokeDashoffset: animatedStroke
+            }}
+            fill="none"
+            strokeDasharray={circleLength}
+            strokeWidth={lineWidth}
+            stroke="currentColor"
+            strokeLinecap={caps}
+          />
+        </g>
       </svg>
-      <span
-        className={`absolute text-xs font-semibold text-content-primary flex justify-center items-center left-0 top-0`}
-        style={{
-          width: sqSize,
-          height: sqSize
-        }}
-      >
+      <div style={{ zIndex: 1 }}>
         {getIconOrPercentageBasedOnStatus(status, percentage)}
-      </span>
+      </div>
     </div>
   )
 }

@@ -3,11 +3,10 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
-  // CircularProgress,
+  CircularProgress,
   IconButton,
   UserAddress
 } from "components/shared"
-import { CircularProgress } from "components/shared/CircularProgress/CircularProgress"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { showCancelModal } from "features/modals/cancelModalSlice"
