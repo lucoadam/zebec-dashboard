@@ -6,6 +6,8 @@ export interface InputProps
   helper?: string
   value?: string
   label?: string
+  helperClassName?: string
+  labelClassName?: string
   children: React.ReactElement
   labelMargin?: number
 }

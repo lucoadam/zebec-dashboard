@@ -88,6 +88,7 @@ export default function AddressesGroup() {
                     <IndividualAddresesTableRow
                       key={addressBook.id}
                       addressBook={addressBook}
+                      onEdit={() => null}
                     />
                   )
                 })}

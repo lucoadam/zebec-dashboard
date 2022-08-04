@@ -1,16 +1,21 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import { LeftArrowIcon } from "assets/icons"
 import {
   Breadcrumb,
   Button,
+  IconButton,
   InputField,
   Table,
   TableBody
 } from "components/shared"
-import { saveAddressBook } from "features/address-book/addressBookSlice"
+import {
+  saveAddressBook,
+  updateAddressBook
+} from "features/address-book/addressBookSlice"
 import { useTranslation } from "next-i18next"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
@@ -20,6 +25,9 @@ export default function IndividualAddresses() {
   const addressBooks = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+
+  const [isEdit, setIsEdit] = useState(false)
+  const [editAddressBookId, setEditAddressBookId] = useState("")
 
   const headers = [
     {
@@ -51,14 +59,30 @@ export default function IndividualAddresses() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    const addressBookData = {
-      data: {
-        user: publicKey?.toString(),
-        ...data
-      },
-      callback: reset
+    if (!isEdit) {
+      const addressBookData = {
+        data: {
+          user: publicKey?.toString(),
+          ...data
+        },
+        callback: reset
+      }
+      dispatch(saveAddressBook(addressBookData))
+    } else {
+      const addressBookData = {
+        data: {
+          id: editAddressBookId,
+          user: publicKey?.toString(),
+          ...data
+        },
+        callback: () => {
+          setIsEdit(false)
+          setEditAddressBookId("")
+          reset()
+        }
+      }
+      dispatch(updateAddressBook(addressBookData))
     }
-    dispatch(saveAddressBook(addressBookData))
   }
 
   useEffect(() => {
@@ -74,6 +98,26 @@ export default function IndividualAddresses() {
     }
   }, [addressBooks, setValue, trigger, getValues])
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onEdit = (data: any) => {
+    setIsEdit(true)
+    setEditAddressBookId(data.id)
+    setValue(
+      "wallets",
+      addressBooks
+        .map((addressBook) => addressBook.wallet)
+        .filter((wallet) => wallet !== data.wallet)
+    )
+    setValue(
+      "names",
+      addressBooks
+        .map((addressBook) => addressBook.name)
+        .filter((name) => name !== data.name)
+    )
+    setValue("wallet", data.wallet)
+    setValue("name", data.name)
+  }
+
   return (
     <>
       <div className="container w-full ">
@@ -88,6 +132,7 @@ export default function IndividualAddresses() {
                     <IndividualAddresesTableRow
                       key={addressBook.id}
                       addressBook={addressBook}
+                      onEdit={onEdit}
                     />
                   )
                 })}
@@ -96,14 +141,28 @@ export default function IndividualAddresses() {
           </div>
           <div className="md:order-last order-first">
             <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
-              <div className="text-content-secondary text-subtitle font-semibold">
-                {t("addressBook:add-an-address")}
+              <div className="flex gap-2 items-center text-content-secondary text-subtitle font-semibold">
+                {isEdit && (
+                  <IconButton
+                    variant="plain"
+                    size="small"
+                    icon={<LeftArrowIcon className="text-content-secondary" />}
+                    onClick={() => {
+                      setIsEdit(false)
+                      reset()
+                    }}
+                  />
+                )}
+                {isEdit
+                  ? t("addressBook:update-an-address")
+                  : t("addressBook:add-an-address")}
               </div>
               <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-                <div className="pt-6 ">
+                <div className="pt-8">
                   <InputField
                     label={t("addressBook:address-name")}
                     className="relative text-content-secondary"
+                    labelClassName="text-content-secondary ml-3"
                     error={!!errors.name}
                     helper={t(
                       errors.name?.message?.toString() || ""
@@ -122,10 +181,11 @@ export default function IndividualAddresses() {
                   </InputField>
                 </div>
 
-                <div className="pt-6 pb-6 ">
+                <div className="pt-6 pb-8">
                   <InputField
                     label={t("addressBook:wallet-address")}
                     className="relative text-content-secondary"
+                    labelClassName="text-content-secondary ml-3"
                     error={!!errors.wallet}
                     helper={t(
                       errors.wallet?.message?.toString() || ""
@@ -151,7 +211,11 @@ export default function IndividualAddresses() {
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
-                    title={`${t("addressBook:add-address")}`}
+                    title={`${
+                      isEdit
+                        ? t("addressBook:update-address")
+                        : t("addressBook:add-address")
+                    }`}
                   />
                 </div>
               </form>
