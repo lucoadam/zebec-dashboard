@@ -52,6 +52,18 @@ export const saveAddressBook: any = createAsyncThunk(
   }
 )
 
+export const updateAddressBook: any = createAsyncThunk(
+  "addressBook/updateAddressBook",
+  async (addressBookData: any, { dispatch }) => {
+    const { data: response } = await axios.put(
+      `https://internal-ten-cherry.glitch.me/addressbooks/${addressBookData.data.id}`,
+      addressBookData.data
+    )
+    dispatch(fetchAddressBook(addressBookData.data.user))
+    addressBookData?.callback()
+    return response
+  }
+)
 export const deleteAddressBook: any = createAsyncThunk(
   "addressBook/deleteAddressBook",
   async (data: DeleteProps, { dispatch }) => {
@@ -92,6 +104,17 @@ const addressBookSlice = createSlice({
       state.error = ""
     })
     builder.addCase(saveAddressBook.rejected, (state, action) => {
+      state.saving = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    builder.addCase(updateAddressBook.pending, (state) => {
+      state.saving = true
+    })
+    builder.addCase(updateAddressBook.fulfilled, (state) => {
+      state.saving = false
+      state.error = ""
+    })
+    builder.addCase(updateAddressBook.rejected, (state, action) => {
       state.saving = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
