@@ -7,7 +7,7 @@ import { toggleStakeModal } from "features/modals/stakeSlice"
 import { toggleUnStakeModal } from "features/modals/unStakeSlice"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
-import { FC, Fragment, useEffect } from "react"
+import { FC, Fragment, useEffect, useRef } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency } from "utils"
 
@@ -36,6 +36,15 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
   disableOthers = false
 }) => {
   const { t } = useTranslation("transactions")
+  const detailsRowRef = useRef<HTMLDivElement>(null)
+  const styles = {
+    detailsRow: {
+      height:
+        activeDetailsRow === index
+          ? `${detailsRowRef.current?.scrollHeight}px`
+          : "0px"
+    }
+  }
   const router = useRouter()
   const dispatch = useAppDispatch()
 
@@ -116,10 +125,11 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
         <tr>
           <td colSpan={4}>
             <div
+              ref={detailsRowRef}
               className={`bg-background-light rounded-lg overflow-y-auto  transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in h-max` : "ease-out h-0"
+                activeDetailsRow === index ? `ease-in` : "ease-out"
               }`}
-              //style={styles.detailsRow}
+              style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex gap-x-24 py-6 text-subtitle-sm font-medium">
