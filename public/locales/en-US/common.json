@@ -18,6 +18,7 @@
     "buttons": {
         "continue": "Continue",
         "deposit": "Deposit",
+        "add-funds": "Add Funds",
         "withdraw": "Withdraw",
         "go-back": "Go back",
         "view-all": "View All",

@@ -4,7 +4,9 @@
   "create-new-dca": "Create New DCA",
   "next": "Next",
   "buttons": {
-    "cancel-dca": "Cancel DCA"
+    "cancel-dca": "Cancel DCA",
+    "withdraw": "Withdraw",
+    "deposit": "Deposit"
   },
   "tabs": {
     "transactions": "Transactions",
@@ -15,5 +17,9 @@
     "transaction-date":"Transaction Date",
     "action": "Action",
     "value":"Value"
-  }
+  },
+  "next-investment-on": "Next Investment On",
+  "frequency": "Frequency",
+  "add-funds-dca": "Add funds to DCA",
+  "withdraw-description": "Withdraw funds from DCA"
 }
