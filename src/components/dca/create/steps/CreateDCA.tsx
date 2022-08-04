@@ -1,13 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
+import * as AvatarImages from "assets/images/avatars"
 import { AmountField } from "components/dca/components/AmountField"
 import { StepsComponentProps } from "components/dca/create/CreateDCA.d"
 import { Button, CollapseDropdown } from "components/shared"
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 import { useTranslation } from "next-i18next"
+import { StaticImageData } from "next/image"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { twMerge } from "tailwind-merge"
+import { formatCurrency } from "utils"
 import { getBalance } from "utils/getBalance"
 import * as Yup from "yup"
 
@@ -15,6 +19,11 @@ export const CreateDCA: FC<StepsComponentProps> = ({
   setCurrentStep,
   setDCA
 }) => {
+  const Avatars: StaticImageData[] = [
+    AvatarImages.Avatar2,
+    AvatarImages.Avatar3,
+    AvatarImages.Avatar4
+  ]
   const { t } = useTranslation()
   const [balances, setBalances] = useState<WalletToken[]>([])
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
@@ -75,6 +84,10 @@ export const CreateDCA: FC<StepsComponentProps> = ({
     }
   }, [depositFrom, zebecBalance, walletBalance])
 
+  const [showTreasuryList, setShowTreasuryList] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [treasury, setTreasury] = useState({})
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -110,19 +123,100 @@ export const CreateDCA: FC<StepsComponentProps> = ({
               position="left"
             >
               <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-                {["Wallet", "Zebec balance"].map((item) => (
-                  <div
-                    key={item}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setToggleDropdown(false)
-                      setDepositFrom(item)
-                    }}
-                    className={`border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light`}
-                  >
-                    <div className="text-sm text-content-primary">{item}</div>
+                {!showTreasuryList &&
+                  ["Wallet", "Zebec balance", "Treasury"].map((item) => (
+                    <div
+                      key={item}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        if (item === "Treasury") {
+                          setShowTreasuryList(true)
+                        } else {
+                          setDepositFrom(item)
+                          setToggleDropdown(false)
+                        }
+                      }}
+                      className={`border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light`}
+                    >
+                      <div
+                        className={twMerge(
+                          "text-sm  flex justify-between",
+                          item === depositFrom ||
+                            (depositFrom.includes("Treasury") &&
+                              item === "Treasury")
+                            ? "text-primary"
+                            : "text-content-primary",
+                          item === "Treasury" ? "relative" : ""
+                        )}
+                      >
+                        {depositFrom.includes("Treasury") && item === "Treasury"
+                          ? depositFrom
+                          : item}{" "}
+                        <div className="flex gap-3">
+                          {item === depositFrom && <Icons.CheckIcon />}
+                          {item === "Treasury" && (
+                            <>
+                              <Icons.CheveronDownIcon className="text-content-primary -rotate-90" />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {showTreasuryList && (
+                  <div className="py-[17px]">
+                    <div
+                      onClick={() => {
+                        setShowTreasuryList(false)
+                      }}
+                      className="flex px-[17px] items-center mb-2 gap-[18.52px] cursor-pointer hover:text-primary"
+                    >
+                      <Icons.CheveronDownIcon className="rotate-90" /> All
+                    </div>
+                    {[
+                      {
+                        name: "Zebec Safe",
+                        balance: 20000
+                      },
+                      {
+                        name: "Kalpanik Treasury",
+                        balance: 20000
+                      }
+                    ].map((item, index) => (
+                      <div
+                        key={item.name}
+                        onClick={() => {
+                          setTreasury(item)
+                          setDepositFrom(`Treasury: ${item.name}`)
+                          setShowTreasuryList(false)
+                          setToggleDropdown(false)
+                        }}
+                        className="flex justify-between p-2.5 px-[17px]  hover:bg-background-light cursor-pointer"
+                      >
+                        <div
+                          className={twMerge(
+                            "flex text-body justify-start items-center gap-1.5",
+                            depositFrom.includes(item.name)
+                              ? "text-primary"
+                              : ""
+                          )}
+                        >
+                          <img
+                            src={Avatars[index % 3].src}
+                            width={16}
+                            height={16}
+                            className="object-contain"
+                            alt={`Avatar ${index + 1}`}
+                          />
+                          {item.name}
+                        </div>
+                        <div className="text-content-tertiary text-caption">
+                          {formatCurrency(item.balance, "$", 2)}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             </CollapseDropdown>
           </div>
