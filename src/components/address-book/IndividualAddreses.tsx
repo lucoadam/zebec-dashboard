@@ -5,6 +5,7 @@ import { LeftArrowIcon } from "assets/icons"
 import {
   Breadcrumb,
   Button,
+  EmptyDataState,
   IconButton,
   InputField,
   Table,
@@ -125,19 +126,28 @@ export default function IndividualAddresses() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 overflow-hidden">
-            <Table headers={headers}>
-              <TableBody className="justify between">
-                {addressBooks?.map((addressBook) => {
-                  return (
-                    <IndividualAddresesTableRow
-                      key={addressBook.id}
-                      addressBook={addressBook}
-                      onEdit={onEdit}
-                    />
-                  )
-                })}
-              </TableBody>
-            </Table>
+            {addressBooks.length && (
+              <Table headers={headers}>
+                <TableBody className="justify between">
+                  {addressBooks?.map((addressBook) => {
+                    return (
+                      <IndividualAddresesTableRow
+                        key={addressBook.id}
+                        addressBook={addressBook}
+                        onEdit={onEdit}
+                      />
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            )}
+            {addressBooks.length === 0 && (
+              <EmptyDataState
+                message={t("addressBook:empty-address-book")}
+                padding={80}
+                className="h-[386px] w-full mt-[26px] rounded !px-10 text-center"
+              />
+            )}
           </div>
           <div className="md:order-last order-first">
             <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
