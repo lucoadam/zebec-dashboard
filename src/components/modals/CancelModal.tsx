@@ -1,17 +1,31 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
-import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-
-import * as Icons from "assets/icons"
 import { setLoading, toggleCancelModal } from "features/modals/cancelModalSlice"
+import { cancelStreamNative, cancelStreamToken } from "application/normal"
+import { Button, Modal } from "components/shared"
+import ZebecContext from "app/zebecContext"
 
 const CancelModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.cancel)
-
-  const dispatch = useAppDispatch()
-
   const { t } = useTranslation("transactions")
+  const { stream, token } = useContext(ZebecContext)
+  const dispatch = useAppDispatch()
+  const { show, loading, transaction } = useAppSelector((state) => state.cancel)
+
+  const handleCancelTransaction = () => {
+    dispatch(setLoading(true))
+    // data
+    const data = {
+      sender: transaction.sender,
+      receiver: transaction.receiver,
+      escrow: transaction.pda,
+      token_mint_address:
+        transaction.symbol === "SOL" ? "" : transaction.token_mint_address
+    }
+    if (transaction.symbol === "SOL")
+      stream && dispatch(cancelStreamNative(data, stream))
+    else token && dispatch(cancelStreamToken(data, token))
+  }
 
   return (
     <Modal
@@ -28,27 +42,21 @@ const CancelModal: FC = ({}) => {
           </div>
           <div className="pt-3 pb-3">
             <Button
-              className={`w-full `}
+              className={`w-full`}
               variant="gradient"
               disabled={loading}
-              endIcon={loading ? <Icons.Loading /> : <></>}
+              loading={loading}
               title={
                 loading
                   ? `${t("modal-actions.cancelling")}`
                   : `${t("modal-actions.yes-cancel")}`
               }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(toggleCancelModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
+              onClick={handleCancelTransaction}
             />
           </div>
           <div className="">
             <Button
-              className={`w-full ${loading ? "cursor-not-allowed" : ""}`}
+              className={`w-full`}
               disabled={loading}
               title={`${t("modal-actions.no-cancel")}`}
               onClick={() => {

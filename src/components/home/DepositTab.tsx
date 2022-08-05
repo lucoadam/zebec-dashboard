@@ -1,15 +1,25 @@
-import { useAppSelector } from "app/hooks"
-import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
-import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { FC, useContext, useState } from "react"
+import { useWallet } from "@solana/wallet-adapter-react"
 import { useTranslation } from "next-i18next"
-import { FC } from "react"
+import { useAppSelector, useAppDispatch } from "app/hooks"
+import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { getBalance } from "utils/getBalance"
+import { depositNative, depositToken } from "application"
+import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import ZebecContext from "app/zebecContext"
+import { PublicKey } from "@solana/web3.js"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
+  const { stream, token } = useContext(ZebecContext)
+  const { publicKey } = useWallet()
+  const dispatch = useAppDispatch()
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const walletTokens =
     useAppSelector((state) => state.walletBalance.tokens) || []
+
+  const [loading, setLoading] = useState<boolean>(false)
+
   const {
     currentToken,
     setCurrentToken,
@@ -41,8 +51,18 @@ const DepositTab: FC = () => {
         { shouldFocus: true }
       )
       return
+    } else {
+      setLoading(true)
+      const depositData = {
+        sender: (publicKey as PublicKey).toString(),
+        amount: +data.amount,
+        token_mint_address:
+          currentToken.symbol === "SOL" ? "" : currentToken.mint
+      }
+      if (currentToken.symbol === "SOL")
+        stream && dispatch(depositNative(depositData, stream, setLoading))
+      else token && dispatch(depositToken(depositData, token, setLoading))
     }
-    // on deposited
   }
 
   return (
@@ -76,6 +96,8 @@ const DepositTab: FC = () => {
           title={`${t("common:buttons.deposit")}`}
           variant="gradient"
           className="w-full"
+          disabled={loading}
+          loading={loading}
         />
       </form>
     </div>

@@ -5,12 +5,14 @@ import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchTreasury } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
+import ZebecContext from "app/zebecContext"
 
 const Common = () => {
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
+  const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
     dispatch(fetchTokens())
@@ -21,14 +23,22 @@ const Common = () => {
       dispatch(fetchWalletBalance(walletObject.publicKey))
       dispatch(fetchZebecBalance(walletObject.publicKey))
     }
-  }, [dispatch, walletObject.publicKey, tokens])
+    // eslint-disable-next-line
+  }, [walletObject.publicKey, tokens])
+  useEffect(() => {
+    if (walletObject.connected) {
+      zebecContext.initialize(walletObject)
+    }
+    // eslint-disable-next-line
+  }, [walletObject.connected])
 
   useEffect(() => {
     if (walletObject.publicKey) {
       dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
       dispatch(fetchTreasury(walletObject.publicKey?.toString()))
     }
-  }, [dispatch, walletObject.publicKey])
+    // eslint-disable-next-line
+  }, [walletObject.publicKey])
 
   return <></>
 }

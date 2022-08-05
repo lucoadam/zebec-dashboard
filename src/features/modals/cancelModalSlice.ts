@@ -3,12 +3,14 @@ import axios from "axios"
 
 //declare types for state
 interface CancelState {
+  transaction: any
   show: boolean
   loading: boolean
   error: string
 }
 
 const initialState: CancelState = {
+  transaction: null,
   show: false,
   loading: false,
   error: ""
@@ -25,12 +27,17 @@ export const cancelModalSlice = createSlice({
   name: "cancel",
   initialState,
   reducers: {
-    showModal: (state) => {
+    showCancelModal: (
+      state,
+      action: PayloadAction<typeof initialState.transaction>
+    ) => {
       state.show = true
       state.loading = false
+      state.transaction = action.payload
     },
     toggleCancelModal: (state) => {
       state.show = !state.show
+      state.transaction = state.show ? null : state.transaction
     },
     setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
       state.loading = action.payload
@@ -52,7 +59,7 @@ export const cancelModalSlice = createSlice({
   }
 })
 
-export const { showModal, toggleCancelModal, setLoading } =
+export const { showCancelModal, toggleCancelModal, setLoading } =
   cancelModalSlice.actions
 
 export default cancelModalSlice.reducer

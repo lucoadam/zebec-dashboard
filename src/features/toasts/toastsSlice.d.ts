@@ -2,8 +2,8 @@ type ToastType = "success" | "error" | "info"
 
 export interface ToastObjectProps {
   title?: string
-  message: string
-  transactionId?: string
+  message: string | Error
+  transactionHash?: string
   autoClose?: number
 }
 

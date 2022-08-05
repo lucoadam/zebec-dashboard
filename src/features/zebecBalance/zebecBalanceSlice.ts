@@ -4,6 +4,8 @@ import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
 import { RootState } from "app/store"
 import { ZebecTokenState } from "./zebecBalanceSlice.d"
 
+import { constants } from "constants/constants"
+
 const initialState: ZebecTokenState = {
   loading: false,
   tokens: [],
@@ -15,9 +17,7 @@ const initialState: ZebecTokenState = {
 export const fetchZebecBalance: any = createAsyncThunk(
   "balance/fetchZebecBalance",
   async (wallet: string, { getState }) => {
-    const base58PublicKey = new PublicKey(
-      "AknC341xog56SrnoK6j3mUvaD1Y7tYayx1sxUGpeYWdX"
-    )
+    const base58PublicKey = new PublicKey(constants.PROGRAM_ID)
     const validProgramAddressPub = await PublicKey.findProgramAddress(
       [new PublicKey(wallet).toBuffer()],
       base58PublicKey

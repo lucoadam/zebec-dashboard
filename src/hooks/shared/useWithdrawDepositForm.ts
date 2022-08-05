@@ -18,10 +18,12 @@ export const useWithdrawDepositForm = ({
   const [currentToken, setCurrentToken] = useState<{
     symbol: string
     image: string
+    mint: string
   }>(
     tokens[0] || {
       symbol: "",
-      image: ""
+      image: "",
+      mint: ""
     }
   )
 

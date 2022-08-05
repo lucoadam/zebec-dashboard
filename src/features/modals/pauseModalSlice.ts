@@ -3,20 +3,22 @@ import axios from "axios"
 
 //declare types for state
 interface PauseState {
+  transaction: any
   show: boolean
   loading: boolean
   error: string
 }
 
 const initialState: PauseState = {
+  transaction: null,
   show: false,
   loading: false,
   error: ""
 }
 export const pauseTransaction = createAsyncThunk(
   "pause/pauseTransaction",
-  async () => {
-    const response = await axios.get("url")
+  async (data) => {
+    const response = await axios.post("url", data)
     return response.data
   }
 )
@@ -25,12 +27,17 @@ export const pauseModalSlice = createSlice({
   name: "pause",
   initialState,
   reducers: {
-    showModal: (state) => {
+    showPauseModal: (
+      state,
+      action: PayloadAction<typeof initialState.transaction>
+    ) => {
       state.show = true
       state.loading = false
+      state.transaction = action.payload
     },
     togglePauseModal: (state) => {
       state.show = !state.show
+      state.transaction = state.show ? null : state.transaction
     },
     setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
       state.loading = action.payload
@@ -41,7 +48,7 @@ export const pauseModalSlice = createSlice({
       state.loading = true
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    builder.addCase(pauseTransaction.fulfilled, (state, action) => {
+    builder.addCase(pauseTransaction.fulfilled, (state) => {
       state.loading = false
       state.error = ""
     })
@@ -52,7 +59,7 @@ export const pauseModalSlice = createSlice({
   }
 })
 
-export const { showModal, togglePauseModal, setLoading } =
+export const { showPauseModal, togglePauseModal, setLoading } =
   pauseModalSlice.actions
 
 export default pauseModalSlice.reducer

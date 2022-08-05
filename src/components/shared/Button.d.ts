@@ -9,6 +9,7 @@ interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   startIcon?: JSX.Element
   endIcon?: JSX.Element
+  loading?: boolean
 }
 
 interface ButtonChildrenProps extends ButtonBaseProps {

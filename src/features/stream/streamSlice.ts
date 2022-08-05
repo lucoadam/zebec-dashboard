@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 interface SendState {
@@ -21,6 +22,7 @@ export const sendContinuousStream: any = createAsyncThunk(
       data
     )
     dispatch(fetchOutgoingTransactions(data.sender))
+    dispatch(toggleWalletApprovalMessageModal())
     return response
   }
 )
