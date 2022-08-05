@@ -8,8 +8,9 @@ import type { GetStaticProps, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { twMerge } from "tailwind-merge"
 import { displayExponentialNumber, formatCurrency } from "utils"
 import { addLiquiditySchema } from "utils/validations/addLiquiditySchema"
 
@@ -116,6 +117,27 @@ const AddLiquidity: NextPage = () => {
       }
     })
   }
+  const showInfoRef = useRef<HTMLDivElement>(null)
+  const [styles, setStyles] = useState({
+    showInfo: {
+      height: showMore ? `${showInfoRef.current?.scrollHeight}px` : "0px"
+    }
+  })
+  useEffect(() => {
+    if (showMore) {
+      setStyles({
+        showInfo: {
+          height: showMore ? `${showInfoRef.current?.scrollHeight}px` : "0px"
+        }
+      })
+    } else {
+      setStyles({
+        showInfo: {
+          height: "0px"
+        }
+      })
+    }
+  }, [showMore, showInfoRef])
 
   return (
     <Layout pageTitle={t("yeildFarming:add-liquidity")}>
@@ -219,36 +241,44 @@ const AddLiquidity: NextPage = () => {
                 </span>
                 <span className="text-content-secondary">20,604.51 LP</span>
               </div>
-              {showMore && (
-                <>
-                  <div className="flex justify-between text-xs font-normal mt-2">
-                    <div className="flex items-center gap-[2px]">
-                      <span className="text-content-tertiary">
-                        {t("yeildFarming:addresses")}
-                      </span>
-                      <Icons.InformationIcon className="cursor-pointer w-4 h-4 text-content-primary" />
-                    </div>
+              <div
+                className={twMerge(
+                  "transition-all duration-300",
+                  showMore ? "ease-out" : "ease-in"
+                )}
+                style={styles.showInfo}
+              >
+                {showMore && (
+                  <div ref={showInfoRef}>
+                    <div className="flex justify-between text-xs font-normal mt-2">
+                      <div className="flex items-center gap-[2px]">
+                        <span className="text-content-tertiary">
+                          {t("yeildFarming:addresses")}
+                        </span>
+                        <Icons.InformationIcon className="cursor-pointer w-4 h-4 text-content-primary" />
+                      </div>
 
-                    <span className="text-content-secondary">-</span>
+                      <span className="text-content-secondary">-</span>
+                    </div>
+                    <div className="relative flex justify-between text-xs font-normal mt-2">
+                      <span className="text-content-tertiary">
+                        {t("yeildFarming:slippage-tolerance")}
+                      </span>
+                      <input
+                        className={`${
+                          !!errors.slippage && "error"
+                        } h-6 max-w-[52px] text-sm rounded-2 !pl-3 !pr-5`}
+                        type="number"
+                        step="any"
+                        {...register("slippage")}
+                      />
+                      <span className="absolute text-sm text-content-tertiary right-2 top-1">
+                        %
+                      </span>
+                    </div>
                   </div>
-                  <div className="relative flex justify-between text-xs font-normal mt-2">
-                    <span className="text-content-tertiary">
-                      {t("yeildFarming:slippage-tolerance")}
-                    </span>
-                    <input
-                      className={`${
-                        !!errors.slippage && "error"
-                      } h-6 max-w-[52px] text-sm rounded-2 !pl-3 !pr-5`}
-                      type="number"
-                      step="any"
-                      {...register("slippage")}
-                    />
-                    <span className="absolute text-sm text-content-tertiary right-2 top-1">
-                      %
-                    </span>
-                  </div>
-                </>
-              )}
+                )}
+              </div>
               <Button
                 className="text-content-primary mt-2 bg-background-secondary"
                 endIcon={
