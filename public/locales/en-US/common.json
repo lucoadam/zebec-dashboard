@@ -59,14 +59,17 @@
         "notification-header":"Set Up Notifications",
         "notification-subtitle": "Get notified about the transactions in your email.",
         "powered-by":"Powered by",
-        "notification": "Notification",
+        "notifications": "Notifications",
         "notified-on": "Notified on",
         "email-address": "Email Address",
         "telegram-username": "Telegram Username",
         "unsubscribe": "Unsubscribe",
         "unsubscribe-description": "Don’t want to receive any emails or telegram message about your transactions?",
         "subscribe": "Subscribe",
-        "update": "Update"
+        "update": "Update",
+        "only-show-unread": "Only show unread",
+        "new":"NEW",
+        "mark-all-as-read":"Mark all as read"
     },
     "modal-actions": {
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",
