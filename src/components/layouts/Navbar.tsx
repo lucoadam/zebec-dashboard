@@ -19,7 +19,7 @@ import { useClickOutside } from "hooks"
 import { toSubstring } from "utils"
 import CopyButton from "components/shared/CopyButton"
 import { useRouter } from "next/router"
-import NotificationsComponent from "components/notifications/Notifications"
+import NotificationsComponent from "components/notifications/NotificationsDropdown"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()

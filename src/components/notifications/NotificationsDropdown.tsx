@@ -12,7 +12,7 @@ interface Notification {
   telegram: string
 }
 
-export default function NotificationsComponent() {
+export default function NotificationsDropdown() {
   const { t } = useTranslation("")
   const [userNotification, setUserNotification] = useState<Notification>()
 
