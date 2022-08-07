@@ -4,28 +4,74 @@ import { Button, Modal } from "components/shared"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
+import TokenService from "api/services/token.service"
+import { login } from "api"
+
+declare global {
+  interface Window {
+    phantom: any
+  }
+}
 
 const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
   const walletObject = useWallet()
   const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isSigned, setIsSigned] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (walletObject.connected) {
+      const token = TokenService.getLocalAccessToken()
+      if (!token) handleLogin()
+      else setIsSigned(!!token)
+    }
+  }, [walletObject.connected, isSigned])
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
       ? walletObject.connect()
       : walletModalObject.setVisible(!walletModalObject.visible)
   }
+
+  const handleLogin: () => void = async () => {
+    const response = await login(walletObject)
+    if (response?.status === 200) {
+      setIsSigned(true)
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
       setIsInitialized(true)
-    }, 600)
+    }, 800)
   }, [])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const provider = window.phantom?.solana
+
+      provider.on("accountChanged", (publicKey: any) => {
+        if (publicKey) {
+          // Set new public key and continue as usual
+          console.log(`Switched to account ${publicKey.toBase58()}`)
+          walletObject.disconnect()
+          TokenService.removeTokens()
+        } else {
+          // Attempt to reconnect to Phantom
+          provider.connect().catch((error: any) => {
+            // Handle connection failure
+          })
+        }
+      })
+    }
+  }, [])
+
   return (
     <>
       {isInitialized && (
         <Modal
-          show={!walletObject.connected}
+          show={!walletObject.connected || !isSigned}
           toggleModal={() => null}
           className="rounded-2xl"
           hasCloseIcon={false}
@@ -39,9 +85,17 @@ const WalletNotConnectedModal: NextPage = () => {
             </p>
             <Button
               className="w-full mt-10"
-              title={`${t("wallet-not-connected.connect-wallet")}`}
+              title={`${
+                walletObject.connected && !isSigned
+                  ? "Sign Message"
+                  : t("wallet-not-connected.connect-wallet")
+              }`}
               variant="gradient"
-              onClick={handleConnectWallet}
+              onClick={() =>
+                walletObject.connected && !isSigned
+                  ? handleLogin()
+                  : handleConnectWallet()
+              }
             />
           </div>
         </Modal>
