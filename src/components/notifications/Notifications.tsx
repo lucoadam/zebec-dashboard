@@ -1,19 +1,16 @@
 import React, { useRef, useState } from "react"
-import {  CollapseDropdown } from "components/shared"
+import { CollapseDropdown } from "components/shared"
 import * as Icons from "assets/icons"
 import { useClickOutside } from "hooks"
 import { NotificationSubscribed } from "./NotificationSubscribed"
 import { NotificationForm } from "./NotificationForm"
 
-
-
 interface NotificationStep {
   component: React.FC<NotificationProps>
 }
 export interface NotificationProps {
-  setCurrentStep: (step: number) => void,
-  handleNotificationClose: ()=>void
-
+  setCurrentStep: (step: number) => void
+  handleNotificationClose: () => void
 }
 
 export const NotificationStepsList: NotificationStep[] = [
@@ -21,12 +18,13 @@ export const NotificationStepsList: NotificationStep[] = [
     component: (props: NotificationProps) => <NotificationForm {...props} />
   },
   {
-    component: (props: NotificationProps) => <NotificationSubscribed {...props} />
+    component: (props: NotificationProps) => (
+      <NotificationSubscribed {...props} />
+    )
   }
 ]
 
 export default function NotificationsComponent() {
-
   const [currentStep, setCurrentStep] = useState(1)
 
   const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
@@ -57,9 +55,9 @@ export default function NotificationsComponent() {
           className="top-12 w-[400px]"
         >
           {NotificationStepsList[currentStep]?.component({
-        setCurrentStep,handleNotificationClose
-      })}
-          
+            setCurrentStep,
+            handleNotificationClose
+          })}
         </CollapseDropdown>
         {/* </div> */}
       </div>

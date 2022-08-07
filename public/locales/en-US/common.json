@@ -69,7 +69,9 @@
         "update": "Update",
         "only-show-unread": "Only show unread",
         "new":"NEW",
-        "mark-all-as-read":"Mark all as read"
+        "mark-all-as-read":"Mark all as read",
+        "earlier": "EARLIER",
+        "view-on-explorer":"View on explorer"
     },
     "modal-actions": {
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",

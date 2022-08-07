@@ -25,8 +25,8 @@ const nextConfig = {
     return config
   },
   experimental: {
-    outputStandalone: true,
-  },
+    outputStandalone: true
+  }
 }
 
 module.exports = nextConfig

@@ -51,7 +51,7 @@ export const Tab: FC<TabProps> = (props) => {
             {startIcon}
           </span>
         )}
-        <span className="text-subtitle-sm font-medium w-max" >
+        <span className="text-subtitle-sm font-medium w-max">
           {children ? children : title}
         </span>
         {count && count > 0 ? (
