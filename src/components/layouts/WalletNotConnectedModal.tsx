@@ -87,7 +87,7 @@ const WalletNotConnectedModal: NextPage = () => {
               className="w-full mt-10"
               title={`${
                 walletObject.connected && !isSigned
-                  ? "Sign Message"
+                  ? t("wallet-not-connected.sign-message")
                   : t("wallet-not-connected.connect-wallet")
               }`}
               variant="gradient"
