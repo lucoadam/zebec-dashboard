@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios"
-import TokenService from "./token.service"
+import TokenService from "./services/token.service"
 
 const api = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.DB_HOST,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json; charset=utf-8"
