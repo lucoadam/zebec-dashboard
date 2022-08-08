@@ -12,27 +12,27 @@ export const nftLists = [
     image: NFTImage1.src
   },
   {
-    name: "DaleEE",
+    name: "Daleee",
     address: "4ETf86tK7b4W72f27kNJLgRWi9UfJjgH4koHGUXMFtn",
     image: NFTImage2.src
   },
   {
-    name: "DaleEE",
+    name: "Dale",
     address: "4ETf86tK7b4W72f27kNLJLgWi9UfJjgH4koHGUXMFtn",
     image: NFTImage3.src
   },
   {
-    name: "DaleEE",
+    name: "DaleaE",
     address: "4ETf86tK7b4W72f27kNLJLgRWi9fJjgH4koHGUXMFtn",
     image: NFTImage4.src
   },
   {
-    name: "DaleEE",
+    name: "DaleAe",
     address: "4ETf86tK7b4W72f27kNLJLgRWi9UfJjgH4oHGUXMFtn",
     image: NFTImage5.src
   },
   {
-    name: "DaleEE",
+    name: "DaleAA",
     address: "4ETf86tK7b4W72f27kNLJLgRWi9UfJjgH4koHGXMFtn",
     image: NFTImage6.src
   }

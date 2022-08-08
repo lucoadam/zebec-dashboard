@@ -69,52 +69,61 @@ const Treasury: NextPage = () => {
         <div className="container">
           <Breadcrumb title="Zebec Safe" arrowBack={true} className="md:flex">
             <BreadcrumbRightContent>
-              <div ref={dropdownWrapper} className="relative">
-                <Button
-                  title={`${t("send:send-from-treasury")}`}
-                  variant="gradient"
-                  endIcon={<Icons.ArrowUpRightIcon />}
-                  onClick={() => setToggleDropdown(!toggleDropdown)}
-                />
-                <CollapseDropdown
-                  className="p-2 mt-4 w-[232px]"
-                  position="right"
-                  show={toggleDropdown}
-                >
-                  <div className="pb-2">
-                    <Link href="/treasury/send">
-                      <div
-                        onClick={() => dispatch(setTreasurySendActiveTab(0))}
-                        className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary"
-                      >
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>{t("send:continuous-stream")}</span>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="pt-2">
-                    <Link href="/treasury/send">
-                      <div
-                        onClick={() => dispatch(setTreasurySendActiveTab(1))}
-                        className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
-                      >
-                        <Icons.ThunderIcon className="w-6 h-6" />
-                        <span>{t("send:instant-transfer")}</span>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="pt-2">
-                    <Link href="/treasury/send">
-                      <div
-                        onClick={() => dispatch(setTreasurySendActiveTab(2))}
-                        className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
-                      >
-                        <Icons.SquareBlockMove className="w-6 h-6" />
-                        <span>{t("send:nft")}</span>
-                      </div>
-                    </Link>
-                  </div>
-                </CollapseDropdown>
+              <div className="flex gap-4">
+                <Link href="/treasury/deposit-nft">
+                  <Button
+                    title={`${t("treasury:deposit-nft")}`}
+                    endIcon={<Icons.PlusIncircleIcon />}
+                    type="button"
+                  />
+                </Link>
+                <div ref={dropdownWrapper} className="relative">
+                  <Button
+                    title={`${t("send:send-from-treasury")}`}
+                    variant="gradient"
+                    endIcon={<Icons.ArrowUpRightIcon />}
+                    onClick={() => setToggleDropdown(!toggleDropdown)}
+                  />
+                  <CollapseDropdown
+                    className="p-2 mt-4 w-[232px]"
+                    position="right"
+                    show={toggleDropdown}
+                  >
+                    <div className="pb-2">
+                      <Link href="/treasury/send">
+                        <div
+                          onClick={() => dispatch(setTreasurySendActiveTab(0))}
+                          className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary"
+                        >
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                          <span>{t("send:continuous-stream")}</span>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="pt-2">
+                      <Link href="/treasury/send">
+                        <div
+                          onClick={() => dispatch(setTreasurySendActiveTab(1))}
+                          className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                        >
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                          <span>{t("send:instant-transfer")}</span>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="pt-2">
+                      <Link href="/treasury/send">
+                        <div
+                          onClick={() => dispatch(setTreasurySendActiveTab(2))}
+                          className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                        >
+                          <Icons.SquareBlockMove className="w-6 h-6" />
+                          <span>{t("send:nft")}</span>
+                        </div>
+                      </Link>
+                    </div>
+                  </CollapseDropdown>
+                </div>
               </div>
             </BreadcrumbRightContent>
           </Breadcrumb>
