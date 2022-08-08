@@ -11,31 +11,52 @@ interface NFTDetail {
 
 interface NFTEachProps extends React.HTMLAttributes<HTMLDivElement> {
   detail: NFTDetail
+  eachWidth?: number
 }
 
-export const NFTEach: FC<NFTEachProps> = ({ detail, ...rest }) => {
-  const [showOverlay, setShowOverlay] = useState(true)
+export const NFTEach: FC<NFTEachProps> = ({ detail, eachWidth, ...rest }) => {
+  const [showOverlay, setShowOverlay] = useState(false)
   return (
     <div
-      key={detail.address}
-      className="w-full rounded relative"
       onMouseOver={() => {
         setShowOverlay(true)
       }}
       onMouseLeave={() => {
         setShowOverlay(false)
       }}
+      style={
+        eachWidth
+          ? {
+              width: eachWidth ?? 314,
+              height: eachWidth ?? 314
+            }
+          : {}
+      }
+      key={detail.address}
+      className="w-full rounded relative"
       {...rest}
     >
       <Image
         src={detail.image}
         className="rounded"
         alt={detail.name}
-        layout="fill"
+        width={eachWidth ?? 314}
+        height={eachWidth ?? 314}
+        // layout="fill"
       />
       {showOverlay && (
         <>
-          <div className="w-full h-full absolute left-0 top-0 rounded nft-overlay" />
+          <div
+            style={
+              eachWidth
+                ? {
+                    width: eachWidth ?? 314,
+                    height: eachWidth ?? 314
+                  }
+                : {}
+            }
+            className="w-full h-full absolute left-0 top-0 rounded nft-overlay"
+          />
           <div className="absolute bottom-6 left-6 cursor-pointer text-content-secondary">
             <p className="text-subtitle font-semibold">{detail.name}</p>
             <p className="flex items-center gap-1.5">

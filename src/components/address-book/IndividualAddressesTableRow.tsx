@@ -1,4 +1,3 @@
-import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, Modal } from "components/shared"
@@ -21,7 +20,6 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   onEdit
 }) => {
   const { t } = useTranslation("addressBook")
-  const { publicKey } = useWallet()
   const dispatch = useAppDispatch()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -43,20 +41,20 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
             <div
               className="flex items-center gap-x-2 text-content-primary"
-              data-tip={addressBook.wallet}
+              data-tip={addressBook.address}
             >
-              {toSubstring(addressBook.wallet, 4, true)}
+              {toSubstring(addressBook.address, 8, true)}
 
               <div className="flex-shrink-0">
                 <CopyButton
-                  content={addressBook.wallet}
+                  content={addressBook.address}
                   className="flex-shrink-0"
                 />
               </div>
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 w-full my-auto">
-            <div className="flex items-center gap-x-8 justify-end ">
+            <div className="flex items-center gap-x-5 justify-end ">
               <Button
                 title={`${t("send")}`}
                 size="small"
@@ -109,8 +107,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     onClick={() =>
                       dispatch(
                         deleteAddressBook({
-                          id: addressBook.id,
-                          user: publicKey
+                          id: addressBook.id
                         })
                       )
                     }

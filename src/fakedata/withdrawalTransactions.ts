@@ -51,6 +51,7 @@ export const withdrawalTransactions = {
       start_time: 1656826920,
       status: "ongoing",
       confirmation: "confirmed",
+      type: "nft",
       timestamp: {
         $date: 1656826847877
       },

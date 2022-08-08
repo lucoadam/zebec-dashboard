@@ -73,21 +73,14 @@ const Incoming: FC = () => {
         </TableBody>
       </Table>
       <div className="flex pt-5">
-        <RowsPerPage
-          setNoOfRows={setNoOfRows}
-          noOfRows={noOfRows}
-          
-        />
+        <RowsPerPage setNoOfRows={setNoOfRows} noOfRows={noOfRows} />
         <div className="ml-auto">
           <Pagination
-          pages={100}
-          setCurrentPage={setCurrentPage}
-          setNoOfRows={setNoOfRows}
-         
-        />
-
+            pages={100}
+            setCurrentPage={setCurrentPage}
+            setNoOfRows={setNoOfRows}
+          />
         </div>
-        
       </div>
 
       <ExportModal />
