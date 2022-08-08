@@ -1,7 +1,8 @@
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Layout from "components/layouts/Layout"
-import NotificationsComponent from "components/notifications/Notifications"
+import NotificationsComponent from "components/notifications/NotificationsPage"
+
 
 const Transactions: NextPage = () => {
   return (

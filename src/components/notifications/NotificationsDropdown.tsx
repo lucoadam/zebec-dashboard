@@ -24,7 +24,7 @@ export const NotificationStepsList: NotificationStep[] = [
   }
 ]
 
-export default function NotificationsComponent() {
+const NotificationsComponent = () => {
   const [currentStep, setCurrentStep] = useState(1)
 
   const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
@@ -64,3 +64,5 @@ export default function NotificationsComponent() {
     </>
   )
 }
+
+export default NotificationsComponent
