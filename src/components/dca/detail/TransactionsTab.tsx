@@ -16,20 +16,20 @@ export const TransactionsTab = () => {
   const noOfOptions = [10, 20, 30, 40]
   const headers = [
     {
-      label: "dca:table.quantity",
-      width: "85"
+      label: "dca:table.quantity"
+      // width: "85"
     },
     {
-      label: "dca:table.transaction-date",
-      width: "61"
+      label: "dca:table.transaction-date"
+      // width: "61"
     },
     {
-      label: "dca:table.action",
-      width: "61"
+      label: "dca:table.action"
+      // width: "61"
     },
     {
-      label: "dca:table.value",
-      width: "61"
+      label: "dca:table.value"
+      // width: "61"
     }
   ]
   return (
@@ -54,7 +54,7 @@ export const TransactionsTab = () => {
           })}
         </TableBody>
       </Table>
-      <div className="flex text-caption pt-5">
+      <div className="flex text-caption justify-between pt-5">
         <RowsPerPage
           setNoOfRows={setNoOfRows}
           noOfRows={noOfRows}

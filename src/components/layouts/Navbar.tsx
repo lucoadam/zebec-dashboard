@@ -19,6 +19,7 @@ import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
+import WalletNotConnectedModal from "./WalletNotConnectedModal"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
@@ -252,7 +253,7 @@ const Navbar: FC = () => {
             </Sidebar>
           </div>
         </div>
-        {/* <WalletNotConnectedModal /> */}
+        <WalletNotConnectedModal />
       </nav>
     </>
   )

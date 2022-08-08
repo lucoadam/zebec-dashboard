@@ -18,8 +18,14 @@
     "action": "Action",
     "value":"Value"
   },
+  "add-funds-description": "Increase funds in DCA.",
   "next-investment-on": "Next Investment On",
   "frequency": "Frequency",
   "add-funds-dca": "Add funds to DCA",
-  "withdraw-description": "Withdraw funds from DCA"
+  "withdraw-description": "Withdraw funds from DCA",
+  "cancel-modal-header" :"Are you sure you want to cancel DCA?",
+  "cancel-content":"Aborting dca will remove your fund from DCA. You will peculiarly get benefited using DCA.",
+  "yes-cancel-dca" :"Yes, Cancel DCA",
+  "cancel" : "Cancel"
+
 }
