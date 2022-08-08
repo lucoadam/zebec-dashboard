@@ -1,25 +1,24 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import * as Icons from "assets/icons"
+import * as Images from "assets/images"
+import NotificationsComponent from "components/notifications/Notifications"
+import CopyButton from "components/shared/CopyButton"
 import { updateWidth } from "features/layout/layoutSlice"
+import { useClickOutside } from "hooks"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import * as Icons from "assets/icons"
-import * as Images from "assets/images"
+import { toSubstring } from "utils"
 import { Button, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
-import WalletNotConnectedModal from "./WalletNotConnectedModal"
-import { useClickOutside } from "hooks"
-import { toSubstring } from "utils"
-import CopyButton from "components/shared/CopyButton"
-import { useRouter } from "next/router"
-import NotificationsComponent from "components/notifications/Notifications"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
@@ -253,7 +252,7 @@ const Navbar: FC = () => {
             </Sidebar>
           </div>
         </div>
-        <WalletNotConnectedModal />
+        {/* <WalletNotConnectedModal /> */}
       </nav>
     </>
   )
