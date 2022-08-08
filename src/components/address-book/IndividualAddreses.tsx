@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { LeftArrowIcon } from "assets/icons"
 import {
@@ -22,13 +21,12 @@ import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
-  const { publicKey } = useWallet()
   const addressBooks = useAppSelector((state) => state.address.addressBooks)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
   const [isEdit, setIsEdit] = useState(false)
-  const [editAddressBookId, setEditAddressBookId] = useState("")
+  const [editAddressBookId, setEditAddressBookId] = useState<number | "">("")
 
   const headers = [
     {
@@ -63,8 +61,8 @@ export default function IndividualAddresses() {
     if (!isEdit) {
       const addressBookData = {
         data: {
-          user: publicKey?.toString(),
-          ...data
+          name: data.name,
+          address: data.wallet
         },
         callback: reset
       }
@@ -73,8 +71,8 @@ export default function IndividualAddresses() {
       const addressBookData = {
         data: {
           id: editAddressBookId,
-          user: publicKey?.toString(),
-          ...data
+          name: data.name,
+          address: data.wallet
         },
         callback: () => {
           setIsEdit(false)
@@ -90,7 +88,7 @@ export default function IndividualAddresses() {
     if (addressBooks) {
       setValue(
         "wallets",
-        addressBooks.map((addressBook) => addressBook.wallet)
+        addressBooks.map((addressBook) => addressBook.address)
       )
       setValue(
         "names",
@@ -106,8 +104,8 @@ export default function IndividualAddresses() {
     setValue(
       "wallets",
       addressBooks
-        .map((addressBook) => addressBook.wallet)
-        .filter((wallet) => wallet !== data.wallet)
+        .map((addressBook) => addressBook.address)
+        .filter((wallet) => wallet !== data.address)
     )
     setValue(
       "names",
@@ -115,7 +113,7 @@ export default function IndividualAddresses() {
         .map((addressBook) => addressBook.name)
         .filter((name) => name !== data.name)
     )
-    setValue("wallet", data.wallet)
+    setValue("wallet", data.address)
     setValue("name", data.name)
   }
 
@@ -126,7 +124,7 @@ export default function IndividualAddresses() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 overflow-hidden">
-            {addressBooks.length && (
+            {addressBooks.length > 0 ? (
               <Table headers={headers}>
                 <TableBody className="justify between">
                   {addressBooks?.map((addressBook) => {
@@ -140,12 +138,11 @@ export default function IndividualAddresses() {
                   })}
                 </TableBody>
               </Table>
-            )}
-            {addressBooks.length === 0 && (
+            ) : (
               <EmptyDataState
                 message={t("addressBook:empty-address-book")}
                 padding={80}
-                className="h-[386px] w-full mt-[26px] rounded !px-10 text-center"
+                className="h-[386px] w-full mt-12 rounded !px-10 text-center"
               />
             )}
           </div>

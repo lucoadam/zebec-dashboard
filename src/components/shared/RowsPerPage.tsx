@@ -13,7 +13,7 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
   const { noOfRows, setNoOfRows, noOfOptions } = props
   const [toggleNoOfRows, settoggleNoofRows] = useState(false)
   const RowsDropdownWrapper = useRef(null)
-  const Options:number[] = noOfOptions ? noOfOptions : [10, 20, 30, 40, 50];
+  const Options: number[] = noOfOptions ? noOfOptions : [10, 20, 30, 40, 50]
 
   const handleClose = () => {
     settoggleNoofRows(false)

@@ -10,7 +10,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   const [isClicked, setIsClicked] = React.useState<boolean>(false)
 
   return (
-    <div className="grid place-content-center border border-outline bg-background-primary rounded-full  w-7 h-7 text-sm">
+    <span className="grid place-content-center border border-outline bg-background-primary rounded-full  w-7 h-7 text-sm">
       {isClicked ? (
         <Icons.CheckIcon
           onClick={(e: Event) => {
@@ -32,7 +32,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
           className={`text-base cursor-pointer ${className}`}
         />
       )}
-    </div>
+    </span>
   )
 }
 
