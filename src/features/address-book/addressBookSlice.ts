@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import api from "api/api"
 import axios from "axios"
 
 export interface AddressBook {
   id: number
   name: string
-  wallet: string
+  address: string
 }
 
 interface AddressBookState {
@@ -18,7 +19,6 @@ interface AddressBookState {
 
 interface DeleteProps {
   id: number
-  user: string
 }
 
 const initialState: AddressBookState = {
@@ -31,22 +31,29 @@ const initialState: AddressBookState = {
 
 export const fetchAddressBook: any = createAsyncThunk(
   "addressBook/fetchAddressBook",
-  async (user: string) => {
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/addressbooks?user=${user}`
-    )
-    return response
+  async () => {
+    const { data: response } = await api.get(`/user/address/`)
+    return response.results
   }
 )
 
 export const saveAddressBook: any = createAsyncThunk(
   "addressBook/saveAddressBook",
-  async (addressBookData: any, { dispatch }) => {
-    const { data: response } = await axios.post(
-      "https://internal-ten-cherry.glitch.me/addressbooks",
+  async (
+    addressBookData: {
+      data: {
+        name: string
+        wallet: string
+      }
+      callback: () => void
+    },
+    { dispatch }
+  ) => {
+    const { data: response } = await api.post(
+      "/user/address/",
       addressBookData.data
     )
-    dispatch(fetchAddressBook(addressBookData.data.user))
+    dispatch(fetchAddressBook())
     addressBookData?.callback()
     return response
   }
@@ -54,12 +61,22 @@ export const saveAddressBook: any = createAsyncThunk(
 
 export const updateAddressBook: any = createAsyncThunk(
   "addressBook/updateAddressBook",
-  async (addressBookData: any, { dispatch }) => {
-    const { data: response } = await axios.put(
-      `https://internal-ten-cherry.glitch.me/addressbooks/${addressBookData.data.id}`,
+  async (
+    addressBookData: {
+      data: {
+        id: number
+        name: string
+        wallet: string
+      }
+      callback: () => void
+    },
+    { dispatch }
+  ) => {
+    const { data: response } = await api.put(
+      `/user/address/${addressBookData.data.id}/`,
       addressBookData.data
     )
-    dispatch(fetchAddressBook(addressBookData.data.user))
+    dispatch(fetchAddressBook())
     addressBookData?.callback()
     return response
   }
@@ -67,10 +84,8 @@ export const updateAddressBook: any = createAsyncThunk(
 export const deleteAddressBook: any = createAsyncThunk(
   "addressBook/deleteAddressBook",
   async (data: DeleteProps, { dispatch }) => {
-    const { data: response } = await axios.delete(
-      `https://internal-ten-cherry.glitch.me/addressbooks/${data.id}`
-    )
-    dispatch(fetchAddressBook(data.user))
+    const { data: response } = await api.delete(`/user/address/${data.id}`)
+    dispatch(fetchAddressBook())
     return response
   }
 )
