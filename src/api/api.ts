@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios"
-import TokenService from "./token.service"
+import TokenService from "./services/token.service"
 
 const api = axios.create({
-  baseURL: process.env.BACKEND_URL,
+  baseURL: process.env.DB_HOST,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json; charset=utf-8"
@@ -31,21 +31,24 @@ api.interceptors.response.use(
   (response) => {
     return response
   },
-  (error) => {
+  async (error) => {
     const originalConfig = error.config
     const refreshToken = TokenService.getLocalRefreshToken()
     if (error.response) {
       if (
         refreshToken &&
-        error.response.status === 401 &&
+        error.response.status === 403 &&
         !originalConfig._retry
       ) {
         originalConfig._retry = true
         try {
-          // Do something, call refreshToken() request for example;
-          // return a request
+          const response = await api.post("/user/auth/refresh/", {
+            refresh: refreshToken
+          })
+          TokenService.setTokens(response.data)
           return api(originalConfig)
         } catch (error) {
+          localStorage.clear()
           return null
         }
       }

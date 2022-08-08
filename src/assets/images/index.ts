@@ -1,5 +1,5 @@
-export { default as ZebecLogo } from "./zebec-logo.png"
-export { default as LoadingGif } from "./gifs/withdrawing.gif"
 export * from "./avatars"
-
+export { default as LoadingGif } from "./gifs/withdrawing.gif"
 export { default as PageNotFoundImage } from "./page-not-found.svg"
+export { default as NFTImg } from "./transactions/nft.png"
+export { default as ZebecLogo } from "./zebec-logo.png"

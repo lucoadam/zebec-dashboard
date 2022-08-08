@@ -15,6 +15,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
+import { twMerge } from "tailwind-merge"
 import { formatCurrency, toSubstring } from "utils"
 
 interface WithdrawalTableRowProps {
@@ -78,31 +79,65 @@ const WithdrawalTableRow: FC<WithdrawalTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 min-w-70">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress
-                status={transaction.status}
-                percentage={returnValidPercentage(
-                  parseInt(
-                    formatCurrency(
-                      (transaction.sent_token * 100) / transaction.amount
+              {transaction.type === "nft" ? (
+                <div
+                  className={twMerge(
+                    "w-[54px] h-[54px] rounded-full p-px border-[3px]",
+                    transaction.status === "sent"
+                      ? "boreder-error"
+                      : "border-success"
+                  )}
+                >
+                  <Image
+                    src={Images.NFTImg.src}
+                    className="rounded"
+                    alt="NFT Transfer"
+                    width={52}
+                    height={52}
+                  />
+                </div>
+              ) : (
+                <CircularProgress
+                  status={transaction.status}
+                  percentage={returnValidPercentage(
+                    parseInt(
+                      formatCurrency(
+                        (transaction.sent_token * 100) / transaction.amount
+                      )
                     )
-                  )
-                )}
-              />
+                  )}
+                />
+              )}
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -
-                    {formatCurrency(
-                      transaction.sent_token > 0 ? transaction.sent_token : 0
+                    {transaction.type !== "nft" ? (
+                      <>
+                        {" "}
+                        -
+                        {formatCurrency(
+                          transaction.sent_token > 0
+                            ? transaction.sent_token
+                            : 0
+                        )}
+                      </>
+                    ) : (
+                      <>{transaction.nftName ?? "NFT Name"}</>
                     )}
                   </span>
-                  &nbsp;SOL
+                  {transaction.type !== "nft" && <>&nbsp;SOL</>}
                 </div>
                 <div className="text-caption">
-                  {formatCurrency(
-                    transaction.sent_token > 0 ? transaction.sent_token : 0
-                  )}{" "}
-                  of {transaction.amount} SOL
+                  {transaction.type !== "nft" ? (
+                    <>
+                      {formatCurrency(
+                        transaction.sent_token > 0 ? transaction.sent_token : 0
+                      )}{" "}
+                      of {transaction.amount} SOL
+                    </>
+                  ) : (
+                    <>NFT Transferred</>
+                  )}
                 </div>
               </div>
             </div>

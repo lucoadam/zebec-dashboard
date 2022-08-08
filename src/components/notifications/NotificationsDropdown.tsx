@@ -1,34 +1,32 @@
-import { useTranslation } from "next-i18next"
 import React, { useRef, useState } from "react"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { Button, CollapseDropdown, InputField } from "components/shared"
+import { CollapseDropdown } from "components/shared"
 import * as Icons from "assets/icons"
-import { notificationSchema } from "utils/validations/notificationSchema"
 import { useClickOutside } from "hooks"
+import { NotificationSubscribed } from "./NotificationSubscribed"
+import { NotificationForm } from "./NotificationForm"
 
-interface Notification {
-  email: string
-  telegram: string
+interface NotificationStep {
+  component: React.FC<NotificationProps>
+}
+export interface NotificationProps {
+  setCurrentStep: (step: number) => void
+  handleNotificationClose: () => void
 }
 
-export default function NotificationsDropdown() {
-  const { t } = useTranslation("")
-  const [userNotification, setUserNotification] = useState<Notification>()
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(notificationSchema)
-  })
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    setUserNotification(data)
+export const NotificationStepsList: NotificationStep[] = [
+  {
+    component: (props: NotificationProps) => <NotificationForm {...props} />
+  },
+  {
+    component: (props: NotificationProps) => (
+      <NotificationSubscribed {...props} />
+    )
   }
+]
+
+const NotificationsComponent = () => {
+  const [currentStep, setCurrentStep] = useState(1)
+
   const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
     useState<boolean>(false)
 
@@ -54,102 +52,17 @@ export default function NotificationsDropdown() {
         </div>
         <CollapseDropdown
           show={toggleNotificationsDropdown}
-          className="top-12 w-[306px]"
+          className="top-12 w-[400px]"
         >
-          <div className="rounded  p-6  ">
-            <div className="text-content-primary font-semibold">{`${t(
-              "common:notifications.notification-header"
-            )} `}</div>
-            <div className="text-content-secondary text-caption pb-4 pt-1 border-b border-outline">{`${t(
-              "common:notifications.notification-subtitle"
-            )} `}</div>
-
-            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-              <div className="">
-                <div className="pt-6 ">
-                  <InputField
-                    label={t("common:notifications.email-address")}
-                    className="relative text-content-secondary"
-                    error={!!errors.email}
-                    helper={t(
-                      errors.email?.message?.toString() || ""
-                    ).toString()}
-                  >
-                    <div>
-                      <input
-                        className={`w-full h-10 ${
-                          !!errors.email?.message && "error"
-                        }`}
-                        placeholder={t("common:notifications.email-address")}
-                        type="text"
-                        {...register("email")}
-                      />
-                    </div>
-                  </InputField>
-                </div>
-
-                <div className="pt-6 pb-6 ">
-                  <InputField
-                    label={t("common:notifications.telegram-username")}
-                    className="relative text-content-secondary"
-                    error={!!errors.telegram}
-                    helper={t(
-                      errors.telegram?.message?.toString() || ""
-                    ).toString()}
-                  >
-                    <div>
-                      <input
-                        className={`w-full h-10 ${
-                          !!errors.telegram?.message && "error"
-                        }`}
-                        placeholder={t("common:notifications.telegram-username")}
-                        type="text"
-                        {...register("telegram")}
-                      />
-                    </div>
-                  </InputField>
-                </div>
-
-                {/* submit Button */}
-
-                <div className="pb-2">
-                  <Button
-                    className={`w-full ${userNotification ? "hidden" : ""}`}
-                    variant="gradient"
-                    type="submit"
-                    title={`${t("common:notifications.subscribe")}`}
-                  />
-
-                  {userNotification && (
-                    <>
-                      <div className="text-content-secondary pb-4">
-                        {t("common:notifications.unsubscribe-description")}
-                      </div>
-                      <Button
-                        className={`w-full`}
-                        variant="danger"
-                        endIcon={<Icons.Envelope />}
-                        type="button"
-                        title={`${t("common:notifications.unsubscribe")}`}
-                      />
-                    </>
-                  )}
-                </div>
-              </div>
-            </form>
-            <div className="flex gap-x-1 justify-center mt-4">
-              <div className="text-caption text-content-secondary">
-              {t("common:notifications.powered-by")}
-              </div>
-              <div className="pb-4">
-                <Icons.Notif className="w-16"/>
-              </div>
-
-            </div>
-          </div>
+          {NotificationStepsList[currentStep]?.component({
+            setCurrentStep,
+            handleNotificationClose
+          })}
         </CollapseDropdown>
         {/* </div> */}
       </div>
     </>
   )
 }
+
+export default NotificationsComponent
