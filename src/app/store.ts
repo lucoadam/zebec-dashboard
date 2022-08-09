@@ -32,6 +32,7 @@ import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
 import { persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
+import thunk from "redux-thunk"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -72,7 +73,8 @@ const persistedReducer = persistReducer(persistConfig, combineReducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: [thunk]
 })
 
 export type AppDispatch = typeof store.dispatch

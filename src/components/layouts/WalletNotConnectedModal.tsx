@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     phantom: any
   }
 }
@@ -54,6 +55,7 @@ const WalletNotConnectedModal: NextPage = () => {
     if (typeof window !== "undefined") {
       const provider = window.phantom?.solana
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       provider.on("accountChanged", (publicKey: any) => {
         if (publicKey) {
           // Set new public key and continue as usual
@@ -62,6 +64,7 @@ const WalletNotConnectedModal: NextPage = () => {
           TokenService.removeTokens()
         } else {
           // Attempt to reconnect to Phantom
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
           provider.connect().catch((error: any) => {
             // Handle connection failure
           })

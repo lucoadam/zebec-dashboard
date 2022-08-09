@@ -21,12 +21,12 @@ const Common = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (tokens.length > 0 && walletObject.publicKey) {
+    if (isSigned && tokens.length > 0 && walletObject.publicKey) {
       dispatch(fetchWalletBalance(walletObject.publicKey))
       dispatch(fetchZebecBalance(walletObject.publicKey))
     }
     // eslint-disable-next-line
-  }, [walletObject.publicKey, tokens])
+  }, [walletObject.publicKey, tokens, isSigned])
   useEffect(() => {
     if (walletObject.connected) {
       zebecContext.initialize(walletObject)
@@ -39,7 +39,6 @@ const Common = () => {
       dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
       dispatch(fetchTreasury(walletObject.publicKey?.toString()))
     }
-    console.log("signning wallet and fetching data", isSigned)
     // eslint-disable-next-line
   }, [isSigned])
 
