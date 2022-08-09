@@ -51,10 +51,22 @@
         "connect-wallet": "Connect Wallet",
         "sign-message": "Sign Message"
     },
-    "zebec-help": "Zebec Help",
     "support": {
+        "zebec-help": "Zebec Help",
+        "treasury-help": "Zebec Treasury Help",
+        "zebec-dca-help": "Zebec DCA Help",
+        "streaming-help": "Streaming Help",
+        "zebec-help-description": "Browse through our support articles or lets get in touch through Discord.",
+        "treasury-help-description": "Browse through our support articles or lets get in touch through Discord.",
+        "streaming-help-details": "Browse through our support articles to learn to stream or lets get in touch through Discord.",
         "check-faq": "Check FAQs",
-        "join-discord": "Join Discord"
+        "join-discord": "Join Discord",
+        "build-with-zebec": "Build with Zebec",
+        "build-description": "Use our SDKs to easily implement Zebec Pay features directly into your projects.",
+        "check-documentation": "Check Documentation",
+        "send-feedback": "Send Feedback",
+        "feedback-description": "We’ll be pleased if you have suggestions on how to improve Zebec.",
+        "send-us-message": "Send us a message"
     },
     "notifications": {
         "notification-header":"Set Up Notifications",
