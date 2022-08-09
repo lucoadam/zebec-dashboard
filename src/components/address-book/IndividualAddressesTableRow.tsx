@@ -6,6 +6,7 @@ import {
   AddressBook,
   deleteAddressBook
 } from "features/address-book/addressBookSlice"
+import { toast } from "features/toasts/toastsSlice"
 import { useTranslation } from "next-i18next"
 import { FC, Fragment, useState } from "react"
 import { toSubstring } from "utils"
@@ -41,10 +42,8 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
             <div
               className="flex items-center gap-x-2 text-content-primary"
-              data-tip={addressBook.address}
             >
-              {toSubstring(addressBook.address, 8, true)}
-
+              <div data-tip={addressBook.address}>{toSubstring(addressBook.address, 8, true)}</div>
               <div className="flex-shrink-0">
                 <CopyButton
                   content={addressBook.address}
@@ -53,7 +52,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 pt-4.5 pb-6 w-full my-auto">
+          <td className="px-6 pt-4.5 pb-6 ml-auto my-auto">
             <div className="flex items-center gap-x-5 justify-end ">
               <Button
                 title={`${t("send")}`}
@@ -107,7 +106,19 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     onClick={() =>
                       dispatch(
                         deleteAddressBook({
-                          id: addressBook.id
+                          id: addressBook.id,
+                          callback: (error: unknown) => {
+                            if (error) {
+                              dispatch(toast.error({
+                                message: t("addressBook:error-delete")
+                              }))
+                              setIsOpen(false)
+                              return
+                            }
+                            dispatch(toast.success({
+                              message: t("addressBook:success-delete")
+                            }))
+                          }
                         })
                       )
                     }

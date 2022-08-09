@@ -59,17 +59,22 @@ export const saveAddressBook: any = createAsyncThunk(
         name: string
         wallet: string
       }
-      callback: () => void
+      callback: (error?: unknown) => void
     },
     { dispatch }
   ) => {
-    const { data: response } = await api.post(
-      "/user/address/",
-      addressBookData.data
-    )
-    dispatch(fetchAddressBook())
-    addressBookData?.callback()
-    return response
+    try {
+      const { data: response } = await api.post(
+        "/user/address/",
+        addressBookData.data
+      )
+      dispatch(fetchAddressBook())
+      addressBookData?.callback()
+      return response
+    } catch (error) {
+      addressBookData?.callback(error)
+      throw error
+    }
   }
 )
 
@@ -82,25 +87,41 @@ export const updateAddressBook: any = createAsyncThunk(
         name: string
         wallet: string
       }
-      callback: () => void
+      callback: (error?: unknown) => void
     },
     { dispatch }
   ) => {
-    const { data: response } = await api.put(
-      `/user/address/${addressBookData.data.id}/`,
-      addressBookData.data
-    )
-    dispatch(fetchAddressBook())
-    addressBookData?.callback()
-    return response
+    try {
+      const { data: response } = await api.put(
+        `/user/address/${addressBookData.data.id}/`,
+        addressBookData.data
+      )
+      dispatch(fetchAddressBook())
+      addressBookData?.callback()
+      return response
+    } catch (error) {
+      addressBookData?.callback(error)
+      throw error
+    }
   }
 )
 export const deleteAddressBook: any = createAsyncThunk(
   "addressBook/deleteAddressBook",
-  async (data: DeleteProps, { dispatch }) => {
-    const { data: response } = await api.delete(`/user/address/${data.id}`)
-    dispatch(fetchAddressBook())
-    return response
+  async (
+    data: DeleteProps & {
+      callback: (error?: unknown) => void
+    },
+    { dispatch }
+  ) => {
+    try {
+      const { data: response } = await api.delete(`/user/address/${data.id}`)
+      dispatch(fetchAddressBook())
+      data?.callback()
+      return response
+    } catch (error) {
+      data?.callback(error)
+      throw error
+    }
   }
 )
 

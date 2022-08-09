@@ -17,6 +17,7 @@ import {
   setCurrentPage,
   updateAddressBook
 } from "features/address-book/addressBookSlice"
+import { toast } from "features/toasts/toastsSlice"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -69,7 +70,16 @@ export default function IndividualAddresses() {
           name: data.name,
           address: data.wallet
         },
-        callback: reset
+        callback: (error: unknown) => {
+          if (error) {
+            dispatch(toast.error({
+              message: t("addressBook:error-add")
+            }))
+            return
+          }
+          reset()
+          dispatch(toast.success({ message: t("addressBook:success-add") }))
+        }
       }
       dispatch(saveAddressBook(addressBookData))
     } else {
@@ -79,10 +89,18 @@ export default function IndividualAddresses() {
           name: data.name,
           address: data.wallet
         },
-        callback: () => {
+        callback: (error: unknown) => {
+          if (error) {
+            dispatch(toast.error({
+              message: t("addressBook:error-update")
+            }))
+          }
           setIsEdit(false)
           setEditAddressBookId("")
           reset()
+          dispatch(toast.success({
+            message: t("addressBook:success-update")
+          }))
         }
       }
       dispatch(updateAddressBook(addressBookData))
@@ -193,9 +211,8 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${
-                          !!errors.name?.message && "error"
-                        }`}
+                        className={`w-full h-10 ${!!errors.name?.message && "error"
+                          }`}
                         placeholder={t("addressBook:enter-name")}
                         type="text"
                         {...register("name")}
@@ -216,9 +233,8 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${
-                          !!errors.wallet?.message && "error"
-                        }`}
+                        className={`w-full h-10 ${!!errors.wallet?.message && "error"
+                          }`}
                         placeholder={t("addressBook:enter-wallet-address")}
                         type="text"
                         {...register("wallet")}
@@ -234,11 +250,10 @@ export default function IndividualAddresses() {
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
-                    title={`${
-                      isEdit
-                        ? t("addressBook:update-address")
-                        : t("addressBook:add-address")
-                    }`}
+                    title={`${isEdit
+                      ? t("addressBook:update-address")
+                      : t("addressBook:add-address")
+                      }`}
                   />
                 </div>
               </form>
