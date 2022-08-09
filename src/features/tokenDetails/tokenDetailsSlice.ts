@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { TokenListProvider } from "@solana/spl-token-registry"
 import { RootState } from "app/store"
-import { getRPCNetwork } from "constants/cluster"
-import tokenMetaData from "fakedata/tokens.json"
 import { getTokensUSDPrice } from "utils/getTokensPrice"
-import { TokenDetailsState } from "./tokenDetailsSlice.d"
+import { TokenDetailsState, TokenResponse } from "./tokenDetailsSlice.d"
 
 const initialState: TokenDetailsState = {
   loading: false,
@@ -18,37 +15,15 @@ const initialState: TokenDetailsState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTokens: any = createAsyncThunk(
   "token/fetchTokens",
-  async (_, { getState }) => {
-    const { tokenDetails } = getState() as RootState
-    let tokens = tokenDetails.tokens
-    const tokensMint = tokenMetaData
-      .filter((token) => token.mint)
-      .map((token) => token.mint)
-    const tokensData = await (await new TokenListProvider().resolve())
-      .filterByClusterSlug(getRPCNetwork())
-      .getList()
+  async (tokenDetails: TokenResponse[]) => {
+    const tokens = tokenDetails.map((res) => ({
+      name: res.name,
+      symbol: res.symbol,
+      decimal: res.decimal,
+      mint: res.mint,
+      coingeckoId: res.coingeco_id
+    }))
 
-    tokens = [
-      {
-        name: "Solana",
-        symbol: "SOL",
-        image:
-          "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-        mint: "solana",
-        decimal: 18,
-        coingeckoId: "solana"
-      },
-      ...tokensData
-        .filter((token) => tokensMint.includes(token.address))
-        .map((token) => ({
-          name: token.name,
-          symbol: token.symbol,
-          image: token.logoURI || "",
-          decimal: token.decimals,
-          mint: token.address,
-          coingeckoId: token?.extensions?.coingeckoId || ""
-        }))
-    ]
     return tokens
   }
 )

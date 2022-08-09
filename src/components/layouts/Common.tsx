@@ -5,18 +5,21 @@ import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchTreasury } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
-import { useEffect, useContext } from "react"
+import { useEffect, useContext, FC } from "react"
 import ZebecContext from "app/zebecContext"
 
-const Common = () => {
+const Common: FC<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tokenDetails: any
+}> = ({ tokenDetails }) => {
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
   const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
-    dispatch(fetchTokens())
-  }, [dispatch])
+    dispatch(fetchTokens(tokenDetails))
+  }, [dispatch, tokenDetails])
 
   useEffect(() => {
     if (tokens.length > 0 && walletObject.publicKey) {
@@ -25,6 +28,7 @@ const Common = () => {
     }
     // eslint-disable-next-line
   }, [walletObject.publicKey, tokens])
+
   useEffect(() => {
     if (walletObject.connected) {
       zebecContext.initialize(walletObject)
