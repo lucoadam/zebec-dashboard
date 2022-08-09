@@ -1,10 +1,10 @@
 import { useTranslation } from "next-i18next"
 import * as React from "react"
-import { NotificationProps } from "./Notifications"
 import * as Icons from "assets/icons"
-import { IconButton, Toggle } from "components/shared"
+import { Button, IconButton, Toggle } from "components/shared"
 import Link from "next/link"
 import { NotificationRows } from "./NotificationRows"
+import { NotificationProps } from "./NotificationsDropdown"
 
 export const NotificationSubscribed: React.FC<NotificationProps> = ({
   handleNotificationClose
@@ -47,16 +47,16 @@ export const NotificationSubscribed: React.FC<NotificationProps> = ({
 
       <div>
         <div className="flex text-content-primary pt-6">
-          <div className="text-subtitle font-semibold">
+          <div className="text-subtitle-sm font-semibold">
             {t("common:notifications.new")}
           </div>
-          <div className=" text-caption ml-auto rounded-lg justify-center items-center p-1 flex border border-outline gap-x-1 ">
-            <div>
-              <Icons.CheckIcon />
-            </div>
-            <div className="text-content-primary">
-              {t("common:notifications.mark-all-as-read")}
-            </div>
+          <div className=" ml-auto ">
+            <Button
+              title={`${t("common:notifications.mark-all-as-read")}`}
+              className="text-content-primary text-button-sm bg-background-20"
+              startIcon={<Icons.CheckIcon />}
+              size="small"
+            />
           </div>
         </div>
         <div>
@@ -64,7 +64,7 @@ export const NotificationSubscribed: React.FC<NotificationProps> = ({
         </div>
         {earlier && (
           <div className="pt-6 border-t border-outline">
-            <div className="text-subtitle font-semibold text-content-primary">
+            <div className="text-subtitle-sm font-semibold text-content-primary">
               {t("common:notifications.earlier")}
             </div>
             <div>

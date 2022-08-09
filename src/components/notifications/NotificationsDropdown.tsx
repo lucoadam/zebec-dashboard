@@ -25,7 +25,7 @@ export const NotificationStepsList: NotificationStep[] = [
 ]
 
 const NotificationsComponent = () => {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(0)
 
   const [toggleNotificationsDropdown, setToggleNotificationsDropdown] =
     useState<boolean>(false)
