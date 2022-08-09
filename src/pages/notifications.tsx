@@ -3,7 +3,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Layout from "components/layouts/Layout"
 import NotificationsComponent from "components/notifications/NotificationsPage"
 
-
 const Transactions: NextPage = () => {
   return (
     <>

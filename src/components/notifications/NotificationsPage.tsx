@@ -91,24 +91,24 @@ export default function NotificationsComponent() {
 
               <div className="pb-20">
                 <Button
-                    className={`w-full ${userNotification ? "hidden" : ""}`}
-                    variant="gradient"
-                    type="submit"
-                    title={`${t("common:notifications.subscribe")}`}
-                  />
+                  className={`w-full ${userNotification ? "hidden" : ""}`}
+                  variant="gradient"
+                  type="submit"
+                  title={`${t("common:notifications.subscribe")}`}
+                />
 
-                  {userNotification && (
-                    <>
-                      <div className="text-content-secondary pb-4">
-                        {t("common:notifications.unsubscribe-description")}
-                      </div>
-                      <Button
-                        className={`w-full`}
-                        variant="danger"
-                        endIcon={<Icons.Envelope />}
-                        type="button"
-                        title={`${t("common:notifications.unsubscribe")}`}
-                      />
+                {userNotification && (
+                  <>
+                    <div className="text-content-secondary pb-4">
+                      {t("common:notifications.unsubscribe-description")}
+                    </div>
+                    <Button
+                      className={`w-full`}
+                      variant="danger"
+                      endIcon={<Icons.Envelope />}
+                      type="button"
+                      title={`${t("common:notifications.unsubscribe")}`}
+                    />
                   </>
                 )}
               </div>

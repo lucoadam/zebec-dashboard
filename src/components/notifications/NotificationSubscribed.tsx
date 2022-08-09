@@ -1,16 +1,11 @@
 import { useTranslation } from "next-i18next"
 import * as React from "react"
-import { NotificationProps } from "./Notifications"
 import * as Icons from "assets/icons"
 import { IconButton, Toggle } from "components/shared"
 import Link from "next/link"
 import { NotificationRows } from "./NotificationRows"
+import { NotificationProps } from "./NotificationsDropdown"
 
-export const NotificationSubscribed: React.FC<NotificationProps> = ({
-  handleNotificationClose
-}) => {
-  const { t } = useTranslation("")
-  const [earlier, setEarlier] = React.useState<boolean>(true)
 
   return (
     <div className=" p-5">

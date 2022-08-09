@@ -5,6 +5,7 @@ import { Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { notificationSchema } from "utils/validations/notificationSchema"
 import { useTranslation } from "next-i18next"
+import { NotificationProps } from "./NotificationsDropdown"
 
 interface Notification {
   email: string
