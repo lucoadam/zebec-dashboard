@@ -6,6 +6,11 @@ import Link from "next/link"
 import { NotificationRows } from "./NotificationRows"
 import { NotificationProps } from "./NotificationsDropdown"
 
+export const NotificationSubscribed: React.FC<NotificationProps> = ({
+  handleNotificationClose
+}) => {
+  const { t } = useTranslation("")
+  const [earlier, setEarlier] = React.useState<boolean>(true)
 
   return (
     <div className=" p-5">

@@ -7,6 +7,14 @@ export interface TokenDetails {
   coingeckoId: string
 }
 
+export interface TokenResponse {
+  name: string
+  symbol: string
+  mint: string
+  decimal: number
+  coingeco_id: string
+}
+
 export interface TokenDetailsState {
   loading: boolean
   fetchingPrice: boolean
