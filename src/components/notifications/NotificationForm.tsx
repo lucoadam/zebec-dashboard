@@ -5,7 +5,7 @@ import { Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { notificationSchema } from "utils/validations/notificationSchema"
 import { useTranslation } from "next-i18next"
-import { NotificationProps } from "./Notifications"
+
 interface Notification {
   email: string
   telegram: string
