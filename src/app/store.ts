@@ -17,10 +17,12 @@ import resumeModalSlice from "features/modals/resumeModalSlice"
 import signModalSlice from "features/modals/signModalSlice"
 import stakeSlice from "features/modals/stakeSlice"
 import unStakeSlice from "features/modals/unStakeSlice"
+import walletApprovalMessageSlice from "features/modals/walletApprovalMessageSlice"
 import streamSlice from "features/stream/streamSlice"
 import toastsSlice from "features/toasts/toastsSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
 import tranasctionsSlice from "features/transactions/transactionsSlice"
+import treasurySlice from "features/treasury/treasurySlice"
 import treasuryBalanceSlice from "features/treasuryBalance/treasuryBalanceSlice"
 import treasurySettingsSlice from "features/treasurySettings/treasurySettingsSlice"
 import treasuryStreamingSlice from "features/treasuryStreamingBalance/treasuryStreamingSlice"
@@ -28,8 +30,8 @@ import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
-import walletApprovalMessageSlice from "features/modals/walletApprovalMessageSlice"
-import treasurySlice from "features/treasury/treasurySlice"
+import { persistReducer } from "redux-persist"
+import storage from "redux-persist/lib/storage"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -61,8 +63,15 @@ const combineReducer = combineReducers({
   treasury: treasurySlice
 })
 
+const persistConfig = {
+  key: "root",
+  storage
+}
+
+const persistedReducer = persistReducer(persistConfig, combineReducer)
+
 export const store = configureStore({
-  reducer: combineReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 })
 
