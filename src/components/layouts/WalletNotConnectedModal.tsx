@@ -1,14 +1,17 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { login } from "api"
+import TokenService from "api/services/token.service"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import { Button, Modal } from "components/shared"
+import { changeSignState } from "features/modals/signModalSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
-import TokenService from "api/services/token.service"
-import { login } from "api"
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     phantom: any
   }
 }
@@ -18,13 +21,14 @@ const WalletNotConnectedModal: NextPage = () => {
   const walletObject = useWallet()
   const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
-  const [isSigned, setIsSigned] = useState<boolean>(false)
+  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
       if (!token) handleLogin()
-      else setIsSigned(!!token)
+      else dispatch(changeSignState(!!token))
     }
   }, [walletObject.connected, isSigned])
 
@@ -37,7 +41,7 @@ const WalletNotConnectedModal: NextPage = () => {
   const handleLogin: () => void = async () => {
     const response = await login(walletObject)
     if (response?.status === 200) {
-      setIsSigned(true)
+      dispatch(changeSignState(true))
     }
   }
 
@@ -51,6 +55,7 @@ const WalletNotConnectedModal: NextPage = () => {
     if (typeof window !== "undefined") {
       const provider = window.phantom?.solana
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       provider.on("accountChanged", (publicKey: any) => {
         if (publicKey) {
           // Set new public key and continue as usual
@@ -59,6 +64,7 @@ const WalletNotConnectedModal: NextPage = () => {
           TokenService.removeTokens()
         } else {
           // Attempt to reconnect to Phantom
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
           provider.connect().catch((error: any) => {
             // Handle connection failure
           })

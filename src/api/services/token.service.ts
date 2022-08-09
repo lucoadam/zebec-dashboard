@@ -12,6 +12,9 @@ const setTokens = (data: { access_key: string; refresh_key: string }) => {
   localStorage.setItem("refresh_token", data.refresh_key)
 }
 
+const setAfterRefresh = (data: { access: string }) => {
+  localStorage.setItem("access_token", data.access)
+}
 const removeTokens = () => {
   localStorage.removeItem("access_token")
   localStorage.removeItem("refresh_token")
@@ -21,7 +24,8 @@ const TokenService = {
   getLocalAccessToken,
   getLocalRefreshToken,
   setTokens,
-  removeTokens
+  removeTokens,
+  setAfterRefresh
 }
 
 export default TokenService

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
-import axios from "axios"
 
 export interface AddressBook {
   id: number
@@ -33,6 +32,7 @@ export const fetchAddressBook: any = createAsyncThunk(
   "addressBook/fetchAddressBook",
   async () => {
     const { data: response } = await api.get(`/user/address/`)
+    console.log(response)
     return response.results
   }
 )
