@@ -51,13 +51,13 @@ const DCA: NextPage<{
             hasCloseIcon={false}
           >
             <div className="">
-              <div className="text-heading-5 text-content-primary pb-3">
+              <div className="text-heading-5 font-semibold text-content-primary pb-2">
                 {t("dca:cancel-modal-header")}
               </div>
-              <div className="text-content-secondary pb-3">
+              <div className="text-content-secondary pb-6">
                 {t("dca:cancel-content")}
               </div>
-              <div className="pt-[12px] pb-[12px]">
+              <div className="space-y-3">
                 <Button
                   className="w-full"
                   variant="danger"
@@ -65,8 +65,6 @@ const DCA: NextPage<{
                   startIcon={<Icons.TrashIcon />}
                   onClick={() => setIsOpen(true)}
                 />
-              </div>
-              <div className="pb-[12px]">
                 <Button
                   className="w-full"
                   title={`${t("dca:cancel")}`}
@@ -97,5 +95,3 @@ export async function getServerSideProps({
     }
   }
 }
-
-export default DCA

@@ -18,9 +18,9 @@ const TransactionTableRow: FC<TransactionTableRowProps> = ({ transaction }) => {
 
   return (
     <tr className={`flex items-center`}>
-      <td className="px-6 py-4 w-full">
+      <td className="px-6 py-8 w-full">
         <div className="flex items-center gap-x-2.5">
-          <Token symbol={transaction.symbol ?? "SOL"} />
+          <Token symbol={transaction.symbol ?? "SOL"} className="w-5 h-5" />
           <div className="flex flex-col gap-y-1 text-content-contrast">
             <div className="flex items-center text-subtitle-sm font-medium">
               <span className="text-body text-content-primary font-semibold">
@@ -35,12 +35,12 @@ const TransactionTableRow: FC<TransactionTableRowProps> = ({ transaction }) => {
           </div>
         </div>
       </td>
-      <td className="px-6 py-4 w-full">
+      <td className="px-6 py-8 w-full">
         <div className="text-caption text-content-primary">
           {moment(transaction.date).format("MMMM D, YYYY")}
         </div>
       </td>
-      <td className="px-6 py-4 w-full">
+      <td className="px-6 py-8 w-full">
         <div className="flex capitalize items-center gap-x-2.5 text-caption text-content-primary">
           {transaction.action === "buy" ? (
             <Icons.PlusIcon className="text-success w-4 h-4" />
@@ -50,7 +50,7 @@ const TransactionTableRow: FC<TransactionTableRowProps> = ({ transaction }) => {
           {transaction.action}
         </div>
       </td>
-      <td className="px-6 py-4 w-full">
+      <td className="px-6 py-8 w-full">
         <div className="text-caption text-content-primary">
           {formatCurrency(
             getUsdBalance(

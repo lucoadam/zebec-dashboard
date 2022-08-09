@@ -28,16 +28,12 @@ export const Overview: FC<{
         <div className="relative flex items-center text-base text-content-primary font-semibold">
           <div className="w-12">
             <IconButton
-              className="absolute top-0 left-0 h-6 w-6 p-[2px]"
-              icon={
-                <Token symbol={dca.token0} className="text-content-primary" />
-              }
+              className="absolute top-0 left-0 h-6 w-6"
+              icon={<Token symbol={dca.token0} className="text-base" />}
             />
             <IconButton
-              className="absolute top-0 left-3.5 h-6 w-6 p-[2px]"
-              icon={
-                <Token symbol={dca.token1} className="text-content-primary" />
-              }
+              className="absolute top-0 left-3.5 h-6 w-6"
+              icon={<Token symbol={dca.token1} className="text-base" />}
             />
           </div>
           {dca.token0}/{dca.token1}
