@@ -6,9 +6,13 @@ import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchTreasury } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
-import { useContext, useEffect } from "react"
 
-const Common = () => {
+import { FC, useContext, useEffect } from "react"
+
+const Common: FC<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tokenDetails: any
+}> = ({ tokenDetails }) => {
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
@@ -17,8 +21,8 @@ const Common = () => {
   const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
-    dispatch(fetchTokens())
-  }, [dispatch])
+    dispatch(fetchTokens(tokenDetails))
+  }, [dispatch, tokenDetails])
 
   useEffect(() => {
     if (isSigned && tokens.length > 0 && walletObject.publicKey) {

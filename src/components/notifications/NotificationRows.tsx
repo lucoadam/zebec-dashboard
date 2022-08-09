@@ -10,7 +10,7 @@ export function NotificationRows() {
     <div>
       <div className="flex gap-x-4 border-b border-outline pb-3 pt-1">
         <div className="text-content-success pt-4">
-          <Icons.Pass />
+          <Icons.Pass className="w-6 h-6" />
         </div>
         <div>
           <div className="text-content-success font-semibold pt-3">
@@ -29,14 +29,14 @@ export function NotificationRows() {
               />
             </div>
             <div className="text-content-tertiary text-caption pl-2 pt-1">
-              {moment().subtract(10, "days").calendar()}
+              {moment("2022080822", "YYYYMMDDHH").fromNow()}
             </div>
           </div>
         </div>
       </div>
       <div className="flex gap-x-4 pb-3">
         <div className="text-content-error pt-4 ">
-          <Icons.Fail />
+          <Icons.Fail className="w-6 h-6" />
         </div>
         <div>
           <div className="text-content-error font-semibold pt-3">
@@ -48,7 +48,7 @@ export function NotificationRows() {
           </div>
 
           <div className="text-content-tertiary text-caption pt-2">
-            {moment().subtract(10, "minutes").calendar()}
+            {moment("2022072016", "YYYYMMDDHH").fromNow()}
           </div>
         </div>
       </div>

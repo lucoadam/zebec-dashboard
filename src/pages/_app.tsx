@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AppProps } from "next/app"
 import { useMemo } from "react"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
@@ -21,8 +22,14 @@ import Common from "components/layouts/Common"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
+import axios from "axios"
+import { TokenResponse } from "features/tokenDetails/tokenDetailsSlice.d"
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({
+  Component,
+  pageProps,
+  tokenDetails
+}: AppProps & { tokenDetails: TokenResponse[] }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
   const network = WalletAdapterNetwork.Devnet
   // You can also provide a custom RPC endpoint
@@ -44,7 +51,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             <ThemeProvider>
               <ZebecContextProvider>
                 <Component {...pageProps} />
-                <Common />
+                <Common tokenDetails={tokenDetails} />
               </ZebecContextProvider>
             </ThemeProvider>
           </WalletModalProvider>
@@ -52,6 +59,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </ConnectionProvider>
     </Provider>
   )
+}
+
+MyApp.getInitialProps = async () => {
+  const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
+  return {
+    tokenDetails: data as TokenResponse[]
+  }
 }
 
 export default appWithTranslation(MyApp)
