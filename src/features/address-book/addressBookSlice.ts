@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
-import axios from "axios"
+import { RootState } from "app/store"
 
 export interface AddressBook {
   id: number
@@ -13,6 +13,9 @@ interface AddressBookState {
   loading: boolean
   saving: boolean
   deleting: boolean
+  total: number
+  currentPage: number
+  limit: number
   addressBooks: AddressBook[]
   error: string
 }
@@ -25,15 +28,26 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
+  total: 0,
+  limit: 5,
+  currentPage: 1,
   addressBooks: [],
   error: ""
 }
 
 export const fetchAddressBook: any = createAsyncThunk(
   "addressBook/fetchAddressBook",
-  async () => {
-    const { data: response } = await api.get(`/user/address/`)
-    return response.results
+  async (_, { getState }) => {
+    const { address } = getState() as RootState
+    const { data: response } = await api.get(
+      `/user/address/?limit=${address.limit}&offset=${
+        (address.currentPage - 1) * address.limit
+      }`
+    )
+    return {
+      addressBooks: response.results,
+      total: response.count
+    }
   }
 )
 
@@ -94,16 +108,24 @@ export const deleteAddressBook: any = createAsyncThunk(
 const addressBookSlice = createSlice({
   name: "addressBook",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload
+    },
+    setLimit: (state, action: PayloadAction<number>) => {
+      state.limit = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAddressBook.pending, (state) => {
       state.loading = true
     })
     builder.addCase(
       fetchAddressBook.fulfilled,
-      (state, action: PayloadAction<typeof initialState.addressBooks>) => {
+      (state, action: PayloadAction<AddressBookState>) => {
         state.loading = false
-        state.addressBooks = action.payload
+        state.addressBooks = action.payload.addressBooks
+        state.total = action.payload.total
         state.error = ""
       }
     )
@@ -146,5 +168,7 @@ const addressBookSlice = createSlice({
     })
   }
 })
+
+export const { setCurrentPage, setLimit } = addressBookSlice.actions
 
 export default addressBookSlice.reducer
