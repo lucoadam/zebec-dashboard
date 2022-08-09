@@ -7,11 +7,14 @@ import {
   EmptyDataState,
   IconButton,
   InputField,
+  Pagination,
   Table,
   TableBody
 } from "components/shared"
 import {
+  fetchAddressBook,
   saveAddressBook,
+  setCurrentPage,
   updateAddressBook
 } from "features/address-book/addressBookSlice"
 import { useTranslation } from "next-i18next"
@@ -21,7 +24,9 @@ import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
-  const addressBooks = useAppSelector((state) => state.address.addressBooks)
+  const { addressBooks, total, limit } = useAppSelector(
+    (state) => state.address
+  )
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
@@ -125,19 +130,30 @@ export default function IndividualAddresses() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 overflow-hidden">
             {addressBooks.length > 0 ? (
-              <Table headers={headers}>
-                <TableBody className="justify between">
-                  {addressBooks?.map((addressBook) => {
-                    return (
-                      <IndividualAddresesTableRow
-                        key={addressBook.id}
-                        addressBook={addressBook}
-                        onEdit={onEdit}
-                      />
-                    )
-                  })}
-                </TableBody>
-              </Table>
+              <>
+                <Table headers={headers}>
+                  <TableBody className="justify between">
+                    {addressBooks?.map((addressBook) => {
+                      return (
+                        <IndividualAddresesTableRow
+                          key={addressBook.id}
+                          addressBook={addressBook}
+                          onEdit={onEdit}
+                        />
+                      )
+                    })}
+                  </TableBody>
+                </Table>
+                <div className="mt-6">
+                  <Pagination
+                    pages={Math.ceil(total / limit)}
+                    onChange={(page: number) => {
+                      dispatch(setCurrentPage(page))
+                      dispatch(fetchAddressBook())
+                    }}
+                  />
+                </div>
+              </>
             ) : (
               <EmptyDataState
                 message={t("addressBook:empty-address-book")}

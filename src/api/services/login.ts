@@ -18,8 +18,8 @@ export const login = async (walletObject: WalletContextState) => {
 
       const signedMessage = await signMessage(encodedMessage)
 
-      var b64 = Buffer.from(signedMessage).toString("base64")
-      var pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
+      const b64 = Buffer.from(signedMessage).toString("base64")
+      const pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
       const messagetob = Buffer.from(encodedMessage).toString("base64")
 
       const data = {
