@@ -11,7 +11,7 @@ import {
 import { useClickOutside } from "hooks"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
-import { StaticImageData } from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { formatCurrency } from "utils"
@@ -196,7 +196,7 @@ export const Deposit = () => {
                           depositFrom.includes(item.name) ? "text-primary" : ""
                         )}
                       >
-                        <img
+                        <Image
                           src={Avatars[index % 3].src}
                           width={16}
                           height={16}

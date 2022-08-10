@@ -39,7 +39,8 @@ const WalletNotConnectedModal: NextPage = () => {
       if (!token) handleLogin()
       else dispatch(changeSignState(!!token))
     }
-  }, [walletObject.connected, isSigned, dispatch])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletObject.connected, isSigned])
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
@@ -47,35 +48,33 @@ const WalletNotConnectedModal: NextPage = () => {
       : walletModalObject.setVisible(!walletModalObject.visible)
   }
 
-
-
   useEffect(() => {
     setTimeout(() => {
       setIsInitialized(true)
     }, 800)
   }, [])
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const provider = window.phantom?.solana
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const provider = window.phantom?.solana
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      provider.on("accountChanged", (publicKey: any) => {
-        if (publicKey) {
-          // Set new public key and continue as usual
-          console.log(`Switched to account ${publicKey.toBase58()}`)
-          walletObject.disconnect()
-          TokenService.removeTokens()
-        } else {
-          // Attempt to reconnect to Phantom
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-          provider.connect().catch((error: any) => {
-            // Handle connection failure
-          })
-        }
-      })
-    }
-  }, [])
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     provider.on("accountChanged", (publicKey: any) => {
+  //       if (publicKey) {
+  //         // Set new public key and continue as usual
+  //         console.log(`Switched to account ${publicKey.toBase58()}`)
+  //         walletObject.disconnect()
+  //         TokenService.removeTokens()
+  //       } else {
+  //         // Attempt to reconnect to Phantom
+  //         // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  //         provider.connect().catch((error: any) => {
+  //           // Handle connection failure
+  //         })
+  //       }
+  //     })
+  //   }
+  // }, [])
 
   return (
     <>
@@ -95,10 +94,11 @@ const WalletNotConnectedModal: NextPage = () => {
             </p>
             <Button
               className="w-full mt-10"
-              title={`${walletObject.connected && !isSigned
-                ? t("wallet-not-connected.sign-message")
-                : t("wallet-not-connected.connect-wallet")
-                }`}
+              title={`${
+                walletObject.connected && !isSigned
+                  ? t("wallet-not-connected.sign-message")
+                  : t("wallet-not-connected.connect-wallet")
+              }`}
               variant="gradient"
               onClick={() =>
                 walletObject.connected && !isSigned
