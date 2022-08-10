@@ -29,18 +29,18 @@ const MyApp = ({
   pageProps,
   tokenDetails = [
     {
-      "symbol": "SOL",
-      "name": "Solana",
-      "decimal": 18,
-      "mint": "solana",
-      "coingeco_id": "solana"
+      symbol: "SOL",
+      name: "Solana",
+      decimal: 18,
+      mint: "solana",
+      coingeco_id: "solana"
     },
     {
-      "symbol": "ZBC",
-      "name": "Zebec",
-      "decimal": 9,
-      "mint": "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
-      "coingeco_id": "zebec-protocol"
+      symbol: "ZBC",
+      name: "Zebec",
+      decimal: 9,
+      mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
+      coingeco_id: "zebec-protocol"
     }
   ]
 }: AppProps & { tokenDetails: TokenResponse[] }) => {
