@@ -143,10 +143,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
-      transaction_name: data.transaction_name,
-      symbol: data.symbol,
-      amount: Number(data.amount),
+      name: data.transaction_name,
+      transaction_type: "continuous",
+      token: data.symbol,
       remarks: data.remarks || "",
+      amount: Number(data.amount),
       receiver: data.receiver,
       sender: data.wallet,
       start_time: moment(
@@ -160,7 +161,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
       file: data.file,
-      transaction_type: "continuous"
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
@@ -469,8 +469,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div className="flex justify-between">
                 <label
                   className={`${getValues().enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
+                    ? "text-content-tertiary"
+                    : "text-content-primary"
                     } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:amount")}
@@ -597,8 +597,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div>
                 <label
                   className={`${getValues().enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
+                    ? "text-content-tertiary"
+                    : "text-content-primary"
                     } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:stream-end")}

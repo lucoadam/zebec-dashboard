@@ -18,7 +18,7 @@ export const initStreamNative: any =
         const backendData = {
           ...data,
           pda: response?.data?.pda,
-          transactionHash: response?.data?.transactionHash
+          transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData))
       } else {
@@ -55,7 +55,7 @@ export const initStreamToken: any =
         const backendData = {
           ...data,
           pda: response?.data?.pda,
-          transactionHash: response?.data?.transactionHash
+          transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData))
       } else {

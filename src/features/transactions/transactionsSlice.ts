@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import api from "api/api"
 import axios from "axios"
 
 interface TransactionState {
@@ -18,10 +19,12 @@ const initialState: TransactionState = {
 
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (sender: string) => {
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
-    )
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
+    // )
+    const { data: response } = await api.get(`/transaction/`)
     return response
   }
 )
