@@ -49,11 +49,10 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
         <>
           <div className={className}>
             <label
-              className={`${
-                props.disabled
+              className={`${props.disabled
                   ? "text-content-tertiary"
                   : "text-content-secondary"
-              }`}
+                }`}
             >
               {" "}
               {t("common:balances.token")}
@@ -73,11 +72,10 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   />
                 )}
                 <span
-                  className={`${
-                    props.disabled
+                  className={`${props.disabled
                       ? "text-content-tertiary"
                       : "text-content-primary"
-                  }`}
+                    }`}
                 >
                   {token?.symbol ?? "SOL"}{" "}
                 </span>
@@ -87,12 +85,12 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                 <input
                   type="number"
                   step={"any"}
-                  className={`!pl-[104px] !pr-14 w-full h-[40px] ${
-                    errorMessage && "error"
-                  }`}
+                  className={`!pl-[104px] !pr-14 w-full h-[40px] ${errorMessage && "error"
+                    }`}
                   placeholder="Enter Amount"
                   {...rest}
                   ref={ref}
+                  autoComplete="off"
                 />
                 <Button
                   type="button"
@@ -101,11 +99,10 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   }}
                   title={`${t("common:buttons.max")}`}
                   size="small"
-                  className={`absolute right-[8px] top-[8px] ${
-                    props.disabled
+                  className={`absolute right-[8px] top-[8px] ${props.disabled
                       ? "text-content-tertiary"
                       : "text-content-primary"
-                  }`}
+                    }`}
                 />
               </div>
 

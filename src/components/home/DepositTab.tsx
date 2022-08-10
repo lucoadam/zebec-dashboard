@@ -8,6 +8,8 @@ import { depositNative, depositToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import { PublicKey } from "@solana/web3.js"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -31,7 +33,8 @@ const DepositTab: FC = () => {
     handleSubmit,
     setValue,
     trigger,
-    setError
+    setError,
+    reset
   } = useWithdrawDepositForm({
     tokens: tokenDetails,
     type: "withdraw"
@@ -40,6 +43,14 @@ const DepositTab: FC = () => {
   const setMaxAmount = () => {
     setValue("amount", getBalance(walletTokens, currentToken.symbol))
     trigger("amount")
+  }
+
+  const depositCallback = () => {
+    reset()
+    setTimeout(() => {
+      dispatch(fetchZebecBalance(publicKey?.toString()))
+      dispatch(fetchWalletBalance(publicKey?.toString()))
+    }, 15000)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,8 +71,8 @@ const DepositTab: FC = () => {
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
       if (currentToken.symbol === "SOL")
-        stream && dispatch(depositNative(depositData, stream, setLoading))
-      else token && dispatch(depositToken(depositData, token, setLoading))
+        stream && dispatch(depositNative(depositData, stream, setLoading, depositCallback))
+      else token && dispatch(depositToken(depositData, token, setLoading, depositCallback))
     }
   }
 
