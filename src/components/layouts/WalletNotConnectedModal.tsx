@@ -7,7 +7,7 @@ import { Button, Modal } from "components/shared"
 import { changeSignState } from "features/modals/signModalSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 declare global {
   interface Window {
@@ -24,13 +24,22 @@ const WalletNotConnectedModal: NextPage = () => {
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
 
+  const handleLogin: () => void = async () => {
+    const response = await login(walletObject)
+    if (response?.status === 200) {
+      dispatch(changeSignState(true))
+    }
+  }
+
+  const loginCallback = useCallback(() => handleLogin(), [])
+
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
-      if (!token) handleLogin()
+      if (!token) loginCallback()
       else dispatch(changeSignState(!!token))
     }
-  }, [walletObject.connected, isSigned])
+  }, [walletObject.connected, isSigned, dispatch, loginCallback])
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
@@ -38,12 +47,7 @@ const WalletNotConnectedModal: NextPage = () => {
       : walletModalObject.setVisible(!walletModalObject.visible)
   }
 
-  const handleLogin: () => void = async () => {
-    const response = await login(walletObject)
-    if (response?.status === 200) {
-      dispatch(changeSignState(true))
-    }
-  }
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -91,11 +95,10 @@ const WalletNotConnectedModal: NextPage = () => {
             </p>
             <Button
               className="w-full mt-10"
-              title={`${
-                walletObject.connected && !isSigned
+              title={`${walletObject.connected && !isSigned
                   ? t("wallet-not-connected.sign-message")
                   : t("wallet-not-connected.connect-wallet")
-              }`}
+                }`}
               variant="gradient"
               onClick={() =>
                 walletObject.connected && !isSigned

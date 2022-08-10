@@ -110,7 +110,7 @@ const AddOwners: FC<StepsComponentProps> = ({
         user.name.toLowerCase().includes(receiverSearchData.toLowerCase())
       )
       .filter(
-        (user) => !owners.map((owner) => owner.wallet).includes(user.wallet)
+        (user) => !owners.map((owner) => owner.wallet).includes(user.address)
       )
 
   return (
@@ -160,9 +160,8 @@ const AddOwners: FC<StepsComponentProps> = ({
                   <div className="flex-1">
                     <input
                       type="text"
-                      className={`w-full h-[40px] ${
-                        !!errors.wallet ? "error" : ""
-                      }`}
+                      className={`w-full h-[40px] ${!!errors.wallet ? "error" : ""
+                        }`}
                       placeholder={t(
                         "createTreasury:second-steper.form.owner-address"
                       )}
@@ -227,14 +226,14 @@ const AddOwners: FC<StepsComponentProps> = ({
               <div className="divide-y divide-outline h-[207px] overflow-auto">
                 {getFilteredAddressBook().map((user) => (
                   <div
-                    key={user.wallet}
+                    key={user.address}
                     className="w-full h-[68px] flex gap-[15px] border-outline p-4 justify-start items-center hover:bg-background-light"
                   >
                     <input
                       type="checkbox"
                       className="hover:cursor-pointer h-5 w-5 rounded-sm focus:ring-offset-0 focus:ring-0 shadow-none outline-none border-2 border-outline bg-transparent"
                       checked={
-                        owners.some((owner) => owner.wallet === user.wallet)
+                        owners.some((owner) => owner.wallet === user.address)
                           ? true
                           : undefined
                       }
@@ -244,13 +243,13 @@ const AddOwners: FC<StepsComponentProps> = ({
                             ...checkedOwners,
                             {
                               name: user.name,
-                              wallet: user.wallet
+                              wallet: user.address
                             }
                           ])
                         } else {
                           setCheckedOwners(
                             checkedOwners.filter(
-                              (owner) => owner.wallet !== user.wallet
+                              (owner) => owner.wallet !== user.address
                             )
                           )
                         }
@@ -261,7 +260,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                         {user.name}
                       </p>
                       <p className="text-xs text-content-tertiary">
-                        {toSubstring(user.wallet, 28, false)}
+                        {toSubstring(user.address, 28, false)}
                       </p>
                     </div>
                   </div>

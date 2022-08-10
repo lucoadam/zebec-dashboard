@@ -1,11 +1,9 @@
-import { ZebecNativeStreamProps, MPauseResumeWithdrawCancel } from "./stream.d"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { togglePauseModal } from "features/modals/pauseModalSlice"
 import { toast } from "features/toasts/toastsSlice"
-import {
-  // pauseTransaction,
-  togglePauseModal
-} from "features/modals/pauseModalSlice"
+import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
-export const pauseStreamNative =
+export const pauseStreamNative: any =
   (data: MPauseResumeWithdrawCancel, stream: ZebecNativeStreamProps) =>
   async (dispatch: any) => {
     try {
@@ -41,7 +39,7 @@ export const pauseStreamNative =
     }
   }
 
-export const pauseStreamToken =
+export const pauseStreamToken: any =
   (data: MPauseResumeWithdrawCancel, token: ZebecNativeStreamProps) =>
   async (dispatch: any) => {
     try {
