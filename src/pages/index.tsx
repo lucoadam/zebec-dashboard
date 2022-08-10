@@ -1,4 +1,4 @@
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import HomePage from "components/home"
 import Layout from "components/layouts/Layout"
 import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
@@ -10,16 +10,19 @@ import { useEffect } from "react"
 const Home: NextPage = () => {
   // const { t } = useTranslation("common")
   const dispatch = useAppDispatch()
+  const tokens = useAppSelector(state => state.tokenDetails.tokens)
   useEffect(() => {
-    dispatch(fetchTokensPrice())
-    const interval = setInterval(() => {
+    if (tokens.length > 0) {
       dispatch(fetchTokensPrice())
-    }, 30000)
+      const interval = setInterval(() => {
+        dispatch(fetchTokensPrice())
+      }, 30000)
 
-    return () => {
-      clearInterval(interval)
+      return () => {
+        clearInterval(interval)
+      }
     }
-  }, [dispatch])
+  }, [dispatch, tokens])
 
   return (
     <Layout pageTitle="Zebec">
