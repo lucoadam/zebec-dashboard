@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios"
 
@@ -14,7 +15,7 @@ const initialState: SafeNameState = {
 }
 
 //Generates pending, fulfilled and rejected action types
-export const updateSafeName = createAsyncThunk(
+export const updateSafeName: any = createAsyncThunk(
   "safeName/fetchSafeName",
   async (data: { name: string }) => {
     await axios.put("https://jsonplaceholder.typicode.com/safeName")

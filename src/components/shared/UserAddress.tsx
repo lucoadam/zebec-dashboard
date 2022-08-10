@@ -19,7 +19,7 @@ export const UserAddress: FC<{
   wallet: string
 }> = ({ wallet }) => {
   const { addressBooks } = useAppSelector((state) => state.address)
-  const isInAddressBook = addressBooks.some((item) => item.wallet === wallet)
+  const isInAddressBook = addressBooks.some((item) => item.address === wallet)
   const AddressDropdownWrapperRef = useRef(null)
 
   const { t } = useTranslation()
@@ -63,10 +63,10 @@ export const UserAddress: FC<{
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
-              addressBooks.find((item) => item.wallet === wallet)?.name,
-              12,
-              false
-            )
+            addressBooks.find((item) => item.address === wallet)?.name,
+            12,
+            false
+          )
           : toSubstring(wallet, 5, true)}{" "}
       </span>
       {!isInAddressBook && (
@@ -96,9 +96,8 @@ export const UserAddress: FC<{
                 >
                   <div>
                     <input
-                      className={`w-full h-10 ${
-                        !!errors.name?.message && "error"
-                      }`}
+                      className={`w-full h-10 ${!!errors.name?.message && "error"
+                        }`}
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("name")}
