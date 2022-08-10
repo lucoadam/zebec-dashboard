@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction } from "react"
 import {
   ZebecNativeStreamProps,
@@ -5,11 +6,12 @@ import {
 } from "./stream"
 import { toast } from "features/toasts/toastsSlice"
 
-export const depositNative =
+export const depositNative: any =
   (
     data: MDepositWithdrawFromZebecVault,
     stream: ZebecNativeStreamProps,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    callback?: () => void
   ) =>
   async (dispatch: any) => {
     try {
@@ -21,6 +23,7 @@ export const depositNative =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) callback()
       } else {
         dispatch(
           toast.error({
@@ -39,11 +42,12 @@ export const depositNative =
     setLoading(false)
   }
 
-export const depositToken =
+export const depositToken: any =
   (
     data: MDepositWithdrawFromZebecVault,
     token: ZebecNativeStreamProps,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    callback?: () => void
   ) =>
   async (dispatch: any) => {
     try {
@@ -55,6 +59,7 @@ export const depositToken =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) callback()
       } else {
         dispatch(
           toast.error({

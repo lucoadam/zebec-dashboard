@@ -8,6 +8,8 @@ import { withdrawNative, withdrawToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import { PublicKey } from "@solana/web3.js"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -31,7 +33,8 @@ const WithdrawTab: FC = () => {
     handleSubmit,
     setValue,
     trigger,
-    setError
+    setError,
+    reset
   } = useWithdrawDepositForm({
     tokens: tokenDetails,
     type: "withdraw"
@@ -40,6 +43,14 @@ const WithdrawTab: FC = () => {
   const setMaxAmount = () => {
     setValue("amount", getBalance(walletTokens, currentToken.symbol))
     trigger("amount")
+  }
+
+  const withdrawCallback = () => {
+    reset()
+    setTimeout(() => {
+      dispatch(fetchZebecBalance(publicKey?.toString()))
+      dispatch(fetchWalletBalance(publicKey?.toString()))
+    }, 15000)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,8 +73,8 @@ const WithdrawTab: FC = () => {
       }
       console.log(withdrawData)
       if (currentToken.symbol === "SOL")
-        stream && dispatch(withdrawNative(withdrawData, stream, setLoading))
-      else token && dispatch(withdrawToken(withdrawData, token, setLoading))
+        stream && dispatch(withdrawNative(withdrawData, stream, setLoading, withdrawCallback))
+      else token && dispatch(withdrawToken(withdrawData, token, setLoading, withdrawCallback))
     }
   }
 
