@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import api from "api/api"
 import axios from "axios"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
@@ -17,10 +18,11 @@ const initialState: SendState = {
 export const sendContinuousStream: any = createAsyncThunk(
   "send/sendContinuousStream",
   async (data: any, { dispatch }) => {
-    const { data: response } = await axios.post(
-      "https://internal-ten-cherry.glitch.me/transactions",
-      data
-    )
+    // const { data: response } = await axios.post(
+    //   "https://internal-ten-cherry.glitch.me/transactions",
+    //   data
+    // )
+    const { data: response } = await api.post("/transaction/", data)
     dispatch(fetchOutgoingTransactions(data.sender))
     dispatch(toggleWalletApprovalMessageModal())
     return response
