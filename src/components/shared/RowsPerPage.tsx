@@ -5,12 +5,13 @@ import * as Icons from "assets/icons"
 
 interface RowsPerPageProps {
   noOfRows: number
-  setNoOfRows: (noOfRows: number) => void
+  setNoOfRows?: (noOfRows: number) => void
   noOfOptions?: number[]
+  onChange?: (noOfRows: number) => void
 }
 
 export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
-  const { noOfRows, setNoOfRows, noOfOptions } = props
+  const { noOfRows, setNoOfRows, noOfOptions, onChange } = props
   const [toggleNoOfRows, settoggleNoofRows] = useState(false)
   const RowsDropdownWrapper = useRef(null)
   const Options: number[] = noOfOptions ? noOfOptions : [10, 20, 30, 40, 50]
@@ -51,7 +52,8 @@ export const RowsPerPage: FC<RowsPerPageProps> = (props) => {
                   onClick={(e) => {
                     e?.stopPropagation()
                     settoggleNoofRows(false)
-                    setNoOfRows(item)
+                    if (setNoOfRows) setNoOfRows(item)
+                    if (onChange) onChange(item)
                   }}
                   key={`rows-${index}`}
                   className="text-content-secondary py-2 pl-4 pr-4  flex cursor-pointer overflow-hidden justify-center items-center hover:text-primary  h-auto"
