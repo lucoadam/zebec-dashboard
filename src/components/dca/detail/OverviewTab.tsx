@@ -1,5 +1,5 @@
 import * as Icons from "assets/icons"
-import { SupportCard, Tab } from "components/shared"
+import { SupportCardComponents, Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { useState } from "react"
 import { Balances } from "./Balances"
@@ -46,13 +46,13 @@ export const OverviewTab = () => {
         <div className="grid md:grid-cols-2 gap-6">
           <Balances />
           <div className="w-full pt-3 rounded bg-background-secondary">
-            <div className="flex">
+            <div className="flex items-center border-b border-outline pt-2">
               {fundTransferTabs.map((fundTranfer, index) => {
                 return (
                   <Tab
                     key={fundTranfer.title}
                     type="plain"
-                    className="w-1/2"
+                    className="w-1/2 justify-center"
                     title={`${t(fundTranfer.title)}`}
                     isActive={activePage === index}
                     startIcon={fundTranfer.icon}
@@ -68,31 +68,8 @@ export const OverviewTab = () => {
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
-          <SupportCard
-            buttons={[
-              {
-                title: "Check FAQs"
-              },
-              {
-                title: "Join Discord"
-              }
-            ]}
-            title="Zebec DCA Help"
-            description="Browse through our support articles or lets get in touch through Discord."
-          />
-
-          <SupportCard
-            buttons={[
-              {
-                title: "Check FAQs"
-              },
-              {
-                title: "Join Discord"
-              }
-            ]}
-            title="Zebec DCA Help"
-            description="Browse through our support articles or lets get in touch through Discord."
-          />
+          <SupportCardComponents.ZebecHelp page="dca" />
+          <SupportCardComponents.SendFeedback />
         </div>
       </div>
     </div>

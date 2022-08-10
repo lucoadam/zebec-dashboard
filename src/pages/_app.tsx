@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AppProps } from "next/app"
-import { useMemo } from "react"
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import {
   ConnectionProvider,
@@ -14,21 +12,37 @@ import {
 } from "@solana/wallet-adapter-wallets"
 import { clusterApiUrl } from "@solana/web3.js"
 import { store } from "app/store"
-import { appWithTranslation } from "next-i18next"
-import { ThemeProvider } from "next-themes"
-import { Provider } from "react-redux"
 import { ZebecContextProvider } from "app/zebecContext"
 import Common from "components/layouts/Common"
+import { appWithTranslation } from "next-i18next"
+import { ThemeProvider } from "next-themes"
+import type { AppProps } from "next/app"
+import { useMemo } from "react"
+import { Provider } from "react-redux"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
-import "styles/globals.css"
-import axios from "axios"
 import { TokenResponse } from "features/tokenDetails/tokenDetailsSlice.d"
+import "styles/globals.css"
 
 const MyApp = ({
   Component,
   pageProps,
-  tokenDetails
+  tokenDetails = [
+    {
+      symbol: "SOL",
+      name: "Solana",
+      decimal: 18,
+      mint: "solana",
+      coingeco_id: "solana"
+    },
+    {
+      symbol: "ZBC",
+      name: "Zebec",
+      decimal: 9,
+      mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
+      coingeco_id: "zebec-protocol"
+    }
+  ]
 }: AppProps & { tokenDetails: TokenResponse[] }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
   const network = WalletAdapterNetwork.Devnet
@@ -61,11 +75,11 @@ const MyApp = ({
   )
 }
 
-MyApp.getInitialProps = async () => {
-  const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
-  return {
-    tokenDetails: data as TokenResponse[]
-  }
-}
+// MyApp.getInitialProps = async () => {
+//   const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
+//   return {
+//     tokenDetails: data as TokenResponse[]
+//   }
+// }
 
 export default appWithTranslation(MyApp)

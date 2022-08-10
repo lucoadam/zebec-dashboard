@@ -24,12 +24,22 @@ const WalletNotConnectedModal: NextPage = () => {
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
 
+  const handleLogin: () => void = async () => {
+    const response = await login(walletObject)
+    if (response?.status === 200) {
+      dispatch(changeSignState(true))
+    }
+  }
+
+  // const loginCallback = useCallback(() => handleLogin(), [])
+
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
       if (!token) handleLogin()
       else dispatch(changeSignState(!!token))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletObject.connected, isSigned])
 
   const handleConnectWallet: () => void = () => {
@@ -38,40 +48,33 @@ const WalletNotConnectedModal: NextPage = () => {
       : walletModalObject.setVisible(!walletModalObject.visible)
   }
 
-  const handleLogin: () => void = async () => {
-    const response = await login(walletObject)
-    if (response?.status === 200) {
-      dispatch(changeSignState(true))
-    }
-  }
-
   useEffect(() => {
     setTimeout(() => {
       setIsInitialized(true)
     }, 800)
   }, [])
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const provider = window.phantom?.solana
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const provider = window.phantom?.solana
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      provider.on("accountChanged", (publicKey: any) => {
-        if (publicKey) {
-          // Set new public key and continue as usual
-          console.log(`Switched to account ${publicKey.toBase58()}`)
-          walletObject.disconnect()
-          TokenService.removeTokens()
-        } else {
-          // Attempt to reconnect to Phantom
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-          provider.connect().catch((error: any) => {
-            // Handle connection failure
-          })
-        }
-      })
-    }
-  }, [])
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     provider.on("accountChanged", (publicKey: any) => {
+  //       if (publicKey) {
+  //         // Set new public key and continue as usual
+  //         console.log(`Switched to account ${publicKey.toBase58()}`)
+  //         walletObject.disconnect()
+  //         TokenService.removeTokens()
+  //       } else {
+  //         // Attempt to reconnect to Phantom
+  //         // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  //         provider.connect().catch((error: any) => {
+  //           // Handle connection failure
+  //         })
+  //       }
+  //     })
+  //   }
+  // }, [])
 
   return (
     <>

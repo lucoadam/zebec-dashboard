@@ -2,6 +2,8 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { initStreamNative, initStreamToken } from "application"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
 import {
@@ -15,11 +17,12 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState, useContext } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
@@ -30,9 +33,6 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
-import { initStreamNative, initStreamToken } from "application"
-import ZebecContext from "app/zebecContext"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 const intervals = [
   {
@@ -143,10 +143,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
-      transaction_name: data.transaction_name,
-      symbol: data.symbol,
-      amount: Number(data.amount),
+      name: data.transaction_name,
+      transaction_type: "continuous",
+      token: data.symbol,
       remarks: data.remarks || "",
+      amount: Number(data.amount),
       receiver: data.receiver,
       sender: data.wallet,
       start_time: moment(
@@ -160,7 +161,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
       file: data.file,
-      transaction_type: "continuous"
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
@@ -254,9 +254,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${
-                      !getValues().showRemarks && "!pr-[124px]"
-                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
+                    className={`${!getValues().showRemarks && "!pr-[124px]"
+                      } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transaction_name")}
@@ -283,9 +282,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pr-12 ${
-                    !!errors.receiver && "error"
-                  }`}
+                  className={`h-[40px] w-full !pr-12 ${!!errors.receiver && "error"
+                    }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiver")}
                 />
@@ -321,11 +319,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       )
                       .map((user) => (
                         <div
-                          key={user.wallet}
+                          key={user.address}
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiver", user.wallet)
+                            setValue("receiver", user.address)
                             trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
@@ -334,7 +332,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                             {user.name}
                           </div>
                           <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.wallet, 28, false)}
+                            {toSubstring(user.address, 28, false)}
                           </div>
                         </div>
                       ))}
@@ -403,9 +401,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pl-11 ${
-                    !!errors.symbol && "error"
-                  }`}
+                  className={`h-[40px] w-full !pl-11 ${!!errors.symbol && "error"
+                    }`}
                   readOnly
                   {...register("symbol")}
                 />
@@ -471,11 +468,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div className="flex justify-between">
                 <label
-                  className={`${
-                    getValues().enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
-                  } ml-3 text-xs font-medium mb-1`}
+                  className={`${getValues().enableStreamRate
+                    ? "text-content-tertiary"
+                    : "text-content-primary"
+                    } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:amount")}
                 </label>
@@ -484,7 +480,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 >
                   {formatCurrency(
                     prices[currentToken.symbol] * Number(getValues().amount) ||
-                      0,
+                    0,
                     "$"
                   )}{" "}
                 </label>
@@ -497,9 +493,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${
-                      !getValues().enableStreamRate && "!pr-14"
-                    } w-full h-[40px] ${!!errors.amount && "error"}`}
+                    className={`${!getValues().enableStreamRate && "!pr-14"
+                      } w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
                     step="any"
@@ -555,9 +550,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   error={!!errors.startDate}
                 >
                   <input
-                    className={`w-full h-[40px] ${
-                      !!errors.startDate && "error"
-                    }`}
+                    className={`w-full h-[40px] ${!!errors.startDate && "error"
+                      }`}
                     readOnly
                     {...register("startDate")}
                   />
@@ -602,11 +596,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div>
                 <label
-                  className={`${
-                    getValues().enableStreamRate
-                      ? "text-content-tertiary"
-                      : "text-content-primary"
-                  } ml-3 text-xs font-medium mb-1`}
+                  className={`${getValues().enableStreamRate
+                    ? "text-content-tertiary"
+                    : "text-content-primary"
+                    } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:stream-end")}
                 </label>
@@ -648,7 +641,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
                   {t(
                     (errors.endDate || errors.endTime)?.message?.toString() ||
-                      ""
+                    ""
                   ).toString()}
                 </p>
               )}
@@ -666,7 +659,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-                // isReset={resetFile}
+              // isReset={resetFile}
               />
             )}
           </div>
@@ -686,9 +679,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 >
                   <div>
                     <input
-                      className={`w-full h-[40px] ${
-                        !!errors.noOfTimes && "error"
-                      }`}
+                      className={`w-full h-[40px] ${!!errors.noOfTimes && "error"
+                        }`}
                       placeholder={"E.g. 4"}
                       type="number"
                       step="any"

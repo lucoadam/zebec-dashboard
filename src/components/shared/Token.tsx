@@ -7,7 +7,7 @@ export interface TokenProps {
   className?: string
 }
 
-export const Token: FC<TokenProps> = ({ symbol, className = "" }) => {
+export const Token: FC<TokenProps> = ({ symbol, className }) => {
   if (!TokenIcons[symbol as TokenSymbol]) {
     return null
   }

@@ -3,7 +3,7 @@ import * as Icons from "assets/icons"
 import * as AvatarImages from "assets/images/avatars"
 import { IconButton } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
-import { StaticImageData } from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { FC } from "react"
 import { toSubstring } from "utils"
 import { Owner } from "./CreateTreasury.d"
@@ -40,7 +40,7 @@ const OwnerLists: FC<{
         return (
           <div key={index} className="w-full flex py-[14px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={Avatars[index % 3].src}
               width={48}
               height={48}

@@ -4,7 +4,7 @@ import DepositedAssets from "components/home/DepositedAssets"
 import {
   ActivityThisWeek,
   DepositedBalance,
-  SupportCard,
+  SupportCardComponents,
   Tokens,
   DepositWithdraw
 } from "components/shared"
@@ -106,30 +106,8 @@ const Overview = () => {
         {/**
          * Zebec Treasury Help
          */}
-        <SupportCard
-          title="treasuryOverview:treasury-help"
-          description="treasuryOverview:treasury-help-description"
-          buttons={[
-            {
-              title: "common:support.check-faq"
-            },
-            {
-              title: "common:support.join-discord"
-            }
-          ]}
-        />
-        {/**
-         * Send Feedback
-         */}
-        <SupportCard
-          title="treasuryOverview:send-feedback"
-          description="treasuryOverview:feedback-description"
-          buttons={[
-            {
-              title: "treasuryOverview:send-us-message"
-            }
-          ]}
-        />
+        <SupportCardComponents.ZebecHelp page="treasury" />
+        <SupportCardComponents.SendFeedback />
       </div>
     </div>
   )

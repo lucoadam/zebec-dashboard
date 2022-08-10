@@ -125,12 +125,12 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   <span className="text-subtitle text-content-primary font-semibold">
                     +{formatCurrency(streamedToken, "", 4)}
                   </span>
-                  &nbsp;{transaction.symbol}
+                  &nbsp;{transaction.token}
                 </div>
                 <div className="text-caption">
                   {formatCurrency(streamedToken, "", 4)} of{" "}
                   {formatCurrency(transaction.amount, "", 4)}{" "}
-                  {transaction.symbol}
+                  {transaction.token}
                 </div>
               </div>
             </div>
@@ -198,19 +198,18 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in` : "ease-out"
-              }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
+                }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    {transaction.transaction_name}
+                    {transaction.name}
                   </div>
-                  {transaction.remark && (
+                  {transaction.remarks && (
                     <div className="text-body text-content-secondary">
-                      {transaction.remark ?? "-"}
+                      {transaction.remarks ?? "-"}
                     </div>
                   )}
                 </div>
@@ -290,11 +289,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${
-                          transaction.type === "instant"
-                            ? "Instant"
-                            : "Continuous"
-                        }`}</span>
+                        <span>{`${transaction.type === "instant"
+                          ? "Instant"
+                          : "Continuous"
+                          }`}</span>
                       </div>
                     </div>
                   </div>
@@ -307,7 +305,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(transaction.amount, "", 4)}{" "}
-                        {transaction.symbol}
+                        {transaction.token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -317,7 +315,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(streamedToken, "", 4)}{" "}
-                        {transaction.symbol} (
+                        {transaction.token} (
                         {formatCurrency(
                           (streamedToken * 100) / transaction.amount,
                           "",
