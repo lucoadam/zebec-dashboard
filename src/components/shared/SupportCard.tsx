@@ -68,17 +68,17 @@ const ZebecHelp = ({
           page === "dca"
             ? "common:support.zebec-dca-help"
             : page === "treasury"
-            ? "common:support.treasury-help"
-            : page === "send"
-            ? "common:support.streaming-help"
-            : "common:support.zebec-help"
+              ? "common:support.treasury-help"
+              : page === "send"
+                ? "common:support.streaming-help"
+                : "common:support.zebec-help"
         }
         description={
           page === "treasury"
             ? "common:support.treasury-help-description"
             : page === "send"
-            ? "common:support.streaming-help-details"
-            : "common:support.zebec-help-description"
+              ? "common:support.streaming-help-details"
+              : "common:support.zebec-help-description"
         }
         buttons={[
           {
@@ -98,7 +98,7 @@ const BuildWithZebec = ({ className }: { className?: string }) => {
   return (
     <>
       <SupportCard
-        title="commin:support.build-with-zebec"
+        title="common:support.build-with-zebec"
         description="common:support.build-description"
         buttons={[
           {
