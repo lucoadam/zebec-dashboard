@@ -7,7 +7,7 @@ import { Button, Modal } from "components/shared"
 import { changeSignState } from "features/modals/signModalSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 declare global {
   interface Window {
@@ -31,15 +31,15 @@ const WalletNotConnectedModal: NextPage = () => {
     }
   }
 
-  const loginCallback = useCallback(() => handleLogin(), [])
+  // const loginCallback = useCallback(() => handleLogin(), [])
 
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
-      if (!token) loginCallback()
+      if (!token) handleLogin()
       else dispatch(changeSignState(!!token))
     }
-  }, [walletObject.connected, isSigned, dispatch, loginCallback])
+  }, [walletObject.connected, isSigned, dispatch])
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
@@ -96,8 +96,8 @@ const WalletNotConnectedModal: NextPage = () => {
             <Button
               className="w-full mt-10"
               title={`${walletObject.connected && !isSigned
-                  ? t("wallet-not-connected.sign-message")
-                  : t("wallet-not-connected.connect-wallet")
+                ? t("wallet-not-connected.sign-message")
+                : t("wallet-not-connected.connect-wallet")
                 }`}
               variant="gradient"
               onClick={() =>
