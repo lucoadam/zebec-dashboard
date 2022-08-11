@@ -2,10 +2,13 @@ import { useTranslation } from "next-i18next"
 import React, { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Button, CollapseDropdown, InputField } from "components/shared"
+import { Breadcrumb, Button, CollapseDropdown, InputField } from "components/shared"
 import { useClickOutside } from "hooks"
 import * as Icons from "assets/icons"
 import { settingsSchema } from "utils/validations/settingsSchema"
+
+
+
 
 interface explorer {
   name: string
@@ -23,6 +26,11 @@ export const Explorers: explorer[] = [
     name: "Solana Explorer",
     key: 1,
     icon: () => <Icons.SolanaExplorer />
+  },
+  {
+    name: "Solana FM",
+    key: 2,
+    icon: () => <Icons.SolanaFM />
   }
 ]
 
@@ -40,6 +48,8 @@ export function SettingsComponent() {
     resolver: yupResolver(settingsSchema)
   })
 
+ 
+
   const [toggleSettingsDropdown, setToggleSettingsDropdown] =
     useState<boolean>(false)
 
@@ -54,17 +64,23 @@ export function SettingsComponent() {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    //setUserSetting(data)
-    data
+  const onEmailSubmit = (data: any) => {
+    console.log(data)
+    //dispatch(saveEmailSettings(data))
+  }
+
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onExplorerSubmit = (data: any) => {
+    console.log(data)
+    //dispatch(saveExplorerSettings(data.explorer))
   }
   return (
     <div className="container w-full">
-      <div className="flex justify-between items-center pb-4">
-        <h4 className="text-heading-4 font-semibold text-content-primary pl-10 pt-10">
-          {`${t("settings.settings")} `}
-        </h4>
-      </div>
+      
+
+        <Breadcrumb title={`${t("settings.settings")} `} className="pt-20"/>
+      
+
 
       <div className="rounded bg-background-secondary p-10 mt-12 max-w-96">
         <div className="text-subtitle text-content-primary font-semibold">{`${t(
@@ -73,7 +89,7 @@ export function SettingsComponent() {
         <div className="text-caption text-content-secondary pt-2">
           {`${t("settings.email-subtitle")} `}
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form onSubmit={handleSubmit(onEmailSubmit)} autoComplete="off">
           <div className="w-96">
             <div className="pt-6 pb-6">
               <InputField
@@ -118,6 +134,7 @@ export function SettingsComponent() {
         <div className="text-caption text-content-secondary pt-4 pl-2 pb-2">
           {`${t("settings.explorer")} `}
         </div>
+        <form onSubmit={handleSubmit(onExplorerSubmit)} autoComplete="off">
         <div
           className={` cursor-pointer w-[400px] relative text-content-primary `}
           onClick={() => setToggleSettingsDropdown(!toggleSettingsDropdown)}
@@ -148,6 +165,7 @@ export function SettingsComponent() {
                 key={explorer.key}
                 onClick={() => {
                   setCurrentExplorer(explorer)
+                  setToggleSettingsDropdown(!toggleSettingsDropdown)
                 }}
               >
                 <div className="pl-4 ">{explorer.icon({})}</div>
@@ -156,8 +174,18 @@ export function SettingsComponent() {
                 </div>
               </div>
             ))}
-          </CollapseDropdown>
-        </div>
+            </CollapseDropdown>
+            <div className="pb-10 pt-6">
+              <Button
+                className={`w-[390px] `}
+                variant="gradient"
+                type="submit"
+                title={`${t("common:settings.save-changes")}`}
+              />
+            </div>
+          </div>
+          
+          </form>
       </div>
     </div>
   )
