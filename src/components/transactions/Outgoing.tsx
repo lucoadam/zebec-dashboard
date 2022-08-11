@@ -13,18 +13,22 @@ import FilterTabs from "./FilterTabs"
 import OutgoingTableRow from "./OutgoingTableRow"
 import ExportModal from "components/modals/export-report/ExportModal"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
+import {
+  fetchOutgoingTransactions,
+  setLimit,
+  setOutgoingCurrentPage
+} from "features/transactions/transactionsSlice"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
   const { publicKey } = useWallet()
   const dispatch = useAppDispatch()
-  const { outgoingTransactions } = useAppSelector((state) => state.transactions)
+  const { outgoingTransactions, limit, outgoingTotal } = useAppSelector(
+    (state) => state.transactions
+  )
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1)
-  const [noOfRows, setNoOfRows] = useState(10)
   const noOfOptions = [10, 20, 30, 40]
 
   const headers = [
@@ -77,16 +81,18 @@ const Outgoing: FC = () => {
       </Table>
 
       {/* Pagination */}
-      <div className="flex text-caption pt-5">
+      <div className="flex justify-between text-caption pt-5">
         <RowsPerPage
-          setNoOfRows={setNoOfRows}
-          noOfRows={noOfRows}
+          noOfRows={limit}
           noOfOptions={noOfOptions}
+          onChange={(noOfRows) => dispatch(setLimit(noOfRows))}
         />
         <Pagination
-          pages={100}
-          setCurrentPage={setCurrentPage}
-          setNoOfRows={setNoOfRows}
+          pages={Math.ceil(outgoingTotal / limit)}
+          onChange={(page: number) => {
+            dispatch(setOutgoingCurrentPage(page))
+            dispatch(fetchOutgoingTransactions())
+          }}
         />
       </div>
 

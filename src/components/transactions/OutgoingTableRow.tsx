@@ -198,8 +198,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
-                }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
+                activeDetailsRow === index ? `ease-in` : "ease-out"
+              }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
@@ -289,10 +290,11 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${transaction.type === "instant"
-                          ? "Instant"
-                          : "Continuous"
-                          }`}</span>
+                        <span>{`${
+                          transaction.type === "instant"
+                            ? "Instant"
+                            : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
