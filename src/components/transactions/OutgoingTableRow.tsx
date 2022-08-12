@@ -290,11 +290,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${
-                          transaction.type === "instant"
-                            ? "Instant"
-                            : "Continuous"
-                        }`}</span>
+                        <span className="capitalize">{transaction.type}</span>
                       </div>
                     </div>
                   </div>
