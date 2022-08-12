@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { toggleCancelModal } from "features/modals/cancelModalSlice"
+import {
+  cancelTransaction,
+  toggleCancelModal
+} from "features/modals/cancelModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
 export const cancelStreamNative: any =
-  (data: MPauseResumeWithdrawCancel, stream: ZebecNativeStreamProps) =>
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    stream: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await stream.cancel(data)
@@ -12,14 +19,11 @@ export const cancelStreamNative: any =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Cancel Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Cancel Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(cancelTransaction(backendData))
+        dispatch(cancelTransaction(uuid))
       } else {
         dispatch(
           toast.error({
@@ -39,7 +43,11 @@ export const cancelStreamNative: any =
   }
 
 export const cancelStreamToken: any =
-  (data: MPauseResumeWithdrawCancel, token: ZebecNativeStreamProps) =>
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    token: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await token.cancel(data)
@@ -47,14 +55,11 @@ export const cancelStreamToken: any =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Cancel Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Cancel Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(cancelTransaction(backendData))
+        dispatch(cancelTransaction(uuid))
       } else {
         dispatch(
           toast.error({

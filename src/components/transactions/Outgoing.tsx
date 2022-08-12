@@ -45,7 +45,7 @@ const Outgoing: FC = () => {
 
   useEffect(() => {
     if (publicKey) {
-      dispatch(fetchOutgoingTransactions(publicKey?.toString()))
+      dispatch(fetchOutgoingTransactions())
     }
   }, [publicKey, dispatch])
 
@@ -58,14 +58,14 @@ const Outgoing: FC = () => {
       {/* Table */}
       <Table headers={headers}>
         <TableBody>
-          {outgoingTransactions.length === 0 ? (
+          {outgoingTransactions.results.length === 0 ? (
             <tr>
               <td colSpan={headers.length}>
                 <EmptyDataState message="There are no outgoing transactions. The transactions you initiated will appear here." />
               </td>
             </tr>
           ) : (
-            outgoingTransactions.map((transaction, index) => {
+            outgoingTransactions.results.map((transaction, index) => {
               return (
                 <OutgoingTableRow
                   key={index}

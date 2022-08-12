@@ -290,11 +290,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${
-                          transaction.type === "instant"
-                            ? "Instant"
-                            : "Continuous"
-                        }`}</span>
+                        <span className="capitalize">{transaction.type}</span>
                       </div>
                     </div>
                   </div>
@@ -343,7 +339,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction.transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                          href={`https://solana.fm/tx/${transaction.transaction_hash}?cluster=${RPC_NETWORK}-solana`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -358,20 +354,22 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                     </div>
                     {/* Reference */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.reference")}
+                    {transaction.file && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.reference")}
+                        </div>
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.view-reference-file")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-reference-file")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

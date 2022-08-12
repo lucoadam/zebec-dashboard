@@ -160,7 +160,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file,
+      file: data.file
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
@@ -254,8 +254,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${!getValues().showRemarks && "!pr-[124px]"
-                      } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
+                    className={`${
+                      !getValues().showRemarks && "!pr-[124px]"
+                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transaction_name")}
@@ -282,8 +283,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pr-12 ${!!errors.receiver && "error"
-                    }`}
+                  className={`h-[40px] w-full !pr-12 ${
+                    !!errors.receiver && "error"
+                  }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiver")}
                 />
@@ -401,8 +403,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pl-11 ${!!errors.symbol && "error"
-                    }`}
+                  className={`h-[40px] w-full !pl-11 ${
+                    !!errors.symbol && "error"
+                  }`}
                   readOnly
                   {...register("symbol")}
                 />
@@ -468,10 +471,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div className="flex justify-between">
                 <label
-                  className={`${getValues().enableStreamRate
-                    ? "text-content-tertiary"
-                    : "text-content-primary"
-                    } ml-3 text-xs font-medium mb-1`}
+                  className={`${
+                    getValues().enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:amount")}
                 </label>
@@ -480,7 +484,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 >
                   {formatCurrency(
                     prices[currentToken.symbol] * Number(getValues().amount) ||
-                    0,
+                      0,
                     "$"
                   )}{" "}
                 </label>
@@ -493,8 +497,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${!getValues().enableStreamRate && "!pr-14"
-                      } w-full h-[40px] ${!!errors.amount && "error"}`}
+                    className={`${
+                      !getValues().enableStreamRate && "!pr-14"
+                    } w-full h-[40px] ${!!errors.amount && "error"}`}
                     placeholder={t("send:amount-placeholder")}
                     type="number"
                     step="any"
@@ -550,8 +555,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   error={!!errors.startDate}
                 >
                   <input
-                    className={`w-full h-[40px] ${!!errors.startDate && "error"
-                      }`}
+                    className={`w-full h-[40px] ${
+                      !!errors.startDate && "error"
+                    }`}
                     readOnly
                     {...register("startDate")}
                   />
@@ -596,10 +602,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <div>
               <div>
                 <label
-                  className={`${getValues().enableStreamRate
-                    ? "text-content-tertiary"
-                    : "text-content-primary"
-                    } ml-3 text-xs font-medium mb-1`}
+                  className={`${
+                    getValues().enableStreamRate
+                      ? "text-content-tertiary"
+                      : "text-content-primary"
+                  } ml-3 text-xs font-medium mb-1`}
                 >
                   {t("send:stream-end")}
                 </label>
@@ -641,7 +648,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <p className="text-content-secondary text-xs ml-[12px] mt-1">
                   {t(
                     (errors.endDate || errors.endTime)?.message?.toString() ||
-                    ""
+                      ""
                   ).toString()}
                 </p>
               )}
@@ -659,7 +666,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-              // isReset={resetFile}
+                // isReset={resetFile}
               />
             )}
           </div>
@@ -679,8 +686,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 >
                   <div>
                     <input
-                      className={`w-full h-[40px] ${!!errors.noOfTimes && "error"
-                        }`}
+                      className={`w-full h-[40px] ${
+                        !!errors.noOfTimes && "error"
+                      }`}
                       placeholder={"E.g. 4"}
                       type="number"
                       step="any"

@@ -1,6 +1,7 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
+// import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
 import { fetchTreasury } from "features/treasury/treasurySlice"
@@ -45,6 +46,13 @@ const Common: FC<{
     }
     // eslint-disable-next-line
   }, [isSigned])
+
+  // const createVaultFunction = async () => {
+  //   const data = {
+  //     fee_percentage: 0.25
+  //   }
+  //   if (zebecContext.stream) await createVault(data, zebecContext.stream)
+  // }
 
   return <></>
 }

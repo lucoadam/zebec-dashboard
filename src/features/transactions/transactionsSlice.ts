@@ -7,7 +7,12 @@ import axios from "axios"
 interface TransactionState {
   loading: boolean
   error: string
-  outgoingTransactions: any[]
+  outgoingTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   incomingTransactions: any[]
   incomingTotal: number
   outgoingTotal: number
@@ -19,7 +24,12 @@ interface TransactionState {
 const initialState: TransactionState = {
   loading: false,
   error: "",
-  outgoingTransactions: [],
+  outgoingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
   incomingTransactions: [],
   incomingTotal: 0,
   outgoingTotal: 0,
