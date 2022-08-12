@@ -18,12 +18,8 @@ const initialState: SendState = {
 export const sendContinuousStream: any = createAsyncThunk(
   "send/sendContinuousStream",
   async (data: any, { dispatch }) => {
-    // const { data: response } = await axios.post(
-    //   "https://internal-ten-cherry.glitch.me/transactions",
-    //   data
-    // )
     const { data: response } = await api.post("/transaction/", data)
-    dispatch(fetchOutgoingTransactions(data.sender))
+    dispatch(fetchOutgoingTransactions())
     dispatch(toggleWalletApprovalMessageModal())
     return response
   }

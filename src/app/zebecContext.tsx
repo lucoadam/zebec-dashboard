@@ -32,13 +32,13 @@ export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
     const provider = initAnchorProvider(walletObject, CLUSTER_API_URL)
     const streamCtx = new ZebecNativeStream(
       provider,
-      "7VBTMgbXbnz3gXjCjADM3dzJYsidSRw453mcXV1CfcRj",
+      "4w41teXtLLxVc6ShSSgpu9pmxLvxrL1bsxNrFGm7f5BJ",
       true
     )
     setStream(streamCtx)
     const tokenCtx = new ZebecTokenStream(
       provider,
-      "7VBTMgbXbnz3gXjCjADM3dzJYsidSRw453mcXV1CfcRj",
+      "4w41teXtLLxVc6ShSSgpu9pmxLvxrL1bsxNrFGm7f5BJ",
       true
     )
     setToken(tokenCtx)

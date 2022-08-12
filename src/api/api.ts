@@ -34,7 +34,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalConfig = error.config
     const refreshToken = TokenService.getLocalRefreshToken()
-    const accessToken = TokenService.getLocalAccessToken()
     if (error.response) {
       if (
         refreshToken &&
@@ -44,10 +43,9 @@ api.interceptors.response.use(
         originalConfig._retry = true
         try {
           const response = await api.post("/user/auth/refresh/", {
-            refresh: refreshToken,
-            access: accessToken
+            refresh: refreshToken
           })
-          TokenService.setAfterRefresh(response.data)
+          TokenService.setAccessToken(response.data)
           return api(originalConfig)
         } catch (error) {
           localStorage.clear()

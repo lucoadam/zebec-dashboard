@@ -20,11 +20,12 @@ const CancelModal: FC = ({}) => {
       receiver: transaction.receiver,
       escrow: transaction.pda,
       token_mint_address:
-        transaction.symbol === "SOL" ? "" : transaction.token_mint_address
+        transaction.token === "SOL" ? "" : transaction.token_mint_address
     }
-    if (transaction.symbol === "SOL")
-      stream && dispatch(cancelStreamNative(data, stream))
-    else token && dispatch(cancelStreamToken(data, token))
+    const transaction_uuid = transaction.uuid
+    if (transaction.token === "SOL")
+      stream && dispatch(cancelStreamNative(data, transaction_uuid, stream))
+    else token && dispatch(cancelStreamToken(data, transaction_uuid, token))
   }
 
   return (

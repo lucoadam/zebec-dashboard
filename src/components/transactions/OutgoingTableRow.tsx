@@ -198,8 +198,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${activeDetailsRow === index ? `ease-in` : "ease-out"
-                }`}
+              className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
+                activeDetailsRow === index ? `ease-in` : "ease-out"
+              }`}
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
@@ -289,10 +290,11 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${transaction.type === "instant"
-                          ? "Instant"
-                          : "Continuous"
-                          }`}</span>
+                        <span>{`${
+                          transaction.type === "instant"
+                            ? "Instant"
+                            : "Continuous"
+                        }`}</span>
                       </div>
                     </div>
                   </div>
@@ -341,7 +343,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction.transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                          href={`https://solana.fm/tx/${transaction.transaction_hash}?cluster=${RPC_NETWORK}-solana`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -356,20 +358,22 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                     </div>
                     {/* Reference */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.reference")}
+                    {transaction.file && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.reference")}
+                        </div>
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.view-reference-file")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-reference-file")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

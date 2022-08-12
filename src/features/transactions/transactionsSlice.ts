@@ -6,24 +6,31 @@ import axios from "axios"
 interface TransactionState {
   loading: boolean
   error: string
-  outgoingTransactions: any[]
+  outgoingTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   incomingTransactions: any[]
 }
 
 const initialState: TransactionState = {
   loading: false,
   error: "",
-  outgoingTransactions: [],
+  outgoingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
   incomingTransactions: []
 }
 
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (sender: string) => {
-    // const { data: response } = await axios.get(
-    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
-    // )
+  async () => {
     const { data: response } = await api.get(`/transaction/`)
     return response
   }
