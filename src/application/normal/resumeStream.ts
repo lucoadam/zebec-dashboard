@@ -1,12 +1,16 @@
-import { ZebecNativeStreamProps, MPauseResumeWithdrawCancel } from "./stream.d"
-import { toast } from "features/toasts/toastsSlice"
 import {
-  // resumeTransaction,
+  resumeTransaction,
   toggleResumeModal
 } from "features/modals/resumeModalSlice"
+import { toast } from "features/toasts/toastsSlice"
+import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
-export const resumeStreamNative =
-  (data: MPauseResumeWithdrawCancel, stream: ZebecNativeStreamProps) =>
+export const resumeStreamNative: any =
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    stream: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await stream.resume(data)
@@ -14,14 +18,11 @@ export const resumeStreamNative =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Resume Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Resume Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(resumeTransaction(backendData))
+        dispatch(resumeTransaction(uuid))
       } else {
         dispatch(
           toast.error({
@@ -40,8 +41,12 @@ export const resumeStreamNative =
     }
   }
 
-export const resumeStreamToken =
-  (data: MPauseResumeWithdrawCancel, token: ZebecNativeStreamProps) =>
+export const resumeStreamToken: any =
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    token: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await token.resume(data)
@@ -49,14 +54,11 @@ export const resumeStreamToken =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Resume Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Resume Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(resumeTransaction(backendData))
+        dispatch(resumeTransaction(uuid))
       } else {
         dispatch(
           toast.error({

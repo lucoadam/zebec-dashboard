@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import axios from "axios"
+import api from "api/api"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 //declare types for state
 interface CancelState {
@@ -17,8 +18,11 @@ const initialState: CancelState = {
 }
 export const cancelTransaction = createAsyncThunk(
   "cancel/cancelTransaction",
-  async () => {
-    const response = await axios.get("url")
+  async (uuid: string, { dispatch }) => {
+    const response = await api.patch(`/transaction/${uuid}/`, {
+      status: "cancelled"
+    })
+    dispatch(fetchOutgoingTransactions())
     return response.data
   }
 )

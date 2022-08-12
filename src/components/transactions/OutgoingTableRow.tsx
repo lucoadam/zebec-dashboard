@@ -125,12 +125,12 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   <span className="text-subtitle text-content-primary font-semibold">
                     +{formatCurrency(streamedToken, "", 4)}
                   </span>
-                  &nbsp;{transaction.symbol}
+                  &nbsp;{transaction.token}
                 </div>
                 <div className="text-caption">
                   {formatCurrency(streamedToken, "", 4)} of{" "}
                   {formatCurrency(transaction.amount, "", 4)}{" "}
-                  {transaction.symbol}
+                  {transaction.token}
                 </div>
               </div>
             </div>
@@ -206,11 +206,11 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    {transaction.transaction_name}
+                    {transaction.name}
                   </div>
-                  {transaction.remark && (
+                  {transaction.remarks && (
                     <div className="text-body text-content-secondary">
-                      {transaction.remark ?? "-"}
+                      {transaction.remarks ?? "-"}
                     </div>
                   )}
                 </div>
@@ -290,11 +290,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span>{`${
-                          transaction.type === "instant"
-                            ? "Instant"
-                            : "Continuous"
-                        }`}</span>
+                        <span className="capitalize">{transaction.type}</span>
                       </div>
                     </div>
                   </div>
@@ -307,7 +303,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(transaction.amount, "", 4)}{" "}
-                        {transaction.symbol}
+                        {transaction.token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -317,7 +313,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(streamedToken, "", 4)}{" "}
-                        {transaction.symbol} (
+                        {transaction.token} (
                         {formatCurrency(
                           (streamedToken * 100) / transaction.amount,
                           "",
@@ -343,7 +339,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction.transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                          href={`https://solana.fm/tx/${transaction.transaction_hash}?cluster=${RPC_NETWORK}-solana`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -358,20 +354,22 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                     </div>
                     {/* Reference */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.reference")}
+                    {transaction.file && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.reference")}
+                        </div>
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.view-reference-file")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-reference-file")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

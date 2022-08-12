@@ -28,7 +28,7 @@ const CreatingTreasury: FC<CreatingTreasuryProps> = ({ treasury }) => {
         }
       })
     )
-  }, [treasury, wallet, dispatch])
+  }, [treasury, wallet, dispatch, router])
 
   return (
     <>

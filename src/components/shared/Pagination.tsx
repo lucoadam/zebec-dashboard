@@ -3,12 +3,14 @@ import * as Icons from "assets/icons"
 
 interface PaginationProps {
   pages: number
-  setCurrentPage: (currentPage: number) => void
-  setNoOfRows: (noOfRows: number) => void
+  setCurrentPage?: (currentPage: number) => void
+  setNoOfRows?: (noOfRows: number) => void
+  onChange?: (page: number) => void
 }
 
 export const Pagination: FC<PaginationProps> = (props) => {
-  const { pages, setCurrentPage } = props
+  const { pages, setCurrentPage, onChange } = props
+
   const numberOfPages = useMemo(() => {
     const numOfPages: (number | string)[] = []
     for (let i = 1; i <= pages; i++) {
@@ -100,7 +102,8 @@ export const Pagination: FC<PaginationProps> = (props) => {
     }
 
     setArrOfCurrButtons(tempNumberOfPages)
-    setCurrentPage(Number(currentButton))
+    if (setCurrentPage) setCurrentPage(Number(currentButton))
+    if (onChange) onChange(Number(currentButton))
     // eslint-disable-next-line
   }, [currentButton, numberOfPages, numberOfPages.length])
 

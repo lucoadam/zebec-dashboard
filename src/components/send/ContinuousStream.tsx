@@ -2,6 +2,8 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { initStreamNative, initStreamToken } from "application"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
 import {
@@ -15,11 +17,12 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState, useContext } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
@@ -30,9 +33,6 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
-import { initStreamNative, initStreamToken } from "application"
-import ZebecContext from "app/zebecContext"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 const intervals = [
   {
@@ -143,10 +143,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
-      transaction_name: data.transaction_name,
-      symbol: data.symbol,
-      amount: Number(data.amount),
+      name: data.transaction_name,
+      transaction_type: "continuous",
+      token: data.symbol,
       remarks: data.remarks || "",
+      amount: Number(data.amount),
       receiver: data.receiver,
       sender: data.wallet,
       start_time: moment(
@@ -159,8 +160,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file,
-      transaction_type: "continuous"
+      file: data.file
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
@@ -321,11 +321,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       )
                       .map((user) => (
                         <div
-                          key={user.wallet}
+                          key={user.address}
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiver", user.wallet)
+                            setValue("receiver", user.address)
                             trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
@@ -334,7 +334,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                             {user.name}
                           </div>
                           <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.wallet, 28, false)}
+                            {toSubstring(user.address, 28, false)}
                           </div>
                         </div>
                       ))}

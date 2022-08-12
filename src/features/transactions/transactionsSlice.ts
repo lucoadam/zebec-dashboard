@@ -1,26 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import api from "api/api"
+import { RootState } from "app/store"
 import axios from "axios"
 
 interface TransactionState {
   loading: boolean
   error: string
-  outgoingTransactions: any[]
+  outgoingTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   incomingTransactions: any[]
+  incomingTotal: number
+  outgoingTotal: number
+  limit: number
+  incomingCurrentPage: number
+  outgoingCurrentPage: number
 }
 
 const initialState: TransactionState = {
   loading: false,
   error: "",
-  outgoingTransactions: [],
-  incomingTransactions: []
+  outgoingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  incomingTransactions: [],
+  incomingTotal: 0,
+  outgoingTotal: 0,
+  limit: 5,
+  incomingCurrentPage: 1,
+  outgoingCurrentPage: 1
 }
 
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
-  async (sender: string) => {
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async (sender: string, { getState }) => {
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
+    // )
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get(
+      `/transaction/?limit=${transactions.limit}&offset=${
+        (transactions.outgoingCurrentPage - 1) * transactions.limit
+      }`
     )
     return response
   }
@@ -39,7 +68,17 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
 const transactionsSlice = createSlice({
   name: "transactions",
   initialState,
-  reducers: {},
+  reducers: {
+    setIncomingCurrentPage: (state, action: PayloadAction<number>) => {
+      state.incomingCurrentPage = action.payload
+    },
+    setOutgoingCurrentPage: (state, action: PayloadAction<number>) => {
+      state.outgoingCurrentPage = action.payload
+    },
+    setLimit: (state, action: PayloadAction<number>) => {
+      state.limit = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchOutgoingTransactions.pending, (state) => {
       state.loading = true
@@ -67,5 +106,8 @@ const transactionsSlice = createSlice({
     })
   }
 })
+
+export const { setIncomingCurrentPage, setOutgoingCurrentPage, setLimit } =
+  transactionsSlice.actions
 
 export default transactionsSlice.reducer

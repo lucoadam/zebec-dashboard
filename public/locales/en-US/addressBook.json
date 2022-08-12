@@ -23,5 +23,11 @@
     "add-address-name-to-your-addressBook": "Add address name to your address book",
     "update-an-address": "Update an Address",
     "update-address": "Update Address",
-    "empty-address-book": "There are no addresses. The addresses you add will appear here."
+    "empty-address-book": "There are no addresses. The addresses you add will appear here.",
+    "success-add": "Address added successfully",
+    "success-update": "Address updated successfully",
+    "success-delete": "Address deleted successfully",
+    "error-add": "Error adding address",
+    "error-update": "Error updating address",
+    "error-delete": "Error deleting address"
 }

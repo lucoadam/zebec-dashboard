@@ -7,7 +7,7 @@ import { StepsComponentProps } from "components/dca/create/CreateDCA.d"
 import { Button, CollapseDropdown } from "components/shared"
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 import { useTranslation } from "next-i18next"
-import { StaticImageData } from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -201,7 +201,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({
                               : ""
                           )}
                         >
-                          <img
+                          <Image
                             src={Avatars[index % 3].src}
                             width={16}
                             height={16}

@@ -15,8 +15,8 @@ export const Balances = () => {
             <span data-tip={displayExponentialNumber(23242)}>$24234.23</span>
           </div>
         </div>
-        <div className="text-xs flex items-center gap-x-1.5 font-normal leading-3 text-content-contrast">
-          <Token symbol="SOL" />
+        <div className="text-caption flex items-center gap-x-1 text-content-contrast">
+          <Token symbol="SOL" className="w-4 h-4" />
           120,023.23 SOL
         </div>
       </div>
@@ -29,8 +29,8 @@ export const Balances = () => {
             <span data-tip={displayExponentialNumber(23242)}>$24234.23</span>
           </div>
         </div>
-        <div className="text-xs flex items-center gap-x-1.5 font-normal leading-3 text-content-contrast">
-          <Token symbol="USDC" />
+        <div className="text-caption flex items-center gap-x-1 text-content-contrast">
+          <Token symbol="USDC" className="w-4 h-4" />
           120,023.23 USDC
         </div>
       </div>
@@ -43,8 +43,8 @@ export const Balances = () => {
             <span data-tip={displayExponentialNumber(23242)}>$24234.23</span>
           </div>
         </div>
-        <div className="text-xs flex items-center gap-x-1.5 font-normal leading-3 text-content-contrast">
-          <Token symbol="USDC" />
+        <div className="text-caption flex items-center gap-x-1 text-content-contrast">
+          <Token symbol="USDC" className="w-4 h-4" />
           120,023.23 USDC
         </div>
       </div>

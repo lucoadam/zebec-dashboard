@@ -53,7 +53,8 @@ export const useWithdrawDepositForm = ({
     setError,
     clearErrors,
     getValues,
-    trigger
+    trigger,
+    reset
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(validationSchema)
@@ -72,6 +73,7 @@ export const useWithdrawDepositForm = ({
     setError,
     clearErrors,
     getValues,
-    trigger
+    trigger,
+    reset
   }
 }

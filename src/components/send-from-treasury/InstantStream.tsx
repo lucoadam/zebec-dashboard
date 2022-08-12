@@ -143,9 +143,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${
-                      !showRemarks && "!pr-[124px]"
-                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
+                    className={`${!showRemarks && "!pr-[124px]"
+                      } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transaction_name")}
@@ -172,9 +171,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
               <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pr-12 ${
-                    !!errors.receiver && "error"
-                  }`}
+                  className={`h-[40px] w-full !pr-12 ${!!errors.receiver && "error"
+                    }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiver")}
                 />
@@ -210,11 +208,11 @@ export const InstantStream: FC<InstantStreamProps> = ({
                       )
                       .map((user) => (
                         <div
-                          key={user.wallet}
+                          key={user.address}
                           onClick={(event) => {
                             event.stopPropagation()
                             setToggleReceiverDropdown(false)
-                            setValue("receiver", user.wallet)
+                            setValue("receiver", user.address)
                             trigger("receiver")
                           }}
                           className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
@@ -223,7 +221,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                             {user.name}
                           </div>
                           <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.wallet, 28, false)}
+                            {toSubstring(user.address, 28, false)}
                           </div>
                         </div>
                       ))}
@@ -292,9 +290,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pl-11 ${
-                    !!errors.symbol && "error"
-                  }`}
+                  className={`h-[40px] w-full !pl-11 ${!!errors.symbol && "error"
+                    }`}
                   readOnly
                   {...register("symbol")}
                 />
@@ -370,7 +367,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 >
                   {formatCurrency(
                     prices[currentToken.symbol] * Number(getValues().amount) ||
-                      0,
+                    0,
                     "$"
                   )}{" "}
                 </label>
@@ -416,7 +413,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-                // isReset={resetFile}
+              // isReset={resetFile}
               />
             </div>
           )}

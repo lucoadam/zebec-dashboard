@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
+import { RootState } from "app/store"
 
 export interface AddressBook {
   id: number
@@ -12,6 +13,9 @@ interface AddressBookState {
   loading: boolean
   saving: boolean
   deleting: boolean
+  total: number
+  currentPage: number
+  limit: number
   addressBooks: AddressBook[]
   error: string
 }
@@ -24,16 +28,26 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
+  total: 0,
+  limit: 5,
+  currentPage: 1,
   addressBooks: [],
   error: ""
 }
 
 export const fetchAddressBook: any = createAsyncThunk(
   "addressBook/fetchAddressBook",
-  async () => {
-    const { data: response } = await api.get(`/user/address/`)
-    console.log(response)
-    return response.results
+  async (_, { getState }) => {
+    const { address } = getState() as RootState
+    const { data: response } = await api.get(
+      `/user/address/?limit=${address.limit}&offset=${
+        (address.currentPage - 1) * address.limit
+      }`
+    )
+    return {
+      addressBooks: response.results,
+      total: response.count
+    }
   }
 )
 
@@ -45,17 +59,22 @@ export const saveAddressBook: any = createAsyncThunk(
         name: string
         wallet: string
       }
-      callback: () => void
+      callback: (error?: unknown) => void
     },
     { dispatch }
   ) => {
-    const { data: response } = await api.post(
-      "/user/address/",
-      addressBookData.data
-    )
-    dispatch(fetchAddressBook())
-    addressBookData?.callback()
-    return response
+    try {
+      const { data: response } = await api.post(
+        "/user/address/",
+        addressBookData.data
+      )
+      dispatch(fetchAddressBook())
+      addressBookData?.callback()
+      return response
+    } catch (error) {
+      addressBookData?.callback(error)
+      throw error
+    }
   }
 )
 
@@ -68,25 +87,41 @@ export const updateAddressBook: any = createAsyncThunk(
         name: string
         wallet: string
       }
-      callback: () => void
+      callback: (error?: unknown) => void
     },
     { dispatch }
   ) => {
-    const { data: response } = await api.put(
-      `/user/address/${addressBookData.data.id}/`,
-      addressBookData.data
-    )
-    dispatch(fetchAddressBook())
-    addressBookData?.callback()
-    return response
+    try {
+      const { data: response } = await api.put(
+        `/user/address/${addressBookData.data.id}/`,
+        addressBookData.data
+      )
+      dispatch(fetchAddressBook())
+      addressBookData?.callback()
+      return response
+    } catch (error) {
+      addressBookData?.callback(error)
+      throw error
+    }
   }
 )
 export const deleteAddressBook: any = createAsyncThunk(
   "addressBook/deleteAddressBook",
-  async (data: DeleteProps, { dispatch }) => {
-    const { data: response } = await api.delete(`/user/address/${data.id}`)
-    dispatch(fetchAddressBook())
-    return response
+  async (
+    data: DeleteProps & {
+      callback: (error?: unknown) => void
+    },
+    { dispatch }
+  ) => {
+    try {
+      const { data: response } = await api.delete(`/user/address/${data.id}`)
+      dispatch(fetchAddressBook())
+      data?.callback()
+      return response
+    } catch (error) {
+      data?.callback(error)
+      throw error
+    }
   }
 )
 
@@ -94,16 +129,24 @@ export const deleteAddressBook: any = createAsyncThunk(
 const addressBookSlice = createSlice({
   name: "addressBook",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload
+    },
+    setLimit: (state, action: PayloadAction<number>) => {
+      state.limit = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAddressBook.pending, (state) => {
       state.loading = true
     })
     builder.addCase(
       fetchAddressBook.fulfilled,
-      (state, action: PayloadAction<typeof initialState.addressBooks>) => {
+      (state, action: PayloadAction<AddressBookState>) => {
         state.loading = false
-        state.addressBooks = action.payload
+        state.addressBooks = action.payload.addressBooks
+        state.total = action.payload.total
         state.error = ""
       }
     )
@@ -146,5 +189,7 @@ const addressBookSlice = createSlice({
     })
   }
 })
+
+export const { setCurrentPage, setLimit } = addressBookSlice.actions
 
 export default addressBookSlice.reducer

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ZebecNativeStreamProps,
   MDepositWithdrawFromZebecVault
@@ -5,11 +6,12 @@ import {
 import { toast } from "features/toasts/toastsSlice"
 import { Dispatch, SetStateAction } from "react"
 
-export const withdrawNative =
+export const withdrawNative: any =
   (
     data: MDepositWithdrawFromZebecVault,
     stream: ZebecNativeStreamProps,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    callback?: () => void
   ) =>
   async (dispatch: any) => {
     try {
@@ -21,6 +23,7 @@ export const withdrawNative =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) callback()
       } else {
         dispatch(
           toast.error({
@@ -39,11 +42,12 @@ export const withdrawNative =
     setLoading(false)
   }
 
-export const withdrawToken =
+export const withdrawToken: any =
   (
     data: MDepositWithdrawFromZebecVault,
     token: ZebecNativeStreamProps,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    callback?: () => void
   ) =>
   async (dispatch: any) => {
     try {
@@ -55,6 +59,7 @@ export const withdrawToken =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) callback()
       } else {
         dispatch(
           toast.error({

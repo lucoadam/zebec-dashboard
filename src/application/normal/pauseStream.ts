@@ -1,12 +1,17 @@
-import { ZebecNativeStreamProps, MPauseResumeWithdrawCancel } from "./stream.d"
-import { toast } from "features/toasts/toastsSlice"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  // pauseTransaction,
+  pauseTransaction,
   togglePauseModal
 } from "features/modals/pauseModalSlice"
+import { toast } from "features/toasts/toastsSlice"
+import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
-export const pauseStreamNative =
-  (data: MPauseResumeWithdrawCancel, stream: ZebecNativeStreamProps) =>
+export const pauseStreamNative: any =
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    stream: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await stream.pause(data)
@@ -15,14 +20,11 @@ export const pauseStreamNative =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Pause Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Pause Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(pauseTransaction(backendData))
+        dispatch(pauseTransaction(uuid))
       } else {
         dispatch(
           toast.error({
@@ -41,8 +43,12 @@ export const pauseStreamNative =
     }
   }
 
-export const pauseStreamToken =
-  (data: MPauseResumeWithdrawCancel, token: ZebecNativeStreamProps) =>
+export const pauseStreamToken: any =
+  (
+    data: MPauseResumeWithdrawCancel,
+    uuid: string,
+    token: ZebecNativeStreamProps
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await token.pause(data)
@@ -50,14 +56,11 @@ export const pauseStreamToken =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Pause Success"
-            // transactionHash: response?.data?.transactionHash
+            message: response.message ?? "Pause Success",
+            transactionHash: response?.data?.transactionHash
           })
         )
-        // const backendData = {
-        //   ...data,
-        // }
-        // dispatch(pauseTransaction(backendData))
+        dispatch(pauseTransaction(uuid))
       } else {
         dispatch(
           toast.error({

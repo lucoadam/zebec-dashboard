@@ -1,4 +1,4 @@
-import { SupportCard } from "components/shared"
+import { SupportCardComponents } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
@@ -59,19 +59,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
           </span>
         </p>
       </div>
-      <SupportCard
-        className="mt-12 bg-transparent p-0"
-        title="send:streaming-help"
-        description="send:streaming-help-details"
-        buttons={[
-          {
-            title: "common:support.check-faq"
-          },
-          {
-            title: "common:support.join-discord"
-          }
-        ]}
-      />
+      <SupportCardComponents.ZebecHelp page="send" className="mt-12" />
     </div>
   )
 }

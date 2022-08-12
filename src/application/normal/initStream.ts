@@ -1,9 +1,10 @@
-import { ZebecNativeStreamProps } from "./stream.d"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { ZebecNativeStreamProps } from "./stream.d"
 
-export const initStreamNative =
+export const initStreamNative: any =
   (data: any, stream: ZebecNativeStreamProps) => async (dispatch: any) => {
     try {
       const response = await stream.init(data)
@@ -17,7 +18,7 @@ export const initStreamNative =
         const backendData = {
           ...data,
           pda: response?.data?.pda,
-          transactionHash: response?.data?.transactionHash
+          transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData))
       } else {
@@ -40,7 +41,7 @@ export const initStreamNative =
     return null
   }
 
-export const initStreamToken =
+export const initStreamToken: any =
   (data: any, token: ZebecNativeStreamProps) => async (dispatch: any) => {
     try {
       const response = await token.init(data)
@@ -54,7 +55,7 @@ export const initStreamToken =
         const backendData = {
           ...data,
           pda: response?.data?.pda,
-          transactionHash: response?.data?.transactionHash
+          transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData))
       } else {

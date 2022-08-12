@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import axios from "axios"
+import api from "api/api"
+import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 //declare types for state
 interface PauseState {
@@ -17,8 +18,11 @@ const initialState: PauseState = {
 }
 export const pauseTransaction = createAsyncThunk(
   "pause/pauseTransaction",
-  async (data) => {
-    const response = await axios.post("url", data)
+  async (uuid: string, { dispatch }) => {
+    const response = await api.patch(`/transaction/${uuid}/`, {
+      status: "paused"
+    })
+    dispatch(fetchOutgoingTransactions())
     return response.data
   }
 )

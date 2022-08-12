@@ -16,6 +16,13 @@ RUN \
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
+
+ARG RPC_NETWORK=devnet
+ARG DB_HOST
+
+ENV RPC_NETWORK $RPC_NETWORK
+ENV DB_HOST $DB_HOST
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -35,8 +42,12 @@ FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+
+ARG RPC_NETWORK=devnet
+ARG DB_HOST
+
+ENV RPC_NETWORK $RPC_NETWORK
+ENV DB_HOST $DB_HOST
 
 RUN npm i -g sharp
 
