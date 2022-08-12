@@ -18,6 +18,7 @@ import signModalSlice from "features/modals/signModalSlice"
 import stakeSlice from "features/modals/stakeSlice"
 import unStakeSlice from "features/modals/unStakeSlice"
 import walletApprovalMessageSlice from "features/modals/walletApprovalMessageSlice"
+import settingsSlice from "features/settings/settingsSlice"
 import streamSlice from "features/stream/streamSlice"
 import toastsSlice from "features/toasts/toastsSlice"
 import tokenDetailsSlice from "features/tokenDetails/tokenDetailsSlice"
@@ -61,7 +62,8 @@ const combineReducer = combineReducers({
   harvest: harvestSlice,
   transactions: tranasctionsSlice,
   walletApprovalMessage: walletApprovalMessageSlice,
-  treasury: treasurySlice
+  treasury: treasurySlice,
+  settings: settingsSlice
 })
 
 const persistConfig = {

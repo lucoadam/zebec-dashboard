@@ -66,7 +66,9 @@ import SolanaExplorer from "./other-icons/solanaexplorer.svg"
 export * from "./activity"
 export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
+import SolanaFM from "./other-icons/solanafm.svg"
 export {
+ SolanaFM,
   Solscan,
   SolanaExplorer,
   Pass,
