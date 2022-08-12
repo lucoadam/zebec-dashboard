@@ -85,6 +85,18 @@
         "mark-all-as-read":"Mark all as read",
         "earlier": "EARLIER",
         "view-on-explorer":"View on explorer"
+        
+    },
+    "settings":{
+        "settings": "Settings",
+        "email":"Email Address",
+        "email-subtitle":"This is why we need it and how it’s going to be used.",
+        "save-changes":"Save Changes",
+        "balance-warning-range":"Balance Warning Range",
+        "default-explorer":"Default Explorer",
+        "default-explorer-details":"Choose a default explorer to view your transactions.",
+        "explorer":"Explorer"
+
     },
     "modal-actions": {
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",

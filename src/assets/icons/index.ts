@@ -61,11 +61,16 @@ import UserGroupIcon from "./other-icons/user-group.svg"
 import WarningTriangleIcon from "./other-icons/warning-triangle.svg"
 import Fail from "./other-icons/Fail.svg"
 import Pass from "./other-icons/Pass.svg"
-
+import Solscan from "./other-icons/solscan.svg"
+import SolanaExplorer from "./other-icons/solanaexplorer.svg"
 export * from "./activity"
 export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
+import SolanaFM from "./other-icons/solanafm.svg"
 export {
+ SolanaFM,
+  Solscan,
+  SolanaExplorer,
   Pass,
   Fail,
   Notif,
