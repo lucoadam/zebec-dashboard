@@ -42,7 +42,8 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px"
+          : "0px",
+      overflowY: "hidden"
     }
   }
   const router = useRouter()
