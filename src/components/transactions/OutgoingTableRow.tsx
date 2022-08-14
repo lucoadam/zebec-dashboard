@@ -55,7 +55,11 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     const interval = setInterval(() => {
       setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
     }, 1000)
-    if (status === "completed") {
+    if (
+      status === "completed" ||
+      status === "paused" ||
+      status === "cancelled"
+    ) {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
@@ -66,7 +70,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       setStatus("scheduled")
     } else if (
       currentTime >= transaction.start_time &&
-      currentTime < transaction.end_time
+      currentTime < transaction.end_time &&
+      !["cancelled", "paused"].includes(status)
     ) {
       setStatus("outgoing")
     } else if (currentTime >= transaction.end_time) {
@@ -93,6 +98,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         }, 1000)
         return () => clearInterval(interval)
       }
+    } else if (status === "cancelled") {
+      setStreamedToken(
+        streamRatePerSec * (currentTime - transaction.start_time)
+      )
     }
     // eslint-disable-next-line
   }, [status, counter])

@@ -72,9 +72,11 @@ export default function IndividualAddresses() {
         },
         callback: (error: unknown) => {
           if (error) {
-            dispatch(toast.error({
-              message: t("addressBook:error-add")
-            }))
+            dispatch(
+              toast.error({
+                message: t("addressBook:error-add")
+              })
+            )
             return
           }
           reset()
@@ -91,16 +93,20 @@ export default function IndividualAddresses() {
         },
         callback: (error: unknown) => {
           if (error) {
-            dispatch(toast.error({
-              message: t("addressBook:error-update")
-            }))
+            dispatch(
+              toast.error({
+                message: t("addressBook:error-update")
+              })
+            )
           }
           setIsEdit(false)
           setEditAddressBookId("")
           reset()
-          dispatch(toast.success({
-            message: t("addressBook:success-update")
-          }))
+          dispatch(
+            toast.success({
+              message: t("addressBook:success-update")
+            })
+          )
         }
       }
       dispatch(updateAddressBook(addressBookData))
@@ -211,8 +217,9 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${!!errors.name?.message && "error"
-                          }`}
+                        className={`w-full h-10 ${
+                          !!errors.name?.message && "error"
+                        }`}
                         placeholder={t("addressBook:enter-name")}
                         type="text"
                         {...register("name")}
@@ -233,8 +240,9 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${!!errors.wallet?.message && "error"
-                          }`}
+                        className={`w-full h-10 ${
+                          !!errors.wallet?.message && "error"
+                        }`}
                         placeholder={t("addressBook:enter-wallet-address")}
                         type="text"
                         {...register("wallet")}
@@ -245,16 +253,18 @@ export default function IndividualAddresses() {
 
                 {/* submit Button */}
 
-                <div className="">
+                <div className="flex flex-col gap-4">
                   <Button
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
-                    title={`${isEdit
-                      ? t("addressBook:update-address")
-                      : t("addressBook:add-address")
-                      }`}
+                    title={`${
+                      isEdit
+                        ? t("addressBook:update-address")
+                        : t("addressBook:add-address")
+                    }`}
                   />
+                  <Button className={`w-full`} type="reset" title={`reset`} />
                 </div>
               </form>
             </div>
