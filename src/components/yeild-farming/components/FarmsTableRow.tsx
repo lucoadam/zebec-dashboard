@@ -37,13 +37,12 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-  const styles = {
-    detailsRow: {
+  const style = {
+    detailsRowStyles: {
       height:
         activeDetailsRow === index
           ? `${detailsRowRef.current?.scrollHeight}px`
-          : "0px",
-      overflowY: "hidden"
+          : "0px"
     }
   }
   const router = useRouter()
@@ -127,10 +126,10 @@ const FarmsTableRow: FC<FarmsTableRowProps> = ({
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
-              className={`bg-background-light rounded-lg overflow-y-auto  transition-all duration-[400ms] ${
+              className={`bg-background-light rounded-lg overflow-y-hidden  transition-all duration-[400ms] ${
                 activeDetailsRow === index ? `ease-in` : "ease-out"
               }`}
-              style={styles.detailsRow}
+              style={style.detailsRowStyles}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex gap-x-24 py-6 text-subtitle-sm font-medium">
