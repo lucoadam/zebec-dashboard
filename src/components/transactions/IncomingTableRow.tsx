@@ -5,12 +5,16 @@ import {
   CircularProgress,
   IconButton,
   Modal,
+  TransactionStatus,
   UserAddress
 } from "components/shared"
+import CopyButton from "components/shared/CopyButton"
+import { RPC_NETWORK } from "constants/cluster"
+import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import React, { FC, Fragment, useRef, useState } from "react"
-import { toSubstring } from "utils"
+import React, { FC, Fragment, useEffect, useRef, useState } from "react"
+import { formatCurrency, toSubstring } from "utils"
 import { WithdrawStepsList } from "./withdraw/data.d"
 
 interface IncomingTableRowProps {
@@ -47,6 +51,60 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     setIsOpen(!isOpen)
   }
 
+  const totalTimeInSec = transaction.end_time - transaction.start_time
+  const streamRatePerSec = transaction.amount / totalTimeInSec
+
+  const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
+  const [streamedToken, setStreamedToken] = useState<number>(0)
+  const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const [counter, setCounter] = useState<number>(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
+    }, 1000)
+    if (status === "completed") {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [currentTime, status])
+
+  useEffect(() => {
+    if (currentTime < transaction.start_time) {
+      setStatus("scheduled")
+    } else if (
+      currentTime >= transaction.start_time &&
+      currentTime < transaction.end_time
+    ) {
+      setStatus("outgoing")
+    } else if (currentTime >= transaction.end_time) {
+      setStatus("completed")
+    }
+  }, [status, currentTime, transaction.end_time, transaction.start_time])
+
+  useEffect(() => {
+    if (status === "completed") {
+      setStreamedToken(transaction.amount)
+    } else if (status === "outgoing") {
+      if (counter === 0) {
+        setStreamedToken(
+          streamRatePerSec * (currentTime - transaction.start_time)
+        )
+        setCounter((counter) => counter + 1)
+      } else {
+        const interval = setInterval(() => {
+          setStreamedToken((prevStreamedToken: number) =>
+            prevStreamedToken + streamRatePerSec > transaction.amount
+              ? transaction.amount
+              : prevStreamedToken + streamRatePerSec
+          )
+        }, 1000)
+        return () => clearInterval(interval)
+      }
+    }
+    // eslint-disable-next-line
+  }, [status, counter])
+
   return (
     <>
       <Fragment>
@@ -55,23 +113,37 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           <td className="px-6 py-5 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">
-                <CircularProgress status={transaction.status} />
+                <CircularProgress
+                  status={status}
+                  percentage={(streamedToken * 100) / transaction.amount}
+                />
               </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    +{formatCurrency(streamedToken, "", 4)}
                   </span>
-                  &nbsp;SOL
+                  &nbsp;{transaction.token}
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                  {" "}
+                  {formatCurrency(streamedToken, "", 4)} of{" "}
+                  {formatCurrency(transaction.amount, "", 4)}{" "}
+                  {transaction.token}
+                </div>
               </div>
             </div>
           </td>
           <td className="px-6 py-5 min-w-60">
             <div className="text-caption text-content-primary">
-              Mar 18, 2022, 12:00 PM <br />
-              to Mar 19, 2022, 11:58 AM
+              {moment
+                .unix(transaction.start_time)
+                .format("MMMM Do YYYY, h:mm:ss A")}{" "}
+              <br />
+              to{" "}
+              {moment
+                .unix(transaction.end_time)
+                .format("MMMM Do YYYY, h:mm:ss A")}
             </div>
           </td>
           <td className="px-6 py-5 min-w-60">
@@ -126,10 +198,10 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    Feb Salary
+                    {transaction.name}
                   </div>
                   <div className="text-body text-content-secondary">
-                    This is the secondary notes with character limit.
+                    {transaction.remarks ?? "-"}
                   </div>
                 </div>
                 <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
@@ -149,10 +221,10 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div data-tip={transaction.sender} className="">
+                          {toSubstring(transaction.sender, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
+                        <CopyButton content={transaction.sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -169,10 +241,10 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div className="" data-tip={transaction.receiver}>
+                          {toSubstring(transaction.receiver, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
+                        <CopyButton content={transaction.receiver} />
                       </div>
                     </div>
                     {/* Start Date */}
@@ -181,7 +253,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.start-date")}
                       </div>
                       <div className="text-content-primary">
-                        Feb 19, 2022, 09:13 PM
+                        {moment
+                          .unix(transaction.start_time)
+                          .format("MMMM Do YYYY, h:mm:ss A")}
                       </div>
                     </div>
                     {/* End Date */}
@@ -190,7 +264,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.end-date")}
                       </div>
                       <div className="text-content-primary">
-                        Feb 29, 2022, 09:13 PM
+                        {moment
+                          .unix(transaction.end_time)
+                          .format("MMMM Do YYYY, h:mm:ss A")}
                       </div>
                     </div>
                     {/* Stream Type */}
@@ -199,8 +275,12 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        <span>Continuous</span>
+                        {transaction.type === "instant" ? (
+                          <Icons.ThunderIcon className="w-6 h-6" />
+                        ) : (
+                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
+                        )}
+                        <span className="capitalize">{transaction.type}</span>
                       </div>
                     </div>
                   </div>
@@ -211,7 +291,11 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.total-amount")}
                       </div>
-                      <div className="text-content-primary">20,000 SOL</div>
+                      <div className="text-content-primary">
+                        {" "}
+                        {formatCurrency(transaction.amount, "", 4)}{" "}
+                        {transaction.token}
+                      </div>
                     </div>
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
@@ -219,7 +303,14 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        10,000 SOL (50%)
+                        {formatCurrency(streamedToken, "", 4)}{" "}
+                        {transaction.token} (
+                        {formatCurrency(
+                          (streamedToken * 100) / transaction.amount,
+                          "",
+                          2
+                        )}
+                        %)
                       </div>
                     </div>
                     {/* Status */}
@@ -229,7 +320,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
                         <Icons.IncomingIcon className="w-5 h-5" />
-                        <span>Ongoing</span>
+                        <span>{transaction.status}</span>
                       </div>
                     </div>
                     {/* Transaction */}
@@ -238,30 +329,38 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.transaction")}
                       </div>
                       <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-on-explorer")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
+                        <a
+                          href={`https://solana.fm/tx/${transaction.transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button
+                            title={`${t("table.view-on-explorer")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </a>
                       </div>
                     </div>
                     {/* Reference */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.reference")}
+                    {transaction.file && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.reference")}
+                        </div>
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.view-reference-file")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-reference-file")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
