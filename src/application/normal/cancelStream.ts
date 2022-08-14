@@ -15,7 +15,6 @@ export const cancelStreamNative: any =
   async (dispatch: any) => {
     try {
       const response = await stream.cancel(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -51,7 +50,6 @@ export const cancelStreamToken: any =
   async (dispatch: any) => {
     try {
       const response = await token.cancel(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

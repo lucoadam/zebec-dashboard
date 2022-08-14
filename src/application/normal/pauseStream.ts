@@ -15,8 +15,6 @@ export const pauseStreamNative: any =
   async (dispatch: any) => {
     try {
       const response = await stream.pause(data)
-      console.log(response)
-
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -52,7 +50,6 @@ export const pauseStreamToken: any =
   async (dispatch: any) => {
     try {
       const response = await token.pause(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

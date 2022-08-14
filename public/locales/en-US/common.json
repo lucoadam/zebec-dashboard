@@ -37,11 +37,12 @@
         "incoming": "INCOMING",
         "outgoing": "OUTGOING",
         "withdrawn": "WITHDRAWN",
+        "view": "View",
         "total-withdrawable-amount-detail": "Whenever you receive money, you have to individually withdraw it from each transaction. Go to incoming tab to perform withdrawal."
     },
     "deposit-withdrawal": {
-        "deposit-title": "Deposit balance into your wallet.",
-        "withdraw-title": "Withdraw your deposited balance into your wallet."
+        "deposit-title": "Deposit balance into your Zebec wallet.",
+        "withdraw-title": "Withdraw Zebec deposited assets into your wallet."
     },
     "wallet-not-connected": {
         "title": "Wallet not connected!",
