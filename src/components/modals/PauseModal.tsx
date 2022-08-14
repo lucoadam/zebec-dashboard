@@ -21,10 +21,8 @@ const PauseModal: FC = ({}) => {
       escrow: transaction.pda
     }
 
-    console.log(transaction)
-
     const transaction_uuid = transaction.uuid
-    if (transaction.symbol === "SOL")
+    if (transaction.token === "SOL")
       stream && dispatch(pauseStreamNative(data, transaction_uuid, stream))
     else token && dispatch(pauseStreamToken(data, transaction_uuid, token))
   }

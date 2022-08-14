@@ -71,13 +71,20 @@ const DepositTab: FC = () => {
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
       if (currentToken.symbol === "SOL")
-        stream && dispatch(depositNative(depositData, stream, setLoading, depositCallback))
-      else token && dispatch(depositToken(depositData, token, setLoading, depositCallback))
+        stream &&
+          dispatch(
+            depositNative(depositData, stream, setLoading, depositCallback)
+          )
+      else
+        token &&
+          dispatch(
+            depositToken(depositData, token, setLoading, depositCallback)
+          )
     }
   }
 
   return (
-    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
+    <div className="deposit-to-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
         {t("common:deposit-withdrawal.deposit-title")}
       </div>

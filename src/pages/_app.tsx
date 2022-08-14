@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
 import {
   ConnectionProvider,
   WalletProvider
@@ -10,7 +9,6 @@ import {
   SlopeWalletAdapter,
   SolflareWalletAdapter
 } from "@solana/wallet-adapter-wallets"
-import { clusterApiUrl } from "@solana/web3.js"
 import { store } from "app/store"
 import { ZebecContextProvider } from "app/zebecContext"
 import Common from "components/layouts/Common"
@@ -19,9 +17,10 @@ import { ThemeProvider } from "next-themes"
 import type { AppProps } from "next/app"
 import { useMemo } from "react"
 import { Provider } from "react-redux"
+import { TokenResponse } from "features/tokenDetails/tokenDetailsSlice.d"
+import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
-import { TokenResponse } from "features/tokenDetails/tokenDetailsSlice.d"
 import "styles/globals.css"
 
 const MyApp = ({
@@ -45,9 +44,9 @@ const MyApp = ({
   ]
 }: AppProps & { tokenDetails: TokenResponse[] }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
-  const network = WalletAdapterNetwork.Devnet
+  const network = RPC_NETWORK
   // You can also provide a custom RPC endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network])
+  const endpoint = useMemo(() => CLUSTER_API_URL, [])
   //wallets
   const wallets = useMemo(
     () => [

@@ -14,7 +14,6 @@ export const resumeStreamNative: any =
   async (dispatch: any) => {
     try {
       const response = await stream.resume(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -50,7 +49,6 @@ export const resumeStreamToken: any =
   async (dispatch: any) => {
     try {
       const response = await token.resume(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

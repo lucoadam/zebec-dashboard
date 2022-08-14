@@ -6,15 +6,17 @@ import { FC, useState } from "react"
 import { formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "./Token"
+import { twMerge } from "tailwind-merge"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
   tokens: TokenDetails[]
   balanceTokens: TreasuryToken[]
+  className?: string
 }
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
-  const { tableMaxHeight, tokens, balanceTokens } = props
+  const { tableMaxHeight, tokens, balanceTokens, className } = props
   const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
 
   const [search, setSearch] = useState("")
@@ -27,7 +29,12 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
 
   return (
     <>
-      <div className="p-6 rounded bg-background-secondary h-full">
+      <div
+        className={twMerge(
+          "p-6 rounded bg-background-secondary h-full",
+          className
+        )}
+      >
         <div className="flex flex-col gap-y-6">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
             DEPOSITED ASSETS

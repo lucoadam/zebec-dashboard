@@ -5,6 +5,7 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import NotificationsComponent from "components/notifications/NotificationsDropdown"
 import CopyButton from "components/shared/CopyButton"
+import { RPC_NETWORK } from "constants/cluster"
 import { updateWidth } from "features/layout/layoutSlice"
 import { useClickOutside } from "hooks"
 import { useTheme } from "next-themes"
@@ -110,15 +111,19 @@ const Navbar: FC = () => {
           {/* Logo */}
           <div className="flex flex-row gap-8 items-center">
             <div className="flex flex-col">
-              <Image
-                src={Images.ZebecLogo}
-                alt="Zebec Logo"
-                layout="fixed"
-                width={87}
-                height={24}
-              />
-              <div className="ml-10 text-caption text-content-contrast">
-                Mainnet Beta
+              <Link href="/">
+                <a className="h-6">
+                  <Image
+                    src={Images.ZebecLogo}
+                    alt="Zebec Logo"
+                    layout="fixed"
+                    width={87}
+                    height={24}
+                  />
+                </a>
+              </Link>
+              <div className="ml-10 text-caption text-content-contrast capitalize">
+                {RPC_NETWORK}
               </div>
             </div>
             <div className="hidden md:block">{themeChanger()}</div>
