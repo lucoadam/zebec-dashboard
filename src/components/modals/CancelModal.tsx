@@ -22,6 +22,7 @@ const CancelModal: FC = ({}) => {
       token_mint_address:
         transaction.token === "SOL" ? "" : transaction.token_mint_address
     }
+
     const transaction_uuid = transaction.uuid
     if (transaction.token === "SOL")
       stream && dispatch(cancelStreamNative(data, transaction_uuid, stream))

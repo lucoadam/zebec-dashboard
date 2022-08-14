@@ -162,9 +162,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         currentToken.mint === "solana" ? "" : currentToken.mint,
       file: data.file
     }
+
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
-      if (data.symbol === "SOL")
+      if (formattedData.token === "SOL")
         stream && dispatch(initStreamNative(formattedData, stream))
       else token && dispatch(initStreamToken(formattedData, token))
     } else {

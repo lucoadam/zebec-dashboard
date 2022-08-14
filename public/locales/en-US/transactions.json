@@ -31,12 +31,12 @@
     "enter-withdraw-amount": "Withdrawal amount is required.",
     "not-zero": "Amount must be greater than zero",
     "withdraw.not-string": "Please enter a number",
-    "max-amount": "Amount should not exceed max amount."
+    "max-amount": "Insufficient fund in Zebec wallet to withdraw."
   },
   "deposit": {
     "enter-deposit-amount": "Deposit amount is required.",
-    "not-zero": "Amount must be greater than zero",
-    "max-amount": "Amount should not exceed max amount."
+    "not-zero": "Amount must be greater than zero.",
+    "max-amount": "Insufficient fund in your wallet to deposit."
   },
   "table": {
     "progress": "Progress",

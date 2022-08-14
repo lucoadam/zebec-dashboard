@@ -33,17 +33,17 @@ const NotificationsComponent = () => {
   const handleNotificationClose = () => {
     setToggleNotificationsDropdown(false)
   }
-  const NotificationsDropdownWrapperRef = useRef(null)
+  const notificationsDropdownWrapperRef = useRef(null)
 
   //handle clicking outside
-  useClickOutside(NotificationsDropdownWrapperRef, {
+  useClickOutside(notificationsDropdownWrapperRef, {
     onClickOutside: handleNotificationClose
   })
   return (
     <>
-      <div className="relative h-8" ref={NotificationsDropdownWrapperRef}>
+      <div className="relative my-auto" ref={notificationsDropdownWrapperRef}>
         <div
-          className={` text-content-primary`}
+          className={`text-content-primary`}
           onClick={() =>
             setToggleNotificationsDropdown(!toggleNotificationsDropdown)
           }
