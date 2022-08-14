@@ -1,5 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import ExportModal from "components/modals/export-report/ExportModal"
 import {
   Breadcrumb,
@@ -8,21 +7,26 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import { incomingTransactions } from "fakedata"
-import { fetchIncomingTransactions } from "features/transactions/transactionsSlice"
+import {
+  fetchIncomingTransactions,
+  setIncomingCurrentPage,
+  setLimit
+} from "features/transactions/transactionsSlice"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useState } from "react"
+import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
 
 const Incoming: FC = () => {
+  const noOfOptions = [10, 20, 30, 40]
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
+  const { incomingTransactions, limit } = useAppSelector(
+    (state) => state.transactions
+  )
+
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
-  const { publicKey } = useWallet()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1)
-  const [noOfRows, setNoOfRows] = useState(10)
 
   const headers = [
     {
@@ -47,10 +51,6 @@ const Incoming: FC = () => {
     else setActiveDetailsRow(index)
   }
 
-  useEffect(() => {
-    dispatch(fetchIncomingTransactions(publicKey?.toString()))
-  }, [dispatch, publicKey])
-
   return (
     <>
       <Breadcrumb title={`${t("incoming-transactions")}`} />
@@ -59,7 +59,7 @@ const Incoming: FC = () => {
       {/* Table */}
       <Table headers={headers}>
         <TableBody>
-          {incomingTransactions.data.map((transaction, index) => {
+          {incomingTransactions.results.map((transaction, index) => {
             return (
               <IncomingTableRow
                 key={index}
@@ -73,16 +73,21 @@ const Incoming: FC = () => {
         </TableBody>
       </Table>
       <div className="flex pt-5">
-        <RowsPerPage setNoOfRows={setNoOfRows} noOfRows={noOfRows} />
+        <RowsPerPage
+          noOfRows={limit}
+          noOfOptions={noOfOptions}
+          onChange={(noOfRows) => dispatch(setLimit(noOfRows))}
+        />
         <div className="ml-auto">
           <Pagination
-            pages={100}
-            setCurrentPage={setCurrentPage}
-            setNoOfRows={setNoOfRows}
+            pages={Math.ceil(incomingTransactions.count / limit)}
+            onChange={(page: number) => {
+              dispatch(setIncomingCurrentPage(page))
+              dispatch(fetchIncomingTransactions())
+            }}
           />
         </div>
       </div>
-
       <ExportModal />
     </>
   )

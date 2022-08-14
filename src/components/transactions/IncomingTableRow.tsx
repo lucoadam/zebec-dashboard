@@ -75,7 +75,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-60">
-            <UserAddress wallet="Ha4FMLcLVGrTYkxnnZGmT5SJb1pVGXxLaY54AtekJF8h" />
+            <UserAddress wallet={transaction.sender} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">

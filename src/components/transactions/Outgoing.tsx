@@ -8,11 +8,11 @@ import {
 } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { useTranslation } from "next-i18next"
-import { FC, useState, useEffect } from "react"
+import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import OutgoingTableRow from "./OutgoingTableRow"
 import ExportModal from "components/modals/export-report/ExportModal"
-import { useWallet } from "@solana/wallet-adapter-react"
+// import { useWallet } from "@solana/wallet-adapter-react"
 import {
   fetchOutgoingTransactions,
   setLimit,
@@ -21,9 +21,9 @@ import {
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
-  const { publicKey } = useWallet()
+  // const { publicKey } = useWallet()
   const dispatch = useAppDispatch()
-  const { outgoingTransactions, limit, outgoingTotal } = useAppSelector(
+  const { outgoingTransactions, limit } = useAppSelector(
     (state) => state.transactions
   )
 
@@ -42,12 +42,6 @@ const Outgoing: FC = () => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
     else setActiveDetailsRow(index)
   }
-
-  useEffect(() => {
-    if (publicKey) {
-      dispatch(fetchOutgoingTransactions())
-    }
-  }, [publicKey, dispatch])
 
   return (
     <>
@@ -88,7 +82,7 @@ const Outgoing: FC = () => {
           onChange={(noOfRows) => dispatch(setLimit(noOfRows))}
         />
         <Pagination
-          pages={Math.ceil(outgoingTotal / limit)}
+          pages={Math.ceil(outgoingTransactions.count / limit)}
           onChange={(page: number) => {
             dispatch(setOutgoingCurrentPage(page))
             dispatch(fetchOutgoingTransactions())
