@@ -1,12 +1,15 @@
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { tokenBalances, weeklyBalances } from "fakedata"
+import { useClickOutside, useToggle } from "hooks"
 import { useTranslation } from "next-i18next"
 import Link from "next/link"
-import { FC } from "react"
-import { twMerge } from "tailwind-merge"
+import { FC, useRef } from "react"
 import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
 import { DepositedBalanceProps } from "./Balances.d"
 import { Button } from "./Button"
+import { Token } from "./Token"
+import { TokensDropdown } from "./TokensDropdown"
 /* Deposited Balance */
 export const DepositedBalance: FC<DepositedBalanceProps> = ({
   balance = 0
@@ -71,16 +74,52 @@ export const Tokens: FC<{
   setCurrentToken: (each: keyof typeof tokenBalances) => void
 }> = ({ currentToken, setCurrentToken }) => {
   const { t } = useTranslation()
-
+  const [show, toggle, setToggle] = useToggle(false)
+  const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
+  //handle clicking outside
+  useClickOutside(tokensDropdownWrapperRef, {
+    onClickOutside: () => setToggle(false)
+  })
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const walletTokens =
+    useAppSelector((state) => state.walletBalance.tokens) || []
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
-      <div className="flex justify-between items-center gap-x-6">
+      <div className="flex relative justify-between items-center gap-x-6">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1 transform -translate-y-1.5">
           {t("common:balances.token")}
         </div>
         {/* Tokens */}
-        <div className="flex gap-x-2 overflow-x-auto pb-1">
-          {Object.keys(tokenBalances).map((each) => (
+        <div className="flex  gap-x-2 overflow-x-auto pb-1">
+          <div
+            ref={tokensDropdownWrapperRef}
+            className="cursor-pointer flex items-center text-content-primary gap-1.5"
+            onClick={() => {
+              toggle()
+            }}
+          >
+            {/* Icons here */}
+            {currentToken && (
+              <Token
+                symbol={currentToken}
+                className="w-4 h-4 text-content-primary"
+              />
+            )}
+            <span className="text-content-primary">
+              {currentToken ?? "SOL"}{" "}
+            </span>
+            <Icons.CheveronDownIcon className="text-base text-content-secondary" />
+          </div>
+          <TokensDropdown
+            walletTokens={walletTokens}
+            tokens={tokenDetails}
+            show={show}
+            toggleShow={setToggle}
+            setCurrentToken={(token) =>
+              setCurrentToken(token?.symbol as keyof typeof tokenBalances)
+            }
+          />
+          {/* {Object.keys(tokenBalances).map((each) => (
             <button
               key={each}
               onClick={() => {
@@ -93,7 +132,7 @@ export const Tokens: FC<{
             >
               {each}
             </button>
-          ))}
+          ))} */}
         </div>
       </div>
       {/* Incoming */}
