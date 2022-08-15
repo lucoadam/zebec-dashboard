@@ -3,7 +3,12 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Button, CollapseDropdown, InputField } from "components/shared"
+import {
+  Button,
+  CollapseDropdown,
+  IconButton,
+  InputField
+} from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { sendTreasuryInstantTransfer } from "features/stream/streamSlice"
@@ -36,7 +41,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    watch
+    watch,
+    reset
   } = useForm<InstantStreamFormData>({
     mode: "onChange",
     resolver: yupResolver(instantStreamSchema)
@@ -101,6 +107,12 @@ export const InstantStream: FC<InstantStreamProps> = ({
     dispatch(sendTreasuryInstantTransfer(formattedData))
   }
 
+  const resetForm = () => {
+    reset()
+    setCurrentToken(tokenDetails[0])
+    setValue("symbol", tokenDetails[0].symbol)
+  }
+
   useEffect(() => {
     const subscription = watch(() => {
       if (setFormValues) {
@@ -124,9 +136,17 @@ export const InstantStream: FC<InstantStreamProps> = ({
           className ?? ""
         )}
       >
-        <div className="text-heading-4 text-content-primary font-semibold">
-          {t("send:instant-transfer")}
+        <div className="flex justify-between">
+          <div className="text-heading-4 text-content-primary font-semibold">
+            {t("send:instant-transfer")}
+          </div>
+          <IconButton
+            icon={<Icons.RefreshIcon />}
+            className="w-7 h-7"
+            onClick={resetForm}
+          />
         </div>
+
         <div className="text-caption text-content-tertiary font-normal pt-2">
           {t("send:instant-transfer-description")}
         </div>
@@ -143,8 +163,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
               >
                 <div>
                   <input
-                    className={`${!showRemarks && "!pr-[124px]"
-                      } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
+                    className={`${
+                      !showRemarks && "!pr-[124px]"
+                    } w-full h-[40px] ${!!errors.transaction_name && "error"}`}
                     placeholder={t("send:transaction-name")}
                     type="text"
                     {...register("transaction_name")}
@@ -171,8 +192,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
               <div className="relative text-content-primary">
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pr-12 ${!!errors.receiver && "error"
-                    }`}
+                  className={`h-[40px] w-full !pr-12 ${
+                    !!errors.receiver && "error"
+                  }`}
                   placeholder={t("send:receiver-wallet-placeholder")}
                   {...register("receiver")}
                 />
@@ -290,8 +312,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 )}
                 <input
                   type="text"
-                  className={`h-[40px] w-full !pl-11 ${!!errors.symbol && "error"
-                    }`}
+                  className={`h-[40px] w-full !pl-11 ${
+                    !!errors.symbol && "error"
+                  }`}
                   readOnly
                   {...register("symbol")}
                 />
@@ -367,7 +390,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 >
                   {formatCurrency(
                     prices[currentToken.symbol] * Number(getValues().amount) ||
-                    0,
+                      0,
                     "$"
                   )}{" "}
                 </label>
@@ -413,7 +436,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-              // isReset={resetFile}
+                // isReset={resetFile}
               />
             </div>
           )}

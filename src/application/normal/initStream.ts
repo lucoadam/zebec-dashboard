@@ -5,7 +5,8 @@ import { toast } from "features/toasts/toastsSlice"
 import { ZebecNativeStreamProps } from "./stream.d"
 
 export const initStreamNative: any =
-  (data: any, stream: ZebecNativeStreamProps) => async (dispatch: any) => {
+  (data: any, stream: ZebecNativeStreamProps, callback?: () => void) =>
+  async (dispatch: any) => {
     try {
       const response = await stream.init(data)
       if (response.status.toLocaleLowerCase() === "success") {
@@ -20,7 +21,9 @@ export const initStreamNative: any =
           pda: response?.data?.pda,
           transaction_hash: response?.data?.transactionHash
         }
-        dispatch(sendContinuousStream(backendData))
+        dispatch(sendContinuousStream(backendData)).then(() => {
+          if (callback) callback()
+        })
       } else {
         dispatch(
           toast.error({
@@ -42,7 +45,8 @@ export const initStreamNative: any =
   }
 
 export const initStreamToken: any =
-  (data: any, token: ZebecNativeStreamProps) => async (dispatch: any) => {
+  (data: any, token: ZebecNativeStreamProps, callback?: () => void) =>
+  async (dispatch: any) => {
     try {
       const response = await token.init(data)
       if (response.status.toLocaleLowerCase() === "success") {
@@ -57,7 +61,9 @@ export const initStreamToken: any =
           pda: response?.data?.pda,
           transaction_hash: response?.data?.transactionHash
         }
-        dispatch(sendContinuousStream(backendData))
+        dispatch(sendContinuousStream(backendData)).then(() => {
+          if (callback) callback()
+        })
       } else {
         dispatch(
           toast.error({

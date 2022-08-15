@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { LeftArrowIcon } from "assets/icons"
+import { LeftArrowIcon, RefreshIcon } from "assets/icons"
 import {
   Breadcrumb,
   Button,
@@ -113,6 +113,10 @@ export default function IndividualAddresses() {
     }
   }
 
+  const resetForm = () => {
+    reset()
+  }
+
   useEffect(() => {
     if (addressBooks) {
       setValue(
@@ -188,21 +192,31 @@ export default function IndividualAddresses() {
           </div>
           <div className="md:order-last order-first">
             <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
-              <div className="flex gap-2 items-center text-content-secondary text-subtitle font-semibold">
-                {isEdit && (
-                  <IconButton
-                    variant="plain"
-                    size="small"
-                    icon={<LeftArrowIcon className="text-content-secondary" />}
-                    onClick={() => {
-                      setIsEdit(false)
-                      reset()
-                    }}
-                  />
-                )}
-                {isEdit
-                  ? t("addressBook:update-an-address")
-                  : t("addressBook:add-an-address")}
+              <div className="flex justify-between">
+                <div className="flex gap-2 items-center text-content-secondary text-subtitle font-semibold">
+                  {isEdit && (
+                    <IconButton
+                      variant="plain"
+                      size="small"
+                      icon={
+                        <LeftArrowIcon className="text-content-secondary" />
+                      }
+                      onClick={() => {
+                        setIsEdit(false)
+                        reset()
+                      }}
+                    />
+                  )}
+                  {isEdit
+                    ? t("addressBook:update-an-address")
+                    : t("addressBook:add-an-address")}
+                </div>
+                <IconButton
+                  data-tip="Reset"
+                  icon={<RefreshIcon />}
+                  className="w-7 h-7"
+                  onClick={resetForm}
+                />
               </div>
               <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 <div className="pt-8">
