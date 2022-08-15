@@ -23,7 +23,7 @@ const RecentTransactions: FC = () => {
   const { t } = useTranslation()
   return (
     <>
-      <div className="lg:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
+      <div className="recent-transactions lg:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
         <div className="flex justify-between items-center">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
             {t("home:recent.title")}

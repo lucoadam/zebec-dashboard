@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react"
 import * as Icons from "assets/icons"
+import React, { FC, useEffect, useState } from "react"
 
 export type TransactionStatus =
   | "completed"
@@ -132,7 +132,7 @@ export const CircularProgress: FC<CircularProgressProps> = ({
           />
         </g>
       </svg>
-      <div style={{ zIndex: 1 }}>
+      <div style={{ zIndex: 1 }} className="text-content-primary">
         {getIconOrPercentageBasedOnStatus(status, percentage)}
       </div>
     </div>

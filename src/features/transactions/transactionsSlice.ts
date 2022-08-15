@@ -2,7 +2,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { RootState } from "app/store"
-import axios from "axios"
 
 interface TransactionState {
   loading: boolean
@@ -13,9 +12,12 @@ interface TransactionState {
     previous: string
     results: any[]
   }
-  incomingTransactions: any[]
-  incomingTotal: number
-  outgoingTotal: number
+  incomingTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   limit: number
   incomingCurrentPage: number
   outgoingCurrentPage: number
@@ -30,10 +32,13 @@ const initialState: TransactionState = {
     previous: "",
     results: []
   },
-  incomingTransactions: [],
-  incomingTotal: 0,
-  outgoingTotal: 0,
-  limit: 5,
+  incomingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  limit: 10,
   incomingCurrentPage: 1,
   outgoingCurrentPage: 1
 }
@@ -41,26 +46,30 @@ const initialState: TransactionState = {
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (sender: string, { getState }) => {
-    // const { data: response } = await axios.get(
-    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${sender}`
-    // )
+  async (_, { getState }) => {
     const { transactions } = getState() as RootState
-    const { data: response } = await api.get(
-      `/transaction/?limit=${transactions.limit}&offset=${
-        (transactions.outgoingCurrentPage - 1) * transactions.limit
-      }`
-    )
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.limit,
+        kind: "outgoing",
+        offset: (transactions.outgoingCurrentPage - 1) * transactions.limit
+      }
+    })
     return response
   }
 )
 
 export const fetchIncomingTransactions: any = createAsyncThunk(
   "transactions/fetchIncomingTransactions",
-  async (receiver: string) => {
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/transactions?receiver=${receiver}`
-    )
+  async (_, { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.limit,
+        kind: "incoming",
+        offset: (transactions.incomingCurrentPage - 1) * transactions.limit
+      }
+    })
     return response
   }
 )

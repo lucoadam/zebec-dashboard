@@ -18,6 +18,7 @@ const DepositedAssets: FC<{
         balanceTokens={balanceTokens}
         tokens={tokens}
         tableMaxHeight={tableMaxHeight}
+        className="deposited-assets"
       />
     </>
   )

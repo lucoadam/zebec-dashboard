@@ -267,7 +267,7 @@ export default function IndividualAddresses() {
 
                 {/* submit Button */}
 
-                <div className="">
+                <div className="flex flex-col gap-4">
                   <Button
                     className={`w-full`}
                     variant="gradient"
@@ -278,6 +278,7 @@ export default function IndividualAddresses() {
                         : t("addressBook:add-address")
                     }`}
                   />
+                  <Button className={`w-full`} type="reset" title={`reset`} />
                 </div>
               </form>
             </div>

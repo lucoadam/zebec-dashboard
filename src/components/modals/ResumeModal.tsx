@@ -21,7 +21,7 @@ const ResumeModal: FC = ({}) => {
       escrow: transaction.pda
     }
     const transaction_uuid = transaction.uuid
-    if (transaction.symbol === "SOL")
+    if (transaction.token === "SOL")
       stream && dispatch(resumeStreamNative(data, transaction_uuid, stream))
     else token && dispatch(resumeStreamToken(data, transaction_uuid, token))
   }

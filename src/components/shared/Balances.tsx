@@ -1,6 +1,7 @@
 import * as Icons from "assets/icons"
 import { tokenBalances, weeklyBalances } from "fakedata"
 import { useTranslation } from "next-i18next"
+import Link from "next/link"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
@@ -13,14 +14,14 @@ export const DepositedBalance: FC<DepositedBalanceProps> = ({
   const { t } = useTranslation()
   const depositedBalance = splitNumber(balance)
   return (
-    <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
+    <div className="deposited-balance p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
         {t("common:balances.deposited-balance")}
       </div>
       <div>
         <div className=" text-heading-3 text-content-primary font-semibold">
           <span data-tip={displayExponentialNumber(balance)}>
-            ${depositedBalance[0]}
+            {`$${depositedBalance[0]}`}
             <span className=" text-subtitle text-content-contrast">
               .{depositedBalance[1]}
             </span>
@@ -38,12 +39,18 @@ export const DepositedBalance: FC<DepositedBalanceProps> = ({
 export const TotalWithdrawableAmount: FC = () => {
   const { t } = useTranslation()
   return (
-    <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
+    <div className="total-withdrawable-amount p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="flex justify-between items-center">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
           {t("common:balances.total-withdrawable-amount")}
         </div>
-        <Button size="small" title="View" endIcon={<Icons.ArrowRightIcon />} />
+        <Link href="/transactions">
+          <Button
+            size="small"
+            title={`${t("common:balances.view")}`}
+            endIcon={<Icons.ArrowRightIcon />}
+          />
+        </Link>
       </div>
       <div className="space-y-4">
         <div className=" text-heading-3 text-content-primary font-semibold">
@@ -66,7 +73,7 @@ export const Tokens: FC<{
   const { t } = useTranslation()
 
   return (
-    <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
+    <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
       <div className="flex justify-between items-center gap-x-6">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1 transform -translate-y-1.5">
           {t("common:balances.token")}
@@ -135,7 +142,7 @@ export const ActivityThisWeek: FC<{
 }> = ({ currentToken }) => {
   const { t } = useTranslation()
   return (
-    <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-6">
+    <div className="activity-this-week p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
         {t("common:balances.activity-this-week")}
       </div>

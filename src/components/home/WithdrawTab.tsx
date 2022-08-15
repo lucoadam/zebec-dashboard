@@ -71,15 +71,21 @@ const WithdrawTab: FC = () => {
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
-      console.log(withdrawData)
       if (currentToken.symbol === "SOL")
-        stream && dispatch(withdrawNative(withdrawData, stream, setLoading, withdrawCallback))
-      else token && dispatch(withdrawToken(withdrawData, token, setLoading, withdrawCallback))
+        stream &&
+          dispatch(
+            withdrawNative(withdrawData, stream, setLoading, withdrawCallback)
+          )
+      else
+        token &&
+          dispatch(
+            withdrawToken(withdrawData, token, setLoading, withdrawCallback)
+          )
     }
   }
 
   return (
-    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
+    <div className="withdraw-from-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
         {t("common:deposit-withdrawal.withdraw-title")}
       </div>
