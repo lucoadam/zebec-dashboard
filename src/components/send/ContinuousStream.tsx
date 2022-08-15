@@ -10,6 +10,8 @@ import {
   Button,
   CollapseDropdown,
   DateTimePicker,
+  EmptyDataState,
+  IconButton,
   InputField,
   TimePicker,
   Toggle
@@ -78,7 +80,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     getValues,
     trigger,
     resetField,
-    watch
+    watch,
+    reset
   } = useForm<ContinuousStreamFormData>({
     mode: "onChange",
     resolver: yupResolver(continuousSchema)
@@ -141,6 +144,32 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }, [publicKey, setValue])
 
+  const resetForm = () => {
+    reset()
+    setCurrentToken(tokenDetails[0])
+    setValue("symbol", tokenDetails[0].symbol)
+    setValue(
+      "startDate",
+      moment().add(constants.STREAM_START_ADD, "minutes").format("DD/MM/YYYY")
+    )
+    setValue(
+      "startTime",
+      moment().add(constants.STREAM_START_ADD, "minutes").format("hh:mm A")
+    )
+    setValue(
+      "endDate",
+      moment()
+        .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
+        .format("DD/MM/YYYY")
+    )
+    setValue(
+      "endTime",
+      moment()
+        .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
+        .format("hh:mm A")
+    )
+  }
+
   const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       name: data.transaction_name,
@@ -165,8 +194,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
       if (data.symbol === "SOL")
-        stream && dispatch(initStreamNative(formattedData, stream))
-      else token && dispatch(initStreamToken(formattedData, token))
+        stream && dispatch(initStreamNative(formattedData, stream, resetForm))
+      else token && dispatch(initStreamToken(formattedData, token, resetForm))
     } else {
       dispatch(sendTreasuryContinuousStream(formattedData))
     }
@@ -233,9 +262,18 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           className ?? ""
         )}
       >
-        <div className="text-heading-4 text-content-primary font-semibold">
-          {t("send:continuous-stream")}
+        <div className="flex justify-between">
+          <div className="text-heading-4 text-content-primary font-semibold">
+            {t("send:continuous-stream")}
+          </div>
+          <IconButton
+            data-tip="Reset"
+            icon={<Icons.RefreshIcon />}
+            className="w-7 h-7"
+            onClick={resetForm}
+          />
         </div>
+
         <div className="text-caption text-content-tertiary font-normal pt-2">
           {t("send:continuous-stream-description")}
         </div>
@@ -305,40 +343,52 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 position="left"
               >
                 <div className="rounded-lg bg-background-primary border border-outline">
-                  <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
-                  <input
-                    className="is-search w-full h-[48px] bg-background-primary"
-                    placeholder={t("send:search-wallet")}
-                    type="text"
-                    onChange={(e) => setReceiverSearchData(e.target.value)}
-                  />
-                  <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                    {addressBook
-                      .filter((user) =>
-                        user.name
-                          .toLowerCase()
-                          .includes(receiverSearchData.toLowerCase())
-                      )
-                      .map((user) => (
-                        <div
-                          key={user.address}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            setToggleReceiverDropdown(false)
-                            setValue("receiver", user.address)
-                            trigger("receiver")
-                          }}
-                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                        >
-                          <div className="text-sm text-content-primary">
-                            {user.name}
-                          </div>
-                          <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.address, 28, false)}
-                          </div>
-                        </div>
-                      ))}
-                  </div>
+                  {addressBook.length > 0 ? (
+                    <>
+                      <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+                      <input
+                        className="is-search w-full h-[48px] bg-background-primary"
+                        placeholder={t("send:search-wallet")}
+                        type="text"
+                        onChange={(e) => setReceiverSearchData(e.target.value)}
+                      />
+                      <div className="divide-y divide-outline max-h-[206px] overflow-auto">
+                        {addressBook
+                          .filter((user) =>
+                            user.name
+                              .toLowerCase()
+                              .includes(receiverSearchData.toLowerCase())
+                          )
+                          .map((user) => (
+                            <div
+                              key={user.address}
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                setToggleReceiverDropdown(false)
+                                setValue("receiver", user.address)
+                                trigger("receiver")
+                              }}
+                              className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                            >
+                              <div className="text-sm text-content-primary">
+                                {user.name}
+                              </div>
+                              <div className="text-caption text-content-tertiary">
+                                {toSubstring(user.address, 28, false)}
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </>
+                  ) : (
+                    <EmptyDataState
+                      message={t(
+                        "createTreasury:second-steper.empty-address-book"
+                      )}
+                      padding={80}
+                      className="h-fit w-full rounded !px-10 !py-10 bg-background-primary text-center"
+                    />
+                  )}
                 </div>
               </CollapseDropdown>
             </div>
@@ -539,7 +589,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   placeholder="E.g. 01/01/2022"
                   dateFormat="DD/MM/YYYY"
                   timeFormat={false}
-                  value={getValues().startDate || moment().format("DD/MM/YYYY")}
+                  value={
+                    getValues().startDate ||
+                    moment()
+                      .add(constants.STREAM_START_ADD, "minutes")
+                      .format("DD/MM/YYYY")
+                  }
                   onChange={(date) => {
                     setValue("startDate", moment(date).format("DD/MM/YYYY"))
                     trigger("startDate")
@@ -615,7 +670,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   dateFormat="DD/MM/YYYY"
                   timeFormat={false}
                   disabled={getValues().enableStreamRate}
-                  value={getValues().endDate}
+                  value={
+                    getValues().endDate ||
+                    moment()
+                      .add(
+                        constants.STREAM_START_ADD + constants.STREAM_END_ADD,
+                        "minutes"
+                      )
+                      .format("DD/MM/YYYY")
+                  }
                   onChange={(date) => {
                     setValue("endDate", moment(date).format("DD/MM/YYYY"))
                     trigger("endDate")
@@ -634,6 +697,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                   name="endTime"
                   register={register}
                   disabled={getValues().enableStreamRate}
+                  value={
+                    getValues().endTime ||
+                    moment()
+                      .add(
+                        constants.STREAM_START_ADD + constants.STREAM_END_ADD,
+                        "minutes"
+                      )
+                      .format("hh:mm A")
+                  }
                   onChange={(time) => {
                     setValue("endTime", time)
                     trigger("endTime")

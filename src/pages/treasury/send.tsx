@@ -88,7 +88,8 @@ export async function getStaticProps({ locale }: { locale: string }) {
       ...(await serverSideTranslations(locale, [
         "common",
         "validation",
-        "send"
+        "send",
+        "createTreasury"
       ]))
     }
   }

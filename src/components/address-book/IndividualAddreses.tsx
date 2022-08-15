@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { LeftArrowIcon } from "assets/icons"
+import { LeftArrowIcon, RefreshIcon } from "assets/icons"
 import {
   Breadcrumb,
   Button,
@@ -72,9 +72,11 @@ export default function IndividualAddresses() {
         },
         callback: (error: unknown) => {
           if (error) {
-            dispatch(toast.error({
-              message: t("addressBook:error-add")
-            }))
+            dispatch(
+              toast.error({
+                message: t("addressBook:error-add")
+              })
+            )
             return
           }
           reset()
@@ -91,20 +93,28 @@ export default function IndividualAddresses() {
         },
         callback: (error: unknown) => {
           if (error) {
-            dispatch(toast.error({
-              message: t("addressBook:error-update")
-            }))
+            dispatch(
+              toast.error({
+                message: t("addressBook:error-update")
+              })
+            )
           }
           setIsEdit(false)
           setEditAddressBookId("")
           reset()
-          dispatch(toast.success({
-            message: t("addressBook:success-update")
-          }))
+          dispatch(
+            toast.success({
+              message: t("addressBook:success-update")
+            })
+          )
         }
       }
       dispatch(updateAddressBook(addressBookData))
     }
+  }
+
+  const resetForm = () => {
+    reset()
   }
 
   useEffect(() => {
@@ -182,21 +192,31 @@ export default function IndividualAddresses() {
           </div>
           <div className="md:order-last order-first">
             <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
-              <div className="flex gap-2 items-center text-content-secondary text-subtitle font-semibold">
-                {isEdit && (
-                  <IconButton
-                    variant="plain"
-                    size="small"
-                    icon={<LeftArrowIcon className="text-content-secondary" />}
-                    onClick={() => {
-                      setIsEdit(false)
-                      reset()
-                    }}
-                  />
-                )}
-                {isEdit
-                  ? t("addressBook:update-an-address")
-                  : t("addressBook:add-an-address")}
+              <div className="flex justify-between">
+                <div className="flex gap-2 items-center text-content-secondary text-subtitle font-semibold">
+                  {isEdit && (
+                    <IconButton
+                      variant="plain"
+                      size="small"
+                      icon={
+                        <LeftArrowIcon className="text-content-secondary" />
+                      }
+                      onClick={() => {
+                        setIsEdit(false)
+                        reset()
+                      }}
+                    />
+                  )}
+                  {isEdit
+                    ? t("addressBook:update-an-address")
+                    : t("addressBook:add-an-address")}
+                </div>
+                <IconButton
+                  data-tip="Reset"
+                  icon={<RefreshIcon />}
+                  className="w-7 h-7"
+                  onClick={resetForm}
+                />
               </div>
               <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                 <div className="pt-8">
@@ -211,8 +231,9 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${!!errors.name?.message && "error"
-                          }`}
+                        className={`w-full h-10 ${
+                          !!errors.name?.message && "error"
+                        }`}
                         placeholder={t("addressBook:enter-name")}
                         type="text"
                         {...register("name")}
@@ -233,8 +254,9 @@ export default function IndividualAddresses() {
                   >
                     <div>
                       <input
-                        className={`w-full h-10 ${!!errors.wallet?.message && "error"
-                          }`}
+                        className={`w-full h-10 ${
+                          !!errors.wallet?.message && "error"
+                        }`}
                         placeholder={t("addressBook:enter-wallet-address")}
                         type="text"
                         {...register("wallet")}
@@ -250,10 +272,11 @@ export default function IndividualAddresses() {
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
-                    title={`${isEdit
-                      ? t("addressBook:update-address")
-                      : t("addressBook:add-address")
-                      }`}
+                    title={`${
+                      isEdit
+                        ? t("addressBook:update-address")
+                        : t("addressBook:add-address")
+                    }`}
                   />
                 </div>
               </form>
