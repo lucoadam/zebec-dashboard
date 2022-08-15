@@ -9,7 +9,7 @@ import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
 import { DepositedBalanceProps } from "./Balances.d"
 import { Button } from "./Button"
 import { Token } from "./Token"
-import { TokensDropdown } from "./TokensDropdown"
+import { TokensDropdwonDashboard } from "./TokensDropdownDashboard"
 /* Deposited Balance */
 export const DepositedBalance: FC<DepositedBalanceProps> = ({
   balance = 0
@@ -81,8 +81,7 @@ export const Tokens: FC<{
     onClickOutside: () => setToggle(false)
   })
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
-  const walletTokens =
-    useAppSelector((state) => state.walletBalance.tokens) || []
+
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
       <div className="flex relative justify-between items-center gap-x-6">
@@ -90,10 +89,12 @@ export const Tokens: FC<{
           {t("common:balances.token")}
         </div>
         {/* Tokens */}
-        <div className="flex  gap-x-2 overflow-x-auto pb-1">
+        <div
+          ref={tokensDropdownWrapperRef}
+          className="flex bg-background-primary px-2 py-2 rounded-md overflow-x-auto"
+        >
           <div
-            ref={tokensDropdownWrapperRef}
-            className="cursor-pointer flex items-center text-content-primary gap-1.5"
+            className="cursor-pointer  flex items-center text-content-primary gap-1.5"
             onClick={() => {
               toggle()
             }}
@@ -110,8 +111,7 @@ export const Tokens: FC<{
             </span>
             <Icons.CheveronDownIcon className="text-base text-content-secondary" />
           </div>
-          <TokensDropdown
-            walletTokens={walletTokens}
+          <TokensDropdwonDashboard
             tokens={tokenDetails}
             show={show}
             toggleShow={setToggle}
@@ -119,20 +119,6 @@ export const Tokens: FC<{
               setCurrentToken(token?.symbol as keyof typeof tokenBalances)
             }
           />
-          {/* {Object.keys(tokenBalances).map((each) => (
-            <button
-              key={each}
-              onClick={() => {
-                setCurrentToken(each as keyof typeof tokenBalances)
-              }}
-              className={twMerge(
-                "text-caption min-w-max text-content-primary font-medium px-2 py-0.5 rounded-2xl",
-                currentToken === each ? "bg-primary" : "bg-background-light"
-              )}
-            >
-              {each}
-            </button>
-          ))} */}
         </div>
       </div>
       {/* Incoming */}
