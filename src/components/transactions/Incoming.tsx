@@ -17,7 +17,7 @@ import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
-import { TransactionSkeleton } from "./transactionSkeleton"
+import { TransactionSkeleton } from "./TransactionSkeleton"
 
 const Incoming: FC = () => {
   const noOfOptions = [10, 20, 30, 40]

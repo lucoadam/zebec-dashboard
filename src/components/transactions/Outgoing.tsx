@@ -18,7 +18,7 @@ import {
   setLimit,
   setOutgoingCurrentPage
 } from "features/transactions/transactionsSlice"
-import { TransactionSkeleton } from "./transactionSkeleton"
+import { TransactionSkeleton } from "./TransactionSkeleton"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
