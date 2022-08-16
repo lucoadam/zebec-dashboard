@@ -8,10 +8,12 @@ import { toSubstring } from "../../utils"
 import { Button, CollapseDropdown } from "../shared"
 //hooks
 import CopyButton from "components/shared/CopyButton"
+import { useTranslation } from "next-i18next"
 import ReactTooltip from "react-tooltip"
 import { useClickOutside } from "../../hooks"
 
 const Profile: FC = () => {
+  const { t } = useTranslation()
   const useWalletObject = useWallet()
   const useWalletModalObject = useWalletModal()
   const profileDropdownWrapperRef = useRef(null)
@@ -116,13 +118,13 @@ const Profile: FC = () => {
             </div>
             <div>
               <Button
-                title="Change Wallet"
+                title={`${t("common:buttons.change-wallet")}`}
                 startIcon={<Icons.RefreshIcon />}
                 className="w-full mb-3"
                 onClick={handleChangeWallet}
               />
               <Button
-                title="Disconnect Wallet"
+                title={`${t("common:buttons.disconnect-wallet")}`}
                 startIcon={<Icons.DisconnectIcon />}
                 className="w-full"
                 onClick={handleDisconnectWallet}

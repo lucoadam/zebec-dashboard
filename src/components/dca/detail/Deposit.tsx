@@ -61,7 +61,7 @@ export const Deposit = () => {
     ) {
       setError(
         "amount",
-        { type: "custom", message: "transactions:deposit.max-amount" },
+        { type: "custom", message: "validations:deposit-max-amount" },
         { shouldFocus: true }
       )
       return
@@ -99,7 +99,7 @@ export const Deposit = () => {
       >
         <div className="relative" ref={dropdownWrapper}>
           <label className={`text-content-secondary text-xs font-medium mb-1`}>
-            Add Funds From
+            {t("dca:add-fund-from")}
           </label>
           <div
             onClick={() => setToggleDropdown(!toggleDropdown)}

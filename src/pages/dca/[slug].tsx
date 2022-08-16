@@ -90,7 +90,11 @@ export async function getServerSideProps({
 }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common", "dca"])),
+      ...(await serverSideTranslations(locale, [
+        "common",
+        "dca",
+        "validations"
+      ])),
       params
     }
   }

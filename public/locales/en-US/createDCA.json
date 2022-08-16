@@ -16,6 +16,9 @@
     }
   },
   "form": {
-    "enter-amount": "Enter Amount"
+    "enter-amount": "Enter Amount",
+    "deposit-from": "Deposit From",
+    "token-to-buy": "Token to Buy",
+    "token-to-deposit": "Token to Deposit"
   }
 }

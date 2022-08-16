@@ -41,7 +41,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({
     amount: Yup.number()
       .required(t(`validation:tokenAmount-required`))
       .typeError(t("validation:tokenAmount-invalid"))
-      .min(0, "Must be greater than zero")
+      .min(0, t("validation:must-be-getter-than-zero"))
       .test("is-max", t("validation:max"), (value) => {
         if (depositFrom === "Zebec balance") {
           return (
@@ -102,7 +102,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({
             <label
               className={`text-content-secondary text-xs font-medium mb-1`}
             >
-              Deposit From
+              {t("createDCA:form.deposit-from")}
             </label>
             <div
               onClick={() => setToggleDropdown(!toggleDropdown)}
@@ -224,7 +224,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({
             <label
               className={`text-content-secondary text-xs font-medium mb-1`}
             >
-              Token to Deposit
+              {t("createDCA:form.token-to-deposit")}
             </label>
             <AmountField
               register={register}

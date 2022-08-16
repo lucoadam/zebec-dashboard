@@ -56,7 +56,7 @@ export const InitializeDCA: FC<StepsComponentProps> = ({ dca }) => {
               <label
                 className={`text-content-secondary text-xs font-medium mb-1`}
               >
-                Token to Buy
+                {t("createDCA:form.token-to-buy")}
               </label>
               <label
                 className={`text-content-tertiary text-xs font-medium mb-1`}

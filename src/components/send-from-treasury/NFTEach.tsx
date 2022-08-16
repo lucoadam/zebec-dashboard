@@ -1,5 +1,6 @@
 import * as Icons from "assets/icons"
 import { Button } from "components/shared"
+import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
@@ -25,6 +26,7 @@ export const NFTEach: FC<NFTEachProps> = ({
   onChoose,
   isChoosed
 }) => {
+  const { t } = useTranslation()
   return (
     <div
       key={detail.address}
@@ -51,7 +53,7 @@ export const NFTEach: FC<NFTEachProps> = ({
           <div className="absolute bottom-4 left-6 gap-x-1.5 flex items-center">
             <Button
               size="small"
-              title={`Confirm`}
+              title={`${t("common:buttons.confirm")}`}
               onClick={() => onChange && onChange(detail)}
               startIcon={
                 <Icons.CheckCircleIcon className="text-content-contrast" />

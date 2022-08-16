@@ -1,15 +1,15 @@
-import { FC, useContext, useState } from "react"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { useTranslation } from "next-i18next"
-import { useAppSelector, useAppDispatch } from "app/hooks"
-import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
-import { getBalance } from "utils/getBalance"
+import { PublicKey } from "@solana/web3.js"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
 import { depositNative, depositToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
-import ZebecContext from "app/zebecContext"
-import { PublicKey } from "@solana/web3.js"
-import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { useTranslation } from "next-i18next"
+import { FC, useContext, useState } from "react"
+import { getBalance } from "utils/getBalance"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -58,7 +58,7 @@ const DepositTab: FC = () => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "transactions:deposit.max-amount" },
+        { type: "custom", message: "validations:deposit-max-amount" },
         { shouldFocus: true }
       )
       return

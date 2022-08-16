@@ -23,16 +23,25 @@
         "go-back": "Go back",
         "view-all": "View All",
         "max": "MAX",
+        "half": "HALF",
+        "confirm": "Confirm",
         "confirm-and-create-treasury": "Confirm & Create Treasury",
         "deposit-and-create-dca": "Deposit & Create DCA",
-        "confirm-and-start-dca": "Confirm & Start DCA"
+        "confirm-and-start-dca": "Confirm & Start DCA",
+        "go-to-homepage": "Go to homepage",
+        "change-wallet": "Change Wallet",
+        "disconnect-wallet": "Disconnect Wallet",
+        "connect-wallet":"Connect Wallet",
+        "select-another-nft":"Select Another NFT"
     },
     "balances": {
         "deposited-balance": "DEPOSITED BALANCE",
         "total-withdrawable-amount": "TOTAL WITHDRAWABLE AMOUNT",
+        "available-deposited-balance": "AVAILABLE DEPOSITED BALANCE",
         "token": "Token",
         "total-incoming": "TOTAL INCOMING",
         "total-outgoing": "TOTAL OUTGOING",
+        "total-deposited": "TOTAL DEPOSITED",
         "activity-this-week": "ACTIVITY THIS WEEK",
         "incoming": "INCOMING",
         "outgoing": "OUTGOING",
@@ -86,7 +95,6 @@
         "mark-all-as-read":"Mark all as read",
         "earlier": "EARLIER",
         "view-on-explorer":"View on explorer"
-        
     },
     "settings":{
         "settings": "Settings",
@@ -102,5 +110,6 @@
     "modal-actions": {
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",
         "do-not-close-this-window": "Do not close this window"
-    }
+    },
+    "page-not-found-message": "Oops, The page you are looking for couldn’t be found. Please enjoy this cute cat illustration."
 }
