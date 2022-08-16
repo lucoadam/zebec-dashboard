@@ -22,26 +22,12 @@ import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
+import axios from "axios"
 
 const MyApp = ({
   Component,
   pageProps,
-  tokenDetails = [
-    {
-      symbol: "SOL",
-      name: "Solana",
-      decimal: 18,
-      mint: "solana",
-      coingeco_id: "solana"
-    },
-    {
-      symbol: "ZBC",
-      name: "Zebec",
-      decimal: 9,
-      mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
-      coingeco_id: "zebec-protocol"
-    }
-  ]
+  tokenDetails
 }: AppProps & { tokenDetails: TokenResponse[] }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
   const network = RPC_NETWORK
@@ -74,11 +60,11 @@ const MyApp = ({
   )
 }
 
-// MyApp.getInitialProps = async () => {
-//   const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
-//   return {
-//     tokenDetails: data as TokenResponse[]
-//   }
-// }
+MyApp.getInitialProps = async () => {
+  const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
+  return {
+    tokenDetails: data as TokenResponse[]
+  }
+}
 
 export default appWithTranslation(MyApp)
