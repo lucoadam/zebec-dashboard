@@ -18,12 +18,13 @@ import {
   setLimit,
   setOutgoingCurrentPage
 } from "features/transactions/transactionsSlice"
+import { TransactionSkeleton } from "./TransactionSkeleton"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
   // const { publicKey } = useWallet()
   const dispatch = useAppDispatch()
-  const { outgoingTransactions, limit } = useAppSelector(
+  const { outgoingTransactions, limit, loading } = useAppSelector(
     (state) => state.transactions
   )
 
@@ -52,10 +53,13 @@ const Outgoing: FC = () => {
       {/* Table */}
       <Table headers={headers}>
         <TableBody>
-          {outgoingTransactions.results.length === 0 ? (
+          {loading && !outgoingTransactions.results.length && (
+            <TransactionSkeleton />
+          )}
+          {outgoingTransactions.results.length === 0 && !loading ? (
             <tr>
               <td colSpan={headers.length}>
-                <EmptyDataState message="There are no outgoing transactions. The transactions you initiated will appear here." />
+                <EmptyDataState message="There are no outgoing transactions. The transactions you received will appear here." />
               </td>
             </tr>
           ) : (

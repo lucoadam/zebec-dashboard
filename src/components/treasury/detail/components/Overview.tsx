@@ -4,9 +4,9 @@ import DepositedAssets from "components/home/DepositedAssets"
 import {
   ActivityThisWeek,
   DepositedBalance,
+  DepositWithdraw,
   SupportCardComponents,
-  Tokens,
-  DepositWithdraw
+  Tokens
 } from "components/shared"
 import { tokenBalances, weeklyBalances } from "fakedata"
 import { useState } from "react"
@@ -40,14 +40,14 @@ const Overview = () => {
   )
   const prices = useAppSelector((state) => state.tokenDetails.prices)
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/**
        * First Column
        *    1. Safe Balance
        *    2. Incoming/ Outgoing
        *    3. Activity this Week
        */}
-      <div className="grid gap-y-6 flex-col justify-between">
+      <div className="grid gap-y-6">
         {/**
          * Safe Balance
          */}
@@ -77,31 +77,7 @@ const Overview = () => {
           tokens={tokenDetails}
         />
       </div>
-      <div className="grid md:grid-cols-2 md:gap-6 lg:col-span-1 lg:grid-cols-1 md:col-span-2 md:flex-row md:flex-wrap flex-col justify-between">
-        {/**
-         * Deposit and Withdrawal
-         */}
-        {/* <div className="w-full pt-3 rounded bg-background-secondary">
-          <div className="flex">
-            {fundTransferTabs.map((fundTranfer, index) => {
-              return (
-                <Tab
-                  key={fundTranfer.title}
-                  type="plain"
-                  className="w-1/2"
-                  title={`${t(fundTranfer.title)}`}
-                  isActive={activePage === index}
-                  startIcon={fundTranfer.icon}
-                  count={fundTranfer.count}
-                  onClick={() => setActivePage(index)}
-                />
-              )
-            })}
-          </div>
-          <div className="px-6 mt-6 pb-6 min-h-[210px]">
-            {fundTransferTabs[activePage].Component}
-          </div>
-        </div> */}
+      <div className="grid gap-y-6">
         <DepositWithdraw tabs={fundTransferTabs} />
         {/**
          * Zebec Treasury Help

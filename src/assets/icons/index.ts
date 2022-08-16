@@ -67,8 +67,10 @@ export * from "./activity"
 export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
 import SolanaFM from "./other-icons/solanafm.svg"
+import SkeletonCircle from "./other-icons/skeleton-circle.svg"
+
 export {
- SolanaFM,
+  SolanaFM,
   Solscan,
   SolanaExplorer,
   Pass,
@@ -131,5 +133,6 @@ export {
   BellEditIcon,
   SwapArrowHorizontalIcon,
   ChevronUpIcon,
-  PlusIcon
+  PlusIcon,
+  SkeletonCircle
 }

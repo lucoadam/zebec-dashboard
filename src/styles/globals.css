@@ -325,3 +325,11 @@ input[type="radio"]:hover::after {
 .nft-overlay {
   background: linear-gradient(180deg, rgba(26, 27, 31, 0) 0%, #0d0e0f 100%);
 }
+
+.skeleton-background {
+  background: linear-gradient(
+    90deg,
+    rgba(43, 45, 51, 0.8) 0%,
+    rgba(43, 45, 51, 0.48) 100%
+  );
+}
