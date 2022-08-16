@@ -8,6 +8,7 @@ import {
   IconButton,
   InputField,
   Pagination,
+  RowsPerPage,
   Table,
   TableBody
 } from "components/shared"
@@ -15,6 +16,7 @@ import {
   fetchAddressBook,
   saveAddressBook,
   setCurrentPage,
+  setLimit,
   updateAddressBook
 } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
@@ -25,7 +27,7 @@ import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
-  const { addressBooks, total, limit } = useAppSelector(
+  const { addressBooks, total, limit, loading } = useAppSelector(
     (state) => state.address
   )
   const { t } = useTranslation()
@@ -157,14 +159,14 @@ export default function IndividualAddresses() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 overflow-hidden">
-            {addressBooks.length > 0 ? (
+            {addressBooks.length > 0 || loading ? (
               <>
                 <Table headers={headers}>
-                  <TableBody className="justify between">
-                    {addressBooks?.map((addressBook) => {
+                  <TableBody className="">
+                    {addressBooks?.map((addressBook, index) => {
                       return (
                         <IndividualAddresesTableRow
-                          key={addressBook.id}
+                          key={index}
                           addressBook={addressBook}
                           onEdit={onEdit}
                         />
@@ -172,7 +174,13 @@ export default function IndividualAddresses() {
                     })}
                   </TableBody>
                 </Table>
-                <div className="mt-6">
+                <div className="mt-6 flex justify-between">
+                  <RowsPerPage
+                    noOfRows={limit}
+                    onChange={async (noOfRows) => {
+                      dispatch(setLimit(noOfRows))
+                    }}
+                  />
                   <Pagination
                     pages={Math.ceil(total / limit)}
                     onChange={(page: number) => {
@@ -183,13 +191,17 @@ export default function IndividualAddresses() {
                 </div>
               </>
             ) : (
-              <EmptyDataState
-                message={t("addressBook:empty-address-book")}
-                padding={80}
-                className="h-[386px] w-full mt-12 rounded !px-10 text-center"
-              />
+              addressBooks.length === 0 &&
+              !loading && (
+                <EmptyDataState
+                  message={t("addressBook:empty-address-book")}
+                  padding={80}
+                  className="h-[386px] w-full mt-12 rounded !px-10 text-center"
+                />
+              )
             )}
           </div>
+
           <div className="md:order-last order-first">
             <div className="rounded bg-background-secondary p-10 mt-12 max-w-96 h-96  ">
               <div className="flex justify-between">
@@ -264,7 +276,6 @@ export default function IndividualAddresses() {
                     </div>
                   </InputField>
                 </div>
-
                 {/* submit Button */}
 
                 <div className="flex flex-col gap-4">
@@ -278,7 +289,6 @@ export default function IndividualAddresses() {
                         : t("addressBook:add-address")
                     }`}
                   />
-                  <Button className={`w-full`} type="reset" title={`reset`} />
                 </div>
               </form>
             </div>
