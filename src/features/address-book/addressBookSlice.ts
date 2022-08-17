@@ -29,7 +29,7 @@ const initialState: AddressBookState = {
   saving: false,
   deleting: false,
   total: 0,
-  limit: 5,
+  limit: 10,
   currentPage: 1,
   addressBooks: [],
   error: ""

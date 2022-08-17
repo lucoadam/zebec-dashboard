@@ -1,14 +1,15 @@
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Button, Modal } from "components/shared"
+import { Button, CollapseDropdown, Modal } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import {
   AddressBook,
   deleteAddressBook
 } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
+import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import { FC, Fragment, useState } from "react"
+import { FC, Fragment, useRef, useState } from "react"
 import { toSubstring } from "utils"
 
 interface IndividualAddresesTableRow {
@@ -22,12 +23,19 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
 }) => {
   const { t } = useTranslation("addressBook")
   const dispatch = useAppDispatch()
-
+  const dropdownWrapper = useRef(null)
+  const [toggleDropdown, setToggleDropdown] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   function toggleModal() {
     setIsOpen(!isOpen)
   }
+
+  useClickOutside(dropdownWrapper, {
+    onClickOutside: () => {
+      setToggleDropdown(false)
+    }
+  })
 
   return (
     <>
@@ -40,10 +48,10 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 min-w-50 my-auto">
-            <div
-              className="flex items-center gap-x-2 text-content-primary"
-            >
-              <div data-tip={addressBook.address}>{toSubstring(addressBook.address, 8, true)}</div>
+            <div className="flex items-center gap-x-2 text-content-primary">
+              <div data-tip={addressBook.address}>
+                {toSubstring(addressBook.address, 8, true)}
+              </div>
               <div className="flex-shrink-0">
                 <CopyButton
                   content={addressBook.address}
@@ -53,37 +61,56 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
             </div>
           </td>
           <td className="px-6 pt-4.5 pb-6 ml-auto my-auto">
-            <div className="flex items-center gap-x-5 justify-end ">
-              <Button
-                title={`${t("send")}`}
-                size="small"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={() => {
-                  //on send click
-                }}
-              />
-
-              <Button
-                title={`${t("Edit")}`}
-                size="small"
-                startIcon={<Icons.EditIcon className="text-content-contrast" />}
-                onClick={() => {
-                  onEdit(addressBook)
-                }}
-              />
-
-              <Button
-                title={`${t("delete")}`}
-                size="small"
-                startIcon={
-                  <Icons.CrossIcon className="text-content-contrast" />
-                }
-                onClick={() => {
-                  setIsOpen(true)
-                }}
-              />
+            <div className="flex items-center gap-x-5 justify-end">
+              <div ref={dropdownWrapper} className="relative">
+                <Button
+                  title={`${t("action")}`}
+                  size="small"
+                  startIcon={
+                    <Icons.GearringIcon className="text-content-contrast" />
+                  }
+                  onClick={() => setToggleDropdown(!toggleDropdown)}
+                />
+                <CollapseDropdown
+                  className="w-max border border-outline"
+                  position="right"
+                  show={toggleDropdown}
+                >
+                  <div className="p-2">
+                    <div
+                      onClick={() => null}
+                      className="flex gap-2 px-4 py-2 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
+                      <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                      <span>{t("send")}</span>
+                    </div>
+                  </div>
+                  <div className="p-2">
+                    <div
+                      onClick={() => {
+                        onEdit(addressBook)
+                        setToggleDropdown(false)
+                      }}
+                      className="flex gap-2 px-4 py-2 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
+                      <Icons.EditIcon className="text-content-contrast" />
+                      <span>{t("Edit")}</span>
+                    </div>
+                  </div>
+                  <div className="p-2">
+                    <div
+                      onClick={() => {
+                        setIsOpen(true)
+                        setToggleDropdown(false)
+                      }}
+                      className="flex gap-2 px-4 py-2 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
+                    >
+                      <Icons.CrossIcon className="text-content-contrast" />
+                      <span>{t("delete")}</span>
+                    </div>
+                  </div>
+                </CollapseDropdown>
+              </div>
               <Modal
                 show={isOpen}
                 toggleModal={toggleModal}
@@ -109,15 +136,19 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                           id: addressBook.id,
                           callback: (error: unknown) => {
                             if (error) {
-                              dispatch(toast.error({
-                                message: t("addressBook:error-delete")
-                              }))
+                              dispatch(
+                                toast.error({
+                                  message: t("addressBook:error-delete")
+                                })
+                              )
                               setIsOpen(false)
                               return
                             }
-                            dispatch(toast.success({
-                              message: t("addressBook:success-delete")
-                            }))
+                            dispatch(
+                              toast.success({
+                                message: t("addressBook:success-delete")
+                              })
+                            )
                           }
                         })
                       )
