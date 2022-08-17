@@ -32,7 +32,7 @@ export const Withdrawal = () => {
     if (Number(data.amount) > getBalance(treasuryTokens, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "transactions:deposit.max-amount" },
+        { type: "custom", message: "validations:withdraw-max-amount" },
         { shouldFocus: true }
       )
       return

@@ -8,6 +8,7 @@ import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { updateWidth } from "features/layout/layoutSlice"
 import { useClickOutside } from "hooks"
+import { useTranslation } from "next-i18next"
 import { useTheme } from "next-themes"
 import Image from "next/image"
 import Link from "next/link"
@@ -24,6 +25,7 @@ import WalletNotConnectedModal from "./WalletNotConnectedModal"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
+  const { t } = useTranslation()
   const useWalletObject = useWallet()
   const useWalletModalObject = useWalletModal()
 
@@ -234,13 +236,13 @@ const Navbar: FC = () => {
                 {useWalletObject.connected ? (
                   <>
                     <Button
-                      title="Change Wallet"
+                      title={`${t("common:buttons.change-wallet")}`}
                       startIcon={<Icons.RefreshIcon />}
                       className="w-full mb-3 bg-background-primary"
                       onClick={handleChangeWallet}
                     />
                     <Button
-                      title="Disconnect Wallet"
+                      title={`${t("common:buttons.disconnect-wallet")}`}
                       startIcon={<Icons.DisconnectIcon />}
                       className="w-full bg-background-primary"
                       onClick={handleDisconnectWallet}
@@ -248,7 +250,7 @@ const Navbar: FC = () => {
                   </>
                 ) : (
                   <Button
-                    title="Connect Wallet"
+                    title={`${t("common:buttons.connect-wallet")}`}
                     variant="gradient"
                     className="w-full"
                     onClick={handleConnectWallet}

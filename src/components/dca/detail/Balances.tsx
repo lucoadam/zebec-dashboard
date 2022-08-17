@@ -22,7 +22,7 @@ export const Balances = () => {
       </div>
       <div className="flex flex-col gap-y-2">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-          AVAILABLE DEPOSITED BALANCE
+          {t("common:balances.available-deposited-balance")}
         </div>
         <div>
           <div className=" text-heading-3 text-content-primary font-semibold">
@@ -36,7 +36,7 @@ export const Balances = () => {
       </div>
       <div className="flex flex-col gap-y-2">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-          TOTAL DEPOSITED
+          {t("common:balances.total-deposited")}
         </div>
         <div>
           <div className=" text-heading-3 text-content-primary font-semibold">

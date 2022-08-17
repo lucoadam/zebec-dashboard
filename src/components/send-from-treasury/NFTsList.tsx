@@ -1,6 +1,7 @@
 import * as Icons from "assets/icons"
 import { Button } from "components/shared"
 import { nftLists } from "fakedata"
+import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, useState } from "react"
 import { twMerge } from "tailwind-merge"
@@ -13,6 +14,7 @@ export const NFTsList: FC<{
   onChange?: (detail: NFTDetail | undefined) => void
 }> = ({ className, onChange, nft }) => {
   const [nftChoosed, setNFTChoosed] = useState<NFTDetail>()
+  const { t } = useTranslation()
   return (
     <div
       className={twMerge(
@@ -53,7 +55,7 @@ export const NFTsList: FC<{
           </div>
           <Button
             size="small"
-            title={`Select Another NFT`}
+            title={`${t("common:buttons.select-another-nft")}`}
             onClick={() => onChange && onChange(undefined)}
             startIcon={<Icons.EditIcon className="text-content-contrast" />}
           />

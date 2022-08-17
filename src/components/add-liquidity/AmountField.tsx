@@ -61,7 +61,7 @@ export const AmountField: FC<AmountFieldProps> = ({
         <div className="flex gap-1 absolute right-2 top-2">
           <Button
             size="small"
-            title={`MAX`}
+            title={`${t("buttons:max")}`}
             className=" text-content-primary"
             onClick={() => {
               setValue(
@@ -77,7 +77,7 @@ export const AmountField: FC<AmountFieldProps> = ({
           />
           <Button
             size="small"
-            title={`HALF`}
+            title={`${t("buttons:half ")}`}
             className="text-content-primary"
             onClick={() => {
               setValue(

@@ -22,6 +22,7 @@
   "next-investment-on": "Next Investment On",
   "frequency": "Frequency",
   "add-funds-dca": "Add funds to DCA",
+  "add-funds-from": "Add Fund From",
   "withdraw-description": "Withdraw funds from DCA",
   "cancel-modal-header" :"Are you sure you want to cancel DCA?",
   "cancel-content":"Aborting dca will remove your fund from DCA. You will peculiarly get benefited using DCA.",

@@ -35,8 +35,7 @@
   },
   "deposit": {
     "enter-deposit-amount": "Deposit amount is required.",
-    "not-zero": "Amount must be greater than zero.",
-    "max-amount": "Insufficient fund in your wallet to deposit."
+    "not-zero": "Amount must be greater than zero."
   },
   "table": {
     "progress": "Progress",

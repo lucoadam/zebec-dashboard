@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ZebecNativeStreamProps } from "./stream"
 
 export const createVault = async (
