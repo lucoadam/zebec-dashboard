@@ -43,6 +43,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
 
+  console.log("data", transaction)
+
   const totalTimeInSec = transaction.end_time - transaction.start_time
   const streamRatePerSec = transaction.amount / totalTimeInSec
 
@@ -74,8 +76,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       !["cancelled", "paused"].includes(status)
     ) {
       setStatus("outgoing")
-    } else if (currentTime >= transaction.end_time) {
+    } else if (
+      currentTime >= transaction.end_time &&
+      !["cancelled", "paused"].includes(transaction.status)
+    ) {
       setStatus("completed")
+    } else {
+      setStatus(transaction.status)
     }
   }, [status, currentTime, transaction.end_time, transaction.start_time])
 
@@ -101,6 +108,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     } else if (status === "cancelled") {
       setStreamedToken(
         streamRatePerSec * (currentTime - transaction.start_time)
+      )
+    } else if (status !== "scheduled") {
+      setStreamedToken(
+        streamRatePerSec * (transaction.end_time - transaction.start_time) * 0.4
       )
     }
     // eslint-disable-next-line
