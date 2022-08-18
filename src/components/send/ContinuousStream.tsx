@@ -224,7 +224,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         "DD/MM/YYYY LT"
       ).add(timeDifference, "minutes")
       setValue("endDate", endDateTime.format("DD/MM/YYYY"))
-      setValue("endTime", endDateTime.format("LT"))
+      setValue("endTime", endDateTime.format("hh:mm A"))
       trigger("endDate")
       trigger("endTime")
     }
@@ -241,8 +241,26 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
 
     resetField("amount")
-    resetField("endDate")
-    resetField("endTime")
+    setValue(
+      "startDate",
+      moment().add(constants.STREAM_START_ADD, "minutes").format("DD/MM/YYYY")
+    )
+    setValue(
+      "startTime",
+      moment().add(constants.STREAM_START_ADD, "minutes").format("hh:mm A")
+    )
+    setValue(
+      "endDate",
+      moment()
+        .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
+        .format("DD/MM/YYYY")
+    )
+    setValue(
+      "endTime",
+      moment()
+        .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
+        .format("hh:mm A")
+    )
     setValue("enableStreamRate", !getValues().enableStreamRate)
   }
 

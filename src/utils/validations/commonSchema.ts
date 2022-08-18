@@ -145,10 +145,17 @@ export const token = {
 
 export const amount = {
   amount: Yup.string()
-    .required("validation:amount-required")
-    .test("amount-negative", "validation:amount-negative", (amount) => {
-      return Number(amount) > 0
+    // .required("validation:amount-required")
+    .test("amount-required", "validation:amount-required", (value, context) => {
+      return context.parent.enableStreamRate || value !== ""
     })
+    .test(
+      "amount-negative",
+      "validation:amount-negative",
+      (amount, context) => {
+        return context.parent.enableStreamRate || Number(amount) > 0
+      }
+    )
 }
 
 export const startDate = {
@@ -168,12 +175,20 @@ export const startDate = {
 
 export const endDate = {
   endDate: Yup.string()
-    .required("validation:end-date-time-required")
+    // .required("validation:end-date-time-required")
+    .test(
+      "endDate-required",
+      "validation:end-date-time-required",
+      (endDate, context) => {
+        return context.parent.enableStreamRate || endDate !== ""
+      }
+    )
     .test(
       "check-end-date",
       "validation:end-date-time-before-start-date-time",
       (endDate, context) => {
         return (
+          context.parent.enableStreamRate ||
           !context.parent.startDate ||
           !context.parent.startTime ||
           moment(
@@ -207,12 +222,20 @@ export const startTime = {
 
 export const endTime = {
   endTime: Yup.string()
-    .required("validation:end-date-time-required")
+    // .required("validation:end-date-time-required")
+    .test(
+      "endTime-required",
+      "validation:end-date-time-required",
+      (endTime, context) => {
+        return context.parent.enableStreamRate || endTime !== ""
+      }
+    )
     .test(
       "check-end-time",
       "validation:end-date-time-before-start-date-time",
       (endTime, context) => {
         return (
+          context.parent.enableStreamRate ||
           !context.parent.startDate ||
           !context.parent.startTime ||
           moment(
