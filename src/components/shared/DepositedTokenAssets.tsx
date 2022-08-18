@@ -7,6 +7,7 @@ import { formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "./Token"
 import { twMerge } from "tailwind-merge"
+import { useTranslation } from "next-i18next"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
@@ -16,6 +17,8 @@ interface DepositedTokenAssetsProps {
 }
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
+  const { t } = useTranslation()
+
   const { tableMaxHeight, tokens, balanceTokens, className } = props
   const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
 
@@ -157,6 +160,16 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                       </td>
                     </tr>
                   ))}
+                  {filterTokens().length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={3}
+                        className="px-6 py-3 text-content-contrast"
+                      >
+                        {t("common:no-coins-found")}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
