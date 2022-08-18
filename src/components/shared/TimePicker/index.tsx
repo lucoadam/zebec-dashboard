@@ -124,6 +124,23 @@ export const TimePicker: FC<TimePickerProps> = ({
     }
   }, [value])
 
+  useEffect(() => {
+    if (toggleDropdown) {
+      const scroll = window.scrollY
+      setTimeout(() => {
+        document.getElementById(`hour-${selectedHour}`)?.scrollIntoView({
+          block: "center",
+          inline: "nearest"
+        })
+        document.getElementById(`minute-${selectedMinute}`)?.scrollIntoView({
+          block: "center",
+          inline: "nearest"
+        })
+        window.scrollTo(0, scroll)
+      }, 100)
+    }
+  }, [toggleDropdown])
+
   return (
     <div>
       <div className="relative" ref={dropdownWrapper}>
@@ -167,6 +184,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                       : "hover:bg-background-secondary"
                   }`}
                   key={hour}
+                  id={`hour-${hour}`}
                   onClick={() => {
                     setSelectedHour(hour)
                   }}
@@ -184,6 +202,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                       : "hover:bg-background-secondary"
                   }`}
                   key={minute}
+                  id={`minute-${minute}`}
                   onClick={() => {
                     setSelectedMinute(minute)
                   }}
@@ -201,6 +220,7 @@ export const TimePicker: FC<TimePickerProps> = ({
                       : "hover:bg-background-secondary"
                   }`}
                   key={a}
+                  id={`ap-${a}`}
                   onClick={() => {
                     setSelectedAP(a)
                   }}
