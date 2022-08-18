@@ -349,7 +349,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
                         <Icons.IncomingIcon className="w-5 h-5" />
-                        <span>{transaction.status}</span>
+                        <span>{status}</span>
                       </div>
                     </div>
                     {/* Transaction */}
