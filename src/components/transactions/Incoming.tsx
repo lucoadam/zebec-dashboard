@@ -4,26 +4,23 @@ import {
   Breadcrumb,
   EmptyDataState,
   Pagination,
-  RowsPerPage,
   Table,
   TableBody
 } from "components/shared"
 import {
   fetchIncomingTransactions,
-  setIncomingCurrentPage,
-  setLimit
+  setPagination
 } from "features/transactions/transactionsSlice"
 import { useTranslation } from "next-i18next"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import FilterTabs from "./FilterTabs"
 import IncomingTableRow from "./IncomingTableRow"
 import { TransactionSkeleton } from "./TransactionSkeleton"
 
 const Incoming: FC = () => {
-  const noOfOptions = [10, 20, 30, 40]
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  const { incomingTransactions, limit, loading } = useAppSelector(
+  const { incomingTransactions, pagination, loading } = useAppSelector(
     (state) => state.transactions
   )
 
@@ -52,6 +49,11 @@ const Incoming: FC = () => {
     if (index === activeDetailsRow) setActiveDetailsRow("")
     else setActiveDetailsRow(index)
   }
+
+  useEffect(() => {
+    dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
+    dispatch(fetchIncomingTransactions())
+  }, [dispatch])
 
   return (
     <>
@@ -85,22 +87,13 @@ const Incoming: FC = () => {
           )}
         </TableBody>
       </Table>
-      <div className="flex pt-5">
-        <RowsPerPage
-          noOfRows={limit}
-          noOfOptions={noOfOptions}
-          onChange={(noOfRows) => dispatch(setLimit(noOfRows))}
-        />
-        <div className="ml-auto">
-          <Pagination
-            pages={Math.ceil(incomingTransactions.count / limit)}
-            onChange={(page: number) => {
-              dispatch(setIncomingCurrentPage(page))
-              dispatch(fetchIncomingTransactions())
-            }}
-          />
-        </div>
-      </div>
+      <Pagination
+        pagination={pagination}
+        setPagination={setPagination}
+        onChange={() => {
+          dispatch(fetchIncomingTransactions())
+        }}
+      />
       <ExportModal />
     </>
   )
