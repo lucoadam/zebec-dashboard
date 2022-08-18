@@ -111,5 +111,6 @@
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",
         "do-not-close-this-window": "Do not close this window"
     },
-    "page-not-found-message": "Oops, The page you are looking for couldn’t be found. Please enjoy this cute cat illustration."
+    "page-not-found-message": "Oops, The page you are looking for couldn’t be found. Please enjoy this cute cat illustration.",
+    "no-coins-found": "No coins found."
 }
