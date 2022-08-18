@@ -1,6 +1,7 @@
 import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
+import { useTranslation } from "next-i18next"
 import { FC, useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { getBalance } from "utils/getBalance"
@@ -17,6 +18,7 @@ interface TokensDropdownProps {
 }
 
 export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
+  const { t } = useTranslation()
   const [search, setSearchData] = useState("")
   const {
     show,
@@ -87,6 +89,17 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
                   </div>
                 </div>
               ))}
+            {tokens.filter(
+              (token) =>
+                token.name.toLowerCase().includes(search.toLowerCase()) ||
+                token.symbol.toLowerCase().includes(search.toLowerCase())
+            ).length === 0 && (
+              <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
+                <div className="text-content-contrast">
+                  {t("common:no-coins-found")}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </CollapseDropdown>
