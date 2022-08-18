@@ -397,6 +397,17 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                               </div>
                             </div>
                           ))}
+                        {addressBook.filter((user) =>
+                          user.name
+                            .toLowerCase()
+                            .includes(receiverSearchData.toLowerCase())
+                        ).length === 0 && (
+                          <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
+                            <div className="text-content-contrast">
+                              {t("common:no-receiver-found")}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -533,6 +544,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                           </div>
                         </div>
                       ))}
+                    {tokenDetails.filter((token) =>
+                      token.symbol.includes(tokenSearchData.toUpperCase())
+                    ).length === 0 && (
+                      <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
+                        <div className="text-content-contrast">
+                          {t("common:no-coins-found")}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CollapseDropdown>

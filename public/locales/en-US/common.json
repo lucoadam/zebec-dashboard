@@ -112,5 +112,6 @@
         "do-not-close-this-window": "Do not close this window"
     },
     "page-not-found-message": "Oops, The page you are looking for couldn’t be found. Please enjoy this cute cat illustration.",
-    "no-coins-found": "No coins found."
+    "no-coins-found": "No coins found.",
+    "no-receiver-found" : "No receiver wallet found with given query."
 }
