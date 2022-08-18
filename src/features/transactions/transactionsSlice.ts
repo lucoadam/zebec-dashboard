@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { RootState } from "app/store"
+import { PaginationInterface } from "components/shared"
 
 interface TransactionState {
   loading: boolean
@@ -18,9 +19,7 @@ interface TransactionState {
     previous: string
     results: any[]
   }
-  limit: number
-  incomingCurrentPage: number
-  outgoingCurrentPage: number
+  pagination: PaginationInterface
 }
 
 const initialState: TransactionState = {
@@ -38,9 +37,11 @@ const initialState: TransactionState = {
     previous: "",
     results: []
   },
-  limit: 10,
-  incomingCurrentPage: 1,
-  outgoingCurrentPage: 1
+  pagination: {
+    currentPage: 1,
+    limit: 10,
+    total: 0
+  }
 }
 
 export const fetchOutgoingTransactions: any = createAsyncThunk(
@@ -50,9 +51,11 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
     const { transactions } = getState() as RootState
     const { data: response } = await api.get("/transaction/", {
       params: {
-        limit: transactions.limit,
+        limit: transactions.pagination.limit,
         kind: "outgoing",
-        offset: (transactions.outgoingCurrentPage - 1) * transactions.limit
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit
       }
     })
     return response
@@ -65,9 +68,11 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
     const { transactions } = getState() as RootState
     const { data: response } = await api.get("/transaction/", {
       params: {
-        limit: transactions.limit,
+        limit: transactions.pagination.limit,
         kind: "incoming",
-        offset: (transactions.incomingCurrentPage - 1) * transactions.limit
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit
       }
     })
     return response
@@ -78,14 +83,11 @@ const transactionsSlice = createSlice({
   name: "transactions",
   initialState,
   reducers: {
-    setIncomingCurrentPage: (state, action: PayloadAction<number>) => {
-      state.incomingCurrentPage = action.payload
-    },
-    setOutgoingCurrentPage: (state, action: PayloadAction<number>) => {
-      state.outgoingCurrentPage = action.payload
-    },
-    setLimit: (state, action: PayloadAction<number>) => {
-      state.limit = action.payload
+    setPagination: (state, action: PayloadAction<PaginationInterface>) => {
+      state.pagination = {
+        ...state.pagination,
+        ...action.payload
+      }
     }
   },
   extraReducers: (builder) => {
@@ -96,6 +98,7 @@ const transactionsSlice = createSlice({
       state.loading = false
       state.error = ""
       state.outgoingTransactions = action.payload
+      state.pagination.total = action.payload.count
     })
     builder.addCase(fetchOutgoingTransactions.rejected, (state, action) => {
       state.loading = false
@@ -108,6 +111,7 @@ const transactionsSlice = createSlice({
       state.loading = false
       state.error = ""
       state.incomingTransactions = action.payload
+      state.pagination.total = action.payload.count
     })
     builder.addCase(fetchIncomingTransactions.rejected, (state, action) => {
       state.loading = false
@@ -116,7 +120,6 @@ const transactionsSlice = createSlice({
   }
 })
 
-export const { setIncomingCurrentPage, setOutgoingCurrentPage, setLimit } =
-  transactionsSlice.actions
+export const { setPagination } = transactionsSlice.actions
 
 export default transactionsSlice.reducer
