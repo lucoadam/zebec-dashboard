@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { RootState } from "app/store"
+import { PaginationInterface } from "components/shared"
 
 export interface AddressBook {
   id: number
@@ -13,9 +14,7 @@ interface AddressBookState {
   loading: boolean
   saving: boolean
   deleting: boolean
-  total: number
-  currentPage: number
-  limit: number
+  pagination: PaginationInterface
   addressBooks: AddressBook[]
   error: string
 }
@@ -28,9 +27,11 @@ const initialState: AddressBookState = {
   loading: false,
   saving: false,
   deleting: false,
-  total: 0,
-  limit: 10,
-  currentPage: 1,
+  pagination: {
+    total: 0,
+    currentPage: 1,
+    limit: 10
+  },
   addressBooks: [],
   error: ""
 }
@@ -40,13 +41,16 @@ export const fetchAddressBook: any = createAsyncThunk(
   async (_, { getState }) => {
     const { address } = getState() as RootState
     const { data: response } = await api.get(
-      `/user/address/?limit=${address.limit}&offset=${
-        (address.currentPage - 1) * address.limit
+      `/user/address/?limit=${address.pagination.limit}&offset=${
+        (Number(address.pagination.currentPage) - 1) * address.pagination.limit
       }`
     )
     return {
       addressBooks: response.results,
-      total: response.count
+      pagination: {
+        ...address.pagination,
+        total: response.count
+      }
     }
   }
 )
@@ -130,11 +134,11 @@ const addressBookSlice = createSlice({
   name: "addressBook",
   initialState,
   reducers: {
-    setCurrentPage: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload
-    },
-    setLimit: (state, action: PayloadAction<number>) => {
-      state.limit = action.payload
+    setPagination: (state, action: PayloadAction<PaginationInterface>) => {
+      state.pagination = {
+        ...state.pagination,
+        ...action.payload
+      }
     }
   },
   extraReducers: (builder) => {
@@ -146,7 +150,7 @@ const addressBookSlice = createSlice({
       (state, action: PayloadAction<AddressBookState>) => {
         state.loading = false
         state.addressBooks = action.payload.addressBooks
-        state.total = action.payload.total
+        state.pagination = action.payload.pagination
         state.error = ""
       }
     )
@@ -190,6 +194,6 @@ const addressBookSlice = createSlice({
   }
 })
 
-export const { setCurrentPage, setLimit } = addressBookSlice.actions
+export const { setPagination } = addressBookSlice.actions
 
 export default addressBookSlice.reducer

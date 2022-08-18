@@ -8,15 +8,13 @@ import {
   IconButton,
   InputField,
   Pagination,
-  RowsPerPage,
   Table,
   TableBody
 } from "components/shared"
 import {
   fetchAddressBook,
   saveAddressBook,
-  setCurrentPage,
-  setLimit,
+  setPagination,
   updateAddressBook
 } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
@@ -27,7 +25,7 @@ import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
-  const { addressBooks, total, limit, loading } = useAppSelector(
+  const { addressBooks, pagination, loading } = useAppSelector(
     (state) => state.address
   )
   const { t } = useTranslation()
@@ -132,6 +130,17 @@ export default function IndividualAddresses() {
     }
   }, [addressBooks, setValue, trigger, getValues])
 
+  useEffect(() => {
+    dispatch(
+      setPagination({
+        ...pagination,
+        currentPage: 1,
+        limit: 10
+      })
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onEdit = (data: any) => {
     setIsEdit(true)
@@ -174,21 +183,15 @@ export default function IndividualAddresses() {
                     })}
                   </TableBody>
                 </Table>
-                <div className="mt-6 flex justify-between">
-                  <RowsPerPage
-                    noOfRows={limit}
-                    onChange={async (noOfRows) => {
-                      dispatch(setLimit(noOfRows))
-                    }}
-                  />
-                  <Pagination
-                    pages={Math.ceil(total / limit)}
-                    onChange={(page: number) => {
-                      dispatch(setCurrentPage(page))
-                      dispatch(fetchAddressBook())
-                    }}
-                  />
-                </div>
+
+                <Pagination
+                  // pages={Math.ceil(total / limit)}
+                  pagination={pagination}
+                  setPagination={setPagination}
+                  onChange={() => {
+                    dispatch(fetchAddressBook())
+                  }}
+                />
               </>
             ) : (
               addressBooks.length === 0 &&

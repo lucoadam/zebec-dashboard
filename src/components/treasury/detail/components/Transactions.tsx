@@ -2,7 +2,7 @@ import { useAppDispatch } from "app/hooks"
 import ExportModal from "components/modals/export-report/ExportModal"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
-import { Button, Pagination, RowsPerPage, Tab } from "components/shared"
+import { Button, Tab } from "components/shared"
 import { toggleExportModal } from "features/export-report/exportSlice"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
@@ -34,10 +34,6 @@ export const Transactions = () => {
   const { t } = useTranslation("transactions")
 
   const [activePage, setActivePage] = useState<number>(0)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1)
-  const [noOfRows, setNoOfRows] = useState(10)
-  const noOfOptions = [10, 20, 30, 40]
 
   useEffect(() => {
     ReactTooltip.rebuild()
@@ -73,18 +69,8 @@ export const Transactions = () => {
         {/* Active Tab */}
         {transactionTabs[activePage].Component}
       </div>
-      <div className="flex text-caption pt-5">
-        <RowsPerPage
-          setNoOfRows={setNoOfRows}
-          noOfRows={noOfRows}
-          noOfOptions={noOfOptions}
-        />
-        <Pagination
-          pages={100}
-          setCurrentPage={setCurrentPage}
-          setNoOfRows={setNoOfRows}
-        />
-      </div>
+
+      {/* <Pagination pagination={pagination} setPagination={setPagination} /> */}
       <RejectTransactionModal />
       <SignTransactionModal />
       <ExportModal />
