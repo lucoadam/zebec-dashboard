@@ -84,7 +84,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     } else {
       setStatus(transaction.status)
     }
-  }, [status, currentTime, transaction.end_time, transaction.start_time])
+  }, [
+    status,
+    currentTime,
+    transaction.end_time,
+    transaction.start_time,
+    transaction.status
+  ])
 
   useEffect(() => {
     if (status === "completed") {

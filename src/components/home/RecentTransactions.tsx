@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useWallet } from "@solana/wallet-adapter-react"
 import * as Icons from "assets/icons"
 import {
@@ -7,7 +8,6 @@ import {
   TableBody,
   TransactionStatus
 } from "components/shared"
-// import { recentTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
 
