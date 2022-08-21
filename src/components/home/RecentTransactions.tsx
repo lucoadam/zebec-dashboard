@@ -7,7 +7,7 @@ import {
   TableBody,
   TransactionStatus
 } from "components/shared"
-import { recentTransactions } from "fakedata"
+// import { recentTransactions } from "fakedata"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
 
@@ -21,6 +21,11 @@ const getValidTokenAmount = (amount: number) => {
 const RecentTransactions: FC = () => {
   const walletObject = useWallet()
   const { t } = useTranslation()
+
+  const recentTransactions: any = {
+    data: []
+  }
+
   return (
     <>
       <div className="recent-transactions lg:col-span-2 p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-96">
@@ -35,11 +40,11 @@ const RecentTransactions: FC = () => {
           />
         </div>
         {recentTransactions.data.length === 0 && (
-          <EmptyDataState message={t("home:recent.empty")} />
+          <EmptyDataState message={t("home:recent.empty")} className="py-10" />
         )}
         <table className="w-full overflow-auto whitespace-nowrap">
           <TableBody className="px-0 py-0 divide-y border-collapse">
-            {recentTransactions.data.map((transaction) => (
+            {recentTransactions.data.map((transaction: any) => (
               <tr key={transaction._id.$oid ?? ""}>
                 <td className=" py-5 min-w-60">
                   <div className="flex items-center gap-x-2.5">

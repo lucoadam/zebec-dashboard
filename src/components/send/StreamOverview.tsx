@@ -13,7 +13,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
   return (
     <div
       className={twMerge(
-        "p-10 flex flex-col justify-center text-content-primary w-[330px]",
+        "p-10 flex flex-col justify-center text-content-primary w-[420px]",
         className ?? ""
       )}
     >
@@ -29,15 +29,17 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
         </p>
         <p className="text-sm mt-2 text-content-secondary">
           <span className="text-content-primary">
-            {formValues?.tokenAmount || formValues?.amount || "..."}{" "}
+            {formValues?.tokenAmount || formValues?.amount || "0"}{" "}
             {formValues?.symbol || "..."}{" "}
           </span>
           {t("send:token-amount-details")}{" "}
           <span className="text-content-primary">
             {" "}
-            {formValues?.receiver
-              ? toSubstring(formValues?.receiver, 5, true)
-              : "..."}
+            {formValues?.receiver ? (
+              toSubstring(formValues?.receiver, 5, true)
+            ) : (
+              <span>receiver wallet</span>
+            )}
           </span>
         </p>
         {(formValues?.noOfTimes ||

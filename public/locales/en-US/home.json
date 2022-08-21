@@ -1,7 +1,7 @@
 {
   "recent": {
     "title": "RECENT TRANSACTIONS",
-    "empty": "There are no recent transactions. The recent payments you make and receive will appear here."
+    "empty": "There are no recent transactions. The recent payments you send or receive will appear here."
   },
   "farms": {
     "title": "FARMS"

@@ -12,7 +12,8 @@ import { Token } from "./Token"
 import { TokensDropdwonDashboard } from "./TokensDropdownDashboard"
 /* Deposited Balance */
 export const DepositedBalance: FC<DepositedBalanceProps> = ({
-  balance = 0
+  balance = 0,
+  page = "dashboard"
 }) => {
   const { t } = useTranslation()
   const depositedBalance = splitNumber(balance)
@@ -30,9 +31,11 @@ export const DepositedBalance: FC<DepositedBalanceProps> = ({
             </span>
           </span>
         </div>
-        {/* <p className="text-xs font-normal leading-3 text-content-contrast">
-          120,023.23 SOL
-        </p> */}
+        <p className="text-caption text-content-contrast mt-4">
+          {page === "treasury"
+            ? t("common:balances.treasury-despoited-balance-detail")
+            : t("common:balances.zebec-despoited-balance-detail")}
+        </p>
       </div>
     </div>
   )
@@ -85,13 +88,13 @@ export const Tokens: FC<{
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
       <div className="flex relative justify-between items-center gap-x-6">
-        <div className="text-caption text-content-contrast font-semibold uppercase tracking-1 transform -translate-y-1.5">
-          {t("common:balances.token")}
+        <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
+          {t("common:balances.overall-activity")}
         </div>
-        {/* Tokens */}
+        {/* Tokens  Dropdown*/}
         <div
           ref={tokensDropdownWrapperRef}
-          className="flex bg-background-primary px-2 py-2 rounded-md overflow-x-auto"
+          className="flex bg-background-primary px-2 py-1 rounded-md overflow-x-auto"
         >
           <div
             className="cursor-pointer  flex items-center text-content-primary gap-1.5"
@@ -118,6 +121,7 @@ export const Tokens: FC<{
             setCurrentToken={(token) =>
               setCurrentToken(token?.symbol as keyof typeof tokenBalances)
             }
+            className="top-8"
           />
         </div>
       </div>

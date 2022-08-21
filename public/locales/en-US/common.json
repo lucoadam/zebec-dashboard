@@ -13,7 +13,6 @@
         "address-book": "Address Book",
         "settings": "Settings"
     },
-    "greeting": "Hello World!",
     "create-new": "Create New",
     "buttons": {
         "continue": "Continue",
@@ -36,9 +35,10 @@
     },
     "balances": {
         "deposited-balance": "DEPOSITED BALANCE",
-        "total-withdrawable-amount": "TOTAL WITHDRAWABLE AMOUNT",
+        "total-withdrawable-amount": "TOTAL WITHDRAWABLE BALANCE",
         "available-deposited-balance": "AVAILABLE DEPOSITED BALANCE",
         "token": "Token",
+        "overall-activity": "OVERALL ACTIVITY",
         "total-incoming": "TOTAL INCOMING",
         "total-outgoing": "TOTAL OUTGOING",
         "total-deposited": "TOTAL DEPOSITED",
@@ -47,11 +47,13 @@
         "outgoing": "OUTGOING",
         "withdrawn": "WITHDRAWN",
         "view": "View",
-        "total-withdrawable-amount-detail": "Whenever you receive money, you have to individually withdraw it from each transaction. Go to incoming tab to perform withdrawal."
+        "zebec-despoited-balance-detail": "Deposited balance is the overall sum of all the tokens deposited on Zebec. This balance may not be accurate as balance rate are not available for all tokens.",
+        "treasury-despoited-balance-detail": "Deposited balance is the overall sum of all the tokens deposited on this treasury. This balance may not be accurate as balance rate are not available for all tokens.",
+        "total-withdrawable-amount-detail": "Whenever you receive token, you have to withdraw it individually for each transaction. Go to the Incoming tab and then proceed to Withdraw."
     },
     "deposit-withdrawal": {
-        "deposit-title": "Deposit balance into your Zebec wallet.",
-        "withdraw-title": "Withdraw Zebec deposited assets into your wallet."
+        "deposit-title": "Deposit assets into your Zebec wallet.",
+        "withdraw-title": "Withdraw deposited Zebec assets into your wallet."
     },
     "wallet-not-connected": {
         "title": "Wallet not connected!",
@@ -66,17 +68,19 @@
         "treasury-help": "Zebec Treasury Help",
         "zebec-dca-help": "Zebec DCA Help",
         "streaming-help": "Streaming Help",
-        "zebec-help-description": "Browse through our support articles or lets get in touch through Discord.",
-        "treasury-help-description": "Browse through our support articles or lets get in touch through Discord.",
-        "streaming-help-details": "Browse through our support articles to learn to stream or lets get in touch through Discord.",
+        "zebec-help-description": "Browse through our support articles or get in touch with our Support Team through Discord.",
+        "treasury-help-description": "Browse through our support articles or get in touch with our Support Team through Discord.",
+        "streaming-help-details": "Browse through our support articles to learn about stream or get in touch with our Support Team through Discord.",
         "check-faq": "Check FAQs",
         "join-discord": "Join Discord",
         "build-with-zebec": "Build with Zebec",
         "build-description": "Use our SDKs to easily implement Zebec Pay features directly into your projects.",
         "check-documentation": "Check Documentation",
-        "send-feedback": "Send Feedback",
+        "send-feedback": "Send us a Feedback",
         "feedback-description": "We’ll be pleased if you have suggestions on how to improve Zebec.",
-        "send-us-message": "Send us a message"
+        "send-us-message": "Send us a message",
+        "github": "GitHub",
+        "telegram": "Telegram"
     },
     "notifications": {
         "notification-header":"Set Up Notifications",
@@ -108,10 +112,18 @@
 
     },
     "modal-actions": {
-        "wallet-approval-message": "After your wallet approval, your transaction will be complete in few seconds",
+        "wallet-approval-message": "After your wallet approval, your transaction will be complete in a few seconds",
         "do-not-close-this-window": "Do not close this window"
     },
-    "page-not-found-message": "Oops, The page you are looking for couldn’t be found. Please enjoy this cute cat illustration.",
-    "no-coins-found": "No coins found.",
+    "deposited-assets": {
+        "deposited-assets": "DEPOSITED ASSETS",
+        "search-token": "Search token",
+        "no-tokens-found": "No token found. Try searching with different keyword.",
+        "balance": "Balance",
+        "streaming": "Streaming"
+    },
+    "page-not-found-message": "Oops, The page you are looking for couldn’t be found! Please enjoy this cute cat illustration.",
+    "search-token": "Search token",
+    "no-tokens-found": "No token found.",
     "no-receiver-found" : "No receiver wallet found with given query."
 }

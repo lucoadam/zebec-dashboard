@@ -73,7 +73,7 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <Token
                       symbol={token.symbol}
-                      className="w-4 h-4 text-content-primary"
+                      className="w-5 h-5 text-content-primary"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -95,8 +95,8 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
                 token.symbol.toLowerCase().includes(search.toLowerCase())
             ).length === 0 && (
               <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
-                <div className="text-content-contrast">
-                  {t("common:no-coins-found")}
+                <div className="text-content-contrast text-center">
+                  {t("common:no-tokens-found")}
                 </div>
               </div>
             )}
