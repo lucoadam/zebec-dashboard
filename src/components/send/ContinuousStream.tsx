@@ -352,7 +352,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 />
               </div>
               {!!errors.receiver && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-[12px] mt-1">
                   {t(errors.receiver?.message?.toString() || "")}
                 </p>
               )}
@@ -415,7 +415,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                       message={t(
                         "createTreasury:second-steper.empty-address-book"
                       )}
-                      padding={80}
                       className="h-fit w-full rounded !px-10 !py-10 bg-background-primary text-center"
                     />
                   )}
@@ -492,7 +491,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 <Icons.CheveronDownIcon className="w-6 h-6 hover:cursor-pointer absolute top-2 right-4" />
               </div>
               {!!errors.symbol && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-[12px] mt-1">
                   {t(errors.symbol?.message?.toString() || "")}
                 </p>
               )}
@@ -684,7 +683,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 />
               </div>
               {(!!errors.startDate || !!errors.startTime) && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-[12px] mt-1">
                   {t(
                     (
                       errors.startDate || errors.startTime
@@ -756,7 +755,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 />
               </div>
               {(!!errors.endDate || !!errors.endTime) && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-[12px] mt-1">
                   {t(
                     (errors.endDate || errors.endTime)?.message?.toString() ||
                       ""

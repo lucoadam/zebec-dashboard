@@ -58,7 +58,7 @@ const DepositTab: FC = () => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "validations:deposit-max-amount" },
+        { type: "custom", message: "validation:deposit-max-amount" },
         { shouldFocus: true }
       )
       return

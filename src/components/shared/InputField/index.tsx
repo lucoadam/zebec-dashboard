@@ -40,7 +40,7 @@ const InputFieldWrapper: FC<InputProps> = (props) => {
       {helper !== "" && (
         <p
           className={twMerge(
-            "text-content-secondary text-xs ml-[12px] mt-1",
+            "text-error text-xs ml-[12px] mt-1",
             helperClassName
           )}
         >

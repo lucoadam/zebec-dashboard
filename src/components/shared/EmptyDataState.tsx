@@ -14,7 +14,6 @@ interface EmptyDataProps {
 export const EmptyDataState: FC<EmptyDataProps> = ({
   button,
   message,
-  padding = 176.5,
   className,
   emptyStateClassName,
   messageClassName
@@ -22,12 +21,9 @@ export const EmptyDataState: FC<EmptyDataProps> = ({
   return (
     <div
       className={twMerge(
-        "bg-background-secondary w-full flex flex-col items-center",
+        "bg-background-secondary w-full flex flex-col items-center py-44",
         className ?? ""
       )}
-      style={{
-        padding: `${padding}px 0`
-      }}
     >
       <EmptyState className={twMerge("w-60 h-32", emptyStateClassName)} />
       <div

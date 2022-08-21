@@ -22,6 +22,9 @@ export const WalletApprovalMessageModal: FC = () => {
         <p className=" text-subtitle text-content-primary font-semibold text-center">
           {t("modal-actions.wallet-approval-message")}
         </p>
+        <div className="flex justify-center items-center py-3">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-content-secondary" />
+        </div>
         <div className="flex items-center gap-x-1 justify-center text-warning">
           <Icons.SparkleIcon className="text-base opacity-100" />{" "}
           <p className="text-body">

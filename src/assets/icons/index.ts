@@ -68,6 +68,9 @@ export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
 import SolanaFM from "./other-icons/solanafm.svg"
 import SkeletonCircle from "./other-icons/skeleton-circle.svg"
+import EmptyStateIllustrator from "./other-icons/empty-state-illustrator.svg"
+import GithubLogo from "./other-icons/github.svg"
+import TelegramLogo from "./other-icons/telegram.svg"
 
 export {
   SolanaFM,
@@ -134,5 +137,8 @@ export {
   SwapArrowHorizontalIcon,
   ChevronUpIcon,
   PlusIcon,
-  SkeletonCircle
+  SkeletonCircle,
+  EmptyStateIllustrator,
+  GithubLogo,
+  TelegramLogo
 }

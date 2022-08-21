@@ -11,6 +11,7 @@ import CopyButton from "components/shared/CopyButton"
 import { useTranslation } from "next-i18next"
 import ReactTooltip from "react-tooltip"
 import { useClickOutside } from "../../hooks"
+import TokenService from "api/services/token.service"
 
 const Profile: FC = () => {
   const { t } = useTranslation()
@@ -40,6 +41,7 @@ const Profile: FC = () => {
   const handleDisconnectWallet = () => {
     useWalletObject.disconnect()
     handleClose()
+    TokenService.removeTokens()
   }
 
   useEffect(() => {

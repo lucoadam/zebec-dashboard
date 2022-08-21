@@ -6,6 +6,8 @@ import { Button } from "./Button"
 
 interface ButtonsTypeInterface {
   title: string
+  icon?: React.ReactElement
+  link?: string
   onClick?: () => void
 }
 
@@ -37,18 +39,39 @@ const SupportCard: FC<SupportCardProps> = ({
         {t(description)}
       </p>
       <div className="flex gap-x-2 mt-5">
-        {buttons.map((each) => (
-          <Button
-            key={each.title}
-            size="small"
-            className=""
-            title={`${t(each.title)}`}
-            onClick={each.onClick}
-            endIcon={
-              <Icons.OutsideLinkIcon className="text-content-contrast" />
-            }
-          />
-        ))}
+        {buttons.map((each) =>
+          each.link ? (
+            <a
+              key={each.title}
+              href={each.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="small"
+                className=""
+                title={`${t(each.title)}`}
+                onClick={each.onClick}
+                startIcon={each.icon}
+                endIcon={
+                  <Icons.OutsideLinkIcon className="text-content-contrast" />
+                }
+              />
+            </a>
+          ) : (
+            <Button
+              key={each.title}
+              size="small"
+              className=""
+              title={`${t(each.title)}`}
+              onClick={each.onClick}
+              startIcon={each.icon}
+              endIcon={
+                <Icons.OutsideLinkIcon className="text-content-contrast" />
+              }
+            />
+          )
+        )}
       </div>
     </div>
   )
@@ -68,24 +91,25 @@ const ZebecHelp = ({
           page === "dca"
             ? "common:support.zebec-dca-help"
             : page === "treasury"
-              ? "common:support.treasury-help"
-              : page === "send"
-                ? "common:support.streaming-help"
-                : "common:support.zebec-help"
+            ? "common:support.treasury-help"
+            : page === "send"
+            ? "common:support.streaming-help"
+            : "common:support.zebec-help"
         }
         description={
           page === "treasury"
             ? "common:support.treasury-help-description"
             : page === "send"
-              ? "common:support.streaming-help-details"
-              : "common:support.zebec-help-description"
+            ? "common:support.streaming-help-details"
+            : "common:support.zebec-help-description"
         }
         buttons={[
           {
             title: "common:support.check-faq"
           },
           {
-            title: "common:support.join-discord"
+            title: "common:support.join-discord",
+            link: "https://discord.com/invite/fJM9cHuvvB"
           }
         ]}
         className={className}
@@ -102,7 +126,15 @@ const BuildWithZebec = ({ className }: { className?: string }) => {
         description="common:support.build-description"
         buttons={[
           {
-            title: "common:support.check-documentation"
+            title: "common:support.check-documentation",
+            link: "https://docs.zebec.io"
+          },
+          {
+            title: "common:support.github",
+            icon: (
+              <Icons.GithubLogo className="w-3 h-3 text-content-secondary mr-1" />
+            ),
+            link: "https://github.com/Zebec-protocol/zebec-anchor-sdk"
           }
         ]}
         className={className}
@@ -120,6 +152,13 @@ const SendFeedback = ({ className }: { className?: string }) => {
         buttons={[
           {
             title: "common:support.send-us-message"
+          },
+          {
+            title: "common:support.telegram",
+            icon: (
+              <Icons.TelegramLogo className="w-3 h-3 text-content-secondary" />
+            ),
+            link: "https://t.me/zebecprotocol"
           }
         ]}
         className={className}

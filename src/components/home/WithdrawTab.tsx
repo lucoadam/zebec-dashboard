@@ -59,7 +59,7 @@ const WithdrawTab: FC = () => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "validations:withdraw-max-amount" },
+        { type: "custom", message: "validation:withdraw-max-amount" },
         { shouldFocus: true }
       )
       return
