@@ -55,7 +55,11 @@ const Outgoing: FC = () => {
       <Table headers={headers}>
         <TableBody>
           {loading && !outgoingTransactions.results.length && (
-            <TransactionSkeleton />
+            <tr>
+              <td colSpan={headers.length}>
+                <TransactionSkeleton />
+              </td>
+            </tr>
           )}
           {outgoingTransactions.results.length === 0 && !loading ? (
             <tr>

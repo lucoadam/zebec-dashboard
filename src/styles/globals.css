@@ -133,6 +133,10 @@
     --toltip-background: rgba(43, 45, 51, 0.98);
   }
 
+  html {
+    font-size: 16px;
+  }
+
   body {
     @apply bg-background-primary font-inter text-body;
   }

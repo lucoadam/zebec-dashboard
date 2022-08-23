@@ -62,6 +62,16 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
   }
 )
 
+export const fetchOutgoingTransactionsById: any = createAsyncThunk(
+  "transactions/fetchOutgoingTransactionsById",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async (uuid: string) => {
+    const { data: response } = await api.get(`/transaction/${uuid}/`)
+    console.log(response)
+    return response
+  }
+)
+
 export const fetchIncomingTransactions: any = createAsyncThunk(
   "transactions/fetchIncomingTransactions",
   async (_, { getState }) => {
@@ -104,6 +114,31 @@ const transactionsSlice = createSlice({
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
+    //fetchOutgoingTransactionsById
+    builder.addCase(fetchOutgoingTransactionsById.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      fetchOutgoingTransactionsById.fulfilled,
+      (state, action) => {
+        state.loading = false
+        state.error = ""
+        // state.outgoingTransactions = action.payload
+        state.outgoingTransactions.results =
+          state.outgoingTransactions.results.map((item) => {
+            if (item.id === action.payload.id) {
+              return action.payload
+            }
+            return item
+          })
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(fetchOutgoingTransactionsById.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    //incomingTransactions
     builder.addCase(fetchIncomingTransactions.pending, (state) => {
       state.loading = true
     })

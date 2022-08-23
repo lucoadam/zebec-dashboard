@@ -186,8 +186,8 @@ module.exports = {
           maxWidth: "100%",
           marginLeft: "auto",
           marginRight: "auto",
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
+          paddingLeft: "16px",
+          paddingRight: "16px",
           "@screen sm": {
             maxWidth: "100%"
           },
@@ -198,14 +198,14 @@ module.exports = {
             maxWidth: "1024px"
           },
           "@screen xl": {
-            maxWidth: "1200px",
-            paddingLeft: "2.5rem",
-            paddingRight: "2.5rem"
+            maxWidth: "1280px",
+            paddingLeft: "5rem",
+            paddingRight: "5rem"
           },
           "@screen 2xl": {
-            maxWidth: "1456px",
-            paddingLeft: "2.5rem",
-            paddingRight: "2.5rem"
+            maxWidth: "1536px",
+            paddingLeft: "5rem",
+            paddingRight: "5rem"
           }
         }
       })

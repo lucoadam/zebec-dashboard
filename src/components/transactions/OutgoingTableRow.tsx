@@ -12,18 +12,16 @@ import { RPC_NETWORK } from "constants/cluster"
 import { showCancelModal } from "features/modals/cancelModalSlice"
 import { showPauseModal } from "features/modals/pauseModalSlice"
 import { showResumeModal } from "features/modals/resumeModalSlice"
-import moment from "moment"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
-import { formatCurrency, toSubstring } from "utils"
-
-export type TransactionStatus =
-  | "completed"
-  | "outgoing"
-  | "scheduled"
-  | "cancelled"
-  | "paused"
+import {
+  formatCurrency,
+  toSubstring,
+  formatLamports,
+  formatDateTime
+} from "utils"
+import { StatusType, TransactionStatusType } from "./transactions.d"
 
 interface OutgoingTableRowProps {
   index: number
@@ -43,14 +41,29 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
 
-  console.log("data", transaction)
+  // console.log("data", transaction)
 
-  const totalTimeInSec = transaction.end_time - transaction.start_time
-  const streamRatePerSec = transaction.amount / totalTimeInSec
+  const {
+    amount,
+    start_time,
+    end_time,
+    token_mint_address,
+    latest_transaction_event
+  } = transaction
+  const totalTransactionAmount =
+    amount -
+    formatLamports(latest_transaction_event.paused_amt, token_mint_address)
+  const transactionFeaturesInitiated = localStorage.getItem(
+    "transaction_features_initiated"
+  )
+  const totalTimeInSec = end_time - start_time
+  const streamRatePerSec = amount / totalTimeInSec
 
   const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
   const [streamedToken, setStreamedToken] = useState<number>(0)
-  const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const [status, setStatus] = useState<TransactionStatusType>(
+    transaction.status
+  )
   const [counter, setCounter] = useState<number>(0)
 
   useEffect(() => {
@@ -58,9 +71,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
     }, 1000)
     if (
-      status === "completed" ||
-      status === "paused" ||
-      status === "cancelled"
+      status === StatusType.COMPLETED ||
+      status === StatusType.PAUSED ||
+      status === StatusType.CANCELLED
     ) {
       clearInterval(interval)
     }
@@ -68,60 +81,73 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   }, [currentTime, status])
 
   useEffect(() => {
-    if (currentTime < transaction.start_time) {
-      setStatus("scheduled")
-    } else if (
-      currentTime >= transaction.start_time &&
-      currentTime < transaction.end_time &&
-      !["cancelled", "paused"].includes(status)
+    if (
+      transaction.status !== StatusType.CANCELLED &&
+      transaction.status !== StatusType.PAUSED
     ) {
-      setStatus("outgoing")
-    } else if (
-      currentTime >= transaction.end_time &&
-      !["cancelled", "paused"].includes(transaction.status)
-    ) {
-      setStatus("completed")
+      if (currentTime < start_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else if (currentTime >= start_time && currentTime < end_time) {
+        setStatus(StatusType.ONGOING)
+      } else if (currentTime >= end_time) {
+        setStatus(StatusType.COMPLETED)
+      }
     } else {
       setStatus(transaction.status)
     }
-  }, [
-    status,
-    currentTime,
-    transaction.end_time,
-    transaction.start_time,
-    transaction.status
-  ])
+  }, [status, currentTime, transaction])
+
+  console.log(index, status)
 
   useEffect(() => {
-    if (status === "completed") {
-      setStreamedToken(transaction.amount)
-    } else if (status === "outgoing") {
-      if (counter === 0) {
+    if (transactionFeaturesInitiated === "true") {
+      setStreamedToken(streamRatePerSec * (currentTime - start_time))
+    } else {
+      if (status === StatusType.COMPLETED) {
         setStreamedToken(
-          streamRatePerSec * (currentTime - transaction.start_time)
+          amount -
+            formatLamports(
+              latest_transaction_event.paused_amt,
+              token_mint_address
+            )
         )
-        setCounter((counter) => counter + 1)
-      } else {
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > transaction.amount
-              ? transaction.amount
-              : prevStreamedToken + streamRatePerSec
+      } else if (status === StatusType.ONGOING) {
+        if (counter === 0) {
+          setStreamedToken(
+            latest_transaction_event.paused_amt
+              ? streamRatePerSec * (currentTime - start_time) -
+                  formatLamports(
+                    latest_transaction_event.paused_amt,
+                    token_mint_address
+                  )
+              : streamRatePerSec * (currentTime - start_time)
           )
-        }, 1000)
-        return () => clearInterval(interval)
+          setCounter((counter) => counter + 1)
+        } else {
+          const interval = setInterval(() => {
+            setStreamedToken((prevStreamedToken: number) =>
+              prevStreamedToken + streamRatePerSec > amount
+                ? amount
+                : prevStreamedToken + streamRatePerSec
+            )
+          }, 1000)
+          return () => clearInterval(interval)
+        }
+      } else if (
+        status === StatusType.CANCELLED ||
+        status === StatusType.PAUSED
+      ) {
+        setStreamedToken(
+          formatLamports(
+            latest_transaction_event.withdrawn +
+              latest_transaction_event.withdraw_limit,
+            token_mint_address
+          )
+        )
       }
-    } else if (status === "cancelled") {
-      setStreamedToken(
-        streamRatePerSec * (currentTime - transaction.start_time)
-      )
-    } else if (status !== "scheduled") {
-      setStreamedToken(
-        streamRatePerSec * (transaction.end_time - transaction.start_time) * 0.4
-      )
     }
     // eslint-disable-next-line
-  }, [status, counter])
+  }, [status, counter, transactionFeaturesInitiated])
 
   const styles = {
     detailsRow: {
@@ -143,7 +169,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                 {" "}
                 <CircularProgress
                   status={status}
-                  percentage={(streamedToken * 100) / transaction.amount}
+                  percentage={(streamedToken * 100) / totalTransactionAmount}
                 />
               </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -163,14 +189,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 min-w-61">
             <div className="text-caption text-content-primary">
-              {moment
-                .unix(transaction.start_time)
-                .format("MMMM Do YYYY, h:mm:ss A")}{" "}
+              {formatDateTime(transaction.start_time)}
               <br />
-              to{" "}
-              {moment
-                .unix(transaction.end_time)
-                .format("MMMM Do YYYY, h:mm:ss A")}
+              to {formatDateTime(transaction.end_time)}
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
@@ -289,9 +310,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.start-date")}
                       </div>
                       <div className="text-content-primary">
-                        {moment
-                          .unix(transaction.start_time)
-                          .format("MMMM Do YYYY, h:mm:ss A")}
+                        {formatDateTime(transaction.start_time)}
                       </div>
                     </div>
                     {/* End Date */}
@@ -300,9 +319,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.end-date")}
                       </div>
                       <div className="text-content-primary">
-                        {moment
-                          .unix(transaction.end_time)
-                          .format("MMMM Do YYYY, h:mm:ss A")}
+                        {formatDateTime(transaction.end_time)}
                       </div>
                     </div>
                     {/* Stream Type */}
