@@ -1,30 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useWallet } from "@solana/wallet-adapter-react"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import {
-  Button,
-  CircularProgress,
-  EmptyDataState,
-  TableBody,
-  TransactionStatus
-} from "components/shared"
+import { Button, EmptyDataState, TableBody } from "components/shared"
+import { fetchRecentTransactions } from "features/transactions/transactionsSlice"
 import { useTranslation } from "next-i18next"
-import { FC } from "react"
-
-const getValidTokenAmount = (amount: number) => {
-  if (amount > 0) {
-    return amount
-  }
-  return 0
-}
+import { useRouter } from "next/router"
+import { FC, useEffect } from "react"
+import { RecentTransactionRow } from "./RecentTransactionRow"
 
 const RecentTransactions: FC = () => {
-  const walletObject = useWallet()
   const { t } = useTranslation()
+  const router = useRouter()
+  const recentTransactions = useAppSelector(
+    (state) => state.transactions.recentTransactions
+  )
 
-  const recentTransactions: any = {
-    data: []
-  }
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchRecentTransactions())
+  }, [dispatch])
 
   return (
     <>
@@ -37,58 +31,21 @@ const RecentTransactions: FC = () => {
             size="small"
             title={`${t("common:buttons.view-all")}`}
             endIcon={<Icons.ArrowRightIcon />}
+            onClick={() => {
+              router.push("/transactions")
+            }}
           />
         </div>
-        {recentTransactions.data.length === 0 && (
+        {recentTransactions.results.length === 0 && (
           <EmptyDataState message={t("home:recent.empty")} className="py-10" />
         )}
         <table className="w-full overflow-auto whitespace-nowrap">
           <TableBody className="px-0 py-0 divide-y border-collapse">
-            {recentTransactions.data.map((transaction: any) => (
-              <tr key={transaction._id.$oid ?? ""}>
-                <td className=" py-5 min-w-60">
-                  <div className="flex items-center gap-x-2.5">
-                    <div className=" w-6 h-6 grid place-content-center bg-outline-icon rounded">
-                      {walletObject?.publicKey?.toString() ===
-                      transaction?.sender ? (
-                        <Icons.OutgoingIcon className="w-5 h-5" />
-                      ) : (
-                        <Icons.IncomingIcon className="w-5 h-5" />
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-y-1 text-content-contrast">
-                      <div className="text-subtitle text-content-primary font-semibold">
-                        {transaction?.transaction_name}
-                      </div>
-                      <div className="text-caption">{transaction?.remark}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-5 min-w-70">
-                  <div className="flex items-center gap-x-2.5">
-                    <div className=" w-14 h-14">
-                      <CircularProgress
-                        status={transaction.status as TransactionStatus}
-                        percentage={
-                          (getValidTokenAmount(transaction.sent_token) * 100) /
-                          transaction.amount
-                        }
-                      />
-                    </div>
-                    <div className="flex flex-col gap-y-1 text-content-contrast">
-                      <div className="flex items-center text-subtitle-sm font-medium">
-                        <span className="text-subtitle text-content-primary font-semibold">
-                          +48,556.98
-                        </span>
-                        &nbsp;SOL
-                      </div>
-                      <div className="text-caption">
-                        48,556.98 of 1,00,00,000 {transaction.token}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+            {recentTransactions.results.map((transaction: any) => (
+              <RecentTransactionRow
+                key={transaction.id}
+                transaction={transaction}
+              />
             ))}
           </TableBody>
         </table>
