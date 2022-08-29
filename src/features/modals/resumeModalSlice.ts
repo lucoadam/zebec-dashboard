@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { fetchTransactionsById } from "api"
 import api from "api/api"
-import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 
 //declare types for state
 interface ResumeState {
@@ -22,7 +22,9 @@ export const resumeTransaction = createAsyncThunk(
     const response = await api.patch(`/transaction/${uuid}/`, {
       status: "ready"
     })
-    dispatch(fetchOutgoingTransactions())
+
+    dispatch(fetchTransactionsById(uuid))
+
     return response.data
   }
 )
