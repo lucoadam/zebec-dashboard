@@ -19,6 +19,12 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  recentTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   pagination: PaginationInterface
 }
 
@@ -32,6 +38,12 @@ const initialState: TransactionState = {
     results: []
   },
   incomingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  recentTransactions: {
     count: 0,
     next: "",
     previous: "",
@@ -83,6 +95,19 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
         offset:
           (Number(transactions.pagination.currentPage) - 1) *
           transactions.pagination.limit
+      }
+    })
+    return response
+  }
+)
+
+export const fetchRecentTransactions: any = createAsyncThunk(
+  "transactions/fetchRecentTransactions",
+  async () => {
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: 3,
+        offset: 0
       }
     })
     return response
@@ -149,6 +174,19 @@ const transactionsSlice = createSlice({
       state.pagination.total = action.payload.count
     })
     builder.addCase(fetchIncomingTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    //recentTransactions
+    builder.addCase(fetchRecentTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchRecentTransactions.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.recentTransactions = action.payload
+    })
+    builder.addCase(fetchRecentTransactions.rejected, (state, action) => {
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })

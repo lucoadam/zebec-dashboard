@@ -23,7 +23,7 @@ const Incoming: FC = () => {
   const { incomingTransactions, pagination, loading } = useAppSelector(
     (state) => state.transactions
   )
-
+  const { isSigned } = useAppSelector((state) => state.signTransaction)
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -51,9 +51,11 @@ const Incoming: FC = () => {
   }
 
   useEffect(() => {
-    dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
-    dispatch(fetchIncomingTransactions())
-  }, [dispatch])
+    if (isSigned) {
+      dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
+      dispatch(fetchIncomingTransactions())
+    }
+  }, [dispatch, isSigned])
 
   return (
     <>
