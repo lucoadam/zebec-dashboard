@@ -11,14 +11,17 @@ import { RecentTransactionRow } from "./RecentTransactionRow"
 const RecentTransactions: FC = () => {
   const { t } = useTranslation()
   const router = useRouter()
+  const { isSigned } = useAppSelector((state) => state.signTransaction)
   const recentTransactions = useAppSelector(
     (state) => state.transactions.recentTransactions
   )
 
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(fetchRecentTransactions())
-  }, [dispatch])
+    if (isSigned) {
+      dispatch(fetchRecentTransactions())
+    }
+  }, [dispatch, isSigned])
 
   return (
     <>

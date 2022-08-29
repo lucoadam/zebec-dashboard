@@ -25,7 +25,7 @@ const Outgoing: FC = () => {
   const { outgoingTransactions, pagination, loading } = useAppSelector(
     (state) => state.transactions
   )
-
+  const { isSigned } = useAppSelector((state) => state.signTransaction)
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
   const headers = [
@@ -41,9 +41,11 @@ const Outgoing: FC = () => {
   }
 
   useEffect(() => {
-    dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
-    dispatch(fetchOutgoingTransactions())
-  }, [dispatch])
+    if (isSigned) {
+      dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
+      dispatch(fetchOutgoingTransactions())
+    }
+  }, [dispatch, isSigned])
 
   return (
     <>
