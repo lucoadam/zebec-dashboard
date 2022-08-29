@@ -160,8 +160,9 @@ const AddOwners: FC<StepsComponentProps> = ({
                   <div className="flex-1">
                     <input
                       type="text"
-                      className={`w-full h-[40px] ${!!errors.wallet ? "error" : ""
-                        }`}
+                      className={`w-full h-[40px] ${
+                        !!errors.wallet ? "error" : ""
+                      }`}
                       placeholder={t(
                         "createTreasury:second-steper.form.owner-address"
                       )}
@@ -346,7 +347,7 @@ const AddOwners: FC<StepsComponentProps> = ({
           </div>
         </div>
         {selectError && (
-          <p className="text-content-secondary text-xs ml-[12px] mt-1">
+          <p className="text-error text-xs ml-[12px] mt-1">
             {t("validation:at-least-two-owners-required")}
           </p>
         )}

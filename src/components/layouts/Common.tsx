@@ -4,7 +4,10 @@ import ZebecContext from "app/zebecContext"
 // import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
 import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
-import { fetchTreasury } from "features/treasury/treasurySlice"
+import {
+  fetchArchivedTreasury,
+  fetchTreasury
+} from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 
@@ -41,8 +44,9 @@ const Common: FC<{
 
   useEffect(() => {
     if (isSigned) {
-      dispatch(fetchAddressBook(walletObject.publicKey?.toString()))
-      dispatch(fetchTreasury(walletObject.publicKey?.toString()))
+      dispatch(fetchAddressBook())
+      dispatch(fetchTreasury())
+      dispatch(fetchArchivedTreasury())
     }
     // eslint-disable-next-line
   }, [isSigned])

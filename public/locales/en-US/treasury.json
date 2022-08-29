@@ -2,6 +2,7 @@
   "title": "Treasury",
   "create-new-treasury": "Create New Treasury",
   "see-archived-safe": "See Archived Safe",
+  "no-treasury": "You don’t have a treasury yet.",
   "treasury-name": "Treasury Name",
   "name-placeholder": "Enter Treasury Name",
   "overview": "Overview",

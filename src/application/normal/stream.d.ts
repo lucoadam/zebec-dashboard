@@ -6,6 +6,7 @@ import {
 } from "@solana/web3.js"
 
 import { AnchorProvider, Program } from "@project-serum/anchor"
+import { ZebecNativeTreasury } from "zebec-anchor-sdk-npmtest/packages/multisig"
 
 export declare class ZebecTransactionBuilder {
   readonly _program: Program
@@ -223,3 +224,5 @@ export interface ZebecNativeStreamProps extends IBaseStream {
   cancel(data: MPauseResumeWithdrawCancel): Promise<MZebecResponse>
   withdraw(data: MPauseResumeWithdrawCancel): Promise<MZebecResponse>
 }
+
+export interface ZebecTreasuryProps extends ZebecNativeTreasury {}
