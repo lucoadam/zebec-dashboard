@@ -1,9 +1,10 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch } from "app/hooks"
+import ZebecContext from "app/zebecContext"
 import LoadingSvg from "assets/images/treasury/loading.svg"
-import { saveTreasury } from "features/treasury/treasurySlice"
+import { createTreasury } from "application"
 import { useRouter } from "next/router"
-import { FC, useEffect } from "react"
+import { FC, useContext, useEffect } from "react"
 import { Treasury } from "../CreateTreasury.d"
 
 interface CreatingTreasuryProps {
@@ -11,24 +12,23 @@ interface CreatingTreasuryProps {
 }
 
 const CreatingTreasury: FC<CreatingTreasuryProps> = ({ treasury }) => {
+  const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
   const wallet = useWallet()
   const router = useRouter()
+
   useEffect(() => {
-    dispatch(
-      saveTreasury({
-        data: {
-          ...treasury,
-          safe_name: treasury.name,
-          wallet: wallet.publicKey?.toString(),
-          multisig_vault: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
-        },
-        callback: () => {
-          router.push("/treasury")
-        }
-      })
-    )
-  }, [treasury, wallet, dispatch, router])
+    zebecCtx.treasury &&
+      dispatch(
+        createTreasury({
+          data: treasury,
+          treasury: zebecCtx.treasury,
+          callback: () => {
+            router.push("/treasury")
+          }
+        })
+      )
+  }, [treasury, wallet, dispatch, router, zebecCtx.treasury])
 
   return (
     <>

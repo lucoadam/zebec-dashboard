@@ -5,9 +5,13 @@ import * as AvatarImages from "assets/images/avatars"
 import { Button, InputField, Modal } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import OwnerLists from "components/treasury/create/OwnerLists"
-import { updateSafeName } from "features/treasurySettings/treasurySettingsSlice"
+import {
+  updateTreasury,
+  archiveTreasury
+} from "features/treasury/treasurySlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
@@ -15,17 +19,17 @@ import { addTreasuryNameSchema } from "utils/validations/addTreasuryNameSchema"
 
 const Setting = () => {
   const { t } = useTranslation()
+  const router = useRouter()
+  const { activeTreasury, updating, updatingError, archiving } = useAppSelector(
+    (state) => state.treasury
+  )
+  const dispatch = useAppDispatch()
+
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleModal = () => {
     setIsOpen((prev) => !prev)
   }
-  const {
-    safeNames: safeName,
-    error,
-    updating
-  } = useAppSelector((state) => state.treasurySettings)
-  const dispatch = useAppDispatch()
 
   const {
     register,
@@ -38,16 +42,20 @@ const Setting = () => {
     mode: "onChange",
     resolver: yupResolver(addTreasuryNameSchema),
     defaultValues: {
-      name: "Zebec Name"
+      name: `${activeTreasury?.name}`
     }
   })
   useEffect(() => {
-    setValue("name", safeName)
-  }, [setValue, safeName])
+    setValue("name", activeTreasury?.name || "")
+  }, [setValue, activeTreasury])
 
   const submitForm = (data: { name: string }) => {
-    if (safeName !== data.name) {
-      dispatch(updateSafeName(data))
+    if (activeTreasury?.name !== data.name) {
+      const backendData = {
+        uuid: activeTreasury?.uuid || "",
+        name: data.name
+      }
+      dispatch(updateTreasury(backendData))
     }
   }
   return (
@@ -65,18 +73,21 @@ const Setting = () => {
           <div className="w-full flex justify-between items-center">
             <div className="flex flex-col mx-3">
               <div className="text-subtitle text-content-primary font-semibold">
-                {safeName}
+                {activeTreasury?.name}
               </div>
               <div className="flex gap-x-3 items-center">
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.UserGroupIcon className="text-sm font-normal" />
                   <div className="w-20">
-                    {5} {t("treasurySettings:owners")}
+                    {activeTreasury?.owners.length}{" "}
+                    {t("treasurySettings:owners")}
                   </div>
                 </div>
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.NotebookIcon className="text-sm font-normal" />
-                  <div>{toSubstring("23423sdfjsdlfjs234230423", 6, true)}</div>
+                  <div>
+                    {toSubstring(activeTreasury?.treasury_address, 6, true)}
+                  </div>
                   <CopyButton content="23423sdfjsdlfjs234230423" />
                 </div>
               </div>
@@ -87,13 +98,14 @@ const Setting = () => {
           <span className="text-sm font-normal text-content-secondary block">
             {t("treasurySettings:minimum-confirmation")}:
           </span>
-          &nbsp;2 {t("treasurySettings:out-of")} 3{" "}
+          &nbsp;{activeTreasury?.min_confirmations}{" "}
+          {t("treasurySettings:out-of")} {activeTreasury?.owners.length}{" "}
           {t("treasurySettings:owners")}
         </div>
         <form onSubmit={handleSubmit(submitForm)}>
           <InputField
-            error={!!errors?.name || !!error}
-            helper={errors?.name?.message?.toString() || error || ""}
+            error={!!errors?.name || !!updatingError}
+            helper={errors?.name?.message?.toString() || updatingError || ""}
             label={t("treasurySettings:safe-name")}
             placeholder={t("treasurySettings:enter-safe-name")}
             className="h-[40px] w-full"
@@ -103,7 +115,7 @@ const Setting = () => {
           </InputField>
           <Button
             disabled={updating}
-            endIcon={updating ? <Icons.Loading /> : <></>}
+            loading={updating}
             title={`${t("treasurySettings:save-changes")}`}
             variant="gradient"
             size="medium"
@@ -143,9 +155,20 @@ const Setting = () => {
                 <Button
                   className="w-full"
                   variant="danger"
+                  loading={archiving}
+                  disabled={archiving}
                   title={`${t("treasurySettings:yes-archive-safe")}`}
                   startIcon={<Icons.TrashIcon />}
-                  onClick={() => setIsOpen(true)}
+                  onClick={() =>
+                    dispatch(
+                      archiveTreasury({
+                        uuid: activeTreasury?.uuid || "",
+                        callback: () => {
+                          router.push("/treasury")
+                        }
+                      })
+                    )
+                  }
                 />
               </div>
               <div className="pb-[12px]">
@@ -167,32 +190,11 @@ const Setting = () => {
         </div>
         <OwnerLists
           maxItems={5}
-          owners={[
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            },
-            {
-              name: "Subas Shrestha",
-              wallet: "2sdfdsfsodfeorweorwerwenreworjweorewrweorjew"
-            }
-          ]}
+          owners={
+            activeTreasury?.owners.map((owner) => {
+              return { name: owner.name, wallet: owner.wallet_address }
+            }) || []
+          }
           showCopy
         />
       </div>

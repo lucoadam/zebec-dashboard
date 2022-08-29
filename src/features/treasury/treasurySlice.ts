@@ -1,59 +1,104 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import axios from "axios"
-import { setTreasuryData } from "data/api"
-import { FetchTreasuryProps, TreasuryState } from "./treasurySlice.d"
+import api from "api/api"
+import {
+  UpdateTreasuryProps,
+  UpdateTreasuryResponse,
+  TreasuryState,
+  CreateTreasuryProps
+} from "./treasurySlice.d"
+import { toast } from "features/toasts/toastsSlice"
+import { AppDispatch } from "app/store"
 
 const initialState: TreasuryState = {
   loading: false,
-  treasuries: [],
-  error: ""
+  treasuries: {
+    count: 0,
+    next: null,
+    previous: null,
+    results: []
+  },
+  error: "",
+  archivedTreasuries: {
+    count: 0,
+    next: null,
+    previous: null,
+    results: []
+  },
+  activeTreasury: null,
+  updating: false,
+  updatingError: "",
+  archiving: false,
+  archiveError: ""
 }
 
-interface SaveTreasuryProps {
-  data: TreasuryState & {
-    wallet: string
-  }
-  callback: () => void
-}
-
-//Generates pending, fulfilled and rejected action types
-export const updateTreasury = createAsyncThunk(
-  "treasury/",
-  async ({ name, address }: FetchTreasuryProps) => {
-    await setTreasuryData({ name, address })
-  }
-)
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const fetchTreasury: any = createAsyncThunk(
+export const fetchTreasury = createAsyncThunk(
   "treasury/fetchTreasury",
-  async (wallet: string) => {
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/treasury?wallet=${wallet}`
-    )
+  async () => {
+    const { data: response } = await api.get(`/treasury/`)
+    return response
+  }
+)
+export const fetchArchivedTreasury = createAsyncThunk(
+  "treasury/fetchArchivedTreasury",
+  async () => {
+    const { data: response } = await api.get(`/treasury/`)
     return response
   }
 )
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const saveTreasury: any = createAsyncThunk(
-  "treasury/saveTreasury",
-  async (data: SaveTreasuryProps, { dispatch }) => {
-    const { data: response } = await axios.post(
-      `https://internal-ten-cherry.glitch.me/treasury`,
-      data.data
-    )
-    dispatch(fetchTreasury(data.data.wallet))
-    data.callback()
-    return response
+export const createTreasury = createAsyncThunk<
+  any,
+  CreateTreasuryProps,
+  {
+    dispatch: AppDispatch
   }
-)
+>("treasury/createTreasury", async (data, { dispatch }) => {
+  const { data: response } = await api.post(`/treasury/`, data.data)
+  dispatch(fetchTreasury())
+  data.callback()
+  return response
+})
+
+export const updateTreasury = createAsyncThunk<
+  UpdateTreasuryResponse,
+  UpdateTreasuryProps,
+  { dispatch: AppDispatch }
+>("treasury/updateTreasury", async (data, { dispatch }) => {
+  const response = await api.patch(`/treasury/${data.uuid}/`, data)
+  dispatch(
+    toast.success({
+      message: "Treasury updated successfully."
+    })
+  )
+  return { data: response.data, uuid: data.uuid }
+})
+
+export const archiveTreasury = createAsyncThunk<
+  null,
+  { uuid: string; callback: () => void },
+  { dispatch: AppDispatch }
+>("treasury/archiveTreasury", async (data, { dispatch }) => {
+  console.log(data)
+  const response = await api.delete(`/treasury/${data.uuid}/`)
+  dispatch(fetchTreasury())
+  data.callback()
+  console.log(response)
+  return null
+})
 
 const treasurySlice = createSlice({
   name: "treasury",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveTreasury: (state, action: PayloadAction<string>) => {
+      state.activeTreasury =
+        state.treasuries.results.find(
+          (treasury) => treasury.uuid === action.payload
+        ) || null
+    }
+  },
   extraReducers: (builder) => {
+    //Fetch Treasury
     builder.addCase(fetchTreasury.pending, (state) => {
       state.loading = true
     })
@@ -69,22 +114,70 @@ const treasurySlice = createSlice({
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })
-    builder.addCase(saveTreasury.pending, (state) => {
+    //Fetch Archived Treasury
+    builder.addCase(fetchArchivedTreasury.pending, (state) => {
       state.loading = true
     })
     builder.addCase(
-      saveTreasury.fulfilled,
+      fetchArchivedTreasury.fulfilled,
+      (state, action: PayloadAction<typeof initialState.treasuries>) => {
+        state.loading = false
+        state.archivedTreasuries = action.payload
+        state.error = ""
+      }
+    )
+    builder.addCase(fetchArchivedTreasury.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Create Treasury
+    builder.addCase(createTreasury.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      createTreasury.fulfilled,
       (state, action: PayloadAction<typeof initialState.treasuries>) => {
         state.loading = false
         state.treasuries = action.payload
         state.error = ""
       }
     )
-    builder.addCase(saveTreasury.rejected, (state, action) => {
+    builder.addCase(createTreasury.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
+    })
+    // Update Treasury
+    builder.addCase(updateTreasury.pending, (state) => {
+      state.updating = true
+    })
+    builder.addCase(updateTreasury.fulfilled, (state, action) => {
+      const updatedTreasuries = state.treasuries.results.map((treasury) =>
+        treasury.uuid === action.payload.uuid
+          ? { ...treasury, ...action.payload.data }
+          : treasury
+      )
+      state.updating = false
+      state.treasuries.results = updatedTreasuries
+      state.updatingError = ""
+    })
+    builder.addCase(updateTreasury.rejected, (state, action) => {
+      state.updating = false
+      state.updatingError = action.error.message ?? "Something went wrong"
+    })
+    // Archive Treasury
+    builder.addCase(archiveTreasury.pending, (state) => {
+      state.archiving = true
+    })
+    builder.addCase(archiveTreasury.fulfilled, (state) => {
+      state.archiving = false
+      state.archiveError = ""
+    })
+    builder.addCase(archiveTreasury.rejected, (state, action) => {
+      state.archiving = false
+      state.archiveError = action.error.message ?? "Something went wrong"
     })
   }
 })
 
 export default treasurySlice.reducer
+export const { setActiveTreasury } = treasurySlice.actions
