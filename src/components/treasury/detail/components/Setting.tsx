@@ -105,7 +105,7 @@ const Setting = () => {
         <form onSubmit={handleSubmit(submitForm)}>
           <InputField
             error={!!errors?.name || !!updatingError}
-            helper={errors?.name?.message?.toString() || updatingError || ""}
+            helper={t(errors?.name?.message?.toString() || updatingError || "")}
             label={t("treasurySettings:safe-name")}
             placeholder={t("treasurySettings:enter-safe-name")}
             className="h-[40px] w-full"
