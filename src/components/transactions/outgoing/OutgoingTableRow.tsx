@@ -1,23 +1,29 @@
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
   IconButton,
-  Modal,
-  TransactionStatus,
   UserAddress
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
-import moment from "moment"
+import { showCancelModal } from "features/modals/cancelModalSlice"
+import { showPauseModal } from "features/modals/pauseModalSlice"
+import { showResumeModal } from "features/modals/resumeModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import React, { FC, Fragment, useEffect, useRef, useState } from "react"
-import { formatCurrency, toSubstring } from "utils"
-import { WithdrawStepsList } from "./withdraw/data.d"
+import { FC, Fragment, useEffect, useRef, useState } from "react"
+import {
+  formatCurrency,
+  toSubstring,
+  formatLamports,
+  formatDateTime
+} from "utils"
+import { StatusType, TransactionStatusType } from "../transactions.d"
 
-interface IncomingTableRowProps {
+interface OutgoingTableRowProps {
   index: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
@@ -25,15 +31,124 @@ interface IncomingTableRowProps {
   handleToggleRow: () => void
 }
 
-const IncomingTableRow: FC<IncomingTableRowProps> = ({
+const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   index,
-  transaction,
   activeDetailsRow,
-  handleToggleRow
+  handleToggleRow,
+  transaction
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-  const [currentStep, setCurrentStep] = React.useState(-1)
+  const dispatch = useAppDispatch()
+
+  // console.log("data", transaction)
+
+  const {
+    amount,
+    start_time,
+    end_time,
+    token_mint_address,
+    latest_transaction_event
+  } = transaction
+  const totalTransactionAmount =
+    amount -
+    formatLamports(latest_transaction_event.paused_amt, token_mint_address)
+  const transactionFeaturesInitiated = localStorage.getItem(
+    "transaction_features_initiated"
+  )
+  const totalTimeInSec = end_time - start_time
+  const streamRatePerSec = amount / totalTimeInSec
+
+  const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
+  const [streamedToken, setStreamedToken] = useState<number>(0)
+  const [status, setStatus] = useState<TransactionStatusType>(
+    transaction.status
+  )
+  const [counter, setCounter] = useState<number>(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
+    }, 1000)
+    if (
+      status === StatusType.COMPLETED ||
+      status === StatusType.PAUSED ||
+      status === StatusType.CANCELLED
+    ) {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [currentTime, status])
+
+  useEffect(() => {
+    if (
+      transaction.status !== StatusType.CANCELLED &&
+      transaction.status !== StatusType.PAUSED
+    ) {
+      if (currentTime < start_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else if (currentTime >= start_time && currentTime < end_time) {
+        setStatus(StatusType.ONGOING)
+      } else if (currentTime >= end_time) {
+        setStatus(StatusType.COMPLETED)
+      }
+    } else {
+      setStatus(transaction.status)
+    }
+  }, [status, currentTime, transaction])
+
+  console.log(index, status)
+
+  useEffect(() => {
+    if (transactionFeaturesInitiated === "true") {
+      setStreamedToken(streamRatePerSec * (currentTime - start_time))
+    } else {
+      if (status === StatusType.COMPLETED) {
+        setStreamedToken(
+          amount -
+            formatLamports(
+              latest_transaction_event.paused_amt,
+              token_mint_address
+            )
+        )
+      } else if (status === StatusType.ONGOING) {
+        if (counter === 0) {
+          setStreamedToken(
+            latest_transaction_event.paused_amt
+              ? streamRatePerSec * (currentTime - start_time) -
+                  formatLamports(
+                    latest_transaction_event.paused_amt,
+                    token_mint_address
+                  )
+              : streamRatePerSec * (currentTime - start_time)
+          )
+          setCounter((counter) => counter + 1)
+        } else {
+          const interval = setInterval(() => {
+            setStreamedToken((prevStreamedToken: number) =>
+              prevStreamedToken + streamRatePerSec > amount
+                ? amount
+                : prevStreamedToken + streamRatePerSec
+            )
+          }, 1000)
+          return () => clearInterval(interval)
+        }
+      } else if (
+        status === StatusType.CANCELLED ||
+        status === StatusType.PAUSED
+      ) {
+        setStreamedToken(
+          formatLamports(
+            latest_transaction_event.withdrawn +
+              latest_transaction_event.withdraw_limit,
+            token_mint_address
+          )
+        )
+      }
+    }
+    // eslint-disable-next-line
+  }, [status, counter, transactionFeaturesInitiated])
+
   const styles = {
     detailsRow: {
       height:
@@ -42,68 +157,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           : "0px"
     }
   }
-  const [isOpen, setIsOpen] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [withdrawAmount, setWithdrawAmount] = useState<any>()
-  const fees = 0.25
-
-  function toggleModal() {
-    setIsOpen(!isOpen)
-  }
-
-  const totalTimeInSec = transaction.end_time - transaction.start_time
-  const streamRatePerSec = transaction.amount / totalTimeInSec
-
-  const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
-  const [streamedToken, setStreamedToken] = useState<number>(0)
-  const [status, setStatus] = useState<TransactionStatus>("scheduled")
-  const [counter, setCounter] = useState<number>(0)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
-    }, 1000)
-    if (status === "completed") {
-      clearInterval(interval)
-    }
-    return () => clearInterval(interval)
-  }, [currentTime, status])
-
-  useEffect(() => {
-    if (currentTime < transaction.start_time) {
-      setStatus("scheduled")
-    } else if (
-      currentTime >= transaction.start_time &&
-      currentTime < transaction.end_time
-    ) {
-      setStatus("outgoing")
-    } else if (currentTime >= transaction.end_time) {
-      setStatus("completed")
-    }
-  }, [status, currentTime, transaction.end_time, transaction.start_time])
-
-  useEffect(() => {
-    if (status === "completed") {
-      setStreamedToken(transaction.amount)
-    } else if (status === "outgoing") {
-      if (counter === 0) {
-        setStreamedToken(
-          streamRatePerSec * (currentTime - transaction.start_time)
-        )
-        setCounter((counter) => counter + 1)
-      } else {
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > transaction.amount
-              ? transaction.amount
-              : prevStreamedToken + streamRatePerSec
-          )
-        }, 1000)
-        return () => clearInterval(interval)
-      }
-    }
-    // eslint-disable-next-line
-  }, [status, counter])
 
   return (
     <>
@@ -113,9 +166,10 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           <td className="px-6 py-5 min-w-85">
             <div className="flex items-center gap-x-2.5">
               <div className=" w-14 h-14">
+                {" "}
                 <CircularProgress
                   status={status}
-                  percentage={(streamedToken * 100) / transaction.amount}
+                  percentage={(streamedToken * 100) / totalTransactionAmount}
                 />
               </div>
               <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -126,7 +180,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   &nbsp;{transaction.token}
                 </div>
                 <div className="text-caption">
-                  {" "}
                   {formatCurrency(streamedToken, "", 4)} of{" "}
                   {formatCurrency(transaction.amount, "", 4)}{" "}
                   {transaction.token}
@@ -134,49 +187,51 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 min-w-60">
+          <td className="px-6 py-5 min-w-61">
             <div className="text-caption text-content-primary">
-              {moment
-                .unix(transaction.start_time)
-                .format("MMMM Do YYYY, h:mm:ss A")}{" "}
+              {formatDateTime(transaction.start_time)}
               <br />
-              to{" "}
-              {moment
-                .unix(transaction.end_time)
-                .format("MMMM Do YYYY, h:mm:ss A")}
+              to {formatDateTime(transaction.end_time)}
             </div>
           </td>
-          <td className="px-6 py-5 min-w-60">
-            <UserAddress wallet={transaction.sender} />
+          <td className="px-6 py-5 min-w-61">
+            <UserAddress wallet={transaction.receiver} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
-              <Button
-                title="Withdraw"
-                size="small"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={() => {
-                  setCurrentStep(0)
-                  setIsOpen(true)
-                }}
-              />
+              <div className="flex items-center gap-x-3">
+                <Button
+                  title="Resume"
+                  size="small"
+                  startIcon={
+                    <Icons.ResumeIcon className="text-content-contrast" />
+                  }
+                  onClick={() => {
+                    dispatch(showResumeModal(transaction))
+                  }}
+                />
+                <Button
+                  title="Pause"
+                  size="small"
+                  startIcon={
+                    <Icons.PauseIcon className="text-content-contrast" />
+                  }
+                  onClick={() => {
+                    dispatch(showPauseModal(transaction))
+                  }}
+                />
 
-              <Modal
-                show={currentStep >= 0 && isOpen}
-                toggleModal={toggleModal}
-                className={`rounded h-96 flex items-center justify-center`}
-                hasCloseIcon={!currentStep}
-                size="small"
-              >
-                {WithdrawStepsList[currentStep]?.component({
-                  setCurrentStep,
-                  withdrawAmount,
-                  setWithdrawAmount,
-                  fees
-                })}
-              </Modal>
+                <Button
+                  title="Cancel"
+                  size="small"
+                  startIcon={
+                    <Icons.CrossIcon className="text-content-contrast" />
+                  }
+                  onClick={() => {
+                    dispatch(showCancelModal(transaction))
+                  }}
+                />
+              </div>
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -200,9 +255,11 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   <div className=" text-subtitle-sm font-medium text-content-primary">
                     {transaction.name}
                   </div>
-                  <div className="text-body text-content-secondary">
-                    {transaction.remarks ?? "-"}
-                  </div>
+                  {transaction.remarks && (
+                    <div className="text-body text-content-secondary">
+                      {transaction.remarks ?? "-"}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
@@ -235,7 +292,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                       <div className="flex items-center gap-x-2 text-content-primary">
                         <Image
                           layout="fixed"
-                          alt="Sender Logo"
+                          alt="Receiver Logo"
                           src={Images.Avatar3}
                           height={24}
                           width={24}
@@ -253,9 +310,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.start-date")}
                       </div>
                       <div className="text-content-primary">
-                        {moment
-                          .unix(transaction.start_time)
-                          .format("MMMM Do YYYY, h:mm:ss A")}
+                        {formatDateTime(transaction.start_time)}
                       </div>
                     </div>
                     {/* End Date */}
@@ -264,9 +319,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.end-date")}
                       </div>
                       <div className="text-content-primary">
-                        {moment
-                          .unix(transaction.end_time)
-                          .format("MMMM Do YYYY, h:mm:ss A")}
+                        {formatDateTime(transaction.end_time)}
                       </div>
                     </div>
                     {/* Stream Type */}
@@ -292,7 +345,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {" "}
                         {formatCurrency(transaction.amount, "", 4)}{" "}
                         {transaction.token}
                       </div>
@@ -320,7 +372,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                       </div>
                       <div className="flex items-center gap-x-2 text-content-primary">
                         <Icons.IncomingIcon className="w-5 h-5" />
-                        <span>{transaction.status}</span>
+                        <span>{status}</span>
                       </div>
                     </div>
                     {/* Transaction */}
@@ -372,4 +424,4 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   )
 }
 
-export default IncomingTableRow
+export default OutgoingTableRow
