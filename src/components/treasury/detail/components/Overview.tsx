@@ -8,7 +8,6 @@ import {
   SupportCardComponents,
   Tokens
 } from "components/shared"
-import { tokenBalances, weeklyBalances } from "fakedata"
 import { useState } from "react"
 import { Deposit } from "./Deposit"
 import { Withdrawal } from "./Withdrawal"
@@ -32,9 +31,7 @@ const Overview = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
-  const [currentToken, setCurrentToken] = useState<
-    keyof typeof tokenBalances | keyof typeof weeklyBalances
-  >("SOL")
+  const [currentToken, setCurrentToken] = useState("SOL")
   const treasuryBalance = useAppSelector(
     (state) => state.treasuryBalance.treasury?.tokens
   )
