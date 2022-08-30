@@ -34,7 +34,7 @@ export const fetchTreasuryBalance: any = createAsyncThunk(
 
     const mappedTokens = tokens.map((token) => ({
       symbol: token.symbol,
-      balance: tokensBalance[token.mint] || 0
+      balance: tokensBalance[token.symbol] || 0
     }))
     return {
       name,

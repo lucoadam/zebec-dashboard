@@ -5,13 +5,11 @@ import {
   Tokens,
   TotalWithdrawableAmount
 } from "components/shared"
-import { tokenBalances, weeklyBalances } from "fakedata"
+// import { tokenBalances, weeklyBalances } from "fakedata"
 import { FC, useState } from "react"
 
 const Balances: FC = () => {
-  const [currentToken, setCurrentToken] = useState<
-    keyof typeof tokenBalances | keyof typeof weeklyBalances
-  >("SOL")
+  const [currentToken, setCurrentToken] = useState("SOL")
   const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
   const { prices } = useAppSelector((state) => state.tokenDetails)
   return (
@@ -25,7 +23,7 @@ const Balances: FC = () => {
       />
       {/* Total Withdrawable Amount */}
       <TotalWithdrawableAmount />
-      {/* Tokens */}
+      {/* Overall Activity */}
       <Tokens currentToken={currentToken} setCurrentToken={setCurrentToken} />
       {/* Activity This Week */}
       <ActivityThisWeek currentToken={currentToken} />

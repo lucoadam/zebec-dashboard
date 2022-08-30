@@ -26,7 +26,11 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
 
   const filterTokens = () => {
     if (search !== "")
-      return tokens.filter((item) => item.symbol.toLowerCase().includes(search))
+      return tokens.filter(
+        (item) =>
+          item.symbol.toLowerCase().includes(search.toLowerCase()) ||
+          item.name.toLowerCase().includes(search.toLowerCase())
+      )
     return tokens
   }
 

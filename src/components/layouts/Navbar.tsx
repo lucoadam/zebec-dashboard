@@ -3,7 +3,7 @@ import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
-import NotificationsComponent from "components/notifications/NotificationsDropdown"
+// import NotificationsComponent from "components/notifications/NotificationsDropdown"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { updateWidth } from "features/layout/layoutSlice"
@@ -163,7 +163,7 @@ const Navbar: FC = () => {
                 />
               ) : (
                 <div className="flex gap-x-6">
-                  <NotificationsComponent />
+                  {/* <NotificationsComponent /> */}
                   <Profile />
                 </div>
               )}

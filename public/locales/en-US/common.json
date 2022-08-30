@@ -30,8 +30,8 @@
         "go-to-homepage": "Go to homepage",
         "change-wallet": "Change Wallet",
         "disconnect-wallet": "Disconnect Wallet",
-        "connect-wallet":"Connect Wallet",
-        "select-another-nft":"Select Another NFT"
+        "connect-wallet": "Connect Wallet",
+        "select-another-nft": "Select Another NFT"
     },
     "balances": {
         "deposited-balance": "DEPOSITED BALANCE",
@@ -83,9 +83,9 @@
         "telegram": "Telegram"
     },
     "notifications": {
-        "notification-header":"Set Up Notifications",
+        "notification-header": "Set Up Notifications",
         "notification-subtitle": "Get notified about the transactions in your email.",
-        "powered-by":"Powered by",
+        "powered-by": "Powered by",
         "notifications": "Notifications",
         "notified-on": "Notified on",
         "email-address": "Email Address",
@@ -95,21 +95,20 @@
         "subscribe": "Subscribe",
         "update": "Update",
         "only-show-unread": "Only show unread",
-        "new":"NEW",
-        "mark-all-as-read":"Mark all as read",
+        "new": "NEW",
+        "mark-all-as-read": "Mark all as read",
         "earlier": "EARLIER",
-        "view-on-explorer":"View on explorer"
+        "view-on-explorer": "View on explorer"
     },
-    "settings":{
+    "settings": {
         "settings": "Settings",
-        "email":"Email Address",
-        "email-subtitle":"This is why we need it and how it’s going to be used.",
-        "save-changes":"Save Changes",
-        "balance-warning-range":"Balance Warning Range",
-        "default-explorer":"Default Explorer",
-        "default-explorer-details":"Choose a default explorer to view your transactions.",
-        "explorer":"Explorer"
-
+        "email": "Email Address",
+        "email-subtitle": "This is why we need it and how it’s going to be used.",
+        "save-changes": "Save Changes",
+        "balance-warning-range": "Balance Warning Range",
+        "default-explorer": "Default Explorer",
+        "default-explorer-details": "Choose a default explorer to view your transactions.",
+        "explorer": "Explorer"
     },
     "modal-actions": {
         "wallet-approval-message": "After your wallet approval, your transaction will be complete in a few seconds",
@@ -117,7 +116,7 @@
     },
     "deposited-assets": {
         "deposited-assets": "DEPOSITED ASSETS",
-        "search-token": "Search token",
+        "search-token": "Eg. SOL",
         "no-tokens-found": "No token found. Try searching with different keyword.",
         "balance": "Balance",
         "streaming": "Streaming"
@@ -125,5 +124,5 @@
     "page-not-found-message": "Oops, The page you are looking for couldn’t be found! Please enjoy this cute cat illustration.",
     "search-token": "Search token",
     "no-tokens-found": "No token found.",
-    "no-receiver-found" : "No receiver wallet found with given query."
+    "no-receiver-found": "No receiver wallet found with given query."
 }
