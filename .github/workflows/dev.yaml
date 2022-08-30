@@ -12,7 +12,7 @@ env:
   ECS_TASK_DEFINITION: dev-frontend
   CONTAINER_NAME: main
   RPC_NETWORK: devnet
-  DB_HOST: https://api.dev.thestream.finance
+  DB_HOST: https://api.dev.zebec.io
 
 permissions:
   contents: read
