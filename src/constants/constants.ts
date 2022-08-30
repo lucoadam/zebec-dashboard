@@ -6,5 +6,6 @@ export const constants = {
   STREAM_START_ADD: 2, // 2 minutes
   STREAM_END_ADD: 2, // 2 minutes
   STREAM_FETCH_TIMEOUT: 5000,
+  AVERAGE_TPS: 3000,
   DEPOSIT_MAX_OFFSET: 0.001
 }

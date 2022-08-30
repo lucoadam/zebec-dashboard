@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
@@ -6,6 +6,8 @@ import { CollapseDropdown } from "../shared"
 import * as Icons from "../../assets/icons"
 //hooks
 import { useClickOutside } from "../../hooks"
+import { getRecentTPS } from "utils"
+import { constants } from "constants/constants"
 
 const TPSHeader = () => {
   const router = useRouter()
@@ -13,10 +15,21 @@ const TPSHeader = () => {
   const languageDropdownWrapperRef = useRef(null)
 
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
+  const [recentTPS, setRecentTPS] = useState<number>(0)
 
   useClickOutside(languageDropdownWrapperRef, {
     onClickOutside: () => setToggleDropdown(false)
   })
+
+  useEffect(() => {
+    const fetchTPS = async () => {
+      const tpsValue = await getRecentTPS()
+      setRecentTPS(tpsValue)
+    }
+    fetchTPS()
+    const interval = setInterval(fetchTPS, 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <>
@@ -24,8 +37,19 @@ const TPSHeader = () => {
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
           <div className="flex">
             {t("tps-header.network")}:&nbsp;
-            <span className="text-error flex items-center">
-              1,450 TPS <Icons.WarningTriangleIcon className="w-4 h-4" />
+            <span
+              className={`flex items-center ${
+                recentTPS >= constants.AVERAGE_TPS
+                  ? "text-warning"
+                  : "text-error"
+              } `}
+            >
+              {recentTPS} TPS{" "}
+              <Icons.WarningTriangleIcon
+                className={`w-4 h-4 ${
+                  recentTPS >= constants.AVERAGE_TPS && "hidden"
+                }`}
+              />
             </span>
           </div>
           <div className="ml-2 hidden lg:block">
