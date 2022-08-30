@@ -58,7 +58,7 @@ export const Tab: FC<TabProps> = (props) => {
           <span
             className={`h-4 px-[5px] text-caption-sm bg-background-tertiary text-primary-contrast grid place-content-center rounded-full outline outline-1 outline-outline outline-offset-[-1px]`}
           >
-            {count}
+            {count < 100 ? count : `99+`}
           </span>
         ) : (
           ""

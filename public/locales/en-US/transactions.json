@@ -67,7 +67,9 @@
     "deposited": "Deposited",
     "apy-7d": "APY(7D)",
     "tvl": "TVL",
-    "reject": "Reject"
+    "reject": "Reject",
+    "incoming-empty": "There are no incoming transactions. The transactions sender initiated will appear here.",
+    "outgoing-empty": "There are no outgoing transactions. The transactions you initiated will appear here."
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",
@@ -88,26 +90,25 @@
     "no-sign": "No, Dont Sign",
     "sign-modal-header": "Are you sure you wnat to sign transaction?",
     "rejecting": "Rejecting",
-    "yes-reject":"Yes, Reject",
-    "no-reject":"No, Reject"
+    "yes-reject": "Yes, Reject",
+    "no-reject": "No, Reject"
   },
   "yield-farming": {
-    "stake-lp-token":"Stake LP Token",
-    "stake-lp-token-subtitle":"Stake LP tokens to earn rewards.",
-    "token":"Token",
-    "balance":"Balance: ",
-    "enter-amount":"Enter amount",
-    "stake":"Stake",
-    "harvest-rewards":"Harvest Rewards",
-    "harvest-rewards-subtitle":"Harvest pending rewards from your farm.",
-    "harvest":"Harvest",
-    "unstake":"Unstake",
-    "unstake-header":"Unstake LP Token",
+    "stake-lp-token": "Stake LP Token",
+    "stake-lp-token-subtitle": "Stake LP tokens to earn rewards.",
+    "token": "Token",
+    "balance": "Balance: ",
+    "enter-amount": "Enter amount",
+    "stake": "Stake",
+    "harvest-rewards": "Harvest Rewards",
+    "harvest-rewards-subtitle": "Harvest pending rewards from your farm.",
+    "harvest": "Harvest",
+    "unstake": "Unstake",
+    "unstake-header": "Unstake LP Token",
     "unstake-subtitle": "Withdraw your deposit & pending rewards.",
-    "staking":"Staking",
-    "unstaking":"Unstaking",
-    "harvesting":"Harvesting",
-    "max":"MAX"
-
+    "staking": "Staking",
+    "unstaking": "Unstaking",
+    "harvesting": "Harvesting",
+    "max": "MAX"
   }
 }

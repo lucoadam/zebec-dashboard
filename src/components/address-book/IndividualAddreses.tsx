@@ -123,10 +123,6 @@ export default function IndividualAddresses() {
         "wallets",
         addressBooks.map((addressBook) => addressBook.address)
       )
-      setValue(
-        "names",
-        addressBooks.map((addressBook) => addressBook.name)
-      )
     }
   }, [addressBooks, setValue, trigger, getValues])
 

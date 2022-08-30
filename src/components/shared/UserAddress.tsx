@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
+import { toast } from "features/toasts/toastsSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useRef, useState } from "react"
@@ -32,7 +33,8 @@ export const UserAddress: FC<{
     register,
     formState: { errors },
     handleSubmit,
-    setValue
+    setValue,
+    reset
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(addOwnersSchema)
@@ -44,7 +46,26 @@ export const UserAddress: FC<{
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    dispatch(saveAddressBook({ name: data.name, wallet: data.wallet }))
+    const addressBookData = {
+      data: {
+        name: data.name,
+        address: data.wallet
+      },
+      callback: (error: unknown) => {
+        if (error) {
+          dispatch(
+            toast.error({
+              message: t("addressBook:error-add")
+            })
+          )
+          return
+        }
+        reset()
+        dispatch(toast.success({ message: t("addressBook:success-add") }))
+        handleClose()
+      }
+    }
+    dispatch(saveAddressBook(addressBookData))
   }
 
   const handleClose = () => {
@@ -63,10 +84,10 @@ export const UserAddress: FC<{
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
-            addressBooks.find((item) => item.address === wallet)?.name,
-            12,
-            false
-          )
+              addressBooks.find((item) => item.address === wallet)?.name,
+              12,
+              false
+            )
           : toSubstring(wallet, 5, true)}{" "}
       </span>
       {!isInAddressBook && (
@@ -96,8 +117,9 @@ export const UserAddress: FC<{
                 >
                   <div>
                     <input
-                      className={`w-full h-10 ${!!errors.name?.message && "error"
-                        }`}
+                      className={`w-full h-10 ${
+                        !!errors.name?.message && "error"
+                      }`}
                       placeholder={t("addressBook:enter-name")}
                       type="text"
                       {...register("name")}
