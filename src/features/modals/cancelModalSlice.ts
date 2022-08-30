@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { fetchTransactionsById } from "api"
 import api from "api/api"
+import { AppDispatch } from "app/store"
 
 //declare types for state
 interface CancelState {
@@ -16,18 +17,20 @@ const initialState: CancelState = {
   loading: false,
   error: ""
 }
-export const cancelTransaction = createAsyncThunk(
-  "cancel/cancelTransaction",
-  async (uuid: string, { dispatch }) => {
-    const response = await api.patch(`/transaction/${uuid}/`, {
-      status: "cancelled"
-    })
+export const cancelTransaction = createAsyncThunk<
+  any,
+  { uuid: string; txn_hash?: string },
+  { dispatch: AppDispatch }
+>("cancel/cancelTransaction", async (data, { dispatch }) => {
+  const response = await api.patch(`/transaction/${data.uuid}/`, {
+    status: "cancelled",
+    ...data
+  })
 
-    dispatch(fetchTransactionsById(uuid))
+  dispatch(fetchTransactionsById(data.uuid, "cancel"))
 
-    return response.data
-  }
-)
+  return response.data
+})
 
 export const cancelModalSlice = createSlice({
   name: "cancel",

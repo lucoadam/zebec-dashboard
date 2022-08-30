@@ -28,6 +28,7 @@ interface TransactionState {
   overallActivity: any
   weeklyActivity: any
   pagination: PaginationInterface
+  initiatedTransactions: string[]
 }
 
 const initialState: TransactionState = {
@@ -57,7 +58,8 @@ const initialState: TransactionState = {
     currentPage: 1,
     limit: 10,
     total: 0
-  }
+  },
+  initiatedTransactions: []
 }
 
 export const fetchOutgoingTransactions: any = createAsyncThunk(
@@ -144,6 +146,17 @@ const transactionsSlice = createSlice({
         ...state.pagination,
         ...action.payload
       }
+    },
+    setInitiatedTransactions: (state, action: PayloadAction<string>) => {
+      state.initiatedTransactions = [
+        ...state.initiatedTransactions,
+        action.payload
+      ]
+    },
+    removeInitiatedTransactions: (state, action: PayloadAction<string>) => {
+      state.initiatedTransactions = state.initiatedTransactions.filter(
+        (initiatedTrx) => initiatedTrx !== action.payload
+      )
     }
   },
   extraReducers: (builder) => {
@@ -242,6 +255,10 @@ const transactionsSlice = createSlice({
   }
 })
 
-export const { setPagination } = transactionsSlice.actions
+export const {
+  setPagination,
+  setInitiatedTransactions,
+  removeInitiatedTransactions
+} = transactionsSlice.actions
 
 export default transactionsSlice.reducer

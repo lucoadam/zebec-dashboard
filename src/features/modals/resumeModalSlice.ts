@@ -23,7 +23,7 @@ export const resumeTransaction = createAsyncThunk(
       status: "ready"
     })
 
-    dispatch(fetchTransactionsById(uuid))
+    dispatch(fetchTransactionsById(uuid, "resume"))
 
     return response.data
   }
