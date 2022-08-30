@@ -3,7 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
-import { initStreamNative, initStreamToken } from "application"
+import {
+  initStreamNative,
+  initStreamToken,
+  initStreamTreasury
+} from "application"
 import * as Icons from "assets/icons"
 import BigNumber from "bignumber.js"
 import {
@@ -20,7 +24,6 @@ import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
-import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
@@ -69,7 +72,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { publicKey } = useWallet()
-  const { stream, token } = useContext(ZebecContext)
+  const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const {
@@ -198,7 +201,27 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         stream && dispatch(initStreamNative(formattedData, stream, resetForm))
       else token && dispatch(initStreamToken(formattedData, token, resetForm))
     } else {
-      dispatch(sendTreasuryContinuousStream(formattedData))
+      const treasuryFormattedData = {
+        ...formattedData,
+        safe_address: "",
+        safe_data_account: ""
+      }
+      if (formattedData.token === "SOL")
+        treasury &&
+          dispatch(
+            initStreamTreasury({
+              data: treasuryFormattedData,
+              treasury: treasury
+            })
+          )
+      else
+        treasuryToken &&
+          dispatch(
+            initStreamTreasury({
+              data: treasuryFormattedData,
+              treasury: treasuryToken
+            })
+          )
     }
   }
 

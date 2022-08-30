@@ -1,5 +1,5 @@
 import { AppDispatch } from "app/store"
-import { ZebecTreasuryProps } from "application/normal/stream.d"
+import { ZebecTreasuryProps } from "./stream.d"
 import { toast } from "features/toasts/toastsSlice"
 import { createTreasury as createNewTreasury } from "features/treasury/treasurySlice"
 

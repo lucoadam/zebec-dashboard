@@ -1,5 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { useAppSelector } from "app/hooks"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { PublicKey } from "@solana/web3.js"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { depositToTreasury } from "application"
 import * as Icons from "assets/icons"
 import {
   Button,
@@ -7,23 +11,30 @@ import {
   TokensDropdown,
   WithdrawDepositInput
 } from "components/shared"
+import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { useClickOutside } from "hooks"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
+import { useContext } from "react"
 import { useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 
 export const Deposit = () => {
   const { t } = useTranslation()
+  const { publicKey } = useWallet()
+  const { treasury } = useContext(ZebecContext)
+  const dispatch = useAppDispatch()
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const zebecBalance =
     useAppSelector((state) => state.zebecBalance.tokens) || []
   const walletBalance =
     useAppSelector((state) => state.walletBalance.tokens) || []
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const dropdownWrapper = useRef(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const [depositFrom, setDepositFrom] = useState("Zebec balance")
+  const [loading, setLoading] = useState(false)
 
   const {
     currentToken,
@@ -36,11 +47,20 @@ export const Deposit = () => {
     register,
     handleSubmit,
     setError,
-    trigger
+    trigger,
+    reset
   } = useWithdrawDepositForm({
     tokens: tokenDetails,
     type: "deposit"
   })
+
+  const depositCallback = () => {
+    reset()
+    setLoading(false)
+    setTimeout(() => {
+      dispatch(fetchTreasuryBalance())
+    })
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
@@ -56,6 +76,23 @@ export const Deposit = () => {
         { shouldFocus: true }
       )
       return
+    } else {
+      setLoading(true)
+      const depositData = {
+        sender: (publicKey as PublicKey).toString(),
+        safe_address: activeTreasury?.treasury_address || "",
+        amount: data.amount,
+        token_mint_address:
+          currentToken.symbol === "SOL" ? "" : currentToken.mint
+      }
+      treasury &&
+        dispatch(
+          depositToTreasury({
+            data: depositData,
+            treasury: treasury,
+            callback: depositCallback
+          })
+        )
     }
     // handle deposit
   }
@@ -153,6 +190,8 @@ export const Deposit = () => {
           title={`${t("treasuryOverview:deposit")}`}
           variant="gradient"
           className="w-full mt-6"
+          loading={loading}
+          disabled={loading}
         />
       </form>
     </div>
