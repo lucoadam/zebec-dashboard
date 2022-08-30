@@ -1,4 +1,4 @@
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -15,12 +15,7 @@ import { showResumeModal } from "features/modals/resumeModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
-import {
-  formatCurrency,
-  toSubstring,
-  formatLamports,
-  formatDateTime
-} from "utils"
+import { formatCurrency, toSubstring, formatDateTime } from "utils"
 import { StatusType, TransactionStatusType } from "../transactions.d"
 
 interface OutgoingTableRowProps {
@@ -40,22 +35,16 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-
+  const { initiatedTransactions } = useAppSelector(
+    (state) => state.transactions
+  )
   // console.log("data", transaction)
 
-  const {
-    amount,
-    start_time,
-    end_time,
-    token_mint_address,
-    latest_transaction_event
-  } = transaction
+  const { amount, start_time, end_time, latest_transaction_event } = transaction
+
   const totalTransactionAmount =
-    amount -
-    formatLamports(latest_transaction_event.paused_amt, token_mint_address)
-  const transactionFeaturesInitiated = localStorage.getItem(
-    "transaction_features_initiated"
-  )
+    amount - Number(latest_transaction_event.paused_amt)
+
   const totalTimeInSec = end_time - start_time
   const streamRatePerSec = amount / totalTimeInSec
 
@@ -97,29 +86,27 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     }
   }, [status, currentTime, transaction])
 
-  console.log(index, status)
-
   useEffect(() => {
-    if (transactionFeaturesInitiated === "true") {
-      setStreamedToken(streamRatePerSec * (currentTime - start_time))
+    if (
+      initiatedTransactions.some(
+        (initiatedTrx) => initiatedTrx === transaction.uuid
+      )
+    ) {
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
+      )
     } else {
       if (status === StatusType.COMPLETED) {
-        setStreamedToken(
-          amount -
-            formatLamports(
-              latest_transaction_event.paused_amt,
-              token_mint_address
-            )
-        )
+        setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
       } else if (status === StatusType.ONGOING) {
         if (counter === 0) {
           setStreamedToken(
             latest_transaction_event.paused_amt
               ? streamRatePerSec * (currentTime - start_time) -
-                  formatLamports(
-                    latest_transaction_event.paused_amt,
-                    token_mint_address
-                  )
+                  Number(latest_transaction_event.paused_amt)
               : streamRatePerSec * (currentTime - start_time)
           )
           setCounter((counter) => counter + 1)
@@ -138,16 +125,13 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         status === StatusType.PAUSED
       ) {
         setStreamedToken(
-          formatLamports(
-            latest_transaction_event.withdrawn +
-              latest_transaction_event.withdraw_limit,
-            token_mint_address
-          )
+          Number(latest_transaction_event.withdrawn) +
+            Number(latest_transaction_event.withdraw_limit)
         )
       }
     }
     // eslint-disable-next-line
-  }, [status, counter, transactionFeaturesInitiated])
+  }, [status, counter, transaction])
 
   const styles = {
     detailsRow: {
@@ -200,26 +184,30 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
               <div className="flex items-center gap-x-3">
-                <Button
-                  title="Resume"
-                  size="small"
-                  startIcon={
-                    <Icons.ResumeIcon className="text-content-contrast" />
-                  }
-                  onClick={() => {
-                    dispatch(showResumeModal(transaction))
-                  }}
-                />
-                <Button
-                  title="Pause"
-                  size="small"
-                  startIcon={
-                    <Icons.PauseIcon className="text-content-contrast" />
-                  }
-                  onClick={() => {
-                    dispatch(showPauseModal(transaction))
-                  }}
-                />
+                {status === StatusType.PAUSED && (
+                  <Button
+                    title="Resume"
+                    size="small"
+                    startIcon={
+                      <Icons.ResumeIcon className="text-content-contrast" />
+                    }
+                    onClick={() => {
+                      dispatch(showResumeModal(transaction))
+                    }}
+                  />
+                )}
+                {status === StatusType.ONGOING && (
+                  <Button
+                    title="Pause"
+                    size="small"
+                    startIcon={
+                      <Icons.PauseIcon className="text-content-contrast" />
+                    }
+                    onClick={() => {
+                      dispatch(showPauseModal(transaction))
+                    }}
+                  />
+                )}
 
                 <Button
                   title="Cancel"
