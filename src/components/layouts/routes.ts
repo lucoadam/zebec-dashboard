@@ -47,36 +47,48 @@ const routesArray: RoutesArrayProps[] = [
 ]
 
 const deviceRoutes: DeviceRoutes[] = [
+  // {
+  //   width: 1024,
+  //   main: [],
+  //   more: [],
+  //   menu: [
+  //     "dashboard",
+  //     "treasury",
+  //     "transactions",
+  //     "yeild-farming",
+  //     "dca",
+  //     "address-book",
+  //     "settings"
+  //   ]
+  // },
+  // {
+  //   width: 1280,
+  //   main: ["dashboard", "treasury", "transactions"],
+  //   more: ["yeild-farming", "dca", "address-book", "settings"],
+  //   menu: []
+  // },
+  // {
+  //   width: 1440,
+  //   main: ["dashboard", "treasury", "transactions", "yeild-farming"],
+  //   more: ["dca", "address-book", "settings"],
+  //   menu: []
+  // },
+  // {
+  //   width: Number.MAX_VALUE,
+  //   main: ["dashboard", "treasury", "transactions", "yeild-farming", "dca"],
+  //   more: ["address-book", "settings"],
+  //   menu: []
+  // }
   {
     width: 1024,
     main: [],
     more: [],
-    menu: [
-      "dashboard",
-      "treasury",
-      "transactions",
-      "yeild-farming",
-      "dca",
-      "address-book",
-      "settings"
-    ]
-  },
-  {
-    width: 1280,
-    main: ["dashboard", "treasury", "transactions"],
-    more: ["yeild-farming", "dca", "address-book", "settings"],
-    menu: []
-  },
-  {
-    width: 1440,
-    main: ["dashboard", "treasury", "transactions", "yeild-farming"],
-    more: ["dca", "address-book", "settings"],
-    menu: []
+    menu: ["dashboard", "transactions", "address-book"]
   },
   {
     width: Number.MAX_VALUE,
-    main: ["dashboard", "treasury", "transactions", "yeild-farming", "dca"],
-    more: ["address-book", "settings"],
+    main: ["dashboard", "transactions", "address-book"],
+    more: [],
     menu: []
   }
 ]

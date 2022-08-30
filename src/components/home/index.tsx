@@ -1,5 +1,5 @@
-import { useAppSelector } from "app/hooks"
-import { FC } from "react"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { FC, useEffect } from "react"
 import Balances from "./Balances"
 import DepositedAssets from "./DepositedAssets"
 import { DepositWithdraw, SupportCardComponents } from "components/shared"
@@ -8,6 +8,10 @@ import RecentTransactions from "./RecentTransactions"
 import * as Icons from "assets/icons"
 import DepositTab from "./DepositTab"
 import WithdrawTab from "./WithdrawTab"
+import {
+  fetchOverallActivity,
+  fetchWeeklyActivity
+} from "features/transactions/transactionsSlice"
 
 const tabs = [
   {
@@ -28,6 +32,14 @@ const HomePage: FC = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.zebecBalance?.tokens) || []
+  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    if (isSigned) {
+      dispatch(fetchWeeklyActivity())
+      dispatch(fetchOverallActivity())
+    }
+  }, [isSigned, dispatch])
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

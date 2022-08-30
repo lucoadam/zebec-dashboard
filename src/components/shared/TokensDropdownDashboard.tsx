@@ -38,7 +38,7 @@ export const TokensDropdwonDashboard: FC<TokensDropdwonDashboardProps> = (
       <CollapseDropdown
         show={show}
         className={twMerge(
-          `border border-outline bg-background-primary z-10 max-w-[124px] `,
+          `border border-outline bg-background-primary z-10 max-w-[140px] `,
           className
         )}
       >
@@ -50,7 +50,7 @@ export const TokensDropdwonDashboard: FC<TokensDropdwonDashboardProps> = (
               value={search}
               onChange={(e) => setSearchData(e.target.value)}
               placeholder={`${t("common:search-token")}`}
-              className="!rounded-b-none !pl-2 !pr-1 !w-[86px] !h-5 !border-0 !ring-0 !text-body !text-content-secondary"
+              className="!rounded-b-none !pl-2 !pr-1 !w-[106px] !h-5 !border-0 !ring-0 !text-body !text-content-secondary"
             />
           </div>
           <div className="flex flex-col divide-y divide-outline max-h-[206px] overflow-y-auto">

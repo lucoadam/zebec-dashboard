@@ -1,6 +1,6 @@
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import { tokenBalances, weeklyBalances } from "fakedata"
+// import { tokenBalances, weeklyBalances } from "fakedata"
 import { useClickOutside, useToggle } from "hooks"
 import { useTranslation } from "next-i18next"
 import Link from "next/link"
@@ -73,9 +73,13 @@ export const TotalWithdrawableAmount: FC = () => {
 
 /* Tokens */
 export const Tokens: FC<{
-  currentToken: keyof typeof tokenBalances
-  setCurrentToken: (each: keyof typeof tokenBalances) => void
+  currentToken: string
+  setCurrentToken: (each: string) => void
 }> = ({ currentToken, setCurrentToken }) => {
+  const tokenBalances = useAppSelector(
+    (state) => state.transactions.overallActivity
+  )
+  const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
   const { t } = useTranslation()
   const [show, toggle, setToggle] = useToggle(false)
   const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
@@ -118,9 +122,7 @@ export const Tokens: FC<{
             tokens={tokenDetails}
             show={show}
             toggleShow={setToggle}
-            setCurrentToken={(token) =>
-              setCurrentToken(token?.symbol as keyof typeof tokenBalances)
-            }
+            setCurrentToken={(token) => setCurrentToken(token?.symbol)}
             className="top-8"
           />
         </div>
@@ -135,10 +137,15 @@ export const Tokens: FC<{
           <div className="text-heading-3 text-content-primary font-semibold">
             <span
               data-tip={displayExponentialNumber(
-                tokenBalances[currentToken]?.incoming
+                (tokenPrices[currentToken] ?? 0) *
+                  (tokenBalances[currentToken]?.incoming ?? 0)
               )}
             >
-              {formatCurrency(tokenBalances[currentToken]?.incoming ?? 0, "$")}
+              {formatCurrency(
+                (tokenPrices[currentToken] ?? 0) *
+                  (tokenBalances[currentToken]?.incoming ?? 0),
+                "$"
+              )}
             </span>
           </div>
         </div>
@@ -153,10 +160,15 @@ export const Tokens: FC<{
           <div className=" text-heading-3 text-content-primary font-semibold">
             <span
               data-tip={displayExponentialNumber(
-                tokenBalances[currentToken]?.outgoing
+                (tokenPrices[currentToken] ?? 0) *
+                  (tokenBalances[currentToken]?.outgoing ?? 0)
               )}
             >
-              {formatCurrency(tokenBalances[currentToken]?.outgoing ?? 0, "$")}
+              {formatCurrency(
+                (tokenPrices[currentToken] ?? 0) *
+                  (tokenBalances[currentToken]?.outgoing ?? 0),
+                "$"
+              )}
             </span>
           </div>
         </div>
@@ -167,9 +179,14 @@ export const Tokens: FC<{
 
 /* Activity This Week */
 export const ActivityThisWeek: FC<{
-  currentToken: keyof typeof weeklyBalances
+  currentToken: string
 }> = ({ currentToken }) => {
   const { t } = useTranslation()
+  const weeklyBalances = useAppSelector(
+    (state) => state.transactions.weeklyActivity
+  )
+  const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
+
   return (
     <div className="activity-this-week p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
@@ -195,17 +212,19 @@ export const ActivityThisWeek: FC<{
                 <div className=" text-subtitle-sm text-content-primary font-medium">
                   <span
                     data-tip={displayExponentialNumber(
-                      weeklyBalances[currentToken]?.incoming
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.incoming ?? 0)
                     )}
                   >
                     {formatCurrency(
-                      weeklyBalances[currentToken]?.incoming ?? 0,
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.incoming ?? 0),
                       "$"
                     )}
                   </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 {currentToken}
+                  {weeklyBalances[currentToken]?.incoming ?? 0} {currentToken}
                 </div>
               </div>
             </td>
@@ -228,17 +247,19 @@ export const ActivityThisWeek: FC<{
                 <div className=" text-subtitle-sm text-content-primary font-medium">
                   <span
                     data-tip={displayExponentialNumber(
-                      weeklyBalances[currentToken]?.outgoing
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.outgoing ?? 0)
                     )}
                   >
                     {formatCurrency(
-                      weeklyBalances[currentToken]?.outgoing ?? 0,
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.outgoing ?? 0),
                       "$"
                     )}
                   </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 {currentToken}
+                  {weeklyBalances[currentToken]?.outgoing ?? 0} {currentToken}
                 </div>
               </div>
             </td>
@@ -261,17 +282,20 @@ export const ActivityThisWeek: FC<{
                 <div className=" text-subtitle-sm text-content-primary font-medium">
                   <span
                     data-tip={displayExponentialNumber(
-                      weeklyBalances[currentToken]?.withdrawn
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.incoming_withdrawn ?? 0)
                     )}
                   >
                     {formatCurrency(
-                      weeklyBalances[currentToken]?.withdrawn ?? 0,
+                      (tokenPrices[currentToken] ?? 0) *
+                        (weeklyBalances[currentToken]?.incoming_withdrawn ?? 0),
                       "$"
                     )}
                   </span>
                 </div>
                 <div className=" text-subtitle-sm text-content-contrast">
-                  140.59 {currentToken}
+                  {weeklyBalances[currentToken]?.incoming_withdrawn ?? 0}{" "}
+                  {currentToken}
                 </div>
               </div>
             </td>
