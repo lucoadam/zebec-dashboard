@@ -22,7 +22,7 @@ export const fetchWalletBalance: any = createAsyncThunk(
 
     return tokens.map((token) => ({
       symbol: token.symbol,
-      balance: tokensBalance[token.mint] || 0
+      balance: tokensBalance[token.symbol] || 0
     }))
   }
 )

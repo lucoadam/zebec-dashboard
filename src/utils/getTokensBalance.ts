@@ -17,13 +17,15 @@ export const getTokensBalanceOfWallet = async (
   )
   const solBalance = await getSolBalanceOfWallet(wallet)
   const tokensBalance = Object.fromEntries([
-    ["solana", solBalance],
+    ["SOL", solBalance],
     ...accounts.value
       .filter((account) =>
         tokensMint.includes(account.account.data.parsed.info.mint)
       )
       .map((account) => [
-        account.account.data.parsed.info.mint,
+        tokens.find(
+          (token) => token.mint === account.account.data.parsed.info.mint
+        )?.symbol,
         account.account.data.parsed.info.tokenAmount.uiAmount
       ])
   ])

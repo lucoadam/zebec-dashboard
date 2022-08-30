@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { depositNative, depositToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
@@ -41,7 +42,10 @@ const DepositTab: FC = () => {
   })
 
   const setMaxAmount = () => {
-    setValue("amount", getBalance(walletTokens, currentToken.symbol))
+    const balance =
+      getBalance(walletTokens, currentToken.symbol) -
+      constants.DEPOSIT_MAX_OFFSET
+    setValue("amount", balance > 0 ? balance : 0)
     trigger("amount")
   }
 

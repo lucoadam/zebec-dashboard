@@ -25,6 +25,8 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  overallActivity: any
+  weeklyActivity: any
   pagination: PaginationInterface
 }
 
@@ -49,6 +51,8 @@ const initialState: TransactionState = {
     previous: "",
     results: []
   },
+  overallActivity: {},
+  weeklyActivity: {},
   pagination: {
     currentPage: 1,
     limit: 10,
@@ -107,9 +111,26 @@ export const fetchRecentTransactions: any = createAsyncThunk(
     const { data: response } = await api.get("/transaction/", {
       params: {
         limit: 3,
-        offset: 0
+        offset: 0,
+        timed_status: "ongoing"
       }
     })
+    return response
+  }
+)
+
+export const fetchOverallActivity: any = createAsyncThunk(
+  "transactions/fetchOverallActivity",
+  async () => {
+    const { data: response } = await api.get("/transaction/total/")
+    return response
+  }
+)
+
+export const fetchWeeklyActivity: any = createAsyncThunk(
+  "transactions/fetchWeeklyActivity",
+  async () => {
+    const { data: response } = await api.get("/transaction/weekly/")
     return response
   }
 )
@@ -187,6 +208,34 @@ const transactionsSlice = createSlice({
       state.recentTransactions = action.payload
     })
     builder.addCase(fetchRecentTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+
+    //overallActivity
+    builder.addCase(fetchOverallActivity.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchOverallActivity.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.overallActivity = action.payload
+    })
+    builder.addCase(fetchOverallActivity.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+
+    //weeklyActivity
+    builder.addCase(fetchWeeklyActivity.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchWeeklyActivity.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.weeklyActivity = action.payload
+    })
+    builder.addCase(fetchWeeklyActivity.rejected, (state, action) => {
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
