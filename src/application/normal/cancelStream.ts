@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AppDispatch } from "app/store"
 import {
   cancelTransaction,
   toggleCancelModal
@@ -14,6 +15,11 @@ export const cancelStreamNative: any =
   ) =>
   async (dispatch: any) => {
     try {
+      dispatch(
+        cancelTransaction({
+          uuid
+        })
+      )
       const response = await stream.cancel(data)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
@@ -22,7 +28,11 @@ export const cancelStreamNative: any =
             transactionHash: response?.data?.transactionHash
           })
         )
-        dispatch(cancelTransaction(uuid))
+        const backendData = {
+          uuid,
+          txn_hash: response?.data?.transactionHash
+        }
+        dispatch(cancelTransaction(backendData))
       } else {
         dispatch(
           toast.error({
@@ -41,14 +51,19 @@ export const cancelStreamNative: any =
     }
   }
 
-export const cancelStreamToken: any =
+export const cancelStreamToken =
   (
     data: MPauseResumeWithdrawCancel,
     uuid: string,
     token: ZebecNativeStreamProps
   ) =>
-  async (dispatch: any) => {
+  async (dispatch: AppDispatch) => {
     try {
+      dispatch(
+        cancelTransaction({
+          uuid
+        })
+      )
       const response = await token.cancel(data)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
@@ -57,7 +72,11 @@ export const cancelStreamToken: any =
             transactionHash: response?.data?.transactionHash
           })
         )
-        dispatch(cancelTransaction(uuid))
+        const backendData = {
+          uuid,
+          txn_hash: response?.data?.transactionHash
+        }
+        dispatch(cancelTransaction(backendData))
       } else {
         dispatch(
           toast.error({

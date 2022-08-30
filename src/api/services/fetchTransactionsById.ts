@@ -1,10 +1,20 @@
 import { constants } from "constants/constants"
-import { fetchOutgoingTransactionsById } from "features/transactions/transactionsSlice"
+import {
+  fetchOutgoingTransactionsById,
+  removeInitiatedTransactions,
+  setInitiatedTransactions
+} from "features/transactions/transactionsSlice"
 export const fetchTransactionsById =
-  (uuid: string) => async (dispatch: any) => {
+  (uuid: string, type: "pause" | "resume" | "cancel") =>
+  async (dispatch: any) => {
     localStorage.setItem("transaction_features_initiated", "true")
 
     await dispatch(fetchOutgoingTransactionsById(uuid))
+
+    //Initiated transactions
+    if (type === "resume") dispatch(removeInitiatedTransactions(uuid))
+    else dispatch(setInitiatedTransactions(uuid))
+
     setTimeout(async () => {
       await dispatch(fetchOutgoingTransactionsById(uuid))
       localStorage.setItem("transaction_features_initiated", "false")

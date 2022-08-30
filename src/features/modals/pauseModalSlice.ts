@@ -22,7 +22,7 @@ export const pauseTransaction = createAsyncThunk(
       status: "paused"
     })
 
-    dispatch(fetchTransactionsById(uuid))
+    dispatch(fetchTransactionsById(uuid, "pause"))
 
     return response.data
   }
