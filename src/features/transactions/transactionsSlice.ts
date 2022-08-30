@@ -25,6 +25,24 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  completedTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
+  ongoingTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
+  scheduledTransactions: {
+    count: number
+    next: string
+    previous: string
+    results: any[]
+  }
   overallActivity: any
   weeklyActivity: any
   pagination: PaginationInterface
@@ -46,6 +64,24 @@ const initialState: TransactionState = {
     results: []
   },
   recentTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  completedTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  ongoingTransactions: {
+    count: 0,
+    next: "",
+    previous: "",
+    results: []
+  },
+  scheduledTransactions: {
     count: 0,
     next: "",
     previous: "",
@@ -111,8 +147,61 @@ export const fetchRecentTransactions: any = createAsyncThunk(
     const { data: response } = await api.get("/transaction/", {
       params: {
         limit: 3,
-        offset: 0,
+        offset: 0
+      }
+    })
+    return response
+  }
+)
+
+export const fetchCompletedTransactions: any = createAsyncThunk(
+  "transactions/fetchCompletedTransactions",
+  async (kind: "incoming" | "outgoing", { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.pagination.limit,
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit,
+        kind,
+        timed_status: "completed"
+      }
+    })
+    return response
+  }
+)
+
+export const fetchOngoingTransactions: any = createAsyncThunk(
+  "transactions/fetchOngoingTransactions",
+  async (kind: "incoming" | "outgoing", { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.pagination.limit,
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit,
+        kind,
         timed_status: "ongoing"
+      }
+    })
+    return response
+  }
+)
+
+export const fetchScheduledTransactions: any = createAsyncThunk(
+  "transactions/fetchScheduledTransactions",
+  async (kind: "incoming" | "outgoing", { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.pagination.limit,
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit,
+        kind,
+        timed_status: "scheduled"
       }
     })
     return response
@@ -144,6 +233,11 @@ const transactionsSlice = createSlice({
         ...state.pagination,
         ...action.payload
       }
+    },
+    resetTimedStatusTransactions: (state) => {
+      state.completedTransactions = initialState.completedTransactions
+      state.ongoingTransactions = initialState.ongoingTransactions
+      state.scheduledTransactions = initialState.scheduledTransactions
     }
   },
   extraReducers: (builder) => {
@@ -212,6 +306,51 @@ const transactionsSlice = createSlice({
       state.error = action?.error?.message ?? "Something went wrong"
     })
 
+    //completedTransactions
+    builder.addCase(fetchCompletedTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchCompletedTransactions.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.completedTransactions = action.payload
+      state.pagination.total = action.payload.count
+    })
+    builder.addCase(fetchCompletedTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+
+    //ongoingTransactions
+    builder.addCase(fetchOngoingTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchOngoingTransactions.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.ongoingTransactions = action.payload
+      state.pagination.total = action.payload.count
+    })
+    builder.addCase(fetchOngoingTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+
+    //scheduledTransactions
+    builder.addCase(fetchScheduledTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchScheduledTransactions.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.scheduledTransactions = action.payload
+      state.pagination.total = action.payload.count
+    })
+    builder.addCase(fetchScheduledTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+
     //overallActivity
     builder.addCase(fetchOverallActivity.pending, (state) => {
       state.loading = true
@@ -242,6 +381,7 @@ const transactionsSlice = createSlice({
   }
 })
 
-export const { setPagination } = transactionsSlice.actions
+export const { setPagination, resetTimedStatusTransactions } =
+  transactionsSlice.actions
 
 export default transactionsSlice.reducer

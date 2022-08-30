@@ -3,8 +3,8 @@ import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
 import ResumeModal from "components/modals/ResumeModal"
 import { Tab } from "components/shared"
-import Incoming from "components/transactions/Incoming"
-import Outgoing from "components/transactions/Outgoing"
+import Incoming from "components/transactions/incoming/Incoming"
+import Outgoing from "components/transactions/outgoing/Outgoing"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
@@ -22,7 +22,7 @@ const transactionTabs = [
   {
     title: "Outgoing",
     icon: <Icons.ArrowUpRightIcon />,
-    count: 2,
+    count: 0,
     Component: <Outgoing />
   }
 ]
