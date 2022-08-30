@@ -34,7 +34,7 @@
         "select-another-nft": "Select Another NFT"
     },
     "balances": {
-        "deposited-balance": "DEPOSITED BALANCE",
+        "deposited-balance": "ZEBEC BALANCE",
         "total-withdrawable-amount": "TOTAL WITHDRAWABLE BALANCE",
         "available-deposited-balance": "AVAILABLE DEPOSITED BALANCE",
         "token": "Token",
