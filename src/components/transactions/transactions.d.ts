@@ -1,6 +1,6 @@
 export enum StatusType {
   SCHEDULED = "scheduled",
-  ONGOING = "outgoing",
+  ONGOING = "ongoing",
   CANCELLED = "cancelled",
   PAUSED = "paused",
   COMPLETED = "completed"

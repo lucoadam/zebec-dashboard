@@ -1,15 +1,12 @@
 import * as Icons from "assets/icons"
 import React, { FC, useEffect, useState } from "react"
-
-export type TransactionStatus =
-  | "completed"
-  | "outgoing"
-  | "scheduled"
-  | "cancelled"
-  | "paused"
+import {
+  StatusType,
+  TransactionStatusType
+} from "components/transactions/transactions.d"
 
 interface CircularProgressProps {
-  status: TransactionStatus
+  status: TransactionStatusType
   percentage?: number
   animation?: "clockwise" | "anti-clockwise"
   transitionDuration?: number
@@ -20,7 +17,7 @@ interface CircularProgressProps {
   children?: React.ReactNode
 }
 
-const statusIconMapping = {
+const statusIconMapping: any = {
   completed: <Icons.CheckIcon className="text-success text-xl" />,
   scheduled: <Icons.CalenderIcon className="text-content-secondary text-xl" />,
   cancelled: <Icons.CrossIcon className="text-error text-xl" />,
@@ -28,26 +25,27 @@ const statusIconMapping = {
 }
 
 const getIconOrPercentageBasedOnStatus = (
-  status: TransactionStatus,
+  status: TransactionStatusType,
   percentage: number
 ) => {
-  if (status === "outgoing") return `${parseInt(percentage.toString())}%`
+  if (status === StatusType.ONGOING)
+    return `${parseInt(percentage.toString())}%`
   return statusIconMapping[status]
 }
 
 const getBackgroundByPercentage = (
   percentage: number,
-  status: TransactionStatus
+  status: TransactionStatusType
 ) => {
   if (percentage === 100) {
     return "text-success"
   }
   switch (status) {
-    case "cancelled":
+    case StatusType.CANCELLED:
       return "text-error"
-    case "paused":
+    case StatusType.PAUSED:
       return "text-content-contrast"
-    case "outgoing":
+    case StatusType.ONGOING:
       return "text-primary"
   }
   return ""
