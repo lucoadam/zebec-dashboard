@@ -1,15 +1,15 @@
 import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Button, CollapseDropdown, Modal } from "components/shared"
+import { Button, Modal } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import {
   AddressBook,
   deleteAddressBook
 } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import { FC, Fragment, useRef, useState } from "react"
+import { useRouter } from "next/router"
+import { FC, Fragment, useState } from "react"
 import { toSubstring } from "utils"
 
 interface IndividualAddresesTableRow {
@@ -23,19 +23,20 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
 }) => {
   const { t } = useTranslation("addressBook")
   const dispatch = useAppDispatch()
-  const dropdownWrapper = useRef(null)
-  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const router = useRouter()
+  // const dropdownWrapper = useRef(null)
+  // const [toggleDropdown, setToggleDropdown] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   function toggleModal() {
     setIsOpen(!isOpen)
   }
 
-  useClickOutside(dropdownWrapper, {
-    onClickOutside: () => {
-      setToggleDropdown(false)
-    }
-  })
+  // useClickOutside(dropdownWrapper, {
+  //   onClickOutside: () => {
+  //     setToggleDropdown(false)
+  //   }
+  // })
 
   return (
     <>
@@ -62,7 +63,35 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
           </td>
           <td className="px-6 pt-4.5 pb-6 ml-auto my-auto">
             <div className="flex items-center gap-x-5 justify-end">
-              <div ref={dropdownWrapper} className="relative">
+              <Button
+                title={`${t("send")}`}
+                size="small"
+                startIcon={
+                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                }
+                onClick={() => {
+                  router.push(`/send?address=${addressBook.address}`)
+                }}
+              />
+              <Button
+                title={`${t("Edit")}`}
+                size="small"
+                startIcon={<Icons.EditIcon className="text-content-contrast" />}
+                onClick={() => {
+                  onEdit(addressBook)
+                }}
+              />
+              <Button
+                title={`${t("delete")}`}
+                size="small"
+                startIcon={
+                  <Icons.CrossIcon className="text-content-contrast" />
+                }
+                onClick={() => {
+                  setIsOpen(true)
+                }}
+              />
+              {/* <div ref={dropdownWrapper} className="relative">
                 <Button
                   title={`${t("action")}`}
                   size="small"
@@ -110,7 +139,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     </div>
                   </div>
                 </CollapseDropdown>
-              </div>
+              </div> */}
               <Modal
                 show={isOpen}
                 toggleModal={toggleModal}

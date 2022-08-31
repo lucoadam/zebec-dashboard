@@ -195,7 +195,7 @@ export default function IndividualAddresses() {
                 <EmptyDataState
                   message={t("addressBook:empty-address-book")}
                   padding={80}
-                  className="h-[386px] w-full mt-12 rounded !px-10 text-center"
+                  className="h-[386px] w-full mt-12 rounded !px-10 text-center !py-0 justify-center"
                 />
               )
             )}

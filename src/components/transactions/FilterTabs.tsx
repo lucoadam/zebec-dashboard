@@ -1,7 +1,5 @@
-import { useAppDispatch } from "app/hooks"
-import { Button, Tab } from "components/shared"
-import { toggleExportModal } from "features/export-report/exportSlice"
-import ExportModal from "components/modals/export-report/ExportModal"
+import { Tab } from "components/shared"
+// import ExportModal from "components/modals/export-report/ExportModal"
 
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
@@ -21,7 +19,6 @@ export interface FilterTabProps {
 
 const FilterTabs: FC<FilterTabProps> = ({ tabs, activeTab, setActiveTab }) => {
   const { t } = useTranslation("transactions")
-  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-wrap justify-between items-center gap-x-6 gap-y-4 pb-10">
@@ -43,13 +40,13 @@ const FilterTabs: FC<FilterTabProps> = ({ tabs, activeTab, setActiveTab }) => {
       </div>
       {/* Export */}
 
-      <Button
+      {/* <Button
         title={`${t("export-report")}`}
         onClick={() => {
           dispatch(toggleExportModal())
         }}
-      />
-      <ExportModal />
+      /> */}
+      {/* <ExportModal /> */}
     </div>
   )
 }

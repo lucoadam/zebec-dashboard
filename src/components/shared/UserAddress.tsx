@@ -3,17 +3,16 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toSubstring } from "utils"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
 import { Button } from "./Button"
-import { CollapseDropdown } from "./CollapseDropdown"
 import CopyButton from "./CopyButton"
 import { IconButton } from "./IconButton"
 import { InputField } from "./InputField"
+import { Modal } from "./Modal"
 
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,7 +20,6 @@ export const UserAddress: FC<{
 }> = ({ wallet }) => {
   const { addressBooks } = useAppSelector((state) => state.address)
   const isInAddressBook = addressBooks.some((item) => item.address === wallet)
-  const AddressDropdownWrapperRef = useRef(null)
 
   const { t } = useTranslation()
 
@@ -72,15 +70,8 @@ export const UserAddress: FC<{
     setToggleAddressDropdown(false)
   }
 
-  //handle clicking outside
-  useClickOutside(AddressDropdownWrapperRef, {
-    onClickOutside: handleClose
-  })
   return (
-    <div
-      className="flex gap-x-1 items-center text-body text-content-primary"
-      ref={AddressDropdownWrapperRef}
-    >
+    <div className="flex gap-x-1 items-center text-body text-content-primary">
       <span data-tip={wallet}>
         {isInAddressBook
           ? toSubstring(
@@ -97,8 +88,15 @@ export const UserAddress: FC<{
           onClick={() => setToggleAddressDropdown(!toggleAddressDropdown)}
         />
       )}
-      <div className="relative ">
-        <CollapseDropdown show={toggleAddressDropdown} className="w-[306px]">
+
+      <div className="relative">
+        <Modal
+          toggleModal={() => setToggleAddressDropdown(!toggleAddressDropdown)}
+          show={toggleAddressDropdown}
+          className="w-[306px]"
+          hasCloseIcon={true}
+          closeOnOutsideClick={true}
+        >
           <div className="p-5 max-w-96">
             <div className="text-content-secondary text-subtitle font-semibold">
               {t("addressBook:add-an-address-name")}
@@ -140,7 +138,7 @@ export const UserAddress: FC<{
               </div>
             </form>
           </div>
-        </CollapseDropdown>
+        </Modal>
       </div>
       <CopyButton className="min-w-7" content={wallet} />
     </div>
