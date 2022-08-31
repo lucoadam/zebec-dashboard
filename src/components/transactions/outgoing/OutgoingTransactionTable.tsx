@@ -72,7 +72,7 @@ export const OutgoingTransactionTable: FC<TransactionTableProps> = ({
             transactions.results.map((transaction, index) => {
               return (
                 <OutgoingTableRow
-                  key={index}
+                  key={transaction.id}
                   index={index}
                   transaction={transaction}
                   activeDetailsRow={activeDetailsRow}
