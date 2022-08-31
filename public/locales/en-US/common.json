@@ -123,6 +123,7 @@
     },
     "page-not-found-message": "Oops, The page you are looking for couldn’t be found! Please enjoy this cute cat illustration.",
     "search-token": "Search token",
+    "eg-sol": "Eg. SOL",
     "no-tokens-found": "No token found.",
     "no-receiver-found": "No receiver wallet found with given query."
 }

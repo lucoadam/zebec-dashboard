@@ -2,8 +2,8 @@ import { useAppSelector } from "app/hooks"
 import {
   ActivityThisWeek,
   DepositedBalance,
-  Tokens,
-  TotalWithdrawableAmount
+  Tokens
+  // TotalWithdrawableAmount
 } from "components/shared"
 // import { tokenBalances, weeklyBalances } from "fakedata"
 import { FC, useState } from "react"
@@ -22,7 +22,7 @@ const Balances: FC = () => {
         )}
       />
       {/* Total Withdrawable Amount */}
-      <TotalWithdrawableAmount />
+      {/* <TotalWithdrawableAmount /> */}
       {/* Overall Activity */}
       <Tokens currentToken={currentToken} setCurrentToken={setCurrentToken} />
       {/* Activity This Week */}

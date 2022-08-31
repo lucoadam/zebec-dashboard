@@ -49,7 +49,7 @@ export const TokensDropdwonDashboard: FC<TokensDropdwonDashboardProps> = (
               type="text"
               value={search}
               onChange={(e) => setSearchData(e.target.value)}
-              placeholder={`${t("common:search-token")}`}
+              placeholder={`${t("common:eg-sol")}`}
               className="!rounded-b-none !pl-2 !pr-1 !w-[106px] !h-5 !border-0 !ring-0 !text-body !text-content-secondary"
             />
           </div>
@@ -66,7 +66,7 @@ export const TokensDropdwonDashboard: FC<TokensDropdwonDashboardProps> = (
                     }
                   }}
                   aria-disabled
-                  className="px-3.5 py-1 flex items-center gap-x-2.5 transition hover:bg-background-tertiary"
+                  className="px-3.5 py-1 flex items-center gap-x-2.5 transition hover:bg-background-tertiary cursor-pointer"
                 >
                   <div className="grid place-content-center w-7 h-7 rounded-full bg-background-primary">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
