@@ -25,6 +25,7 @@
     "axios": "^0.27.2",
     "bignumber.js": "^9.0.2",
     "borsh": "^0.7.0",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",

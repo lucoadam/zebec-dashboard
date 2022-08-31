@@ -8,12 +8,14 @@ import { changeSignState } from "features/modals/signModalSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
+import jwt_decode from "jwt-decode"
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    phantom: any
-  }
+interface DecodedTokenProps {
+  token_type: string
+  exp: number
+  iat: number
+  jti: string
+  wallet_address: string
 }
 
 const WalletNotConnectedModal: NextPage = () => {
@@ -31,13 +33,20 @@ const WalletNotConnectedModal: NextPage = () => {
     }
   }
 
-  // const loginCallback = useCallback(() => handleLogin(), [])
-
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
       if (!token) handleLogin()
-      else dispatch(changeSignState(!!token))
+      else {
+        const decodedToken: DecodedTokenProps = jwt_decode(token)
+        if (
+          decodedToken.wallet_address === walletObject.publicKey?.toString()
+        ) {
+          dispatch(changeSignState(!!token))
+        } else {
+          handleLogin()
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletObject.connected, isSigned])
@@ -53,28 +62,6 @@ const WalletNotConnectedModal: NextPage = () => {
       setIsInitialized(true)
     }, 800)
   }, [])
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const provider = window.phantom?.solana
-
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //     provider.on("accountChanged", (publicKey: any) => {
-  //       if (publicKey) {
-  //         // Set new public key and continue as usual
-  //         console.log(`Switched to account ${publicKey.toBase58()}`)
-  //         walletObject.disconnect()
-  //         TokenService.removeTokens()
-  //       } else {
-  //         // Attempt to reconnect to Phantom
-  //         // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  //         provider.connect().catch((error: any) => {
-  //           // Handle connection failure
-  //         })
-  //       }
-  //     })
-  //   }
-  // }, [])
 
   return (
     <>
