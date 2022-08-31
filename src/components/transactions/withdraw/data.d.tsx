@@ -10,6 +10,10 @@ export interface withdrawProps {
   withdrawAmount: number
   setWithdrawAmount: (withdrawAmount: number) => void
   fees: number
+  escrowData: any
+  transaction: any
+  withdrawLoading: boolean
+  setWithdrawLoadingFunc: (arg1: boolean) => void
 }
 
 export const WithdrawStepsList: withdrawStep[] = [

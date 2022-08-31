@@ -5,14 +5,19 @@ import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 
-const Withdrawing: FC<withdrawProps> = ({ setCurrentStep, withdrawAmount }) => {
+const Withdrawing: FC<withdrawProps> = ({
+  setCurrentStep,
+  withdrawAmount,
+  withdrawLoading
+}) => {
   const { t } = useTranslation("transactions")
   useEffect(() => {
-    setTimeout(() => {
+    console.log(withdrawLoading)
+    if (withdrawLoading === false) {
       setCurrentStep(-1)
-    }, 1000)
+    }
     // eslint-disable-next-line
-  }, [])
+  }, [withdrawLoading])
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="w-16">
