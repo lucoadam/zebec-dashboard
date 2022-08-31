@@ -96,6 +96,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     } else {
       setStatus(transaction.status)
     }
+    // eslint-disable-next-line
   }, [status, currentTime, transaction])
 
   useEffect(() => {
