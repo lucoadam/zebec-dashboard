@@ -38,9 +38,21 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { initiatedTransactions } = useAppSelector(
     (state) => state.transactions
   )
-  // console.log("data", transaction)
 
-  const { amount, start_time, end_time, latest_transaction_event } = transaction
+  const {
+    name,
+    remarks,
+    amount,
+    token,
+    sender,
+    receiver,
+    start_time,
+    end_time,
+    transaction_type,
+    transaction_hash,
+    file,
+    latest_transaction_event
+  } = transaction
 
   const totalTransactionAmount =
     amount - Number(latest_transaction_event.paused_amt)
@@ -161,25 +173,24 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   <span className="text-subtitle text-content-primary font-semibold">
                     +{formatCurrency(streamedToken, "", 4)}
                   </span>
-                  &nbsp;{transaction.token}
+                  &nbsp;{token}
                 </div>
                 <div className="text-caption">
                   {formatCurrency(streamedToken, "", 4)} of{" "}
-                  {formatCurrency(transaction.amount, "", 4)}{" "}
-                  {transaction.token}
+                  {formatCurrency(totalTransactionAmount, "", 4)} {token}
                 </div>
               </div>
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
             <div className="text-caption text-content-primary">
-              {formatDateTime(transaction.start_time)}
+              {formatDateTime(start_time)}
               <br />
-              to {formatDateTime(transaction.end_time)}
+              to {formatDateTime(end_time)}
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet={transaction.receiver} />
+            <UserAddress wallet={receiver} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
@@ -241,11 +252,11 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    {transaction.name}
+                    {name}
                   </div>
-                  {transaction.remarks && (
+                  {remarks && (
                     <div className="text-body text-content-secondary">
-                      {transaction.remarks ?? "-"}
+                      {remarks ?? "-"}
                     </div>
                   )}
                 </div>
@@ -266,10 +277,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div data-tip={transaction.sender} className="">
-                          {toSubstring(transaction.sender, 5, true)}
+                        <div data-tip={sender} className="">
+                          {toSubstring(sender, 5, true)}
                         </div>
-                        <CopyButton content={transaction.sender} />
+                        <CopyButton content={sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -286,10 +297,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="" data-tip={transaction.receiver}>
-                          {toSubstring(transaction.receiver, 5, true)}
+                        <div className="" data-tip={receiver}>
+                          {toSubstring(receiver, 5, true)}
                         </div>
-                        <CopyButton content={transaction.receiver} />
+                        <CopyButton content={receiver} />
                       </div>
                     </div>
                     {/* Start Date */}
@@ -298,7 +309,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.start-date")}
                       </div>
                       <div className="text-content-primary">
-                        {formatDateTime(transaction.start_time)}
+                        {formatDateTime(start_time)}
                       </div>
                     </div>
                     {/* End Date */}
@@ -307,7 +318,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.end-date")}
                       </div>
                       <div className="text-content-primary">
-                        {formatDateTime(transaction.end_time)}
+                        {formatDateTime(end_time)}
                       </div>
                     </div>
                     {/* Stream Type */}
@@ -316,12 +327,12 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        {transaction.type === "instant" ? (
+                        {transaction_type === "instant" ? (
                           <Icons.ThunderIcon className="w-6 h-6" />
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span className="capitalize">{transaction.type}</span>
+                        <span className="capitalize">{transaction_type}</span>
                       </div>
                     </div>
                   </div>
@@ -333,8 +344,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(transaction.amount, "", 4)}{" "}
-                        {transaction.token}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -343,10 +353,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(streamedToken, "", 4)}{" "}
-                        {transaction.token} (
+                        {formatCurrency(streamedToken, "", 4)} {token} (
                         {formatCurrency(
-                          (streamedToken * 100) / transaction.amount,
+                          (streamedToken * 100) / totalTransactionAmount,
                           "",
                           2
                         )}
@@ -370,7 +379,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction.transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -385,7 +394,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                     </div>
                     {/* Reference */}
-                    {transaction.file && (
+                    {file && (
                       <div className="flex items-center gap-x-8">
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
