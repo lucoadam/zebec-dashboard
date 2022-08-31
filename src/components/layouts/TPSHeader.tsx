@@ -6,8 +6,9 @@ import { CollapseDropdown } from "../shared"
 import * as Icons from "../../assets/icons"
 //hooks
 import { useClickOutside } from "../../hooks"
-import { getRecentTPS } from "utils"
+import { formatCurrency, getRecentTPS } from "utils"
 import { constants } from "constants/constants"
+import { useAppSelector } from "app/hooks"
 
 const TPSHeader = () => {
   const router = useRouter()
@@ -17,6 +18,7 @@ const TPSHeader = () => {
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
   const [recentTPS, setRecentTPS] = useState<number>(0)
 
+  const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
   useClickOutside(languageDropdownWrapperRef, {
     onClickOutside: () => setToggleDropdown(false)
   })
@@ -36,6 +38,9 @@ const TPSHeader = () => {
       <div className="px-6  bg-background-secondary">
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
           <div className="flex">
+            <span className="mr-4">
+              SOL/USD {formatCurrency(tokensPrice["SOL"], "$")}
+            </span>
             {t("tps-header.network")}:&nbsp;
             <span
               className={`flex items-center ${
@@ -52,7 +57,11 @@ const TPSHeader = () => {
               />
             </span>
           </div>
-          <div className="ml-2 hidden lg:block">
+          <div
+            className={`ml-2 ${
+              recentTPS >= constants.AVERAGE_TPS ? "hidden" : "hidden lg:block"
+            }`}
+          >
             {t("tps-header.description")}
           </div>
 
