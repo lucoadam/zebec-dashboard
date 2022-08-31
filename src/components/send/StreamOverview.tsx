@@ -2,7 +2,7 @@ import { SupportCardComponents } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { FC } from "react"
 import { twMerge } from "tailwind-merge"
-import { toSubstring } from "utils"
+import { formatDateTime, toSubstring } from "utils"
 import { StreamOverviewProps } from "./StreamOverview.d"
 
 export const StreamOverview: FC<StreamOverviewProps> = ({
@@ -13,7 +13,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
   return (
     <div
       className={twMerge(
-        "p-10 flex flex-col justify-center text-content-primary w-[420px]",
+        "p-10 flex flex-col justify-center text-content-primary w-[432px]",
         className ?? ""
       )}
     >
@@ -24,7 +24,10 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
         <p className="text-sm text-content-secondary">
           {t("send:stream-start-details")}{" "}
           <span className="text-content-primary">
-            {formValues?.startDate || "..."} {formValues?.startTime || "..."}
+            {formatDateTime(
+              `${formValues?.startDate} ${formValues?.startTime}`
+            )}
+            .
           </span>
         </p>
         <p className="text-sm mt-2 text-content-secondary">
@@ -40,6 +43,11 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
             ) : (
               <span>receiver wallet</span>
             )}
+            {formValues?.noOfTimes ||
+            formValues?.tokenAmount ||
+            formValues?.interval
+              ? ","
+              : "."}
           </span>
         </p>
         {(formValues?.noOfTimes ||
@@ -57,7 +65,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
         <p className="mt-2 text-sm text-content-secondary">
           {t("send:stream-end-details")}{" "}
           <span className="text-content-primary">
-            {formValues?.endDate || "..."} {formValues?.endTime || "..."}
+            {formatDateTime(`${formValues?.endDate} ${formValues?.endTime}`)}.
           </span>
         </p>
       </div>
