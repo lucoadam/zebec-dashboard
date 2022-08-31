@@ -17,6 +17,7 @@ interface CircularProgressProps {
   children?: React.ReactNode
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const statusIconMapping: any = {
   completed: <Icons.CheckIcon className="text-success text-xl" />,
   scheduled: <Icons.CalenderIcon className="text-content-secondary text-xl" />,

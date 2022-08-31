@@ -77,6 +77,7 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
     } else {
       setStatus(transaction.status)
     }
+    // eslint-disable-next-line
   }, [status, currentTime, transaction])
 
   useEffect(() => {

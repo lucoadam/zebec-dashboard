@@ -15,6 +15,7 @@ import Image from "next/image"
 import { FC, Fragment, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import { toSubstring } from "utils"
+import { StatusType } from "components/transactions/transactions.d"
 
 interface ScheduledTableRowProps {
   index: number
@@ -54,7 +55,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress percentage={0} status="scheduled" />
+              <CircularProgress percentage={0} status={StatusType.SCHEDULED} />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
