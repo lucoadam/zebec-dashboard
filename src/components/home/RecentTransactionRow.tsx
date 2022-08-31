@@ -3,8 +3,13 @@ import { FC, useEffect, useState } from "react"
 import { useWallet } from "@solana/wallet-adapter-react"
 import * as Icons from "assets/icons"
 
-import { CircularProgress, TransactionStatus } from "components/shared"
+import { CircularProgress } from "components/shared"
+import {
+  StatusType,
+  TransactionStatusType
+} from "components/transactions/transactions.d"
 import { formatCurrency } from "utils"
+import { useAppSelector } from "app/hooks"
 
 interface RecentTransactionRowProps {
   transaction: any
@@ -15,66 +20,118 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
 }) => {
   const walletObject = useWallet()
 
+  const { initiatedTransactions } = useAppSelector(
+    (state) => state.transactions
+  )
+
+  const {
+    name,
+    remarks,
+    amount,
+    token,
+    sender,
+    start_time,
+    end_time,
+    latest_transaction_event
+  } = transaction
+
+  const totalTransactionAmount =
+    amount - Number(latest_transaction_event.paused_amt)
+
   const totalTimeInSec = transaction.end_time - transaction.start_time
   const streamRatePerSec = transaction.amount / totalTimeInSec
 
   const [currentTime, setCurrentTime] = useState<number>(Date.now() / 1000)
   const [streamedToken, setStreamedToken] = useState<number>(0)
-  const [status, setStatus] = useState<TransactionStatus>("scheduled")
+  const [status, setStatus] = useState<TransactionStatusType>(
+    transaction.status
+  )
   const [counter, setCounter] = useState<number>(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
     }, 1000)
-    if (status === "completed") {
+    if (
+      status === StatusType.COMPLETED ||
+      status === StatusType.PAUSED ||
+      status === StatusType.CANCELLED
+    ) {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
   }, [currentTime, status])
 
   useEffect(() => {
-    if (currentTime < transaction.start_time) {
-      setStatus("scheduled")
-    } else if (
-      currentTime >= transaction.start_time &&
-      currentTime < transaction.end_time
+    if (
+      transaction.status !== StatusType.CANCELLED &&
+      transaction.status !== StatusType.PAUSED
     ) {
-      setStatus("outgoing")
-    } else if (currentTime >= transaction.end_time) {
-      setStatus("completed")
+      if (currentTime < start_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else if (currentTime >= start_time && currentTime < end_time) {
+        setStatus(StatusType.ONGOING)
+      } else if (currentTime >= end_time) {
+        setStatus(StatusType.COMPLETED)
+      }
+    } else {
+      setStatus(transaction.status)
     }
-  }, [status, currentTime, transaction.end_time, transaction.start_time])
+  }, [status, currentTime, transaction])
 
   useEffect(() => {
-    if (status === "completed") {
-      setStreamedToken(transaction.amount)
-    } else if (status === "outgoing") {
-      if (counter === 0) {
-        setStreamedToken(
-          streamRatePerSec * (currentTime - transaction.start_time)
-        )
-        setCounter((counter) => counter + 1)
-      } else {
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > transaction.amount
-              ? transaction.amount
-              : prevStreamedToken + streamRatePerSec
+    if (
+      initiatedTransactions.some(
+        (initiatedTrx) => initiatedTrx === transaction.uuid
+      )
+    ) {
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
+      )
+    } else {
+      if (status === StatusType.COMPLETED) {
+        setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
+      } else if (status === StatusType.ONGOING) {
+        if (counter === 0) {
+          setStreamedToken(
+            latest_transaction_event.paused_amt
+              ? streamRatePerSec * (currentTime - start_time) -
+                  Number(latest_transaction_event.paused_amt)
+              : streamRatePerSec * (currentTime - start_time)
           )
-        }, 1000)
-        return () => clearInterval(interval)
+          setCounter((counter) => counter + 1)
+        } else {
+          const interval = setInterval(() => {
+            setStreamedToken((prevStreamedToken: number) =>
+              prevStreamedToken + streamRatePerSec > amount
+                ? amount
+                : prevStreamedToken + streamRatePerSec
+            )
+          }, 1000)
+          return () => clearInterval(interval)
+        }
+      } else if (
+        status === StatusType.CANCELLED ||
+        status === StatusType.PAUSED
+      ) {
+        setStreamedToken(
+          Number(latest_transaction_event.withdrawn) +
+            Number(latest_transaction_event.withdraw_limit)
+        )
       }
     }
     // eslint-disable-next-line
   }, [status, counter])
 
   return (
-    <tr key={transaction.id}>
+    <tr>
       <td className=" py-5 min-w-60">
         <div className="flex items-center gap-x-2.5">
           <div className=" w-6 h-6 grid place-content-center bg-outline-icon rounded">
-            {walletObject?.publicKey?.toString() === transaction?.sender ? (
+            {walletObject?.publicKey?.toString() === sender ? (
               <Icons.OutgoingIcon className="w-5 h-5" />
             ) : (
               <Icons.IncomingIcon className="w-5 h-5" />
@@ -82,9 +139,9 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
           </div>
           <div className="flex flex-col gap-y-1 text-content-contrast">
             <div className="text-subtitle text-content-primary font-semibold capitalize">
-              {transaction?.name}
+              {name}
             </div>
-            <div className="text-caption">{transaction?.remarks}</div>
+            <div className="text-caption">{remarks}</div>
           </div>
         </div>
       </td>
@@ -93,7 +150,7 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
           <div className=" w-14 h-14">
             <CircularProgress
               status={status}
-              percentage={(streamedToken * 100) / transaction.amount}
+              percentage={(streamedToken * 100) / totalTransactionAmount}
             />
           </div>
           <div className="flex flex-col gap-y-1 text-content-contrast">
@@ -101,12 +158,12 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
               <span className="text-subtitle text-content-primary font-semibold">
                 +{formatCurrency(streamedToken, "", 4)}
               </span>
-              &nbsp;{transaction.token}
+              &nbsp;{token}
             </div>
             <div className="text-caption">
               {" "}
               {formatCurrency(streamedToken, "", 4)} of{" "}
-              {formatCurrency(transaction.amount, "", 4)} {transaction.token}
+              {formatCurrency(totalTransactionAmount, "", 4)} {token}
             </div>
           </div>
         </div>
