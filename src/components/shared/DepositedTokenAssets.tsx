@@ -49,7 +49,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
           {/* Assets Table */}
           <div className="w-full border border-outline  bg-background-primary overflow-hidden rounded-md">
             <div className="flex items-center px-4.5 border-b border-outline">
-              <Icons.SearchIcon className="text-base text-content-tertiary" />
+              <Icons.SearchIcon className="text-base text-content-tertiary flex-shrink-0" />
 
               <input
                 className="!rounded-b-none !border-0 !ring-0 !text-body !text-content-secondary"
