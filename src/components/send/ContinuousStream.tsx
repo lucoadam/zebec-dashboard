@@ -27,6 +27,7 @@ import { toggleWalletApprovalMessageModal } from "features/modals/walletApproval
 import { useClickOutside } from "hooks"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { FC, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -71,6 +72,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const { publicKey } = useWallet()
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
@@ -146,6 +148,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       setValue("wallet", publicKey.toString())
     }
   }, [publicKey, setValue])
+
+  useEffect(() => {
+    if (router?.query.address) {
+      setValue("receiver", router?.query.address.toString() || "")
+    }
+  }, [router, setValue])
 
   const resetForm = () => {
     reset()
