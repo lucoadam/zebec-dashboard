@@ -3,7 +3,10 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 // import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
-import { fetchTokens } from "features/tokenDetails/tokenDetailsSlice"
+import {
+  fetchTokens,
+  fetchTokensPrice
+} from "features/tokenDetails/tokenDetailsSlice"
 import {
   fetchArchivedTreasury,
   fetchTreasury
@@ -58,6 +61,18 @@ const Common: FC<{
   //   if (zebecContext.stream) await createVault(data, zebecContext.stream)
   // }
 
+  useEffect(() => {
+    if (tokens.length > 0) {
+      dispatch(fetchTokensPrice())
+      const interval = setInterval(() => {
+        dispatch(fetchTokensPrice())
+      }, 30000)
+
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [dispatch, tokens])
   return <></>
 }
 
