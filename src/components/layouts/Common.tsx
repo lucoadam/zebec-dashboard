@@ -13,6 +13,7 @@ import {
 } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice"
 
 import { FC, useContext, useEffect } from "react"
 
@@ -35,9 +36,18 @@ const Common: FC<{
     if (isSigned && tokens.length > 0 && walletObject.publicKey) {
       dispatch(fetchWalletBalance(walletObject.publicKey))
       dispatch(fetchZebecBalance(walletObject.publicKey))
+      if (zebecContext.token && zebecContext.stream) {
+        dispatch(
+          fetchZebecStreamingBalance({
+            wallet: walletObject.publicKey.toString(),
+            stream: zebecContext.stream,
+            token: zebecContext.token
+          })
+        )
+      }
     }
     // eslint-disable-next-line
-  }, [walletObject.publicKey, tokens, isSigned])
+  }, [walletObject.publicKey, tokens, isSigned, zebecContext])
   useEffect(() => {
     if (walletObject.connected) {
       zebecContext.initialize(walletObject)

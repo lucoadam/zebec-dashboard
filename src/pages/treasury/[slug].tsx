@@ -62,7 +62,6 @@ const Treasury: NextPage = () => {
           address: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
         })
       )
-      // dispatch(fetchZebecStreamingBalance(walletObject.publicKey));
       // dispatch(fetchTreasuryStreamingBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"));
     }
   }, [dispatch, tokens, walletObject])

@@ -172,27 +172,51 @@ const Navbar: FC = () => {
                     show={toggleDropdown}
                   >
                     {constants.ZEBEC_VERSIONS.map((version) => {
-                      return (
-                        <a
-                          href={version.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          key={version.title}
-                          onClick={() => setToggleDropdown(!toggleDropdown)}
-                        >
-                          <div
-                            className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
-                              version.display === currentVersion.display &&
-                              "bg-background-tertiary"
-                            } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                      if (version.display === "v1") {
+                        return (
+                          <a
+                            href={version.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            key={version.title}
+                            onClick={() => setToggleDropdown(!toggleDropdown)}
+                            className="w-full"
                           >
-                            {version.display === currentVersion.display && (
-                              <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
-                            )}
-                            {version.title}
-                          </div>
-                        </a>
-                      )
+                            <div
+                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
+                                version.display === currentVersion.display &&
+                                "bg-background-tertiary"
+                              } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                            >
+                              {version.display === currentVersion.display && (
+                                <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
+                              )}
+                              {version.title}
+                            </div>
+                          </a>
+                        )
+                      } else {
+                        return (
+                          <Link
+                            href={version.url}
+                            key={version.title}
+                            className="w-full"
+                          >
+                            <div
+                              onClick={() => setToggleDropdown(!toggleDropdown)}
+                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
+                                version.display === currentVersion.display &&
+                                "bg-background-tertiary"
+                              } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                            >
+                              {version.display === currentVersion.display && (
+                                <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
+                              )}
+                              {version.title}
+                            </div>
+                          </Link>
+                        )
+                      }
                     })}
                   </CollapseDropdown>
                 </div>

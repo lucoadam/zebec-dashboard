@@ -7,8 +7,14 @@ import ReactTooltip from "react-tooltip"
 const DepositedAssets: FC<{
   tokens?: TokenDetails[]
   balanceTokens?: TreasuryToken[]
+  streamingBalanceTokens?: TreasuryToken[]
   tableMaxHeight?: number
-}> = ({ tokens = [], balanceTokens = [], tableMaxHeight = 402 }) => {
+}> = ({
+  tokens = [],
+  balanceTokens = [],
+  streamingBalanceTokens = [],
+  tableMaxHeight = 402
+}) => {
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [balanceTokens])
@@ -16,6 +22,7 @@ const DepositedAssets: FC<{
     <>
       <DepositedTokenAssets
         balanceTokens={balanceTokens}
+        streamingBalanceTokens={streamingBalanceTokens}
         tokens={tokens}
         tableMaxHeight={tableMaxHeight}
         className="deposited-assets"
