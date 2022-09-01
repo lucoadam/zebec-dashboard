@@ -10,11 +10,10 @@ interface WithdrawIncomingTokenProps {
     token_mint_address?: string
   }
   stream: ZebecNativeStreamProps
-  setWithdrawLoadingFunc: (arg1: boolean) => void
 }
 
 export const withdrawIncomingToken =
-  ({ data, stream, setWithdrawLoadingFunc }: WithdrawIncomingTokenProps) =>
+  ({ data, stream }: WithdrawIncomingTokenProps) =>
   async (dispatch: AppDispatch) => {
     try {
       const response = await stream.withdraw(data)
@@ -32,13 +31,11 @@ export const withdrawIncomingToken =
           })
         )
       }
-      setWithdrawLoadingFunc(false)
     } catch (error: any) {
       dispatch(
         toast.error({
           message: error?.message ?? "Unknown Error"
         })
       )
-      setWithdrawLoadingFunc(false)
     }
   }

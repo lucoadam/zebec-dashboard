@@ -1,23 +1,13 @@
-import React, { FC, useEffect } from "react"
+import React, { FC } from "react"
 import Image from "next/image"
 import { withdrawProps } from "../data.d"
 import { useTranslation } from "next-i18next"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 
-const Withdrawing: FC<withdrawProps> = ({
-  setCurrentStep,
-  withdrawAmount,
-  withdrawLoading
-}) => {
+const Withdrawing: FC<withdrawProps> = ({ withdrawAmount }) => {
   const { t } = useTranslation("transactions")
-  useEffect(() => {
-    console.log(withdrawLoading)
-    if (withdrawLoading === false) {
-      setCurrentStep(-1)
-    }
-    // eslint-disable-next-line
-  }, [withdrawLoading])
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="w-16">

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react"
+import React, { FC, useEffect } from "react"
 import { Button, InputField } from "components/shared"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
@@ -6,25 +6,16 @@ import { withdrawProps } from "../data.d"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { withdrawAmountSchema } from "utils/validations/withdrawAmountSchema"
-import { formatLamportsToAmount } from "utils"
-import { useAppDispatch } from "app/hooks"
-import { withdrawIncomingToken } from "application"
-import ZebecContext from "app/zebecContext"
 
 const EnterWithdrawAmount: FC<withdrawProps> = ({
   setCurrentStep,
   withdrawAmount,
   setWithdrawAmount,
-  fees,
-  escrowData,
-  transaction,
-  setWithdrawLoadingFunc
+  fees
 }) => {
   const { t } = useTranslation("transactions")
-  const [totalAmount, setTotalAmount] = useState(0)
-  const [approxWithdrawableAmount, setApproxWithdrawableAmount] = useState(0)
-  const dispatch = useAppDispatch()
-  const { stream, token } = useContext(ZebecContext)
+  const totalAmount = 0
+  const approxWithdrawableAmount = 0
 
   const {
     register,
@@ -32,27 +23,13 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
     handleSubmit,
     setValue
   } = useForm({
-    mode: "onChange"
-    // resolver: yupResolver(withdrawAmountSchema)
+    mode: "onChange",
+    resolver: yupResolver(withdrawAmountSchema)
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     setWithdrawAmount(data.withdrawAmount)
-    setCurrentStep(2)
-    setWithdrawLoadingFunc(true)
-    if (stream && token) {
-      const withdrawData = {
-        data: {
-          sender: transaction.sender,
-          receiver: transaction.receiver,
-          escrow: transaction.pda,
-          token_mint_address: transaction.token_mint_address
-        },
-        stream: transaction.token_mint_address ? token : stream,
-        setWithdrawLoadingFunc: setWithdrawLoadingFunc
-      }
-      dispatch(withdrawIncomingToken(withdrawData))
-    }
+    setCurrentStep(1)
   }
 
   useEffect(() => {
@@ -60,24 +37,6 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
       setValue("withdrawAmount", withdrawAmount)
     }
   }, [withdrawAmount, setValue])
-
-  useEffect(() => {
-    if (escrowData.length > 0 && escrowData[0] !== null) {
-      console.log(escrowData[0])
-      const fetchAmount = async () => {
-        //Total amount
-        const amt = await formatLamportsToAmount(escrowData[0].amount)
-        const pausedAmt = await formatLamportsToAmount(escrowData[0].pausedAmt)
-        setTotalAmount(amt - pausedAmt)
-        //Withdrawable amount
-        const withdrawableAmt = await formatLamportsToAmount(
-          escrowData[0].withdrawLimit
-        )
-        setApproxWithdrawableAmount(withdrawableAmt)
-      }
-      fetchAmount()
-    }
-  }, [escrowData])
 
   return (
     <div className="text-content-primary">
@@ -94,7 +53,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
             <Icons.ArrowDownLeft />
           </div>
           <div className="text-caption ">
-            {t("withdraw.amount-received")} {totalAmount} {transaction.token}
+            {t("withdraw.amount-received")} {totalAmount} SOL
           </div>
         </div>
         <div className="flex text-content-secondary pb-3">
@@ -103,8 +62,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
             <Icons.ArrowTopRight />
           </div>
           <div className="text-caption">
-            {t("withdraw.withdrawable-amount")} {approxWithdrawableAmount}{" "}
-            {transaction.token}
+            {t("withdraw.withdrawable-amount")} {approxWithdrawableAmount} SOL
           </div>
         </div>
         <div className="flex items-start text-content-contrast">
@@ -117,7 +75,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
       </div>
       {/* Input Field */}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        {/* <div className="pt-3 pb-3">
+        <div className="pt-3 pb-3">
           <InputField
             label={t("")}
             className="relative text-content-primary"
@@ -147,7 +105,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
               />
             </div>
           </InputField>
-        </div> */}
+        </div>
 
         {/* warning text */}
         <div className="hidden pt-3">
