@@ -6,7 +6,8 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     RPC_NETWORK: process.env.RPC_NETWORK,
-    DB_HOST: process.env.DB_HOST
+    DB_HOST: process.env.DB_HOST,
+    ZBC_AIRDROP: process.env.ZBC_AIRDROP
   },
   i18n,
   webpack(config) {

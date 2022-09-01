@@ -16,7 +16,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { toSubstring } from "utils"
+import { toSubstring, zbcAirdrop } from "utils"
 import { Button, CollapseDropdown, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
@@ -132,8 +132,10 @@ const Navbar: FC = () => {
   }
 
   //ZBC Airdrop
-  const zbcAirdrop = () => {
-    alert("ZBC Airdrop")
+  const zbcAirdropToWallet = () => {
+    if (useWalletObject.publicKey) {
+      dispatch(zbcAirdrop(useWalletObject.publicKey))
+    }
   }
 
   return (
@@ -265,7 +267,7 @@ const Navbar: FC = () => {
                   <Button
                     title="ZBC Airdrop"
                     variant="default"
-                    onClick={() => zbcAirdrop()}
+                    onClick={zbcAirdropToWallet}
                   />
                   <Profile />
                 </div>
