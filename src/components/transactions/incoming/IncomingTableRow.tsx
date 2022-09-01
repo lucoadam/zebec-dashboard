@@ -1,20 +1,30 @@
+import { useAppDispatch } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { withdrawIncomingToken } from "application"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
   IconButton,
-  Modal,
+  // Modal,
   UserAddress
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import React, { FC, Fragment, useEffect, useRef, useState } from "react"
+import React, {
+  FC,
+  Fragment,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import { StatusType, TransactionStatusType } from "../transactions.d"
-import { WithdrawStepsList } from "../withdraw/data.d"
+// import { WithdrawStepsList } from "../withdraw/data.d"
 
 interface IncomingTableRowProps {
   index: number
@@ -32,6 +42,8 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
+  const zebecCtx = useContext(ZebecContext)
+  const dispatch = useAppDispatch()
 
   const styles = {
     detailsRow: {
@@ -42,26 +54,27 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     }
   }
 
-  const [currentStep, setCurrentStep] = React.useState(-1)
-  const [isOpen, setIsOpen] = useState(false)
+  // const [currentStep, setCurrentStep] = React.useState(-1)
+  // const [isOpen, setIsOpen] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [withdrawAmount, setWithdrawAmount] = useState<any>()
-  const fees = 0.25
+  // const [withdrawAmount, setWithdrawAmount] = useState<any>()
+  // const [escrowData, setEscrowData] = useState<any>([])
+  // const [withdrawLoading, setWithdrawLoading] = useState<boolean>(false)
 
-  function toggleModal() {
-    setIsOpen(!isOpen)
-  }
+  // const fees = 0.25
 
   const {
     name,
     remarks,
     amount,
     token,
+    token_mint_address,
     sender,
     receiver,
     start_time,
     end_time,
     transaction_type,
+    pda,
     transaction_hash,
     file,
     latest_transaction_event
@@ -146,6 +159,38 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     // eslint-disable-next-line
   }, [status, counter, transaction])
 
+  // Toggle Modal
+  // const toggleModal = () => {
+  //   setIsOpen(!isOpen)
+  //   setWithdrawAmount(0)
+  //   setEscrowData(0)
+  // }
+  // Fetch escrow data
+  // const fetchEscrowData = async () => {
+  //   if (token_mint_address && zebecCtx.token) {
+  //     const data = await deserializeStreamEscrow(zebecCtx.token, pda)
+  //     setEscrowData([data])
+  //   } else if (zebecCtx.stream) {
+  //     const data = await deserializeStreamEscrow(zebecCtx.stream, pda)
+  //     setEscrowData([data])
+  //   }
+  // }
+
+  const withdraw = () => {
+    if (zebecCtx.stream && zebecCtx.token) {
+      const withdrawData = {
+        data: {
+          sender: sender,
+          receiver: receiver,
+          escrow: pda,
+          token_mint_address: token_mint_address
+        },
+        stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
+      }
+      dispatch(withdrawIncomingToken(withdrawData))
+    }
+  }
+
   return (
     <>
       <Fragment>
@@ -193,12 +238,14 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
                 onClick={() => {
-                  setCurrentStep(0)
-                  setIsOpen(true)
+                  // setCurrentStep(0)
+                  // setIsOpen(true)
+                  // fetchEscrowData()
+                  withdraw()
                 }}
               />
-
-              <Modal
+              {/* Withdraw Modal */}
+              {/* <Modal
                 show={currentStep >= 0 && isOpen}
                 toggleModal={toggleModal}
                 className={`rounded h-96 flex items-center justify-center`}
@@ -209,9 +256,14 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   setCurrentStep,
                   withdrawAmount,
                   setWithdrawAmount,
-                  fees
+                  fees,
+                  escrowData,
+                  transaction,
+                  withdrawLoading,
+                  setWithdrawLoadingFunc
                 })}
-              </Modal>
+              </Modal> */}
+              {/* ------- */}
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}

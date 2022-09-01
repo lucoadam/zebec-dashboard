@@ -14,6 +14,8 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
   fees
 }) => {
   const { t } = useTranslation("transactions")
+  const totalAmount = 0
+  const approxWithdrawableAmount = 0
 
   const {
     register,
@@ -29,6 +31,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
     setWithdrawAmount(data.withdrawAmount)
     setCurrentStep(1)
   }
+
   useEffect(() => {
     if (withdrawAmount != null && withdrawAmount != 0) {
       setValue("withdrawAmount", withdrawAmount)
@@ -50,7 +53,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
             <Icons.ArrowDownLeft />
           </div>
           <div className="text-caption ">
-            {t("withdraw.amount-received")} 20000 SOL
+            {t("withdraw.amount-received")} {totalAmount} SOL
           </div>
         </div>
         <div className="flex text-content-secondary pb-3">
@@ -59,7 +62,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
             <Icons.ArrowTopRight />
           </div>
           <div className="text-caption">
-            {t("withdraw.withdrawable-amount")} 20000 SOL
+            {t("withdraw.withdrawable-amount")} {approxWithdrawableAmount} SOL
           </div>
         </div>
         <div className="flex items-start text-content-contrast">
@@ -105,7 +108,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
         </div>
 
         {/* warning text */}
-        <div className="flex pb-3 hidden">
+        <div className="hidden pt-3">
           <div className="pr-2 text-warning">
             <Icons.WarningTriangleIcon />
           </div>
@@ -116,7 +119,7 @@ const EnterWithdrawAmount: FC<withdrawProps> = ({
 
         {/* withdraw Button */}
 
-        <div className="pb-3">
+        <div className="py-3">
           <Button
             className={`w-full`}
             variant="gradient"
