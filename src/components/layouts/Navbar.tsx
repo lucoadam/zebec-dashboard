@@ -106,6 +106,12 @@ const Navbar: FC = () => {
     useWalletObject.disconnect()
     handleClose()
   }
+
+  //ZBC Airdrop
+  const zbcAirdrop = () => {
+    alert("ZBC Airdrop")
+  }
+
   return (
     <>
       <nav className="bg-background-primary shadow-2 px-4 py-4 w-full">
@@ -164,6 +170,11 @@ const Navbar: FC = () => {
               ) : (
                 <div className="flex gap-x-6">
                   {/* <NotificationsComponent /> */}
+                  <Button
+                    title="ZBC Airdrop"
+                    variant="default"
+                    onClick={() => zbcAirdrop()}
+                  />
                   <Profile />
                 </div>
               )}

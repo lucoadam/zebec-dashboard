@@ -7,8 +7,6 @@ import {
 export const fetchTransactionsById =
   (uuid: string, type: "pause" | "resume" | "cancel") =>
   async (dispatch: any) => {
-    localStorage.setItem("transaction_features_initiated", "true")
-
     await dispatch(fetchOutgoingTransactionsById(uuid))
 
     //Initiated transactions
@@ -17,7 +15,6 @@ export const fetchTransactionsById =
 
     setTimeout(async () => {
       await dispatch(fetchOutgoingTransactionsById(uuid))
-      localStorage.setItem("transaction_features_initiated", "false")
     }, constants.STREAM_FETCH_TIMEOUT)
 
     return null

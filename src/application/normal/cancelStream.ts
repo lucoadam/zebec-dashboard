@@ -1,22 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppDispatch } from "app/store"
 import {
+  preCancelTransaction,
   cancelTransaction,
   toggleCancelModal
 } from "features/modals/cancelModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
-export const cancelStreamNative: any =
+export const cancelStreamNative =
   (
     data: MPauseResumeWithdrawCancel,
     uuid: string,
     stream: ZebecNativeStreamProps
   ) =>
-  async (dispatch: any) => {
+  async (dispatch: AppDispatch) => {
     try {
       dispatch(
-        cancelTransaction({
+        preCancelTransaction({
           uuid
         })
       )
@@ -39,8 +39,8 @@ export const cancelStreamNative: any =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleCancelModal())
       }
-      dispatch(toggleCancelModal())
     } catch (error: any) {
       dispatch(
         toast.error({
@@ -60,7 +60,7 @@ export const cancelStreamToken =
   async (dispatch: AppDispatch) => {
     try {
       dispatch(
-        cancelTransaction({
+        preCancelTransaction({
           uuid
         })
       )
