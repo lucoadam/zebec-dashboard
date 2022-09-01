@@ -330,6 +330,17 @@ input[type="radio"]:hover::after {
   background: linear-gradient(180deg, rgba(26, 27, 31, 0) 0%, #0d0e0f 100%);
 }
 
+.gradient-color {
+  background: linear-gradient(
+    93.42deg,
+    #1abdbd -7.23%,
+    #4f65db 52.96%,
+    #9543b3 110.69%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
 .skeleton-background {
   background: linear-gradient(
     90deg,

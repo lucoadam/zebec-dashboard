@@ -7,5 +7,17 @@ export const constants = {
   STREAM_END_ADD: 2, // 2 minutes
   STREAM_FETCH_TIMEOUT: 5000,
   AVERAGE_TPS: 2500,
-  DEPOSIT_MAX_OFFSET: 0.001
+  DEPOSIT_MAX_OFFSET: 0.001,
+  ZEBEC_VERSIONS: [
+    {
+      title: "v1",
+      display: "v1",
+      url: "https://zebec.io"
+    },
+    {
+      title: "v2 (beta)",
+      display: "v2",
+      url: "https://localhost:3000"
+    }
+  ]
 }

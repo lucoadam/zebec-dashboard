@@ -179,6 +179,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
         .format("hh:mm A")
     )
+    trigger("startDate")
+    trigger("startTime")
+    trigger("endDate")
+    trigger("endTime")
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
