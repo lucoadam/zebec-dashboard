@@ -1,7 +1,10 @@
 import { AppDispatch } from "app/store"
 import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { ZebecTokenTreasuryProps, ZebecTreasuryProps } from "./stream"
+import {
+  ZebecNativeTreasury,
+  ZebecTokenTreasury
+} from "zebec-anchor-sdk-npmtest/packages/multisig"
 
 interface InitStreamProps {
   data: {
@@ -20,7 +23,7 @@ interface InitStreamProps {
     remarks: string
     file?: string
   }
-  treasury: ZebecTreasuryProps | ZebecTokenTreasuryProps
+  treasury: ZebecNativeTreasury | ZebecTokenTreasury
 }
 
 export const initStreamTreasury =

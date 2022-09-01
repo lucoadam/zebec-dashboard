@@ -1,8 +1,8 @@
 import { PublicKey } from "@solana/web3.js"
-import { ZebecNativeStreamProps } from "./stream"
+import { ZebecNativeStream } from "zebec-anchor-sdk-npmtest/packages/stream"
 
 export const deserializeStreamEscrow = async (
-  streamTokenObject: ZebecNativeStreamProps,
+  streamTokenObject: ZebecNativeStream,
   escrow: string
 ) => {
   try {

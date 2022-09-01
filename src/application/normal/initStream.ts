@@ -2,10 +2,13 @@
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { ZebecNativeStreamProps } from "./stream.d"
+import {
+  ZebecNativeStream,
+  ZebecTokenStream
+} from "zebec-anchor-sdk-npmtest/packages/stream"
 
 export const initStreamNative: any =
-  (data: any, stream: ZebecNativeStreamProps, callback?: () => void) =>
+  (data: any, stream: ZebecNativeStream, callback?: () => void) =>
   async (dispatch: any) => {
     try {
       const response = await stream.init(data)
@@ -45,7 +48,7 @@ export const initStreamNative: any =
   }
 
 export const initStreamToken: any =
-  (data: any, token: ZebecNativeStreamProps, callback?: () => void) =>
+  (data: any, token: ZebecTokenStream, callback?: () => void) =>
   async (dispatch: any) => {
     try {
       const response = await token.init(data)

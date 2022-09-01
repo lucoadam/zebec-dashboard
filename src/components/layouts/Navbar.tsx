@@ -176,6 +176,7 @@ const Navbar: FC = () => {
                         <a
                           href={version.url}
                           target="_blank"
+                          rel="noreferrer"
                           key={version.title}
                           onClick={() => setToggleDropdown(!toggleDropdown)}
                         >

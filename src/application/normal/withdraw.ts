@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  ZebecNativeStreamProps,
+  ZebecNativeStream,
+  ZebecTokenStream,
   MDepositWithdrawFromZebecVault
-} from "./stream"
+} from "zebec-anchor-sdk-npmtest/packages/stream"
 import { toast } from "features/toasts/toastsSlice"
 import { Dispatch, SetStateAction } from "react"
 
 export const withdrawNative: any =
   (
     data: MDepositWithdrawFromZebecVault,
-    stream: ZebecNativeStreamProps,
+    stream: ZebecNativeStream,
     setLoading: Dispatch<SetStateAction<boolean>>,
     callback?: () => void
   ) =>
@@ -45,7 +46,7 @@ export const withdrawNative: any =
 export const withdrawToken: any =
   (
     data: MDepositWithdrawFromZebecVault,
-    token: ZebecNativeStreamProps,
+    token: ZebecTokenStream,
     setLoading: Dispatch<SetStateAction<boolean>>,
     callback?: () => void
   ) =>
