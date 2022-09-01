@@ -6,6 +6,7 @@ import * as Images from "assets/images"
 // import NotificationsComponent from "components/notifications/NotificationsDropdown"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
+import { constants } from "constants/constants"
 import { updateWidth } from "features/layout/layoutSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
@@ -16,7 +17,7 @@ import { useRouter } from "next/router"
 import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import { toSubstring } from "utils"
-import { Button, IconButton, Sidebar } from "../shared"
+import { Button, CollapseDropdown, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
@@ -37,6 +38,24 @@ const Navbar: FC = () => {
 
   const dropdownWrapperRef = useRef(null)
   const router = useRouter()
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [currentVersion, setCurrentVersion] = useState<{
+    title: string
+    url: string
+    display: string
+  }>(constants.ZEBEC_VERSIONS[1])
+
+  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const versionDropdownRef = useRef(null)
+
+  const handleDropdownClose = () => {
+    setToggleDropdown(false)
+  }
+
+  useClickOutside(versionDropdownRef, {
+    onClickOutside: handleDropdownClose
+  })
 
   useEffect(() => {
     setMounted(true)
@@ -76,8 +95,13 @@ const Navbar: FC = () => {
       setTimeout(() => {
         ReactTooltip.rebuild()
       }, 500)
+    } else {
+      dispatch({
+        type: "user/logout",
+        payload: {}
+      })
     }
-  }, [useWalletObject])
+  }, [useWalletObject, dispatch])
 
   const handleConnectWallet: () => void = () => {
     useWalletObject.wallet
@@ -119,17 +143,55 @@ const Navbar: FC = () => {
           {/* Logo */}
           <div className="flex flex-row gap-8 items-center">
             <div className="flex flex-col">
-              <Link href="/">
-                <a className="h-6">
-                  <Image
-                    src={Images.ZebecLogo}
-                    alt="Zebec Logo"
-                    layout="fixed"
-                    width={87}
-                    height={24}
-                  />
-                </a>
-              </Link>
+              <div className="flex items-center justify-center gap-x-2">
+                <Link href="/">
+                  <a className="h-6">
+                    <Image
+                      src={Images.ZebecLogo}
+                      alt="Zebec Logo"
+                      layout="fixed"
+                      width={87}
+                      height={24}
+                    />
+                  </a>
+                </Link>
+                <div className="relative" ref={versionDropdownRef}>
+                  <div
+                    className="flex gap-x-1 pt-1 items-center cursor-pointer"
+                    onClick={() => setToggleDropdown(!toggleDropdown)}
+                  >
+                    <span className="gradient-color font-bold text-subtitle">
+                      {currentVersion.display}
+                    </span>
+                    <Icons.CheveronDownIcon />
+                  </div>
+
+                  <CollapseDropdown
+                    className="p-2 w-[137px] justify-center items-center text-center divide-y-0"
+                    position="left"
+                    show={toggleDropdown}
+                  >
+                    {constants.ZEBEC_VERSIONS.map((version) => {
+                      return (
+                        <Link href={version.url} key={version.title}>
+                          <div
+                            className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
+                              version.display === currentVersion.display &&
+                              "bg-background-tertiary"
+                            } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                          >
+                            {version.display === currentVersion.display && (
+                              <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
+                            )}
+                            {version.title}
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </CollapseDropdown>
+                </div>
+              </div>
+
               <div className="ml-10 text-caption text-content-contrast capitalize">
                 {RPC_NETWORK}
               </div>

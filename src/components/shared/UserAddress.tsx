@@ -97,7 +97,7 @@ export const UserAddress: FC<{
           hasCloseIcon={true}
           closeOnOutsideClick={true}
         >
-          <div className="p-5 max-w-96">
+          <div className="max-w-96">
             <div className="text-content-secondary text-subtitle font-semibold">
               {t("addressBook:add-an-address-name")}
             </div>

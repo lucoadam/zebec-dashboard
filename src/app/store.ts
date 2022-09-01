@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Action,
   combineReducers,
@@ -31,8 +32,6 @@ import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
-import { persistReducer } from "redux-persist"
-import storage from "redux-persist/lib/storage"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -65,15 +64,17 @@ const combineReducer = combineReducers({
   settings: settingsSlice
 })
 
-const persistConfig = {
-  key: "root",
-  storage
+const rootReducer = (state: any, action: any) => {
+  if (action.type === "user/logout") {
+    state = {
+      layout: state.layout,
+      tokenDetails: state.tokenDetails
+    }
+  }
+  return combineReducer(state, action)
 }
-
-const persistedReducer = persistReducer(persistConfig, combineReducer)
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production"
 })
 
