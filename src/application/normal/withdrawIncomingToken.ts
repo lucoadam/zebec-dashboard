@@ -1,6 +1,9 @@
 import { AppDispatch } from "app/store"
 import { toast } from "features/toasts/toastsSlice"
-import { ZebecNativeStreamProps } from "./stream"
+import {
+  ZebecNativeStream,
+  ZebecTokenStream
+} from "zebec-anchor-sdk-npmtest/packages/stream"
 
 interface WithdrawIncomingTokenProps {
   data: {
@@ -9,7 +12,7 @@ interface WithdrawIncomingTokenProps {
     escrow: string
     token_mint_address?: string
   }
-  stream: ZebecNativeStreamProps
+  stream: ZebecNativeStream | ZebecTokenStream
 }
 
 export const withdrawIncomingToken =

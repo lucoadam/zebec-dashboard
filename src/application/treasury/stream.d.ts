@@ -231,6 +231,8 @@ export declare class ZebecTreasuryProps extends ZebecMultisig {
   execResume(data: any): Promise<any>
   cancel(data: any): Promise<any>
   execCancel(data: any): Promise<any>
+  instanttransfer(data: any): Promise<any>
+  execInstanttransfer(data: any): Promise<any>
   fetchStreamData(stream_data_account: PublicKey): Promise<any>
 }
 export declare class ZebecTokenTreasuryProps extends ZebecMultisig {
@@ -247,5 +249,8 @@ export declare class ZebecTokenTreasuryProps extends ZebecMultisig {
   execResume(data: any): Promise<any>
   cancel(data: any): Promise<any>
   execCancel(data: any): Promise<any>
+  instanttransfer(data: any): Promise<any>
+  execInstanttransfer(data: any): Promise<any>
+  fetchStreamData(stream_data_account: PublicKey): Promise<any>
   withdraw(): Promise<any>
 }

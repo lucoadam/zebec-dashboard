@@ -1,6 +1,9 @@
 import { AppDispatch } from "app/store"
 import { toast } from "features/toasts/toastsSlice"
-import { ZebecTokenTreasuryProps, ZebecTreasuryProps } from "./stream"
+import {
+  ZebecNativeTreasury,
+  ZebecTokenTreasury
+} from "zebec-anchor-sdk-npmtest/packages/multisig"
 
 interface DepositToTreasuryProps {
   data: {
@@ -9,7 +12,7 @@ interface DepositToTreasuryProps {
     amount: number
     token_mint_address?: string
   }
-  treasury: ZebecTreasuryProps | ZebecTokenTreasuryProps
+  treasury: ZebecNativeTreasury | ZebecTokenTreasury
   callback?: () => void
 }
 

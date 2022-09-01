@@ -9,19 +9,14 @@ import {
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
 import { createContext, FC, useState } from "react"
 import { CLUSTER_API_URL } from "constants/cluster"
-import { ZebecNativeStreamProps } from "../application/normal/stream.d"
-import {
-  ZebecTreasuryProps,
-  ZebecTokenTreasuryProps
-} from "../application/treasury/stream.d"
 
 const feeReceiverWallet = "4w41teXtLLxVc6ShSSgpu9pmxLvxrL1bsxNrFGm7f5BJ"
 
 interface ZebecContextProps {
-  stream: ZebecNativeStreamProps | null
-  token: ZebecNativeStreamProps | null
-  treasury: ZebecTreasuryProps | null
-  treasuryToken: ZebecTokenTreasuryProps | null
+  stream: ZebecNativeStream | null
+  token: ZebecTokenStream | null
+  treasury: ZebecNativeTreasury | null
+  treasuryToken: ZebecTokenTreasury | null
   initialize: (arg: any) => void
 }
 
@@ -40,11 +35,12 @@ const ZebecContext = createContext<ZebecContextProps>({
 export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
   children
 }) => {
-  const [stream, setStream] = useState<ZebecNativeStreamProps | null>(null)
-  const [token, setToken] = useState<ZebecNativeStreamProps | null>(null)
-  const [treasury, setTreasury] = useState<ZebecTreasuryProps | null>(null)
-  const [treasuryToken, setTreasuryToken] =
-    useState<ZebecTokenTreasuryProps | null>(null)
+  const [stream, setStream] = useState<ZebecNativeStream | null>(null)
+  const [token, setToken] = useState<ZebecTokenStream | null>(null)
+  const [treasury, setTreasury] = useState<ZebecNativeTreasury | null>(null)
+  const [treasuryToken, setTreasuryToken] = useState<ZebecTokenTreasury | null>(
+    null
+  )
   const initializeHandler = (walletObject: any) => {
     const provider = initAnchorProvider(walletObject, CLUSTER_API_URL)
     const streamCtx = new ZebecNativeStream(provider, feeReceiverWallet, true)

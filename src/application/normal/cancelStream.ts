@@ -1,18 +1,18 @@
 import { AppDispatch } from "app/store"
 import {
+  ZebecNativeStream,
+  ZebecTokenStream,
+  MPauseResumeWithdrawCancel
+} from "zebec-anchor-sdk-npmtest/packages/stream"
+import {
   preCancelTransaction,
   cancelTransaction,
   toggleCancelModal
 } from "features/modals/cancelModalSlice"
 import { toast } from "features/toasts/toastsSlice"
-import { MPauseResumeWithdrawCancel, ZebecNativeStreamProps } from "./stream.d"
 
 export const cancelStreamNative =
-  (
-    data: MPauseResumeWithdrawCancel,
-    uuid: string,
-    stream: ZebecNativeStreamProps
-  ) =>
+  (data: MPauseResumeWithdrawCancel, uuid: string, stream: ZebecNativeStream) =>
   async (dispatch: AppDispatch) => {
     try {
       dispatch(
@@ -52,11 +52,7 @@ export const cancelStreamNative =
   }
 
 export const cancelStreamToken =
-  (
-    data: MPauseResumeWithdrawCancel,
-    uuid: string,
-    token: ZebecNativeStreamProps
-  ) =>
+  (data: MPauseResumeWithdrawCancel, uuid: string, token: ZebecTokenStream) =>
   async (dispatch: AppDispatch) => {
     try {
       dispatch(

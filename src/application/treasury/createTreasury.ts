@@ -1,7 +1,7 @@
 import { AppDispatch } from "app/store"
-import { ZebecTreasuryProps } from "./stream.d"
 import { toast } from "features/toasts/toastsSlice"
 import { createTreasury as createNewTreasury } from "features/treasury/treasurySlice"
+import { ZebecNativeTreasury } from "zebec-anchor-sdk-npmtest/packages/multisig"
 
 interface CreateTreasuryProps {
   data: {
@@ -9,7 +9,7 @@ interface CreateTreasuryProps {
     minValidator: number
     owners: { name: string; wallet: string }[]
   }
-  treasury: ZebecTreasuryProps
+  treasury: ZebecNativeTreasury
   callback: () => void
 }
 
