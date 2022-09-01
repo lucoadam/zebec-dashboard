@@ -13,13 +13,20 @@ interface DepositedTokenAssetsProps {
   tableMaxHeight: number
   tokens: TokenDetails[]
   balanceTokens: TreasuryToken[]
+  streamingBalanceTokens: TreasuryToken[]
   className?: string
 }
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
   const { t } = useTranslation("common")
 
-  const { tableMaxHeight, tokens, balanceTokens, className } = props
+  const {
+    tableMaxHeight,
+    tokens,
+    balanceTokens,
+    streamingBalanceTokens,
+    className
+  } = props
   const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
 
   const [search, setSearch] = useState("")
@@ -143,14 +150,14 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                               <span
                                 data-tip={getUsdBalance(
                                   tokensPrice,
-                                  balanceTokens,
+                                  streamingBalanceTokens,
                                   token.symbol
                                 )}
                               >
                                 {formatCurrency(
                                   getUsdBalance(
                                     tokensPrice,
-                                    balanceTokens,
+                                    streamingBalanceTokens,
                                     token.symbol
                                   ),
                                   "$"
@@ -160,12 +167,15 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             <div className=" text-caption text-content-contrast">
                               <span
                                 data-tip={getBalance(
-                                  balanceTokens,
+                                  streamingBalanceTokens,
                                   token.symbol
                                 )}
                               >
                                 {formatCurrency(
-                                  getBalance(balanceTokens, token.symbol)
+                                  getBalance(
+                                    streamingBalanceTokens,
+                                    token.symbol
+                                  )
                                 )}{" "}
                               </span>
                               {token.symbol}

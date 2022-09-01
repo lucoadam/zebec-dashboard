@@ -30,16 +30,20 @@ const tabs = [
 
 const HomePage: FC = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
-  const treasuryTokens =
+  const zebecTokensBalance =
     useAppSelector((state) => state.zebecBalance?.tokens) || []
+  const zebecStreamingTokensBalance =
+    useAppSelector((state) => state.zebecStreamingBalance?.tokens) || []
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
+
   useEffect(() => {
     if (isSigned) {
       dispatch(fetchWeeklyActivity())
       dispatch(fetchOverallActivity())
     }
   }, [isSigned, dispatch])
+
   return (
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,7 +57,8 @@ const HomePage: FC = () => {
           <div className="grid lg:grid-rows-2 lg:grid-cols-2 gap-4 lg:col-span-2">
             <div className="row-span-2">
               <DepositedAssets
-                balanceTokens={treasuryTokens}
+                balanceTokens={zebecTokensBalance}
+                streamingBalanceTokens={zebecStreamingTokensBalance}
                 tokens={tokenDetails}
               />
             </div>

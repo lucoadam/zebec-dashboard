@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PublicKey } from "@solana/web3.js"
+import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { RootState } from "app/store"
-import { connection } from "constants/cluster"
-import { constants } from "constants/constants"
-import { streamingSchema } from "utils/deserialize/streamingSchema"
 import { StreamingTokenState } from "./zebecStreamingSlice.d"
+import {
+  ZebecNativeStream,
+  ZebecTokenStream
+} from "zebec-anchor-sdk-npmtest/packages/stream"
 
 const initialState: StreamingTokenState = {
   loading: false,
@@ -13,58 +14,43 @@ const initialState: StreamingTokenState = {
 }
 
 //Generates pending, fulfilled and rejected action types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const fetchZebecStreamingBalance: any = createAsyncThunk(
-  "balance/fetchZebecStreamingBalance",
-  async (wallet: string, { getState }) => {
-    try {
-      const { tokenDetails } = getState() as RootState
-      const tokens = tokenDetails.tokens
-      const base58PublicKey = new PublicKey(constants.PROGRAM_ID)
-      const streamingBalance = await Promise.all(
-        tokens.map(async (token) => {
-          const senderAddress = new PublicKey(wallet)
-          let withdraw_data
-          if (token.symbol.toUpperCase() === "SOL") {
-            withdraw_data = await PublicKey.findProgramAddress(
-              [Buffer.from("withdraw_sol"), senderAddress.toBuffer()],
-              base58PublicKey
-            )
-          } else {
-            const tokenMint = new PublicKey(token.mint)
-            withdraw_data = await PublicKey.findProgramAddress(
-              [
-                Buffer.from("withdraw_token"),
-                senderAddress.toBuffer(),
-                tokenMint.toBuffer()
-              ],
-              base58PublicKey
-            )
-          }
-          const withdrawDataPubKey = withdraw_data[0]
-          const accountInfo = await connection.getAccountInfo(
-            withdrawDataPubKey,
-            "confirmed"
-          )
-          let balance = null
-          if (accountInfo) {
-            const resp = streamingSchema.decode(accountInfo.data)
-            balance = resp.amount.toString()
-          } else {
-            balance = 0
-          }
-          return {
-            symbol: token.symbol,
-            balance: balance
-          }
-        })
-      )
-      return streamingBalance
-    } catch (error) {
-      throw error
-    }
+export const fetchZebecStreamingBalance = createAsyncThunk<
+  any,
+  { wallet: string; stream: ZebecNativeStream; token: ZebecTokenStream },
+  { state: RootState }
+>("balance/fetchZebecStreamingBalance", async (data, { getState }) => {
+  try {
+    const { tokenDetails } = getState() as RootState
+    const tokens = tokenDetails.tokens
+    const streamingBalance: {
+      symbol: string
+      balance: number
+    }[] = await Promise.all(
+      tokens.map(async (token) => {
+        let amount
+        if (token.symbol === "SOL") {
+          const response = await data.stream.fetchStreamingAmount({
+            sender: data.wallet
+          })
+          amount = response.amount.toString() / LAMPORTS_PER_SOL
+        } else {
+          const response = await data.token.fetchStreamingAmount({
+            sender: data.wallet,
+            token_mint_address: token.mint
+          })
+          amount = response.amount.toString() / 10 ** token.decimal
+        }
+        return {
+          symbol: token.symbol,
+          balance: Number(amount)
+        }
+      })
+    )
+    return streamingBalance
+  } catch (error) {
+    throw error
   }
-)
+})
 
 const streamingBalanceSlice = createSlice({
   name: "zebecStreamingBalance",
