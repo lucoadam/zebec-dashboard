@@ -16,13 +16,11 @@ const transactionTabs = [
   {
     title: "Incoming",
     icon: <Icons.ArrowDownLeftIcon />,
-    count: 0,
     Component: <Incoming />
   },
   {
     title: "Outgoing",
     icon: <Icons.ArrowUpRightIcon />,
-    count: 0,
     Component: <Outgoing />
   }
 ]
@@ -51,7 +49,6 @@ const Transactions: NextPage = () => {
                 title={`${t(transactionTab.title.toLowerCase())}`}
                 isActive={activePage === index}
                 startIcon={transactionTab.icon}
-                count={transactionTab.count}
                 onClick={() => setActivePage(index)}
               />
             )

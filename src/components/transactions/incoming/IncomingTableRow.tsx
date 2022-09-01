@@ -371,6 +371,29 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   </div>
                   {/* Right Column */}
                   <div className="flex flex-col gap-y-4">
+                    {/* Streamed Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.streamed-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(amount, "", 4)} {token}
+                      </div>
+                    </div>
+                    {/* Paused Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.paused-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.paused_amt,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
+                      </div>
+                    </div>
                     {/* Total Amount */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
@@ -401,7 +424,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.status")}
                       </div>
-                      <div className="flex items-center gap-x-2 text-content-primary">
+                      <div className="flex items-center gap-x-2 text-content-primary capitalize">
                         <Icons.IncomingIcon className="w-5 h-5" />
                         <span>{status}</span>
                       </div>

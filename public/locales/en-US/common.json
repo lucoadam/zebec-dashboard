@@ -1,5 +1,6 @@
 {
     "tps-header": {
+        "sol/usd": "SOL/USD",
         "network": "Solana Network",
         "description": "The Solana Network is currently operating at a limited capacity, your on-chain actions have increased chance of failing."
     },

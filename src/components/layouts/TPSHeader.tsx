@@ -38,8 +38,17 @@ const TPSHeader = () => {
       <div className="px-6  bg-background-secondary">
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
           <div className="flex">
-            <span className="mr-4">
-              SOL/USD {formatCurrency(tokensPrice["SOL"], "$")}
+            <span className="mr-4 uppercase">
+              {t("tps-header.sol/usd")}{" "}
+              <span
+                className={`${
+                  recentTPS >= constants.AVERAGE_TPS
+                    ? "text-warning"
+                    : "text-error"
+                }`}
+              >
+                {formatCurrency(tokensPrice["SOL"], "$")}
+              </span>
             </span>
             {t("tps-header.network")}:&nbsp;
             <span

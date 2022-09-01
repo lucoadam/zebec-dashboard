@@ -339,6 +339,29 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   </div>
                   {/* Right Column */}
                   <div className="flex flex-col gap-y-4">
+                    {/* Streamed Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.streamed-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(amount, "", 4)} {token}
+                      </div>
+                    </div>
+                    {/* Paused Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.paused-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.paused_amt,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
+                      </div>
+                    </div>
                     {/* Total Amount */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
@@ -351,7 +374,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
-                        {t("table.amount-received")}
+                        {t("table.amount-sent")}
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(streamedToken, "", 4)} {token} (
@@ -368,8 +391,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.status")}
                       </div>
-                      <div className="flex items-center gap-x-2 text-content-primary">
-                        <Icons.IncomingIcon className="w-5 h-5" />
+                      <div className="flex items-center gap-x-2 text-content-primary capitalize">
+                        <Icons.OutgoingIcon className="w-5 h-5" />
                         <span>{status}</span>
                       </div>
                     </div>

@@ -17,12 +17,6 @@ import { OngoingIncoming } from "./tabs/OngoingIncoming"
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  const {
-    incomingTransactions,
-    completedTransactions,
-    ongoingTransactions,
-    scheduledTransactions
-  } = useAppSelector((state) => state.transactions)
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const [activeTab, setActiveTab] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,26 +24,22 @@ const Incoming: FC = () => {
   const filterTabs: Tab[] = [
     {
       title: "All",
-      count: incomingTransactions.count,
       component: <AllIncoming />
     },
     {
       title: "Ongoing",
       icon: <Icons.DoubleCircleDottedLineIcon />,
-      count: ongoingTransactions.count,
       component: <OngoingIncoming />
     },
     {
       title: "Scheduled",
       icon: <Icons.CalenderIcon />,
-      count: scheduledTransactions.count,
       component: <ScheduledIncoming />
     },
     {
       title: "Completed",
       icon: <Icons.CheckCircleIcon />,
-      component: <CompletedIncoming />,
-      count: completedTransactions.count
+      component: <CompletedIncoming />
     }
   ]
 

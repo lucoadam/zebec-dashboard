@@ -105,7 +105,8 @@ const ZebecHelp = ({
         }
         buttons={[
           {
-            title: "common:support.check-faq"
+            title: "common:support.check-faq",
+            link: "https://discord.com/channels/881716805234745375/901084357761069086"
           },
           {
             title: "common:support.join-discord",
@@ -151,7 +152,8 @@ const SendFeedback = ({ className }: { className?: string }) => {
         description="common:support.feedback-description"
         buttons={[
           {
-            title: "common:support.send-us-message"
+            title: "common:support.send-us-message",
+            link: "https://discord.com/channels/881716805234745375/947919288239525949"
           },
           {
             title: "common:support.telegram",

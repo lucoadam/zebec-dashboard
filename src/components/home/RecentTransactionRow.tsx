@@ -129,7 +129,7 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
 
   return (
     <tr>
-      <td className=" py-5 min-w-60">
+      <td className=" py-4 min-w-60">
         <div className="flex items-center gap-x-2.5">
           <div className=" w-6 h-6 grid place-content-center bg-outline-icon rounded">
             {walletObject?.publicKey?.toString() === sender ? (
@@ -146,7 +146,7 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
           </div>
         </div>
       </td>
-      <td className="px-6 py-5 min-w-70">
+      <td className="px-6 py-4 min-w-70">
         <div className="flex items-center gap-x-2.5">
           <div className=" w-14 h-14">
             <CircularProgress
