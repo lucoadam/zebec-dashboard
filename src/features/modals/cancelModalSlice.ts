@@ -3,7 +3,6 @@ import { fetchTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch } from "app/store"
 
-//declare types for state
 interface CancelState {
   transaction: any
   show: boolean
@@ -17,6 +16,20 @@ const initialState: CancelState = {
   loading: false,
   error: ""
 }
+
+export const preCancelTransaction = createAsyncThunk<
+  any,
+  { uuid: string },
+  { dispatch: AppDispatch }
+>("cancel/preCancelTransaction", async (data, { dispatch }) => {
+  const response = await api.patch(`/transaction/${data.uuid}/`, {
+    status: "cancelled"
+  })
+  dispatch(fetchTransactionsById(data.uuid, "cancel"))
+
+  return response.data
+})
+
 export const cancelTransaction = createAsyncThunk<
   any,
   { uuid: string; txn_hash?: string },
@@ -28,7 +41,7 @@ export const cancelTransaction = createAsyncThunk<
   })
 
   dispatch(fetchTransactionsById(data.uuid, "cancel"))
-
+  dispatch(toggleCancelModal())
   return response.data
 })
 
@@ -53,11 +66,23 @@ export const cancelModalSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    //Pre-cancel Transaction
+    builder.addCase(preCancelTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(preCancelTransaction.fulfilled, (state) => {
+      state.loading = true
+      state.error = ""
+    })
+    builder.addCase(preCancelTransaction.rejected, (state, action) => {
+      state.loading = true
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Cancel Transaction
     builder.addCase(cancelTransaction.pending, (state) => {
       state.loading = true
     })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    builder.addCase(cancelTransaction.fulfilled, (state, action) => {
+    builder.addCase(cancelTransaction.fulfilled, (state) => {
       state.loading = false
       state.error = ""
     })
