@@ -17,7 +17,7 @@ export const constants = {
     {
       title: "v2 (beta)",
       display: "v2",
-      url: "https://localhost:3000"
+      url: "https://dev.zebec.io/"
     }
   ]
 }

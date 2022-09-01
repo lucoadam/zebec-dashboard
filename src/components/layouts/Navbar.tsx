@@ -141,9 +141,9 @@ const Navbar: FC = () => {
       <nav className="bg-background-primary shadow-2 px-4 py-4 w-full">
         <div className="w-full flex justify-between gap-x-4 items-center">
           {/* Logo */}
-          <div className="flex flex-row gap-8 items-center">
+          <div className="flex flex-row gap-4 items-center">
             <div className="flex flex-col">
-              <div className="flex items-center justify-center gap-x-2">
+              <div className="flex items-center justify-center gap-x-1">
                 <Link href="/">
                   <a className="h-6">
                     <Image
@@ -157,13 +157,13 @@ const Navbar: FC = () => {
                 </Link>
                 <div className="relative" ref={versionDropdownRef}>
                   <div
-                    className="flex gap-x-1 pt-1 items-center cursor-pointer"
+                    className="flex pt-1 items-center cursor-pointer"
                     onClick={() => setToggleDropdown(!toggleDropdown)}
                   >
-                    <span className="gradient-color font-bold text-subtitle">
+                    <span className="gradient-color font-medium text-subtitle-sm">
                       {currentVersion.display}
                     </span>
-                    <Icons.CheveronDownIcon />
+                    <Icons.CheveronDownIcon className="text-content-secondary flex-shrink-0" />
                   </div>
 
                   <CollapseDropdown
@@ -173,7 +173,12 @@ const Navbar: FC = () => {
                   >
                     {constants.ZEBEC_VERSIONS.map((version) => {
                       return (
-                        <Link href={version.url} key={version.title}>
+                        <a
+                          href={version.url}
+                          target="_blank"
+                          key={version.title}
+                          onClick={() => setToggleDropdown(!toggleDropdown)}
+                        >
                           <div
                             className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
                               version.display === currentVersion.display &&
@@ -185,7 +190,7 @@ const Navbar: FC = () => {
                             )}
                             {version.title}
                           </div>
-                        </Link>
+                        </a>
                       )
                     })}
                   </CollapseDropdown>
@@ -230,7 +235,7 @@ const Navbar: FC = () => {
                   onClick={handleConnectWallet}
                 />
               ) : (
-                <div className="flex gap-x-6">
+                <div className="flex gap-x-4">
                   {/* <NotificationsComponent /> */}
                   <Button
                     title="ZBC Airdrop"
