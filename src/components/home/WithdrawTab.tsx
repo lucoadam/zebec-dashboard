@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { withdrawNative, withdrawToken } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
@@ -50,7 +51,7 @@ const WithdrawTab: FC = () => {
     setTimeout(() => {
       dispatch(fetchZebecBalance(publicKey?.toString()))
       dispatch(fetchWalletBalance(publicKey?.toString()))
-    }, 15000)
+    }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -20,5 +20,6 @@ export const constants = {
       url: "/"
     }
   ],
-  TEST_ZBC_AMOUNT: 5
+  TEST_ZBC_AMOUNT: 5,
+  BALANCE_FETCH_TIMEOUT: 10000
 }

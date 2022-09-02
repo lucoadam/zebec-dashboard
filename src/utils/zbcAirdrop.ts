@@ -12,6 +12,7 @@ import {
 import { AppDispatch } from "app/store"
 import { toast } from "features/toasts/toastsSlice"
 import { constants } from "constants/constants"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 
 export const zbcAirdrop =
   (walletPublicKey: PublicKey) => async (dispatch: AppDispatch) => {
@@ -50,6 +51,9 @@ export const zbcAirdrop =
             message: `${constants.TEST_ZBC_AMOUNT} test ZBC faucet airdropped.`
           })
         )
+        setTimeout(() => {
+          dispatch(fetchWalletBalance(walletPublicKey?.toString()))
+        }, constants.BALANCE_FETCH_TIMEOUT)
       }
     } catch (error) {
       console.log(error)
