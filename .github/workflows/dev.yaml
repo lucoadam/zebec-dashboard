@@ -46,7 +46,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: fe-${{ github.sha }}
         run: |
-          docker build --build-arg RPC_NETWORK=${RPC_NETWORK} --build-arg DB_HOST=${DB_HOST}  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --build-arg RPC_NETWORK=${RPC_NETWORK} --build-arg DB_HOST=${DB_HOST}  --build-arg ZBC_AIRDROP=${ZBC_AIRDROP}  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
