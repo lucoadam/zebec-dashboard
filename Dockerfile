@@ -19,9 +19,11 @@ FROM node:16-alpine AS builder
 
 ARG RPC_NETWORK=devnet
 ARG DB_HOST
+ARG ZBC_AIRDROP
 
 ENV RPC_NETWORK $RPC_NETWORK
 ENV DB_HOST $DB_HOST
+ENV ZBC_AIRDROP $ZBC_AIRDROP
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
