@@ -32,6 +32,7 @@ const Navbar: FC = () => {
 
   const [mounted, setMounted] = useState<boolean>(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
+  const [zbcAirdropLoading, setZBCAirdropLoading] = useState<boolean>(false)
 
   const width = useAppSelector((state) => state.layout.width)
   const dispatch = useAppDispatch()
@@ -39,12 +40,12 @@ const Navbar: FC = () => {
   const dropdownWrapperRef = useRef(null)
   const router = useRouter()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentVersion, setCurrentVersion] = useState<{
+  //Current version
+  const currentVersion: {
     title: string
     url: string
     display: string
-  }>(constants.ZEBEC_VERSIONS[1])
+  } = constants.ZEBEC_VERSIONS[1]
 
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const versionDropdownRef = useRef(null)
@@ -134,7 +135,8 @@ const Navbar: FC = () => {
   //ZBC Airdrop
   const zbcAirdropToWallet = () => {
     if (useWalletObject.publicKey) {
-      dispatch(zbcAirdrop(useWalletObject.publicKey))
+      setZBCAirdropLoading(true)
+      dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
     }
   }
 
@@ -268,6 +270,8 @@ const Navbar: FC = () => {
                     title="ZBC Airdrop"
                     variant="default"
                     onClick={zbcAirdropToWallet}
+                    loading={zbcAirdropLoading}
+                    disabled={zbcAirdropLoading}
                   />
                   <Profile />
                 </div>
