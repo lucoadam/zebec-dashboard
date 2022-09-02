@@ -19,5 +19,6 @@ export const constants = {
       display: "v2",
       url: "/"
     }
-  ]
+  ],
+  TEST_ZBC_AMOUNT: 5
 }
