@@ -12,9 +12,15 @@ import {
 import { AppDispatch } from "app/store"
 import { toast } from "features/toasts/toastsSlice"
 import { constants } from "constants/constants"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
+import { Dispatch, SetStateAction } from "react"
 
 export const zbcAirdrop =
-  (walletPublicKey: PublicKey) => async (dispatch: AppDispatch) => {
+  (
+    walletPublicKey: PublicKey,
+    setZBCAirdropLoading: Dispatch<SetStateAction<boolean>>
+  ) =>
+  async (dispatch: AppDispatch) => {
     try {
       const mint = new PublicKey("6vvKBoSx7p33YER66LQ8VokTRHUcmxwz3iA1GSbexC5i")
       const privateKey = process.env.ZBC_AIRDROP
@@ -50,6 +56,9 @@ export const zbcAirdrop =
             message: `${constants.TEST_ZBC_AMOUNT} test ZBC faucet airdropped.`
           })
         )
+        setTimeout(() => {
+          dispatch(fetchWalletBalance(walletPublicKey?.toString()))
+        }, constants.BALANCE_FETCH_TIMEOUT)
       }
     } catch (error) {
       console.log(error)
@@ -58,5 +67,7 @@ export const zbcAirdrop =
           message: `Error occured on test ZBC airdrop.`
         })
       )
+    } finally {
+      setZBCAirdropLoading(false)
     }
   }

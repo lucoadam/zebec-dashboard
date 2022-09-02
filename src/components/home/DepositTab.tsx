@@ -54,7 +54,7 @@ const DepositTab: FC = () => {
     setTimeout(() => {
       dispatch(fetchZebecBalance(publicKey?.toString()))
       dispatch(fetchWalletBalance(publicKey?.toString()))
-    }, 15000)
+    }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
