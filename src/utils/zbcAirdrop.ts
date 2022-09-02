@@ -24,10 +24,9 @@ export const zbcAirdrop =
     try {
       const mint = new PublicKey("6vvKBoSx7p33YER66LQ8VokTRHUcmxwz3iA1GSbexC5i")
       const privateKey = process.env.ZBC_AIRDROP
-      console.log(privateKey)
+
       if (privateKey) {
         const payer = Keypair.fromSecretKey(Buffer.from(JSON.parse(privateKey)))
-        console.log(payer)
         const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
           connection,
           payer,
@@ -49,7 +48,6 @@ export const zbcAirdrop =
           )
         )
         const signature = await connection.sendTransaction(transaction, [payer])
-        console.log(signature)
 
         await connection.confirmTransaction(signature, "confirmed")
 
