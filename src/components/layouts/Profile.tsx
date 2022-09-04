@@ -1,5 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import Image from "next/image"
 import { FC, useEffect, useRef, useState } from "react"
 import * as Icons from "../../assets/icons"
@@ -12,11 +11,13 @@ import { useTranslation } from "next-i18next"
 import ReactTooltip from "react-tooltip"
 import { useClickOutside } from "../../hooks"
 import TokenService from "api/services/token.service"
+import { useZebecWallet } from "hooks/useWallet"
+import { titleCase } from "utils/titleCase"
 
 const Profile: FC = () => {
   const { t } = useTranslation()
-  const useWalletObject = useWallet()
-  const useWalletModalObject = useWalletModal()
+  const useWalletObject = useZebecWallet()
+  // const useWalletModalObject = useWalletModal()
   const profileDropdownWrapperRef = useRef(null)
 
   const [toggleProfileDropdown, setToggleProfileDropdown] =
@@ -32,10 +33,10 @@ const Profile: FC = () => {
   })
 
   //handle change wallet
-  const handleChangeWallet = () => {
-    useWalletModalObject.setVisible(!useWalletModalObject.visible)
-    handleClose()
-  }
+  // const handleChangeWallet = () => {
+  //   useWalletModalObject.setVisible(!useWalletModalObject.visible)
+  //   handleClose()
+  // }
 
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
@@ -75,7 +76,7 @@ const Profile: FC = () => {
                   {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                  {useWalletObject?.wallet?.adapter.name} Wallet
+                  {titleCase(`${useWalletObject.adapter} Wallet`)}
                 </div>
               </div>
               <Icons.CheveronDownIcon className="w-5 h-5 text-content-secondary" />
@@ -109,7 +110,7 @@ const Profile: FC = () => {
                     )}
                   </div>
                   <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                    {useWalletObject?.wallet?.adapter.name} Wallet
+                    {titleCase(`${useWalletObject.adapter} Wallet`)}
                   </div>
                 </div>
                 <CopyButton
@@ -123,7 +124,7 @@ const Profile: FC = () => {
                 title={`${t("common:buttons.change-wallet")}`}
                 startIcon={<Icons.RefreshIcon />}
                 className="w-full mb-3"
-                onClick={handleChangeWallet}
+                onClick={handleDisconnectWallet}
               />
               <Button
                 title={`${t("common:buttons.disconnect-wallet")}`}

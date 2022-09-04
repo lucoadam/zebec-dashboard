@@ -26,9 +26,9 @@ export const login = async (walletObject: ZebecWalletContext) => {
       const messagetob = Buffer.from(encodedMessage).toString("base64")
 
       const data = {
-        wallet_address: pubkey,
+        wallet_address: network === "solana" ? pubkey : publicKey,
         signature: b64,
-        message: messagetob,
+        message: network === "solana" ? messagetob : message,
         network
       }
 
@@ -51,6 +51,8 @@ export const login = async (walletObject: ZebecWalletContext) => {
       } catch (error) {
         console.log(error)
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

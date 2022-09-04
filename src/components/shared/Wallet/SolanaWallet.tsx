@@ -17,6 +17,10 @@ import { Button } from "../Button"
 import { Collapse } from "./Collapse"
 import { WalletSVG } from "./WalletSVG"
 import * as Icons from "assets/icons"
+import { useAppDispatch } from "app/hooks"
+import { useZebecWallet } from "hooks/useWallet"
+import { login } from "api"
+import { changeSignState } from "features/modals/signModalSlice"
 
 export interface WalletModalProps {
   className?: string
@@ -51,27 +55,6 @@ export const SolanaWallet: FC<WalletModalProps> = ({
 
     return [installed, [...loadable, ...notDetected]]
   }, [wallets])
-
-  // const getStartedWallet = useMemo(() => {
-  //   return installedWallets.length
-  //     ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //       installedWallets[0]!
-  //     : wallets.find(
-  //         (wallet: { adapter: { name: WalletName } }) =>
-  //           wallet.adapter.name === "Torus"
-  //       ) ||
-  //         wallets.find(
-  //           (wallet: { adapter: { name: WalletName } }) =>
-  //             wallet.adapter.name === "Phantom"
-  //         ) ||
-  //         wallets.find(
-  //           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //           (wallet: { readyState: any }) =>
-  //             wallet.readyState === WalletReadyState.Loadable
-  //         ) ||
-  //         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //         otherWallets[0]!
-  // }, [installedWallets, wallets, otherWallets])
 
   const hideModal = useCallback(() => {
     setFadeIn(false)
@@ -158,6 +141,15 @@ export const SolanaWallet: FC<WalletModalProps> = ({
     [container]
   )
 
+  const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
+  const handleLogin: () => void = async () => {
+    const response = await login(walletObject)
+    if (response?.status === 200) {
+      dispatch(changeSignState(true))
+    }
+  }
+
   return (
     <div className={twMerge("text-content-primary", className)}>
       {!installedWallets.length && (
@@ -184,7 +176,11 @@ export const SolanaWallet: FC<WalletModalProps> = ({
           variant="gradient"
           endIcon={<span className="text-[10px] font-normal">Detected</span>}
           title={wallet.adapter.name}
-          onClick={(event) => handleWalletClick(event, wallet.adapter.name)}
+          onClick={(event) =>
+            walletObject.connected
+              ? handleLogin()
+              : handleWalletClick(event, wallet.adapter.name)
+          }
           childrenClassName="flex items-center justify-start"
         />
       ))}

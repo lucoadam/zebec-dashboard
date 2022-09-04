@@ -1,5 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
@@ -9,6 +8,7 @@ import { RPC_NETWORK } from "constants/cluster"
 import { constants } from "constants/constants"
 import { updateWidth } from "features/layout/layoutSlice"
 import { useClickOutside } from "hooks"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useTheme } from "next-themes"
 import Image from "next/image"
@@ -16,7 +16,9 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { toSubstring, zbcAirdrop } from "utils"
+import { titleCase } from "utils/titleCase"
 import { Button, CollapseDropdown, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
@@ -27,8 +29,8 @@ import WalletNotConnectedModal from "./WalletNotConnectedModal"
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
   const { t } = useTranslation()
-  const useWalletObject = useWallet()
-  const useWalletModalObject = useWalletModal()
+  const useWalletObject = useZebecWallet()
+  // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -105,9 +107,9 @@ const Navbar: FC = () => {
   }, [useWalletObject, dispatch])
 
   const handleConnectWallet: () => void = () => {
-    useWalletObject.wallet
-      ? useWalletObject.connect()
-      : useWalletModalObject.setVisible(!useWalletModalObject.visible)
+    // useWalletObject.wallet
+    //   ? useWalletObject.connect()
+    //   : useWalletModalObject.setVisible(!useWalletModalObject.visible)
   }
 
   useClickOutside(dropdownWrapperRef, {
@@ -121,10 +123,10 @@ const Navbar: FC = () => {
   }
 
   //handle change wallet
-  const handleChangeWallet = () => {
-    useWalletModalObject.setVisible(!useWalletModalObject.visible)
-    handleClose()
-  }
+  // const handleChangeWallet = () => {
+  //   useWalletModalObject.setVisible(!useWalletModalObject.visible)
+  //   handleClose()
+  // }
 
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
@@ -136,7 +138,7 @@ const Navbar: FC = () => {
   const zbcAirdropToWallet = () => {
     if (useWalletObject.publicKey) {
       setZBCAirdropLoading(true)
-      dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
+      // dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
     }
   }
 
@@ -314,7 +316,7 @@ const Navbar: FC = () => {
                         )}
                       </div>
                       <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                        {useWalletObject?.wallet?.adapter.name} Wallet
+                        {titleCase(`${useWalletObject?.adapter} Wallet`)}
                       </div>
                     </div>
                     <CopyButton
@@ -348,7 +350,7 @@ const Navbar: FC = () => {
                       title={`${t("common:buttons.change-wallet")}`}
                       startIcon={<Icons.RefreshIcon />}
                       className="w-full mb-3 bg-background-primary"
-                      onClick={handleChangeWallet}
+                      onClick={handleDisconnectWallet}
                     />
                     <Button
                       title={`${t("common:buttons.disconnect-wallet")}`}

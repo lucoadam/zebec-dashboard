@@ -1,4 +1,3 @@
-// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { login } from "api"
 import TokenService from "api/services/token.service"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -39,6 +38,7 @@ const tabs = [
 const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
   const walletObject = useZebecWallet()
+
   const [activeTab, setActiveTab] = useState<number>(0)
 
   // const walletModalObject = useWalletModal()
@@ -56,8 +56,11 @@ const WalletNotConnectedModal: NextPage = () => {
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
-      if (!token) handleLogin()
-      else {
+      if (!token) {
+        if (walletObject.adapter) {
+          handleLogin()
+        }
+      } else {
         const decodedToken: DecodedTokenProps = jwt_decode(token)
         if (
           decodedToken.wallet_address === walletObject.publicKey?.toString()
@@ -69,13 +72,7 @@ const WalletNotConnectedModal: NextPage = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walletObject.connected, isSigned])
-
-  // const handleConnectWallet: () => void = () => {
-  //   walletObject.wallet
-  //     ? walletObject.connect()
-  //     : walletModalObject.setVisible(!walletModalObject.visible)
-  // }
+  }, [walletObject.connected, isSigned, walletObject.adapter])
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,7 +86,7 @@ const WalletNotConnectedModal: NextPage = () => {
         <Modal
           show={!walletObject.connected || !isSigned}
           toggleModal={() => null}
-          className="rounded-2xl pb-6 max-w-[398px]"
+          className="rounded-2xl pb-6 max-w-[398px] text-center"
           hasCloseIcon={false}
         >
           <span className="text-content-primary text-2xl font-semibold">

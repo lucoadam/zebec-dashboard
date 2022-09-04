@@ -1,4 +1,4 @@
-import { useAccount, useSignMessage } from "wagmi"
+import { useAccount, useSignMessage, useDisconnect } from "wagmi"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 
@@ -6,11 +6,14 @@ export interface ZebecWalletContext {
   connected: boolean
   publicKey: string | PublicKey | undefined
   network: string
+  adapter: string | undefined
   signMessage: (message: string) => Promise<string | null>
+  disconnect: () => void
 }
 export const useZebecWallet = (): ZebecWalletContext => {
   const ethAccount = useAccount()
   const solAccount = useWallet()
+  const { disconnect } = useDisconnect()
   const connected = solAccount.connected || ethAccount.isConnected
   const publicKey = solAccount.publicKey || ethAccount.address
   const network = solAccount.connected
@@ -18,6 +21,14 @@ export const useZebecWallet = (): ZebecWalletContext => {
     : ethAccount.isConnected
     ? "ethereum"
     : ""
+  const adapter = solAccount.connected
+    ? solAccount.wallet?.adapter.name
+    : ethAccount.isConnected
+    ? ethAccount.connector?.name
+    : ""
+  const disconnectWallet = solAccount.connected
+    ? solAccount.disconnect
+    : disconnect
   const { signMessageAsync } = useSignMessage()
 
   const signMessage = async (message: string) => {
@@ -29,7 +40,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
       return Buffer.from(signedMessage).toString("base64")
     } else if (network === "ethereum") {
       const signed = await signMessageAsync({ message })
-      return Buffer.from(new TextEncoder().encode(signed)).toString("base64")
+      return signed
     }
     return null
   }
@@ -37,6 +48,8 @@ export const useZebecWallet = (): ZebecWalletContext => {
     connected,
     publicKey,
     network,
-    signMessage
+    adapter,
+    signMessage,
+    disconnect: disconnectWallet
   }
 }
