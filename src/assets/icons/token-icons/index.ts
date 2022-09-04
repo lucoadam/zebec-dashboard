@@ -18,6 +18,7 @@ import UxdIcon from "./uxd.svg"
 import WagIcon from "./wag.svg"
 import WnzIcon from "./wnz.svg"
 import ZbcIcon from "./zbc.svg"
+import EthIcon from "./eth.svg"
 
 export {
   SolIcon as SOL,
@@ -39,5 +40,6 @@ export {
   BlockIcon as BLOCK,
   AllIcon as $ALL,
   RayIcon as RAY,
-  UxdIcon as UXD
+  UxdIcon as UXD,
+  EthIcon as ETH
 }

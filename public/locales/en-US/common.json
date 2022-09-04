@@ -57,7 +57,7 @@
         "withdraw-title": "Withdraw deposited Zebec assets into your wallet."
     },
     "wallet-not-connected": {
-        "title": "Wallet not connected!",
+        "title": "Connect a wallet to continue",
         "description": "Looks like your wallet is not connected. Please connect your wallet to keep using Zebec.",
         "connect-previous-wallet": "Connect with Previous Wallet",
         "connect-different-wallet": "Use a Different Wallet",

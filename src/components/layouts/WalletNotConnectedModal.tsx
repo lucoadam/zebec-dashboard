@@ -1,14 +1,17 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import { login } from "api"
 import TokenService from "api/services/token.service"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { Button, Modal } from "components/shared"
+import { Modal, Tab } from "components/shared"
 import { changeSignState } from "features/modals/signModalSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
 import jwt_decode from "jwt-decode"
+import { SolanaWallet } from "components/shared/Wallet/SolanaWallet"
+import { EthereumWallet } from "components/shared/Wallet/EthereumWallet"
+import { Token } from "components/shared/Token"
+import { useZebecWallet } from "hooks/useWallet"
 
 interface DecodedTokenProps {
   token_type: string
@@ -18,10 +21,27 @@ interface DecodedTokenProps {
   wallet_address: string
 }
 
+const tabs = [
+  {
+    title: "Solana",
+    icon: <Token symbol="SOL" />,
+    count: 0,
+    Component: <SolanaWallet className="mt-8" />
+  },
+  {
+    title: "Ethereum",
+    icon: <Token symbol="ETH" />,
+    count: 2,
+    Component: <EthereumWallet />
+  }
+]
+
 const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
-  const walletObject = useWallet()
-  const walletModalObject = useWalletModal()
+  const walletObject = useZebecWallet()
+  const [activeTab, setActiveTab] = useState<number>(0)
+
+  // const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const dispatch = useAppDispatch()
@@ -51,11 +71,11 @@ const WalletNotConnectedModal: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletObject.connected, isSigned])
 
-  const handleConnectWallet: () => void = () => {
-    walletObject.wallet
-      ? walletObject.connect()
-      : walletModalObject.setVisible(!walletModalObject.visible)
-  }
+  // const handleConnectWallet: () => void = () => {
+  //   walletObject.wallet
+  //     ? walletObject.connect()
+  //     : walletModalObject.setVisible(!walletModalObject.visible)
+  // }
 
   useEffect(() => {
     setTimeout(() => {
@@ -69,31 +89,28 @@ const WalletNotConnectedModal: NextPage = () => {
         <Modal
           show={!walletObject.connected || !isSigned}
           toggleModal={() => null}
-          className="rounded-2xl"
+          className="rounded-2xl pb-6 max-w-[398px]"
           hasCloseIcon={false}
         >
-          <div className="text-center px-6 py-8">
-            <span className="text-content-primary text-2xl font-semibold">
-              {t("wallet-not-connected.title")}
-            </span>
-            <p className="text-sm space-x-1 text-content-secondary mt-3">
-              {t("wallet-not-connected.description")}
-            </p>
-            <Button
-              className="w-full mt-10"
-              title={`${
-                walletObject.connected && !isSigned
-                  ? t("wallet-not-connected.sign-message")
-                  : t("wallet-not-connected.connect-wallet")
-              }`}
-              variant="gradient"
-              onClick={() =>
-                walletObject.connected && !isSigned
-                  ? handleLogin()
-                  : handleConnectWallet()
-              }
-            />
+          <span className="text-content-primary text-2xl font-semibold">
+            {t("wallet-not-connected.title")}
+          </span>
+          <div className="flex items-center border-b border-outline pt-2">
+            {tabs.map((tab, index) => {
+              return (
+                <Tab
+                  key={tab.title}
+                  type="plain"
+                  title={`${t(tab.title)}`}
+                  isActive={activeTab === index}
+                  onClick={() => setActiveTab(index)}
+                  startIcon={tab.icon}
+                  className="w-1/2 justify-center"
+                />
+              )
+            })}
           </div>
+          {tabs[activeTab].Component}
         </Modal>
       )}
     </>

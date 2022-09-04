@@ -7,7 +7,19 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import {
   PhantomWalletAdapter,
   SlopeWalletAdapter,
-  SolflareWalletAdapter
+  SolflareWalletAdapter,
+  BackpackWalletAdapter,
+  ExodusWalletAdapter,
+  SolletExtensionWalletAdapter,
+  TorusWalletAdapter,
+  CloverWalletAdapter,
+  Coin98WalletAdapter,
+  LedgerWalletAdapter,
+  SolongWalletAdapter,
+  MathWalletAdapter,
+  GlowWalletAdapter,
+  SpotWalletAdapter,
+  BitKeepWalletAdapter
 } from "@solana/wallet-adapter-wallets"
 import { store } from "app/store"
 import { ZebecContextProvider } from "app/zebecContext"
@@ -23,6 +35,7 @@ import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
 import axios from "axios"
+import EthereumWalletProvider from "components/shared/Wallet/EthereumWalletProvider"
 
 const MyApp = ({
   Component,
@@ -38,24 +51,38 @@ const MyApp = ({
     () => [
       new PhantomWalletAdapter(),
       new SlopeWalletAdapter(),
-      new SolflareWalletAdapter({ network })
+      new SolflareWalletAdapter({ network }),
+      new BackpackWalletAdapter(),
+      new ExodusWalletAdapter(),
+      new SolletExtensionWalletAdapter(),
+      new TorusWalletAdapter(),
+      new CloverWalletAdapter(),
+      new Coin98WalletAdapter(),
+      new LedgerWalletAdapter(),
+      new SolongWalletAdapter(),
+      new MathWalletAdapter(),
+      new GlowWalletAdapter(),
+      new SpotWalletAdapter(),
+      new BitKeepWalletAdapter()
     ],
     [network]
   )
   return (
     <Provider store={store}>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
-            <ThemeProvider>
-              <ZebecContextProvider>
-                <Component {...pageProps} />
-                <Common tokenDetails={tokenDetails} />
-              </ZebecContextProvider>
-            </ThemeProvider>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
+      <EthereumWalletProvider>
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+            <WalletModalProvider>
+              <ThemeProvider>
+                <ZebecContextProvider>
+                  <Component {...pageProps} />
+                  <Common tokenDetails={tokenDetails} />
+                </ZebecContextProvider>
+              </ThemeProvider>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      </EthereumWalletProvider>
     </Provider>
   )
 }

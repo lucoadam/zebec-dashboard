@@ -142,3 +142,5 @@ export {
   GithubLogo,
   TelegramLogo
 }
+
+export * from "./wallet-adapter-icons"
