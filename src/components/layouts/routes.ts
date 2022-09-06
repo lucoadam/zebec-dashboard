@@ -86,6 +86,12 @@ const deviceRoutes: DeviceRoutes[] = [
     menu: ["dashboard", "transactions", "treasury", "address-book"]
   },
   {
+    width: 1280,
+    main: ["dashboard", "transactions"],
+    more: ["treasury", "address-book"],
+    menu: []
+  },
+  {
     width: Number.MAX_VALUE,
     main: ["dashboard", "transactions", "treasury", "address-book"],
     more: [],
