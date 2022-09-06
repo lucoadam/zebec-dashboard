@@ -37,6 +37,7 @@ const Common: FC<{
 
   useEffect(() => {
     dispatch(fetchTokens(tokenDetails))
+    // eslint-disable-next-line
   }, [tokenDetails])
 
   useEffect(() => {

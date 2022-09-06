@@ -47,7 +47,8 @@ const HomePage: FC = () => {
       Object.keys(weeklyActivity).length === 0 &&
         dispatch(fetchWeeklyActivity())
     }
-  }, [isSigned, dispatch])
+    // eslint-disable-next-line
+  }, [isSigned])
 
   return (
     <>

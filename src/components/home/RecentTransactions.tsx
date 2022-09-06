@@ -23,6 +23,7 @@ const RecentTransactions: FC<{ className?: string }> = ({ className }) => {
       recentTransactions.results.length === 0 &&
         dispatch(fetchRecentTransactions())
     }
+    // eslint-disable-next-line
   }, [isSigned])
 
   return (
