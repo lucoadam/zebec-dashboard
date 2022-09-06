@@ -80,6 +80,7 @@ export const Tokens: FC<{
     (state) => state.transactions.overallActivity
   )
   const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
+  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const { t } = useTranslation()
   const [show, toggle, setToggle] = useToggle(false)
   const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)
@@ -87,7 +88,6 @@ export const Tokens: FC<{
   useClickOutside(tokensDropdownWrapperRef, {
     onClickOutside: () => setToggle(false)
   })
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
 
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">

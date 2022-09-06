@@ -11,6 +11,7 @@ import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
 import { FC, useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
+import * as Icons from "assets/icons"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -20,8 +21,11 @@ const WithdrawTab: FC = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const walletTokens =
     useAppSelector((state) => state.zebecBalance.tokens) || []
+  const streamingTokens =
+    useAppSelector((state) => state.zebecStreamingBalance.tokens) || []
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [showMaxInfo, setShowMaxInfo] = useState<boolean>(false)
 
   const {
     currentToken,
@@ -42,7 +46,17 @@ const WithdrawTab: FC = () => {
   })
 
   const setMaxAmount = () => {
-    setValue("amount", getBalance(walletTokens, currentToken.symbol))
+    const balance =
+      getBalance(walletTokens, currentToken.symbol) -
+      getBalance(streamingTokens, currentToken.symbol)
+
+    if (getBalance(streamingTokens, currentToken.symbol) > 0) {
+      setShowMaxInfo(true)
+    } else {
+      setShowMaxInfo(false)
+    }
+
+    setValue("amount", balance)
     trigger("amount")
   }
 
@@ -90,7 +104,7 @@ const WithdrawTab: FC = () => {
       <div className="text-caption text-content-tertiary">
         {t("common:deposit-withdrawal.withdraw-title")}
       </div>
-      <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-y-6">
+      <form onSubmit={handleSubmit(submit)} className="flex flex-col">
         <WithdrawDepositInput
           token={currentToken}
           setMaxAmount={setMaxAmount}
@@ -109,10 +123,17 @@ const WithdrawTab: FC = () => {
           />
         </WithdrawDepositInput>
 
+        {showMaxInfo && (
+          <div className="mt-2 text-caption text-content-tertiary flex items-start gap-x-1">
+            <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
+            <span>{t("common:deposit-withdrawal.max-withdraw-message")}</span>
+          </div>
+        )}
+
         <Button
           title={`${t("common:buttons.withdraw")}`}
           variant="gradient"
-          className="w-full"
+          className="w-full mt-6"
           disabled={loading}
           loading={loading}
         />

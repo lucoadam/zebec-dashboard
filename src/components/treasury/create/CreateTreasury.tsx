@@ -56,7 +56,7 @@ const CreateTreasury: NextPage = () => {
           ))}
         </div>
         <div className="flex-auto sm:w-1/2 w-full">
-          <div className="bg-background-tertiary rounded-[4px] py-[48px] px-[32px]">
+          <div className="bg-background-light rounded-[4px] py-[48px] px-[32px]">
             {currentStep < StepsList.length ? (
               StepsList[currentStep].component({
                 setCurrentStep,
@@ -64,7 +64,10 @@ const CreateTreasury: NextPage = () => {
                 treasury
               })
             ) : (
-              <CreatingTreasury treasury={treasury} />
+              <CreatingTreasury
+                treasury={treasury}
+                setCurrentStep={setCurrentStep}
+              />
             )}
           </div>
         </div>

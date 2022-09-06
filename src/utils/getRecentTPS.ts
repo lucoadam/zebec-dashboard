@@ -9,7 +9,6 @@ export const getRecentTPS = async () => {
         performanceSamples[0].samplePeriodSecs
     )
   } catch (error) {
-    console.log(error)
     currentTPS = 0
   }
   return currentTPS

@@ -30,6 +30,9 @@ const tabs = [
 
 const HomePage: FC = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const { overallActivity, weeklyActivity } = useAppSelector(
+    (state) => state.transactions
+  )
   const zebecTokensBalance =
     useAppSelector((state) => state.zebecBalance?.tokens) || []
   const zebecStreamingTokensBalance =
@@ -39,10 +42,13 @@ const HomePage: FC = () => {
 
   useEffect(() => {
     if (isSigned) {
-      dispatch(fetchWeeklyActivity())
-      dispatch(fetchOverallActivity())
+      Object.keys(overallActivity).length === 0 &&
+        dispatch(fetchOverallActivity())
+      Object.keys(weeklyActivity).length === 0 &&
+        dispatch(fetchWeeklyActivity())
     }
-  }, [isSigned, dispatch])
+    // eslint-disable-next-line
+  }, [isSigned])
 
   return (
     <>

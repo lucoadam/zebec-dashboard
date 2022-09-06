@@ -61,7 +61,6 @@ export const zbcAirdrop =
         }, constants.BALANCE_FETCH_TIMEOUT)
       }
     } catch (error) {
-      console.log(error)
       dispatch(
         toast.error({
           message: `Error occured on test ZBC airdrop.`

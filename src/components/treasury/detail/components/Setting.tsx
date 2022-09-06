@@ -110,6 +110,7 @@ const Setting = () => {
             placeholder={t("treasurySettings:enter-safe-name")}
             className="h-[40px] w-full"
             type="text"
+            autoFocus={false}
           >
             <input {...register("name")} autoFocus />
           </InputField>
@@ -164,7 +165,10 @@ const Setting = () => {
                       archiveTreasury({
                         uuid: activeTreasury?.uuid || "",
                         callback: () => {
-                          router.push("/treasury")
+                          setIsOpen(!isOpen)
+                          setTimeout(() => {
+                            router.push("/treasury")
+                          }, 500)
                         }
                       })
                     )

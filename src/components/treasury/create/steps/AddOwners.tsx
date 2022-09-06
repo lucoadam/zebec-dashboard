@@ -217,14 +217,14 @@ const AddOwners: FC<StepsComponentProps> = ({
             <div className="rounded-lg bg-background-primary border border-outline">
               <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
               <input
-                className="is-search w-full h-[48px] bg-background-primary"
+                className="is-search w-full h-[48px] bg-background-primary !border-t-0 !border-l-0 !border-r-0 !rounded-none"
                 placeholder={t(
                   "createTreasury:second-steper.search-address-book"
                 )}
                 type="text"
                 onChange={(e) => setReceiverSearchData(e.target.value)}
               />
-              <div className="divide-y divide-outline h-[207px] overflow-auto">
+              <div className="divide-y divide-outline h-[206px] overflow-auto">
                 {getFilteredAddressBook().map((user) => (
                   <div
                     key={user.address}
@@ -232,7 +232,7 @@ const AddOwners: FC<StepsComponentProps> = ({
                   >
                     <input
                       type="checkbox"
-                      className="hover:cursor-pointer h-5 w-5 rounded-sm focus:ring-offset-0 focus:ring-0 shadow-none outline-none border-2 border-outline bg-transparent"
+                      className="hover:cursor-pointer h-5 w-5 rounded focus:ring-offset-0 focus:ring-0 shadow-none outline-none border-2 border-outline bg-transparent"
                       checked={
                         owners.some((owner) => owner.wallet === user.address)
                           ? true
@@ -304,13 +304,13 @@ const AddOwners: FC<StepsComponentProps> = ({
                     setCheckedOwners([])
                     setToggleReceiverDropdown(false)
                   }}
-                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
+                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t border-outline"
                 >
                   {t("createTreasury:second-steper.title")}
                 </div>
               ) : (
                 <div
-                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-[15px] border-t-[1px] border-outline"
+                  className="cursor-pointer hover:bg-background-light text-content-primary grid place-items-center p-4 border-t border-outline rounded-b-lg"
                   onClick={() => router.push("/address-book")}
                 >
                   {t("createTreasury:second-steper.add-address")}
