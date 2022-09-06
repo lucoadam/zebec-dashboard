@@ -12,17 +12,18 @@ import { RecentTransactionRow } from "./RecentTransactionRow"
 const RecentTransactions: FC<{ className?: string }> = ({ className }) => {
   const { t } = useTranslation()
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.signTransaction)
   const recentTransactions = useAppSelector(
     (state) => state.transactions.recentTransactions
   )
 
-  const dispatch = useAppDispatch()
   useEffect(() => {
     if (isSigned) {
-      dispatch(fetchRecentTransactions())
+      recentTransactions.results.length === 0 &&
+        dispatch(fetchRecentTransactions())
     }
-  }, [dispatch, isSigned])
+  }, [isSigned])
 
   return (
     <>
