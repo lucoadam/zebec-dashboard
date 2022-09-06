@@ -11,10 +11,11 @@ interface CreateTreasuryProps {
   }
   treasury: ZebecNativeTreasury
   callback: () => void
+  errorCallback: () => void
 }
 
 export const createTreasury =
-  ({ data, treasury, callback }: CreateTreasuryProps) =>
+  ({ data, treasury, callback, errorCallback }: CreateTreasuryProps) =>
   async (dispatch: AppDispatch) => {
     try {
       const sdkData = {
@@ -49,6 +50,8 @@ export const createTreasury =
             message: response.message ?? "Unknown Error"
           })
         )
+        //Error callBack
+        errorCallback()
       }
     } catch (error: any) {
       dispatch(
@@ -56,6 +59,8 @@ export const createTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
+      //Error callBack
+      errorCallback()
     }
     return null
   }

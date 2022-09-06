@@ -1,21 +1,22 @@
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
+import { WalletApprovalMessageModal } from "components/modals"
+import { Toasts } from "components/shared"
 // import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
+import { setTPSValue } from "features/common/commonSlice"
 import {
   fetchTokens,
   fetchTokensPrice
 } from "features/tokenDetails/tokenDetailsSlice"
-import {
-  fetchArchivedTreasury,
-  fetchTreasury
-} from "features/treasury/treasurySlice"
+import { fetchTreasury } from "features/treasury/treasurySlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice"
 
 import { FC, useContext, useEffect } from "react"
+import { getRecentTPS } from "utils"
 
 const Common: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +60,14 @@ const Common: FC<{
     if (isSigned) {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
-      dispatch(fetchArchivedTreasury())
+      // TPS Value
+      const fetchTPS = async () => {
+        const tpsValue = await getRecentTPS()
+        dispatch(setTPSValue(tpsValue))
+      }
+      fetchTPS()
+      const interval = setInterval(fetchTPS, 60000)
+      return () => clearInterval(interval)
     }
     // eslint-disable-next-line
   }, [isSigned])
@@ -83,7 +91,14 @@ const Common: FC<{
       }
     }
   }, [dispatch, tokens])
-  return <></>
+  return (
+    <>
+      {/* Common Modals */}
+      <WalletApprovalMessageModal />
+      {/* Fixed Divs */}
+      <Toasts />
+    </>
+  )
 }
 
 export default Common

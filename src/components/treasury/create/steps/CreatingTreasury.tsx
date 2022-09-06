@@ -1,20 +1,23 @@
-import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch } from "app/hooks"
 import ZebecContext from "app/zebecContext"
-import LoadingSvg from "assets/images/treasury/loading.svg"
+import { CreatingTreasuryGif } from "assets/images"
 import { createTreasury } from "application"
 import { useRouter } from "next/router"
 import { FC, useContext, useEffect } from "react"
 import { Treasury } from "../CreateTreasury.d"
+import Image from "next/image"
 
 interface CreatingTreasuryProps {
   treasury: Treasury
+  setCurrentStep: (step: number) => void
 }
 
-const CreatingTreasury: FC<CreatingTreasuryProps> = ({ treasury }) => {
+const CreatingTreasury: FC<CreatingTreasuryProps> = ({
+  treasury,
+  setCurrentStep
+}) => {
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
-  const wallet = useWallet()
   const router = useRouter()
 
   useEffect(() => {
@@ -25,20 +28,31 @@ const CreatingTreasury: FC<CreatingTreasuryProps> = ({ treasury }) => {
           treasury: zebecCtx.treasury,
           callback: () => {
             router.push("/treasury")
+          },
+          errorCallback: () => {
+            setCurrentStep(2)
           }
         })
       )
-  }, [treasury, wallet, dispatch, router, zebecCtx.treasury])
+
+    // eslint-disable-next-line
+  }, [zebecCtx.treasury])
 
   return (
     <>
       <h3 className="leading-7 font-semibold text-base text-content-primary">
         Creating Treasury
       </h3>
-      <p className="text-content-secondary font-normal text-sm">
+      <p className="text-content-secondary font-normal text-sm mb-8">
         Your treasury is being created. It can take up to a minute.
       </p>
-      <LoadingSvg className="w-[92px] h-[92px] mt-[32px]" />
+      <Image
+        src={CreatingTreasuryGif}
+        width={100}
+        height={92}
+        layout="fixed"
+        alt="Creating treasury"
+      />
     </>
   )
 }

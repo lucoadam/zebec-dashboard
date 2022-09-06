@@ -83,11 +83,11 @@ const deviceRoutes: DeviceRoutes[] = [
     width: 1024,
     main: [],
     more: [],
-    menu: ["dashboard", "transactions", "address-book"]
+    menu: ["dashboard", "transactions", "treasury", "address-book"]
   },
   {
     width: Number.MAX_VALUE,
-    main: ["dashboard", "transactions", "address-book"],
+    main: ["dashboard", "transactions", "treasury", "address-book"],
     more: [],
     menu: []
   }

@@ -7,6 +7,7 @@ interface Owner {
 
 export interface Treasury {
   id: number
+  archived: boolean
   owners: Owner[]
   name: string
   treasury_address: string
@@ -25,12 +26,6 @@ export interface TreasuryState {
     results: Treasury[]
   }
   error: string
-  archivedTreasuries: {
-    count: number
-    next: string | null
-    previous: string | null
-    results: Treasury[]
-  }
   activeTreasury: Treasury | null
   updating: boolean
   updatingError: string
@@ -42,6 +37,7 @@ export interface UpdateTreasuryProps {
   uuid: string
   name?: string
   archived?: boolean
+  callback?: () => void
 }
 export interface UpdateTreasuryResponse {
   data: { name: string; archived: boolean }

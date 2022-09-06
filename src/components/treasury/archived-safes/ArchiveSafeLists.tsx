@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import * as Icons from "assets/icons"
 import { useTranslation } from "next-i18next"
 import Image, { StaticImageData } from "next/image"
@@ -12,7 +12,15 @@ import { updateTreasury } from "features/treasury/treasurySlice"
 const ArchiveSafeLists = () => {
   const { t } = useTranslation("archiveTreasury")
   const dispatch = useAppDispatch()
-  const { archivedTreasuries } = useAppSelector((state) => state.treasury)
+  const { results } = useAppSelector((state) => state.treasury.treasuries)
+
+  const archivedTreasuries = useMemo(() => {
+    let archivedTreasuriesList = []
+    archivedTreasuriesList = results.filter(
+      (treasury) => treasury.archived === true
+    )
+    return archivedTreasuriesList
+  }, [results])
 
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
@@ -29,14 +37,14 @@ const ArchiveSafeLists = () => {
   return (
     <>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {archivedTreasuries.results.length === 0 ? (
+        {archivedTreasuries.length === 0 ? (
           <>
             <div className="md:col-span-2 lg:col-span-3">
-              <EmptyDataState message={`${t("no-treasury")}`} />
+              <EmptyDataState message={`${t("no-archive-treasury")}`} />
             </div>
           </>
         ) : (
-          archivedTreasuries.results.map((treasury, index) => {
+          archivedTreasuries.map((treasury, index) => {
             return (
               <div
                 className="p-6 bg-background-secondary rounded cursor-pointer"
@@ -105,7 +113,10 @@ const ArchiveSafeLists = () => {
               onClick={() => {
                 const data = {
                   uuid: selectedTreasury,
-                  archived: false
+                  archived: false,
+                  callback: () => {
+                    setIsOpen(!isOpen)
+                  }
                 }
                 dispatch(updateTreasury(data))
               }}

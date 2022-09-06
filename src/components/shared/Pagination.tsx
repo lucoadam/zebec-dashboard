@@ -41,10 +41,6 @@ export const Pagination: FC<PaginationProps> = ({
     []
   )
 
-  useEffect(() => {
-    console.log(pagination, numberOfPages)
-  }, [pagination, numberOfPages])
-
   const handlePagination = (currentPage: number | string) => {
     //Temp no of Pages
     let page = currentPage
@@ -196,13 +192,14 @@ export const Pagination: FC<PaginationProps> = ({
         <button
           className={`w-8  px-3 py-1.5  ${
             pagination.currentPage === 1
-              ? "opacity-50 cursor-default"
+              ? "opacity-50 cursor-not-allowed"
               : "cursor-pointer"
           }`}
           onClick={() => {
             handlePagination(Number(pagination.currentPage) - 1)
             if (onChange) onChange()
           }}
+          disabled={pagination.currentPage === 1}
         >
           <Icons.PaginationLeftArrow />
         </button>
@@ -233,15 +230,19 @@ export const Pagination: FC<PaginationProps> = ({
         <button
           className={` w-8 px-3 py-2 ${
             pagination.currentPage === numberOfPages.length
-              ? "opacity-50 cursor-default"
+              ? "opacity-50 cursor-not-allowed"
               : numberOfPages.length === 0
-              ? "opacity-50 cursor-default"
+              ? "opacity-50 cursor-not-allowed"
               : "cursor-pointer"
           }`}
           onClick={() => {
             handlePagination(Number(pagination.currentPage) + 1)
             if (onChange) onChange()
           }}
+          disabled={
+            pagination.currentPage === numberOfPages.length ||
+            numberOfPages.length === 0
+          }
         >
           <Icons.PaginationRightArrow />
         </button>

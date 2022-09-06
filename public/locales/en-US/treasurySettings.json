@@ -3,14 +3,12 @@
     "out-of": "out of",
     "owners": "Owners",
     "safe-name": "Safe Name",
-    "enter-safe-name": "Enter Safe Name",
+    "enter-safe-name": "Enter Treasury Name",
     "save-changes": "Save Changes",
-    "archive-safe": "Archive Safe",
-    "archive-safe-description": "Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe.",
-    "archive-modal-header" :"Are you sure you want to archive safe?",
-    "archiving-content":"Archiving safe will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the safe.",
-    "yes-archive-safe" :"Yes, Archive Safe",
+    "archive-safe": "Archive Treasury",
+    "archive-safe-description": "Archiving treasury will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the treasury.",
+    "archive-modal-header" :"Are you sure you want to archive treasury?",
+    "archiving-content":"Archiving treasury will remove it from Treasury. However, you can always unarchive it from your settings. Your funds will always be in the treasury.",
+    "yes-archive-safe" :"Yes, Archive Treasury",
     "cancel" : "Cancel"
-
-
 }
