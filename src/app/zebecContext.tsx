@@ -42,22 +42,26 @@ export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
     null
   )
   const initializeHandler = (walletObject: any) => {
+    //Logger
+    const logger = process.env.NODE_ENV === "development" ? true : false
+    //Provider
     const provider = initAnchorProvider(walletObject, CLUSTER_API_URL)
-    const streamCtx = new ZebecNativeStream(provider, feeReceiverWallet, true)
+    //Normal
+    const streamCtx = new ZebecNativeStream(provider, feeReceiverWallet, logger)
     setStream(streamCtx)
-    const tokenCtx = new ZebecTokenStream(provider, feeReceiverWallet, true)
+    const tokenCtx = new ZebecTokenStream(provider, feeReceiverWallet, logger)
     setToken(tokenCtx)
     //Treasury
     const treasuryCtx = new ZebecNativeTreasury(
       provider,
       feeReceiverWallet,
-      true
+      logger
     )
     setTreasury(treasuryCtx)
     const treasuryTokenCtx = new ZebecTokenTreasury(
       provider,
       feeReceiverWallet,
-      true
+      logger
     )
     setTreasuryToken(treasuryTokenCtx)
   }
