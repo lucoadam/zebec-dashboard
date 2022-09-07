@@ -42,6 +42,8 @@ const getBackgroundByPercentage = (
     return "text-success"
   }
   switch (status) {
+    case StatusType.COMPLETED:
+      return "text-success"
     case StatusType.CANCELLED:
       return "text-error"
     case StatusType.PAUSED:

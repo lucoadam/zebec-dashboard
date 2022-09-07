@@ -1,30 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useAppDispatch, useAppSelector } from "app/hooks"
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, EmptyDataState, TableBody } from "components/shared"
-import { fetchRecentTransactions } from "features/transactions/transactionsSlice"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { RecentTransactionRow } from "./RecentTransactionRow"
 
 const RecentTransactions: FC<{ className?: string }> = ({ className }) => {
   const { t } = useTranslation()
   const router = useRouter()
-  const dispatch = useAppDispatch()
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
   const recentTransactions = useAppSelector(
     (state) => state.transactions.recentTransactions
   )
-
-  useEffect(() => {
-    if (isSigned) {
-      recentTransactions.results.length === 0 &&
-        dispatch(fetchRecentTransactions())
-    }
-    // eslint-disable-next-line
-  }, [isSigned])
 
   return (
     <>
