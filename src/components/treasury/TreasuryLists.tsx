@@ -1,7 +1,7 @@
 import CopyButton from "components/shared/CopyButton"
 import Image, { StaticImageData } from "next/image"
 import Link from "next/link"
-import { FC } from "react"
+import { FC, useMemo } from "react"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as AvatarImages from "assets/images/avatars"
@@ -10,9 +10,16 @@ import { EmptyDataState } from "components/shared"
 import { useTranslation } from "next-i18next"
 
 const TreasuryLists: FC = () => {
-  const { treasuries } = useAppSelector((state) => state.treasury)
-
   const { t } = useTranslation("treasury")
+  const { results } = useAppSelector((state) => state.treasury.treasuries)
+
+  const unarchivedTreasuries = useMemo(() => {
+    let unarchivedTreasuriesList = []
+    unarchivedTreasuriesList = results.filter(
+      (treasury) => treasury.archived === false
+    )
+    return unarchivedTreasuriesList
+  }, [results])
 
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
@@ -23,14 +30,14 @@ const TreasuryLists: FC = () => {
   return (
     <>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {treasuries.results.length === 0 ? (
+        {unarchivedTreasuries.length === 0 ? (
           <>
             <div className="md:col-span-2 lg:col-span-3">
               <EmptyDataState message={`${t("no-treasury")}`} />
             </div>
           </>
         ) : (
-          treasuries.results.map((treasury, index) => {
+          unarchivedTreasuries.map((treasury, index) => {
             return (
               <Link key={treasury.id} href={`/treasury/${treasury.uuid}`}>
                 <div className="p-6 bg-background-secondary rounded cursor-pointer">

@@ -1,14 +1,12 @@
 import { useState } from "react"
 import ReactTooltip from "react-tooltip"
-
-// import { Tab } from "@headlessui/react";
 import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
-import { NFTsList } from "./components/NFTsList"
 import Overview from "./components/Overview"
-import Setting from "./components/Setting"
-import { Transactions } from "./components/Transactions"
+// import { NFTsList } from "./components/NFTsList"
+// import Setting from "./components/Setting"
+// import { Transactions } from "./components/Transactions"
 
 const categories = [
   {
@@ -16,25 +14,25 @@ const categories = [
     count: 0,
     icon: <Icons.EyeOpenIcon />,
     Component: <Overview />
-  },
-  {
-    title: "transactions",
-    count: 3,
-    icon: <Icons.TransactionIcon />,
-    Component: <Transactions />
-  },
-  {
-    title: "nft",
-    count: 0,
-    icon: <Icons.SquareBlockMove />,
-    Component: <NFTsList />
-  },
-  {
-    title: "settings",
-    count: 0,
-    icon: <Icons.GearringIcon />,
-    Component: <Setting />
   }
+  // {
+  //   title: "transactions",
+  //   count: 3,
+  //   icon: <Icons.TransactionIcon />,
+  //   Component: <Transactions />
+  // },
+  // {
+  //   title: "nft",
+  //   count: 0,
+  //   icon: <Icons.SquareBlockMove />,
+  //   Component: <NFTsList />
+  // },
+  // {
+  //   title: "settings",
+  //   count: 0,
+  //   icon: <Icons.GearringIcon />,
+  //   Component: <Setting />
+  // }
 ]
 
 export default function TreasuryDetail() {

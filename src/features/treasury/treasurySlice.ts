@@ -18,12 +18,6 @@ const initialState: TreasuryState = {
     results: []
   },
   error: "",
-  archivedTreasuries: {
-    count: 0,
-    next: null,
-    previous: null,
-    results: []
-  },
   activeTreasury: null,
   updating: false,
   updatingError: "",
@@ -33,13 +27,6 @@ const initialState: TreasuryState = {
 
 export const fetchTreasury = createAsyncThunk(
   "treasury/fetchTreasury",
-  async () => {
-    const { data: response } = await api.get(`/treasury/`)
-    return response
-  }
-)
-export const fetchArchivedTreasury = createAsyncThunk(
-  "treasury/fetchArchivedTreasury",
   async () => {
     const { data: response } = await api.get(`/treasury/`)
     return response
@@ -65,11 +52,22 @@ export const updateTreasury = createAsyncThunk<
   { dispatch: AppDispatch }
 >("treasury/updateTreasury", async (data, { dispatch }) => {
   const response = await api.patch(`/treasury/${data.uuid}/`, data)
-  dispatch(
-    toast.success({
-      message: "Treasury updated successfully."
-    })
-  )
+  if (data.name) {
+    dispatch(
+      toast.success({
+        message: "Treasury name updated successfully."
+      })
+    )
+  } else {
+    dispatch(
+      toast.success({
+        message: "Treasury unarchived successfully."
+      })
+    )
+    dispatch(fetchTreasury())
+    data.callback && data.callback()
+  }
+
   return { data: response.data, uuid: data.uuid }
 })
 
@@ -78,11 +76,14 @@ export const archiveTreasury = createAsyncThunk<
   { uuid: string; callback: () => void },
   { dispatch: AppDispatch }
 >("treasury/archiveTreasury", async (data, { dispatch }) => {
-  console.log(data)
-  const response = await api.delete(`/treasury/${data.uuid}/`)
+  await api.delete(`/treasury/${data.uuid}/`)
+  dispatch(
+    toast.success({
+      message: "Treasury archived successfully."
+    })
+  )
   dispatch(fetchTreasury())
   data.callback()
-  console.log(response)
   return null
 })
 
@@ -111,22 +112,6 @@ const treasurySlice = createSlice({
       }
     )
     builder.addCase(fetchTreasury.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.error.message ?? "Something went wrong"
-    })
-    //Fetch Archived Treasury
-    builder.addCase(fetchArchivedTreasury.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(
-      fetchArchivedTreasury.fulfilled,
-      (state, action: PayloadAction<typeof initialState.treasuries>) => {
-        state.loading = false
-        state.archivedTreasuries = action.payload
-        state.error = ""
-      }
-    )
-    builder.addCase(fetchArchivedTreasury.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })

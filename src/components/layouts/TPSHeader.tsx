@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
@@ -6,7 +6,7 @@ import { CollapseDropdown } from "../shared"
 import * as Icons from "../../assets/icons"
 //hooks
 import { useClickOutside } from "../../hooks"
-import { formatCurrency, getRecentTPS } from "utils"
+import { formatCurrency } from "utils"
 import { constants } from "constants/constants"
 import { useAppSelector } from "app/hooks"
 
@@ -16,22 +16,13 @@ const TPSHeader = () => {
   const languageDropdownWrapperRef = useRef(null)
 
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
-  const [recentTPS, setRecentTPS] = useState<number>(0)
 
   const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
+  const { tpsValue } = useAppSelector((state) => state.common)
+
   useClickOutside(languageDropdownWrapperRef, {
     onClickOutside: () => setToggleDropdown(false)
   })
-
-  useEffect(() => {
-    const fetchTPS = async () => {
-      const tpsValue = await getRecentTPS()
-      setRecentTPS(tpsValue)
-    }
-    fetchTPS()
-    const interval = setInterval(fetchTPS, 60000)
-    return () => clearInterval(interval)
-  }, [])
 
   return (
     <>
@@ -42,7 +33,7 @@ const TPSHeader = () => {
               {t("tps-header.sol/usd")}{" "}
               <span
                 className={`${
-                  recentTPS >= constants.AVERAGE_TPS
+                  tpsValue >= constants.AVERAGE_TPS
                     ? "text-warning"
                     : "text-error"
                 }`}
@@ -53,22 +44,22 @@ const TPSHeader = () => {
             {t("tps-header.network")}:&nbsp;
             <span
               className={`flex items-center ${
-                recentTPS >= constants.AVERAGE_TPS
+                tpsValue >= constants.AVERAGE_TPS
                   ? "text-warning"
                   : "text-error"
               } `}
             >
-              {recentTPS} TPS{" "}
+              {tpsValue} TPS{" "}
               <Icons.WarningTriangleIcon
                 className={`w-4 h-4 ${
-                  recentTPS >= constants.AVERAGE_TPS && "hidden"
+                  tpsValue >= constants.AVERAGE_TPS && "hidden"
                 }`}
               />
             </span>
           </div>
           <div
             className={`ml-2 ${
-              recentTPS >= constants.AVERAGE_TPS ? "hidden" : "hidden lg:block"
+              tpsValue >= constants.AVERAGE_TPS ? "hidden" : "hidden lg:block"
             }`}
           >
             {t("tps-header.description")}

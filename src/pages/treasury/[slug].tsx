@@ -87,7 +87,8 @@ const Treasury: NextPage = () => {
             className="md:flex"
           >
             <BreadcrumbRightContent>
-              <div className="flex gap-4">
+              {/* Deposit NFT and Send from treasury | Hidden for now (flex) */}
+              <div className="gap-4 hidden">
                 <Link href="/treasury/deposit-nft">
                   <Button
                     title={`${t("treasury:deposit-nft")}`}

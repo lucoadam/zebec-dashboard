@@ -23,7 +23,9 @@ export const fetchZebecBalance: any = createAsyncThunk(
       base58PublicKey
     )
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.chainId === "solana"
+    )
 
     // fetch wallet tokens
     const tokensBalance = await getTokensBalanceOfWallet(

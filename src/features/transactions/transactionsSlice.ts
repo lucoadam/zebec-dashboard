@@ -121,7 +121,6 @@ export const fetchOutgoingTransactionsById: any = createAsyncThunk(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (uuid: string) => {
     const { data: response } = await api.get(`/transaction/${uuid}/`)
-    console.log(response)
     return response
   }
 )
@@ -394,13 +393,11 @@ const transactionsSlice = createSlice({
   }
 })
 
-
 export const {
   setPagination,
   setInitiatedTransactions,
   removeInitiatedTransactions,
   resetTimedStatusTransactions
 } = transactionsSlice.actions
-
 
 export default transactionsSlice.reducer

@@ -28,10 +28,10 @@ export const useWithdrawDepositForm = ({
   )
 
   useEffect(() => {
-    if (tokens.length > 0) {
+    if (tokens.length > 0 && currentToken.symbol === "") {
       setCurrentToken(tokens[0])
     }
-  }, [tokens])
+  }, [tokens, currentToken])
 
   const [show, toggle, setToggle] = useToggle(false)
 
