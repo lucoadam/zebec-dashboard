@@ -29,7 +29,9 @@ const tabs = [
 ]
 
 const HomePage: FC = () => {
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const tokenDetails = useAppSelector(
+    (state) => state.tokenDetails.tokens
+  ).filter((token) => token.chainId === "solana")
   const zebecTokensBalance =
     useAppSelector((state) => state.zebecBalance?.tokens) || []
   const zebecStreamingTokensBalance =

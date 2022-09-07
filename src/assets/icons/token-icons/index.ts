@@ -22,6 +22,7 @@ import EthIcon from "./eth.svg"
 
 export {
   SolIcon as SOL,
+  SolIcon as WSOL,
   ScyIcon as SCY,
   SerIcon as SER,
   PusdIcon as PUSD,

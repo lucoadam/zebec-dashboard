@@ -1,4 +1,3 @@
-import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 // import { createVault } from "application/normal/createFeeVault"
@@ -14,18 +13,20 @@ import {
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice"
+import { useZebecWallet } from "hooks/useWallet"
 
 import { FC, useContext, useEffect } from "react"
+import { useSigner } from "wagmi"
 
 const Common: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tokenDetails: any
 }> = ({ tokenDetails }) => {
-  const walletObject = useWallet()
+  const walletObject = useZebecWallet()
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
   const { isSigned } = useAppSelector((state) => state.signTransaction)
-
+  const { data: signer } = useSigner()
   const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
@@ -33,8 +34,19 @@ const Common: FC<{
   }, [dispatch, tokenDetails])
 
   useEffect(() => {
-    if (isSigned && tokens.length > 0 && walletObject.publicKey) {
-      dispatch(fetchWalletBalance(walletObject.publicKey))
+    if (
+      isSigned &&
+      tokens.length > 0 &&
+      walletObject.publicKey &&
+      (walletObject.chainId === "solana" || signer)
+    ) {
+      dispatch(
+        fetchWalletBalance({
+          publicKey: walletObject.publicKey,
+          chainId: walletObject.chainId,
+          signer: walletObject.chainId !== "solana" && signer
+        })
+      )
       dispatch(fetchZebecBalance(walletObject.publicKey))
       if (zebecContext.token && zebecContext.stream) {
         dispatch(
@@ -47,7 +59,8 @@ const Common: FC<{
       }
     }
     // eslint-disable-next-line
-  }, [walletObject.publicKey, tokens, isSigned, zebecContext])
+  }, [walletObject.publicKey, tokens, isSigned, zebecContext, signer])
+
   useEffect(() => {
     if (walletObject.connected) {
       zebecContext.initialize(walletObject)

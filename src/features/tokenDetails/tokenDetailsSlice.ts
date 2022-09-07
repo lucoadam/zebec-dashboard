@@ -21,7 +21,8 @@ export const fetchTokens: any = createAsyncThunk(
       symbol: res.symbol,
       decimal: res.decimal,
       mint: res.mint,
-      coingeckoId: res.coingeco_id
+      coingeckoId: res.coingeco_id,
+      chainId: res.chainId
     }))
 
     return tokens

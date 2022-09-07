@@ -1,4 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
@@ -8,21 +8,72 @@ import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useState } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import { getBalance } from "utils/getBalance"
+import { useSigner } from "wagmi"
+
+const ABI = [
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  }
+]
+import { transferEvm, ZebecSolBridgeClient } from "@zebec-io/zebec-wormhole-sdk"
+import { ethers } from "ethers"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
   const { stream, token } = useContext(ZebecContext)
-  const { publicKey } = useWallet()
+  const { publicKey } = useZebecWallet()
   const dispatch = useAppDispatch()
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
+
+  useEffect(() => {
+    if (walletObject.publicKey && signer) {
+      const contract = new ethers.Contract(
+        "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+        ABI,
+        signer
+      )
+      console.log(contract)
+      if (contract) {
+        contract.balanceOf(walletObject.publicKey).then((res: any) => {
+          console.log(res.toString() / 10 ** 9)
+        })
+      }
+    }
+  }, [walletObject.publicKey, signer])
+
+  const tokenDetails = useAppSelector(
+    (state) => state.tokenDetails.tokens
+  ).filter(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (token) => token.chainId === walletObject.chainId
+  )
   const walletTokens =
     useAppSelector((state) => state.walletBalance.tokens) || []
 
   const [loading, setLoading] = useState<boolean>(false)
-
   const {
     currentToken,
     setCurrentToken,
@@ -53,12 +104,18 @@ const DepositTab: FC = () => {
     reset()
     setTimeout(() => {
       dispatch(fetchZebecBalance(publicKey?.toString()))
-      dispatch(fetchWalletBalance(publicKey?.toString()))
+      dispatch(
+        fetchWalletBalance({
+          publicKey: publicKey?.toString(),
+          chainId: walletObject.chainId,
+          signer: walletObject.chainId === "solana" && signer
+        })
+      )
     }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
+  const handleSolanaSubmit = (data: any) => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
@@ -74,6 +131,7 @@ const DepositTab: FC = () => {
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
+      console.log(depositData)
       if (currentToken.symbol === "SOL")
         stream &&
           dispatch(
@@ -84,6 +142,37 @@ const DepositTab: FC = () => {
           dispatch(
             depositToken(depositData, token, setLoading, depositCallback)
           )
+    }
+  }
+
+  const handleEvmSubmit = (data: any) => {
+    console.log(
+      "receiver",
+      ZebecSolBridgeClient.getXChainUserKey(
+        walletObject.publicKey as string,
+        4
+      ).toString()
+    )
+    if (signer) {
+      transferEvm(
+        signer,
+        currentToken.mint,
+        4,
+        data.amount,
+        1,
+        ZebecSolBridgeClient.getXChainUserKey(
+          walletObject.publicKey as string,
+          4
+        ).toString(),
+        "0.01"
+      )
+    }
+  }
+  const submit = (data: any) => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaSubmit(data)
+    } else {
+      handleEvmSubmit(data)
     }
   }
 

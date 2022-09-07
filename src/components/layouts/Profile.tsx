@@ -76,7 +76,7 @@ const Profile: FC = () => {
                   {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                  {titleCase(`${useWalletObject.adapter} Wallet`)}
+                  {titleCase(`${useWalletObject.adapter}`)}
                 </div>
               </div>
               <Icons.CheveronDownIcon className="w-5 h-5 text-content-secondary" />
@@ -110,7 +110,7 @@ const Profile: FC = () => {
                     )}
                   </div>
                   <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                    {titleCase(`${useWalletObject.adapter} Wallet`)}
+                    {titleCase(`${useWalletObject.network}`)}
                   </div>
                 </div>
                 <CopyButton

@@ -4,7 +4,7 @@ import { WalletReadyState } from "@solana/wallet-adapter-base"
 import type { Wallet } from "@solana/wallet-adapter-react"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useWalletModal, WalletIcon } from "@solana/wallet-adapter-react-ui"
-import type { FC, MouseEvent } from "react"
+import { FC, MouseEvent, useEffect } from "react"
 import React, {
   useCallback,
   useLayoutEffect,
@@ -33,6 +33,10 @@ export const SolanaWallet: FC<WalletModalProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const { wallets, select } = useWallet()
+  const data = useWallet()
+  useEffect(() => {
+    console.log(data)
+  }, [data])
   const { setVisible } = useWalletModal()
   const [expanded, setExpanded] = useState(false)
   const [fadeIn, setFadeIn] = useState(false)

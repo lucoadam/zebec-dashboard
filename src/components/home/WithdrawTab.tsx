@@ -1,4 +1,3 @@
-import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
@@ -8,15 +7,18 @@ import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { FC, useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
+import { useSigner } from "wagmi"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
   const { stream, token } = useContext(ZebecContext)
-  const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
   const dispatch = useAppDispatch()
+  const { data: signer } = useSigner()
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const walletTokens =
     useAppSelector((state) => state.zebecBalance.tokens) || []
@@ -49,8 +51,14 @@ const WithdrawTab: FC = () => {
   const withdrawCallback = () => {
     reset()
     setTimeout(() => {
-      dispatch(fetchZebecBalance(publicKey?.toString()))
-      dispatch(fetchWalletBalance(publicKey?.toString()))
+      dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+      dispatch(
+        fetchWalletBalance({
+          publicKey: walletObject.publicKey?.toString(),
+          chainId: walletObject.chainId,
+          signer: walletObject.chainId === "solana" && signer
+        })
+      )
     }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
@@ -67,7 +75,7 @@ const WithdrawTab: FC = () => {
     } else {
       setLoading(true)
       const withdrawData = {
-        sender: (publicKey as PublicKey).toString(),
+        sender: (walletObject.publicKey as PublicKey).toString(),
         amount: +data.amount,
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint

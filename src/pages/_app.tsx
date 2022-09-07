@@ -34,7 +34,7 @@ import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
-import axios from "axios"
+// import axios from "axios"
 import EthereumWalletProvider from "components/shared/Wallet/EthereumWalletProvider"
 
 const MyApp = ({
@@ -88,9 +88,35 @@ const MyApp = ({
 }
 
 MyApp.getInitialProps = async () => {
-  const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
+  // const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
   return {
-    tokenDetails: data as TokenResponse[]
+    // tokenDetails: data as TokenResponse[]
+    tokenDetails: [
+      {
+        symbol: "ZBC",
+        name: "ZEBEC",
+        decimal: 9,
+        mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
+        coingeco_id: "zebec-protocol",
+        chainId: "solana"
+      },
+      {
+        symbol: "SOL",
+        name: "Solana",
+        decimal: 18,
+        mint: null,
+        coingeco_id: "solana",
+        chainId: "solana"
+      },
+      {
+        symbol: "WSOL",
+        name: "Wrapped SOL",
+        decimal: 9,
+        mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+        coingeco_id: "solana",
+        chainId: "97"
+      }
+    ]
   }
 }
 

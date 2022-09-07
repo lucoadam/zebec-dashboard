@@ -1,4 +1,5 @@
 // import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
@@ -136,9 +137,11 @@ const Navbar: FC = () => {
 
   //ZBC Airdrop
   const zbcAirdropToWallet = () => {
-    if (useWalletObject.publicKey) {
+    if (useWalletObject.publicKey && useWalletObject.chainId === "solana") {
       setZBCAirdropLoading(true)
-      // dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
+      dispatch(
+        zbcAirdrop(useWalletObject.publicKey as PublicKey, setZBCAirdropLoading)
+      )
     }
   }
 
