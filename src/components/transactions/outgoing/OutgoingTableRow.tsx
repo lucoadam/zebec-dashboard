@@ -71,11 +71,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     const interval = setInterval(() => {
       setCurrentTime((prevCurrentTime) => prevCurrentTime + 1)
     }, 1000)
-    if (
-      status === StatusType.COMPLETED ||
-      status === StatusType.PAUSED ||
-      status === StatusType.CANCELLED
-    ) {
+    if (status === StatusType.COMPLETED || status === StatusType.CANCELLED) {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
@@ -105,12 +101,16 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
         (initiatedTrx) => initiatedTrx === transaction.uuid
       )
     ) {
-      setStreamedToken(
-        latest_transaction_event.paused_amt
-          ? streamRatePerSec * (currentTime - start_time) -
-              Number(latest_transaction_event.paused_amt)
-          : streamRatePerSec * (currentTime - start_time)
-      )
+      if (currentTime < start_time) {
+        setStreamedToken(0)
+      } else {
+        setStreamedToken(
+          latest_transaction_event.paused_amt
+            ? streamRatePerSec * (currentTime - start_time) -
+                Number(latest_transaction_event.paused_amt)
+            : streamRatePerSec * (currentTime - start_time)
+        )
+      }
     } else {
       if (status === StatusType.COMPLETED) {
         setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
@@ -196,7 +196,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
               <div className="flex items-center gap-x-3">
-                {status === StatusType.PAUSED && (
+                {status === StatusType.PAUSED && currentTime < end_time && (
                   <Button
                     title="Resume"
                     size="small"
@@ -208,7 +208,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                     }}
                   />
                 )}
-                {status === StatusType.ONGOING && (
+                {status === StatusType.ONGOING && currentTime < end_time && (
                   <Button
                     title="Pause"
                     size="small"
@@ -221,16 +221,18 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   />
                 )}
 
-                <Button
-                  title="Cancel"
-                  size="small"
-                  startIcon={
-                    <Icons.CrossIcon className="text-content-contrast" />
-                  }
-                  onClick={() => {
-                    dispatch(showCancelModal(transaction))
-                  }}
-                />
+                {status !== StatusType.CANCELLED && currentTime < end_time && (
+                  <Button
+                    title="Cancel"
+                    size="small"
+                    startIcon={
+                      <Icons.CrossIcon className="text-content-contrast" />
+                    }
+                    onClick={() => {
+                      dispatch(showCancelModal(transaction))
+                    }}
+                  />
+                )}
               </div>
               <IconButton
                 variant="plain"
@@ -339,10 +341,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   </div>
                   {/* Right Column */}
                   <div className="flex flex-col gap-y-4">
-                    {/* Streamed Amount */}
+                    {/* Amount Sent */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
-                        {t("table.streamed-amount")}
+                        {t("table.amount-sent")}
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(amount, "", 4)} {token}
@@ -371,10 +373,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                         {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
-                    {/* Amount Received */}
+                    {/* Streamed Amount */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
-                        {t("table.amount-sent")}
+                        {t("table.streamed-amount")}
                       </div>
                       <div className="text-content-primary">
                         {formatCurrency(streamedToken, "", 4)} {token} (
