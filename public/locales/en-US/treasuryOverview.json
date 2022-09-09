@@ -1,5 +1,13 @@
 {
     "safe-balance": "SAFE BALANCE",
+    "treasury-balance": "TREASURY BALANCE",
+    "transfer-to-vault": "Transfer to Vault",
+    "treasury-balance-detail": "Total calculateable value of all your deposited tokens in treasury in USD.",
+    "treasury-vault-balance": "TREASURY VAULT BALANCE",
+    "transfer-to-treasury": "Transfer back to Treasury",
+    "treasury-vault-balance-detail": "Total calculateable value of all your deposited tokens in treasury vault in USD.",
+    "treasury-assets": "Treasury Assets",
+    "treasury-vault-assets": "Treasury Vault Assets",
     "deposited-assets": "DEPOSITED ASSETS",
     "total-incoming": "TOTAL INCOMING",
     "total-outgoing": "TOTAL OUTGOING",
@@ -12,7 +20,15 @@
     "enter-amount": "Enter Amount",
     "max": "MAX",
     "deposit": "Deposit",
-    "deposit-description": "Deposit funds into your wallet.",
+    "deposit-description": "Deposit assets into your treasury wallet.",
     "withdraw": "Withdraw",
-    "withdraw-description": "Withdraw your deposited balance into your wallet."
+    "withdraw-description": "Withdraw your deposited treasury assets into your wallet. These withdraw requires confirmation.",
+    "pending-confirmation": "PENDING CONFIRMATION",
+    "deposit-to-vault": "Deposit to Vault",
+    "withdraw-from-treasury": "Withdraw from Treasury",
+    "initiated-by": "Initiated by",
+    "on": "on",
+    "sign": "Sign",
+    "reject": "Reject",
+    "confirmation": "Confirmation"
 }

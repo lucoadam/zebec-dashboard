@@ -61,7 +61,13 @@ const MyApp = ({
 }
 
 MyApp.getInitialProps = async () => {
-  const { data } = await axios.get(`${process.env.DB_HOST}/token/`)
+  let data = []
+  try {
+    const response = await axios.get(`${process.env.DB_HOST}/token/`)
+    data = response.data
+  } catch (error) {
+    data = []
+  }
   return {
     tokenDetails: data as TokenResponse[]
   }

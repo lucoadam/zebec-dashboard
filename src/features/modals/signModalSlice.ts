@@ -3,17 +3,17 @@ import axios from "axios"
 
 //declare types for state
 interface SignState {
+  transaction: any
   show: boolean
   loading: boolean
   error: string
-  isSigned: boolean
 }
 
 const initialState: SignState = {
+  transaction: null,
   show: false,
   loading: false,
-  error: "",
-  isSigned: false
+  error: ""
 }
 export const signTransaction = createAsyncThunk(
   "sign/signTransaction",
@@ -27,15 +27,17 @@ export const signModalSlice = createSlice({
   name: "signTransaction",
   initialState,
   reducers: {
-    showModal: (state) => {
+    showSignModal: (
+      state,
+      action: PayloadAction<typeof initialState.transaction>
+    ) => {
       state.show = true
       state.loading = false
+      state.transaction = action.payload
     },
     toggleSignModal: (state) => {
       state.show = !state.show
-    },
-    changeSignState: (state, action: PayloadAction<boolean | undefined>) => {
-      state.isSigned = !!action.payload
+      state.transaction = state.show ? null : state.transaction
     },
     setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
       state.loading = action.payload
@@ -44,24 +46,20 @@ export const signModalSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(signTransaction.pending, (state) => {
       state.loading = true
-      state.isSigned = false
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    builder.addCase(signTransaction.fulfilled, (state, action) => {
+    builder.addCase(signTransaction.fulfilled, (state) => {
       state.loading = false
-      state.isSigned = true
       state.error = ""
     })
     builder.addCase(signTransaction.rejected, (state, action) => {
       state.loading = false
-      state.isSigned = false
-
       state.error = action.error.message ?? "Something went wrong"
     })
   }
 })
 
-export const { showModal, toggleSignModal, setLoading, changeSignState } =
+export const { showSignModal, toggleSignModal, setLoading } =
   signModalSlice.actions
 
 export default signModalSlice.reducer

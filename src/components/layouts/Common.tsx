@@ -25,7 +25,7 @@ const Common: FC<{
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const { tokens } = useAppSelector((state) => state.tokenDetails)
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const walletBalances = useAppSelector((state) => state.walletBalance.tokens)
   const zebecBalances = useAppSelector((state) => state.zebecBalance.tokens)
   const zebecStreamingBalances = useAppSelector(
@@ -51,10 +51,10 @@ const Common: FC<{
     if (isSigned && tokens.length > 0 && walletObject.publicKey) {
       //wallet balance fetch
       walletBalances.length === 0 &&
-        dispatch(fetchWalletBalance(walletObject.publicKey))
+        dispatch(fetchWalletBalance(walletObject.publicKey.toString()))
       //zebec balance fetch
       zebecBalances.length === 0 &&
-        dispatch(fetchZebecBalance(walletObject.publicKey))
+        dispatch(fetchZebecBalance(walletObject.publicKey.toString()))
 
       //zebec streaming balance fetch
       if (zebecContext.token && zebecContext.stream) {

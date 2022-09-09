@@ -39,7 +39,7 @@ const HomePage: FC = () => {
     useAppSelector((state) => state.zebecBalance?.tokens) || []
   const zebecStreamingTokensBalance =
     useAppSelector((state) => state.zebecStreamingBalance?.tokens) || []
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const recentTransactions = useAppSelector(
     (state) => state.transactions.recentTransactions
   )

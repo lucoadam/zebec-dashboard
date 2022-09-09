@@ -126,7 +126,9 @@ const WithdrawTab: FC = () => {
         {showMaxInfo && (
           <div className="mt-2 text-caption text-content-tertiary flex items-start gap-x-1">
             <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
-            <span>{t("common:deposit-withdrawal.max-withdraw-message")}</span>
+            <span>
+              {t("common:deposit-withdrawal.max-treasury-deposit-message")}
+            </span>
           </div>
         )}
 

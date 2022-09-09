@@ -1,9 +1,10 @@
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import DepositedAssets from "components/home/DepositedAssets"
+import { TreasuryBalance } from "./TreasuryBalance"
+import { TreasuryVaultBalance } from "./TreasuryVaultBalance"
+import { TreasuryDepositedAssets } from "./TreasuryDepositedAssets"
 import {
   ActivityThisWeek,
-  DepositedBalance,
   DepositWithdraw,
   SupportCardComponents,
   Tokens
@@ -11,6 +12,7 @@ import {
 import { useState } from "react"
 import { Deposit } from "./Deposit"
 import { Withdrawal } from "./Withdrawal"
+import { PendingConfirmation } from "./PendingConfirmation"
 
 const fundTransferTabs = [
   {
@@ -46,9 +48,16 @@ const Overview = () => {
        */}
       <div className="grid gap-y-6">
         {/**
-         * Safe Balance
+         * Treasury Balance
          */}
-        <DepositedBalance
+        <TreasuryBalance
+          balance={treasuryBalance?.reduce(
+            (a, b) => a + (prices[b.symbol] * b.balance || 0),
+            0
+          )}
+        />
+        {/* Treasury Vault Balance */}
+        <TreasuryVaultBalance
           balance={treasuryBalance?.reduce(
             (a, b) => a + (prices[b.symbol] * b.balance || 0),
             0
@@ -67,20 +76,21 @@ const Overview = () => {
        * Second Column
        *   1. Deposited Assets
        * **/}
-      <div>
-        <DepositedAssets
-          tableMaxHeight={554}
+      <div className="grid gap-y-6">
+        <TreasuryDepositedAssets
+          tableMaxHeight={517}
           balanceTokens={treasuryTokens}
           tokens={tokenDetails}
         />
-      </div>
-      <div className="grid gap-y-6">
-        <DepositWithdraw tabs={fundTransferTabs} />
         {/**
          * Zebec Treasury Help
          */}
         <SupportCardComponents.ZebecHelp page="treasury" />
         <SupportCardComponents.SendFeedback />
+      </div>
+      <div className="grid gap-y-6">
+        <DepositWithdraw tabs={fundTransferTabs} />
+        <PendingConfirmation />
       </div>
     </div>
   )

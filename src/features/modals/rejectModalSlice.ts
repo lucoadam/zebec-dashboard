@@ -3,12 +3,14 @@ import axios from "axios"
 
 //declare types for state
 interface RejectState {
+  transaction: any
   show: boolean
   loading: boolean
   error: string
 }
 
 const initialState: RejectState = {
+  transaction: null,
   show: false,
   loading: false,
   error: ""
@@ -25,9 +27,13 @@ export const rejectModalSlice = createSlice({
   name: "rejectTransaction",
   initialState,
   reducers: {
-    showModal: (state) => {
+    showRejectModal: (
+      state,
+      action: PayloadAction<typeof initialState.transaction>
+    ) => {
       state.show = true
       state.loading = false
+      state.transaction = action.payload
     },
     toggleRejectModal: (state) => {
       state.show = !state.show
@@ -52,7 +58,7 @@ export const rejectModalSlice = createSlice({
   }
 })
 
-export const { showModal, toggleRejectModal, setLoading } =
+export const { showRejectModal, toggleRejectModal, setLoading } =
   rejectModalSlice.actions
 
 export default rejectModalSlice.reducer

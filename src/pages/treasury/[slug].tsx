@@ -55,16 +55,16 @@ const Treasury: NextPage = () => {
   }, [slug, treasuries])
 
   useEffect(() => {
-    if (tokens.length > 0 && walletObject.publicKey) {
+    if (tokens.length > 0 && walletObject.publicKey && activeTreasury) {
       dispatch(
         fetchTreasuryBalance({
-          name: "my treasury",
-          address: "DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"
+          name: activeTreasury.name,
+          address: activeTreasury.treasury_address
         })
       )
-      // dispatch(fetchTreasuryStreamingBalance("DNMTFn1Eag5wuYusuPHfcE9b7iCzQMz2avnC2eajv1Cf"));
     }
-  }, [dispatch, tokens, walletObject])
+    // eslint-disable-next-line
+  }, [tokens, walletObject, activeTreasury])
 
   useEffect(() => {
     dispatch(fetchTokensPrice())

@@ -17,7 +17,7 @@ import { CompletedOutgoing } from "./tabs/CompletedOutgoing"
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const [activeTab, setActiveTab] = useState(0)
 
   const tabs: Tab[] = [
