@@ -4,11 +4,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 interface CommonState {
   treasurySendActiveTab: number
   tpsValue: number
+  isSigned: boolean
 }
 
 const initialState: CommonState = {
   treasurySendActiveTab: 0,
-  tpsValue: 0
+  tpsValue: 0,
+  isSigned: false
 }
 
 export const commonSlice = createSlice({
@@ -26,10 +28,14 @@ export const commonSlice = createSlice({
       action: PayloadAction<typeof initialState.tpsValue>
     ) => {
       state.tpsValue = action.payload
+    },
+    changeSignState: (state, action: PayloadAction<boolean | undefined>) => {
+      state.isSigned = !!action.payload
     }
   }
 })
 
-export const { setTreasurySendActiveTab, setTPSValue } = commonSlice.actions
+export const { setTreasurySendActiveTab, setTPSValue, changeSignState } =
+  commonSlice.actions
 
 export default commonSlice.reducer

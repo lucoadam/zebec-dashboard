@@ -21,5 +21,5 @@ export const constants = {
     }
   ],
   TEST_ZBC_AMOUNT: 2,
-  BALANCE_FETCH_TIMEOUT: 10000
+  BALANCE_FETCH_TIMEOUT: 15000
 }

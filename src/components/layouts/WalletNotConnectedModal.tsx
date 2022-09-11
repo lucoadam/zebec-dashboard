@@ -4,7 +4,7 @@ import { login } from "api"
 import TokenService from "api/services/token.service"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { Button, Modal } from "components/shared"
-import { changeSignState } from "features/modals/signModalSlice"
+import { changeSignState } from "features/common/commonSlice"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
@@ -23,7 +23,7 @@ const WalletNotConnectedModal: NextPage = () => {
   const walletObject = useWallet()
   const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const dispatch = useAppDispatch()
 
   const handleLogin: () => void = async () => {

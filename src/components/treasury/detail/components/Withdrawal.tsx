@@ -1,14 +1,25 @@
-import { useAppSelector } from "app/hooks"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { PublicKey } from "@solana/web3.js"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { withdrawFromTreasury } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
+import { useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
 
 export const Withdrawal = () => {
   const { t } = useTranslation()
+  const { publicKey } = useWallet()
+  const { treasury, treasuryToken } = useContext(ZebecContext)
+  const dispatch = useAppDispatch()
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+
+  const [loading, setLoading] = useState(false)
 
   const {
     currentToken,
@@ -21,11 +32,19 @@ export const Withdrawal = () => {
     handleSubmit,
     setValue,
     trigger,
-    setError
+    setError,
+    reset
   } = useWithdrawDepositForm({
     tokens: tokenDetails,
     type: "withdraw"
   })
+
+  const withdrawCallback = (message: "success" | "error") => {
+    if (message === "success") {
+      reset()
+    }
+    setLoading(false)
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitWitdrawal = (data: any) => {
@@ -36,6 +55,36 @@ export const Withdrawal = () => {
         { shouldFocus: true }
       )
       return
+    } else {
+      setLoading(true)
+      const withdrawData = {
+        sender: (publicKey as PublicKey).toString(),
+        safe_address: activeTreasury?.treasury_address || "",
+        safe_data_account: activeTreasury?.treasury_escrow || "",
+        receiver: "7VBTMgbXbnz3gXjCjADM3dzJYsidSRw453mcXV1CfcRj",
+        amount: Number(data.amount),
+        token_mint_address:
+          currentToken.symbol === "SOL" ? "" : currentToken.mint
+      }
+      if (!withdrawData.token_mint_address) {
+        treasury &&
+          dispatch(
+            withdrawFromTreasury({
+              data: withdrawData,
+              treasury: treasury,
+              callback: withdrawCallback
+            })
+          )
+      } else {
+        treasuryToken &&
+          dispatch(
+            withdrawFromTreasury({
+              data: withdrawData,
+              treasuryToken: treasuryToken,
+              callback: withdrawCallback
+            })
+          )
+      }
     }
     // handle withdrawal
   }
@@ -76,6 +125,8 @@ export const Withdrawal = () => {
           title={`${t("treasuryOverview:withdraw")}`}
           variant="gradient"
           className="w-full"
+          loading={loading}
+          disabled={loading}
         />
       </form>
     </div>
