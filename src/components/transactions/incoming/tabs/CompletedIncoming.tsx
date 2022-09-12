@@ -13,11 +13,11 @@ export const CompletedIncoming: FC = () => {
   const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.common)
   useEffect(() => {
-    if (isSigned) {
+    if (isSigned && completedTransactions.count === null) {
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
       dispatch(fetchCompletedTransactions("incoming"))
     }
-  }, [dispatch, isSigned])
+  }, [dispatch, isSigned, completedTransactions.count])
 
   return (
     <div>

@@ -15,7 +15,7 @@ import { useTranslation } from "next-i18next"
 
 export interface TransactionTableProps {
   transactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]

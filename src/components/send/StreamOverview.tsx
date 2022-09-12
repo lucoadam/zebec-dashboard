@@ -5,6 +5,13 @@ import { twMerge } from "tailwind-merge"
 import { formatDateTime, toSubstring } from "utils"
 import { StreamOverviewProps } from "./StreamOverview.d"
 
+const getSingular = (value: number | string | undefined, text: string) => {
+  if (!value) return text
+  if (Number(value) === 1 || Number(value) === -1)
+    return text.substring(0, text.length - 1)
+  return text
+}
+
 export const StreamOverview: FC<StreamOverviewProps> = ({
   formValues,
   className
@@ -56,8 +63,11 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
           <p className="text-sm text-content-secondary">
             {t("send:for")}{" "}
             <span className="text-content-primary">
-              {formValues?.noOfTimes || "..."} {formValues?.interval || "..."}.{" "}
-              {formValues?.amount || "..."} {formValues?.symbol || "..."}
+              {formValues?.noOfTimes || "..."}{" "}
+              {(formValues?.interval &&
+                getSingular(formValues?.noOfTimes, formValues?.interval)) ||
+                "..."}
+              , {formValues?.amount || "..."} {formValues?.symbol || "..."}
             </span>{" "}
             {t("send:in-total")}
           </p>
