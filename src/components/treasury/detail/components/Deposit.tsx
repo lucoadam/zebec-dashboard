@@ -69,7 +69,7 @@ export const Deposit = () => {
     if (Number(data.amount) > getBalance(zebecBalance, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "transactions:deposit.max-amount" },
+        { type: "custom", message: "validation:max" },
         { shouldFocus: true }
       )
       return
@@ -116,7 +116,7 @@ export const Deposit = () => {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance)
+    setValue("amount", balance.toString())
     trigger("amount")
   }
 

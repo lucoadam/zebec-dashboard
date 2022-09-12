@@ -56,7 +56,7 @@ const WithdrawTab: FC = () => {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance)
+    setValue("amount", balance.toString())
     trigger("amount")
   }
 

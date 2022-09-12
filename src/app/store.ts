@@ -32,6 +32,11 @@ import userSlice from "features/user/userSlice"
 import walletBalanceSlice from "features/walletBalance/walletBalanceSlice"
 import zebecBalanceSlice from "features/zebecBalance/zebecBalanceSlice"
 import zebecStreamingSlice from "features/zebecStreamingBalance/zebecStreamingSlice"
+import treasuryVaultBalanceSlice from "features/treasuryBalance/treasuryVaultBalanceSlice"
+import withdrawFromTreasurySlice from "features/modals/withdrawFromTreasurySlice"
+import transferToVaultModalSlice from "features/modals/transferToVaultModalSlice"
+import transferToTreasuryModalSlice from "features/modals/transferToTreasuryModalSlice"
+import treasuryTransactionsSlice from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -61,7 +66,12 @@ const combineReducer = combineReducers({
   transactions: tranasctionsSlice,
   walletApprovalMessage: walletApprovalMessageSlice,
   treasury: treasurySlice,
-  settings: settingsSlice
+  settings: settingsSlice,
+  treasuryVaultBalance: treasuryVaultBalanceSlice,
+  withdrawFromTreasury: withdrawFromTreasurySlice,
+  transferToVault: transferToVaultModalSlice,
+  transferToTreasury: transferToTreasuryModalSlice,
+  treasuryTransactions: treasuryTransactionsSlice
 })
 
 const rootReducer = (state: any, action: any) => {

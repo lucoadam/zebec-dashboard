@@ -11,6 +11,10 @@ interface UseWithdrawDepositFormOptions {
   type?: "deposit" | "withdraw"
 }
 
+interface InputData {
+  amount: string
+}
+
 export const useWithdrawDepositForm = ({
   tokens,
   type = "deposit"
@@ -55,7 +59,7 @@ export const useWithdrawDepositForm = ({
     getValues,
     trigger,
     reset
-  } = useForm({
+  } = useForm<InputData>({
     mode: "onChange",
     resolver: yupResolver(validationSchema)
   })

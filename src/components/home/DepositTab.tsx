@@ -38,14 +38,14 @@ const DepositTab: FC = () => {
     reset
   } = useWithdrawDepositForm({
     tokens: tokenDetails,
-    type: "withdraw"
+    type: "deposit"
   })
 
   const setMaxAmount = () => {
     const balance =
       getBalance(walletTokens, currentToken.symbol) -
       constants.DEPOSIT_MAX_OFFSET
-    setValue("amount", balance > 0 ? balance : 0)
+    setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
 
