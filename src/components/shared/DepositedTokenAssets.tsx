@@ -1,13 +1,21 @@
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
-import { FC, useState } from "react"
+import { FC, useContext, useState } from "react"
 import { formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "./Token"
 import { twMerge } from "tailwind-merge"
 import { useTranslation } from "next-i18next"
+import { IconButton } from "./IconButton"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
+import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice"
+import ZebecContext from "app/zebecContext"
+import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
+import { constants } from "constants/constants"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
@@ -19,7 +27,8 @@ interface DepositedTokenAssetsProps {
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
   const { t } = useTranslation("common")
-
+  const { publicKey } = useWallet()
+  const dispatch = useAppDispatch()
   const {
     tableMaxHeight,
     tokens,
@@ -28,8 +37,10 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
     className
   } = props
   const tokensPrice = useAppSelector((state) => state.tokenDetails.prices)
+  const zebecContext = useContext(ZebecContext)
 
   const [search, setSearch] = useState("")
+  const [refreshClassName, setRefreshClassName] = useState("")
 
   const filterTokens = () => {
     if (search !== "")
@@ -41,6 +52,27 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
     return tokens
   }
 
+  const refreshBalance = () => {
+    setRefreshClassName("animate-spin")
+    if (publicKey && !refreshClassName) {
+      dispatch(fetchTokensPrice())
+      dispatch(fetchZebecBalance(publicKey?.toString()))
+      dispatch(fetchWalletBalance(publicKey?.toString()))
+      if (zebecContext.token && zebecContext.stream) {
+        dispatch(
+          fetchZebecStreamingBalance({
+            wallet: publicKey.toString(),
+            stream: zebecContext.stream,
+            token: zebecContext.token
+          })
+        )
+      }
+    }
+    setTimeout(() => {
+      setRefreshClassName("")
+    }, constants.REFRESH_ANIMATION_DURATION)
+  }
+
   return (
     <>
       <div
@@ -50,8 +82,14 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
         )}
       >
         <div className="flex flex-col gap-y-6">
-          <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
+          <div className="flex justify-between items-center text-caption text-content-contrast font-semibold uppercase tracking-1">
             {t("deposited-assets.deposited-assets")}
+            <IconButton
+              data-tip="Refresh"
+              icon={<Icons.RefreshIcon className={refreshClassName} />}
+              className="w-7 h-7"
+              onClick={() => refreshBalance()}
+            />
           </div>
           {/* Assets Table */}
           <div className="w-full border border-outline  bg-background-primary overflow-hidden rounded-md">

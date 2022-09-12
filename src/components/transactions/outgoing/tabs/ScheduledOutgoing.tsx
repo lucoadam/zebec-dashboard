@@ -13,16 +13,16 @@ export const ScheduledOutgoing: FC = () => {
   const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.common)
   useEffect(() => {
-    if (isSigned) {
+    if (isSigned && scheduledTransactions.count === null) {
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
       dispatch(fetchScheduledTransactions("outgoing"))
     }
-  }, [dispatch, isSigned])
+  }, [dispatch, isSigned, scheduledTransactions.count])
   return (
     <div>
       <OutgoingTransactionTable
         fetchTransactions={fetchScheduledTransactions}
-        transactions={{ ...scheduledTransactions, results: [] }}
+        transactions={scheduledTransactions}
       />
     </div>
   )
