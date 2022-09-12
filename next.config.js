@@ -9,19 +9,18 @@ const nextConfig = {
     RPC_NETWORK: process.env.RPC_NETWORK,
     DB_HOST: process.env.DB_HOST,
     ZBC_AIRDROP: process.env.ZBC_AIRDROP,
-    WALLET_SECRET_KEY: process.env.WALLET_SECRET_KEY,
-    CLUSTER: process.env.CLUSTER,
-    COVALENT_API_KEY: process.env.COVALENT_API_KEY,
-    RELAYER_CONTRACT_ADDRESS: process.env.RELAYER_CONTRACT_ADDRESS,
+    REACT_APP_WALLET_SECRET_KEY: process.env.REACT_APP_WALLET_SECRET_KEY,
+    REACT_APP_CLUSTER: process.env.REACT_APP_CLUSTER,
+    REACT_APP_COVALENT_API_KEY: process.env.REACT_APP_COVALENT_API_KEY,
+    REACT_APP_RELAYER_CONTRACT_ADDRESS: process.env.REACT_APP_RELAYER_CONTRACT_ADDRESS,
   },
   i18n,
   webpack(config) {
-    // config.experiments = { asyncWebAssembly: true };
-    // config.resolve.fallback = { fs: false };
     config.experiments.asyncWebAssembly = true;
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
+      encoding: false
     };
     config.module.rules.push(
       {

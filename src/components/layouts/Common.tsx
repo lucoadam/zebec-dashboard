@@ -57,21 +57,16 @@ const Common: FC<{
       walletObject.publicKey &&
       (walletObject.chainId === "solana" || signer)
     ) {
-      console.log(
-        "fetching wallet balance",
-        walletBalances.length,
-        zebecBalances.length
-      )
-      // walletBalances.length === 0 &&
-      dispatch(
-        fetchWalletBalance({
-          publicKey: walletObject.publicKey,
-          chainId: walletObject.chainId,
-          signer: walletObject.chainId !== "solana" && signer
-        })
-      )
-      // zebecBalances.length === 0 &&
-      dispatch(fetchZebecBalance(walletObject.publicKey))
+      walletBalances.length === 0 &&
+        dispatch(
+          fetchWalletBalance({
+            publicKey: walletObject.publicKey,
+            chainId: walletObject.chainId,
+            signer: walletObject.chainId !== "solana" && signer
+          })
+        )
+      zebecBalances.length === 0 &&
+        dispatch(fetchZebecBalance(walletObject.publicKey))
       if (zebecContext.token && zebecContext.stream) {
         zebecStreamingBalances.length === 0 &&
           dispatch(
@@ -94,7 +89,7 @@ const Common: FC<{
       }
     }
     // eslint-disable-next-line
-  }, [walletObject.publicKey, tokens, isSigned, zebecContext])
+  }, [walletObject.publicKey, tokens, isSigned, zebecContext, signer])
 
   useEffect(() => {
     if (isSigned) {

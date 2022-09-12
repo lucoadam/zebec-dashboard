@@ -13,7 +13,22 @@ import { useTranslation } from "next-i18next"
 import { FC, useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
-import { transferEvm, ZebecSolBridgeClient } from "@zebec-io/zebec-wormhole-sdk"
+import {
+  getTokenBridgeAddressForChain,
+  transferEvm,
+  ZebecSolBridgeClient
+} from "@zebec-io/zebec-wormhole-sdk"
+import { connection } from "constants/cluster"
+
+import {
+  getForeignAssetSolana,
+  getOriginalAssetEth,
+  toChainName,
+  tryUint8ArrayToNative
+} from "@certusone/wormhole-sdk"
+import axios from "axios"
+import { toast } from "features/toasts/toastsSlice"
+// import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -104,29 +119,85 @@ const DepositTab: FC = () => {
     }
   }
 
-  const handleEvmSubmit = (data: any) => {
-    console.log(
-      "receiver",
-      ZebecSolBridgeClient.getXChainUserKey(
+  const handleEvmSubmit = async (data: any) => {
+    if (signer) {
+      const sourceChain = 4
+      const targetChain = 1
+      const SOL_TOKEN_BRIDGE_ADDRESS =
+        process.env.REACT_APP_CLUSTER === "mainnet"
+          ? "wormDTUJ6AWPNvk59vGQbDvGJmqbDTdgWgAqcLBCgUb"
+          : process.env.REACT_APP_CLUSTER === "testnet"
+          ? "DZnkkTmCiFWfYTfT41X3Rd1kDgozqzxWaHqsw6W4x2oe"
+          : "B6RHG3mfcckmrYN1UhmJzyS1XX3fZKbkeUcpJe9Sy3FE"
+      const tokenAddress = currentToken.mint
+      const recipientAddress = ZebecSolBridgeClient.getXChainUserKey(
         walletObject.publicKey as string,
         4
       ).toString()
-    )
-    if (signer) {
+      console.log("recipientAddress", recipientAddress)
+      
+      // find out target token address in solana
+      let targetTokenAddress: string
+      const originAssetInfo = await getOriginalAssetEth(
+        getTokenBridgeAddressForChain(sourceChain),
+        signer,
+        tokenAddress,
+        sourceChain
+      )
+      if (originAssetInfo.chainId === targetChain) {
+        targetTokenAddress = tryUint8ArrayToNative(
+          originAssetInfo.assetAddress,
+          toChainName(targetChain)
+        )
+      } else {
+        const foreignAsset = await getForeignAssetSolana(
+          connection,
+          SOL_TOKEN_BRIDGE_ADDRESS,
+          originAssetInfo.chainId,
+          originAssetInfo.assetAddress
+        )
+        if (!foreignAsset) {
+          throw new Error("Token is not attested in solana")
+        }
+        targetTokenAddress = foreignAsset
+      }
+
+      // Create token account if doesn't exist
+      const { data: response } = await axios.post(
+        "http://localhost:3000/api/create-token-account",
+        {
+          recipientAddress,
+          targetTokenAddress
+        }
+      )
+      if (!response.success) {
+        console.log("Error creating token account")
+        return
+      }
+
       transferEvm(
         signer,
         currentToken.mint,
         4,
         data.amount,
         1,
-        ZebecSolBridgeClient.getXChainUserKey(
-          walletObject.publicKey as string,
-          4
-        ).toString(),
-        "0.01"
+        recipientAddress,
+        "0.1"
       )
+        .then(() => {
+          dispatch(toast.success({ message: "Deposit successful" }))
+          reset()
+        })
+        .catch(() => {
+          dispatch(
+            toast.error({
+              message: "Error depositing token"
+            })
+          )
+        })
     }
   }
+
   const submit = (data: any) => {
     if (walletObject.chainId === "solana") {
       handleSolanaSubmit(data)
