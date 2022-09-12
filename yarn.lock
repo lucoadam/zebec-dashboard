@@ -5985,7 +5985,7 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zebec-anchor-sdk-npmtest@^1.3.5:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.3.5.tgz#c17a738357ab1eb15ce4628442c70d662fd198fa"
-  integrity sha512-x55tT+Qu3fWRK/TdIMpYZRGTcSSUhRg0ynXARz0C5lguoqpEbM5iSOH7ws+R6Qqzb+jyv4PTcLBmBLCU/OegDg==
+zebec-anchor-sdk-npmtest@^1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.3.8.tgz#d96b3ab3887d6bf6bba834b7baa49d14b3b1f537"
+  integrity sha512-g9cmwpv0IQ/e2hmYvUe+SDjK85m/NMhShcfqFzVoYfiu/kfmlVjZQGL/1GvYIE11VNaG9zj4RRWeKno5dW92Iw==

@@ -2,12 +2,13 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "components/shared"
 import { twMerge } from "tailwind-merge"
 import { useTranslation } from "next-i18next"
+import ReactTooltip from "react-tooltip"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
@@ -42,6 +43,10 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
       )
     return tokens
   }
+
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [balanceTokens])
 
   return (
     <>

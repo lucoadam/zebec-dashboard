@@ -102,7 +102,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   }}
                   title={`${t("common:buttons.max")}`}
                   size="small"
-                  className={`absolute right-[8px] top-[8px] ${
+                  className={`absolute right-2 top-2 ${
                     props.disabled
                       ? "text-content-tertiary"
                       : "text-content-primary"
@@ -116,7 +116,7 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
             {errorMessage &&
               errorMessage !== "" &&
               errorMessage !== "undefined" && (
-                <p className="text-error text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-3 mt-1">
                   {t(errorMessage)}
                 </p>
               )}

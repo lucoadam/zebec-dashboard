@@ -15,7 +15,7 @@ const initialState: TreasuryState = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTreasuryVaultBalance: any = createAsyncThunk(
-  "balance/fetchTreasuryBalance",
+  "balance/fetchTreasuryVaultBalance",
   async ({ name, address }: FetchTreasuryProps, { getState }) => {
     const { tokenDetails } = getState() as RootState
     const tokens = tokenDetails.tokens
@@ -37,7 +37,7 @@ export const fetchTreasuryVaultBalance: any = createAsyncThunk(
 )
 
 const treasuryVaultBalanceSlice = createSlice({
-  name: "treasuryBalance",
+  name: "treasuryVaultBalance",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -10,11 +10,13 @@ import { TreasuryVaultTokenAssets } from "./TreasuryVaultTokenAssets"
 export const TreasuryDepositedAssets: FC<{
   tokens?: TokenDetails[]
   balanceTokens?: TreasuryToken[]
+  vaultBalanceTokens?: TreasuryToken[]
   streamingBalanceTokens?: TreasuryToken[]
   tableMaxHeight?: number
 }> = ({
   tokens = [],
   balanceTokens = [],
+  vaultBalanceTokens = [],
   streamingBalanceTokens = [],
   tableMaxHeight = 402
 }) => {
@@ -27,7 +29,6 @@ export const TreasuryDepositedAssets: FC<{
       Component: (
         <TreasuryTokenAssets
           balanceTokens={balanceTokens}
-          streamingBalanceTokens={streamingBalanceTokens}
           tokens={tokens}
           tableMaxHeight={tableMaxHeight}
           className="deposited-assets"
@@ -38,7 +39,7 @@ export const TreasuryDepositedAssets: FC<{
       title: "treasury-vault-assets",
       Component: (
         <TreasuryVaultTokenAssets
-          balanceTokens={balanceTokens}
+          balanceTokens={vaultBalanceTokens}
           streamingBalanceTokens={streamingBalanceTokens}
           tokens={tokens}
           tableMaxHeight={tableMaxHeight}

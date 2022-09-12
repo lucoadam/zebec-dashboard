@@ -13,6 +13,7 @@ export interface Treasury {
   treasury_address: string
   transaction_hash: string
   treasury_escrow: string
+  treasury_vault_address: string
   uuid: string
   min_confirmations: number
 }

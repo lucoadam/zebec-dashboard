@@ -27,8 +27,7 @@ export const Withdrawal = () => {
     type: "withdraw"
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submitWitdrawal = (data: any) => {
+  const submitWitdrawal = (data: { amount: string }) => {
     if (Number(data.amount) > getBalance(treasuryTokens, currentToken.symbol)) {
       setError(
         "amount",
@@ -41,7 +40,10 @@ export const Withdrawal = () => {
   }
 
   const setMaxAmount = () => {
-    setValue("amount", getBalance(treasuryTokens, currentToken.symbol))
+    setValue(
+      "amount",
+      getBalance(treasuryTokens, currentToken.symbol).toString()
+    )
     trigger("amount")
   }
 
