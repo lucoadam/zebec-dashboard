@@ -7,7 +7,7 @@ import Overview from "./components/Overview"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
 // import { NFTsList } from "./components/NFTsList"
-// import Setting from "./components/Setting"
+import Setting from "./components/Setting"
 // import { Transactions } from "./components/Transactions"
 
 const categories = [
@@ -16,6 +16,12 @@ const categories = [
     count: 0,
     icon: <Icons.EyeOpenIcon />,
     Component: <Overview />
+  },
+  {
+    title: "settings",
+    count: 0,
+    icon: <Icons.GearringIcon />,
+    Component: <Setting />
   }
   // {
   //   title: "transactions",
@@ -29,12 +35,6 @@ const categories = [
   //   icon: <Icons.SquareBlockMove />,
   //   Component: <NFTsList />
   // },
-  // {
-  //   title: "settings",
-  //   count: 0,
-  //   icon: <Icons.GearringIcon />,
-  //   Component: <Setting />
-  // }
 ]
 
 export default function TreasuryDetail() {
