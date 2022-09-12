@@ -5,7 +5,7 @@ export const constants = {
   MAX_FILE_SIZE: 200 * 1024, // 200KB
   STREAM_START_ADD: 2, // 2 minutes
   STREAM_END_ADD: 2, // 2 minutes
-  STREAM_FETCH_TIMEOUT: 5000,
+  STREAM_FETCH_TIMEOUT: 10000,
   AVERAGE_TPS: 2500,
   DEPOSIT_MAX_OFFSET: 0.001,
   ZEBEC_VERSIONS: [
@@ -21,5 +21,5 @@ export const constants = {
     }
   ],
   TEST_ZBC_AMOUNT: 2,
-  BALANCE_FETCH_TIMEOUT: 10000
+  BALANCE_FETCH_TIMEOUT: 15000
 }

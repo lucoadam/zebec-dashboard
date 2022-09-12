@@ -28,7 +28,7 @@ const Common: FC<{
   const solanaWalletObject = useWallet()
   const dispatch = useAppDispatch()
   const { tokens } = useAppSelector((state) => state.tokenDetails)
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const walletBalances = useAppSelector((state) => state.walletBalance.tokens)
   const zebecBalances = useAppSelector((state) => state.zebecBalance.tokens)
   const zebecStreamingBalances = useAppSelector(

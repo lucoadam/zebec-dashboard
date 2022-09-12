@@ -1,6 +1,7 @@
 export interface TreasuryToken {
   symbol: string
   balance: number
+  chainId: string
 }
 
 export interface TreasuryState {

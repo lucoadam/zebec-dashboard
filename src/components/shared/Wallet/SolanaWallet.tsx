@@ -20,7 +20,7 @@ import * as Icons from "assets/icons"
 import { useAppDispatch } from "app/hooks"
 import { useZebecWallet } from "hooks/useWallet"
 import { login } from "api"
-import { changeSignState } from "features/modals/signModalSlice"
+import { changeSignState } from "features/common/commonSlice"
 
 export interface WalletModalProps {
   className?: string

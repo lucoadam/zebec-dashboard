@@ -11,6 +11,7 @@ interface CollapseDropdownProps {
   className?: string
   position?: PositionStyle
   ref?: React.RefObject<HTMLDivElement>
+  onHover?: boolean
 }
 
 const getPositionStyle = (position: PositionStyle) => {
@@ -41,12 +42,16 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
     className,
     position = "right",
     variant = "default",
+    onHover = false,
     // ref,
     ...rest
   } = props
 
   const [dropDownWrapperRef, setDropdownWrapper] =
     useState<HTMLDivElement | null>(null)
+  const [yAxisPlacement, setYAxisPlacement] = useState<"top" | "bottom">(
+    "bottom"
+  )
 
   const isInViewport = (element: HTMLElement) => {
     const clientRect = element.getBoundingClientRect()
@@ -81,6 +86,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
             "class",
             element.getAttribute("class")?.replace("bottom", "top") || ""
           )
+          setYAxisPlacement("top")
         } else {
           element.style.bottom = `${
             parseInt(
@@ -96,6 +102,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
             "class",
             element.getAttribute("class")?.replace("top", "bottom") || ""
           )
+          setYAxisPlacement("bottom")
         }
       }, 10)
     }
@@ -124,7 +131,9 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
           )}
           {...rest}
         >
+          {onHover && yAxisPlacement === "top" && <div className="h-4" />}
           {children}
+          {onHover && yAxisPlacement === "bottom" && <div className="h-4" />}
         </div>
       </Transition>
     </div>

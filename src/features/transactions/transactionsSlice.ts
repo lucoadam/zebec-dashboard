@@ -20,7 +20,7 @@ interface TransactionState {
     results: any[]
   }
   recentTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
@@ -65,7 +65,7 @@ const initialState: TransactionState = {
     results: []
   },
   recentTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []
@@ -119,8 +119,9 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
 export const fetchOutgoingTransactionsById: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactionsById",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (uuid: string) => {
+  async (uuid: string, { dispatch }) => {
     const { data: response } = await api.get(`/transaction/${uuid}/`)
+    dispatch(removeInitiatedTransactions(uuid))
     return response
   }
 )
@@ -273,16 +274,18 @@ const transactionsSlice = createSlice({
     builder.addCase(
       fetchOutgoingTransactionsById.fulfilled,
       (state, action) => {
-        state.loading = false
-        state.error = ""
-        // state.outgoingTransactions = action.payload
-        state.outgoingTransactions.results =
-          state.outgoingTransactions.results.map((item) => {
+        const newOutgoingTransactions = state.outgoingTransactions.results.map(
+          (item) => {
             if (item.id === action.payload.id) {
               return action.payload
             }
             return item
-          })
+          }
+        )
+        state.loading = false
+        state.error = ""
+        // state.outgoingTransactions = action.payload
+        state.outgoingTransactions.results = newOutgoingTransactions
         state.pagination.total = action.payload.count
       }
     )

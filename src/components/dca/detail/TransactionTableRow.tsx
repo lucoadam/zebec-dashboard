@@ -58,7 +58,8 @@ const TransactionTableRow: FC<TransactionTableRowProps> = ({ transaction }) => {
               [
                 {
                   symbol: transaction.symbol,
-                  balance: Math.abs(transaction.amount)
+                  balance: Math.abs(transaction.amount),
+                  chainId: "solana"
                 }
               ],
               transaction.symbol

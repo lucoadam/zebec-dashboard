@@ -3,7 +3,7 @@ import { Button } from "components/shared"
 import * as Icons from "assets/icons"
 import { login } from "api"
 import { useAppDispatch } from "app/hooks"
-import { changeSignState } from "features/modals/signModalSlice"
+import { changeSignState } from "features/common/commonSlice"
 import { useZebecWallet } from "hooks/useWallet"
 import { useEffect } from "react"
 

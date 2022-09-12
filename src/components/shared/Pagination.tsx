@@ -218,7 +218,8 @@ export const Pagination: FC<PaginationProps> = ({
               }`}
               onClick={() => {
                 handlePagination(item)
-                if (onChange) onChange()
+                if (onChange && String(pagination.currentPage) !== String(item))
+                  onChange()
               }}
             >
               {item}

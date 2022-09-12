@@ -10,6 +10,7 @@ import DepositTab from "./DepositTab"
 import WithdrawTab from "./WithdrawTab"
 import {
   fetchOverallActivity,
+  fetchRecentTransactions,
   fetchWeeklyActivity
 } from "features/transactions/transactionsSlice"
 
@@ -29,6 +30,7 @@ const tabs = [
 ]
 
 const HomePage: FC = () => {
+  const dispatch = useAppDispatch()
   const tokenDetails = useAppSelector(
     (state) => state.tokenDetails.tokens
   ).filter((token) => token.chainId === "solana")
@@ -39,8 +41,10 @@ const HomePage: FC = () => {
     useAppSelector((state) => state.zebecBalance?.tokens) || []
   const zebecStreamingTokensBalance =
     useAppSelector((state) => state.zebecStreamingBalance?.tokens) || []
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
-  const dispatch = useAppDispatch()
+  const { isSigned } = useAppSelector((state) => state.common)
+  const recentTransactions = useAppSelector(
+    (state) => state.transactions.recentTransactions
+  )
 
   useEffect(() => {
     if (isSigned) {
@@ -48,6 +52,7 @@ const HomePage: FC = () => {
         dispatch(fetchOverallActivity())
       Object.keys(weeklyActivity).length === 0 &&
         dispatch(fetchWeeklyActivity())
+      recentTransactions.count === null && dispatch(fetchRecentTransactions())
     }
     // eslint-disable-next-line
   }, [isSigned])

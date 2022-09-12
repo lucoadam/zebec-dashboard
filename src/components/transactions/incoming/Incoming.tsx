@@ -17,7 +17,7 @@ import { OngoingIncoming } from "./tabs/OngoingIncoming"
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  const { isSigned } = useAppSelector((state) => state.signTransaction)
+  const { isSigned } = useAppSelector((state) => state.common)
   const [activeTab, setActiveTab] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
