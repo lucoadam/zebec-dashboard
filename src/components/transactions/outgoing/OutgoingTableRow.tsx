@@ -78,6 +78,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       clearInterval(interval)
     }
     return () => clearInterval(interval)
+    // eslint-disable-next-line
   }, [currentTime, status])
 
   useEffect(() => {

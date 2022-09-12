@@ -59,6 +59,7 @@ export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
       clearInterval(interval)
     }
     return () => clearInterval(interval)
+    // eslint-disable-next-line
   }, [currentTime, status])
 
   useEffect(() => {
