@@ -9,10 +9,6 @@ const nextConfig = {
     RPC_NETWORK: process.env.RPC_NETWORK,
     DB_HOST: process.env.DB_HOST,
     ZBC_AIRDROP: process.env.ZBC_AIRDROP,
-    REACT_APP_WALLET_SECRET_KEY: process.env.REACT_APP_WALLET_SECRET_KEY,
-    REACT_APP_CLUSTER: process.env.REACT_APP_CLUSTER,
-    REACT_APP_COVALENT_API_KEY: process.env.REACT_APP_COVALENT_API_KEY,
-    REACT_APP_RELAYER_CONTRACT_ADDRESS: process.env.REACT_APP_RELAYER_CONTRACT_ADDRESS,
   },
   i18n,
   webpack(config) {

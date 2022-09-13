@@ -73,7 +73,11 @@ const Profile: FC = () => {
             <div className="flex items-center gap-x-3">
               <div className="flex flex-col items-start justify-between h-full">
                 <div className="text-avatar-title font-medium text-content-primary">
-                  {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
+                  {toSubstring(
+                    useWalletObject?.originalAddress?.toString(),
+                    4,
+                    true
+                  )}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
                   {titleCase(`${useWalletObject.adapter}`)}
@@ -100,11 +104,11 @@ const Profile: FC = () => {
               <div className="flex items-center gap-x-3">
                 <div className="flex flex-col justify-between h-full">
                   <div
-                    data-tip={useWalletObject?.publicKey?.toString()}
+                    data-tip={useWalletObject?.originalAddress?.toString()}
                     className="text-avatar-title font-medium text-content-primary"
                   >
                     {toSubstring(
-                      useWalletObject?.publicKey?.toString(),
+                      useWalletObject?.originalAddress?.toString(),
                       4,
                       true
                     )}
@@ -115,7 +119,7 @@ const Profile: FC = () => {
                 </div>
                 <CopyButton
                   className="text-content-primary"
-                  content={useWalletObject?.publicKey?.toString() ?? ""}
+                  content={useWalletObject?.originalAddress?.toString() ?? ""}
                 />
               </div>
             </div>

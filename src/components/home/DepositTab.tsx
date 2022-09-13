@@ -15,8 +15,7 @@ import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
 import {
   getTokenBridgeAddressForChain,
-  transferEvm,
-  ZebecSolBridgeClient
+  transferEvm
 } from "@zebec-io/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
@@ -33,7 +32,6 @@ import { toast } from "features/toasts/toastsSlice"
 const DepositTab: FC = () => {
   const { t } = useTranslation()
   const { stream, token } = useContext(ZebecContext)
-  const { publicKey } = useZebecWallet()
   const dispatch = useAppDispatch()
   const walletObject = useZebecWallet()
   const { data: signer } = useSigner()
@@ -77,10 +75,10 @@ const DepositTab: FC = () => {
   const depositCallback = () => {
     reset()
     setTimeout(() => {
-      dispatch(fetchZebecBalance(publicKey?.toString()))
+      dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
       dispatch(
         fetchWalletBalance({
-          publicKey: publicKey?.toString(),
+          publicKey: walletObject.originalAddress,
           chainId: walletObject.chainId,
           signer: walletObject.chainId === "solana" && signer
         })
@@ -100,12 +98,12 @@ const DepositTab: FC = () => {
     } else {
       setLoading(true)
       const depositData = {
-        sender: (publicKey as PublicKey).toString(),
+        sender: (walletObject.publicKey as PublicKey).toString(),
         amount: +data.amount,
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
-      console.log(depositData)
+      console.log("depositData", depositData)
       if (currentToken.symbol === "SOL")
         stream &&
           dispatch(
@@ -124,18 +122,15 @@ const DepositTab: FC = () => {
       const sourceChain = 4
       const targetChain = 1
       const SOL_TOKEN_BRIDGE_ADDRESS =
-        process.env.REACT_APP_CLUSTER === "mainnet"
+        process.env.NODE_ENV === "production"
           ? "wormDTUJ6AWPNvk59vGQbDvGJmqbDTdgWgAqcLBCgUb"
-          : process.env.REACT_APP_CLUSTER === "testnet"
+          : process.env.NODE_ENV === "development"
           ? "DZnkkTmCiFWfYTfT41X3Rd1kDgozqzxWaHqsw6W4x2oe"
           : "B6RHG3mfcckmrYN1UhmJzyS1XX3fZKbkeUcpJe9Sy3FE"
       const tokenAddress = currentToken.mint
-      const recipientAddress = ZebecSolBridgeClient.getXChainUserKey(
-        walletObject.publicKey as string,
-        4
-      ).toString()
+      const recipientAddress = walletObject.publicKey?.toString() as string
       console.log("recipientAddress", recipientAddress)
-      
+
       // find out target token address in solana
       let targetTokenAddress: string
       const originAssetInfo = await getOriginalAssetEth(

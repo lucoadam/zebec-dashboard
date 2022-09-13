@@ -37,7 +37,7 @@ export default async function handler(
         new PublicKey(recipientAddress),
         true
       )
-      console.log("recipientTokenAddress", recipientTokenAddress)
+      console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
       const receipientTokenAccountInfo = await connection.getAccountInfo(
         recipientTokenAddress,
@@ -47,7 +47,7 @@ export default async function handler(
         console.log("Recipient token account exist on solana")
         return res.status(200).json({ success: true })
       }
-
+      console.log("Recipient token account doesn't exist on solana")
       const txn = new Transaction()
       txn.add(
         createAssociatedTokenAccountInstruction(

@@ -2,13 +2,18 @@ import { useAccount, useSignMessage, useDisconnect, useNetwork } from "wagmi"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 import { supportedEVMChains } from "constants/supportedEVMChains"
+import { ZebecSolBridgeClient } from "@zebec-io/zebec-wormhole-sdk"
+import { EVMToWormholeChainMapping } from "constants/wormholeChains"
+import { ChainId } from "@certusone/wormhole-sdk"
+import { useMemo } from "react"
 
 export interface ZebecWalletContext {
   connected: boolean
-  publicKey: string | PublicKey | undefined
+  publicKey: PublicKey | undefined
   network: string | undefined
   adapter: string | undefined
   chainId: string | undefined
+  originalAddress: string | PublicKey | undefined
   signMessage: (message: string) => Promise<string | null>
   disconnect: () => void
 }
@@ -18,7 +23,6 @@ export const useZebecWallet = (): ZebecWalletContext => {
   const { chain } = useNetwork()
   const { disconnect } = useDisconnect()
   const connected = solAccount.connected || ethAccount.isConnected
-  const publicKey = solAccount.publicKey || ethAccount.address
   const network = solAccount.connected
     ? "solana"
     : ethAccount.isConnected
@@ -29,8 +33,30 @@ export const useZebecWallet = (): ZebecWalletContext => {
   const chainId = solAccount.connected
     ? "solana"
     : ethAccount.isConnected
-    ? chain?.id.toString()
+    ? chain?.id.toString() || ""
     : ""
+  const publicKey = useMemo(() => {
+    const pubKey =
+      solAccount.publicKey ||
+      (ethAccount.isConnected
+        ? new PublicKey(
+            ZebecSolBridgeClient.getXChainUserKey(
+              ethAccount.address as string,
+              EVMToWormholeChainMapping[
+                chain?.id as keyof typeof EVMToWormholeChainMapping
+              ] as ChainId
+            ).toString()
+          )
+        : undefined)
+    return pubKey
+  }, [
+    ethAccount.address,
+    chain?.id,
+    ethAccount.isConnected,
+    solAccount.publicKey
+  ])
+
+  const originalAddress = solAccount.publicKey || ethAccount.address
   const adapter = solAccount.connected
     ? solAccount.wallet?.adapter.name
     : ethAccount.isConnected
@@ -59,6 +85,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
     network,
     adapter,
     chainId,
+    originalAddress,
     signMessage,
     disconnect: disconnectWallet
   }

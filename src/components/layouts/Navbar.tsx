@@ -309,11 +309,11 @@ const Navbar: FC = () => {
                   >
                     <div className="flex flex-col justify-between h-full">
                       <div
-                        data-tip={useWalletObject?.publicKey?.toString()}
+                        data-tip={useWalletObject?.originalAddress?.toString()}
                         className="text-avatar-title font-medium text-content-primary"
                       >
                         {toSubstring(
-                          useWalletObject?.publicKey?.toString(),
+                          useWalletObject?.originalAddress?.toString(),
                           4,
                           true
                         )}
@@ -325,7 +325,9 @@ const Navbar: FC = () => {
                     <CopyButton
                       disabled={!useWalletObject.connected}
                       className="text-content-primary"
-                      content={useWalletObject?.publicKey?.toString() ?? ""}
+                      content={
+                        useWalletObject?.originalAddress?.toString() ?? ""
+                      }
                     />
                   </div>
                   <div>{themeChanger()}</div>

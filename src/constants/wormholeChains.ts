@@ -29,3 +29,14 @@ export const wormholeChains = {
   ropsten: 10001,
   wormholechain: 3104
 }
+
+export const EVMToWormholeChainMapping = {
+  97: wormholeChains.bsc,
+  56: wormholeChains.bsc,
+  1: wormholeChains.ethereum,
+  3: wormholeChains.ethereum,
+  4: wormholeChains.ethereum,
+  42: wormholeChains.ethereum,
+  137: wormholeChains.polygon,
+  8001: wormholeChains.polygon
+}
