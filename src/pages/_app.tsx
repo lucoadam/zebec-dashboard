@@ -109,14 +109,22 @@ MyApp.getInitialProps = async () => {
       {
         symbol: "SOL",
         name: "Solana",
-        decimal: 18,
+        decimal: 9,
         mint: null,
         coingeco_id: "solana",
         chainId: "solana"
       },
       {
         symbol: "WSOL",
-        name: "Wrapped SOL",
+        name: "Wrapped Solana",
+        decimal: 9,
+        mint: "So11111111111111111111111111111111111111112",
+        coingeco_id: "solana",
+        chainId: "solana"
+      },
+      {
+        symbol: "WWSOL",
+        name: "Wormhole Wrapped SOL",
         decimal: 9,
         mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
         coingeco_id: "solana",

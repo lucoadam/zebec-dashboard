@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -10,12 +11,17 @@ import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useState } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
 import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
   getTokenBridgeAddressForChain,
-  transferEvm
+  SOL_TOKEN_BRIDGE_ADDRESS,
+  transferEvm,
+  WORMHOLE_RPC_HOSTS,
+  ZebecMessengerClient
 } from "@zebec-io/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
@@ -23,10 +29,15 @@ import {
   getForeignAssetSolana,
   getOriginalAssetEth,
   toChainName,
-  tryUint8ArrayToNative
+  tryUint8ArrayToNative,
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth,
+  getIsTransferCompletedSolana
 } from "@certusone/wormhole-sdk"
-import axios from "axios"
+// import axios from "axios"
 import { toast } from "features/toasts/toastsSlice"
+import { ethers } from "ethers"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -121,12 +132,6 @@ const DepositTab: FC = () => {
     if (signer) {
       const sourceChain = 4
       const targetChain = 1
-      const SOL_TOKEN_BRIDGE_ADDRESS =
-        process.env.NODE_ENV === "production"
-          ? "wormDTUJ6AWPNvk59vGQbDvGJmqbDTdgWgAqcLBCgUb"
-          : process.env.NODE_ENV === "development"
-          ? "DZnkkTmCiFWfYTfT41X3Rd1kDgozqzxWaHqsw6W4x2oe"
-          : "B6RHG3mfcckmrYN1UhmJzyS1XX3fZKbkeUcpJe9Sy3FE"
       const tokenAddress = currentToken.mint
       const recipientAddress = walletObject.publicKey?.toString() as string
       console.log("recipientAddress", recipientAddress)
@@ -158,18 +163,18 @@ const DepositTab: FC = () => {
       }
 
       // Create token account if doesn't exist
-      const { data: response } = await axios.post(
-        "http://localhost:3000/api/create-token-account",
-        {
-          recipientAddress,
-          targetTokenAddress
-        }
-      )
-      if (!response.success) {
-        console.log("Error creating token account")
-        return
-      }
-
+      console.log("targetTokenAddress", targetTokenAddress)
+      // const { data: response } = await axios.post(
+      //   "http://localhost:3000/api/create-token-account",
+      //   {
+      //     recipientAddress,
+      //     targetTokenAddress
+      //   }
+      // )
+      // if (!response.success) {
+      //   console.log("Error creating token account")
+      //   return
+      // }
       transferEvm(
         signer,
         currentToken.mint,
@@ -179,7 +184,19 @@ const DepositTab: FC = () => {
         recipientAddress,
         "0.1"
       )
-        .then(() => {
+        .then(async (vaa: any) => {
+          console.log("vaa", vaa)
+          const messengerContract = new ZebecMessengerClient(
+            BSC_ZEBEC_BRIDGE_ADDRESS,
+            signer,
+            4
+          )
+          const reciept = await messengerContract.depositToken(
+            data.amount,
+            walletObject.originalAddress?.toString() as string,
+            targetTokenAddress
+          )
+          console.log("reciept", reciept)
           dispatch(toast.success({ message: "Deposit successful" }))
           reset()
         })
@@ -200,6 +217,50 @@ const DepositTab: FC = () => {
       handleEvmSubmit(data)
     }
   }
+
+  // useEffect(() => {
+  //   if (signer) {
+  //     signer.provider
+  //       ?.getTransactionReceipt(
+  //         "0xa4e15ae6b94b68d67857bcfb3f01f656ab47860bb5d58a1e424e72a86e13f0d7"
+  //       )
+  //       .then(async (receipt: any) => {
+  //         console.log("receipt", receipt)
+  //         const txs = await signer.provider?.getTransaction(
+  //           "0xa4e15ae6b94b68d67857bcfb3f01f656ab47860bb5d58a1e424e72a86e13f0d7"
+  //         )
+  //         const ABI = [
+  //           "function transferTokens(address token, uint256 amount, uint16 recipientChain, bytes32 recipient, uint256 arbiterFee, uint32 nonce)"
+  //         ]
+  //         const iface = new ethers.utils.Interface(ABI)
+  //         const parsedTxs = iface.parseTransaction({
+  //           data: txs?.data as string
+  //         })
+  //         console.log("parsedTxs", parsedTxs.args)
+  //         const tokenBridgeAddress = getTokenBridgeAddressForChain(4)
+  //         const sequence = parseSequenceFromLogEth(
+  //           receipt,
+  //           getBridgeAddressForChain(4)
+  //         )
+  //         const emitterAddress = getEmitterAddressEth(tokenBridgeAddress)
+  //         console.log("emitterAddress", emitterAddress)
+  //         console.log("msgSequence", sequence)
+  //         const { vaaBytes } = await getSignedVAAWithRetry(
+  //           WORMHOLE_RPC_HOSTS,
+  //           4,
+  //           emitterAddress,
+  //           sequence
+  //         )
+
+  //         const isTransferComplete = await getIsTransferCompletedSolana(
+  //           SOL_TOKEN_BRIDGE_ADDRESS,
+  //           vaaBytes,
+  //           connection
+  //         )
+  //         console.log("isTransferComplete", isTransferComplete)
+  //       })
+  //   }
+  // }, [signer])
 
   return (
     <div className="deposit-to-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
