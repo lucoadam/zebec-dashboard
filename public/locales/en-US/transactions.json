@@ -63,6 +63,7 @@
     "requested-by": "Requested By",
     "sign-and-approve": "Sign & Approve",
     "signed-by": "Signed By",
+    "rejected-by": "Rejected By",
     "remaining": "Remaining",
     "show-all-remaining": "Show all remaining",
     "farm": "Farm",
@@ -72,7 +73,9 @@
     "tvl": "TVL",
     "reject": "Reject",
     "incoming-empty": "There are no incoming transactions. The transactions sender initiated will appear here.",
-    "outgoing-empty": "There are no outgoing transactions. The transactions you initiated will appear here."
+    "outgoing-empty": "There are no outgoing transactions. The transactions you initiated will appear here.",
+    "out-of": "out of",
+    "owners": "Owners"
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",

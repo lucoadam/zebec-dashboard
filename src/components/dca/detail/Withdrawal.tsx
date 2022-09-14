@@ -61,7 +61,7 @@ export const Withdrawal = () => {
           setMaxAmount={setMaxAmount}
           toggle={toggle}
           setToggle={setToggle}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
           {...register("amount")}
         >
           {/* Tokens Dropdown */}

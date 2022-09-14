@@ -1,5 +1,6 @@
 import { AppDispatch } from "app/store"
-import { withdrawFromTreasuryToWallet } from "features/modals/withdrawFromTreasurySlice"
+import { TreasuryTransactionType } from "components/treasury/treasury.d"
+import { transferToVault } from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
@@ -52,14 +53,28 @@ export const withdrawFromTreasury =
             transactionHash: response?.data?.transactionHash
           })
         )
+        //backend call
+        const payloadData = {
+          amount: data.amount,
+          transaction_type: TreasuryTransactionType.WITHDRAW_FROM_TREASURY,
+          transaction_account: response?.data?.transaction_account,
+          transaction_hash: response?.data?.transactionHash
+        }
+
+        if (!data.token_mint_address) {
+          const backendData = payloadData
+          dispatch(transferToVault(backendData))
+        } else {
+          const backendData = {
+            ...payloadData,
+            token_mint_address: data.token_mint_address
+          }
+          dispatch(transferToVault(backendData))
+        }
+        //callback
         if (callback) {
           callback("success")
         }
-        const backendData = {
-          ...data,
-          transaction_account: response.data.transaction_account
-        }
-        dispatch(withdrawFromTreasuryToWallet(backendData))
       } else {
         dispatch(
           toast.error({
@@ -83,7 +98,7 @@ export const withdrawFromTreasury =
   }
 
 //execute withdraw from treasury //sign
-export const executrWithdrawFromTreasury =
+export const executeWithdrawFromTreasury =
   ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
   async (dispatch: AppDispatch) => {
     console.log(data)
@@ -94,7 +109,6 @@ export const executrWithdrawFromTreasury =
       } else if (treasuryToken) {
         response = await treasuryToken.execTransferTokenFromSafe(data)
       }
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

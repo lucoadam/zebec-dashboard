@@ -1,11 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import api from "api/api"
-import { AppDispatch, RootState } from "app/store"
 
 interface TransactionState {
   loading: boolean
   error: string
-  pendingTransactions: {
+  transactions: {
     count: number | null
     next: string
     previous: string
@@ -16,7 +15,7 @@ interface TransactionState {
 const initialState: TransactionState = {
   loading: false,
   error: "",
-  pendingTransactions: {
+  transactions: {
     count: null,
     next: "",
     previous: "",
@@ -24,20 +23,13 @@ const initialState: TransactionState = {
   }
 }
 
-export const fetchPendingTransactions = createAsyncThunk<
+export const fetchTreasuryPendingTransactions = createAsyncThunk<
   any,
-  null,
-  { state: RootState }
->("treasuryTransactions/fetchPendingTransactions", async (_, { getState }) => {
-  const { treasuryTransactions } = getState()
-  console.log(treasuryTransactions)
-  // const response = await api.get(``)
-  return {
-    count: 0,
-    next: "",
-    previous: "",
-    results: []
-  }
+  { treasury_uuid: string },
+  {}
+>("treasuryTransactions/fetchTransactions", async ({ treasury_uuid }, {}) => {
+  const response = await api.get(`/treasury/${treasury_uuid}/transactions/`)
+  return response.data
 })
 
 export const treasuryTransactionsSlice = createSlice({
@@ -45,18 +37,24 @@ export const treasuryTransactionsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchPendingTransactions.pending, (state) => {
+    builder.addCase(fetchTreasuryPendingTransactions.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(fetchPendingTransactions.fulfilled, (state, action) => {
-      state.loading = false
-      state.error = ""
-      state.pendingTransactions = action.payload
-    })
-    builder.addCase(fetchPendingTransactions.rejected, (state, action) => {
-      state.loading = false
-      state.error = action?.error?.message ?? "Something went wrong"
-    })
+    builder.addCase(
+      fetchTreasuryPendingTransactions.fulfilled,
+      (state, action) => {
+        state.loading = false
+        state.error = ""
+        state.transactions = action.payload
+      }
+    )
+    builder.addCase(
+      fetchTreasuryPendingTransactions.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
   }
 })
 

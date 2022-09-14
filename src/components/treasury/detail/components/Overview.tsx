@@ -94,7 +94,7 @@ const Overview = () => {
         <SupportCardComponents.ZebecHelp page="treasury" />
         <SupportCardComponents.SendFeedback />
       </div>
-      <div className="grid gap-y-6">
+      <div className="flex flex-col gap-y-6">
         <DepositWithdraw tabs={fundTransferTabs} />
         <PendingConfirmation />
       </div>

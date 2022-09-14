@@ -136,7 +136,7 @@ export const Deposit = () => {
           toggle={toggle}
           setToggle={setToggle}
           {...register("amount")}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
         >
           {/* Tokens Dropdown */}
           <TokensDropdown
