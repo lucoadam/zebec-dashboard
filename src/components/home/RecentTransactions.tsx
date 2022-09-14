@@ -32,7 +32,7 @@ const RecentTransactions: FC<{ className?: string }> = ({ className }) => {
             title={`${t("common:buttons.view-all")}`}
             endIcon={<Icons.ArrowRightIcon />}
             onClick={() => {
-              router.push("/transactions")
+              router.push("/transactions/incoming")
             }}
           />
         </div>

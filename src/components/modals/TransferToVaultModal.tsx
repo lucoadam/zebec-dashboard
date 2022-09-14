@@ -14,9 +14,10 @@ import {
 } from "features/modals/transferToVaultModalSlice"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import ZebecContext from "app/zebecContext"
 import { depositToTreasuryVault } from "application"
+import { CallbackMessageType } from "components/treasury/treasury"
 
 const TransferToVaultModal = () => {
   const { t } = useTranslation()
@@ -47,14 +48,14 @@ const TransferToVaultModal = () => {
     type: "deposit"
   })
 
-  useEffect(() => {
-    if (transferToVaultStates.loading === false) {
-      setTimeout(() => {
-        reset()
-      }, 500)
+  const depositToTreasuryCallback = (message: CallbackMessageType) => {
+    if (message === "success") {
+      reset()
+      dispatch(toggleTransferToVaultModal())
+    } else {
+      dispatch(setLoading(false))
     }
-    // eslint-disable-next-line
-  }, [transferToVaultStates])
+  }
 
   const submit = (data: { amount: string }) => {
     if (
@@ -79,13 +80,18 @@ const TransferToVaultModal = () => {
       if (!transferData.token_mint_address) {
         treasury &&
           dispatch(
-            depositToTreasuryVault({ data: transferData, treasury: treasury })
+            depositToTreasuryVault({
+              data: transferData,
+              callback: depositToTreasuryCallback,
+              treasury: treasury
+            })
           )
       } else {
         treasuryToken &&
           dispatch(
             depositToTreasuryVault({
               data: transferData,
+              callback: depositToTreasuryCallback,
               treasuryToken: treasuryToken
             })
           )
@@ -128,7 +134,7 @@ const TransferToVaultModal = () => {
             toggle={toggle}
             setToggle={setToggle}
             {...register("amount")}
-            errorMessage={`${errors.amount?.message?.toString() || ""}`}
+            errorMessage={`${errors.amount?.message || ""}`}
           >
             {/* Tokens Dropdown */}
             <TokensDropdown

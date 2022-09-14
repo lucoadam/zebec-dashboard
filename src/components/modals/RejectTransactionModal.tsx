@@ -4,12 +4,24 @@ import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import * as Icons from "assets/icons"
-import { setLoading, toggleRejectModal } from "features/modals/rejectModalSlice"
+import {
+  rejectTransaction,
+  setLoading,
+  toggleRejectModal
+} from "features/modals/rejectModalSlice"
 
 const RejectTransactionModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.rejectTransaction)
+  const { show, loading, transaction } = useAppSelector(
+    (state) => state.rejectTransaction
+  )
   const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
+
+  const executeRejectTransaction = () => {
+    dispatch(setLoading(true))
+    dispatch(rejectTransaction({ uuid: transaction.uuid }))
+  }
+
   return (
     <Modal
       show={show}
@@ -34,13 +46,7 @@ const RejectTransactionModal: FC = ({}) => {
                   ? `${t("modal-actions.rejecting")}`
                   : `${t("modal-actions.yes-reject")}`
               }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(toggleRejectModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
+              onClick={executeRejectTransaction}
             />
           </div>
           <div className="">

@@ -97,7 +97,7 @@ export const Withdrawal = () => {
   }
 
   return (
-    <div className="px-6 pt-6 flex flex-col gap-y-6">
+    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
         {t("treasuryOverview:withdraw-description")}
       </div>
@@ -110,7 +110,7 @@ export const Withdrawal = () => {
           setMaxAmount={setMaxAmount}
           toggle={toggle}
           setToggle={setToggle}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
           {...register("amount")}
         >
           {/* Tokens Dropdown */}

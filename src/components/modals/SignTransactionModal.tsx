@@ -1,15 +1,131 @@
-import React, { FC } from "react"
+import React, { FC, useContext } from "react"
 import { useTranslation } from "next-i18next"
 import { Button, Modal } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-
 import * as Icons from "assets/icons"
-import { setLoading, toggleSignModal } from "features/modals/signModalSlice"
+import {
+  setLoading,
+  signTransaction,
+  toggleSignModal
+} from "features/modals/signModalSlice"
+import { useWallet } from "@solana/wallet-adapter-react"
+import {
+  TreasuryTransactionType,
+  CallbackMessageType
+} from "components/treasury/treasury.d"
+import {
+  executeDepositToTreasuryVault,
+  executeWithdrawFromTreasury,
+  executeWithdrawFromTreasuryVault
+} from "application"
+import ZebecContext from "app/zebecContext"
 
 const SignTransactionModal: FC = ({}) => {
-  const { show, loading } = useAppSelector((state) => state.signTransaction)
+  const { publicKey } = useWallet()
+  const { treasury, treasuryToken } = useContext(ZebecContext)
+  const { show, loading, transaction } = useAppSelector(
+    (state) => state.signTransaction
+  )
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+
   const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
+
+  const signTransactionCallback = (message: CallbackMessageType) => {
+    if (message === "success") {
+      dispatch(signTransaction({ uuid: transaction.uuid }))
+    } else {
+      dispatch(setLoading(false))
+    }
+  }
+
+  const executeSignTransaction = () => {
+    if (activeTreasury && publicKey) {
+      dispatch(setLoading(true))
+      const data = {
+        sender: transaction.approved_by[0].user,
+        receiver: transaction.receiver,
+        safe_address: activeTreasury.treasury_address,
+        safe_data_account: activeTreasury.treasury_escrow,
+        amount: Number(transaction.amount),
+        token_mint_address: transaction.token_mint_address,
+        transaction_account: transaction.transaction_account,
+        signer: publicKey.toString()
+      }
+
+      if (
+        transaction.transaction_type ===
+        TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT
+      ) {
+        if (!data.token_mint_address) {
+          treasury &&
+            dispatch(
+              executeDepositToTreasuryVault({
+                data: data,
+                callback: signTransactionCallback,
+                treasury: treasury
+              })
+            )
+        } else {
+          treasuryToken &&
+            dispatch(
+              executeDepositToTreasuryVault({
+                data: data,
+                callback: signTransactionCallback,
+                treasuryToken: treasuryToken
+              })
+            )
+        }
+      } else if (
+        transaction.transaction_type ===
+        TreasuryTransactionType.WITHDRAW_FROM_TREASURY_VAULT
+      ) {
+        if (!data.token_mint_address) {
+          treasury &&
+            dispatch(
+              executeWithdrawFromTreasuryVault({
+                data: data,
+                callback: signTransactionCallback,
+                treasury: treasury
+              })
+            )
+        } else {
+          treasuryToken &&
+            dispatch(
+              executeWithdrawFromTreasuryVault({
+                data: data,
+                callback: signTransactionCallback,
+                treasuryToken: treasuryToken
+              })
+            )
+        }
+      } else if (
+        transaction.transaction_type ===
+        TreasuryTransactionType.WITHDRAW_FROM_TREASURY
+      ) {
+        if (!data.token_mint_address) {
+          treasury &&
+            dispatch(
+              executeWithdrawFromTreasury({
+                data: data,
+                callback: signTransactionCallback,
+                treasury: treasury
+              })
+            )
+        } else {
+          treasuryToken &&
+            dispatch(
+              executeWithdrawFromTreasury({
+                data: data,
+                callback: signTransactionCallback,
+                treasuryToken: treasuryToken
+              })
+            )
+        }
+      }
+    }
+  }
+
   return (
     <Modal
       show={show}
@@ -34,13 +150,7 @@ const SignTransactionModal: FC = ({}) => {
                   ? `${t("modal-actions.signing")}`
                   : `${t("modal-actions.yes-sign")}`
               }
-              onClick={() => {
-                dispatch(setLoading(true))
-                setTimeout(() => {
-                  dispatch(toggleSignModal())
-                  dispatch(setLoading(false))
-                }, 5000)
-              }}
+              onClick={executeSignTransaction}
             />
           </div>
           <div className="">

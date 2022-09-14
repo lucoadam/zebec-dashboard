@@ -17,7 +17,8 @@ import { Modal } from "./Modal"
 export const UserAddress: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   wallet: string
-}> = ({ wallet }) => {
+  showIcons?: boolean
+}> = ({ wallet, showIcons = true }) => {
   const { addressBooks } = useAppSelector((state) => state.address)
   const isInAddressBook = addressBooks.some((item) => item.address === wallet)
 
@@ -81,7 +82,7 @@ export const UserAddress: FC<{
             )
           : toSubstring(wallet, 5, true)}{" "}
       </span>
-      {!isInAddressBook && (
+      {!isInAddressBook && showIcons && (
         <IconButton
           icon={<Icons.UserAddIcon />}
           className="bg-background-primary min-w-7 h-7"
@@ -140,7 +141,7 @@ export const UserAddress: FC<{
           </div>
         </Modal>
       </div>
-      <CopyButton className="min-w-7" content={wallet} />
+      {showIcons && <CopyButton className="min-w-7" content={wallet} />}
     </div>
   )
 }

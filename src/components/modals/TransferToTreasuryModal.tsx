@@ -14,9 +14,10 @@ import {
 } from "features/modals/transferToTreasuryModalSlice"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import ZebecContext from "app/zebecContext"
 import { withdrawFromTreasuryVault } from "application"
+import { CallbackMessageType } from "components/treasury/treasury"
 
 const TransferToTreasuryModal = () => {
   const { t } = useTranslation()
@@ -49,14 +50,14 @@ const TransferToTreasuryModal = () => {
     type: "withdraw"
   })
 
-  useEffect(() => {
-    if (transferToTreasuryStates.loading === false) {
-      setTimeout(() => {
-        reset()
-      }, 500)
+  const withdrawFromTreasuryCallback = (message: CallbackMessageType) => {
+    if (message === "success") {
+      reset()
+      dispatch(toggleTransferToTreasuryModal())
+    } else {
+      dispatch(setLoading(false))
     }
-    // eslint-disable-next-line
-  }, [transferToTreasuryStates])
+  }
 
   const submit = (data: { amount: string }) => {
     if (
@@ -85,6 +86,7 @@ const TransferToTreasuryModal = () => {
           dispatch(
             withdrawFromTreasuryVault({
               data: transferData,
+              callback: withdrawFromTreasuryCallback,
               treasury: treasury
             })
           )
@@ -93,6 +95,7 @@ const TransferToTreasuryModal = () => {
           dispatch(
             withdrawFromTreasuryVault({
               data: transferData,
+              callback: withdrawFromTreasuryCallback,
               treasuryToken: treasuryToken
             })
           )
@@ -135,7 +138,7 @@ const TransferToTreasuryModal = () => {
             toggle={toggle}
             setToggle={setToggle}
             {...register("amount")}
-            errorMessage={`${errors.amount?.message?.toString() || ""}`}
+            errorMessage={`${errors.amount?.message || ""}`}
           >
             {/* Tokens Dropdown */}
             <TokensDropdown

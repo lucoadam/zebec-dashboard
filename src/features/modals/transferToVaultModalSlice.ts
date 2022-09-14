@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-// import api from "api/api"
-import { AppDispatch } from "app/store"
+import api from "api/api"
+import { AppDispatch, RootState } from "app/store"
+import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface TransferToVaultState {
   show: boolean
@@ -17,11 +18,16 @@ const initialState: TransferToVaultState = {
 export const transferToVault = createAsyncThunk<
   any,
   any,
-  { dispatch: AppDispatch }
->("transferToVault/transferToVault", async (data, { dispatch }) => {
-  console.log(data)
-  // const response = await api.post(`/`, data)
-  dispatch(toggleTransferToVaultModal())
+  { dispatch: AppDispatch; state: RootState }
+>("transferToVault/transferToVault", async (data, { dispatch, getState }) => {
+  const { treasury } = getState()
+  if (treasury.activeTreasury?.uuid) {
+    const uuid = treasury.activeTreasury.uuid
+    await api.post(`/treasury/${uuid}/transactions/`, data)
+    dispatch(setLoading(false))
+    dispatch(fetchTreasuryPendingTransactions({ treasury_uuid: uuid }))
+    return null
+  }
   return
 })
 

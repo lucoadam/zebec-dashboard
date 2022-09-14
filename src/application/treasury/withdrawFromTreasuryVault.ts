@@ -1,5 +1,7 @@
 import { AppDispatch } from "app/store"
-import { withdrawFromTreasuryToWallet } from "features/modals/withdrawFromTreasurySlice"
+import { TreasuryTransactionType } from "components/treasury/treasury.d"
+import { transferToVault } from "features/modals/transferToVaultModalSlice"
+import { setLoading } from "features/modals/transferToTreasuryModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
@@ -55,11 +57,25 @@ export const withdrawFromTreasuryVault =
             transactionHash: response?.data?.transactionHash
           })
         )
-        const backendData = {
-          ...data,
-          transaction_account: response.data.transaction_account
+
+        const payloadData = {
+          amount: data.amount,
+          transaction_type:
+            TreasuryTransactionType.WITHDRAW_FROM_TREASURY_VAULT,
+          transaction_account: response?.data?.transaction_account,
+          transaction_hash: response?.data?.transactionHash
         }
-        dispatch(withdrawFromTreasuryToWallet(backendData))
+
+        if (!data.token_mint_address) {
+          const backendData = payloadData
+          dispatch(transferToVault(backendData))
+        } else {
+          const backendData = {
+            ...payloadData,
+            token_mint_address: data.token_mint_address
+          }
+          dispatch(transferToVault(backendData))
+        }
         if (callback) {
           callback("success")
         }
@@ -69,6 +85,7 @@ export const withdrawFromTreasuryVault =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(setLoading(false))
         if (callback) {
           callback("error")
         }
@@ -79,6 +96,7 @@ export const withdrawFromTreasuryVault =
           message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(setLoading(false))
       if (callback) {
         callback("error")
       }

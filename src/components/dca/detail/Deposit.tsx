@@ -226,7 +226,7 @@ export const Deposit = () => {
           toggle={toggle}
           setToggle={setToggle}
           {...register("amount")}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
           disabled={!depositFrom}
           className="mt-4"
         >

@@ -1,10 +1,17 @@
 import { AppDispatch } from "app/store"
-import { transferToVault } from "features/modals/transferToVaultModalSlice"
+import {
+  transferToVault,
+  setLoading
+} from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
+import {
+  TreasuryTransactionType,
+  CallbackMessageType
+} from "components/treasury/treasury.d"
 
 interface DepositToTreasuryVaultDataProps {
   data: {
@@ -16,7 +23,7 @@ interface DepositToTreasuryVaultDataProps {
     transaction_account?: string
     signer?: string
   }
-  callback?: (message: "success" | "error") => void
+  callback?: (message: CallbackMessageType) => void
 }
 
 type DepositToTreasuryVaultProps = DepositToTreasuryVaultDataProps &
@@ -49,11 +56,24 @@ export const depositToTreasuryVault =
             transactionHash: response?.data?.transactionHash
           })
         )
-        const backendData = {
-          ...data,
-          transaction_account: response.data.transaction_account
+
+        const payloadData = {
+          amount: data.amount,
+          transaction_type: TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT,
+          transaction_account: response?.data?.transaction_account,
+          transaction_hash: response?.data?.transactionHash
         }
-        dispatch(transferToVault(backendData))
+
+        if (!data.token_mint_address) {
+          const backendData = payloadData
+          dispatch(transferToVault(backendData))
+        } else {
+          const backendData = {
+            ...payloadData,
+            token_mint_address: data.token_mint_address
+          }
+          dispatch(transferToVault(backendData))
+        }
         if (callback) {
           callback("success")
         }
@@ -63,6 +83,7 @@ export const depositToTreasuryVault =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(setLoading(false))
         if (callback) {
           callback("error")
         }
@@ -73,6 +94,7 @@ export const depositToTreasuryVault =
           message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(setLoading(false))
       if (callback) {
         callback("error")
       }
