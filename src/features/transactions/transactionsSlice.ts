@@ -8,13 +8,13 @@ interface TransactionState {
   loading: boolean
   error: string
   outgoingTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
   }
   incomingTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
@@ -26,19 +26,19 @@ interface TransactionState {
     results: any[]
   }
   completedTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
   }
   ongoingTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
   }
   scheduledTransactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]
@@ -53,13 +53,13 @@ const initialState: TransactionState = {
   loading: false,
   error: "",
   outgoingTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []
   },
   incomingTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []
@@ -71,19 +71,19 @@ const initialState: TransactionState = {
     results: []
   },
   completedTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []
   },
   ongoingTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []
   },
   scheduledTransactions: {
-    count: 0,
+    count: null,
     next: "",
     previous: "",
     results: []

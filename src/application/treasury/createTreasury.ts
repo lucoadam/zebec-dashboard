@@ -41,6 +41,7 @@ export const createTreasury =
           min_confirmations: data.minValidator,
           treasury_address: response?.data?.safe_address,
           treasury_escrow: response?.data?.safe_data_account,
+          treasury_vault_address: response?.data?.safe_vault_address,
           transaction_hash: response?.data?.transactionHash
         }
         dispatch(createNewTreasury({ data: backendData, callback: callback }))

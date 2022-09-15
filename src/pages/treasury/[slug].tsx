@@ -16,6 +16,8 @@ import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 import { setActiveTreasury } from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
+import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
+import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
@@ -35,6 +37,7 @@ const Treasury: NextPage = () => {
   const { treasuries, activeTreasury } = useAppSelector(
     (state) => state.treasury
   )
+  const { transactions } = useAppSelector((state) => state.treasuryTransactions)
 
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const dropdownWrapper = useRef(null)
@@ -56,12 +59,28 @@ const Treasury: NextPage = () => {
 
   useEffect(() => {
     if (tokens.length > 0 && walletObject.publicKey && activeTreasury) {
+      //Treasury Balance
       dispatch(
         fetchTreasuryBalance({
           name: activeTreasury.name,
           address: activeTreasury.treasury_address
         })
       )
+      //Treasury Vault Balance
+      dispatch(
+        fetchTreasuryVaultBalance({
+          name: activeTreasury.name,
+          address: activeTreasury.treasury_vault_address
+        })
+      )
+
+      //Treasury Transactions
+      transactions.count === null &&
+        dispatch(
+          fetchTreasuryPendingTransactions({
+            treasury_uuid: activeTreasury.uuid
+          })
+        )
     }
     // eslint-disable-next-line
   }, [tokens, walletObject, activeTreasury])

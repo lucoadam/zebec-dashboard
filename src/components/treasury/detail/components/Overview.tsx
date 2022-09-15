@@ -33,9 +33,14 @@ const Overview = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
+  const treasuryVaultTokens =
+    useAppSelector((state) => state.treasuryVaultBalance.treasury?.tokens) || []
   const [currentToken, setCurrentToken] = useState("SOL")
   const treasuryBalance = useAppSelector(
     (state) => state.treasuryBalance.treasury?.tokens
+  )
+  const treasuryVaultBalance = useAppSelector(
+    (state) => state.treasuryVaultBalance.treasury?.tokens
   )
   const prices = useAppSelector((state) => state.tokenDetails.prices)
   return (
@@ -58,7 +63,7 @@ const Overview = () => {
         />
         {/* Treasury Vault Balance */}
         <TreasuryVaultBalance
-          balance={treasuryBalance?.reduce(
+          balance={treasuryVaultBalance?.reduce(
             (a, b) => a + (prices[b.symbol] * b.balance || 0),
             0
           )}
@@ -80,6 +85,7 @@ const Overview = () => {
         <TreasuryDepositedAssets
           tableMaxHeight={517}
           balanceTokens={treasuryTokens}
+          vaultBalanceTokens={treasuryVaultTokens}
           tokens={tokenDetails}
         />
         {/**
@@ -88,7 +94,7 @@ const Overview = () => {
         <SupportCardComponents.ZebecHelp page="treasury" />
         <SupportCardComponents.SendFeedback />
       </div>
-      <div className="grid gap-y-6">
+      <div className="flex flex-col gap-y-6">
         <DepositWithdraw tabs={fundTransferTabs} />
         <PendingConfirmation />
       </div>

@@ -51,8 +51,7 @@ export const Deposit = () => {
     type: "deposit"
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
+  const submit = (data: { amount: string }) => {
     if (
       (depositFrom === "Wallet" &&
         Number(data.amount) > getBalance(walletBalance, currentToken.symbol)) ||
@@ -77,9 +76,15 @@ export const Deposit = () => {
 
   const setMaxAmount = () => {
     if (depositFrom === "Wallet") {
-      setValue("amount", getBalance(walletBalance, currentToken.symbol))
+      setValue(
+        "amount",
+        getBalance(walletBalance, currentToken.symbol).toString()
+      )
     } else if (depositFrom === "Zebec balance") {
-      setValue("amount", getBalance(zebecBalance, currentToken.symbol))
+      setValue(
+        "amount",
+        getBalance(zebecBalance, currentToken.symbol).toString()
+      )
     }
     trigger("amount")
   }
@@ -221,7 +226,7 @@ export const Deposit = () => {
           toggle={toggle}
           setToggle={setToggle}
           {...register("amount")}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
           disabled={!depositFrom}
           className="mt-4"
         >

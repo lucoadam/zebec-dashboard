@@ -1,18 +1,19 @@
 import { AppDispatch } from "app/store"
 import { TreasuryTransactionType } from "components/treasury/treasury.d"
 import { transferToVault } from "features/modals/transferToVaultModalSlice"
+import { setLoading } from "features/modals/transferToTreasuryModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
 
-interface WithdrawFromDataProps {
+interface WithdrawFromTreasuryVaultDataProps {
   data: {
     sender: string
-    receiver: string
     safe_address: string
     safe_data_account: string
+    receiver: string
     amount: number
     token_mint_address?: string
     transaction_account?: string
@@ -21,7 +22,7 @@ interface WithdrawFromDataProps {
   callback?: (message: "success" | "error") => void
 }
 
-type WithdrawFromTreasuryProps = WithdrawFromDataProps &
+type WithdrawFromTreasuryVaultProps = WithdrawFromTreasuryVaultDataProps &
   (
     | {
         treasury: ZebecNativeTreasury
@@ -33,30 +34,34 @@ type WithdrawFromTreasuryProps = WithdrawFromDataProps &
       }
   )
 
-export const withdrawFromTreasury =
-  ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
+export const withdrawFromTreasuryVault =
+  ({
+    data,
+    callback,
+    treasury,
+    treasuryToken
+  }: WithdrawFromTreasuryVaultProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
-        response = await treasury.transferFromSafe(data)
+        response = await treasury.instantTransfer(data)
       } else if (treasuryToken) {
-        response = await treasuryToken.transferTokenFromSafe(data)
+        response = await treasuryToken.instanttransfer(data)
       }
+
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message:
-              response.message ??
-              "Withdraw from treasury initiated and is pending for sign.",
+            message: response.message ?? "Deposit to treasury success.",
             transactionHash: response?.data?.transactionHash
           })
         )
-        //backend call
+
         const payloadData = {
           amount: data.amount,
-          transaction_type: TreasuryTransactionType.WITHDRAW_FROM_TREASURY,
+          transaction_type:
+            TreasuryTransactionType.WITHDRAW_FROM_TREASURY_VAULT,
           transaction_account: response?.data?.transaction_account,
           transaction_hash: response?.data?.transactionHash
         }
@@ -71,7 +76,6 @@ export const withdrawFromTreasury =
           }
           dispatch(transferToVault(backendData))
         }
-        //callback
         if (callback) {
           callback("success")
         }
@@ -81,6 +85,7 @@ export const withdrawFromTreasury =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(setLoading(false))
         if (callback) {
           callback("error")
         }
@@ -91,30 +96,35 @@ export const withdrawFromTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(setLoading(false))
       if (callback) {
         callback("error")
       }
     }
   }
 
-//execute withdraw from treasury //sign
-export const executeWithdrawFromTreasury =
-  ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
+//Execute deposit to treasury //sign
+export const executeWithdrawFromTreasuryVault =
+  ({
+    data,
+    callback,
+    treasury,
+    treasuryToken
+  }: WithdrawFromTreasuryVaultProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
-        response = await treasury.execTransferFromSafe(data)
+        response = await treasury.execInstantTransfer(data)
       } else if (treasuryToken) {
-        response = await treasuryToken.execTransferTokenFromSafe(data)
+        response = await treasuryToken.execInstanttransfer(data)
       }
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
             message:
               response.message ??
-              "Withdraw from treasury initiated and is pending for sign.",
+              "Withdraw from treasury executed successfully.",
             transactionHash: response?.data?.transactionHash
           })
         )

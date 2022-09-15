@@ -91,7 +91,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   const [status, setStatus] = useState<TransactionStatusType>(
     transaction.status
   )
-  const [counter, setCounter] = useState<number>(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -99,12 +98,13 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     }, 1000)
     if (
       status === StatusType.COMPLETED ||
-      status === StatusType.PAUSED ||
-      status === StatusType.CANCELLED
+      status === StatusType.CANCELLED ||
+      currentTime > end_time
     ) {
       clearInterval(interval)
     }
     return () => clearInterval(interval)
+    // eslint-disable-next-line
   }, [currentTime, status])
 
   useEffect(() => {
@@ -129,24 +129,20 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     if (status === StatusType.COMPLETED) {
       setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
     } else if (status === StatusType.ONGOING) {
-      if (counter === 0) {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
+      )
+      const interval = setInterval(() => {
+        setStreamedToken((prevStreamedToken: number) =>
+          prevStreamedToken + streamRatePerSec > amount
+            ? amount
+            : prevStreamedToken + streamRatePerSec
         )
-        setCounter((counter) => counter + 1)
-      } else {
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > amount
-              ? amount
-              : prevStreamedToken + streamRatePerSec
-          )
-        }, 1000)
-        return () => clearInterval(interval)
-      }
+      }, 1000)
+      return () => clearInterval(interval)
     } else if (
       status === StatusType.CANCELLED ||
       status === StatusType.PAUSED
@@ -157,7 +153,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
       )
     }
     // eslint-disable-next-line
-  }, [status, counter, transaction])
+  }, [status, transaction])
 
   // Toggle Modal
   // const toggleModal = () => {

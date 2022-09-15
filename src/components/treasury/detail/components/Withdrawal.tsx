@@ -46,8 +46,7 @@ export const Withdrawal = () => {
     setLoading(false)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submitWitdrawal = (data: any) => {
+  const submitWitdrawal = (data: { amount: string }) => {
     if (Number(data.amount) > getBalance(treasuryTokens, currentToken.symbol)) {
       setError(
         "amount",
@@ -61,7 +60,7 @@ export const Withdrawal = () => {
         sender: (publicKey as PublicKey).toString(),
         safe_address: activeTreasury?.treasury_address || "",
         safe_data_account: activeTreasury?.treasury_escrow || "",
-        receiver: "7VBTMgbXbnz3gXjCjADM3dzJYsidSRw453mcXV1CfcRj",
+        receiver: (publicKey as PublicKey).toString(),
         amount: Number(data.amount),
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint
@@ -90,12 +89,15 @@ export const Withdrawal = () => {
   }
 
   const setMaxAmount = () => {
-    setValue("amount", getBalance(treasuryTokens, currentToken.symbol))
+    setValue(
+      "amount",
+      getBalance(treasuryTokens, currentToken.symbol).toString()
+    )
     trigger("amount")
   }
 
   return (
-    <div className="px-6 pt-6 flex flex-col gap-y-6">
+    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
         {t("treasuryOverview:withdraw-description")}
       </div>
@@ -108,7 +110,7 @@ export const Withdrawal = () => {
           setMaxAmount={setMaxAmount}
           toggle={toggle}
           setToggle={setToggle}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
           {...register("amount")}
         >
           {/* Tokens Dropdown */}

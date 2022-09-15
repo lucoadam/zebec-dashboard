@@ -16,7 +16,7 @@ const routesArray: RoutesArrayProps[] = [
   },
   {
     name: "transactions",
-    path: "/transactions",
+    path: "/transactions/incoming",
     Icon: NavIcons.TransactionIcon,
     type: "link"
   },

@@ -60,7 +60,7 @@ const WithdrawTab: FC = () => {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance)
+    setValue("amount", balance.toString())
     trigger("amount")
   }
 
@@ -121,7 +121,7 @@ const WithdrawTab: FC = () => {
           toggle={toggle}
           setToggle={setToggle}
           {...register("amount")}
-          errorMessage={`${errors.amount?.message?.toString() || ""}`}
+          errorMessage={`${errors.amount?.message || ""}`}
         >
           {/* Tokens Dropdown */}
           <TokensDropdown

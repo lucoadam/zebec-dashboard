@@ -39,13 +39,13 @@ export const TokensDropdown: FC<TokensDropdownProps> = (props) => {
         )}
       >
         <div className="rounded-lg">
-          <div className="flex items-center px-4.5 py-3 border-b border-outline">
-            <Icons.SearchIcon className="text-base text-content-tertiary" />
+          <div className="flex items-center px-4.5 py-1 border-b border-outline">
+            <Icons.SearchIcon className="text-base text-content-tertiary flex-shrink-0" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearchData(e.target.value)}
-              placeholder="Search Tokens"
+              placeholder={`${t("common:eg-sol")}`}
               className="!rounded-b-none !border-0 !ring-0 !text-body !text-content-secondary"
             />
           </div>

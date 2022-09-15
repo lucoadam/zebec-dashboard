@@ -15,7 +15,7 @@ import OutgoingTableRow from "./OutgoingTableRow"
 
 export interface TransactionTableProps {
   transactions: {
-    count: number
+    count: number | null
     next: string
     previous: string
     results: any[]

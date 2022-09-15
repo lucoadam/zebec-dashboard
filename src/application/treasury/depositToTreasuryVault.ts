@@ -1,16 +1,21 @@
 import { AppDispatch } from "app/store"
-import { TreasuryTransactionType } from "components/treasury/treasury.d"
-import { transferToVault } from "features/modals/transferToVaultModalSlice"
+import {
+  transferToVault,
+  setLoading
+} from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
+import {
+  TreasuryTransactionType,
+  CallbackMessageType
+} from "components/treasury/treasury.d"
 
-interface WithdrawFromDataProps {
+interface DepositToTreasuryVaultDataProps {
   data: {
     sender: string
-    receiver: string
     safe_address: string
     safe_data_account: string
     amount: number
@@ -18,10 +23,10 @@ interface WithdrawFromDataProps {
     transaction_account?: string
     signer?: string
   }
-  callback?: (message: "success" | "error") => void
+  callback?: (message: CallbackMessageType) => void
 }
 
-type WithdrawFromTreasuryProps = WithdrawFromDataProps &
+type DepositToTreasuryVaultProps = DepositToTreasuryVaultDataProps &
   (
     | {
         treasury: ZebecNativeTreasury
@@ -33,30 +38,28 @@ type WithdrawFromTreasuryProps = WithdrawFromDataProps &
       }
   )
 
-export const withdrawFromTreasury =
-  ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
+export const depositToTreasuryVault =
+  ({ data, callback, treasury, treasuryToken }: DepositToTreasuryVaultProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
-        response = await treasury.transferFromSafe(data)
+        response = await treasury.deposit(data)
       } else if (treasuryToken) {
-        response = await treasuryToken.transferTokenFromSafe(data)
+        response = await treasuryToken.deposit(data)
       }
+
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message:
-              response.message ??
-              "Withdraw from treasury initiated and is pending for sign.",
+            message: response.message ?? "Deposit to treasury success.",
             transactionHash: response?.data?.transactionHash
           })
         )
-        //backend call
+
         const payloadData = {
           amount: data.amount,
-          transaction_type: TreasuryTransactionType.WITHDRAW_FROM_TREASURY,
+          transaction_type: TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT,
           transaction_account: response?.data?.transaction_account,
           transaction_hash: response?.data?.transactionHash
         }
@@ -71,7 +74,6 @@ export const withdrawFromTreasury =
           }
           dispatch(transferToVault(backendData))
         }
-        //callback
         if (callback) {
           callback("success")
         }
@@ -81,6 +83,7 @@ export const withdrawFromTreasury =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(setLoading(false))
         if (callback) {
           callback("error")
         }
@@ -91,30 +94,29 @@ export const withdrawFromTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(setLoading(false))
       if (callback) {
         callback("error")
       }
     }
   }
 
-//execute withdraw from treasury //sign
-export const executeWithdrawFromTreasury =
-  ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
+//Execute deposit to treasury //sign
+export const executeDepositToTreasuryVault =
+  ({ data, callback, treasury, treasuryToken }: DepositToTreasuryVaultProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
-        response = await treasury.execTransferFromSafe(data)
+        response = await treasury.execDespoit(data)
       } else if (treasuryToken) {
-        response = await treasuryToken.execTransferTokenFromSafe(data)
+        response = await treasuryToken.execDespoit(data)
       }
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
             message:
-              response.message ??
-              "Withdraw from treasury initiated and is pending for sign.",
+              response.message ?? "Deposit to treasury executed successfully.",
             transactionHash: response?.data?.transactionHash
           })
         )

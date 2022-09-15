@@ -339,7 +339,8 @@ const Navbar: FC = () => {
                 ${
                   (router.pathname === route.path ||
                     (route.path !== "/" &&
-                      router.pathname.includes(route.path?.split("/")[1]))) &&
+                      route.path &&
+                      router.pathname.includes(route.path.split("/")[1]))) &&
                   "bg-background-primary"
                 }
                 py-2 px-2 rounded-[4px]`}
