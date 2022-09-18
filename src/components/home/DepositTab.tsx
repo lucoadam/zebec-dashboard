@@ -195,9 +195,26 @@ const DepositTab: FC = () => {
           data.amount,
           targetChain,
           recipientAddress,
-          "0.1"
+          "0.01"
         )
-          .then(async (transferVaa: any) => {
+          .then(async (transferReceipt: any) => {
+            console.log("transferReceipt", transferReceipt)
+
+            const sequence = parseSequenceFromLogEth(
+              transferReceipt,
+              getBridgeAddressForChain(sourceChain)
+            )
+            const transferEmitterAddress = getEmitterAddressEth(
+              getTokenBridgeAddressForChain(sourceChain)
+            )
+            console.debug("emitterAddress:", transferEmitterAddress)
+            const { vaaBytes: transferVaa } = await getSignedVAAWithRetry(
+              WORMHOLE_RPC_HOSTS,
+              sourceChain,
+              transferEmitterAddress,
+              sequence
+            )
+
             // check transfer complete
             let isTransferComplete = false
             let logMsg = "checking if transfer completed"
