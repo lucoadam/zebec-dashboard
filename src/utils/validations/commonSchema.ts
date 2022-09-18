@@ -48,8 +48,8 @@ export const wallets = {
 export const receiverWallet = {
   receiver: Yup.string()
     .required("validation:receiver-required")
-    .test("is-valid-address", "validation:receiver-invalid", (value) =>
-      isValidWallet(value)
+    .test("is-valid-address", "validation:receiver-invalid", (value, context) =>
+      isValidWallet(value, context.parent?.chainId || "solana")
     )
     .test("is-own-wallet", "validation:receiver-self", (receiver, context) => {
       return receiver !== context.parent.wallet
@@ -304,4 +304,8 @@ export const interval = {
 
 export const file = {
   file: Yup.string()
+}
+
+export const chainId = {
+  chainId: Yup.string()
 }

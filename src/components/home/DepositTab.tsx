@@ -38,6 +38,9 @@ import {
 // import axios from "axios"
 import { toast } from "features/toasts/toastsSlice"
 import { ethers } from "ethers"
+import axios from "axios"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { getAssociatedTokenAddress } from "@solana/spl-token"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -130,83 +133,122 @@ const DepositTab: FC = () => {
 
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
-      const sourceChain = 4
-      const targetChain = 1
-      const tokenAddress = currentToken.mint
-      const recipientAddress = walletObject.publicKey?.toString() as string
-      console.log("recipientAddress", recipientAddress)
-
-      // find out target token address in solana
-      let targetTokenAddress: string
-      const originAssetInfo = await getOriginalAssetEth(
-        getTokenBridgeAddressForChain(sourceChain),
-        signer,
-        tokenAddress,
-        sourceChain
-      )
-      if (originAssetInfo.chainId === targetChain) {
-        targetTokenAddress = tryUint8ArrayToNative(
-          originAssetInfo.assetAddress,
-          toChainName(targetChain)
+      try {
+        setLoading(true)
+        const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+        const targetChain = 1
+        const tokenAddress = currentToken.mint
+        const recipientAddress = walletObject.publicKey?.toString() as string
+        console.log("sourceChain", sourceChain)
+        // find out target token address in solana
+        let targetTokenAddress: string
+        const originAssetInfo = await getOriginalAssetEth(
+          getTokenBridgeAddressForChain(sourceChain),
+          signer,
+          tokenAddress,
+          sourceChain
         )
-      } else {
-        const foreignAsset = await getForeignAssetSolana(
-          connection,
-          SOL_TOKEN_BRIDGE_ADDRESS,
-          originAssetInfo.chainId,
-          originAssetInfo.assetAddress
-        )
-        if (!foreignAsset) {
-          throw new Error("Token is not attested in solana")
+        if (originAssetInfo.chainId === targetChain) {
+          targetTokenAddress = tryUint8ArrayToNative(
+            originAssetInfo.assetAddress,
+            toChainName(targetChain)
+          )
+        } else {
+          const foreignAsset = await getForeignAssetSolana(
+            connection,
+            SOL_TOKEN_BRIDGE_ADDRESS,
+            originAssetInfo.chainId,
+            originAssetInfo.assetAddress
+          )
+          if (!foreignAsset) {
+            throw new Error("Token is not attested in solana")
+          }
+          targetTokenAddress = foreignAsset
         }
-        targetTokenAddress = foreignAsset
-      }
 
-      // Create token account if doesn't exist
-      console.log("targetTokenAddress", targetTokenAddress)
-      // const { data: response } = await axios.post(
-      //   "http://localhost:3000/api/create-token-account",
-      //   {
-      //     recipientAddress,
-      //     targetTokenAddress
-      //   }
-      // )
-      // if (!response.success) {
-      //   console.log("Error creating token account")
-      //   return
-      // }
-      transferEvm(
-        signer,
-        currentToken.mint,
-        4,
-        data.amount,
-        1,
-        recipientAddress,
-        "0.1"
-      )
-        .then(async (vaa: any) => {
-          console.log("vaa", vaa)
-          const messengerContract = new ZebecMessengerClient(
-            BSC_ZEBEC_BRIDGE_ADDRESS,
-            signer,
-            4
-          )
-          const reciept = await messengerContract.depositToken(
-            data.amount,
-            walletObject.originalAddress?.toString() as string,
-            targetTokenAddress
-          )
-          console.log("reciept", reciept)
-          dispatch(toast.success({ message: "Deposit successful" }))
-          reset()
-        })
-        .catch(() => {
-          dispatch(
-            toast.error({
-              message: "Error depositing token"
-            })
-          )
-        })
+        // Create token account if doesn't exist
+        console.log("targetTokenAddress", targetTokenAddress)
+        // const { data: response } = await axios.post(
+        //   "http://localhost:3000/api/create-token-account",
+        //   {
+        //     recipientAddress,
+        //     targetTokenAddress
+        //   }
+        // )
+        // if (!response.success) {
+        //   console.log("Error creating token account")
+        //   return
+        // }
+
+        const recipientTokenAddress = await getAssociatedTokenAddress(
+          new PublicKey(targetTokenAddress),
+          new PublicKey(recipientAddress),
+          true
+        )
+        console.log("recipientAddress", recipientAddress)
+        console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
+
+        transferEvm(
+          signer,
+          currentToken.mint,
+          sourceChain,
+          data.amount,
+          targetChain,
+          recipientAddress,
+          "0.1"
+        )
+          .then(async (transferVaa: any) => {
+            // check transfer complete
+            let isTransferComplete = false
+            let logMsg = "checking if transfer completed"
+            let retry = 0
+            do {
+              logMsg = logMsg.concat(".")
+              if (retry > 12) throw new Error("Transfer failed!")
+              retry++
+              console.log(logMsg)
+              isTransferComplete = await getIsTransferCompletedSolana(
+                SOL_TOKEN_BRIDGE_ADDRESS,
+                transferVaa,
+                connection
+              )
+              await new Promise((r) => setTimeout(r, 5000))
+            } while (!isTransferComplete)
+            console.log("transfer successful")
+
+            const messengerContract = new ZebecMessengerClient(
+              BSC_ZEBEC_BRIDGE_ADDRESS,
+              signer,
+              sourceChain
+            )
+            const reciept = await messengerContract.depositToken(
+              data.amount,
+              walletObject.originalAddress?.toString() as string,
+              targetTokenAddress
+            )
+            console.log("reciept", reciept)
+            dispatch(toast.success({ message: "Deposit successful" }))
+            depositCallback()
+            setLoading(false)
+          })
+          .catch((err) => {
+            console.log("error", err)
+            dispatch(
+              toast.error({
+                message: "Error depositing token"
+              })
+            )
+            setLoading(false)
+          })
+      } catch (e) {
+        console.log("error", e)
+        dispatch(
+          toast.error({
+            message: "Error depositing token"
+          })
+        )
+        setLoading(false)
+      }
     }
   }
 
@@ -222,12 +264,12 @@ const DepositTab: FC = () => {
   //   if (signer) {
   //     signer.provider
   //       ?.getTransactionReceipt(
-  //         "0xa4e15ae6b94b68d67857bcfb3f01f656ab47860bb5d58a1e424e72a86e13f0d7"
+  //         "0x90e7676393d9c6db6c554bc4ff0a147ca0f6b1e8094ca50aa7a6a326807e1ae5"
   //       )
   //       .then(async (receipt: any) => {
   //         console.log("receipt", receipt)
   //         const txs = await signer.provider?.getTransaction(
-  //           "0xa4e15ae6b94b68d67857bcfb3f01f656ab47860bb5d58a1e424e72a86e13f0d7"
+  //           "0x90e7676393d9c6db6c554bc4ff0a147ca0f6b1e8094ca50aa7a6a326807e1ae5"
   //         )
   //         const ABI = [
   //           "function transferTokens(address token, uint256 amount, uint16 recipientChain, bytes32 recipient, uint256 arbiterFee, uint32 nonce)"
@@ -251,13 +293,36 @@ const DepositTab: FC = () => {
   //           emitterAddress,
   //           sequence
   //         )
-
+  //         console.log("vaaBytes", Buffer.from(vaaBytes).toString("base64"))
   //         const isTransferComplete = await getIsTransferCompletedSolana(
   //           SOL_TOKEN_BRIDGE_ADDRESS,
   //           vaaBytes,
   //           connection
   //         )
   //         console.log("isTransferComplete", isTransferComplete)
+  //         if (!isTransferComplete) {
+  //           const { data: response } = await axios.post(
+  //             "http://localhost:4201/realyvaa",
+  //             {
+  //               vaa: Buffer.from(vaaBytes).toString("base64")
+  //             }
+  //           )
+  //           if (response.message !== "Scheduled") {
+  //             console.log("Not Scheduled")
+  //             return
+  //           }
+  //         }
+  //         const messengerContract = new ZebecMessengerClient(
+  //           BSC_ZEBEC_BRIDGE_ADDRESS,
+  //           signer,
+  //           4
+  //         )
+  //         const reciept = await messengerContract.depositToken(
+  //           "1.1",
+  //           walletObject.originalAddress?.toString() as string,
+  //           "So11111111111111111111111111111111111111112"
+  //         )
+  //         console.log("reciept", reciept)
   //       })
   //   }
   // }, [signer])

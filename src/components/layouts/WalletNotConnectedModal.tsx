@@ -28,7 +28,7 @@ const tabs = [
     Component: <SolanaWallet className="mt-8" />
   },
   {
-    title: "Ethereum",
+    title: "EVM",
     icon: <Token symbol="ETH" />,
     count: 2,
     Component: <EthereumWallet />

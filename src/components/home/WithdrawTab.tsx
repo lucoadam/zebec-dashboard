@@ -13,6 +13,13 @@ import { FC, useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import * as Icons from "assets/icons"
 import { useSigner } from "wagmi"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  ZebecMessengerClient
+} from "@zebec-io/zebec-wormhole-sdk"
+import { toast } from "features/toasts/toastsSlice"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -79,8 +86,65 @@ const WithdrawTab: FC = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
+  const handleSolanaSubmit = async (data: any) => {
     // on withdrawal form submit
+    setLoading(true)
+    const withdrawData = {
+      sender: (walletObject.publicKey as PublicKey).toString(),
+      amount: +data.amount,
+      token_mint_address: currentToken.symbol === "SOL" ? "" : currentToken.mint
+    }
+    if (currentToken.symbol === "SOL")
+      stream &&
+        dispatch(
+          withdrawNative(withdrawData, stream, setLoading, withdrawCallback)
+        )
+    else
+      token &&
+        dispatch(
+          withdrawToken(withdrawData, token, setLoading, withdrawCallback)
+        )
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEvmSubmit = async (data: any) => {
+    if (signer) {
+      try {
+        setLoading(true)
+        const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+        const targetChain = 1
+        console.log(sourceChain, targetChain)
+        console.log("pda", walletObject.publicKey?.toString())
+        console.log("token mint", currentToken.mint)
+        console.log("withdrawer: ", walletObject.originalAddress?.toString())
+
+        const messengerContract = new ZebecMessengerClient(
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          signer,
+          sourceChain
+        )
+        const tx = await messengerContract.TokenWithdrawal(
+          data.amount,
+          walletObject.originalAddress?.toString() as string,
+          currentToken.mint
+        )
+        console.log("tx", tx)
+        withdrawCallback()
+        dispatch(
+          toast.success({
+            message: "Withdrawal initiated"
+          })
+        )
+      } catch (e) {
+        console.log("error", e)
+        dispatch(toast.error({ message: "Error withdrawing token" }))
+      }
+      setLoading(false)
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const submit = (data: any) => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
@@ -88,24 +152,11 @@ const WithdrawTab: FC = () => {
         { shouldFocus: true }
       )
       return
+    }
+    if (walletObject.chainId === "solana") {
+      handleSolanaSubmit(data)
     } else {
-      setLoading(true)
-      const withdrawData = {
-        sender: (walletObject.publicKey as PublicKey).toString(),
-        amount: +data.amount,
-        token_mint_address:
-          currentToken.symbol === "SOL" ? "" : currentToken.mint
-      }
-      if (currentToken.symbol === "SOL")
-        stream &&
-          dispatch(
-            withdrawNative(withdrawData, stream, setLoading, withdrawCallback)
-          )
-      else
-        token &&
-          dispatch(
-            withdrawToken(withdrawData, token, setLoading, withdrawCallback)
-          )
+      handleEvmSubmit(data)
     }
   }
 

@@ -57,7 +57,7 @@ const Common: FC<{
       walletObject.publicKey &&
       (walletObject.chainId === "solana" || signer)
     ) {
-      walletBalances.length === 0 &&
+      walletBalances?.length === 0 &&
         dispatch(
           fetchWalletBalance({
             publicKey: walletObject.originalAddress,

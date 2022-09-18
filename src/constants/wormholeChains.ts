@@ -1,3 +1,5 @@
+import { ChainId } from "@certusone/wormhole-sdk"
+
 export const wormholeChains = {
   unset: 0,
   solana: 1,
@@ -39,4 +41,10 @@ export const EVMToWormholeChainMapping = {
   42: wormholeChains.ethereum,
   137: wormholeChains.polygon,
   8001: wormholeChains.polygon
+}
+
+export const getEVMToWormholeChain = (chainId: number | string | undefined) => {
+  return (EVMToWormholeChainMapping[
+    chainId as keyof typeof EVMToWormholeChainMapping
+  ] || wormholeChains.unset) as ChainId
 }

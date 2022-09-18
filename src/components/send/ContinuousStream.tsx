@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useWallet } from "@solana/wallet-adapter-react"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  ZebecMessengerClient,
+  ZebecSolBridgeClient
+} from "@zebec-io/zebec-wormhole-sdk"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import {
@@ -23,8 +27,12 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { sendContinuousStream } from "features/stream/streamSlice"
+import { toast } from "features/toasts/toastsSlice"
 import { useClickOutside } from "hooks"
+import { useZebecWallet } from "hooks/useWallet"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
@@ -35,6 +43,7 @@ import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
 import { continuousSchema } from "utils/validations/continuousStreamSchema"
+import { useSigner } from "wagmi"
 import {
   ContinuousStreamFormData,
   ContinuousStreamProps
@@ -73,7 +82,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
+
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
   const addressBook = useAppSelector((state) => state.address.addressBooks)
@@ -144,10 +155,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }, [tokenDetails, setValue])
 
   useEffect(() => {
-    if (publicKey) {
-      setValue("wallet", publicKey.toString())
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
     }
-  }, [publicKey, setValue])
+  }, [walletObject.chainId, setValue])
 
   useEffect(() => {
     if (router?.query.address) {
@@ -185,7 +196,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     trigger("endTime")
   }
 
-  const onSubmit = async (data: ContinuousStreamFormData) => {
+  const handleSolanaStream = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       name: data.transaction_name,
       transaction_type: "continuous",
@@ -193,7 +204,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       remarks: data.remarks || "",
       amount: Number(data.amount),
       receiver: data.receiver,
-      sender: data.wallet,
+      sender: walletObject.publicKey?.toString() || "",
       start_time: moment(
         `${data.startDate} ${data.startTime}`,
         "DD/MM/YYYY LT"
@@ -234,6 +245,73 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               treasury: treasuryToken
             })
           )
+    }
+  }
+
+  const handleEvmStream = async (data: ContinuousStreamFormData) => {
+    console.log(data)
+    if (!signer) return
+    const formattedData = {
+      name: data.transaction_name,
+      transaction_type: "continuous",
+      token: data.symbol,
+      remarks: data.remarks || "",
+      amount: Number(data.amount),
+      receiver: data.receiver,
+      sender: walletObject.publicKey?.toString() || "",
+      start_time: moment(
+        `${data.startDate} ${data.startTime}`,
+        "DD/MM/YYYY LT"
+      ).unix(),
+      end_time: moment(
+        `${data.endDate} ${data.endTime}`,
+        "DD/MM/YYYY LT"
+      ).unix(),
+      token_mint_address:
+        currentToken.mint === "solana" ? "" : currentToken.mint,
+      file: data.file
+    }
+    const messengerContract = new ZebecMessengerClient(
+      BSC_ZEBEC_BRIDGE_ADDRESS,
+      signer,
+      getEVMToWormholeChain(walletObject.chainId)
+    )
+    const tx = await messengerContract.NativeStream(
+      formattedData.start_time.toString(),
+      formattedData.end_time.toString(),
+      formattedData.amount.toString(),
+      formattedData.receiver,
+      walletObject.originalAddress?.toString() || "",
+      "true",
+      "true"
+    )
+    console.log(tx)
+    dispatch(
+      toast.success({
+        message: "Transaction Success",
+        transactionHash: ""
+      })
+    )
+    const backendData = {
+      ...data,
+      receiver: ZebecSolBridgeClient.getXChainUserKey(
+        walletObject.originalAddress?.toString() as string,
+        getEVMToWormholeChain(walletObject.chainId)
+      ).toString(),
+      pda: "",
+      transaction_hash: ""
+    }
+    dispatch(sendContinuousStream(backendData)).then(() => {
+      resetForm()
+    })
+  }
+
+  const onSubmit = async (data: ContinuousStreamFormData) => {
+    console.log("data", data)
+    if (walletObject.chainId === "solana") {
+      handleSolanaStream(data)
+    } else {
+      handleEvmStream(data)
     }
   }
 
