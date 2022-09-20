@@ -244,7 +244,7 @@ const DepositTab: FC = () => {
               targetTokenAddress
             )
             console.log("reciept", reciept)
-            dispatch(toast.success({ message: "Deposit successful" }))
+            dispatch(toast.success({ message: "Deposit initiated" }))
             depositCallback()
             setLoading(false)
           })

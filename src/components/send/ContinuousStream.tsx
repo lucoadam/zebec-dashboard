@@ -114,10 +114,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
   // const [resetFile, setResetFile] = useState(false)
 
-  const { tokens: tokenDetails, prices } = useAppSelector(
-    (state) => state.tokenDetails
+  const { prices } = useAppSelector((state) => state.tokenDetails)
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
   )
-
   const [currentToken, setCurrentToken] = useState(
     tokenDetails[0] || {
       symbol: "",
@@ -148,11 +148,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
 
   useEffect(() => {
-    if (tokenDetails.length > 0) {
+    if (tokenDetails.length > 0 && !currentToken.symbol) {
       setCurrentToken(tokenDetails[0])
       setValue("symbol", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue])
+  }, [tokenDetails, setValue, currentToken.symbol])
 
   useEffect(() => {
     if (walletObject.chainId) {
@@ -190,6 +190,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
         .format("hh:mm A")
     )
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
+    }
     trigger("startDate")
     trigger("startTime")
     trigger("endDate")
@@ -271,38 +274,43 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         currentToken.mint === "solana" ? "" : currentToken.mint,
       file: data.file
     }
-    const messengerContract = new ZebecMessengerClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      getEVMToWormholeChain(walletObject.chainId)
-    )
-    const tx = await messengerContract.NativeStream(
-      formattedData.start_time.toString(),
-      formattedData.end_time.toString(),
-      formattedData.amount.toString(),
-      formattedData.receiver,
-      walletObject.originalAddress?.toString() || "",
-      "true",
-      "true"
-    )
-    console.log(tx)
-    dispatch(
-      toast.success({
-        message: "Transaction Success",
-        transactionHash: ""
-      })
-    )
+
     const backendData = {
-      ...data,
+      ...formattedData,
       receiver: ZebecSolBridgeClient.getXChainUserKey(
-        walletObject.originalAddress?.toString() as string,
+        data.receiver as string,
         getEVMToWormholeChain(walletObject.chainId)
       ).toString(),
-      pda: "",
-      transaction_hash: ""
+      pda: "C4qCTwmKexY2VzJCHXjvB6bzSNxKCfxPda9ZSoYk7RCx",
+      transaction_hash:
+        "JYmmqaWkwaQfrHSETeRNkE6c8iFVZfA4jPZ7yyLorygAuhEgLkiWJrJfyj1zLwDJEcBeixC9CwfH7tTcYJMUdp2"
     }
-    dispatch(sendContinuousStream(backendData)).then(() => {
+    dispatch(sendContinuousStream(backendData)).then(async () => {
       resetForm()
+      const messengerContract = new ZebecMessengerClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        getEVMToWormholeChain(walletObject.chainId)
+      )
+      const tx = await messengerContract.TokenStream(
+        formattedData.start_time.toString(),
+        formattedData.end_time.toString(),
+        formattedData.amount.toString(),
+        formattedData.receiver,
+        walletObject.originalAddress?.toString() || "",
+        "1",
+        "1",
+        formattedData.token_mint_address
+      )
+      console.log(tx)
+      dispatch(
+        toast.success({
+          message: "Transaction Success",
+          transactionHash:
+            "5xTGVWntF1zfKSeYpQo2oRSFy5mYfssjiGVyqbi7f494BMTjQHuSXcxGJATWxtqTLnmMGLpTaTwFmsXm9QxBNWd"
+        })
+      )
+      dispatch(toggleWalletApprovalMessageModal())
     })
   }
 
