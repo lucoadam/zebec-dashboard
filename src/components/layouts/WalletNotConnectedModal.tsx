@@ -63,7 +63,8 @@ const WalletNotConnectedModal: NextPage = () => {
       } else {
         const decodedToken: DecodedTokenProps = jwt_decode(token)
         if (
-          decodedToken.wallet_address === walletObject.publicKey?.toString()
+          decodedToken.wallet_address ===
+          walletObject.originalAddress?.toString()
         ) {
           dispatch(changeSignState(!!token))
         } else {

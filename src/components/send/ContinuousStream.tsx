@@ -2,8 +2,7 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
-  ZebecMessengerClient,
-  ZebecSolBridgeClient
+  ZebecMessengerClient
 } from "@zebec-io/zebec-wormhole-sdk"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
@@ -29,7 +28,7 @@ import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
-import { sendContinuousStream } from "features/stream/streamSlice"
+// import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
 import { useClickOutside } from "hooks"
 import { useZebecWallet } from "hooks/useWallet"
@@ -275,43 +274,42 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       file: data.file
     }
 
-    const backendData = {
-      ...formattedData,
-      receiver: ZebecSolBridgeClient.getXChainUserKey(
-        data.receiver as string,
-        getEVMToWormholeChain(walletObject.chainId)
-      ).toString(),
-      pda: "C4qCTwmKexY2VzJCHXjvB6bzSNxKCfxPda9ZSoYk7RCx",
-      transaction_hash:
-        "JYmmqaWkwaQfrHSETeRNkE6c8iFVZfA4jPZ7yyLorygAuhEgLkiWJrJfyj1zLwDJEcBeixC9CwfH7tTcYJMUdp2"
-    }
-    dispatch(sendContinuousStream(backendData)).then(async () => {
-      resetForm()
-      const messengerContract = new ZebecMessengerClient(
-        BSC_ZEBEC_BRIDGE_ADDRESS,
-        signer,
-        getEVMToWormholeChain(walletObject.chainId)
-      )
-      const tx = await messengerContract.TokenStream(
-        formattedData.start_time.toString(),
-        formattedData.end_time.toString(),
-        formattedData.amount.toString(),
-        formattedData.receiver,
-        walletObject.originalAddress?.toString() || "",
-        "1",
-        "1",
-        formattedData.token_mint_address
-      )
-      console.log(tx)
-      dispatch(
-        toast.success({
-          message: "Transaction Success",
-          transactionHash:
-            "5xTGVWntF1zfKSeYpQo2oRSFy5mYfssjiGVyqbi7f494BMTjQHuSXcxGJATWxtqTLnmMGLpTaTwFmsXm9QxBNWd"
-        })
-      )
-      dispatch(toggleWalletApprovalMessageModal())
-    })
+    // const backendData = {
+    //   ...formattedData,
+    //   sender: walletObject.originalAddress?.toString() || "",
+    //   receiver: data.receiver,
+    //   pda: "C4qCTwmKexY2VzJCHXjvB6bzSNxKCfxPda9ZSoYk7RCx",
+    //   transaction_hash:
+    //     "JYmmqaWkwaQfrHSETeRNkE6c8iFVZfA4jPZ7yyLorygAuhEgLkiWJrJfyj1zLwDJEcBeixC9CwfH7tTcYJMUdp2"
+    // }
+    // dispatch(sendContinuousStream(backendData)).then(async () => {
+    dispatch(toggleWalletApprovalMessageModal())
+    const messengerContract = new ZebecMessengerClient(
+      BSC_ZEBEC_BRIDGE_ADDRESS,
+      signer,
+      getEVMToWormholeChain(walletObject.chainId)
+    )
+    const tx = await messengerContract.TokenStream(
+      formattedData.start_time.toString(),
+      formattedData.end_time.toString(),
+      formattedData.amount.toString(),
+      formattedData.receiver,
+      walletObject.originalAddress?.toString() || "",
+      "1",
+      "1",
+      formattedData.token_mint_address
+    )
+    console.log(tx)
+    resetForm()
+    dispatch(toggleWalletApprovalMessageModal())
+    dispatch(
+      toast.success({
+        message: "Transaction Success",
+        transactionHash:
+          "5xTGVWntF1zfKSeYpQo2oRSFy5mYfssjiGVyqbi7f494BMTjQHuSXcxGJATWxtqTLnmMGLpTaTwFmsXm9QxBNWd"
+      })
+    )
+    // })
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {

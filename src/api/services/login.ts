@@ -18,19 +18,26 @@ export const login = async (walletObject: ZebecWalletContext) => {
 
       const b64 = await signMessage(message)
 
-      const pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
+      let pubKey
+      if (network === "solana") {
+        pubKey = Buffer.from(publicKey.toBytes()).toString("base64")
+      } else {
+        pubKey = Buffer.from(
+          new TextEncoder().encode(originalAddress.toString())
+        ).toString("base64")
+      }
       const messagetob = Buffer.from(encodedMessage).toString("base64")
 
       const data = {
-        wallet_address: pubkey,
+        wallet_address: pubKey,
         signature: b64,
-        message: network === "solana" ? messagetob : message,
-        network,
-        evm_wallet: originalAddress.toString()
+        message: messagetob,
+        network
       }
 
       try {
         const response = await api.post(`/user/auth/login/`, data)
+        console.log(response)
         TokenService.setTokens(response.data)
         return response
       } catch (error) {

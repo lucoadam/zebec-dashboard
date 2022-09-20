@@ -1,11 +1,10 @@
-import { useConnect, useNetwork } from "wagmi"
+import { useConnect } from "wagmi"
 import { Button } from "components/shared"
 import * as Icons from "assets/icons"
 import { login } from "api"
 import { useAppDispatch } from "app/hooks"
 import { changeSignState } from "features/common/commonSlice"
 import { useZebecWallet } from "hooks/useWallet"
-import { useEffect } from "react"
 
 const getAdapterIcon = (name: string) => {
   switch (name) {
@@ -21,7 +20,6 @@ const getAdapterIcon = (name: string) => {
 }
 export const EthereumWallet = () => {
   const { connect, connectors, error } = useConnect()
-  const { chain, chains } = useNetwork()
   const dispatch = useAppDispatch()
   const walletObject = useZebecWallet()
   const handleLogin: () => void = async () => {
@@ -30,9 +28,6 @@ export const EthereumWallet = () => {
       dispatch(changeSignState(true))
     }
   }
-  useEffect(() => {
-    console.log(chain, chains, "connector")
-  }, [chain, chains])
 
   return (
     <div className="flex flex-col mt-6 text-content-primary">

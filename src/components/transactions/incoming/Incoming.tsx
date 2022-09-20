@@ -13,10 +13,12 @@ import { AllIncoming } from "./tabs/AllIncoming"
 import { CompletedIncoming } from "./tabs/CompletedIncoming"
 import { ScheduledIncoming } from "./tabs/ScheduledIncoming"
 import { OngoingIncoming } from "./tabs/OngoingIncoming"
+import { useZebecWallet } from "hooks/useWallet"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
+  const { originalAddress } = useZebecWallet()
   const { isSigned } = useAppSelector((state) => state.common)
   const [activeTab, setActiveTab] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +49,7 @@ const Incoming: FC = () => {
     if (isSigned) {
       dispatch(resetTimedStatusTransactions())
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
-      dispatch(fetchIncomingTransactions())
+      dispatch(fetchIncomingTransactions(originalAddress?.toString() || ""))
     }
   }, [dispatch, isSigned])
 
