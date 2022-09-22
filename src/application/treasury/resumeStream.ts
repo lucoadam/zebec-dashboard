@@ -1,4 +1,5 @@
 import { AppDispatch } from "app/store"
+import { CallbackMessageType } from "components/treasury/treasury"
 import {
   resumeTreasuryTransaction,
   toggleResumeModal
@@ -28,7 +29,9 @@ interface ExecuteResumeStreamDataProps {
     stream_data_account: string
     safe_data_account: string
     token_mint_address?: string
+    signer: string
   }
+  callback?: (message: CallbackMessageType) => void
 }
 
 type ResumeStreamProps = ResumeStreamDataProps &
@@ -96,7 +99,7 @@ export const resumeStreamTreasury =
   }
 
 export const executeResumeStreamTreasury =
-  ({ data, treasury, treasuryToken }: ExecuteResumeStreamProps) =>
+  ({ data, callback, treasury, treasuryToken }: ExecuteResumeStreamProps) =>
   async (dispatch: AppDispatch) => {
     try {
       let response
@@ -112,12 +115,18 @@ export const executeResumeStreamTreasury =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) {
+          callback("success")
+        }
       } else {
         dispatch(
           toast.error({
             message: response.message ?? "Unknown Error"
           })
         )
+        if (callback) {
+          callback("error")
+        }
       }
     } catch (error: any) {
       dispatch(
@@ -125,5 +134,8 @@ export const executeResumeStreamTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
+      if (callback) {
+        callback("error")
+      }
     }
   }

@@ -63,7 +63,6 @@ export const pauseStreamTreasury =
     try {
       let response
       if (!data.token_mint_address && treasury) {
-        console.log(data)
         response = await treasury.pause(data)
       } else if (treasuryToken) {
         response = await treasuryToken.pause(data)

@@ -23,6 +23,7 @@ import {
   executeInitInstantStreamTreasury,
   executeInitStreamTreasury,
   executePauseStreamTreasury,
+  executeResumeStreamTreasury,
   executeWithdrawFromTreasury,
   executeWithdrawFromTreasuryVault
 } from "application"
@@ -195,16 +196,16 @@ const SignTransactionModal: FC = ({}) => {
         } else if (
           transaction.transaction_type === TreasuryTransactionType.CONTINUOUS
         ) {
-          const data = {
-            safe_address: activeTreasury.treasury_address,
-            safe_data_account: activeTreasury.treasury_escrow,
-            token_mint_address: transaction.token_mint_address,
-            transaction_account: transaction.transaction_account,
-            stream_data_account: transaction.pda,
-            receiver: transaction.receiver,
-            signer: publicKey.toString()
-          }
           if (transaction.latest_transaction_event.status === "initial") {
+            const data = {
+              safe_address: activeTreasury.treasury_address,
+              safe_data_account: activeTreasury.treasury_escrow,
+              token_mint_address: transaction.token_mint_address,
+              transaction_account: transaction.transaction_account,
+              stream_data_account: transaction.pda,
+              receiver: transaction.receiver,
+              signer: publicKey.toString()
+            }
             if (!data.token_mint_address) {
               treasury &&
                 dispatch(
@@ -228,6 +229,16 @@ const SignTransactionModal: FC = ({}) => {
             transaction.latest_transaction_event.approval_status ===
             TreasuryApprovalType.PENDING
           ) {
+            const data = {
+              safe_address: activeTreasury.treasury_address,
+              safe_data_account: activeTreasury.treasury_escrow,
+              token_mint_address: transaction.token_mint_address,
+              transaction_account:
+                transaction.latest_transaction_event.transaction_account,
+              stream_data_account: transaction.pda,
+              receiver: transaction.receiver,
+              signer: publicKey.toString()
+            }
             if (
               transaction.latest_transaction_event.status.toLowerCase() ===
               StatusType.CANCELLED
@@ -271,6 +282,31 @@ const SignTransactionModal: FC = ({}) => {
                 treasuryToken &&
                   dispatch(
                     executePauseStreamTreasury({
+                      data: data,
+                      callback:
+                        vaultSignContinuousTransactionLatestEventCallback,
+                      treasuryToken: treasuryToken
+                    })
+                  )
+              }
+            } else if (
+              transaction.latest_transaction_event.status.toLowerCase() ===
+              "ready"
+            ) {
+              if (!data.token_mint_address) {
+                treasury &&
+                  dispatch(
+                    executeResumeStreamTreasury({
+                      data: data,
+                      callback:
+                        vaultSignContinuousTransactionLatestEventCallback,
+                      treasury: treasury
+                    })
+                  )
+              } else {
+                treasuryToken &&
+                  dispatch(
+                    executeResumeStreamTreasury({
                       data: data,
                       callback:
                         vaultSignContinuousTransactionLatestEventCallback,

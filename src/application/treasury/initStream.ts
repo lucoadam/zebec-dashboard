@@ -74,7 +74,6 @@ export const initStreamTreasury =
       } else if (treasuryToken) {
         response = await treasuryToken.init(data)
       }
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -146,7 +145,6 @@ export const executeInitStreamTreasury =
       } else if (treasuryToken) {
         response = await treasuryToken.execInit(data)
       }
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

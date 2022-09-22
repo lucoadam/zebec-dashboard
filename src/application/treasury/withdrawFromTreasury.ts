@@ -100,7 +100,6 @@ export const withdrawFromTreasury =
 export const executeWithdrawFromTreasury =
   ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {

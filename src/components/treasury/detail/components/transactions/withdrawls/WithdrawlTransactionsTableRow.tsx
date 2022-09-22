@@ -104,8 +104,6 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
       ? true
       : false
 
-  console.log(remainingOwners)
-
   return (
     <>
       <Fragment>
