@@ -28,7 +28,22 @@ const nextConfig = {
   },
   experimental: {
     outputStandalone: true
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders
+      }
+    ]
   }
 }
+
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors https://magic.store"
+  }
+]
 
 module.exports = nextConfig
