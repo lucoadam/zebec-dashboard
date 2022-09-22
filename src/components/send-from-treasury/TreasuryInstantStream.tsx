@@ -7,13 +7,13 @@ import { InstantStreamOverview } from "./InstantStreamOverview"
 
 const TreasuryInstantStream: NextPage = () => {
   const [formValues, setFormValues] = useState<InstantStreamFormData>()
-  const treasuryBalance =
-    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
+  const treasuryVaultBalance =
+    useAppSelector((state) => state.treasuryVaultBalance.treasury?.tokens) || []
   return (
     <div className="grid lg:flex">
       <InstantStream
         setFormValues={setFormValues}
-        tokenBalances={treasuryBalance}
+        tokenBalances={treasuryVaultBalance}
         addFile={true}
         className="w-full lg:w-[628px] 2xl:w-[50%]"
       />

@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AppDispatch } from "app/store"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface TransferToTreasuryState {
   show: boolean
@@ -12,17 +11,6 @@ const initialState: TransferToTreasuryState = {
   loading: false,
   error: ""
 }
-
-export const transferToTreasury = createAsyncThunk<
-  any,
-  any,
-  { dispatch: AppDispatch }
->("transferToVault/transferToTreasury", async (data, { dispatch }) => {
-  console.log(data)
-  // const response = await api.post(`/`, data)
-  dispatch(toggleTransferToTreasuryModal())
-  return
-})
 
 export const transferToTreasuryModalSlice = createSlice({
   name: "transferToTreasury",
@@ -38,20 +26,6 @@ export const transferToTreasuryModalSlice = createSlice({
     setLoading: (state, action: PayloadAction<typeof initialState.loading>) => {
       state.loading = action.payload
     }
-  },
-  extraReducers: (builder) => {
-    //Transfer back to treasury
-    builder.addCase(transferToTreasury.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(transferToTreasury.fulfilled, (state) => {
-      state.loading = false
-      state.error = ""
-    })
-    builder.addCase(transferToTreasury.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.error.message ?? "Something went wrong"
-    })
   }
 })
 

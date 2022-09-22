@@ -7,18 +7,19 @@ import { StreamOverview } from "components/send/StreamOverview"
 
 const TreasuryContinuousStream: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
-  const treasuryBalance =
-    useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
+  const treasuryVaultBalance =
+    useAppSelector((state) => state.treasuryVaultBalance.treasury?.tokens) || []
+
   return (
     <div className="grid lg:flex">
       <ContinuousStream
         setFormValues={setFormValues}
-        tokenBalances={treasuryBalance}
+        tokenBalances={treasuryVaultBalance}
         addFile={true}
         className="w-full lg:w-[628px] 2xl:w-[50%]"
         type="treasury"
       />
-      <StreamOverview className="lg:ml-[79px]" formValues={formValues} />
+      <StreamOverview className="lg:ml-20" formValues={formValues} />
     </div>
   )
 }

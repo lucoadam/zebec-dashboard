@@ -26,7 +26,7 @@
   "for": "for",
   "in-total": "in total.",
   "send": "Send",
-  "send-from-treasury": "Send from Treasury",
+  "send-from-treasury-vault": "Send from Treasury Vault",
   "search-wallet": "Search Wallet Address",
   "search-token": "Search Token",
   "instant-transfer": "Instant Transfer",
@@ -39,5 +39,7 @@
   "nft-address": "NFT Address",
   "choose-nft": "Choose NFT",
   "enter-nft-address": "Enter NFT address",
-  "nft-description": "Your receiver will instantly receive the NFT one the transaction is signed by all owners."
+  "nft-description": "Your receiver will instantly receive the NFT one the transaction is signed by all owners.",
+  "once-approved": "once the transaction is approved.",
+  "overview-receiver-wallet": "receiver wallet"
 }

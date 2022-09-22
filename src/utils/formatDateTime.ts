@@ -14,6 +14,10 @@ export const formatDateTime = (
   return moment(value, inputFormat).format("MMM DD YYYY, h:mm A")
 }
 
-export const getTimesAgo = (timestamp: number) => {
-  return moment.utc(new Date(timestamp * 1000)).fromNow()
+export const getTimesAgo = (timestamp: number | string) => {
+  if (typeof timestamp === "string") {
+    return moment.utc(timestamp).fromNow()
+  } else {
+    return moment.utc(new Date(timestamp * 1000)).fromNow()
+  }
 }

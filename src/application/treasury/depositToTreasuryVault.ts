@@ -1,8 +1,5 @@
 import { AppDispatch } from "app/store"
-import {
-  transferToVault,
-  setLoading
-} from "features/modals/transferToVaultModalSlice"
+import { setLoading } from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
@@ -12,6 +9,7 @@ import {
   TreasuryTransactionType,
   CallbackMessageType
 } from "components/treasury/treasury.d"
+import { saveTreasuryWithdrawDepositTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface DepositToTreasuryVaultDataProps {
   data: {
@@ -66,13 +64,13 @@ export const depositToTreasuryVault =
 
         if (!data.token_mint_address) {
           const backendData = payloadData
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         } else {
           const backendData = {
             ...payloadData,
             token_mint_address: data.token_mint_address
           }
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         }
         if (callback) {
           callback("success")

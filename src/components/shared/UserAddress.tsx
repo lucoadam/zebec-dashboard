@@ -72,76 +72,79 @@ export const UserAddress: FC<{
   }
 
   return (
-    <div className="flex gap-x-1 items-center text-body text-content-primary">
-      <span data-tip={wallet}>
-        {isInAddressBook
-          ? toSubstring(
-              addressBooks.find((item) => item.address === wallet)?.name,
-              12,
-              false
-            )
-          : toSubstring(wallet, 5, true)}{" "}
-      </span>
-      {!isInAddressBook && showIcons && (
-        <IconButton
-          icon={<Icons.UserAddIcon />}
-          className="bg-background-primary min-w-7 h-7"
-          onClick={() => setToggleAddressDropdown(!toggleAddressDropdown)}
-        />
-      )}
-
-      <div className="relative">
-        <Modal
-          toggleModal={() => setToggleAddressDropdown(!toggleAddressDropdown)}
-          show={toggleAddressDropdown}
-          className="w-[306px]"
-          hasCloseIcon={true}
-          closeOnOutsideClick={true}
-        >
-          <div className="max-w-96">
-            <div className="text-content-secondary text-subtitle font-semibold">
-              {t("addressBook:add-an-address-name")}
-            </div>
-            <div className="text-caption text-content-secondary pt-2 ">
-              {t("addressBook:add-address-name-to-your-addressBook")}
-            </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-              <div className="pt-4 pb-4">
-                <InputField
-                  label={t("addressBook:name")}
-                  className="relative text-content-secondary"
-                  error={!!errors.name}
-                  helper={t(errors.name?.message?.toString() || "").toString()}
-                >
-                  <div>
-                    <input
-                      className={`w-full h-10 ${
-                        !!errors.name?.message && "error"
-                      }`}
-                      placeholder={t("addressBook:enter-name")}
-                      type="text"
-                      {...register("name")}
-                    />
-                  </div>
-                </InputField>
-              </div>
-
-              {/* submit Button */}
-
-              <div className="">
-                <Button
-                  className={`w-full`}
-                  variant="gradient"
-                  type="submit"
-                  title={`${t("addressBook:add-address-name")}`}
-                />
-              </div>
-            </form>
-          </div>
-        </Modal>
+    <>
+      <div className="flex gap-x-2 items-center text-body text-content-primary">
+        <span data-tip={wallet}>
+          {isInAddressBook
+            ? toSubstring(
+                addressBooks.find((item) => item.address === wallet)?.name,
+                12,
+                false
+              )
+            : toSubstring(wallet, 5, true)}{" "}
+        </span>
+        {!isInAddressBook && showIcons && (
+          <IconButton
+            icon={<Icons.UserAddIcon />}
+            className="bg-background-primary min-w-7 h-7"
+            onClick={() => setToggleAddressDropdown(!toggleAddressDropdown)}
+          />
+        )}
+        {showIcons && (
+          <CopyButton className="min-w-7 flex-shrink-0" content={wallet} />
+        )}
       </div>
-      {showIcons && <CopyButton className="min-w-7" content={wallet} />}
-    </div>
+
+      {/* Add address Modal */}
+      <Modal
+        toggleModal={() => setToggleAddressDropdown(!toggleAddressDropdown)}
+        show={toggleAddressDropdown}
+        className="w-[306px]"
+        hasCloseIcon={true}
+        closeOnOutsideClick={true}
+      >
+        <div className="max-w-96">
+          <div className="text-content-secondary text-subtitle font-semibold">
+            {t("addressBook:add-an-address-name")}
+          </div>
+          <div className="text-caption text-content-secondary pt-2 ">
+            {t("addressBook:add-address-name-to-your-addressBook")}
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <div className="pt-4 pb-4">
+              <InputField
+                label={t("addressBook:name")}
+                className="relative text-content-secondary"
+                error={!!errors.name}
+                helper={t(errors.name?.message?.toString() || "").toString()}
+              >
+                <div>
+                  <input
+                    className={`w-full h-10 ${
+                      !!errors.name?.message && "error"
+                    }`}
+                    placeholder={t("addressBook:enter-name")}
+                    type="text"
+                    {...register("name")}
+                  />
+                </div>
+              </InputField>
+            </div>
+
+            {/* submit Button */}
+
+            <div className="">
+              <Button
+                className={`w-full`}
+                variant="gradient"
+                type="submit"
+                title={`${t("addressBook:add-address-name")}`}
+              />
+            </div>
+          </form>
+        </div>
+      </Modal>
+    </>
   )
 }

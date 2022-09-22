@@ -1,29 +1,15 @@
-import { useAppDispatch, useAppSelector } from "app/hooks"
+import { useAppSelector } from "app/hooks"
 import Layout from "components/layouts/Layout"
 import { ContinuousStream } from "components/send/ContinuousStream"
 import { ContinuousStreamFormData } from "components/send/ContinuousStream.d"
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { StreamOverview } from "components/send/StreamOverview"
-import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 
 const Send: NextPage = () => {
   const [formValues, setFormValues] = useState<ContinuousStreamFormData>()
   const zebecBalance = useAppSelector((state) => state.zebecBalance.tokens)
-
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTokensPrice())
-    const interval = setInterval(() => {
-      dispatch(fetchTokensPrice())
-    }, 30000)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [dispatch])
 
   return (
     <Layout pageTitle="Zebec">
@@ -34,7 +20,7 @@ const Send: NextPage = () => {
             tokenBalances={zebecBalance}
             className="w-full lg:w-[628px] 2xl:w-[50%]"
           />
-          <StreamOverview className="lg:ml-[79px]" formValues={formValues} />
+          <StreamOverview className="lg:ml-20" formValues={formValues} />
         </div>
       </div>
     </Layout>

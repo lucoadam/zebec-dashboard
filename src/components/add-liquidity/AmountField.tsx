@@ -77,7 +77,7 @@ export const AmountField: FC<AmountFieldProps> = ({
           />
           <Button
             size="small"
-            title={`${t("buttons:half ")}`}
+            title={`${t("buttons:half")}`}
             className="text-content-primary"
             onClick={() => {
               setValue(

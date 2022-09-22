@@ -1,12 +1,12 @@
 import { AppDispatch } from "app/store"
 import { TreasuryTransactionType } from "components/treasury/treasury.d"
-import { transferToVault } from "features/modals/transferToVaultModalSlice"
 import { setLoading } from "features/modals/transferToTreasuryModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
+import { saveTreasuryWithdrawDepositTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface WithdrawFromTreasuryVaultDataProps {
   data: {
@@ -33,6 +33,31 @@ type WithdrawFromTreasuryVaultProps = WithdrawFromTreasuryVaultDataProps &
         treasuryToken: ZebecTokenTreasury
       }
   )
+
+interface ExecuteWithdrawFromTreasuryVaultDataProps {
+  data: {
+    safe_address: string
+    safe_data_account: string
+    transaction_account: string
+    receiver: string
+    signer: string
+    token_mint_address?: string
+  }
+  callback?: (message: "success" | "error") => void
+}
+
+type ExecuteWithdrawFromTreasuryVaultProps =
+  ExecuteWithdrawFromTreasuryVaultDataProps &
+    (
+      | {
+          treasury: ZebecNativeTreasury
+          treasuryToken?: never
+        }
+      | {
+          treasury?: never
+          treasuryToken: ZebecTokenTreasury
+        }
+    )
 
 export const withdrawFromTreasuryVault =
   ({
@@ -68,13 +93,13 @@ export const withdrawFromTreasuryVault =
 
         if (!data.token_mint_address) {
           const backendData = payloadData
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         } else {
           const backendData = {
             ...payloadData,
             token_mint_address: data.token_mint_address
           }
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         }
         if (callback) {
           callback("success")
@@ -110,7 +135,7 @@ export const executeWithdrawFromTreasuryVault =
     callback,
     treasury,
     treasuryToken
-  }: WithdrawFromTreasuryVaultProps) =>
+  }: ExecuteWithdrawFromTreasuryVaultProps) =>
   async (dispatch: AppDispatch) => {
     try {
       let response

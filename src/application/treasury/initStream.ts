@@ -1,4 +1,5 @@
 import { AppDispatch } from "app/store"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendTreasuryContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
@@ -6,7 +7,7 @@ import {
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
 
-interface InitStreamProps {
+interface InitStreamDataProps {
   data: {
     sender: string
     receiver: string
@@ -23,14 +24,57 @@ interface InitStreamProps {
     remarks: string
     file?: string
   }
-  treasury: ZebecNativeTreasury | ZebecTokenTreasury
+  callback?: (message: "success" | "error") => void
 }
 
+type InitStreamProps = InitStreamDataProps &
+  (
+    | {
+        treasury: ZebecNativeTreasury
+        treasuryToken?: never
+      }
+    | {
+        treasury?: never
+        treasuryToken: ZebecTokenTreasury
+      }
+  )
+
+interface ExecuteInitStreamDataProps {
+  data: {
+    safe_data_account: string
+    safe_address: string
+    stream_data_account: string
+    transaction_account: string
+    signer: string
+    receiver: string
+    token_mint_address?: string
+  }
+  callback?: (message: "success" | "error") => void
+}
+
+type ExecuteInitStreamProps = ExecuteInitStreamDataProps &
+  (
+    | {
+        treasury: ZebecNativeTreasury
+        treasuryToken?: never
+      }
+    | {
+        treasury?: never
+        treasuryToken: ZebecTokenTreasury
+      }
+  )
+
 export const initStreamTreasury =
-  ({ data, treasury }: InitStreamProps) =>
+  ({ data, callback, treasury, treasuryToken }: InitStreamProps) =>
   async (dispatch: AppDispatch) => {
     try {
-      const response = await treasury.init(data)
+      let response
+      if (!data.token_mint_address && treasury) {
+        response = await treasury.init(data)
+      } else if (treasuryToken) {
+        response = await treasuryToken.init(data)
+      }
+      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -38,13 +82,46 @@ export const initStreamTreasury =
             transactionHash: response?.data?.transactionHash
           })
         )
-        dispatch(sendTreasuryContinuousStream(data))
+
+        const payloadData = {
+          start_time: data.start_time,
+          end_time: data.end_time,
+          amount: data.amount,
+          receiver: data.receiver,
+          name: data.name,
+          remarks: data.remarks,
+          pda: response?.data?.stream_data_account,
+          transaction_account: response?.data?.transaction_account,
+          transaction_hash: response?.data?.transactionHash,
+          file: data.file
+        }
+        if (!data.token_mint_address) {
+          const backendData = payloadData
+          dispatch(sendTreasuryContinuousStream(backendData)).then(() => {
+            if (callback) {
+              callback("success")
+            }
+          })
+        } else {
+          const backendData = {
+            ...payloadData,
+            token_mint_address: data.token_mint_address
+          }
+          dispatch(sendTreasuryContinuousStream(backendData)).then(() => {
+            if (callback) {
+              callback("success")
+            }
+          })
+        }
       } else {
         dispatch(
           toast.error({
             message: response.message ?? "Unknown Error"
           })
         )
+        if (callback) {
+          callback("error")
+        }
       }
     } catch (error: any) {
       dispatch(
@@ -52,5 +129,52 @@ export const initStreamTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
+      if (callback) {
+        callback("error")
+      }
+    }
+  }
+
+//Execute init stream
+export const executeInitStreamTreasury =
+  ({ data, callback, treasury, treasuryToken }: ExecuteInitStreamProps) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      let response
+      if (!data.token_mint_address && treasury) {
+        response = await treasury.execInit(data)
+      } else if (treasuryToken) {
+        response = await treasuryToken.execInit(data)
+      }
+      console.log(response)
+      if (response.status.toLocaleLowerCase() === "success") {
+        dispatch(
+          toast.success({
+            message: response.message ?? "Stream initiated successfully.",
+            transactionHash: response?.data?.transactionHash
+          })
+        )
+        if (callback) {
+          callback("success")
+        }
+      } else {
+        dispatch(
+          toast.error({
+            message: response.message ?? "Unknown Error"
+          })
+        )
+        if (callback) {
+          callback("error")
+        }
+      }
+    } catch (error: any) {
+      dispatch(
+        toast.error({
+          message: error?.message ?? "Unknown Error"
+        })
+      )
+      if (callback) {
+        callback("error")
+      }
     }
   }
