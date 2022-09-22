@@ -71,34 +71,36 @@ const TransferToTreasuryModal = () => {
       )
       return
     } else {
-      dispatch(setLoading(true))
-      const transferData = {
-        sender: (publicKey as PublicKey).toString(),
-        safe_address: activeTreasury?.treasury_address || "",
-        safe_data_account: activeTreasury?.treasury_escrow || "",
-        receiver: activeTreasury?.treasury_address || "",
-        amount: Number(data.amount),
-        token_mint_address:
-          currentToken.symbol === "SOL" ? "" : currentToken.mint
-      }
-      if (!transferData.token_mint_address) {
-        treasury &&
-          dispatch(
-            withdrawFromTreasuryVault({
-              data: transferData,
-              callback: withdrawFromTreasuryCallback,
-              treasury: treasury
-            })
-          )
-      } else {
-        treasuryToken &&
-          dispatch(
-            withdrawFromTreasuryVault({
-              data: transferData,
-              callback: withdrawFromTreasuryCallback,
-              treasuryToken: treasuryToken
-            })
-          )
+      if (activeTreasury) {
+        dispatch(setLoading(true))
+        const transferData = {
+          sender: (publicKey as PublicKey).toString(),
+          safe_address: activeTreasury.treasury_address,
+          safe_data_account: activeTreasury.treasury_escrow,
+          receiver: activeTreasury.treasury_address,
+          amount: Number(data.amount),
+          token_mint_address:
+            currentToken.symbol === "SOL" ? "" : currentToken.mint
+        }
+        if (!transferData.token_mint_address) {
+          treasury &&
+            dispatch(
+              withdrawFromTreasuryVault({
+                data: transferData,
+                callback: withdrawFromTreasuryCallback,
+                treasury: treasury
+              })
+            )
+        } else {
+          treasuryToken &&
+            dispatch(
+              withdrawFromTreasuryVault({
+                data: transferData,
+                callback: withdrawFromTreasuryCallback,
+                treasuryToken: treasuryToken
+              })
+            )
+        }
       }
     }
   }

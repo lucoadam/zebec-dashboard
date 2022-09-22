@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { fetchTransactionsById } from "api"
 import api from "api/api"
-import { AppDispatch } from "app/store"
+import { AppDispatch, RootState } from "app/store"
+import { fetchTreasuryVaultContinuousTransactionsById } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface CancelState {
   transaction: any
@@ -45,6 +46,36 @@ export const cancelTransaction = createAsyncThunk<
   return response.data
 })
 
+export const cancelTreasuryTransaction = createAsyncThunk<
+  any,
+  { uuid: string; transaction_account: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "cancel/cancelTreasuryTransaction",
+  async ({ uuid, transaction_account }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.patch(
+        `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/`,
+        {
+          status: "cancelled",
+          transaction_account: transaction_account
+        }
+      )
+      dispatch(
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
+      )
+      dispatch(toggleCancelModal())
+      return
+    }
+    return
+  }
+)
+
 export const cancelModalSlice = createSlice({
   name: "cancel",
   initialState,
@@ -87,6 +118,18 @@ export const cancelModalSlice = createSlice({
       state.error = ""
     })
     builder.addCase(cancelTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Cancel Treasury Transaction
+    builder.addCase(cancelTreasuryTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(cancelTreasuryTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(cancelTreasuryTransaction.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })

@@ -1,36 +1,42 @@
-import { useAppDispatch } from "app/hooks"
 import ExportModal from "components/modals/export-report/ExportModal"
-import RejectTransactionModal from "components/modals/RejectTransactionModal"
-import SignTransactionModal from "components/modals/SignTransactionModal"
-import { Button, Tab } from "components/shared"
-import { toggleExportModal } from "features/export-report/exportSlice"
+import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { HistoryTransactions } from "./HistoryTransactions"
-import { ScheduledTransactions } from "./ScheduledTransactions"
-import { WithdrawalTransactions } from "./WithdrawalTransactions"
+import ContinuousTransactions from "./continuous/ContinuousTransactions"
+import InstantTransactions from "./instant/InstantTransactions"
+// import { WithdrawalTransactions } from "../WithdrawalTransactions"
+import WithdrawlTransactions from "./withdrawls/WithdrawlTransactions"
+import * as Icons from "assets/icons"
 
 const transactionTabs = [
   {
-    title: "Scheduled",
+    title: "instant",
     count: 0,
-    Component: <ScheduledTransactions />
+    Component: <InstantTransactions />,
+    icon: <Icons.ThunderIcon />
   },
   {
-    title: "History",
+    title: "continuous",
     count: 0,
-    Component: <HistoryTransactions />
+    Component: <ContinuousTransactions />,
+    icon: <Icons.DoubleCircleDottedLineIcon />
   },
   {
-    title: "Withdrawals",
+    title: "withdrawals",
     count: 0,
-    Component: <WithdrawalTransactions />
+    Component: <WithdrawlTransactions />,
+    icon: <Icons.SwapArrowHorizontalIcon />
   }
+  // {
+  //   title: "nfts",
+  //   count: 0,
+  //   Component: <WithdrawalTransactions />,
+  //   icon: <Icons.SquareBlockMove />
+  // }
 ]
 
 export const Transactions = () => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation("transactions")
 
   const [activePage, setActivePage] = useState<number>(0)
@@ -50,29 +56,22 @@ export const Transactions = () => {
                 className="capitalize"
                 key={transactionTab.title}
                 type="plain"
-                title={`${transactionTab.title.toLowerCase()}`}
+                title={`${t(transactionTab.title)}`}
                 isActive={activePage === index}
                 count={transactionTab.count}
                 onClick={() => setActivePage(index)}
+                startIcon={transactionTab.icon}
               />
             )
           })}
         </div>
-        <Button
-          title={`${t("export-report")}`}
-          onClick={() => {
-            dispatch(toggleExportModal())
-          }}
-        />
       </div>
-      <div className="py-10">
+      <div className="pt-6 pb-10">
         {/* Active Tab */}
         {transactionTabs[activePage].Component}
       </div>
 
       {/* <Pagination pagination={pagination} setPagination={setPagination} /> */}
-      <RejectTransactionModal />
-      <SignTransactionModal />
       <ExportModal />
     </div>
   )

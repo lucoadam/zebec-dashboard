@@ -2,14 +2,18 @@ export enum TreasuryTransactionType {
   DEPOSIT_TO_TREASURY = "deposit_treasury",
   DEPOSIT_TO_TREASURY_VAULT = "deposit_treasury_vault",
   WITHDRAW_FROM_TREASURY = "withdraw_treasury",
-  WITHDRAW_FROM_TREASURY_VAULT = "withdraw_treasury_vault"
+  WITHDRAW_FROM_TREASURY_VAULT = "withdraw_treasury_vault",
+  INSTANT = "instant",
+  CONTINUOUS = "continuous"
 }
 
 export type TreasuryTransactionStatesType =
-  | TransactionType.DEPOSIT_TREASURY
-  | TransactionType.DEPOSIT_TREASURY_VAULT
-  | TransactionType.WITHDRAW_TREASURY
-  | TransactionType.WITHDRAW_TREASURY_VAULT
+  | TreasuryTransactionType.DEPOSIT_TO_TREASURY
+  | TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT
+  | TreasuryTransactionType.WITHDRAW_FROM_TREASURY
+  | TreasuryTransactionType.WITHDRAW_FROM_TREASURY_VAULT
+  | TreasuryTransactionType.INSTANT
+  | TreasuryTransactionType.CONTINUOUS
 
 export type CallbackMessageType = "success" | "error"
 
@@ -34,3 +38,14 @@ export type WithdrawDepositTransactionProps = {
   transaction_type: TreasuryTransactionStatesType
   token: string
 }
+
+export enum TreasuryApprovalType {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED"
+}
+
+export type TreasuryApprovalStatusType =
+  | TreasuryApprovalType.PENDING
+  | TreasuryApprovalType.ACCEPTED
+  | TreasuryApprovalType.REJECTED
