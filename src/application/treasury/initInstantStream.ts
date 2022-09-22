@@ -68,7 +68,6 @@ export const initInstantStreamTreasury =
       } else if (treasuryToken) {
         response = await treasuryToken.instanttransfer(data)
       }
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({

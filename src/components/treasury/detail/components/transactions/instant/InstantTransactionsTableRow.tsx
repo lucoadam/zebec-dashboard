@@ -96,8 +96,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
     return remainingOwners.some((owner) => owner === publicKey?.toString())
   }, [remainingOwners, publicKey])
 
-  console.log(remainingOwners)
-
   return (
     <>
       <Fragment>
