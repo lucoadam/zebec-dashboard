@@ -22,7 +22,7 @@ import {
   transferEvm,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "@zebec-io/zebec-wormhole-sdk"
+} from "@jettxcypher/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
 import {
@@ -144,12 +144,18 @@ const DepositTab: FC = () => {
         console.log("sourceChain", sourceChain)
         // find out target token address in solana
         let targetTokenAddress: string
+        console.log(
+          "token bridge address",
+          sourceChain,
+          getTokenBridgeAddressForChain(sourceChain)
+        )
         const originAssetInfo = await getOriginalAssetEth(
           getTokenBridgeAddressForChain(sourceChain),
           signer,
           tokenAddress,
           sourceChain
         )
+        console.log("originAssetInfo", originAssetInfo)
         if (originAssetInfo.chainId === targetChain) {
           targetTokenAddress = tryUint8ArrayToNative(
             originAssetInfo.assetAddress,
@@ -170,17 +176,17 @@ const DepositTab: FC = () => {
 
         // Create token account if doesn't exist
         console.log("targetTokenAddress", targetTokenAddress)
-        // const { data: response } = await axios.post(
-        //   "http://localhost:3000/api/create-token-account",
-        //   {
-        //     recipientAddress,
-        //     targetTokenAddress
-        //   }
-        // )
-        // if (!response.success) {
-        //   console.log("Error creating token account")
-        //   return
-        // }
+        const { data: response } = await axios.post(
+          "http://localhost:3000/api/create-token-account",
+          {
+            recipientAddress,
+            targetTokenAddress
+          }
+        )
+        if (!response.success) {
+          console.log("Error creating token account")
+          return
+        }
 
         const recipientTokenAddress = await getAssociatedTokenAddress(
           new PublicKey(targetTokenAddress),
@@ -190,6 +196,15 @@ const DepositTab: FC = () => {
         console.log("recipientAddress", recipientAddress)
         console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
+        console.log(
+          "signer",
+          signer,
+          currentToken.mint,
+          sourceChain,
+          data.amount,
+          targetChain,
+          recipientAddress
+        )
         transferEvm(
           signer,
           currentToken.mint,
@@ -216,23 +231,10 @@ const DepositTab: FC = () => {
               transferEmitterAddress,
               sequence
             )
-
-            // check transfer complete
-            let isTransferComplete = false
-            let logMsg = "checking if transfer completed"
-            let retry = 0
-            do {
-              logMsg = logMsg.concat(".")
-              if (retry > 12) throw new Error("Transfer failed!")
-              retry++
-              console.log(logMsg)
-              isTransferComplete = await getIsTransferCompletedSolana(
-                SOL_TOKEN_BRIDGE_ADDRESS,
-                transferVaa,
-                connection
-              )
-              await new Promise((r) => setTimeout(r, 5000))
-            } while (!isTransferComplete)
+            console.log("vaaBtyes", transferVaa)
+            // wait for transfer complete
+            console.log("waiting for transfer complete")
+            await new Promise((resolve) => setTimeout(resolve, 40000))
             console.log("transfer successful")
 
             const messengerContract = new ZebecEthBridgeClient(

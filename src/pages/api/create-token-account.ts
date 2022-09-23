@@ -32,6 +32,22 @@ export default async function handler(
           .json({ success: false, message: "Missing required fields" })
         return
       }
+      const recipientbalance = await connection.getBalance(
+        new PublicKey(recipientAddress)
+      )
+      console.log("recipientbalance", recipientbalance / 1e9)
+      if (recipientbalance / 1e9 < 1) {
+        console.log("requesting airdrop...")
+        try {
+          const res = await connection.requestAirdrop(
+            new PublicKey(recipientAddress),
+            1e9
+          )
+          console.log(res)
+        } catch (e) {
+          console.log("airdrop failed", e)
+        }
+      }
       const recipientTokenAddress = await getAssociatedTokenAddress(
         new PublicKey(targetTokenAddress),
         new PublicKey(recipientAddress),

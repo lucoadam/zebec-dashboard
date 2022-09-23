@@ -18,7 +18,7 @@ import { getEVMToWormholeChain } from "constants/wormholeChains"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@zebec-io/zebec-wormhole-sdk"
+} from "@jettxcypher/zebec-wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
 
 const WithdrawTab: FC = () => {

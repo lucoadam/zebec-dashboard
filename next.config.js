@@ -6,8 +6,8 @@ const { i18n } = require("./next-i18next.config");
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    RPC_NETWORK: process.env.RPC_NETWORK,
-    DB_HOST: process.env.DB_HOST,
+    RPC_NETWORK: "devnet",
+    DB_HOST: "https://zebec-backend.alishdahal.com.np/",
     ZBC_AIRDROP: process.env.ZBC_AIRDROP,
   },
   i18n,

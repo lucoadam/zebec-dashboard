@@ -9,7 +9,7 @@ import { useZebecWallet } from "hooks/useWallet"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@zebec-io/zebec-wormhole-sdk/dist/types"
+} from "@jettxcypher/zebec-wormhole-sdk"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 

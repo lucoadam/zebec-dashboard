@@ -1,7 +1,7 @@
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@zebec-io/zebec-wormhole-sdk/dist/types"
+} from "@jettxcypher/zebec-wormhole-sdk"
 import { useAppDispatch } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { withdrawIncomingToken } from "application"

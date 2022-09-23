@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@zebec-io/zebec-wormhole-sdk"
+} from "@jettxcypher/zebec-wormhole-sdk"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import {
