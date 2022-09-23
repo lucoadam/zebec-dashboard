@@ -22,19 +22,29 @@ export const useZebecWallet = (): ZebecWalletContext => {
   const solAccount = useWallet()
   const { chain } = useNetwork()
   const { disconnect } = useDisconnect()
-  const connected = solAccount.connected || ethAccount.isConnected
-  const network = solAccount.connected
-    ? "solana"
-    : ethAccount.isConnected
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      supportedEVMChains.find((c: any) => c.chainId === chain?.id.toString())
-        ?.chainName
-    : ""
-  const chainId = solAccount.connected
-    ? "solana"
-    : ethAccount.isConnected
-    ? chain?.id.toString() || ""
-    : ""
+
+  const connected = useMemo(() => {
+    return solAccount.connected || ethAccount.isConnected
+  }, [solAccount.connected, ethAccount.isConnected])
+
+  const network = useMemo(() => {
+    return solAccount.connected
+      ? "solana"
+      : ethAccount.isConnected
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        supportedEVMChains.find((c: any) => c.chainId === chain?.id.toString())
+          ?.chainName
+      : ""
+  }, [solAccount.connected, ethAccount.isConnected, chain])
+
+  const chainId = useMemo(() => {
+    return solAccount.connected
+      ? "solana"
+      : ethAccount.isConnected
+      ? chain?.id.toString() || ""
+      : ""
+  }, [solAccount.connected, ethAccount.isConnected, chain])
+
   const publicKey = useMemo(() => {
     const pubKey =
       solAccount.publicKey ||
@@ -56,15 +66,27 @@ export const useZebecWallet = (): ZebecWalletContext => {
     solAccount.publicKey
   ])
 
-  const originalAddress = solAccount.publicKey || ethAccount.address
-  const adapter = solAccount.connected
-    ? solAccount.wallet?.adapter.name
-    : ethAccount.isConnected
-    ? ethAccount.connector?.name
-    : ""
-  const disconnectWallet = solAccount.connected
-    ? solAccount.disconnect
-    : disconnect
+  const originalAddress = useMemo(() => {
+    return solAccount.publicKey || ethAccount.address
+  }, [solAccount.publicKey, ethAccount.address])
+
+  const adapter = useMemo(() => {
+    return solAccount.connected
+      ? solAccount.wallet?.adapter.name
+      : ethAccount.isConnected
+      ? ethAccount.connector?.name
+      : ""
+  }, [
+    solAccount.connected,
+    solAccount.wallet?.adapter.name,
+    ethAccount.isConnected,
+    ethAccount.connector?.name
+  ])
+
+  const disconnectWallet = useMemo(() => {
+    return solAccount.connected ? solAccount.disconnect : disconnect
+  }, [solAccount.connected, solAccount.disconnect, disconnect])
+
   const { signMessageAsync } = useSignMessage()
 
   const signMessage = async (message: string) => {

@@ -5,14 +5,23 @@ import { setLoading, toggleCancelModal } from "features/modals/cancelModalSlice"
 import { cancelStreamNative, cancelStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { useZebecWallet } from "hooks/useWallet"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  ZebecEthBridgeClient
+} from "@zebec-io/zebec-wormhole-sdk/dist/types"
+import { useSigner } from "wagmi"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
   const { stream, token } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { data: signer } = useSigner()
+  const walletObject = useZebecWallet()
   const { show, loading, transaction } = useAppSelector((state) => state.cancel)
 
-  const handleCancelTransaction = () => {
+  const handleSolanaCancel = async () => {
     dispatch(setLoading(true))
     // data
     const data = {
@@ -27,6 +36,31 @@ const CancelModal: FC = ({}) => {
     if (transaction.token === "SOL")
       stream && dispatch(cancelStreamNative(data, transaction_uuid, stream))
     else token && dispatch(cancelStreamToken(data, transaction_uuid, token))
+  }
+
+  const handleEVMCancel = async () => {
+    if (!signer) return
+    const messengerContract = new ZebecEthBridgeClient(
+      BSC_ZEBEC_BRIDGE_ADDRESS,
+      signer,
+      getEVMToWormholeChain(walletObject.chainId)
+    )
+    console.log("transaction:", transaction)
+    const tx = await messengerContract.cancelTokenStream(
+      transaction.sender,
+      transaction.receiver,
+      transaction.token_mint_address,
+      transaction.pda
+    )
+    console.log("tx:", tx)
+  }
+
+  const handleCancelTransaction = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaCancel()
+    } else {
+      handleEVMCancel()
+    }
   }
 
   return (

@@ -21,7 +21,7 @@ import {
   SOL_TOKEN_BRIDGE_ADDRESS,
   transferEvm,
   WORMHOLE_RPC_HOSTS,
-  ZebecMessengerClient
+  ZebecEthBridgeClient
 } from "@zebec-io/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
@@ -41,6 +41,7 @@ import { ethers } from "ethers"
 import axios from "axios"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { getAssociatedTokenAddress } from "@solana/spl-token"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -134,6 +135,7 @@ const DepositTab: FC = () => {
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
       try {
+        dispatch(toggleWalletApprovalMessageModal())
         setLoading(true)
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
@@ -233,7 +235,7 @@ const DepositTab: FC = () => {
             } while (!isTransferComplete)
             console.log("transfer successful")
 
-            const messengerContract = new ZebecMessengerClient(
+            const messengerContract = new ZebecEthBridgeClient(
               BSC_ZEBEC_BRIDGE_ADDRESS,
               signer,
               sourceChain
@@ -247,6 +249,7 @@ const DepositTab: FC = () => {
             dispatch(toast.success({ message: "Deposit initiated" }))
             depositCallback()
             setLoading(false)
+            dispatch(toggleWalletApprovalMessageModal())
           })
           .catch((err) => {
             console.log("error", err)
@@ -256,6 +259,7 @@ const DepositTab: FC = () => {
               })
             )
             setLoading(false)
+            dispatch(toggleWalletApprovalMessageModal())
           })
       } catch (e) {
         console.log("error", e)
@@ -265,6 +269,7 @@ const DepositTab: FC = () => {
           })
         )
         setLoading(false)
+        dispatch(toggleWalletApprovalMessageModal())
       }
     }
   }

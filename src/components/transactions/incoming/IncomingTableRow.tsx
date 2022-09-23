@@ -1,3 +1,7 @@
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  ZebecEthBridgeClient
+} from "@zebec-io/zebec-wormhole-sdk/dist/types"
 import { useAppDispatch } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { withdrawIncomingToken } from "application"
@@ -12,6 +16,8 @@ import {
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import React, {
@@ -23,6 +29,7 @@ import React, {
   useState
 } from "react"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
+import { useSigner } from "wagmi"
 import { StatusType, TransactionStatusType } from "../transactions.d"
 // import { WithdrawStepsList } from "../withdraw/data.d"
 
@@ -44,6 +51,8 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { data: signer } = useSigner()
+  const walletObject = useZebecWallet()
 
   const styles = {
     detailsRow: {
@@ -172,7 +181,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   //   }
   // }
 
-  const withdraw = () => {
+  const handleSolanaWithdraw = async () => {
     if (zebecCtx.stream && zebecCtx.token) {
       const withdrawData = {
         data: {
@@ -184,6 +193,29 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
       dispatch(withdrawIncomingToken(withdrawData))
+    }
+  }
+  const handleEVMWithdraw = async () => {
+    if (!signer) return
+    const messengerContract = new ZebecEthBridgeClient(
+      BSC_ZEBEC_BRIDGE_ADDRESS,
+      signer,
+      getEVMToWormholeChain(walletObject.chainId)
+    )
+    console.log("transaction:", transaction)
+    const tx = await messengerContract.withdrawFromTokenStream(
+      transaction.sender,
+      transaction.receiver,
+      transaction.token_mint_address,
+      transaction.pda
+    )
+    console.log("tx:", tx)
+  }
+  const withdraw = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaWithdraw()
+    } else {
+      handleEVMWithdraw()
     }
   }
 

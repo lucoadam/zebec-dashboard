@@ -17,7 +17,7 @@ import { getEVMToWormholeChain } from "constants/wormholeChains"
 
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
-  ZebecMessengerClient
+  ZebecEthBridgeClient
 } from "@zebec-io/zebec-wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
 
@@ -118,12 +118,12 @@ const WithdrawTab: FC = () => {
         console.log("token mint", currentToken.mint)
         console.log("withdrawer: ", walletObject.originalAddress?.toString())
 
-        const messengerContract = new ZebecMessengerClient(
+        const messengerContract = new ZebecEthBridgeClient(
           BSC_ZEBEC_BRIDGE_ADDRESS,
           signer,
           sourceChain
         )
-        const tx = await messengerContract.TokenWithdrawal(
+        const tx = await messengerContract.withdrawToken(
           data.amount,
           walletObject.originalAddress?.toString() as string,
           currentToken.mint

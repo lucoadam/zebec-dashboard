@@ -2,7 +2,7 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
-  ZebecMessengerClient
+  ZebecEthBridgeClient
 } from "@zebec-io/zebec-wormhole-sdk"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
@@ -117,13 +117,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const tokenDetails = useAppSelector((state) =>
     state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
   )
-  const [currentToken, setCurrentToken] = useState(
-    tokenDetails[0] || {
-      symbol: "",
-      image: "",
-      mint: ""
-    }
-  )
+  const [currentToken, setCurrentToken] = useState({
+    symbol: "",
+    image: "",
+    mint: ""
+  })
 
   const handleTokensClose = () => {
     setToggleTokensDropdown(false)
@@ -284,19 +282,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     // }
     // dispatch(sendContinuousStream(backendData)).then(async () => {
     dispatch(toggleWalletApprovalMessageModal())
-    const messengerContract = new ZebecMessengerClient(
+    const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
       getEVMToWormholeChain(walletObject.chainId)
     )
-    const tx = await messengerContract.TokenStream(
+    const tx = await messengerContract.startTokenStream(
       formattedData.start_time.toString(),
       formattedData.end_time.toString(),
       formattedData.amount.toString(),
       formattedData.receiver,
       walletObject.originalAddress?.toString() || "",
-      "1",
-      "1",
+      true,
+      true,
       formattedData.token_mint_address
     )
     console.log(tx)
