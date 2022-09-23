@@ -60,6 +60,7 @@ const initialState: TransactionState = {
   }
 }
 
+// Fetch Pending
 export const fetchTreasuryPendingTransactions = createAsyncThunk<
   any,
   { treasury_uuid: string },
@@ -75,6 +76,7 @@ export const fetchTreasuryPendingTransactions = createAsyncThunk<
   return response.data
 })
 
+// Fetch Transactions
 export const fetchTreasuryTransactions = createAsyncThunk<
   any,
   { treasury_uuid: string; status?: "PENDING" | "ACCEPTED" | "REJECTED" },
@@ -91,6 +93,25 @@ export const fetchTreasuryTransactions = createAsyncThunk<
   }
 )
 
+//Fetch Transactions By Id
+export const fetchTreasuryTransactionsById = createAsyncThunk<
+  any,
+  {
+    treasury_uuid: string
+    uuid: string
+  },
+  {}
+>(
+  "treasuryTransactions/fetchTreasuryTransactionsById",
+  async ({ treasury_uuid, uuid }, {}) => {
+    const response = await api.get(
+      `/treasury/${treasury_uuid}/transactions/${uuid}/`
+    )
+    return response.data
+  }
+)
+
+// Fetch Instant
 export const fetchTreasuryVaultInstantTransactions = createAsyncThunk<
   any,
   { treasury_uuid: string; status?: "PENDING" | "ACCEPTED" | "REJECTED" },
@@ -110,6 +131,25 @@ export const fetchTreasuryVaultInstantTransactions = createAsyncThunk<
   }
 )
 
+//Fetch Instant By Id
+export const fetchTreasuryVaultInstantTransactionsById = createAsyncThunk<
+  any,
+  {
+    treasury_uuid: string
+    uuid: string
+  },
+  {}
+>(
+  "treasuryTransactions/fetchTreasuryVaultInstantTransactionsById",
+  async ({ treasury_uuid, uuid }, {}) => {
+    const response = await api.get(
+      `/treasury/${treasury_uuid}/vault-instant-transactions/${uuid}/`
+    )
+    return response.data
+  }
+)
+
+//Fetch Continuous
 export const fetchTreasuryVaultContinuousTransactions = createAsyncThunk<
   any,
   { treasury_uuid: string; status?: "PENDING" | "ACCEPTED" | "REJECTED" },
@@ -129,6 +169,7 @@ export const fetchTreasuryVaultContinuousTransactions = createAsyncThunk<
   }
 )
 
+//Fetch Continuous By Id
 export const fetchTreasuryVaultContinuousTransactionsById = createAsyncThunk<
   any,
   {
@@ -146,6 +187,25 @@ export const fetchTreasuryVaultContinuousTransactionsById = createAsyncThunk<
   }
 )
 
+// Update Continuous By Status
+export const updateTreasuryVaultContinuousTransactionsStatus = createAsyncThunk<
+  any,
+  {
+    treasury_uuid: string
+    uuid: string
+  },
+  {}
+>(
+  "treasuryTransactions/updateTreasuryVaultContinuousTransactionsStatus",
+  async ({ treasury_uuid, uuid }, {}) => {
+    await api.get(
+      `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/update-status/`
+    )
+    return
+  }
+)
+
+//Save Treasury Withdraw Deposit
 export const saveTreasuryWithdrawDepositTransactions = createAsyncThunk<
   any,
   any,
@@ -201,6 +261,28 @@ export const treasuryTransactionsSlice = createSlice({
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
+    //Treasury Transactions By Id
+    builder.addCase(fetchTreasuryTransactionsById.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      fetchTreasuryTransactionsById.fulfilled,
+      (state, action) => {
+        const newTransactions = state.transactions.results.map((item) => {
+          if (item.id === action.payload.id) {
+            return action.payload
+          }
+          return item
+        })
+        state.loading = false
+        state.error = ""
+        state.transactions.results = newTransactions
+      }
+    )
+    builder.addCase(fetchTreasuryTransactionsById.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
     //Save Treasury Withdraw Deposit Transactions
     builder.addCase(
       saveTreasuryWithdrawDepositTransactions.pending,
@@ -236,6 +318,35 @@ export const treasuryTransactionsSlice = createSlice({
     )
     builder.addCase(
       fetchTreasuryVaultInstantTransactions.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Treasury Vault Instant Transactions By Id
+    builder.addCase(
+      fetchTreasuryVaultInstantTransactionsById.pending,
+      (state) => {
+        state.loading = true
+      }
+    )
+    builder.addCase(
+      fetchTreasuryVaultInstantTransactionsById.fulfilled,
+      (state, action) => {
+        const newVaultInstantTransactions =
+          state.vaultInstantTransactions.results.map((item) => {
+            if (item.id === action.payload.id) {
+              return action.payload
+            }
+            return item
+          })
+        state.loading = false
+        state.error = ""
+        state.vaultInstantTransactions.results = newVaultInstantTransactions
+      }
+    )
+    builder.addCase(
+      fetchTreasuryVaultInstantTransactionsById.rejected,
       (state, action) => {
         state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"
@@ -288,6 +399,27 @@ export const treasuryTransactionsSlice = createSlice({
     )
     builder.addCase(
       fetchTreasuryVaultContinuousTransactionsById.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Treasury Vault Update Continuous Transactions Status
+    builder.addCase(
+      updateTreasuryVaultContinuousTransactionsStatus.pending,
+      (state) => {
+        state.loading = true
+      }
+    )
+    builder.addCase(
+      updateTreasuryVaultContinuousTransactionsStatus.fulfilled,
+      (state) => {
+        state.loading = false
+        state.error = ""
+      }
+    )
+    builder.addCase(
+      updateTreasuryVaultContinuousTransactionsStatus.rejected,
       (state, action) => {
         state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"

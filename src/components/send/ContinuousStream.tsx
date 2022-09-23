@@ -189,7 +189,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const initStreamCallback = (message: "success" | "error") => {
     if (message === "success") {
-      reset()
+      resetForm()
     }
     dispatch(toggleWalletApprovalMessageModal())
   }
