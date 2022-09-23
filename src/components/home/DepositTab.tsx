@@ -177,7 +177,7 @@ const DepositTab: FC = () => {
         // Create token account if doesn't exist
         console.log("targetTokenAddress", targetTokenAddress)
         const { data: response } = await axios.post(
-          "http://localhost:3000/api/create-token-account",
+          "https://zebec-devnet.vercel.app/api/create-token-account",
           {
             recipientAddress,
             targetTokenAddress
