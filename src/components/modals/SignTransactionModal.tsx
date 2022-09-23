@@ -29,6 +29,7 @@ import {
 } from "application"
 import ZebecContext from "app/zebecContext"
 import { StatusType } from "components/transactions/transactions.d"
+import { updateTreasuryVaultContinuousTransactionsStatus } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 const SignTransactionModal: FC = ({}) => {
   const { publicKey } = useWallet()
@@ -243,6 +244,12 @@ const SignTransactionModal: FC = ({}) => {
               transaction.latest_transaction_event.status.toLowerCase() ===
               StatusType.CANCELLED
             ) {
+              dispatch(
+                updateTreasuryVaultContinuousTransactionsStatus({
+                  treasury_uuid: activeTreasury.uuid,
+                  uuid: transaction.uuid
+                })
+              )
               if (!data.token_mint_address) {
                 treasury &&
                   dispatch(

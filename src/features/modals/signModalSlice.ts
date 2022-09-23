@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import { TreasuryTransactionStatesType } from "components/treasury/treasury.d"
 import {
-  fetchTreasuryPendingTransactions,
-  fetchTreasuryVaultContinuousTransactions,
-  fetchTreasuryVaultInstantTransactions
+  fetchTreasuryTransactionsById,
+  fetchTreasuryVaultContinuousTransactionsById,
+  fetchTreasuryVaultInstantTransactionsById
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 //declare types for state
@@ -33,10 +32,13 @@ export const signTransaction = createAsyncThunk<
     if (treasury.activeTreasury?.uuid) {
       const treasury_uuid = treasury.activeTreasury.uuid
       await api.get(`/treasury/${treasury_uuid}/transactions/${uuid}/approve/`)
-      dispatch(toggleSignModal())
       dispatch(
-        fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid })
+        fetchTreasuryTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
       )
+      dispatch(toggleSignModal())
       return
     }
     return
@@ -56,10 +58,13 @@ export const vaultSignTransaction = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-instant-transactions/${uuid}/approve/`
       )
-      dispatch(toggleSignModal())
       dispatch(
-        fetchTreasuryVaultInstantTransactions({ treasury_uuid: treasury_uuid })
+        fetchTreasuryVaultInstantTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
       )
+      dispatch(toggleSignModal())
       return
     }
     return
@@ -79,12 +84,13 @@ export const vaultContinuousSignTransaction = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/approve/`
       )
-      dispatch(toggleSignModal())
       dispatch(
-        fetchTreasuryVaultContinuousTransactions({
-          treasury_uuid: treasury_uuid
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
         })
       )
+      dispatch(toggleSignModal())
       return
     }
     return
@@ -104,12 +110,13 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/events/${event_id}/approve/`
       )
-      dispatch(toggleSignModal())
       dispatch(
-        fetchTreasuryVaultContinuousTransactions({
-          treasury_uuid: treasury_uuid
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
         })
       )
+      dispatch(toggleSignModal())
       return
     }
     return

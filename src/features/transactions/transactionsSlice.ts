@@ -98,6 +98,14 @@ const initialState: TransactionState = {
   initiatedTransactions: []
 }
 
+export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
+  "transactions/updateTransactionsStatus",
+  async (uuid, {}) => {
+    await api.get(`/transaction/${uuid}/update-status/`)
+    return null
+  }
+)
+
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
