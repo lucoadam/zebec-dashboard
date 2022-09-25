@@ -40,6 +40,7 @@ const CancelModal: FC = ({}) => {
 
   const handleEVMCancel = async () => {
     if (!signer) return
+    dispatch(setLoading(true))
     const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
@@ -52,6 +53,8 @@ const CancelModal: FC = ({}) => {
       transaction.token_mint_address,
       transaction.pda
     )
+    dispatch(setLoading(false))
+    dispatch(toggleCancelModal())
     console.log("tx:", tx)
   }
 

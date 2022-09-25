@@ -302,9 +302,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     dispatch(toggleWalletApprovalMessageModal())
     dispatch(
       toast.success({
-        message: "Transaction Success",
-        transactionHash:
-          "5xTGVWntF1zfKSeYpQo2oRSFy5mYfssjiGVyqbi7f494BMTjQHuSXcxGJATWxtqTLnmMGLpTaTwFmsXm9QxBNWd"
+        message: "Stream initiated"
       })
     )
     // })

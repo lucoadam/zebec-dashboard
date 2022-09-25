@@ -17,6 +17,7 @@ import {
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
@@ -53,6 +54,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   const dispatch = useAppDispatch()
   const { data: signer } = useSigner()
   const walletObject = useZebecWallet()
+  const [loading, setLoading] = useState(false)
 
   const styles = {
     detailsRow: {
@@ -183,6 +185,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
 
   const handleSolanaWithdraw = async () => {
     if (zebecCtx.stream && zebecCtx.token) {
+      setLoading(true)
       const withdrawData = {
         data: {
           sender: sender,
@@ -192,11 +195,13 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
         },
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
-      dispatch(withdrawIncomingToken(withdrawData))
+      await dispatch(withdrawIncomingToken(withdrawData))
+      setLoading(false)
     }
   }
   const handleEVMWithdraw = async () => {
     if (!signer) return
+    setLoading(true)
     const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
@@ -208,6 +213,12 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
       transaction.receiver,
       transaction.token_mint_address,
       transaction.pda
+    )
+    setLoading(false)
+    dispatch(
+      toast.success({
+        message: "Withdrawal initiated"
+      })
     )
     console.log("tx:", tx)
   }
@@ -262,6 +273,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               <Button
                 title="Withdraw"
                 size="small"
+                loading={loading}
                 startIcon={
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }

@@ -177,7 +177,7 @@ const DepositTab: FC = () => {
         // Create token account if doesn't exist
         console.log("targetTokenAddress", targetTokenAddress)
         const { data: response } = await axios.post(
-          "https://zebec-devnet.vercel.app/api/create-token-account",
+          "/api/create-token-account",
           {
             recipientAddress,
             targetTokenAddress
@@ -350,6 +350,12 @@ const DepositTab: FC = () => {
   //       })
   //   }
   // }, [signer])
+
+  useEffect(() => {
+    if (walletObject.publicKey) {
+      console.log("walletObject.publicKey", walletObject.publicKey.toBase58())
+    }
+  }, [walletObject.publicKey])
 
   return (
     <div className="deposit-to-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">

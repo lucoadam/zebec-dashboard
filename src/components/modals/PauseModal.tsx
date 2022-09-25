@@ -12,6 +12,7 @@ import {
 } from "@jettxcypher/zebec-wormhole-sdk"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -38,6 +39,7 @@ const PauseModal: FC = ({}) => {
   }
   const handleEVMPause = async () => {
     if (!signer) return
+    dispatch(setLoading(true))
     const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
@@ -49,6 +51,13 @@ const PauseModal: FC = ({}) => {
       transaction.receiver,
       transaction.token_mint_address,
       transaction.pda
+    )
+    dispatch(setLoading(false))
+    dispatch(togglePauseModal())
+    dispatch(
+      toast.success({
+        message: "Pause stream initiated"
+      })
     )
     console.log("tx:", tx)
   }
