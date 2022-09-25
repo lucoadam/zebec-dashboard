@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { fetchTreasuryVaultTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
+import { constants } from "constants/constants"
 import {
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
@@ -104,7 +106,7 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
 >(
   "signTransaction/vaultContinuousSignTransactionLatestEvent",
   async ({ uuid, event_id }, { dispatch, getState }) => {
-    const { treasury } = getState()
+    const { treasury, signTransaction } = getState()
     if (treasury.activeTreasury?.uuid) {
       const treasury_uuid = treasury.activeTreasury.uuid
       await api.get(
@@ -117,6 +119,26 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
         })
       )
       dispatch(toggleSignModal())
+      if (
+        signTransaction.transaction.latest_transaction_event.approved_by
+          .length +
+          1 >=
+        treasury.activeTreasury.min_confirmations
+      ) {
+        const latestInitiatedStatus =
+          signTransaction.transaction.latest_transaction_event.status
+        dispatch(
+          fetchTreasuryVaultTransactionsById(
+            treasury_uuid,
+            uuid,
+            latestInitiatedStatus === "ready"
+              ? "resume"
+              : latestInitiatedStatus === "paused"
+              ? "pause"
+              : "cancel"
+          )
+        )
+      }
       return
     }
     return

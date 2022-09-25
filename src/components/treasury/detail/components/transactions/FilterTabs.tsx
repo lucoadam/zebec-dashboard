@@ -52,6 +52,7 @@ export const FilterTabs: FC<FilterTabProps> = ({
         onClick={() => {
           dispatch(toggleExportModal())
         }}
+        className="hidden"
       />
       {/* <ExportModal /> */}
     </div>

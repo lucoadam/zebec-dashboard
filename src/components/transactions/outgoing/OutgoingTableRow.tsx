@@ -144,7 +144,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       }
     }
     // eslint-disable-next-line
-  }, [status, transaction])
+  }, [status, transaction, initiatedTransactions])
 
   const styles = {
     detailsRow: {
