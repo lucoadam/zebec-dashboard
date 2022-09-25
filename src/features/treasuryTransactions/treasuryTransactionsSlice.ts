@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
 
@@ -29,6 +29,7 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  initiatedTransactions: string[]
 }
 
 const initialState: TransactionState = {
@@ -57,7 +58,8 @@ const initialState: TransactionState = {
     next: "",
     previous: "",
     results: []
-  }
+  },
+  initiatedTransactions: []
 }
 
 // Fetch Pending
@@ -227,7 +229,25 @@ export const saveTreasuryWithdrawDepositTransactions = createAsyncThunk<
 export const treasuryTransactionsSlice = createSlice({
   name: "treasuryTransactions",
   initialState,
-  reducers: {},
+  reducers: {
+    setInitiatedTreasuryTransactions: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.initiatedTransactions = [
+        ...state.initiatedTransactions,
+        action.payload
+      ]
+    },
+    removeInitiatedTreasuryTransactions: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.initiatedTransactions = state.initiatedTransactions.filter(
+        (initiatedTrx) => initiatedTrx !== action.payload
+      )
+    }
+  },
   extraReducers: (builder) => {
     //Pending Transactions
     builder.addCase(fetchTreasuryPendingTransactions.pending, (state) => {
@@ -427,5 +447,10 @@ export const treasuryTransactionsSlice = createSlice({
     )
   }
 })
+
+export const {
+  setInitiatedTreasuryTransactions,
+  removeInitiatedTreasuryTransactions
+} = treasuryTransactionsSlice.actions
 
 export default treasuryTransactionsSlice.reducer
