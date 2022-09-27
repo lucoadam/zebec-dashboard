@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { RootState } from "app/store"
 import { PaginationInterface } from "components/shared"
-import axios from "axios"
+// import axios from "axios"
 
 interface TransactionState {
   loading: boolean
@@ -103,25 +103,25 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (wallet: string, { getState }) => {
-    // const { transactions } = getState() as RootState
-    // const { data: response } = await api.get("/transaction/", {
-    //   params: {
-    //     limit: transactions.pagination.limit,
-    //     kind: "outgoing",
-    //     offset:
-    //       (Number(transactions.pagination.currentPage) - 1) *
-    //       transactions.pagination.limit
-    //   }
-    // })
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/transactions?sender=${wallet}`
-    )
-    return {
-      count: response.length,
-      next: "",
-      previous: "",
-      results: response
-    }
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.pagination.limit,
+        kind: "outgoing",
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit
+      }
+    })
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${wallet}`
+    // )
+    // return {
+    //   count: response.length,
+    //   next: "",
+    //   previous: "",
+    //   results: response
+    // }
     return response
   }
 )
@@ -140,25 +140,26 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
   "transactions/fetchIncomingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (wallet: string, { getState }) => {
-    // const { transactions } = getState() as RootState
-    // const { data: response } = await api.get("/transaction/", {
-    //   params: {
-    //     limit: transactions.pagination.limit,
-    //     kind: "incoming",
-    //     offset:
-    //       (Number(transactions.pagination.currentPage) - 1) *
-    //       transactions.pagination.limit
-    //   }
-    // })
-    const { data: response } = await axios.get(
-      `https://internal-ten-cherry.glitch.me/transactions?receiver=${wallet}`
-    )
-    return {
-      count: response.length,
-      next: "",
-      previous: "",
-      results: response
-    }
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get("/transaction/", {
+      params: {
+        limit: transactions.pagination.limit,
+        kind: "incoming",
+        offset:
+          (Number(transactions.pagination.currentPage) - 1) *
+          transactions.pagination.limit
+      }
+    })
+    return response
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?receiver=${wallet}`
+    // )
+    // return {
+    //   count: response.length,
+    //   next: "",
+    //   previous: "",
+    //   results: response
+    // }
   }
 )
 

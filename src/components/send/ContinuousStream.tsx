@@ -1,7 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
 } from "@jettxcypher/zebec-wormhole-sdk"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -28,7 +35,7 @@ import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
-// import { sendContinuousStream } from "features/stream/streamSlice"
+import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
 import { useClickOutside } from "hooks"
 import { useZebecWallet } from "hooks/useWallet"
@@ -287,7 +294,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       signer,
       getEVMToWormholeChain(walletObject.chainId)
     )
-    const tx = await messengerContract.startTokenStream(
+    const transferReceipt = await messengerContract.startTokenStream(
       formattedData.start_time.toString(),
       formattedData.end_time.toString(),
       formattedData.amount.toString(),
@@ -297,14 +304,35 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       true,
       formattedData.token_mint_address
     )
-    console.log(tx)
-    resetForm()
-    dispatch(toggleWalletApprovalMessageModal())
-    dispatch(
-      toast.success({
-        message: "Stream initiated"
-      })
+    console.log(transferReceipt)
+    const sequence = parseSequenceFromLogEth(
+      transferReceipt,
+      BSC_BRIDGE_ADDRESS
     )
+    const transferEmitterAddress = getEmitterAddressEth(
+      BSC_ZEBEC_BRIDGE_ADDRESS
+    )
+    console.debug("emitterAddress:", transferEmitterAddress)
+    const { vaaBytes } = await getSignedVAAWithRetry(
+      WORMHOLE_RPC_HOSTS,
+      "bsc",
+      transferEmitterAddress,
+      sequence
+    )
+    const backendData = {
+      ...formattedData,
+      sender: walletObject.originalAddress?.toString() || "",
+      receiver: data.receiver,
+      vaa: Buffer.from(vaaBytes).toString("hex")
+    }
+    dispatch(sendContinuousStream(backendData)).then(() => {
+      resetForm()
+      dispatch(
+        toast.success({
+          message: "Stream initiated"
+        })
+      )
+    })
     // })
   }
 

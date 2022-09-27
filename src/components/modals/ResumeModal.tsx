@@ -5,14 +5,24 @@ import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
 import { resumeStreamNative, resumeStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { useZebecWallet } from "hooks/useWallet"
+import { useSigner } from "wagmi"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  ZebecEthBridgeClient
+} from "@jettxcypher/zebec-wormhole-sdk"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
   const { stream, token } = useContext(ZebecContext)
   const { show, loading, transaction } = useAppSelector((state) => state.resume)
   const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
 
-  const handleResumeTransaction = () => {
+  const handleSolanaResume = async () => {
     dispatch(setLoading(true))
     // data
     const data = {
@@ -24,6 +34,39 @@ const ResumeModal: FC = ({}) => {
     if (transaction.token === "SOL")
       stream && dispatch(resumeStreamNative(data, transaction_uuid, stream))
     else token && dispatch(resumeStreamToken(data, transaction_uuid, token))
+  }
+
+  const handleEVMResume = async () => {
+    if (!signer) return
+    dispatch(setLoading(true))
+    const messengerContract = new ZebecEthBridgeClient(
+      BSC_ZEBEC_BRIDGE_ADDRESS,
+      signer,
+      getEVMToWormholeChain(walletObject.chainId)
+    )
+    console.log("pda-data:", transaction)
+    const tx = await messengerContract.pauseTokenStream(
+      transaction.sender,
+      transaction.receiver,
+      transaction.token_mint_address,
+      transaction.pda
+    )
+    dispatch(setLoading(false))
+    dispatch(toggleResumeModal())
+    dispatch(
+      toast.success({
+        message: "Stream resume initiated"
+      })
+    )
+    console.log("tx:", tx)
+  }
+
+  const handleResumeTransaction = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaResume()
+    } else {
+      handleEVMResume()
+    }
   }
 
   return (
