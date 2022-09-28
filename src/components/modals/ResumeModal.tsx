@@ -13,27 +13,58 @@ import {
 } from "@jettxcypher/zebec-wormhole-sdk"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
+import { resumeStreamTreasury } from "application"
+import { useWallet } from "@solana/wallet-adapter-react"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
-  const { stream, token } = useContext(ZebecContext)
+  const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
   const { show, loading, transaction } = useAppSelector((state) => state.resume)
   const dispatch = useAppDispatch()
   const walletObject = useZebecWallet()
   const { data: signer } = useSigner()
+  const { publicKey } = useWallet()
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const handleSolanaResume = async () => {
     dispatch(setLoading(true))
     // data
-    const data = {
-      sender: transaction.sender,
-      receiver: transaction.receiver,
-      escrow: transaction.pda
+    if (!transaction.approval_status) {
+      const data = {
+        sender: transaction.sender,
+        receiver: transaction.receiver,
+        escrow: transaction.pda
+      }
+      const transaction_uuid = transaction.uuid
+      if (transaction.token === "SOL")
+        stream && dispatch(resumeStreamNative(data, transaction_uuid, stream))
+      else token && dispatch(resumeStreamToken(data, transaction_uuid, token))
+    } else if (activeTreasury) {
+      const data = {
+        safe_address: activeTreasury.treasury_address,
+        safe_data_account: activeTreasury.treasury_escrow,
+        sender: publicKey?.toString() || "",
+        receiver: transaction.receiver,
+        stream_data_account: transaction.pda,
+        token_mint_address: transaction.token_mint_address,
+        uuid: transaction.uuid
+      }
+      if (!transaction.token_mint_address && treasury) {
+        dispatch(
+          resumeStreamTreasury({
+            data: data,
+            treasury: treasury
+          })
+        )
+      } else if (treasuryToken) {
+        dispatch(
+          resumeStreamTreasury({
+            data: data,
+            treasuryToken: treasuryToken
+          })
+        )
+      }
     }
-    const transaction_uuid = transaction.uuid
-    if (transaction.token === "SOL")
-      stream && dispatch(resumeStreamNative(data, transaction_uuid, stream))
-    else token && dispatch(resumeStreamToken(data, transaction_uuid, token))
   }
 
   const handleEVMResume = async () => {

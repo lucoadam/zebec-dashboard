@@ -71,6 +71,7 @@ import SkeletonCircle from "./other-icons/skeleton-circle.svg"
 import EmptyStateIllustrator from "./other-icons/empty-state-illustrator.svg"
 import GithubLogo from "./other-icons/github.svg"
 import TelegramLogo from "./other-icons/telegram.svg"
+import CloseCircleIcon from "./other-icons/close-circle.svg"
 
 export {
   SolanaFM,
@@ -140,7 +141,8 @@ export {
   SkeletonCircle,
   EmptyStateIllustrator,
   GithubLogo,
-  TelegramLogo
+  TelegramLogo,
+  CloseCircleIcon
 }
 
 export * from "./wallet-adapter-icons"

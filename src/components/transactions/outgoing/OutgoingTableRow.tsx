@@ -144,7 +144,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
       }
     }
     // eslint-disable-next-line
-  }, [status, transaction])
+  }, [status, transaction, initiatedTransactions])
 
   const styles = {
     detailsRow: {
@@ -177,7 +177,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {formatCurrency(streamedToken, "", 4)} of{" "}
+                  {formatCurrency(streamedToken, "", 4)} {t("table.of")}{" "}
                   {formatCurrency(totalTransactionAmount, "", 4)} {token}
                 </div>
               </div>
@@ -187,7 +187,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             <div className="text-caption text-content-primary">
               {formatDateTime(start_time)}
               <br />
-              to {formatDateTime(end_time)}
+              {t("table.to")} {formatDateTime(end_time)}
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">

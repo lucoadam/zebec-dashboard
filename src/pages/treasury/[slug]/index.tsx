@@ -1,10 +1,5 @@
-import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import Layout from "components/layouts/Layout"
-import CancelModal from "components/modals/CancelModal"
-import PauseModal from "components/modals/PauseModal"
-import ResumeModal from "components/modals/ResumeModal"
 import {
   Breadcrumb,
   BreadcrumbRightContent,
@@ -12,11 +7,8 @@ import {
   CollapseDropdown
 } from "components/shared"
 import TreasuryDetail from "components/treasury/detail/TreasuryDetail"
+import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
-import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
-import { setActiveTreasury } from "features/treasury/treasurySlice"
-import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
-import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
 import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { useClickOutside } from "hooks"
 import type { NextPage } from "next"
@@ -30,14 +22,13 @@ const Treasury: NextPage = () => {
   const router = useRouter()
   const { slug } = router.query
   const { t } = useTranslation()
-  const walletObject = useWallet()
   const dispatch = useAppDispatch()
 
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
-  const { treasuries, activeTreasury } = useAppSelector(
-    (state) => state.treasury
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+  const { pendingTransactions } = useAppSelector(
+    (state) => state.treasuryTransactions
   )
-  const { transactions } = useAppSelector((state) => state.treasuryTransactions)
 
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const dropdownWrapper = useRef(null)
@@ -51,31 +42,9 @@ const Treasury: NextPage = () => {
   })
 
   useEffect(() => {
-    if (treasuries.results.length > 0 && slug && typeof slug === "string") {
-      dispatch(setActiveTreasury(slug))
-    }
-    // eslint-disable-next-line
-  }, [slug, treasuries])
-
-  useEffect(() => {
-    if (tokens.length > 0 && walletObject.publicKey && activeTreasury) {
-      //Treasury Balance
-      dispatch(
-        fetchTreasuryBalance({
-          name: activeTreasury.name,
-          address: activeTreasury.treasury_address
-        })
-      )
-      //Treasury Vault Balance
-      dispatch(
-        fetchTreasuryVaultBalance({
-          name: activeTreasury.name,
-          address: activeTreasury.treasury_vault_address
-        })
-      )
-
+    if (tokens.length > 0 && activeTreasury) {
       //Treasury Transactions
-      transactions.count === null &&
+      pendingTransactions.count === null &&
         dispatch(
           fetchTreasuryPendingTransactions({
             treasury_uuid: activeTreasury.uuid
@@ -83,41 +52,30 @@ const Treasury: NextPage = () => {
         )
     }
     // eslint-disable-next-line
-  }, [tokens, walletObject, activeTreasury])
-
-  useEffect(() => {
-    dispatch(fetchTokensPrice())
-    const interval = setInterval(() => {
-      dispatch(fetchTokensPrice())
-    }, 30000)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [dispatch])
+  }, [tokens, activeTreasury])
 
   return (
-    <Layout pageTitle="Zebec - Treasury">
+    <TreasuryLayout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">
         <div className="container">
           <Breadcrumb
-            title={`${activeTreasury?.name}`}
+            title={activeTreasury?.name || ""}
             arrowBack={true}
             className="md:flex"
           >
             <BreadcrumbRightContent>
-              {/* Deposit NFT and Send from treasury | Hidden for now (flex) */}
-              <div className="gap-4 hidden">
-                <Link href="/treasury/deposit-nft">
+              {/* Deposit NFT and Send from treasury */}
+              <div className="flex gap-4">
+                {/* <Link href="/treasury/deposit-nft">
                   <Button
                     title={`${t("treasury:deposit-nft")}`}
                     endIcon={<Icons.PlusIncircleIcon />}
                     type="button"
                   />
-                </Link>
+                </Link> */}
                 <div ref={dropdownWrapper} className="relative">
                   <Button
-                    title={`${t("send:send-from-treasury")}`}
+                    title={`${t("send:send-from-treasury-vault")}`}
                     variant="gradient"
                     endIcon={<Icons.ArrowUpRightIcon />}
                     onClick={() => setToggleDropdown(!toggleDropdown)}
@@ -128,7 +86,7 @@ const Treasury: NextPage = () => {
                     show={toggleDropdown}
                   >
                     <div className="pb-2">
-                      <Link href="/treasury/send">
+                      <Link href={`/treasury/${slug}/send`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(0))}
                           className="flex gap-2 px-5 py-3 items-center hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary"
@@ -139,7 +97,7 @@ const Treasury: NextPage = () => {
                       </Link>
                     </div>
                     <div className="pt-2">
-                      <Link href="/treasury/send">
+                      <Link href={`/treasury/${slug}/send`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(1))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
@@ -149,8 +107,8 @@ const Treasury: NextPage = () => {
                         </div>
                       </Link>
                     </div>
-                    <div className="pt-2">
-                      <Link href="/treasury/send">
+                    <div className="pt-2 hidden">
+                      <Link href={`/treasury/${slug}/send`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(2))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
@@ -166,13 +124,11 @@ const Treasury: NextPage = () => {
             </BreadcrumbRightContent>
           </Breadcrumb>
 
+          {/* Treasury Details */}
           <TreasuryDetail />
         </div>
       </div>
-      <PauseModal />
-      <CancelModal />
-      <ResumeModal />
-    </Layout>
+    </TreasuryLayout>
   )
 }
 

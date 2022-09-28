@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { fetchTransactionsById } from "api"
 import api from "api/api"
-import { AppDispatch } from "app/store"
+import { AppDispatch, RootState } from "app/store"
+import { fetchTreasuryVaultContinuousTransactionsById } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface CancelState {
   transaction: any
@@ -17,19 +18,6 @@ const initialState: CancelState = {
   error: ""
 }
 
-export const preCancelTransaction = createAsyncThunk<
-  any,
-  { uuid: string },
-  { dispatch: AppDispatch }
->("cancel/preCancelTransaction", async (data, { dispatch }) => {
-  const response = await api.patch(`/transaction/${data.uuid}/`, {
-    status: "cancelled"
-  })
-  dispatch(fetchTransactionsById(data.uuid, "cancel"))
-
-  return response.data
-})
-
 export const cancelTransaction = createAsyncThunk<
   any,
   { uuid: string; txn_hash?: string },
@@ -44,6 +32,36 @@ export const cancelTransaction = createAsyncThunk<
   dispatch(toggleCancelModal())
   return response.data
 })
+
+export const cancelTreasuryTransaction = createAsyncThunk<
+  any,
+  { uuid: string; transaction_account: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "cancel/cancelTreasuryTransaction",
+  async ({ uuid, transaction_account }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.patch(
+        `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/`,
+        {
+          status: "cancelled",
+          transaction_account: transaction_account
+        }
+      )
+      dispatch(
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
+      )
+      dispatch(toggleCancelModal())
+      return
+    }
+    return
+  }
+)
 
 export const cancelModalSlice = createSlice({
   name: "cancel",
@@ -66,18 +84,6 @@ export const cancelModalSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    //Pre-cancel Transaction
-    builder.addCase(preCancelTransaction.pending, (state) => {
-      state.loading = true
-    })
-    builder.addCase(preCancelTransaction.fulfilled, (state) => {
-      state.loading = true
-      state.error = ""
-    })
-    builder.addCase(preCancelTransaction.rejected, (state, action) => {
-      state.loading = true
-      state.error = action.error.message ?? "Something went wrong"
-    })
     //Cancel Transaction
     builder.addCase(cancelTransaction.pending, (state) => {
       state.loading = true
@@ -87,6 +93,18 @@ export const cancelModalSlice = createSlice({
       state.error = ""
     })
     builder.addCase(cancelTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Cancel Treasury Transaction
+    builder.addCase(cancelTreasuryTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(cancelTreasuryTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(cancelTreasuryTransaction.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })

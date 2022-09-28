@@ -5,15 +5,15 @@ import {
   resetTimedStatusTransactions,
   setPagination
 } from "features/transactions/transactionsSlice"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useState } from "react"
 import FilterTabs, { Tab } from "../FilterTabs"
-import * as Icons from "assets/icons"
+// import * as Icons from "assets/icons"
 import { AllIncoming } from "./tabs/AllIncoming"
-import { CompletedIncoming } from "./tabs/CompletedIncoming"
-import { ScheduledIncoming } from "./tabs/ScheduledIncoming"
-import { OngoingIncoming } from "./tabs/OngoingIncoming"
-import { useZebecWallet } from "hooks/useWallet"
+// import { CompletedIncoming } from "./tabs/CompletedIncoming"
+// import { ScheduledIncoming } from "./tabs/ScheduledIncoming"
+// import { OngoingIncoming } from "./tabs/OngoingIncoming"
 
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
@@ -27,22 +27,22 @@ const Incoming: FC = () => {
     {
       title: "All",
       component: <AllIncoming />
-    },
-    {
-      title: "Ongoing",
-      icon: <Icons.DoubleCircleDottedLineIcon />,
-      component: <OngoingIncoming />
-    },
-    {
-      title: "Scheduled",
-      icon: <Icons.CalenderIcon />,
-      component: <ScheduledIncoming />
-    },
-    {
-      title: "Completed",
-      icon: <Icons.CheckCircleIcon />,
-      component: <CompletedIncoming />
     }
+    // {
+    //   title: "Ongoing",
+    //   icon: <Icons.DoubleCircleDottedLineIcon />,
+    //   component: <OngoingIncoming />
+    // },
+    // {
+    //   title: "Scheduled",
+    //   icon: <Icons.CalenderIcon />,
+    //   component: <ScheduledIncoming />
+    // },
+    // {
+    //   title: "Completed",
+    //   icon: <Icons.CheckCircleIcon />,
+    //   component: <CompletedIncoming />
+    // }
   ]
 
   useEffect(() => {

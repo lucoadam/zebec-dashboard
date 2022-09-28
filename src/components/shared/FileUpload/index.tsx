@@ -73,7 +73,7 @@ export const FileUpload: FC<FileUploadProps> = ({
       formData.append("token", "OGpbsp3SMcMOcXxXrz5UAoywdyuZgrFD")
       try {
         const response = await axios.post(
-          "https://store2.gofile.io/uploadFile",
+          "http://localhost:8000/uploads/",
           formData,
           {
             headers: {
@@ -83,11 +83,11 @@ export const FileUpload: FC<FileUploadProps> = ({
             onUploadProgress
           }
         )
-        setValue(name, response.data.data.downloadPage)
+        setValue(name, response.data.uuid)
         setFile((prev: FileState) => ({
           ...prev,
           uploading: false,
-          url: response.data.data.downloadPage
+          url: response.data.file
         }))
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -167,9 +167,9 @@ export const FileUpload: FC<FileUploadProps> = ({
           <div className="w-full">
             <div className="flex justify-start items-center gap-1 text-content-primary">
               {file.url ? (
-                <Icons.FileIcon className="w-3 h-3 text-content-secondary" />
+                <Icons.FileIcon className="w-4 h-4 text-content-secondary" />
               ) : (
-                <Icons.SparkleIcon className="w-3 h-3 text-content-secondary" />
+                <Icons.SparkleIcon className="w-4 h-4 text-content-secondary" />
               )}
               <span className="text-sm text-content-primary font-medium">
                 {toSubstring(file.name, 6, true)}

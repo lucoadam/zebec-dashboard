@@ -2,7 +2,11 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
 import axios from "axios"
-import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import {
+  fetchTreasuryPendingTransactions,
+  fetchTreasuryVaultContinuousTransactions,
+  fetchTreasuryVaultInstantTransactions
+} from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 //declare types for state
 interface RejectState {
@@ -22,18 +26,96 @@ export const rejectTransaction = createAsyncThunk<
   any,
   { uuid: string },
   { dispatch: AppDispatch; state: RootState }
->("reject/rejectTransaction", async ({ uuid }, { dispatch, getState }) => {
-  const { treasury } = getState()
-  if (treasury.activeTreasury?.uuid) {
-    const treasury_uuid = treasury.activeTreasury.uuid
-    await api.get(`/treasury/${treasury_uuid}/transactions/${uuid}/reject/`)
+>(
+  "rejectTransaction/rejectTransaction",
+  async ({ uuid }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(`/treasury/${treasury_uuid}/transactions/${uuid}/reject/`)
 
-    dispatch(toggleRejectModal())
-    dispatch(fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid }))
+      dispatch(toggleRejectModal())
+      dispatch(
+        fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid })
+      )
+      return
+    }
     return
   }
-  return
-})
+)
+
+export const vaultRejectTransaction = createAsyncThunk<
+  any,
+  { uuid: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "rejectTransaction/vaultRejectTransaction",
+  async ({ uuid }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(
+        `/treasury/${treasury_uuid}/vault-instant-transactions/${uuid}/reject/`
+      )
+      dispatch(toggleRejectModal())
+      dispatch(
+        fetchTreasuryVaultInstantTransactions({ treasury_uuid: treasury_uuid })
+      )
+      return
+    }
+    return
+  }
+)
+
+export const vaultContinuousRejectTransaction = createAsyncThunk<
+  any,
+  { uuid: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "rejectTransaction/vaultContinuousRejectTransaction",
+  async ({ uuid }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(
+        `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/reject/`
+      )
+      dispatch(toggleRejectModal())
+      dispatch(
+        fetchTreasuryVaultContinuousTransactions({
+          treasury_uuid: treasury_uuid
+        })
+      )
+      return
+    }
+    return
+  }
+)
+
+export const vaultContinuousRejectTransactionLatestEvent = createAsyncThunk<
+  any,
+  { uuid: string; event_id: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "rejectTransaction/vaultContinuousRejectTransactionLatestEvent",
+  async ({ uuid, event_id }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(
+        `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/events/${event_id}/reject/`
+      )
+      dispatch(toggleRejectModal())
+      dispatch(
+        fetchTreasuryVaultContinuousTransactions({
+          treasury_uuid: treasury_uuid
+        })
+      )
+      return
+    }
+    return
+  }
+)
 
 export const rejectModalSlice = createSlice({
   name: "rejectTransaction",
@@ -56,11 +138,11 @@ export const rejectModalSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    //Reject
     builder.addCase(rejectTransaction.pending, (state) => {
       state.loading = true
     })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    builder.addCase(rejectTransaction.fulfilled, (state, action) => {
+    builder.addCase(rejectTransaction.fulfilled, (state) => {
       state.loading = false
       state.error = ""
     })
@@ -68,6 +150,54 @@ export const rejectModalSlice = createSlice({
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"
     })
+    //Reject Instant
+    builder.addCase(vaultRejectTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(vaultRejectTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(vaultRejectTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Reject Continuous
+    builder.addCase(vaultContinuousRejectTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(vaultContinuousRejectTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(
+      vaultContinuousRejectTransaction.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action.error.message ?? "Something went wrong"
+      }
+    )
+    //Reject Transaction Latest Event
+    builder.addCase(
+      vaultContinuousRejectTransactionLatestEvent.pending,
+      (state) => {
+        state.loading = true
+      }
+    )
+    builder.addCase(
+      vaultContinuousRejectTransactionLatestEvent.fulfilled,
+      (state) => {
+        state.loading = false
+        state.error = ""
+      }
+    )
+    builder.addCase(
+      vaultContinuousRejectTransactionLatestEvent.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action.error.message ?? "Something went wrong"
+      }
+    )
   }
 })
 

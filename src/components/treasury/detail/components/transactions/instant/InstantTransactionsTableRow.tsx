@@ -1,23 +1,30 @@
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
   IconButton,
-  UserAddress
+  UserAddress,
+  SignerRow
 } from "components/shared"
-import { toggleRejectModal } from "features/modals/rejectModalSlice"
-import { toggleSignModal } from "features/modals/signModalSlice"
-import moment from "moment"
+import { showRejectModal } from "features/modals/rejectModalSlice"
+import { showSignModal } from "features/modals/signModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useEffect, useRef, useState } from "react"
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { toSubstring } from "utils"
+import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
+import CopyButton from "components/shared/CopyButton"
+import { RPC_NETWORK } from "constants/cluster"
+import {
+  ApprovedRejectedUserProps,
+  TreasuryApprovalType
+} from "components/treasury/treasury.d"
+import { useWallet } from "@solana/wallet-adapter-react"
 
-interface ScheduledTableRowProps {
+interface InstantTransactionsTableRowProps {
   index: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
@@ -25,7 +32,7 @@ interface ScheduledTableRowProps {
   handleToggleRow: () => void
 }
 
-const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
+const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   index,
   transaction,
   activeDetailsRow,
@@ -33,6 +40,7 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const styles = {
     detailsRow: {
@@ -43,10 +51,50 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
     }
   }
   const dispatch = useAppDispatch()
+  const { publicKey } = useWallet()
   const [showAllRemaining, setShowAllRemaining] = useState(false)
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [showAllRemaining])
+
+  const {
+    name,
+    remarks,
+    amount,
+    token,
+    status,
+    sender,
+    receiver,
+    created_at,
+    transaction_type,
+    transaction_hash,
+    file
+  } = transaction
+
+  const remainingOwners = useMemo(() => {
+    let remainingOwnersList: string[] = []
+    if (activeTreasury) {
+      const treasuryOwners = activeTreasury.owners.map(
+        (owner) => owner.wallet_address
+      )
+      const aprovedOwners = transaction.approved_by.map(
+        (owner: ApprovedRejectedUserProps) => owner.user
+      )
+      const rejectedOwners = transaction.rejected_by.map(
+        (owner: ApprovedRejectedUserProps) => owner.user
+      )
+      const approvedRejectedOwners = [...aprovedOwners, ...rejectedOwners]
+
+      remainingOwnersList = treasuryOwners.filter(
+        (owner) => !approvedRejectedOwners.includes(owner)
+      )
+    }
+    return remainingOwnersList
+  }, [activeTreasury, transaction])
+
+  const isRemaining = useMemo(() => {
+    return remainingOwners.some((owner) => owner === publicKey?.toString())
+  }, [remainingOwners, publicKey])
 
   return (
     <>
@@ -55,29 +103,47 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
         <tr className={`flex items-center`}>
           <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
-              <CircularProgress percentage={0} status={StatusType.SCHEDULED} />
+              <CircularProgress
+                percentage={status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
+                status={
+                  status === TreasuryApprovalType.PENDING
+                    ? StatusType.SCHEDULED
+                    : status === TreasuryApprovalType.ACCEPTED
+                    ? StatusType.COMPLETED
+                    : StatusType.CANCELLED
+                }
+              />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +48,556.98
+                    -
+                    {status === TreasuryApprovalType.ACCEPTED
+                      ? formatCurrency(amount, "", 4)
+                      : 0}
                   </span>
-                  &nbsp;SOL
+                  &nbsp;{token}
                 </div>
-                <div className="text-caption">48,556.98 of 1,00,00,000 SOL</div>
+                <div className="text-caption">
+                  {status === TreasuryApprovalType.ACCEPTED
+                    ? formatCurrency(amount, "", 4)
+                    : 0}{" "}
+                  of {formatCurrency(amount, "", 4)} {token}
+                </div>
               </div>
             </div>
           </td>
           <td className="px-6 py-4 min-w-50">
             <div className="text-caption text-content-primary">
-              Mar 18, 2022, 12:00 PM <br />
-              to Mar 19, 2022, 11:58 AM
+              {formatDateTime(created_at)}
             </div>
           </td>
           <td className="min-w-33.5 px-6 py-4">
-            <div className="text-caption text-content-primary">10 min ago</div>
+            <div className="text-caption text-content-primary">
+              {getTimesAgo(created_at)}
+            </div>
           </td>
           <td className="px-6 py-4 min-w-50">
-            <UserAddress wallet={transaction.receiver} />
+            <UserAddress wallet={receiver} />
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -85,7 +151,8 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                 startIcon={<Icons.EditIcon className="text-content-contrast" />}
                 size="small"
                 title={`${t("table.sign-and-approve")}`}
-                onClick={() => dispatch(toggleSignModal())}
+                onClick={() => dispatch(showSignModal(transaction))}
+                className={`${!isRemaining && "hidden"}`}
               />
               <Button
                 startIcon={
@@ -93,7 +160,8 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                 }
                 size="small"
                 title={`${t("table.reject")}`}
-                onClick={() => dispatch(toggleRejectModal())}
+                onClick={() => dispatch(showRejectModal(transaction))}
+                className={`${!isRemaining && "hidden"}`}
               />
               <IconButton
                 variant="plain"
@@ -117,11 +185,13 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
               <div className="pt-4 pr-12 pb-6 pl-6">
                 <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
                   <div className=" text-subtitle-sm font-medium text-content-primary">
-                    Feb Salary
+                    {name}
                   </div>
-                  <div className="text-body text-content-secondary">
-                    This is the secondary notes with character limit.
-                  </div>
+                  {remarks && (
+                    <div className="text-body text-content-secondary">
+                      {remarks}
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
@@ -140,10 +210,10 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div data-tip={sender} className="">
+                          {toSubstring(sender, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
+                        <CopyButton content={sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -160,28 +230,19 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="">
-                          {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
+                        <div className="" data-tip={receiver}>
+                          {toSubstring(receiver, 5, true)}
                         </div>
-                        <IconButton icon={<Icons.CopyIcon />} />
-                      </div>
-                    </div>
-                    {/* Start Date */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.start-date")}
-                      </div>
-                      <div className="text-content-primary">
-                        Feb 19, 2022, 09:13 PM
+                        <CopyButton content={receiver} />
                       </div>
                     </div>
                     {/* End Date */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
-                        {t("table.end-date")}
+                        {t("table.initiated-on")}
                       </div>
                       <div className="text-content-primary">
-                        Feb 29, 2022, 09:13 PM
+                        {formatDateTime(created_at)}
                       </div>
                     </div>
                     {/* Stream Type */}
@@ -190,14 +251,8 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        {index % 2 == 1 ? (
-                          <Icons.ThunderIcon className="w-6 h-6" />
-                        ) : (
-                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        )}
-                        <span>{`${
-                          index % 2 == 1 ? "Instant" : "Continuous"
-                        }`}</span>
+                        <Icons.ThunderIcon className="w-6 h-6" />
+                        <span className="capitalize">{transaction_type}</span>
                       </div>
                     </div>
                   </div>
@@ -208,7 +263,9 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.total-amount")}
                       </div>
-                      <div className="text-content-primary">20,000 SOL</div>
+                      <div className="text-content-primary">
+                        {formatCurrency(amount, "", 4)} {token}
+                      </div>
                     </div>
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
@@ -216,7 +273,12 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        10,000 SOL (50%)
+                        {status === TreasuryApprovalType.ACCEPTED
+                          ? formatCurrency(amount, "", 4)
+                          : 0}{" "}
+                        {token} (
+                        {status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
+                        %)
                       </div>
                     </div>
                     {/* Status */}
@@ -230,7 +292,13 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         ) : (
                           <Icons.OutgoingIcon className="w-5 h-5" />
                         )}
-                        <span>Ongoing</span>
+                        <span>
+                          {status === TreasuryApprovalType.PENDING
+                            ? StatusType.SCHEDULED
+                            : status === TreasuryApprovalType.ACCEPTED
+                            ? StatusType.COMPLETED
+                            : StatusType.CANCELLED}
+                        </span>
                       </div>
                     </div>
                     {/* Transaction */}
@@ -239,33 +307,45 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.transaction")}
                       </div>
                       <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-on-explorer")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
+                        <a
+                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button
+                            title={`${t("table.view-on-explorer")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </a>
                       </div>
                     </div>
                     {/* Reference */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.reference")}
+                    {file && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.reference")}
+                        </div>
+                        <div className="text-content-primary">
+                          <Button
+                            title={`${t("table.view-reference-file")}`}
+                            size="small"
+                            endIcon={
+                              <Icons.OutsideLinkIcon className="text-content-contrast" />
+                            }
+                          />
+                        </div>
                       </div>
-                      <div className="text-content-primary">
-                        <Button
-                          title={`${t("table.view-reference-file")}`}
-                          size="small"
-                          endIcon={
-                            <Icons.OutsideLinkIcon className="text-content-contrast" />
-                          }
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-x-32 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div
+                  className={`flex gap-x-32 py-6 text-subtitle-sm font-medium ${
+                    isRemaining && "border-b border-outline"
+                  }`}
+                >
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Signed Owners */}
@@ -274,33 +354,22 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.signed-by")}
                       </div>
                       <div className="grid gap-y-4">
-                        {[1, 2, 3].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
-                              }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
+                        {transaction.approved_by.map(
+                          (
+                            item: {
+                              user: string
+                              time: number
+                            },
+                            index: number
+                          ) => (
+                            <SignerRow
+                              key={index}
+                              index={index}
+                              user={item.user}
+                              time={item.time}
                             />
-                            <div className="">
-                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                            </div>
-                            <div className="text-content-tertiary">
-                              10 min ago
-                            </div>
-                          </div>
-                        ))}
+                          )
+                        )}
                       </div>
                     </div>
                   </div>
@@ -314,101 +383,63 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
 
                       <div className="grid gap-y-4">
                         <div className="text-content-primary">
-                          3 out of 4 Owners
+                          {remainingOwners?.length}{" "}
+                          {t("transactions:table.out-of")}{" "}
+                          {activeTreasury?.owners.length}{" "}
+                          {t("transactions:table.owners")}
                         </div>
-                        {[1].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center  gap-x-2 text-content-primary"
-                          >
-                            <Image
-                              layout="fixed"
-                              alt="Owner Logo"
-                              src={
-                                [
-                                  Images.Avatar1,
-                                  Images.Avatar2,
-                                  Images.Avatar4
-                                ][item % 3]
+                        {remainingOwners
+                          ?.slice(0, 3)
+                          .map((item: string, index: number) => (
+                            <SignerRow key={index} index={index} user={item} />
+                          ))}
+                        {/* Has owners more than three */}
+                        {remainingOwners.length > 3 && (
+                          <div className="text-content-primary">
+                            <Button
+                              title={`${t("table.show-all-remaining")}`}
+                              size="small"
+                              endIcon={
+                                <Icons.ArrowDownIcon className="text-content-contrast" />
                               }
-                              height={24}
-                              width={24}
-                              className="rounded-full"
+                              onClick={() =>
+                                setShowAllRemaining(!showAllRemaining)
+                              }
                             />
-                            <div className="">
-                              {toSubstring("0x4f10x4f1U700eU700e", 5, true)}
-                            </div>
-                            <div className="text-content-tertiary">
-                              10 min ago
-                            </div>
-                          </div>
-                        ))}
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.show-all-remaining")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.ArrowDownIcon className="text-content-contrast" />
-                            }
-                            onClick={() =>
-                              setShowAllRemaining(!showAllRemaining)
-                            }
-                          />
-                          {showAllRemaining && (
-                            <div className={`pt-3 pl-3`}>
-                              <div className="grid gap-y-4">
-                                {[1, 2, 3].map((item) => (
-                                  <div
-                                    key={item}
-                                    className="flex items-center  gap-x-2 text-content-primary"
-                                  >
-                                    <Image
-                                      layout="fixed"
-                                      alt="Owner Logo"
-                                      src={
-                                        [
-                                          Images.Avatar1,
-                                          Images.Avatar2,
-                                          Images.Avatar4
-                                        ][item % 3]
-                                      }
-                                      height={24}
-                                      width={24}
-                                      className="rounded-full"
-                                    />
-                                    <div className="">
-                                      <span data-tip="0x4f10x4f1U700eU700e">
-                                        {toSubstring(
-                                          "0x4f10x4f1U700eU700e",
-                                          5,
-                                          true
-                                        )}
-                                      </span>
-                                    </div>
-                                    <div className="text-content-tertiary">
-                                      {moment("20220620", "YYYYMMDD").fromNow()}
-                                    </div>
-                                  </div>
-                                ))}
+                            {showAllRemaining && (
+                              <div className={`pt-3 pl-3`}>
+                                <div className="grid gap-y-4">
+                                  {remainingOwners
+                                    ?.slice(3)
+                                    .map((item: string, index: number) => (
+                                      <SignerRow
+                                        key={index}
+                                        index={index}
+                                        user={item}
+                                      />
+                                    ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-x-4 py-6">
+                <div
+                  className={`flex gap-x-4 py-6 ${!isRemaining && "hidden"}`}
+                >
                   <Button
                     startIcon={<Icons.EditIcon />}
                     variant="gradient"
                     title={`${t("table.sign-and-approve")}`}
-                    onClick={() => dispatch(toggleSignModal())}
+                    onClick={() => dispatch(showSignModal(transaction))}
                   />
                   <Button
                     startIcon={<Icons.CrossIcon />}
                     title={`${t("table.reject")}`}
-                    onClick={() => dispatch(toggleRejectModal())}
+                    onClick={() => dispatch(showRejectModal(transaction))}
                   />
                 </div>
               </div>
@@ -420,4 +451,4 @@ const ScheduledTableRow: FC<ScheduledTableRowProps> = ({
   )
 }
 
-export default ScheduledTableRow
+export default InstantTransactionsTableRow

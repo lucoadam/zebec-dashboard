@@ -12,30 +12,59 @@ import {
 } from "@jettxcypher/zebec-wormhole-sdk"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { cancelStreamTreasury } from "application"
+import { useWallet } from "@solana/wallet-adapter-react"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
-  const { stream, token } = useContext(ZebecContext)
+  const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
   const { data: signer } = useSigner()
   const walletObject = useZebecWallet()
+  const { publicKey } = useWallet()
   const { show, loading, transaction } = useAppSelector((state) => state.cancel)
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const handleSolanaCancel = async () => {
     dispatch(setLoading(true))
-    // data
-    const data = {
-      sender: transaction.sender,
-      receiver: transaction.receiver,
-      escrow: transaction.pda,
-      token_mint_address:
-        transaction.token === "SOL" ? "" : transaction.token_mint_address
+    if (!transaction.approval_status) {
+      const data = {
+        sender: transaction.sender,
+        receiver: transaction.receiver,
+        escrow: transaction.pda,
+        token_mint_address:
+          transaction.token === "SOL" ? "" : transaction.token_mint_address
+      }
+      const transaction_uuid = transaction.uuid
+      if (transaction.token === "SOL")
+        stream && dispatch(cancelStreamNative(data, transaction_uuid, stream))
+      else token && dispatch(cancelStreamToken(data, transaction_uuid, token))
+    } else if (activeTreasury) {
+      const data = {
+        safe_address: activeTreasury.treasury_address,
+        safe_data_account: activeTreasury.treasury_escrow,
+        sender: publicKey?.toString() || "",
+        receiver: transaction.receiver,
+        stream_data_account: transaction.pda,
+        token_mint_address: transaction.token_mint_address,
+        uuid: transaction.uuid
+      }
+      if (!transaction.token_mint_address && treasury) {
+        dispatch(
+          cancelStreamTreasury({
+            data: data,
+            treasury: treasury
+          })
+        )
+      } else if (treasuryToken) {
+        dispatch(
+          cancelStreamTreasury({
+            data: data,
+            treasuryToken: treasuryToken
+          })
+        )
+      }
     }
-    const transaction_uuid = transaction.uuid
-
-    if (transaction.token === "SOL")
-      stream && dispatch(cancelStreamNative(data, transaction_uuid, stream))
-    else token && dispatch(cancelStreamToken(data, transaction_uuid, token))
   }
 
   const handleEVMCancel = async () => {

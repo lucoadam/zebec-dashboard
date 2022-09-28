@@ -2,6 +2,8 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { initInstantStreamTreasury } from "application"
 import * as Icons from "assets/icons"
 import {
   Button,
@@ -11,10 +13,10 @@ import {
 } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
-import { sendTreasuryInstantTransfer } from "features/stream/streamSlice"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
@@ -32,6 +34,8 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const { treasury, treasuryToken } = useContext(ZebecContext)
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const {
     register,
@@ -56,7 +60,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [toggleTokensDropdown, setToggleTokensDropdown] = useState(false)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
-  // const [resetFile, setResetFile] = useState(false)
+  const [resetFile, setResetFile] = useState(false)
 
   const { publicKey } = useWallet()
 
@@ -93,24 +97,54 @@ export const InstantStream: FC<InstantStreamProps> = ({
     }
   }, [tokenDetails, setValue])
 
-  const onSubmit = (data: InstantStreamFormData) => {
-    const formattedData = {
-      transaction_name: data.transaction_name,
-      symbol: data.symbol,
-      amount: Number(data.amount),
-      remarks: data.remarks,
-      receiver: data.receiver,
-      token_mint_address:
-        currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file
+  const initInstantStreamCallback = (message: "success" | "error") => {
+    if (message === "success") {
+      resetForm()
     }
-    dispatch(sendTreasuryInstantTransfer(formattedData))
+    dispatch(toggleWalletApprovalMessageModal())
+  }
+
+  const onSubmit = (data: InstantStreamFormData) => {
+    if (activeTreasury) {
+      const formattedData = {
+        name: data.transaction_name,
+        remarks: data.remarks,
+        token: data.symbol,
+        token_mint_address:
+          currentToken.symbol === "SOL" ? "" : currentToken.mint,
+        sender: data.wallet,
+        receiver: data.receiver,
+        amount: Number(data.amount),
+        file: data.file,
+        safe_address: activeTreasury.treasury_address,
+        safe_data_account: activeTreasury.treasury_escrow
+      }
+      dispatch(toggleWalletApprovalMessageModal())
+      if (!formattedData.token_mint_address && treasury) {
+        dispatch(
+          initInstantStreamTreasury({
+            data: formattedData,
+            callback: initInstantStreamCallback,
+            treasury: treasury
+          })
+        )
+      } else if (treasuryToken) {
+        dispatch(
+          initInstantStreamTreasury({
+            data: formattedData,
+            callback: initInstantStreamCallback,
+            treasuryToken: treasuryToken
+          })
+        )
+      }
+    }
   }
 
   const resetForm = () => {
     reset()
     setCurrentToken(tokenDetails[0])
     setValue("symbol", tokenDetails[0].symbol)
+    setResetFile(true)
   }
 
   useEffect(() => {
@@ -456,7 +490,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 name={"file"}
                 setValue={setValue}
                 resetField={resetField}
-                // isReset={resetFile}
+                isReset={resetFile}
               />
             </div>
           )}

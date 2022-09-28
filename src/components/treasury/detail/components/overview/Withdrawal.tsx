@@ -50,7 +50,7 @@ export const Withdrawal = () => {
     if (Number(data.amount) > getBalance(treasuryTokens, currentToken.symbol)) {
       setError(
         "amount",
-        { type: "custom", message: "transactions:deposit.max-amount" },
+        { type: "custom", message: "validation:max" },
         { shouldFocus: true }
       )
       return
@@ -97,7 +97,7 @@ export const Withdrawal = () => {
   }
 
   return (
-    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6">
+    <div className="px-6 pt-6 pb-8 flex flex-col gap-y-6 min-h-[260px]">
       <div className="text-caption text-content-tertiary">
         {t("treasuryOverview:withdraw-description")}
       </div>

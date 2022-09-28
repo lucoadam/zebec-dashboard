@@ -1,16 +1,14 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import Layout from "components/layouts/Layout"
 import TreasuryContinuousStream from "components/send-from-treasury/TreasuryContinuousStream"
 import TreasuryInstantStream from "components/send-from-treasury/TreasuryInstantStream"
-import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
+// import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
 import { Breadcrumb, Tab } from "components/shared"
+import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
-import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
-import type { NextPage } from "next"
+import type { GetStaticPaths, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useEffect } from "react"
 
 const transferTabs = [
   {
@@ -24,33 +22,26 @@ const transferTabs = [
     icon: <Icons.DoubleCircleDottedLineIcon />,
     count: 0,
     Component: <TreasuryInstantStream />
-  },
-  {
-    title: "send:nft",
-    icon: <Icons.SquareBlockMove />,
-    count: 0,
-    Component: <TreasuryNFTStream />
   }
+  // {
+  //   title: "send:nft",
+  //   icon: <Icons.SquareBlockMove />,
+  //   count: 0,
+  //   Component: <TreasuryNFTStream />
+  // }
 ]
 
 const SendFromTreasury: NextPage = () => {
   const { t } = useTranslation("common")
+
   const activePage = useAppSelector(
     (state) => state.common.treasurySendActiveTab
   )
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
   const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(fetchTokensPrice())
-    const interval = setInterval(() => {
-      dispatch(fetchTokensPrice())
-    }, 30000)
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [dispatch])
   return (
-    <Layout pageTitle="Zebec">
+    <TreasuryLayout pageTitle="Zebec - Treasury Send">
       <div className="ml-2 flex justify-center overflow-x-auto overflow-y-hidden border-b border-outline">
         {/* Tabs */}
         {transferTabs.map((transactionTab, index) => {
@@ -63,14 +54,14 @@ const SendFromTreasury: NextPage = () => {
               startIcon={transactionTab.icon}
               count={transactionTab.count}
               onClick={() => dispatch(setTreasurySendActiveTab(index))}
-              className="md:px-[107.5px]"
+              className="md:px-[108px]"
             />
           )
         })}
       </div>
       <div className="container">
         <Breadcrumb
-          title="Zebec Safe"
+          title={activeTreasury?.name || ""}
           arrowBack={true}
           className="mt-10 mb-9"
         />
@@ -78,7 +69,7 @@ const SendFromTreasury: NextPage = () => {
         {/* Active Tab */}
         {transferTabs[activePage].Component}
       </div>
-    </Layout>
+    </TreasuryLayout>
   )
 }
 
@@ -92,6 +83,13 @@ export async function getStaticProps({ locale }: { locale: string }) {
         "createTreasury"
       ]))
     }
+  }
+}
+
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+  return {
+    paths: [],
+    fallback: "blocking"
   }
 }
 

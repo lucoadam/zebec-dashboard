@@ -1,24 +1,28 @@
 import CopyButton from "components/shared/CopyButton"
 import Image, { StaticImageData } from "next/image"
 import Link from "next/link"
-import { FC, useMemo } from "react"
+import { FC, useEffect, useState } from "react"
 import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as AvatarImages from "assets/images/avatars"
 import { toSubstring } from "utils"
 import { EmptyDataState } from "components/shared"
 import { useTranslation } from "next-i18next"
+import { Treasury } from "features/treasury/treasurySlice.d"
 
 const TreasuryLists: FC = () => {
   const { t } = useTranslation("treasury")
   const { results } = useAppSelector((state) => state.treasury.treasuries)
+  const [unarchivedTreasuries, setUnarchivedTreasuries] = useState<Treasury[]>(
+    []
+  )
 
-  const unarchivedTreasuries = useMemo(() => {
+  useEffect(() => {
     let unarchivedTreasuriesList = []
     unarchivedTreasuriesList = results.filter(
       (treasury) => treasury.archived === false
     )
-    return unarchivedTreasuriesList
+    setUnarchivedTreasuries(unarchivedTreasuriesList)
   }, [results])
 
   const Avatars: StaticImageData[] = [
