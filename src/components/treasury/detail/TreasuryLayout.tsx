@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
 import Layout from "components/layouts/Layout"
 import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
@@ -6,8 +7,9 @@ import ResumeModal from "components/modals/ResumeModal"
 import { setActiveTreasury } from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
+import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice"
 import { useRouter } from "next/router"
-import React, { useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 
 const TreasuryLayout = ({
   pageTitle,
@@ -17,6 +19,7 @@ const TreasuryLayout = ({
   children: React.ReactNode
 }) => {
   const router = useRouter()
+  const { stream, token } = useContext(ZebecContext)
   const { slug } = router.query
   const dispatch = useAppDispatch()
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
@@ -32,7 +35,7 @@ const TreasuryLayout = ({
   }, [slug, treasuries])
 
   useEffect(() => {
-    if (tokens.length > 0 && activeTreasury) {
+    if (tokens.length > 0 && activeTreasury && stream && token) {
       //Treasury Balance
       dispatch(
         fetchTreasuryBalance({
@@ -47,9 +50,17 @@ const TreasuryLayout = ({
           address: activeTreasury.treasury_vault_address
         })
       )
+      //Treasury Vault Streaming Balance
+      dispatch(
+        fetchTreasuryStreamingBalance({
+          wallet: activeTreasury.treasury_address,
+          stream: stream,
+          token: token
+        })
+      )
     }
     // eslint-disable-next-line
-  }, [tokens, activeTreasury])
+  }, [tokens, activeTreasury, stream, token])
 
   return (
     <>

@@ -35,6 +35,8 @@ const Overview = () => {
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   const treasuryVaultTokens =
     useAppSelector((state) => state.treasuryVaultBalance.treasury?.tokens) || []
+  const treasuryVaultStreamingTokensBalance =
+    useAppSelector((state) => state.treasuryStreamingBalance?.tokens) || []
   const [currentToken, setCurrentToken] = useState("SOL")
   const treasuryBalance = useAppSelector(
     (state) => state.treasuryBalance.treasury?.tokens
@@ -43,6 +45,9 @@ const Overview = () => {
     (state) => state.treasuryVaultBalance.treasury?.tokens
   )
   const prices = useAppSelector((state) => state.tokenDetails.prices)
+
+  console.log(treasuryVaultStreamingTokensBalance)
+
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/**
@@ -86,6 +91,7 @@ const Overview = () => {
           tableMaxHeight={517}
           balanceTokens={treasuryTokens}
           vaultBalanceTokens={treasuryVaultTokens}
+          streamingBalanceTokens={treasuryVaultStreamingTokensBalance}
           tokens={tokenDetails}
         />
         {/**

@@ -94,7 +94,8 @@
     "latest-transaction-initiated": "Latest Transaction Initiated",
     "pause": "Pause",
     "resume": "Resume",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "withdrawn": "Withdrawn"
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",
