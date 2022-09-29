@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
+import { PaginationInterface } from "components/shared"
 
 interface TransactionState {
   loading: boolean
@@ -30,6 +32,7 @@ interface TransactionState {
     results: any[]
   }
   initiatedTransactions: string[]
+  pagination: PaginationInterface
 }
 
 const initialState: TransactionState = {
@@ -59,7 +62,12 @@ const initialState: TransactionState = {
     previous: "",
     results: []
   },
-  initiatedTransactions: []
+  initiatedTransactions: [],
+  pagination: {
+    currentPage: 1,
+    limit: 10,
+    total: 0
+  }
 }
 
 // Fetch Pending
@@ -85,10 +93,15 @@ export const fetchTreasuryTransactions = createAsyncThunk<
   {}
 >(
   "treasuryTransactions/fetchTreasuryTransactions",
-  async ({ treasury_uuid, status }, {}) => {
+  async ({ treasury_uuid, status }, { getState }) => {
+    const { treasuryTransactions } = getState() as RootState
     const response = await api.get(`/treasury/${treasury_uuid}/transactions/`, {
       params: {
-        status: status ? status : ""
+        status: status ? status : "",
+        limit: treasuryTransactions.pagination.limit,
+        offset:
+          (Number(treasuryTransactions.pagination.currentPage) - 1) *
+          treasuryTransactions.pagination.limit
       }
     })
     return response.data
@@ -120,12 +133,17 @@ export const fetchTreasuryVaultInstantTransactions = createAsyncThunk<
   {}
 >(
   "treasuryTransactions/fetchTreasuryVaultInstantTransactions",
-  async ({ treasury_uuid, status }, {}) => {
-    const response = await api.get(
+  async ({ treasury_uuid, status }, { getState }) => {
+    const { treasuryTransactions } = getState() as RootState
+    const response: any = await api.get(
       `/treasury/${treasury_uuid}/vault-instant-transactions/`,
       {
         params: {
-          status: status ? status : ""
+          status: status ? status : "",
+          limit: treasuryTransactions.pagination.limit,
+          offset:
+            (Number(treasuryTransactions.pagination.currentPage) - 1) *
+            treasuryTransactions.pagination.limit
         }
       }
     )
@@ -158,12 +176,17 @@ export const fetchTreasuryVaultContinuousTransactions = createAsyncThunk<
   {}
 >(
   "treasuryTransactions/fetchTreasuryVaultContinuousTransactions",
-  async ({ treasury_uuid, status }, {}) => {
+  async ({ treasury_uuid, status }, { getState }) => {
+    const { treasuryTransactions } = getState() as RootState
     const response = await api.get(
       `/treasury/${treasury_uuid}/vault-streaming-transactions/`,
       {
         params: {
-          status: status ? status : ""
+          status: status ? status : "",
+          limit: treasuryTransactions.pagination.limit,
+          offset:
+            (Number(treasuryTransactions.pagination.currentPage) - 1) *
+            treasuryTransactions.pagination.limit
         }
       }
     )
@@ -230,6 +253,15 @@ export const treasuryTransactionsSlice = createSlice({
   name: "treasuryTransactions",
   initialState,
   reducers: {
+    setTreasuryTransactionPagination: (
+      state,
+      action: PayloadAction<PaginationInterface>
+    ) => {
+      state.pagination = {
+        ...state.pagination,
+        ...action.payload
+      }
+    },
     setInitiatedTreasuryTransactions: (
       state,
       action: PayloadAction<string>
@@ -276,6 +308,7 @@ export const treasuryTransactionsSlice = createSlice({
       state.loading = false
       state.error = ""
       state.transactions = action.payload
+      state.pagination.total = action.payload.count
     })
     builder.addCase(fetchTreasuryTransactions.rejected, (state, action) => {
       state.loading = false
@@ -334,6 +367,7 @@ export const treasuryTransactionsSlice = createSlice({
         state.loading = false
         state.error = ""
         state.vaultInstantTransactions = action.payload
+        state.pagination.total = action.payload.count
       }
     )
     builder.addCase(
@@ -385,6 +419,7 @@ export const treasuryTransactionsSlice = createSlice({
         state.loading = false
         state.error = ""
         state.vaultContinuousTransactions = action.payload
+        state.pagination.total = action.payload.count
       }
     )
     builder.addCase(
@@ -450,7 +485,8 @@ export const treasuryTransactionsSlice = createSlice({
 
 export const {
   setInitiatedTreasuryTransactions,
-  removeInitiatedTreasuryTransactions
+  removeInitiatedTreasuryTransactions,
+  setTreasuryTransactionPagination
 } = treasuryTransactionsSlice.actions
 
 export default treasuryTransactionsSlice.reducer
