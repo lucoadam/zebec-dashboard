@@ -74,18 +74,18 @@ const HomePage: FC = () => {
           {/* Deposited Assets */}
           <div className="grid lg:grid-rows-2 lg:grid-cols-2 gap-4 lg:col-span-2">
             <div className="row-span-2">
-              {walletObject.chainId === "solana" ? (
-                <DepositedAssets
-                  balanceTokens={zebecTokensBalance}
-                  streamingBalanceTokens={zebecStreamingTokensBalance}
-                  tokens={tokenDetails}
-                />
-              ) : (
+              {walletObject.chainId !== "solana" ? (
                 <EVMDepositedAssets
                   balanceTokens={zebecTokensBalance}
                   streamingBalanceTokens={zebecStreamingTokensBalance}
                   tokens={tokenDetails}
                   pdaBalanceTokens={pdaBalances}
+                />
+              ) : (
+                <DepositedAssets
+                  balanceTokens={zebecTokensBalance}
+                  streamingBalanceTokens={zebecStreamingTokensBalance}
+                  tokens={tokenDetails}
                 />
               )}
             </div>
