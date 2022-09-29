@@ -1,6 +1,9 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
-import { WalletApprovalMessageModal } from "components/modals"
+import {
+  WalletApprovalMessageModal,
+  XWalletApprovalMessageModal
+} from "components/modals"
 import { Toasts } from "components/shared"
 // import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
@@ -19,6 +22,7 @@ import { FC, useContext, useEffect } from "react"
 import { useSigner } from "wagmi"
 import { getRecentTPS } from "utils"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 
 const Common: FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,6 +35,8 @@ const Common: FC<{
   const { isSigned } = useAppSelector((state) => state.common)
   const walletBalances = useAppSelector((state) => state.walletBalance.tokens)
   const zebecBalances = useAppSelector((state) => state.zebecBalance.tokens)
+  const pdaBalances = useAppSelector((state) => state.pdaBalance.tokens)
+
   const zebecStreamingBalances = useAppSelector(
     (state) => state.zebecStreamingBalance.tokens
   )
@@ -67,6 +73,10 @@ const Common: FC<{
         )
       zebecBalances.length === 0 &&
         dispatch(fetchZebecBalance(walletObject.publicKey))
+      pdaBalances.length === 0 &&
+        walletObject.chainId !== "solana" &&
+        dispatch(fetchPdaBalance(walletObject.publicKey.toString()))
+
       if (zebecContext.token && zebecContext.stream) {
         zebecStreamingBalances.length === 0 &&
           dispatch(
@@ -118,6 +128,7 @@ const Common: FC<{
     <>
       {/* Common Modals */}
       <WalletApprovalMessageModal />
+      <XWalletApprovalMessageModal />
       {/* Fixed Divs */}
       <Toasts />
     </>

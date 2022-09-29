@@ -13,6 +13,8 @@ import {
   fetchRecentTransactions,
   fetchWeeklyActivity
 } from "features/transactions/transactionsSlice"
+import { EVMDepositedAssets } from "./EVMDepositedAssets"
+import { useZebecWallet } from "hooks/useWallet"
 
 const tabs = [
   {
@@ -31,6 +33,7 @@ const tabs = [
 
 const HomePage: FC = () => {
   const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
   const tokenDetails = useAppSelector(
     (state) => state.tokenDetails.tokens
   ).filter((token) => token.chainId === "solana")
@@ -41,6 +44,8 @@ const HomePage: FC = () => {
     useAppSelector((state) => state.zebecBalance?.tokens) || []
   const zebecStreamingTokensBalance =
     useAppSelector((state) => state.zebecStreamingBalance?.tokens) || []
+  const pdaBalances = useAppSelector((state) => state.pdaBalance?.tokens) || []
+
   const { isSigned } = useAppSelector((state) => state.common)
   const recentTransactions = useAppSelector(
     (state) => state.transactions.recentTransactions
@@ -69,11 +74,20 @@ const HomePage: FC = () => {
           {/* Deposited Assets */}
           <div className="grid lg:grid-rows-2 lg:grid-cols-2 gap-4 lg:col-span-2">
             <div className="row-span-2">
-              <DepositedAssets
-                balanceTokens={zebecTokensBalance}
-                streamingBalanceTokens={zebecStreamingTokensBalance}
-                tokens={tokenDetails}
-              />
+              {walletObject.chainId === "solana" ? (
+                <DepositedAssets
+                  balanceTokens={zebecTokensBalance}
+                  streamingBalanceTokens={zebecStreamingTokensBalance}
+                  tokens={tokenDetails}
+                />
+              ) : (
+                <EVMDepositedAssets
+                  balanceTokens={zebecTokensBalance}
+                  streamingBalanceTokens={zebecStreamingTokensBalance}
+                  tokens={tokenDetails}
+                  pdaBalanceTokens={pdaBalances}
+                />
+              )}
             </div>
             {/* Deposit | Withdraw and Farms */}
             <div className="order-first lg:order-none">

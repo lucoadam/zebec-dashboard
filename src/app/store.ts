@@ -19,6 +19,7 @@ import signModalSlice from "features/modals/signModalSlice"
 import stakeSlice from "features/modals/stakeSlice"
 import unStakeSlice from "features/modals/unStakeSlice"
 import walletApprovalMessageSlice from "features/modals/walletApprovalMessageSlice"
+import xWalletApprovalMessageSlice from "features/modals/xWalletApprovalMessageSlice"
 import settingsSlice from "features/settings/settingsSlice"
 import streamSlice from "features/stream/streamSlice"
 import toastsSlice from "features/toasts/toastsSlice"
@@ -37,6 +38,7 @@ import withdrawFromTreasurySlice from "features/modals/withdrawFromTreasurySlice
 import transferToVaultModalSlice from "features/modals/transferToVaultModalSlice"
 import transferToTreasuryModalSlice from "features/modals/transferToTreasuryModalSlice"
 import treasuryTransactionsSlice from "features/treasuryTransactions/treasuryTransactionsSlice"
+import pdaBalanceSlice from "features/pdaBalance/pdaBalanceSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -46,6 +48,7 @@ const combineReducer = combineReducers({
   treasuryBalance: treasuryBalanceSlice,
   treasurySettings: treasurySettingsSlice,
   zebecBalance: zebecBalanceSlice,
+  pdaBalance: pdaBalanceSlice,
   zebecStreamingBalance: zebecStreamingSlice,
   treasuryStreamingBalance: treasuryStreamingSlice,
   layout: layoutSlice,
@@ -65,6 +68,7 @@ const combineReducer = combineReducers({
   harvest: harvestSlice,
   transactions: tranasctionsSlice,
   walletApprovalMessage: walletApprovalMessageSlice,
+  xWalletApprovalMessage: xWalletApprovalMessageSlice,
   treasury: treasurySlice,
   settings: settingsSlice,
   treasuryVaultBalance: treasuryVaultBalanceSlice,

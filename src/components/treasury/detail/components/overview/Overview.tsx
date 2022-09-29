@@ -88,7 +88,6 @@ const Overview = () => {
        * **/}
       <div className="grid gap-y-6">
         <TreasuryDepositedAssets
-          tableMaxHeight={517}
           balanceTokens={treasuryTokens}
           vaultBalanceTokens={treasuryVaultTokens}
           streamingBalanceTokens={treasuryVaultStreamingTokensBalance}

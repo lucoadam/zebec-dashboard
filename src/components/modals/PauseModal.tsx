@@ -87,7 +87,7 @@ const PauseModal: FC = ({}) => {
     dispatch(togglePauseModal())
     dispatch(
       toast.success({
-        message: "Stream Pause initiated"
+        message: "Stream pause initiated"
       })
     )
     console.log("tx:", tx)

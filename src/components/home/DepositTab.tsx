@@ -42,6 +42,10 @@ import axios from "axios"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { getAssociatedTokenAddress } from "@solana/spl-token"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import {
+  switchxWalletApprovalMessageStep,
+  togglexWalletApprovalMessageModal
+} from "features/modals/xWalletApprovalMessageSlice"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -132,10 +136,16 @@ const DepositTab: FC = () => {
     }
   }
 
+  const onApproved = () => {
+    dispatch(switchxWalletApprovalMessageStep(1))
+  }
+
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
       try {
-        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(switchxWalletApprovalMessageStep(0))
+        dispatch(togglexWalletApprovalMessageModal())
+        // dispatch(toggleWalletApprovalMessageModal())
         setLoading(true)
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
@@ -212,7 +222,8 @@ const DepositTab: FC = () => {
           data.amount,
           targetChain,
           recipientAddress,
-          "0.01"
+          "0.01",
+          onApproved
         )
           .then(async (transferReceipt: any) => {
             console.log("transferReceipt", transferReceipt)
@@ -236,7 +247,7 @@ const DepositTab: FC = () => {
             console.log("waiting for transfer complete")
             await new Promise((resolve) => setTimeout(resolve, 40000))
             console.log("transfer successful")
-
+            dispatch(switchxWalletApprovalMessageStep(2))
             const messengerContract = new ZebecEthBridgeClient(
               BSC_ZEBEC_BRIDGE_ADDRESS,
               signer,
@@ -249,9 +260,12 @@ const DepositTab: FC = () => {
             )
             console.log("reciept", reciept)
             dispatch(toast.success({ message: "Deposit initiated" }))
+            dispatch(switchxWalletApprovalMessageStep(3))
+            await new Promise((resolve) => setTimeout(resolve, 1000))
             depositCallback()
             setLoading(false)
-            dispatch(toggleWalletApprovalMessageModal())
+            // dispatch(toggleWalletApprovalMessageModal())
+            dispatch(togglexWalletApprovalMessageModal())
           })
           .catch((err) => {
             console.log("error", err)
@@ -261,7 +275,8 @@ const DepositTab: FC = () => {
               })
             )
             setLoading(false)
-            dispatch(toggleWalletApprovalMessageModal())
+            // dispatch(toggleWalletApprovalMessageModal())
+            dispatch(togglexWalletApprovalMessageModal())
           })
       } catch (e) {
         console.log("error", e)
@@ -271,7 +286,8 @@ const DepositTab: FC = () => {
           })
         )
         setLoading(false)
-        dispatch(toggleWalletApprovalMessageModal())
+        // dispatch(toggleWalletApprovalMessageModal())
+        dispatch(togglexWalletApprovalMessageModal())
       }
     }
   }
