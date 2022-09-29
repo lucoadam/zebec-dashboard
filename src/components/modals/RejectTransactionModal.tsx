@@ -7,8 +7,15 @@ import * as Icons from "assets/icons"
 import {
   rejectTransaction,
   setLoading,
-  toggleRejectModal
+  toggleRejectModal,
+  vaultContinuousRejectTransaction,
+  vaultContinuousRejectTransactionLatestEvent,
+  vaultRejectTransaction
 } from "features/modals/rejectModalSlice"
+import {
+  TreasuryApprovalType,
+  TreasuryTransactionType
+} from "components/treasury/treasury.d"
 
 const RejectTransactionModal: FC = ({}) => {
   const { show, loading, transaction } = useAppSelector(
@@ -19,7 +26,27 @@ const RejectTransactionModal: FC = ({}) => {
 
   const executeRejectTransaction = () => {
     dispatch(setLoading(true))
-    dispatch(rejectTransaction({ uuid: transaction.uuid }))
+    if (transaction.transaction_type === TreasuryTransactionType.INSTANT) {
+      dispatch(vaultRejectTransaction({ uuid: transaction.uuid }))
+    } else if (
+      transaction.transaction_type === TreasuryTransactionType.CONTINUOUS
+    ) {
+      if (
+        transaction.latest_transaction_event.approval_status ===
+        TreasuryApprovalType.PENDING
+      ) {
+        dispatch(
+          vaultContinuousRejectTransactionLatestEvent({
+            uuid: transaction.uuid,
+            event_id: transaction.latest_transaction_event.id
+          })
+        )
+      } else {
+        dispatch(vaultContinuousRejectTransaction({ uuid: transaction.uuid }))
+      }
+    } else {
+      dispatch(rejectTransaction({ uuid: transaction.uuid }))
+    }
   }
 
   return (

@@ -5,26 +5,57 @@ import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
 import { pauseStreamNative, pauseStreamToken } from "application/normal"
 import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { pauseStreamTreasury } from "application"
+import { useWallet } from "@solana/wallet-adapter-react"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
-  const { stream, token } = useContext(ZebecContext)
+  const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { publicKey } = useWallet()
   const { show, loading, transaction } = useAppSelector((state) => state.pause)
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const handlePauseTransaction = () => {
     dispatch(setLoading(true))
-    // data
-    const data = {
-      sender: transaction.sender,
-      receiver: transaction.receiver,
-      escrow: transaction.pda
-    }
 
-    const transaction_uuid = transaction.uuid
-    if (transaction.token === "SOL")
-      stream && dispatch(pauseStreamNative(data, transaction_uuid, stream))
-    else token && dispatch(pauseStreamToken(data, transaction_uuid, token))
+    if (!transaction.approval_status) {
+      // data
+      const data = {
+        sender: transaction.sender,
+        receiver: transaction.receiver,
+        escrow: transaction.pda
+      }
+      const transaction_uuid = transaction.uuid
+      if (transaction.token === "SOL")
+        stream && dispatch(pauseStreamNative(data, transaction_uuid, stream))
+      else token && dispatch(pauseStreamToken(data, transaction_uuid, token))
+    } else if (activeTreasury) {
+      const data = {
+        safe_address: activeTreasury.treasury_address,
+        safe_data_account: activeTreasury.treasury_escrow,
+        sender: publicKey?.toString() || "",
+        receiver: transaction.receiver,
+        stream_data_account: transaction.pda,
+        token_mint_address: transaction.token_mint_address,
+        uuid: transaction.uuid
+      }
+      if (!transaction.token_mint_address && treasury) {
+        dispatch(
+          pauseStreamTreasury({
+            data: data,
+            treasury: treasury
+          })
+        )
+      } else if (treasuryToken) {
+        dispatch(
+          pauseStreamTreasury({
+            data: data,
+            treasuryToken: treasuryToken
+          })
+        )
+      }
+    }
   }
 
   return (

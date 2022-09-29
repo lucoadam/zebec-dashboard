@@ -7,7 +7,8 @@ const nextConfig = {
   env: {
     RPC_NETWORK: process.env.RPC_NETWORK,
     DB_HOST: process.env.DB_HOST,
-    ZBC_AIRDROP: process.env.ZBC_AIRDROP
+    ZBC_AIRDROP: process.env.ZBC_AIRDROP,
+    NOTIFI_CARD_ID: process.env.NOTIFI_CARD_ID
   },
   i18n,
   webpack(config) {

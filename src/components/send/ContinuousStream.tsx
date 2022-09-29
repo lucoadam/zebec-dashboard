@@ -77,6 +77,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
   const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+
   const {
     register,
     formState: { errors },
@@ -185,6 +187,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     trigger("endTime")
   }
 
+  const initStreamCallback = (message: "success" | "error") => {
+    if (message === "success") {
+      resetForm()
+    }
+    dispatch(toggleWalletApprovalMessageModal())
+  }
+
   const onSubmit = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       name: data.transaction_name,
@@ -203,37 +212,40 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         "DD/MM/YYYY LT"
       ).unix(),
       token_mint_address:
-        currentToken.mint === "solana" ? "" : currentToken.mint,
+        currentToken.symbol === "SOL" ? "" : currentToken.mint,
       file: data.file
     }
-
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
       if (formattedData.token === "SOL")
         stream && dispatch(initStreamNative(formattedData, stream, resetForm))
       else token && dispatch(initStreamToken(formattedData, token, resetForm))
     } else {
-      const treasuryFormattedData = {
-        ...formattedData,
-        safe_address: "",
-        safe_data_account: ""
+      if (activeTreasury) {
+        const treasuryFormattedData = {
+          ...formattedData,
+          safe_address: activeTreasury.treasury_address,
+          safe_data_account: activeTreasury.treasury_escrow
+        }
+        if (formattedData.token === "SOL")
+          treasury &&
+            dispatch(
+              initStreamTreasury({
+                data: treasuryFormattedData,
+                callback: initStreamCallback,
+                treasury: treasury
+              })
+            )
+        else
+          treasuryToken &&
+            dispatch(
+              initStreamTreasury({
+                data: treasuryFormattedData,
+                callback: initStreamCallback,
+                treasuryToken: treasuryToken
+              })
+            )
       }
-      if (formattedData.token === "SOL")
-        treasury &&
-          dispatch(
-            initStreamTreasury({
-              data: treasuryFormattedData,
-              treasury: treasury
-            })
-          )
-      else
-        treasuryToken &&
-          dispatch(
-            initStreamTreasury({
-              data: treasuryFormattedData,
-              treasury: treasuryToken
-            })
-          )
     }
   }
 

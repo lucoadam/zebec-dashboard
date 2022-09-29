@@ -48,7 +48,7 @@ export const StreamOverview: FC<StreamOverviewProps> = ({
             {formValues?.receiver ? (
               toSubstring(formValues?.receiver, 5, true)
             ) : (
-              <span>receiver wallet</span>
+              <span>{t("send:overview-receiver-wallet")}</span>
             )}
             {formValues?.noOfTimes ||
             formValues?.tokenAmount ||

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
-import { RootState } from "app/store"
+import { AppDispatch, RootState } from "app/store"
 import { PaginationInterface } from "components/shared"
+import { constants } from "constants/constants"
 
 interface TransactionState {
   loading: boolean
@@ -98,6 +99,14 @@ const initialState: TransactionState = {
   initiatedTransactions: []
 }
 
+export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
+  "transactions/updateTransactionsStatus",
+  async (uuid, {}) => {
+    await api.get(`/transaction/${uuid}/update-status/`)
+    return null
+  }
+)
+
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -130,10 +139,9 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
   "transactions/fetchIncomingTransactions",
   async (_, { getState }) => {
     const { transactions } = getState() as RootState
-    const { data: response } = await api.get("/transaction/", {
+    const { data: response } = await api.get("/incoming/", {
       params: {
         limit: transactions.pagination.limit,
-        kind: "incoming",
         offset:
           (Number(transactions.pagination.currentPage) - 1) *
           transactions.pagination.limit
@@ -142,6 +150,19 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
     return response
   }
 )
+
+export const updateIncomingTransactions: any = createAsyncThunk<
+  null,
+  { transaction_kind: string; transaction_uuid: string },
+  { dispatch: AppDispatch }
+>("transactions/updateIncomingTransactions", async (data, { dispatch }) => {
+  await api.post(`/incoming/update/`, data)
+  console.log("etee")
+  setTimeout(() => {
+    dispatch(fetchIncomingTransactions())
+  }, constants.STREAM_FETCH_TIMEOUT)
+  return null
+})
 
 export const fetchRecentTransactions: any = createAsyncThunk(
   "transactions/fetchRecentTransactions",

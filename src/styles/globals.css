@@ -348,3 +348,43 @@ input[type="radio"]:hover::after {
     rgba(43, 45, 51, 0.48) 100%
   );
 }
+
+/* Notifi */
+.NotifiEmailInput__input {
+  @apply w-full border-none text-sm box-border flex order-1 flex-col flex-none flex-grow-0 self-stretch items-start px-5 py-3 mb-5 text-content-primary bg-background-primary border-outline border-[1px] rounded-lg;
+}
+.NotifiEmailInput__input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+.EventTypeDirectPushRow__container,
+.EventTypeBroadcastRow__container {
+  @apply flex flex-row-reverse justify-end gap-2.5 mt-3;
+}
+.EventTypeDirectPushRow__label,
+.EventTypeBroadcastRow__label {
+  @apply text-content-secondary font-medium;
+}
+.NotifiToggle__input {
+  @apply w-5 h-5 bg-transparent border-2 border-content-tertiary text-primary;
+}
+.NotifiToggle__input:focus {
+  box-shadow: none;
+}
+.NotifiSubscribeButton__button {
+  margin-top: 40px;
+  height: 40px;
+  background-clip: content-box, border-box;
+  @apply border-2 border-transparent bg-origin-border rounded-lg w-full text-content-primary text-button font-semibold;
+  background-image: linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+    var(--primary-gradient);
+}
+.NotifiSubscribeButton__button:hover,
+.NotifiSubscribeButton__button:focus {
+  background-image: linear-gradient(var(--bg-tertiary), var(--bg-tertiary)),
+    var(--primary-gradient-hover);
+}
+.NotifiFooter__container {
+  display: none;
+}

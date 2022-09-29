@@ -3,38 +3,35 @@ import ReactTooltip from "react-tooltip"
 import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
-import Overview from "./components/Overview"
+import Overview from "./components/overview/Overview"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
-// import { NFTsList } from "./components/NFTsList"
-import Setting from "./components/Setting"
-// import { Transactions } from "./components/Transactions"
+// import { NFTsList } from "./components/nfts/NFTsList"
+import Setting from "./components/settings/Setting"
+import { Transactions } from "./components/transactions/Transactions"
 
 const categories = [
   {
     title: "overview",
-    count: 0,
     icon: <Icons.EyeOpenIcon />,
     Component: <Overview />
   },
   {
+    title: "transactions",
+    icon: <Icons.TransactionIcon />,
+    Component: <Transactions />
+  },
+  {
     title: "settings",
-    count: 0,
     icon: <Icons.GearringIcon />,
     Component: <Setting />
   }
-  // {
-  //   title: "transactions",
-  //   count: 3,
-  //   icon: <Icons.TransactionIcon />,
-  //   Component: <Transactions />
-  // },
   // {
   //   title: "nft",
   //   count: 0,
   //   icon: <Icons.SquareBlockMove />,
   //   Component: <NFTsList />
-  // },
+  // }
 ]
 
 export default function TreasuryDetail() {
@@ -53,7 +50,6 @@ export default function TreasuryDetail() {
               title={`${t(`treasury:${category.title.toLowerCase()}`)}`}
               isActive={activePage === index}
               startIcon={category.icon}
-              count={category.count}
               onClick={() => {
                 setTimeout(() => {
                   ReactTooltip.rebuild()

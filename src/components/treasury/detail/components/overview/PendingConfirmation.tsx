@@ -8,11 +8,13 @@ import { PendingConfirmationRow } from "./PendingConfirmationRow"
 
 export const PendingConfirmation = () => {
   const { t } = useTranslation()
-  const { transactions } = useAppSelector((state) => state.treasuryTransactions)
+  const { pendingTransactions } = useAppSelector(
+    (state) => state.treasuryTransactions
+  )
 
   useEffect(() => {
     ReactTooltip.rebuild()
-  }, [transactions])
+  }, [pendingTransactions])
 
   return (
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-2.5 h-full">
@@ -27,13 +29,13 @@ export const PendingConfirmation = () => {
         />
       </div>
       <div className="flex flex-col">
-        {transactions.results.length === 0 ? (
+        {pendingTransactions.results.length === 0 ? (
           <EmptyDataState
             message={t("treasuryOverview:empty")}
             className="py-14 text-center"
           />
         ) : (
-          transactions.results.map((transaction) => {
+          pendingTransactions.results.map((transaction) => {
             return (
               <PendingConfirmationRow
                 key={transaction.uuid}

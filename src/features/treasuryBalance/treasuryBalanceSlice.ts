@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "app/store"
-import { setTreasuryData } from "data/api"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
 import { FetchTreasuryProps, TreasuryState } from "./treasuryBalanceSlice.d"
 
@@ -13,14 +12,6 @@ const initialState: TreasuryState = {
   },
   error: ""
 }
-
-//Generates pending, fulfilled and rejected action types
-export const updateTreasury = createAsyncThunk(
-  "treasury/",
-  async ({ name, address }: FetchTreasuryProps) => {
-    await setTreasuryData({ name, address })
-  }
-)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTreasuryBalance: any = createAsyncThunk(

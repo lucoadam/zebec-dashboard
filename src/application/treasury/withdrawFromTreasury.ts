@@ -1,7 +1,7 @@
 import { AppDispatch } from "app/store"
 import { TreasuryTransactionType } from "components/treasury/treasury.d"
-import { transferToVault } from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
+import { saveTreasuryWithdrawDepositTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
@@ -36,7 +36,6 @@ type WithdrawFromTreasuryProps = WithdrawFromDataProps &
 export const withdrawFromTreasury =
   ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
@@ -63,13 +62,13 @@ export const withdrawFromTreasury =
 
         if (!data.token_mint_address) {
           const backendData = payloadData
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         } else {
           const backendData = {
             ...payloadData,
             token_mint_address: data.token_mint_address
           }
-          dispatch(transferToVault(backendData))
+          dispatch(saveTreasuryWithdrawDepositTransactions(backendData))
         }
         //callback
         if (callback) {
@@ -101,7 +100,6 @@ export const withdrawFromTreasury =
 export const executeWithdrawFromTreasury =
   ({ data, treasury, treasuryToken, callback }: WithdrawFromTreasuryProps) =>
   async (dispatch: AppDispatch) => {
-    console.log(data)
     try {
       let response
       if (!data.token_mint_address && treasury) {
