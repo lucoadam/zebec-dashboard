@@ -1,5 +1,8 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { fetchTreasuryVaultInstantTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import {
+  fetchTreasuryVaultInstantTransactions,
+  setTreasuryTransactionPagination
+} from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { FC, useEffect } from "react"
 import { InstantTransactionsTable } from "../InstantTransactionsTable"
 
@@ -14,6 +17,13 @@ export const AllInstant: FC = () => {
   useEffect(() => {
     if (isSigned && activeTreasury) {
       dispatch(
+        setTreasuryTransactionPagination({
+          currentPage: 1,
+          limit: 10,
+          total: 0
+        })
+      )
+      dispatch(
         fetchTreasuryVaultInstantTransactions({
           treasury_uuid: activeTreasury.uuid
         })
@@ -27,9 +37,11 @@ export const AllInstant: FC = () => {
     <div>
       <InstantTransactionsTable
         fetchTransactions={() =>
-          fetchTreasuryVaultInstantTransactions({
-            treasury_uuid: activeTreasury.uuid
-          })
+          dispatch(
+            fetchTreasuryVaultInstantTransactions({
+              treasury_uuid: activeTreasury.uuid
+            })
+          )
         }
         transactions={vaultInstantTransactions}
       />

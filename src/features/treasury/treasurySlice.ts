@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import {
@@ -119,14 +120,10 @@ const treasurySlice = createSlice({
     builder.addCase(createTreasury.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(
-      createTreasury.fulfilled,
-      (state, action: PayloadAction<typeof initialState.treasuries>) => {
-        state.loading = false
-        state.treasuries = action.payload
-        state.error = ""
-      }
-    )
+    builder.addCase(createTreasury.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
     builder.addCase(createTreasury.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message ?? "Something went wrong"

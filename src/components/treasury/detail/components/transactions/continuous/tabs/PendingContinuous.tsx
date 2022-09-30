@@ -1,5 +1,8 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { fetchTreasuryVaultContinuousTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import {
+  fetchTreasuryVaultContinuousTransactions,
+  setTreasuryTransactionPagination
+} from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { FC, useEffect } from "react"
 import { ContinuousTransactionsTable } from "../ContinuousTransactionsTable"
 
@@ -13,6 +16,13 @@ export const PendingContinuous: FC = () => {
 
   useEffect(() => {
     if (isSigned && activeTreasury) {
+      dispatch(
+        setTreasuryTransactionPagination({
+          currentPage: 1,
+          limit: 10,
+          total: 0
+        })
+      )
       dispatch(
         fetchTreasuryVaultContinuousTransactions({
           treasury_uuid: activeTreasury.uuid,
@@ -28,10 +38,12 @@ export const PendingContinuous: FC = () => {
     <div>
       <ContinuousTransactionsTable
         fetchTransactions={() =>
-          fetchTreasuryVaultContinuousTransactions({
-            treasury_uuid: activeTreasury.uuid,
-            status: "PENDING"
-          })
+          dispatch(
+            fetchTreasuryVaultContinuousTransactions({
+              treasury_uuid: activeTreasury.uuid,
+              status: "PENDING"
+            })
+          )
         }
         transactions={vaultContinuousTransactions}
       />

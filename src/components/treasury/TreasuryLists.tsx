@@ -19,10 +19,10 @@ const TreasuryLists: FC = () => {
 
   useEffect(() => {
     let unarchivedTreasuriesList = []
-    unarchivedTreasuriesList = results.filter(
+    unarchivedTreasuriesList = results?.filter(
       (treasury) => treasury.archived === false
     )
-    setUnarchivedTreasuries(unarchivedTreasuriesList)
+    setUnarchivedTreasuries(unarchivedTreasuriesList || [])
   }, [results])
 
   const Avatars: StaticImageData[] = [

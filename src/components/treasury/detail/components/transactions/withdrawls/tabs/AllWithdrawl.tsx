@@ -1,5 +1,8 @@
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { fetchTreasuryTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import {
+  fetchTreasuryTransactions,
+  setTreasuryTransactionPagination
+} from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { FC, useEffect } from "react"
 import { WithdrawlTransactionsTable } from "../WithdrawlTransactionsTable"
 
@@ -11,6 +14,13 @@ export const AllWithdrawl: FC = () => {
 
   useEffect(() => {
     if (isSigned && activeTreasury) {
+      dispatch(
+        setTreasuryTransactionPagination({
+          currentPage: 1,
+          limit: 10,
+          total: 0
+        })
+      )
       dispatch(
         fetchTreasuryTransactions({
           treasury_uuid: activeTreasury.uuid
@@ -25,9 +35,11 @@ export const AllWithdrawl: FC = () => {
     <div>
       <WithdrawlTransactionsTable
         fetchTransactions={() =>
-          fetchTreasuryTransactions({
-            treasury_uuid: activeTreasury.uuid
-          })
+          dispatch(
+            fetchTreasuryTransactions({
+              treasury_uuid: activeTreasury.uuid
+            })
+          )
         }
         transactions={transactions}
       />
