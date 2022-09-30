@@ -336,22 +336,30 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                   </>
                 )}
 
-              <Button
-                startIcon={<Icons.EditIcon className="text-content-contrast" />}
-                size="small"
-                title={`${t("table.sign-and-approve")}`}
-                onClick={() => dispatch(showSignModal(transaction))}
-                className={`${!isRemaining && "hidden"}`}
-              />
-              <Button
-                startIcon={
-                  <Icons.CrossIcon className="text-content-contrast" />
-                }
-                size="small"
-                title={`${t("table.reject")}`}
-                onClick={() => dispatch(showRejectModal(transaction))}
-                className={`${!isRemaining && "hidden"}`}
-              />
+              {approval_status === TreasuryApprovalType.PENDING &&
+                currentTime < end_time && (
+                  <>
+                    <Button
+                      startIcon={
+                        <Icons.EditIcon className="text-content-contrast" />
+                      }
+                      size="small"
+                      title={`${t("table.sign-and-approve")}`}
+                      onClick={() => dispatch(showSignModal(transaction))}
+                      className={`${!isRemaining && "hidden"}`}
+                    />
+                    <Button
+                      startIcon={
+                        <Icons.CrossIcon className="text-content-contrast" />
+                      }
+                      size="small"
+                      title={`${t("table.reject")}`}
+                      onClick={() => dispatch(showRejectModal(transaction))}
+                      className={`${!isRemaining && "hidden"}`}
+                    />
+                  </>
+                )}
+
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}

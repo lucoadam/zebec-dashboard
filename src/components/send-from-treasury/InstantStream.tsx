@@ -238,7 +238,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 />
               </div>
               {!!errors.receiver && (
-                <p className="text-content-secondary text-xs ml-[12px] mt-1">
+                <p className="text-error text-xs ml-[12px] mt-1">
                   {t(errors.receiver?.message?.toString() ?? "")}
                 </p>
               )}

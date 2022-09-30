@@ -1,7 +1,7 @@
 {
   "incoming": "Incoming",
   "outgoing": "Outgoing",
-  "incoming-transactions": "Incoming Transaction",
+  "incoming-transactions": "Incoming Transactions",
   "outgoing-transactions": "Outgoing Transactions",
   "all": "All Streams",
   "ongoing": "Ongoing",
@@ -113,11 +113,11 @@
     "resuming": "Resuming",
     "cancelling": "Cancelling",
     "pausing": "Pausing",
-    "reject-modal-header": "Are you sure you wnat to reject transaction?",
+    "reject-modal-header": "Are you sure you want to reject transaction?",
     "signing": "Signing",
     "yes-sign": "Yes, Sign",
     "no-sign": "No, Dont Sign",
-    "sign-modal-header": "Are you sure you wnat to sign transaction?",
+    "sign-modal-header": "Are you sure you want to sign transaction?",
     "rejecting": "Rejecting",
     "yes-reject": "Yes, Reject",
     "no-reject": "No, Reject"

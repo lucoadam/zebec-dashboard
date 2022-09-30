@@ -147,22 +147,29 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              <Button
-                startIcon={<Icons.EditIcon className="text-content-contrast" />}
-                size="small"
-                title={`${t("table.sign-and-approve")}`}
-                onClick={() => dispatch(showSignModal(transaction))}
-                className={`${!isRemaining && "hidden"}`}
-              />
-              <Button
-                startIcon={
-                  <Icons.CrossIcon className="text-content-contrast" />
-                }
-                size="small"
-                title={`${t("table.reject")}`}
-                onClick={() => dispatch(showRejectModal(transaction))}
-                className={`${!isRemaining && "hidden"}`}
-              />
+              {status === TreasuryApprovalType.PENDING && (
+                <>
+                  <Button
+                    startIcon={
+                      <Icons.EditIcon className="text-content-contrast" />
+                    }
+                    size="small"
+                    title={`${t("table.sign-and-approve")}`}
+                    onClick={() => dispatch(showSignModal(transaction))}
+                    className={`${!isRemaining && "hidden"}`}
+                  />
+                  <Button
+                    startIcon={
+                      <Icons.CrossIcon className="text-content-contrast" />
+                    }
+                    size="small"
+                    title={`${t("table.reject")}`}
+                    onClick={() => dispatch(showRejectModal(transaction))}
+                    className={`${!isRemaining && "hidden"}`}
+                  />
+                </>
+              )}
+
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}

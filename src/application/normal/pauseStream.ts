@@ -29,8 +29,8 @@ export const pauseStreamNative: any =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(togglePauseModal())
       }
-      dispatch(togglePauseModal())
     } catch (error: any) {
       dispatch(
         toast.error({
@@ -60,8 +60,8 @@ export const pauseStreamToken: any =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(togglePauseModal())
       }
-      dispatch(togglePauseModal())
     } catch (error: any) {
       dispatch(
         toast.error({
