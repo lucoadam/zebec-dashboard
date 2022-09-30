@@ -274,7 +274,7 @@ const DepositTab: FC = () => {
             depositCallback()
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
-            dispatch(toast.success({ message: "Deposit Successful" }))
+            dispatch(toast.success({ message: "Deposit initiated" }))
             // dispatch(toggleWalletApprovalMessageModal())
           })
           .catch((err) => {
