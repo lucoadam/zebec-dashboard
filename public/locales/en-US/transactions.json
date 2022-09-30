@@ -7,6 +7,7 @@
   "ongoing": "Ongoing",
   "scheduled": "Scheduled",
   "completed": "Completed",
+  "cancelled": "Cancelled",
   "pending": "Pending",
   "accepted": "Accepted",
   "rejected": "Rejected",
@@ -17,6 +18,8 @@
   "continuous": "Continuous",
   "withdrawls": "Withdrawls",
   "nfts": "NFT's",
+  "treasury-instant": "Treasury Instant",
+  "treasury-continuous": "Treasury Continuous",
   "withdraw-from-treasury-vault": "Withdraw from Treasury Vault",
   "withdraw": {
     "withdraw-modal-header": "Withdraw Incoming Balance",
