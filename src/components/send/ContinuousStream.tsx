@@ -339,8 +339,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
     dispatch(sendContinuousStream(backendData)).then(() => {
       resetForm()
-      dispatch(toggleWalletApprovalMessageModal())
-
       dispatch(
         toast.success({
           message: "Stream initiated"
