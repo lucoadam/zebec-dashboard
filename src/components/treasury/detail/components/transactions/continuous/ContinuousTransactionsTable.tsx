@@ -1,8 +1,9 @@
-import { EmptyDataState, Table, TableBody } from "components/shared"
+import { EmptyDataState, Pagination, Table, TableBody } from "components/shared"
 import { useAppSelector } from "app/hooks"
 import { FC, useState } from "react"
 import { TransactionSkeleton } from "components/transactions/TransactionSkeleton"
 import ContinuousTransactionsTableRow from "./ContinuousTransactionsTableRow"
+import { setTreasuryTransactionPagination } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 export interface TransactionTableProps {
   transactions: {
@@ -16,9 +17,12 @@ export interface TransactionTableProps {
 }
 
 export const ContinuousTransactionsTable: FC<TransactionTableProps> = ({
-  transactions
+  transactions,
+  fetchTransactions
 }) => {
-  const { loading } = useAppSelector((state) => state.treasuryTransactions)
+  const { loading, pagination } = useAppSelector(
+    (state) => state.treasuryTransactions
+  )
 
   const [activeDetailsRow, setActiveDetailsRow] = useState<"" | number>("")
 
@@ -49,35 +53,42 @@ export const ContinuousTransactionsTable: FC<TransactionTableProps> = ({
     else setActiveDetailsRow(index)
   }
   return (
-    <Table headers={headers}>
-      <TableBody>
-        {loading && !transactions.results.length && (
-          <tr>
-            <td colSpan={headers.length}>
-              <TransactionSkeleton />
-            </td>
-          </tr>
-        )}
-        {transactions.results.length === 0 && !loading ? (
-          <tr>
-            <td colSpan={headers.length}>
-              <EmptyDataState message="There are no incoming transactions. The payments you receive will appear here." />
-            </td>
-          </tr>
-        ) : (
-          transactions.results.map((transaction, index) => {
-            return (
-              <ContinuousTransactionsTableRow
-                key={transaction.id}
-                index={index}
-                transaction={transaction}
-                activeDetailsRow={activeDetailsRow}
-                handleToggleRow={() => handleToggleRow(index)}
-              />
-            )
-          })
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table headers={headers}>
+        <TableBody>
+          {loading && !transactions.results.length && (
+            <tr>
+              <td colSpan={headers.length}>
+                <TransactionSkeleton />
+              </td>
+            </tr>
+          )}
+          {transactions.results.length === 0 && !loading ? (
+            <tr>
+              <td colSpan={headers.length}>
+                <EmptyDataState message="There are no incoming transactions. The payments you receive will appear here." />
+              </td>
+            </tr>
+          ) : (
+            transactions.results.map((transaction, index) => {
+              return (
+                <ContinuousTransactionsTableRow
+                  key={transaction.id}
+                  index={index}
+                  transaction={transaction}
+                  activeDetailsRow={activeDetailsRow}
+                  handleToggleRow={() => handleToggleRow(index)}
+                />
+              )
+            })
+          )}
+        </TableBody>
+      </Table>
+      <Pagination
+        pagination={pagination}
+        setPagination={setTreasuryTransactionPagination}
+        onChange={() => fetchTransactions()}
+      />
+    </>
   )
 }

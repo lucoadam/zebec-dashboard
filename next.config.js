@@ -9,6 +9,7 @@ const nextConfig = {
     RPC_NETWORK: "devnet",
     DB_HOST: "https://zebec-backend.alishdahal.com.np/",
     ZBC_AIRDROP: process.env.ZBC_AIRDROP,
+    NOTIFI_CARD_ID: process.env.NOTIFI_CARD_ID
   },
   i18n,
   webpack(config) {
@@ -35,7 +36,22 @@ const nextConfig = {
   },
   experimental: {
     outputStandalone: true
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders
+      }
+    ];
   }
 };
+
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors https://magic.store"
+  }
+];
 
 module.exports = nextConfig;
