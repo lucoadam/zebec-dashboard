@@ -150,8 +150,9 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (wallet: string, { getState }) => {
     const { transactions } = getState() as RootState
-    const { data: response } = await api.get("/incoming/", {
+    const { data: response } = await api.get("/transaction/", {
       params: {
+        kind: "incoming",
         limit: transactions.pagination.limit,
         offset:
           (Number(transactions.pagination.currentPage) - 1) *

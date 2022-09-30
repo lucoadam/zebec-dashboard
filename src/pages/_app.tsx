@@ -98,22 +98,22 @@ MyApp.getInitialProps = async () => {
   return {
     // tokenDetails: data as TokenResponse[]
     tokenDetails: [
-      {
-        symbol: "ZBC",
-        name: "ZEBEC",
-        decimal: 9,
-        mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
-        coingeco_id: "zebec-protocol",
-        chainId: "solana"
-      },
-      {
-        symbol: "SOL",
-        name: "Solana",
-        decimal: 9,
-        mint: null,
-        coingeco_id: "solana",
-        chainId: "solana"
-      },
+      // {
+      //   symbol: "ZBC",
+      //   name: "ZEBEC",
+      //   decimal: 9,
+      //   mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
+      //   coingeco_id: "zebec-protocol",
+      //   chainId: "solana"
+      // },
+      // {
+      //   symbol: "SOL",
+      //   name: "Solana",
+      //   decimal: 9,
+      //   mint: null,
+      //   coingeco_id: "solana",
+      //   chainId: "solana"
+      // },
       {
         symbol: "WSOL",
         name: "Wrapped Solana",

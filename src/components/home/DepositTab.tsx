@@ -4,14 +4,19 @@ import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { depositNative, depositToken } from "application"
-import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import {
+  Button,
+  CollapseDropdown,
+  TokensDropdown,
+  WithdrawDepositInput
+} from "components/shared"
 import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
 import {
@@ -46,6 +51,9 @@ import {
   switchxWalletApprovalMessageStep,
   togglexWalletApprovalMessageModal
 } from "features/modals/xWalletApprovalMessageSlice"
+import { CheveronDownIcon } from "assets/icons"
+import { useClickOutside } from "hooks"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -63,8 +71,16 @@ const DepositTab: FC = () => {
 
   const walletTokens =
     useAppSelector((state) => state.walletBalance.tokens) || []
+  const solanaTokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+  )
+  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens) || []
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const [depositFrom, setDepositFrom] = useState("Wallet Assets")
+  const dropdownWrapper = useRef(null)
+
   const {
     currentToken,
     setCurrentToken,
@@ -85,8 +101,10 @@ const DepositTab: FC = () => {
 
   const setMaxAmount = () => {
     const balance =
-      getBalance(walletTokens, currentToken.symbol) -
-      constants.DEPOSIT_MAX_OFFSET
+      getBalance(
+        depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+        currentToken.symbol
+      ) - constants.DEPOSIT_MAX_OFFSET
     setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
@@ -227,23 +245,15 @@ const DepositTab: FC = () => {
         )
           .then(async (transferReceipt: any) => {
             console.log("transferReceipt", transferReceipt)
-
             const sequence = parseSequenceFromLogEth(
               transferReceipt,
               getBridgeAddressForChain(sourceChain)
             )
-            const transferEmitterAddress = getEmitterAddressEth(
-              getTokenBridgeAddressForChain(sourceChain)
+            console.log(
+              "sequence",
+              sequence,
+              getBridgeAddressForChain(sourceChain)
             )
-            console.debug("emitterAddress:", transferEmitterAddress)
-            const { vaaBytes: transferVaa } = await getSignedVAAWithRetry(
-              WORMHOLE_RPC_HOSTS,
-              sourceChain,
-              transferEmitterAddress,
-              sequence
-            )
-            console.log("vaaBtyes", transferVaa)
-            // wait for transfer complete
             console.log("waiting for transfer complete")
             await new Promise((resolve) => setTimeout(resolve, 40000))
             console.log("transfer successful")
@@ -253,19 +263,19 @@ const DepositTab: FC = () => {
               signer,
               sourceChain
             )
-            const reciept = await messengerContract.depositToken(
+            const receipt = await messengerContract.depositToken(
               data.amount,
               walletObject.originalAddress?.toString() as string,
               targetTokenAddress
             )
-            console.log("reciept", reciept)
-            dispatch(toast.success({ message: "Deposit initiated" }))
+            console.log("reciept", receipt)
             dispatch(switchxWalletApprovalMessageStep(3))
             await new Promise((resolve) => setTimeout(resolve, 1000))
             depositCallback()
             setLoading(false)
-            // dispatch(toggleWalletApprovalMessageModal())
             dispatch(togglexWalletApprovalMessageModal())
+            dispatch(toast.success({ message: "Deposit Successful" }))
+            // dispatch(toggleWalletApprovalMessageModal())
           })
           .catch((err) => {
             console.log("error", err)
@@ -292,11 +302,46 @@ const DepositTab: FC = () => {
     }
   }
 
+  const handlePDADeposit = async (data: any) => {
+    try {
+      if (!signer) return
+      setLoading(true)
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      const reciept = await messengerContract.depositToken(
+        data.amount,
+        walletObject.originalAddress?.toString() as string,
+        currentToken.mint
+      )
+      console.log("reciept", reciept)
+      dispatch(toast.success({ message: "Deposit initiated" }))
+      depositCallback()
+      setLoading(false)
+    } catch (e) {
+      console.log(e)
+      dispatch(
+        toast.error({
+          message: "Error deposit token"
+        })
+      )
+      setLoading(false)
+    }
+  }
+
   const submit = (data: any) => {
     if (walletObject.chainId === "solana") {
       handleSolanaSubmit(data)
     } else {
-      handleEvmSubmit(data)
+      if (depositFrom === "Wallet Assets") {
+        handleEvmSubmit(data)
+      } else {
+        handlePDADeposit(data)
+      }
     }
   }
 
@@ -373,6 +418,12 @@ const DepositTab: FC = () => {
     }
   }, [walletObject.publicKey])
 
+  useClickOutside(dropdownWrapper, {
+    onClickOutside: () => {
+      setToggleDropdown(false)
+    }
+  })
+
   return (
     <div className="deposit-to-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
@@ -380,10 +431,53 @@ const DepositTab: FC = () => {
       </div>
       <form
         onSubmit={handleSubmit(submit)}
-        className="flex flex-col gap-y-6"
+        className="flex flex-col"
         autoComplete="off"
       >
+        <div className="relative" ref={dropdownWrapper}>
+          <label className={`text-content-secondary text-xs font-medium mb-1`}>
+            Deposit From
+          </label>
+          <div
+            onClick={() => setToggleDropdown(!toggleDropdown)}
+            className="cursor-pointer relative text-content-primary"
+          >
+            <input
+              type="text"
+              value={depositFrom}
+              className={`cursor-pointer h-[40px] w-full !pr-12`}
+              readOnly
+            />
+            <CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
+          </div>
+          <CollapseDropdown
+            show={toggleDropdown}
+            className="mt-8 w-full z-[99]"
+            position="left"
+          >
+            <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+              {["Wallet Assets", "PDA Assets"].map((item) => (
+                <div
+                  className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
+                  key={item}
+                  onClick={() => {
+                    setDepositFrom(item)
+                    setToggleDropdown(false)
+                    if (item === "PDA Assets") {
+                      setCurrentToken(solanaTokenDetails[0])
+                    } else {
+                      setCurrentToken(tokenDetails[0])
+                    }
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </CollapseDropdown>
+        </div>
         <WithdrawDepositInput
+          className="mt-4"
           token={currentToken}
           setMaxAmount={setMaxAmount}
           toggle={toggle}
@@ -393,8 +487,12 @@ const DepositTab: FC = () => {
         >
           {/* Tokens Dropdown */}
           <TokensDropdown
-            walletTokens={walletTokens}
-            tokens={tokenDetails}
+            walletTokens={
+              depositFrom === "PDA Assets" ? pdaTokens : walletTokens
+            }
+            tokens={
+              depositFrom === "PDA Assets" ? solanaTokenDetails : tokenDetails
+            }
             show={show}
             toggleShow={setToggle}
             setCurrentToken={setCurrentToken}
@@ -403,7 +501,7 @@ const DepositTab: FC = () => {
         <Button
           title={`${t("common:buttons.deposit")}`}
           variant="gradient"
-          className="w-full"
+          className="w-full mt-6"
           disabled={loading}
           loading={loading}
         />

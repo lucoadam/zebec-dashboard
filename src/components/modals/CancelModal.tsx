@@ -14,6 +14,7 @@ import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { cancelStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { toast } from "features/toasts/toastsSlice"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -88,10 +89,19 @@ const CancelModal: FC = ({}) => {
   }
 
   const handleCancelTransaction = () => {
-    if (walletObject.chainId === "solana") {
-      handleSolanaCancel()
-    } else {
-      handleEVMCancel()
+    try {
+      if (walletObject.chainId === "solana") {
+        handleSolanaCancel()
+      } else {
+        handleEVMCancel()
+      }
+    } catch (e) {
+      setLoading(false)
+      dispatch(
+        toast.error({
+          message: "Stream withdrawal failed"
+        })
+      )
     }
   }
 

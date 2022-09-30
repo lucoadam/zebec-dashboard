@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
@@ -15,7 +17,6 @@ import {
   UserAddress
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
-import { TreasuryApprovalType } from "components/treasury/treasury.d"
 import { RPC_NETWORK } from "constants/cluster"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
@@ -34,12 +35,6 @@ import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import { useSigner } from "wagmi"
 import { StatusType, TransactionStatusType } from "../transactions.d"
 // import { WithdrawStepsList } from "../withdraw/data.d"
-
-enum IncomingTransactionKind {
-  TREASURY_VAULT_CONTINUOUS = "treasury_vault_continuous",
-  TREASURY_VAULT_INSTANT = "treasury_vault_instant",
-  CONTINUOUS = "continuous"
-}
 
 interface IncomingTableRowProps {
   index: number
@@ -82,7 +77,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   // const fees = 0.25
 
   const {
-    uuid,
     name,
     remarks,
     amount,
@@ -92,17 +86,15 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     receiver,
     start_time,
     end_time,
+    transaction_type,
     pda,
     transaction_hash,
     file,
-    latest_transaction_event,
-    transaction_kind,
-    created_at
+    latest_transaction_event
   } = transaction
 
-  const totalTransactionAmount = latest_transaction_event
-    ? amount - Number(latest_transaction_event.paused_amt)
-    : amount
+  const totalTransactionAmount =
+    amount - Number(latest_transaction_event.paused_amt)
 
   const totalTimeInSec = end_time - start_time
   const streamRatePerSec = amount / totalTimeInSec
@@ -130,74 +122,48 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
 
   useEffect(() => {
     if (
-      transaction_kind === IncomingTransactionKind.TREASURY_VAULT_CONTINUOUS ||
-      transaction_kind === IncomingTransactionKind.CONTINUOUS
+      transaction.status !== StatusType.CANCELLED &&
+      transaction.status !== StatusType.PAUSED
     ) {
-      if (
-        transaction.status !== StatusType.CANCELLED &&
-        transaction.status !== StatusType.PAUSED
-      ) {
-        if (currentTime < start_time) {
-          setStatus(StatusType.SCHEDULED)
-        } else if (currentTime >= start_time && currentTime < end_time) {
-          setStatus(StatusType.ONGOING)
-        } else if (currentTime >= end_time) {
-          setStatus(StatusType.COMPLETED)
-        }
-      } else {
-        setStatus(transaction.status)
+      if (currentTime < start_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else if (currentTime >= start_time && currentTime < end_time) {
+        setStatus(StatusType.ONGOING)
+      } else if (currentTime >= end_time) {
+        setStatus(StatusType.COMPLETED)
       }
     } else {
-      if (transaction.approval_status === TreasuryApprovalType.PENDING) {
-        setStatus(StatusType.SCHEDULED)
-      } else if (
-        transaction.approval_status === TreasuryApprovalType.ACCEPTED
-      ) {
-        setStatus(StatusType.COMPLETED)
-      } else {
-        setStatus(StatusType.CANCELLED)
-      }
+      setStatus(transaction.status)
     }
     // eslint-disable-next-line
   }, [status, currentTime, transaction])
 
   useEffect(() => {
-    if (
-      transaction_kind === IncomingTransactionKind.TREASURY_VAULT_CONTINUOUS ||
-      transaction_kind === IncomingTransactionKind.CONTINUOUS
+    if (status === StatusType.COMPLETED) {
+      setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
+    } else if (status === StatusType.ONGOING) {
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
+      )
+      const interval = setInterval(() => {
+        setStreamedToken((prevStreamedToken: number) =>
+          prevStreamedToken + streamRatePerSec > amount
+            ? amount
+            : prevStreamedToken + streamRatePerSec
+        )
+      }, 1000)
+      return () => clearInterval(interval)
+    } else if (
+      status === StatusType.CANCELLED ||
+      status === StatusType.PAUSED
     ) {
-      if (status === StatusType.COMPLETED) {
-        setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
-      } else if (status === StatusType.ONGOING) {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
-        )
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > amount
-              ? amount
-              : prevStreamedToken + streamRatePerSec
-          )
-        }, 1000)
-        return () => clearInterval(interval)
-      } else if (
-        status === StatusType.CANCELLED ||
-        status === StatusType.PAUSED
-      ) {
-        setStreamedToken(
-          Number(latest_transaction_event.withdrawn) +
-            Number(latest_transaction_event.withdraw_limit)
-        )
-      }
-    } else {
-      if (transaction.approval_status === TreasuryApprovalType.ACCEPTED) {
-        setStreamedToken(amount)
-      } else {
-        setStreamedToken(0)
-      }
+      setStreamedToken(
+        Number(latest_transaction_event.withdrawn) +
+          Number(latest_transaction_event.withdraw_limit)
+      )
     }
     // eslint-disable-next-line
   }, [status, transaction])
@@ -227,38 +193,46 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           sender: sender,
           receiver: receiver,
           escrow: pda,
-          token_mint_address: token_mint_address,
-          transaction_kind: transaction_kind,
-          transaction_uuid: uuid
+          token_mint_address: token_mint_address
         },
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
-      await dispatch(withdrawIncomingToken(withdrawData))
+      // await dispatch(withdrawIncomingToken(withdrawData))
       setLoading(false)
     }
   }
   const handleEVMWithdraw = async () => {
-    if (!signer) return
-    setLoading(true)
-    const messengerContract = new ZebecEthBridgeClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      getEVMToWormholeChain(walletObject.chainId)
-    )
-    console.log("transaction:", transaction)
-    const tx = await messengerContract.withdrawFromTokenStream(
-      transaction.sender,
-      transaction.receiver,
-      transaction.token_mint_address,
-      transaction.pda
-    )
-    setLoading(false)
-    dispatch(
-      toast.success({
-        message: "Withdrawal initiated"
-      })
-    )
-    console.log("tx:", tx)
+    try {
+      if (!signer) return
+      setLoading(true)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        getEVMToWormholeChain(walletObject.chainId)
+      )
+      console.log("transaction:", transaction)
+      const tx = await messengerContract.withdrawFromTokenStream(
+        transaction.sender,
+        transaction.receiver,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+      setLoading(false)
+      dispatch(
+        toast.success({
+          message: "Withdrawal initiated"
+        })
+      )
+      console.log("tx:", tx)
+    } catch (e: any) {
+      console.log("error:", e)
+      setLoading(false)
+      dispatch(
+        toast.error({
+          message: "Stream withdrawal failed"
+        })
+      )
+    }
   }
   const withdraw = () => {
     if (walletObject.chainId === "solana") {
@@ -298,16 +272,9 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 min-w-60">
             <div className="text-caption text-content-primary">
-              {transaction_kind ===
-              IncomingTransactionKind.TREASURY_VAULT_INSTANT ? (
-                formatDateTime(created_at)
-              ) : (
-                <>
-                  {formatDateTime(start_time)}
-                  <br />
-                  to {formatDateTime(end_time)}
-                </>
-              )}
+              {formatDateTime(start_time)}
+              <br />
+              to {formatDateTime(end_time)}
             </div>
           </td>
           <td className="px-6 py-5 min-w-60">
@@ -315,24 +282,22 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
-              <Button
-                title="Withdraw"
-                size="small"
-                loading={loading}
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={() => {
-                  // setCurrentStep(0)
-                  // setIsOpen(true)
-                  // fetchEscrowData()
-                  withdraw()
-                }}
-                className={`${
-                  transaction_kind ===
-                    IncomingTransactionKind.TREASURY_VAULT_INSTANT && "hidden"
-                }`}
-              />
+              {parseFloat(latest_transaction_event.withdrawn) !== amount && (
+                <Button
+                  title="Withdraw"
+                  size="small"
+                  loading={loading}
+                  startIcon={
+                    <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                  }
+                  onClick={() => {
+                    // setCurrentStep(0)
+                    // setIsOpen(true)
+                    // fetchEscrowData()
+                    withdraw()
+                  }}
+                />
+              )}
               {/* Withdraw Modal */}
               {/* <Modal
                 show={currentStep >= 0 && isOpen}
@@ -425,61 +390,36 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         <CopyButton content={receiver} />
                       </div>
                     </div>
-
-                    {transaction_kind ===
-                    IncomingTransactionKind.TREASURY_VAULT_INSTANT ? (
-                      <>
-                        {/* Transaction Date */}
-                        <div className="flex items-center gap-x-8">
-                          <div className="w-32 text-content-secondary">
-                            {t("table.transaction-date")}
-                          </div>
-                          <div className="text-content-primary">
-                            {formatDateTime(created_at)}
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {/* Start Date */}
-                        <div className="flex items-center gap-x-8">
-                          <div className="w-32 text-content-secondary">
-                            {t("table.start-date")}
-                          </div>
-                          <div className="text-content-primary">
-                            {formatDateTime(start_time)}
-                          </div>
-                        </div>
-                        {/* End Date */}
-                        <div className="flex items-center gap-x-8">
-                          <div className="w-32 text-content-secondary">
-                            {t("table.end-date")}
-                          </div>
-                          <div className="text-content-primary">
-                            {formatDateTime(end_time)}
-                          </div>
-                        </div>
-                      </>
-                    )}
-
+                    {/* Start Date */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.start-date")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatDateTime(start_time)}
+                      </div>
+                    </div>
+                    {/* End Date */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.end-date")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatDateTime(end_time)}
+                      </div>
+                    </div>
                     {/* Stream Type */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        {transaction_kind ===
-                        IncomingTransactionKind.TREASURY_VAULT_INSTANT ? (
+                        {transaction_type === "instant" ? (
                           <Icons.ThunderIcon className="w-6 h-6" />
                         ) : (
                           <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
                         )}
-                        <span className="capitalize">
-                          {transaction_kind ===
-                          IncomingTransactionKind.TREASURY_VAULT_INSTANT
-                            ? "Instant"
-                            : "Continuous"}
-                        </span>
+                        <span className="capitalize">{transaction_type}</span>
                       </div>
                     </div>
                   </div>
@@ -494,37 +434,30 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {formatCurrency(amount, "", 4)} {token}
                       </div>
                     </div>
-                    {transaction_kind !==
-                      IncomingTransactionKind.TREASURY_VAULT_INSTANT && (
-                      <>
-                        {/* Paused Amount */}
-                        <div className="flex items-center gap-x-8">
-                          <div className="w-32 text-content-secondary">
-                            {t("table.paused-amount")}
-                          </div>
-                          <div className="text-content-primary">
-                            {formatCurrency(
-                              latest_transaction_event.paused_amt,
-                              "",
-                              4
-                            )}{" "}
-                            {token}
-                          </div>
-                        </div>
-                        {/* Total Amount */}
-                        <div className="flex items-center gap-x-8">
-                          <div className="w-32 text-content-secondary">
-                            {t("table.total-amount")}
-                          </div>
-                          <div className="text-content-primary">
-                            {" "}
-                            {formatCurrency(totalTransactionAmount, "", 4)}{" "}
-                            {token}
-                          </div>
-                        </div>
-                      </>
-                    )}
-
+                    {/* Paused Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.paused-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.paused_amt,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
+                      </div>
+                    </div>
+                    {/* Total Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.total-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        {" "}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                      </div>
+                    </div>
                     {/* Amount Received */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
@@ -540,23 +473,6 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         %)
                       </div>
                     </div>
-                    {/* Withdrawn */}
-                    {/* <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.withdrawn")}
-                      </div>
-                      <div className="text-content-primary">
-                        {transaction_kind ===
-                        IncomingTransactionKind.TREASURY_VAULT_INSTANT
-                          ? formatCurrency(streamedToken, "", 4)
-                          : formatCurrency(
-                              latest_transaction_event.withdrawn,
-                              "",
-                              4
-                            )}{" "}
-                        {token}
-                      </div>
-                    </div> */}
                     {/* Status */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
