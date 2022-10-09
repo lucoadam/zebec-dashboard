@@ -164,7 +164,7 @@ const Navbar: FC = () => {
                     className="flex pt-1 items-center cursor-pointer"
                     onClick={() => setToggleDropdown(!toggleDropdown)}
                   >
-                    <span className="gradient-color font-medium text-subtitle-sm">
+                    <span className="text-primary font-medium text-subtitle-sm">
                       {currentVersion.display}
                     </span>
                     <Icons.CheveronDownIcon className="text-content-secondary flex-shrink-0" />
