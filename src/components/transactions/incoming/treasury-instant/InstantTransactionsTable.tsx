@@ -50,14 +50,13 @@ export const InstantTransactionsTable: FC<TransactionTableProps> = ({
     <>
       <Table headers={headers}>
         <TableBody>
-          {loading && !transactions.results.length && (
+          {loading ? (
             <tr>
               <td colSpan={headers.length}>
                 <TransactionSkeleton />
               </td>
             </tr>
-          )}
-          {transactions.results.length === 0 && !loading ? (
+          ) : transactions.results.length === 0 && !loading ? (
             <tr>
               <td colSpan={headers.length}>
                 <EmptyDataState message="There are no incoming transactions. The payments you receive will appear here." />
