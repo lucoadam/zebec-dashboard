@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "app/hooks"
+import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -9,15 +9,7 @@ import {
 } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import {
-  FC,
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react"
+import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import {

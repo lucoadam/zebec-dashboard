@@ -244,9 +244,13 @@ export const updateIncomingTransactions: any = createAsyncThunk<
   { dispatch: AppDispatch }
 >("transactions/updateIncomingTransactions", async (data, { dispatch }) => {
   if (data.transaction_type === "continuous") {
-    await api.post(`/transaction/${data.transaction_uuid}/update-status/`, {
-      transaction_hash: data?.transaction_hash ? data?.transaction_hash : ""
-    })
+    if (data.transaction_hash) {
+      await api.post(`/transaction/${data.transaction_uuid}/update-status/`, {
+        transaction_hash: data.transaction_hash
+      })
+    } else {
+      await api.post(`/transaction/${data.transaction_uuid}/update-status/`)
+    }
     setTimeout(() => {
       dispatch(fetchIncomingTransactions())
     }, constants.STREAM_FETCH_TIMEOUT)

@@ -1,4 +1,3 @@
-import { useAppDispatch } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -9,14 +8,13 @@ import {
 } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useEffect, useRef, useState } from "react"
+import { FC, Fragment, useEffect, useRef } from "react"
 import ReactTooltip from "react-tooltip"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { TreasuryApprovalType } from "components/treasury/treasury.d"
-import { useWallet } from "@solana/wallet-adapter-react"
 
 interface InstantTransactionsTableRowProps {
   index: number
