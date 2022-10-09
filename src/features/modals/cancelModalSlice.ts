@@ -28,8 +28,8 @@ export const cancelTransaction = createAsyncThunk<
     ...data
   })
 
-  dispatch(fetchTransactionsById(data.uuid, "cancel"))
   dispatch(toggleCancelModal())
+  dispatch(fetchTransactionsById(data.uuid, "cancel"))
   return response.data
 })
 
@@ -50,13 +50,13 @@ export const cancelTreasuryTransaction = createAsyncThunk<
           transaction_account: transaction_account
         }
       )
+      dispatch(toggleCancelModal())
       dispatch(
         fetchTreasuryVaultContinuousTransactionsById({
           treasury_uuid: treasury_uuid,
           uuid: uuid
         })
       )
-      dispatch(toggleCancelModal())
       return
     }
     return

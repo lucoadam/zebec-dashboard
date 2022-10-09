@@ -26,6 +26,7 @@ export const pauseTransaction = createAsyncThunk<
   await api.patch(`/transaction/${uuid}/`, {
     status: "paused"
   })
+  dispatch(togglePauseModal())
   dispatch(fetchTransactionsById(uuid, "pause"))
   return
 })
@@ -47,6 +48,7 @@ export const pauseTreasuryTransaction = createAsyncThunk<
           transaction_account: transaction_account
         }
       )
+      dispatch(togglePauseModal())
       dispatch(
         fetchTreasuryVaultContinuousTransactionsById({
           treasury_uuid: treasury_uuid,

@@ -14,6 +14,7 @@ interface WithdrawIncomingTokenProps {
     token_mint_address?: string
     transaction_kind: string
     transaction_uuid: string
+    hasTransactionEnd: boolean
   }
   stream: ZebecNativeStream | ZebecTokenStream
 }
@@ -30,13 +31,22 @@ export const withdrawIncomingToken =
             transactionHash: response?.data?.transactionHash
           })
         )
-        console.log('test')
-        dispatch(
-          updateIncomingTransactions({
-            transaction_kind: data.transaction_kind,
-            transaction_uuid: data.transaction_uuid
-          })
-        )
+        if (data.hasTransactionEnd) {
+          dispatch(
+            updateIncomingTransactions({
+              transaction_type: data.transaction_kind,
+              transaction_uuid: data.transaction_uuid,
+              transaction_hash: response?.data?.transactionHash
+            })
+          )
+        } else {
+          dispatch(
+            updateIncomingTransactions({
+              transaction_type: data.transaction_kind,
+              transaction_uuid: data.transaction_uuid
+            })
+          )
+        }
       } else {
         dispatch(
           toast.error({

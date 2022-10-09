@@ -1,28 +1,20 @@
-import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
   IconButton,
-  UserAddress,
-  SignerRow
+  UserAddress
 } from "components/shared"
-import { showRejectModal } from "features/modals/rejectModalSlice"
-import { showSignModal } from "features/modals/signModalSlice"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react"
+import { FC, Fragment, useEffect, useRef } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
+import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
-import {
-  ApprovedRejectedUserProps,
-  TreasuryApprovalType
-} from "components/treasury/treasury.d"
-import { useWallet } from "@solana/wallet-adapter-react"
+import { TreasuryApprovalType } from "components/treasury/treasury.d"
 
 interface InstantTransactionsTableRowProps {
   index: number
@@ -40,7 +32,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-  const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const styles = {
     detailsRow: {
@@ -50,12 +41,10 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
           : "0px"
     }
   }
-  const dispatch = useAppDispatch()
-  const { publicKey } = useWallet()
-  const [showAllRemaining, setShowAllRemaining] = useState(false)
+
   useEffect(() => {
     ReactTooltip.rebuild()
-  }, [showAllRemaining])
+  }, [])
 
   const {
     name,
@@ -70,31 +59,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
     transaction_hash,
     file
   } = transaction
-
-  const remainingOwners = useMemo(() => {
-    let remainingOwnersList: string[] = []
-    if (activeTreasury) {
-      const treasuryOwners = activeTreasury.owners.map(
-        (owner) => owner.wallet_address
-      )
-      const aprovedOwners = transaction.approved_by.map(
-        (owner: ApprovedRejectedUserProps) => owner.user
-      )
-      const rejectedOwners = transaction.rejected_by.map(
-        (owner: ApprovedRejectedUserProps) => owner.user
-      )
-      const approvedRejectedOwners = [...aprovedOwners, ...rejectedOwners]
-
-      remainingOwnersList = treasuryOwners.filter(
-        (owner) => !approvedRejectedOwners.includes(owner)
-      )
-    }
-    return remainingOwnersList
-  }, [activeTreasury, transaction])
-
-  const isRemaining = useMemo(() => {
-    return remainingOwners.some((owner) => owner === publicKey?.toString())
-  }, [remainingOwners, publicKey])
 
   return (
     <>
@@ -132,44 +96,16 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 min-w-50">
+          <td className="px-6 py-4 min-w-60">
             <div className="text-caption text-content-primary">
               {formatDateTime(created_at)}
             </div>
           </td>
-          <td className="min-w-33.5 px-6 py-4">
-            <div className="text-caption text-content-primary">
-              {getTimesAgo(created_at)}
-            </div>
-          </td>
-          <td className="px-6 py-4 min-w-50">
-            <UserAddress wallet={receiver} />
+          <td className="px-6 py-4 min-w-60">
+            <UserAddress wallet={sender} />
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              {status === TreasuryApprovalType.PENDING && (
-                <>
-                  <Button
-                    startIcon={
-                      <Icons.EditIcon className="text-content-contrast" />
-                    }
-                    size="small"
-                    title={`${t("table.sign-and-approve")}`}
-                    onClick={() => dispatch(showSignModal(transaction))}
-                    className={`${!isRemaining && "hidden"}`}
-                  />
-                  <Button
-                    startIcon={
-                      <Icons.CrossIcon className="text-content-contrast" />
-                    }
-                    size="small"
-                    title={`${t("table.reject")}`}
-                    onClick={() => dispatch(showRejectModal(transaction))}
-                    className={`${!isRemaining && "hidden"}`}
-                  />
-                </>
-              )}
-
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -293,7 +229,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.status")}
                       </div>
-                      <div className="flex items-center gap-x-2 text-content-primary">
+                      <div className="flex items-center gap-x-2 text-content-primary capitalize">
                         {Math.sign(transaction.sent_token) > 0 ? (
                           <Icons.IncomingIcon className="w-5 h-5" />
                         ) : (
@@ -347,107 +283,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       </div>
                     )}
                   </div>
-                </div>
-                <div
-                  className={`flex gap-x-32 py-6 text-subtitle-sm font-medium ${
-                    isRemaining && "border-b border-outline"
-                  }`}
-                >
-                  {/* Left Column */}
-                  <div className="flex flex-col gap-y-4">
-                    {/* Signed Owners */}
-                    <div className="flex gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.signed-by")}
-                      </div>
-                      <div className="grid gap-y-4">
-                        {transaction.approved_by.map(
-                          (
-                            item: {
-                              user: string
-                              time: number
-                            },
-                            index: number
-                          ) => (
-                            <SignerRow
-                              key={index}
-                              index={index}
-                              user={item.user}
-                              time={item.time}
-                            />
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {/* Right Column */}
-                  <div className="flex flex-col gap-y-4">
-                    {/* Total Amount */}
-                    <div className="flex gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.remaining")}
-                      </div>
-
-                      <div className="grid gap-y-4">
-                        <div className="text-content-primary">
-                          {remainingOwners?.length}{" "}
-                          {t("transactions:table.out-of")}{" "}
-                          {activeTreasury?.owners.length}{" "}
-                          {t("transactions:table.owners")}
-                        </div>
-                        {remainingOwners
-                          ?.slice(0, 3)
-                          .map((item: string, index: number) => (
-                            <SignerRow key={index} index={index} user={item} />
-                          ))}
-                        {/* Has owners more than three */}
-                        {remainingOwners.length > 3 && (
-                          <div className="text-content-primary">
-                            <Button
-                              title={`${t("table.show-all-remaining")}`}
-                              size="small"
-                              endIcon={
-                                <Icons.ArrowDownIcon className="text-content-contrast" />
-                              }
-                              onClick={() =>
-                                setShowAllRemaining(!showAllRemaining)
-                              }
-                            />
-                            {showAllRemaining && (
-                              <div className={`pt-3 pl-3`}>
-                                <div className="grid gap-y-4">
-                                  {remainingOwners
-                                    ?.slice(3)
-                                    .map((item: string, index: number) => (
-                                      <SignerRow
-                                        key={index}
-                                        index={index}
-                                        user={item}
-                                      />
-                                    ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={`flex gap-x-4 py-6 ${!isRemaining && "hidden"}`}
-                >
-                  <Button
-                    startIcon={<Icons.EditIcon />}
-                    variant="gradient"
-                    title={`${t("table.sign-and-approve")}`}
-                    onClick={() => dispatch(showSignModal(transaction))}
-                  />
-                  <Button
-                    startIcon={<Icons.CrossIcon />}
-                    title={`${t("table.reject")}`}
-                    onClick={() => dispatch(showRejectModal(transaction))}
-                  />
                 </div>
               </div>
             </div>

@@ -24,9 +24,8 @@ export const resumeTransaction = createAsyncThunk(
     const response = await api.patch(`/transaction/${uuid}/`, {
       status: "ready"
     })
-
+    dispatch(toggleResumeModal())
     dispatch(fetchTransactionsById(uuid, "resume"))
-
     return response.data
   }
 )
@@ -48,6 +47,7 @@ export const resumeTreasuryTransaction = createAsyncThunk<
           transaction_account: transaction_account
         }
       )
+      dispatch(toggleResumeModal())
       dispatch(
         fetchTreasuryVaultContinuousTransactionsById({
           treasury_uuid: treasury_uuid,

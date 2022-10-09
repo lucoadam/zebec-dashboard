@@ -73,8 +73,8 @@ export const cancelStreamToken =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleCancelModal())
       }
-      dispatch(toggleCancelModal())
     } catch (error: any) {
       dispatch(
         toast.error({

@@ -85,8 +85,8 @@ export const pauseStreamTreasury =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(togglePauseModal())
       }
-      dispatch(togglePauseModal())
     } catch (error: any) {
       dispatch(
         toast.error({

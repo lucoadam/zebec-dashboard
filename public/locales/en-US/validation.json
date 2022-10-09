@@ -35,7 +35,7 @@
     "export-end-date-time-required": "Date is required",
     "export-start-date-time-required": "Date is required",
     "export-choose-report-format": "Choose report format",
-    "receiver-self": "Stream can't be send to connected wallet",
+    "receiver-self": "Stream can't be executed to owner wallet",
     "receiver-required": "Receiver address is required",
     "receiver-invalid": "Invalid receiver address",
     "max": "Insufficient fund",
