@@ -2,9 +2,9 @@ import { useAccount, useSignMessage, useDisconnect, useNetwork } from "wagmi"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 import { supportedEVMChains } from "constants/supportedEVMChains"
-import { ZebecSolBridgeClient } from "@jettxcypher/zebec-wormhole-sdk"
+import { ZebecSolBridgeClient } from "@lucoadam/zebec-wormhole-sdk"
 import { EVMToWormholeChainMapping } from "constants/wormholeChains"
-import { ChainId } from "@certusone/wormhole-sdk"
+import { ChainId, tryNativeToUint8Array } from "@certusone/wormhole-sdk"
 import { useMemo } from "react"
 
 export interface ZebecWalletContext {
@@ -45,25 +45,29 @@ export const useZebecWallet = (): ZebecWalletContext => {
       : ""
   }, [solAccount.connected, ethAccount.isConnected, chain])
 
+  const wormholeChain = EVMToWormholeChainMapping[
+    chain?.id as keyof typeof EVMToWormholeChainMapping
+  ] as ChainId
   const publicKey = useMemo(() => {
     const pubKey =
       solAccount.publicKey ||
       (ethAccount.isConnected
         ? new PublicKey(
             ZebecSolBridgeClient.getXChainUserKey(
-              ethAccount.address as string,
-              EVMToWormholeChainMapping[
-                chain?.id as keyof typeof EVMToWormholeChainMapping
-              ] as ChainId
+              tryNativeToUint8Array(
+                ethAccount.address as string,
+                wormholeChain
+              ),
+              wormholeChain
             ).toString()
           )
         : undefined)
     return pubKey
   }, [
     ethAccount.address,
-    chain?.id,
     ethAccount.isConnected,
-    solAccount.publicKey
+    solAccount.publicKey,
+    wormholeChain
   ])
 
   const originalAddress = useMemo(() => {

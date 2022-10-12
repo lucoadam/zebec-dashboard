@@ -8,13 +8,16 @@ import ZebecContext from "app/zebecContext"
 import { useZebecWallet } from "hooks/useWallet"
 import { useSigner } from "wagmi"
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
 import { resumeStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -68,28 +71,46 @@ const ResumeModal: FC = ({}) => {
   }
 
   const handleEVMResume = async () => {
-    if (!signer) return
-    dispatch(setLoading(true))
-    const messengerContract = new ZebecEthBridgeClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      getEVMToWormholeChain(walletObject.chainId)
-    )
-    console.log("pda-data:", transaction)
-    const tx = await messengerContract.pauseTokenStream(
-      transaction.sender,
-      transaction.receiver,
-      transaction.token_mint_address,
-      transaction.pda
-    )
-    dispatch(setLoading(false))
-    dispatch(toggleResumeModal())
-    dispatch(
-      toast.success({
-        message: "Stream resume initiated"
-      })
-    )
-    console.log("tx:", tx)
+    try {
+      if (!signer) return
+      dispatch(setLoading(true))
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      console.log("pda-data:", transaction)
+      const tx = await messengerContract.pauseTokenStream(
+        transaction.sender,
+        transaction.receiver,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+      console.log("tx:", tx)
+      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+      console.log("sequence:", sequence)
+      const response = await listenWormholeTransactionStatus(
+        sequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
+      )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream resumed" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream resume timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream resume failed" }))
+      }
+      dispatch(setLoading(false))
+      dispatch(toggleResumeModal())
+    } catch (e) {
+      console.log("error:", e)
+      setLoading(false)
+      dispatch(toggleResumeModal())
+      dispatch(toast.error({ message: "Stream resume failed" }))
+    }
   }
 
   const handleResumeTransaction = () => {

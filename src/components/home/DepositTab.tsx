@@ -26,8 +26,9 @@ import {
   SOL_TOKEN_BRIDGE_ADDRESS,
   transferEvm,
   WORMHOLE_RPC_HOSTS,
-  ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+  ZebecEthBridgeClient,
+  BSC_BRIDGE_ADDRESS
+} from "@lucoadam/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
 import {
@@ -42,11 +43,10 @@ import {
 } from "@certusone/wormhole-sdk"
 // import axios from "axios"
 import { toast } from "features/toasts/toastsSlice"
-import { ethers } from "ethers"
+// import { ethers } from "ethers"
 import axios from "axios"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { getAssociatedTokenAddress } from "@solana/spl-token"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import {
   switchxWalletApprovalMessageStep,
   togglexWalletApprovalMessageModal
@@ -54,6 +54,7 @@ import {
 import { CheveronDownIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+// import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
@@ -245,18 +246,48 @@ const DepositTab: FC = () => {
         )
           .then(async (transferReceipt: any) => {
             console.log("transferReceipt", transferReceipt)
+
             const sequence = parseSequenceFromLogEth(
               transferReceipt,
               getBridgeAddressForChain(sourceChain)
             )
-            console.log(
-              "sequence",
-              sequence,
-              getBridgeAddressForChain(sourceChain)
+            const transferEmitterAddress = getEmitterAddressEth(
+              getTokenBridgeAddressForChain(sourceChain)
             )
-            console.log("waiting for transfer complete")
-            await new Promise((resolve) => setTimeout(resolve, 40000))
+            console.debug("emitterAddress:", transferEmitterAddress)
+            const { vaaBytes: transferVaa } = await getSignedVAAWithRetry(
+              WORMHOLE_RPC_HOSTS,
+              sourceChain,
+              transferEmitterAddress,
+              sequence
+            )
+            console.log("transferVaa", transferVaa)
+            // check transfer complete
+            let isTransferComplete = false
+            let logMsg = "checking if transfer completed"
+            let retry = 0
+            do {
+              logMsg = logMsg.concat(".")
+              if (retry > 12) throw new Error("Deposit Timeout")
+              retry++
+              console.log(logMsg)
+              // isTransferComplete = await getIsTransferCompletedSolana(
+              //   SOL_TOKEN_BRIDGE_ADDRESS,
+              //   transferVaa,
+              //   connection
+              // )
+              const { data } = await await axios.post(
+                "/api/check-transfer-complete-solana",
+                {
+                  transferVaa: Buffer.from(transferVaa).toString("base64")
+                }
+              )
+              console.log("data", data)
+              isTransferComplete = data.isTransferComplete
+              await new Promise((r) => setTimeout(r, 5000))
+            } while (!isTransferComplete)
             console.log("transfer successful")
+
             dispatch(switchxWalletApprovalMessageStep(2))
             const messengerContract = new ZebecEthBridgeClient(
               BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -268,14 +299,32 @@ const DepositTab: FC = () => {
               walletObject.originalAddress?.toString() as string,
               targetTokenAddress
             )
-            console.log("reciept", receipt)
-            dispatch(switchxWalletApprovalMessageStep(3))
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            console.log("receipt", receipt)
+            const msgSequence = parseSequenceFromLogEth(
+              receipt,
+              BSC_BRIDGE_ADDRESS
+            )
+            console.log("msgSequence", msgSequence)
+
+            // check if message is relayed
+            const response = await listenWormholeTransactionStatus(
+              msgSequence,
+              BSC_ZEBEC_BRIDGE_ADDRESS,
+              sourceChain
+            )
+            console.log("response", response)
+            if (response === "success") {
+              dispatch(switchxWalletApprovalMessageStep(3))
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+              dispatch(toast.success({ message: "Deposit completed" }))
+            } else if (response === "timeout") {
+              dispatch(toast.error({ message: "Deposit timeout" }))
+            } else {
+              dispatch(toast.error({ message: "Deposit failed" }))
+            }
             depositCallback()
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
-            dispatch(toast.success({ message: "Deposit initiated" }))
-            // dispatch(toggleWalletApprovalMessageModal())
           })
           .catch((err) => {
             console.log("error", err)
@@ -285,7 +334,6 @@ const DepositTab: FC = () => {
               })
             )
             setLoading(false)
-            // dispatch(toggleWalletApprovalMessageModal())
             dispatch(togglexWalletApprovalMessageModal())
           })
       } catch (e) {
@@ -296,7 +344,6 @@ const DepositTab: FC = () => {
           })
         )
         setLoading(false)
-        // dispatch(toggleWalletApprovalMessageModal())
         dispatch(togglexWalletApprovalMessageModal())
       }
     }
@@ -313,13 +360,27 @@ const DepositTab: FC = () => {
         signer,
         sourceChain
       )
-      const reciept = await messengerContract.depositToken(
+      const receipt = await messengerContract.depositToken(
         data.amount,
         walletObject.originalAddress?.toString() as string,
         currentToken.mint
       )
-      console.log("reciept", reciept)
-      dispatch(toast.success({ message: "Deposit initiated" }))
+      console.log("receipt", receipt)
+      const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
+      console.log("msgSequence", msgSequence)
+      const response = await listenWormholeTransactionStatus(
+        msgSequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
+      )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Deposit completed" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Deposit timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Deposit failed" }))
+      }
       depositCallback()
       setLoading(false)
     } catch (e) {

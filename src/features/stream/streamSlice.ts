@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+// import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 import {
   fetchTreasuryVaultContinuousTransactions,
@@ -24,7 +24,7 @@ export const sendContinuousStream: any = createAsyncThunk(
   async (data: any, { dispatch }) => {
     await api.post("/transaction/", data)
     dispatch(fetchOutgoingTransactions())
-    dispatch(toggleWalletApprovalMessageModal())
+    // dispatch(toggleWalletApprovalMessageModal())
     return
   }
 )

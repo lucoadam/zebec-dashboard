@@ -16,10 +16,13 @@ import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -128,13 +131,23 @@ const WithdrawTab: FC = () => {
           walletObject.originalAddress?.toString() as string,
           currentToken.mint
         )
-        console.log("tx", tx)
-        withdrawCallback()
-        dispatch(
-          toast.success({
-            message: "Withdrawal initiated"
-          })
+        console.log("tx:", tx)
+        const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+        console.log("sequence:", sequence)
+        const response = await listenWormholeTransactionStatus(
+          sequence,
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          sourceChain
         )
+        console.log("response", response)
+        if (response === "success") {
+          dispatch(toast.success({ message: "Withdrawal completed" }))
+        } else if (response === "timeout") {
+          dispatch(toast.error({ message: "Withdrawal timeout" }))
+        } else {
+          dispatch(toast.error({ message: "Error withdrawing token" }))
+        }
+        withdrawCallback()
       } catch (e) {
         console.log("error", e)
         dispatch(toast.error({ message: "Error withdrawing token" }))

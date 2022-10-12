@@ -7,14 +7,17 @@ import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import { useZebecWallet } from "hooks/useWallet"
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { cancelStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { toast } from "features/toasts/toastsSlice"
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -69,23 +72,46 @@ const CancelModal: FC = ({}) => {
   }
 
   const handleEVMCancel = async () => {
-    if (!signer) return
-    dispatch(setLoading(true))
-    const messengerContract = new ZebecEthBridgeClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      getEVMToWormholeChain(walletObject.chainId)
-    )
-    console.log("transaction:", transaction)
-    const tx = await messengerContract.cancelTokenStream(
-      transaction.sender,
-      transaction.receiver,
-      transaction.token_mint_address,
-      transaction.pda
-    )
-    dispatch(setLoading(false))
-    dispatch(toggleCancelModal())
-    console.log("tx:", tx)
+    try {
+      if (!signer) return
+      dispatch(setLoading(true))
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      console.log("transaction:", transaction)
+      const tx = await messengerContract.cancelTokenStream(
+        transaction.sender,
+        transaction.receiver,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+      console.log("tx:", tx)
+      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+      console.log("sequence:", sequence)
+      const response = await listenWormholeTransactionStatus(
+        sequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
+      )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream cancelled" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream cancel timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream cancel failed" }))
+      }
+      dispatch(setLoading(false))
+      dispatch(toggleCancelModal())
+    } catch (e) {
+      console.log("error:", e)
+      setLoading(false)
+      dispatch(toggleCancelModal())
+      dispatch(toast.error({ message: "Stream cancel failed" }))
+    }
   }
 
   const handleCancelTransaction = () => {

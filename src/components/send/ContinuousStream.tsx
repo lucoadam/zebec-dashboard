@@ -10,7 +10,8 @@ import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import {
@@ -212,6 +213,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     dispatch(toggleWalletApprovalMessageModal())
   }
 
+  const sendStreamCallback = () => {
+    resetForm()
+    dispatch(toggleWalletApprovalMessageModal())
+  }
+
   const handleSolanaStream = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       name: data.transaction_name,
@@ -236,8 +242,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
       if (formattedData.token === "SOL")
-        stream && dispatch(initStreamNative(formattedData, stream, resetForm))
-      else token && dispatch(initStreamToken(formattedData, token, resetForm))
+        stream &&
+          dispatch(initStreamNative(formattedData, stream, sendStreamCallback))
+      else
+        token &&
+          dispatch(initStreamToken(formattedData, token, sendStreamCallback))
     } else {
       if (activeTreasury) {
         const treasuryFormattedData = {
@@ -291,20 +300,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       file: data.file
     }
 
-    // const backendData = {
-    //   ...formattedData,
-    //   sender: walletObject.originalAddress?.toString() || "",
-    //   receiver: data.receiver,
-    //   pda: "C4qCTwmKexY2VzJCHXjvB6bzSNxKCfxPda9ZSoYk7RCx",
-    //   transaction_hash:
-    //     "JYmmqaWkwaQfrHSETeRNkE6c8iFVZfA4jPZ7yyLorygAuhEgLkiWJrJfyj1zLwDJEcBeixC9CwfH7tTcYJMUdp2"
-    // }
-    // dispatch(sendContinuousStream(backendData)).then(async () => {
+    const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
     dispatch(toggleWalletApprovalMessageModal())
     const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
-      getEVMToWormholeChain(walletObject.chainId)
+      sourceChain
     )
     const transferReceipt = await messengerContract.startTokenStream(
       formattedData.start_time.toString(),
@@ -316,7 +318,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       true,
       formattedData.token_mint_address
     )
-    console.log(transferReceipt)
+    console.log("receipt", transferReceipt)
     const sequence = parseSequenceFromLogEth(
       transferReceipt,
       BSC_BRIDGE_ADDRESS
@@ -325,6 +327,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       BSC_ZEBEC_BRIDGE_ADDRESS
     )
     console.debug("emitterAddress:", transferEmitterAddress)
+    console.log("sequence", sequence)
     const { vaaBytes } = await getSignedVAAWithRetry(
       WORMHOLE_RPC_HOSTS,
       "bsc",
@@ -337,15 +340,23 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       receiver: data.receiver,
       vaa: Buffer.from(vaaBytes).toString("hex")
     }
-    dispatch(sendContinuousStream(backendData)).then(() => {
+    dispatch(sendContinuousStream(backendData)).then(async () => {
       resetForm()
-      dispatch(
-        toast.success({
-          message: "Stream initiated"
-        })
+      const response = await listenWormholeTransactionStatus(
+        sequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
       )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream started" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream failed" }))
+      }
+      dispatch(toggleWalletApprovalMessageModal())
     })
-    // })
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {

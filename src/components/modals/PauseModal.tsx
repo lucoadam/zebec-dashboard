@@ -7,14 +7,17 @@ import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import { useZebecWallet } from "hooks/useWallet"
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
 import { pauseStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -69,28 +72,47 @@ const PauseModal: FC = ({}) => {
     }
   }
   const handleEVMPause = async () => {
-    if (!signer) return
-    dispatch(setLoading(true))
-    const messengerContract = new ZebecEthBridgeClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      getEVMToWormholeChain(walletObject.chainId)
-    )
-    console.log("pda-data:", transaction)
-    const tx = await messengerContract.pauseTokenStream(
-      transaction.sender,
-      transaction.receiver,
-      transaction.token_mint_address,
-      transaction.pda
-    )
-    dispatch(setLoading(false))
-    dispatch(togglePauseModal())
-    dispatch(
-      toast.success({
-        message: "Stream pause initiated"
-      })
-    )
-    console.log("tx:", tx)
+    try {
+      if (!signer) return
+      dispatch(setLoading(true))
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      console.log("pda-data:", transaction)
+      const tx = await messengerContract.pauseTokenStream(
+        transaction.sender,
+        transaction.receiver,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+
+      console.log("tx:", tx)
+      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+      console.log("sequence:", sequence)
+      const response = await listenWormholeTransactionStatus(
+        sequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
+      )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream paused" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream pause timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream pause failed" }))
+      }
+      dispatch(setLoading(false))
+      dispatch(togglePauseModal())
+    } catch (e) {
+      console.log("error:", e)
+      setLoading(false)
+      dispatch(togglePauseModal())
+      dispatch(toast.error({ message: "Stream pause failed" }))
+    }
   }
 
   const handlePauseTransaction = () => {

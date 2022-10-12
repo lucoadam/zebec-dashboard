@@ -25,10 +25,10 @@ export const XWalletApprovalMessageModal: FC = () => {
       name: "Approve Deposit"
     },
     {
-      name: "Approve Transfer to PDA"
+      name: "Transfer to PDA"
     },
     {
-      name: "Approve Transfer to Zebec Vault"
+      name: "Transfer to Zebec Vault"
     }
   ]
   return (

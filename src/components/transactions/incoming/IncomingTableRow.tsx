@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import {
+  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@jettxcypher/zebec-wormhole-sdk"
+} from "@lucoadam/zebec-wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { withdrawIncomingToken } from "application"
@@ -205,10 +208,11 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     try {
       if (!signer) return
       setLoading(true)
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,
         signer,
-        getEVMToWormholeChain(walletObject.chainId)
+        sourceChain
       )
       console.log("transaction:", transaction)
       const tx = await messengerContract.withdrawFromTokenStream(
@@ -217,13 +221,23 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
         transaction.token_mint_address,
         transaction.pda
       )
-      setLoading(false)
-      dispatch(
-        toast.success({
-          message: "Withdrawal initiated"
-        })
-      )
       console.log("tx:", tx)
+      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+      console.log("sequence:", sequence)
+      const response = await listenWormholeTransactionStatus(
+        sequence,
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        sourceChain
+      )
+      console.log("response", response)
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream withdrawal completed" }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream withdrawal timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream withdrawal failed" }))
+      }
+      setLoading(false)
     } catch (e: any) {
       console.log("error:", e)
       setLoading(false)
@@ -282,13 +296,18 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
-              {parseFloat(latest_transaction_event.withdrawn) !== amount && (
+              {/* // parseFloat(latest_transaction_event.withdraw_limit)>0 || &&  */}
+              {
                 <Button
                   title="Withdraw"
                   size="small"
                   loading={loading}
                   startIcon={
                     <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                  }
+                  disabled={
+                    status === StatusType.CANCELLED ||
+                    status === StatusType.SCHEDULED
                   }
                   onClick={() => {
                     // setCurrentStep(0)
@@ -297,7 +316,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                     withdraw()
                   }}
                 />
-              )}
+              }
               {/* Withdraw Modal */}
               {/* <Modal
                 show={currentStep >= 0 && isOpen}
