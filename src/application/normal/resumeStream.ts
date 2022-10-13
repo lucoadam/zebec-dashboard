@@ -28,8 +28,8 @@ export const resumeStreamNative: any =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleResumeModal())
       }
-      dispatch(toggleResumeModal())
     } catch (error: any) {
       dispatch(
         toast.error({
@@ -59,8 +59,8 @@ export const resumeStreamToken: any =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleResumeModal())
       }
-      dispatch(toggleResumeModal())
     } catch (error: any) {
       dispatch(
         toast.error({

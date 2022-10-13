@@ -17,21 +17,19 @@
     --bg-backdrop: rgba(0, 0, 0, 0.64);
     --bg-contrast: rgba(20, 20, 20, 1);
     /* Primary */
-    --primary-main: rgba(55, 132, 251, 1);
-    --primary-dark: rgba(49, 118, 224, 1);
-    --primary-light: rgba(55, 132, 251, 0.2);
+    --primary-main: rgba(8, 224, 163, 1);
+    --primary-dark: rgba(7, 184, 134, 1);
+    --primary-light: rgba(8, 224, 163, 0.2);
     --primary-contrast: rgba(255, 255, 255, 1);
     --primary-gradient: linear-gradient(
       93.42deg,
-      #1abdbd -7.23%,
-      #4f65db 52.96%,
-      #9543b3 110.69%
+      #08e0a3 -7.23%,
+      #e0ae1f 110.69%
     );
     --primary-gradient-hover: linear-gradient(
       93.42deg,
-      #9543b3 -7.23%,
-      #4f65db 52.96%,
-      #1abdbd 110.69%
+      #e0ae1f -7.23%,
+      #08e0a3 110.69%
     );
     /* Content */
     --content-primary: rgba(255, 255, 255, 0.9);

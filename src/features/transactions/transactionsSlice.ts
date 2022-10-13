@@ -20,6 +20,18 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  incomingTreasuryInstantTransactions: {
+    count: number | null
+    next: string
+    previous: string
+    results: any[]
+  }
+  incomingTreasuryContinuousTransactions: {
+    count: number | null
+    next: string
+    previous: string
+    results: any[]
+  }
   recentTransactions: {
     count: number | null
     next: string
@@ -59,12 +71,26 @@ const initialState: TransactionState = {
     previous: "",
     results: []
   },
+  //Incoming Transactions
   incomingTransactions: {
     count: null,
     next: "",
     previous: "",
     results: []
   },
+  incomingTreasuryInstantTransactions: {
+    count: null,
+    next: "",
+    previous: "",
+    results: []
+  },
+  incomingTreasuryContinuousTransactions: {
+    count: null,
+    next: "",
+    previous: "",
+    results: []
+  },
+  //Recent Transactions
   recentTransactions: {
     count: null,
     next: "",
@@ -145,10 +171,14 @@ export const fetchOutgoingTransactionsById: any = createAsyncThunk(
   }
 )
 
-export const fetchIncomingTransactions: any = createAsyncThunk(
+//Incoming Continuous Transactions
+export const fetchIncomingTransactions = createAsyncThunk<
+  any,
+  "completed" | "ongoing" | "scheduled" | "all" | undefined,
+  { state: RootState }
+>(
   "transactions/fetchIncomingTransactions",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (wallet: string, { getState }) => {
+  async (timed_status, { getState }) => {
     const { transactions } = getState() as RootState
     const { data: response } = await api.get("/transaction/", {
       params: {
@@ -156,35 +186,106 @@ export const fetchIncomingTransactions: any = createAsyncThunk(
         limit: transactions.pagination.limit,
         offset:
           (Number(transactions.pagination.currentPage) - 1) *
-          transactions.pagination.limit
+          transactions.pagination.limit,
+        timed_status: timed_status === "all" ? "" : timed_status
       }
     })
     return response
-    // const { data: response } = await axios.get(
-    //   `https://internal-ten-cherry.glitch.me/transactions?receiver=${wallet}`
-    // )
-    // return {
-    //   count: response.length,
-    //   next: "",
-    //   previous: "",
-    //   results: response
-    // }
+  }
+)
+//Incoming Vault Instant Transactions
+export const fetchIncomingTreasuryInstantTransactions = createAsyncThunk<
+  any,
+  "PENDING" | "ACCEPTED" | "REJECTED" | "ALL" | undefined,
+  { state: RootState }
+>(
+  "transactions/fetchIncomingTreasuryInstantTransactions",
+  async (status, { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get(
+      "/incoming/treasury-vault-instant-transactions/",
+      {
+        params: {
+          limit: transactions.pagination.limit,
+          offset:
+            (Number(transactions.pagination.currentPage) - 1) *
+            transactions.pagination.limit,
+          status: status === "ALL" ? "" : status
+        }
+      }
+    )
+    return response
+  }
+)
+//Incoming Vault Continuous Transactions
+export const fetchIncomingTreasuryContinuousTransactions = createAsyncThunk<
+  any,
+  "completed" | "ongoing" | "scheduled" | "all" | undefined,
+  { state: RootState }
+>(
+  "transactions/fetchIncomingTreasuryContinuousTransactions",
+  async (time_based_status, { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get(
+      "/incoming/treasury-vault-streaming-transactions/",
+      {
+        params: {
+          limit: transactions.pagination.limit,
+          offset:
+            (Number(transactions.pagination.currentPage) - 1) *
+            transactions.pagination.limit,
+          time_based_status:
+            time_based_status === "all" ? "" : time_based_status
+        }
+      }
+    )
+    return response
   }
 )
 
+//Update Incoming Transactions
 export const updateIncomingTransactions: any = createAsyncThunk<
   null,
-  { transaction_kind: string; transaction_uuid: string },
+  {
+    transaction_type: "continuous" | "treasury_continuous"
+    transaction_uuid: string
+    transaction_hash?: string
+  },
   { dispatch: AppDispatch }
 >("transactions/updateIncomingTransactions", async (data, { dispatch }) => {
-  await api.post(`/incoming/update/`, data)
-  console.log("etee")
-  setTimeout(() => {
-    dispatch(fetchIncomingTransactions())
-  }, constants.STREAM_FETCH_TIMEOUT)
+  if (data.transaction_type === "continuous") {
+    if (data.transaction_hash) {
+      await api.post(`/transaction/${data.transaction_uuid}/update-status/`, {
+        transaction_hash: data.transaction_hash
+      })
+    } else {
+      await api.post(`/transaction/${data.transaction_uuid}/update-status/`)
+    }
+    setTimeout(() => {
+      dispatch(fetchIncomingTransactions())
+    }, constants.STREAM_FETCH_TIMEOUT)
+  } else {
+    if (data.transaction_hash) {
+      await api.post(
+        `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`,
+        {
+          transaction_hash: data.transaction_hash
+        }
+      )
+    } else {
+      await api.post(
+        `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`
+      )
+    }
+
+    setTimeout(() => {
+      dispatch(fetchIncomingTreasuryContinuousTransactions())
+    }, constants.STREAM_FETCH_TIMEOUT)
+  }
   return null
 })
 
+//Recent Transactions
 export const fetchRecentTransactions: any = createAsyncThunk(
   "transactions/fetchRecentTransactions",
   async () => {
@@ -252,6 +353,7 @@ export const fetchScheduledTransactions: any = createAsyncThunk(
   }
 )
 
+// Overall Activity
 export const fetchOverallActivity: any = createAsyncThunk(
   "transactions/fetchOverallActivity",
   async () => {
@@ -260,6 +362,7 @@ export const fetchOverallActivity: any = createAsyncThunk(
   }
 )
 
+// Weekly Activity
 export const fetchWeeklyActivity: any = createAsyncThunk(
   "transactions/fetchWeeklyActivity",
   async () => {
@@ -349,6 +452,52 @@ const transactionsSlice = createSlice({
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
+    //Incoming Treasury Instant Transactions
+    builder.addCase(
+      fetchIncomingTreasuryInstantTransactions.pending,
+      (state) => {
+        state.loading = true
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryInstantTransactions.fulfilled,
+      (state, action) => {
+        state.loading = false
+        state.error = ""
+        state.incomingTreasuryInstantTransactions = action.payload
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryInstantTransactions.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Incoming Treasury Continuous Transactions
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactions.pending,
+      (state) => {
+        state.loading = true
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactions.fulfilled,
+      (state, action) => {
+        state.loading = false
+        state.error = ""
+        state.incomingTreasuryContinuousTransactions = action.payload
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactions.rejected,
+      (state, action) => {
+        state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
     //recentTransactions
     builder.addCase(fetchRecentTransactions.pending, (state) => {
       state.loading = true

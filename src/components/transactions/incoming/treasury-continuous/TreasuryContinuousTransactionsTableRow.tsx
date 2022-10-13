@@ -1,45 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
-import {
-  BSC_BRIDGE_ADDRESS,
-  BSC_ZEBEC_BRIDGE_ADDRESS,
-  ZebecEthBridgeClient
-} from "@lucoadam/zebec-wormhole-sdk"
-import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch } from "app/hooks"
-import ZebecContext from "app/zebecContext"
-import { withdrawIncomingToken } from "application"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
   IconButton,
-  // Modal,
   UserAddress
 } from "components/shared"
-import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
-import { getEVMToWormholeChain } from "constants/wormholeChains"
-import { toast } from "features/toasts/toastsSlice"
-import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
-import React, {
-  FC,
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
+import ReactTooltip from "react-tooltip"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
-import { useSigner } from "wagmi"
-import { StatusType, TransactionStatusType } from "../transactions.d"
-// import { WithdrawStepsList } from "../withdraw/data.d"
+import {
+  StatusType,
+  TransactionStatusType
+} from "components/transactions/transactions.d"
+import CopyButton from "components/shared/CopyButton"
+import { RPC_NETWORK } from "constants/cluster"
+import { withdrawIncomingToken } from "application"
+import ZebecContext from "app/zebecContext"
 
-interface IncomingTableRowProps {
+interface ContinuousTransactionsTableRowProps {
   index: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any
@@ -47,19 +29,16 @@ interface IncomingTableRowProps {
   handleToggleRow: () => void
 }
 
-const IncomingTableRow: FC<IncomingTableRowProps> = ({
-  index,
-  transaction,
-  activeDetailsRow,
-  handleToggleRow
-}) => {
+const TreasuryContinuousTransactionsTableRow: FC<
+  ContinuousTransactionsTableRowProps
+> = ({ index, transaction, activeDetailsRow, handleToggleRow }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
-  const { data: signer } = useSigner()
-  const walletObject = useZebecWallet()
-  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [])
 
   const styles = {
     detailsRow: {
@@ -70,16 +49,8 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     }
   }
 
-  // const [currentStep, setCurrentStep] = React.useState(-1)
-  // const [isOpen, setIsOpen] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const [withdrawAmount, setWithdrawAmount] = useState<any>()
-  // const [escrowData, setEscrowData] = useState<any>([])
-  // const [withdrawLoading, setWithdrawLoading] = useState<boolean>(false)
-
-  // const fees = 0.25
-
   const {
+    uuid,
     name,
     remarks,
     amount,
@@ -89,15 +60,15 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
     receiver,
     start_time,
     end_time,
-    transaction_type,
     pda,
     transaction_hash,
     file,
     latest_transaction_event
   } = transaction
 
-  const totalTransactionAmount =
-    amount - Number(latest_transaction_event.paused_amt)
+  const totalTransactionAmount = latest_transaction_event
+    ? amount - Number(latest_transaction_event.paused_amt)
+    : amount
 
   const totalTimeInSec = end_time - start_time
   const streamRatePerSec = amount / totalTimeInSec
@@ -168,91 +139,25 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           Number(latest_transaction_event.withdraw_limit)
       )
     }
+
     // eslint-disable-next-line
   }, [status, transaction])
 
-  // Toggle Modal
-  // const toggleModal = () => {
-  //   setIsOpen(!isOpen)
-  //   setWithdrawAmount(0)
-  //   setEscrowData(0)
-  // }
-  // Fetch escrow data
-  // const fetchEscrowData = async () => {
-  //   if (token_mint_address && zebecCtx.token) {
-  //     const data = await deserializeStreamEscrow(zebecCtx.token, pda)
-  //     setEscrowData([data])
-  //   } else if (zebecCtx.stream) {
-  //     const data = await deserializeStreamEscrow(zebecCtx.stream, pda)
-  //     setEscrowData([data])
-  //   }
-  // }
-
-  const handleSolanaWithdraw = async () => {
+  const withdraw = () => {
     if (zebecCtx.stream && zebecCtx.token) {
-      setLoading(true)
       const withdrawData = {
         data: {
           sender: sender,
           receiver: receiver,
           escrow: pda,
-          token_mint_address: token_mint_address
+          token_mint_address: token_mint_address,
+          transaction_kind: "treasury_continuous",
+          transaction_uuid: uuid,
+          hasTransactionEnd: currentTime > end_time ? true : false
         },
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
-      // await dispatch(withdrawIncomingToken(withdrawData))
-      setLoading(false)
-    }
-  }
-  const handleEVMWithdraw = async () => {
-    try {
-      if (!signer) return
-      setLoading(true)
-      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-      const messengerContract = new ZebecEthBridgeClient(
-        BSC_ZEBEC_BRIDGE_ADDRESS,
-        signer,
-        sourceChain
-      )
-      console.log("transaction:", transaction)
-      const tx = await messengerContract.withdrawFromTokenStream(
-        transaction.sender,
-        transaction.receiver,
-        transaction.token_mint_address,
-        transaction.pda
-      )
-      console.log("tx:", tx)
-      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      console.log("sequence:", sequence)
-      const response = await listenWormholeTransactionStatus(
-        sequence,
-        BSC_ZEBEC_BRIDGE_ADDRESS,
-        sourceChain
-      )
-      console.log("response", response)
-      if (response === "success") {
-        dispatch(toast.success({ message: "Stream withdrawal completed" }))
-      } else if (response === "timeout") {
-        dispatch(toast.error({ message: "Stream withdrawal timeout" }))
-      } else {
-        dispatch(toast.error({ message: "Stream withdrawal failed" }))
-      }
-      setLoading(false)
-    } catch (e: any) {
-      console.log("error:", e)
-      setLoading(false)
-      dispatch(
-        toast.error({
-          message: "Stream withdrawal failed"
-        })
-      )
-    }
-  }
-  const withdraw = () => {
-    if (walletObject.chainId === "solana") {
-      handleSolanaWithdraw()
-    } else {
-      handleEVMWithdraw()
+      dispatch(withdrawIncomingToken(withdrawData))
     }
   }
 
@@ -261,14 +166,12 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
       <Fragment>
         {/* Table Body Row */}
         <tr className={`flex items-center`}>
-          <td className="px-6 py-5 min-w-85">
+          <td className="px-6 py-4 min-w-85">
             <div className="flex items-center gap-x-2.5">
-              <div className=" w-14 h-14">
-                <CircularProgress
-                  status={status}
-                  percentage={(streamedToken * 100) / totalTransactionAmount}
-                />
-              </div>
+              <CircularProgress
+                status={status}
+                percentage={(streamedToken * 100) / totalTransactionAmount}
+              />
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
@@ -284,59 +187,26 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
               </div>
             </div>
           </td>
-          <td className="px-6 py-5 min-w-60">
+          <td className="px-6 py-4 min-w-60">
             <div className="text-caption text-content-primary">
               {formatDateTime(start_time)}
               <br />
               to {formatDateTime(end_time)}
             </div>
           </td>
-          <td className="px-6 py-5 min-w-60">
+          <td className="px-6 py-4 min-w-60">
             <UserAddress wallet={sender} />
           </td>
-          <td className="px-6 py-5 w-full">
-            <div className="flex items-center float-right gap-x-6">
-              {/* // parseFloat(latest_transaction_event.withdraw_limit)>0 || &&  */}
-              {
-                <Button
-                  title="Withdraw"
-                  size="small"
-                  loading={loading}
-                  startIcon={
-                    <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                  }
-                  disabled={
-                    status === StatusType.CANCELLED ||
-                    status === StatusType.SCHEDULED
-                  }
-                  onClick={() => {
-                    // setCurrentStep(0)
-                    // setIsOpen(true)
-                    // fetchEscrowData()
-                    withdraw()
-                  }}
-                />
-              }
-              {/* Withdraw Modal */}
-              {/* <Modal
-                show={currentStep >= 0 && isOpen}
-                toggleModal={toggleModal}
-                className={`rounded h-96 flex items-center justify-center`}
-                hasCloseIcon={!currentStep}
+          <td className="px-6 py-4 w-full">
+            <div className="flex items-center justify-end float-right gap-x-6">
+              <Button
                 size="small"
-              >
-                {WithdrawStepsList[currentStep]?.component({
-                  setCurrentStep,
-                  withdrawAmount,
-                  setWithdrawAmount,
-                  fees,
-                  escrowData,
-                  transaction,
-                  withdrawLoading,
-                  setWithdrawLoadingFunc
-                })}
-              </Modal> */}
-              {/* ------- */}
+                title="Withdraw"
+                startIcon={
+                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                }
+                onClick={withdraw}
+              />
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -346,12 +216,13 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
           </td>
         </tr>
         {/* Table Body Details Row */}
+
         <tr>
           <td colSpan={4}>
             <div
               ref={detailsRowRef}
               className={`bg-background-light rounded-lg overflow-hidden transition-all duration-[400ms] ${
-                activeDetailsRow === index ? `ease-in` : "ease-out"
+                activeDetailsRow === index ? `ease-in ` : "ease-out"
               }`}
               style={styles.detailsRow}
             >
@@ -362,11 +233,11 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                   </div>
                   {remarks && (
                     <div className="text-body text-content-secondary">
-                      {remarks ?? "-"}
+                      {remarks}
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
+                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -433,12 +304,8 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.stream-type")}
                       </div>
                       <div className="flex items-center gap-x-1 text-content-primary">
-                        {transaction_type === "instant" ? (
-                          <Icons.ThunderIcon className="w-6 h-6" />
-                        ) : (
-                          <Icons.DoubleCircleDottedLineIcon className="w-6 h-6" />
-                        )}
-                        <span className="capitalize">{transaction_type}</span>
+                        <Icons.ThunderIcon className="w-6 h-6" />
+                        <span className="capitalize">Continuous</span>
                       </div>
                     </div>
                   </div>
@@ -473,8 +340,7 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {" "}
-                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                        {formatCurrency(amount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -551,4 +417,4 @@ const IncomingTableRow: FC<IncomingTableRowProps> = ({
   )
 }
 
-export default IncomingTableRow
+export default TreasuryContinuousTransactionsTableRow
