@@ -6,6 +6,12 @@ import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import { TreasuryTokenAssets } from "components/treasury/detail/components/overview/TreasuryTokenAssets"
 import { TreasuryVaultTokenAssets } from "components/treasury/detail/components/overview/TreasuryVaultTokenAssets"
+import * as Icons from "assets/icons"
+import { useAppDispatch } from "app/hooks"
+import { useZebecWallet } from "hooks/useWallet"
+import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
+import { constants } from "constants/constants"
 
 export const EVMDepositedAssets: FC<{
   tokens?: TokenDetails[]
@@ -22,6 +28,32 @@ export const EVMDepositedAssets: FC<{
 }) => {
   const { t } = useTranslation("treasuryOverview")
   const [activeTab, setActiveTab] = useState<number>(0)
+  const [refreshClassName, setRefreshClassName] = useState({
+    1: "",
+    2: ""
+  })
+  const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
+
+  const refreshBalance = (title: string) => {
+    if (title === "home:zebec-assets") {
+      setRefreshClassName((prev) => ({ ...prev, 1: "animate-spin" }))
+      if (walletObject.publicKey && !refreshClassName) {
+        dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+      }
+      setTimeout(() => {
+        setRefreshClassName((prev) => ({ ...prev, 1: "" }))
+      }, constants.REFRESH_ANIMATION_DURATION)
+    } else {
+      setRefreshClassName((prev) => ({ ...prev, 2: "animate-spin" }))
+      if (walletObject && !refreshClassName) {
+        dispatch(fetchPdaBalance(walletObject.publicKey?.toString()))
+      }
+      setTimeout(() => {
+        setRefreshClassName((prev) => ({ ...prev, 2: "" }))
+      }, constants.REFRESH_ANIMATION_DURATION)
+    }
+  }
 
   const tabs = [
     {
@@ -65,6 +97,18 @@ export const EVMDepositedAssets: FC<{
                 title={`${t(tab.title)}`}
                 isActive={activeTab === index}
                 onClick={() => setActiveTab(index)}
+                endIcon={
+                  <span
+                    className="w-7 h-7"
+                    onClick={() => refreshBalance(tab.title)}
+                  >
+                    <Icons.RefreshIcon
+                      className={
+                        refreshClassName[(index + 1) as 1 | 2] as string
+                      }
+                    />
+                  </span>
+                }
                 className="w-1/2 justify-center"
               />
             )

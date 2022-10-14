@@ -72,7 +72,7 @@ const Common: FC<{
           })
         )
       zebecBalances.length === 0 &&
-        dispatch(fetchZebecBalance(walletObject.publicKey))
+        dispatch(fetchZebecBalance(walletObject.publicKey.toString()))
       pdaBalances.length === 0 &&
         walletObject.chainId !== "solana" &&
         dispatch(fetchPdaBalance(walletObject.publicKey.toString()))

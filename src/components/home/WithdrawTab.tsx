@@ -2,14 +2,19 @@ import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { withdrawNative, withdrawToken } from "application"
-import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
+import {
+  Button,
+  CollapseDropdown,
+  TokensDropdown,
+  WithdrawDepositInput
+} from "components/shared"
 import { constants } from "constants/constants"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useState } from "react"
+import { FC, useContext, useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import * as Icons from "assets/icons"
 import { useSigner } from "wagmi"
@@ -23,6 +28,7 @@ import {
 import { toast } from "features/toasts/toastsSlice"
 import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { useClickOutside } from "hooks"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -37,9 +43,13 @@ const WithdrawTab: FC = () => {
     useAppSelector((state) => state.zebecBalance.tokens) || []
   const streamingTokens =
     useAppSelector((state) => state.zebecStreamingBalance.tokens) || []
+  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens) || []
 
   const [loading, setLoading] = useState<boolean>(false)
   const [showMaxInfo, setShowMaxInfo] = useState<boolean>(false)
+  const [toggleDropdown, setToggleDropdown] = useState(false)
+  const [withdrawFrom, setWithdrawFrom] = useState("Zebec Assets")
+  const dropdownWrapper = useRef(null)
 
   const {
     currentToken,
@@ -60,6 +70,11 @@ const WithdrawTab: FC = () => {
   })
 
   const setMaxAmount = () => {
+    if (withdrawFrom === "PDA Assets") {
+      setValue("amount", getBalance(pdaTokens, currentToken.symbol).toString())
+      trigger("amount")
+      return
+    }
     const balance =
       getBalance(walletTokens, currentToken.symbol) -
       getBalance(streamingTokens, currentToken.symbol)
@@ -157,6 +172,10 @@ const WithdrawTab: FC = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePdaWithdraw = (data: any) => {
+    console.log(data)
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
@@ -169,9 +188,19 @@ const WithdrawTab: FC = () => {
     if (walletObject.chainId === "solana") {
       handleSolanaSubmit(data)
     } else {
-      handleEvmSubmit(data)
+      if (withdrawFrom === "Zebec Assets") {
+        handleEvmSubmit(data)
+      } else {
+        handlePdaWithdraw(data)
+      }
     }
   }
+
+  useClickOutside(dropdownWrapper, {
+    onClickOutside: () => {
+      setToggleDropdown(false)
+    }
+  })
 
   return (
     <div className="withdraw-from-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
@@ -179,17 +208,65 @@ const WithdrawTab: FC = () => {
         {t("common:deposit-withdrawal.withdraw-title")}
       </div>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col">
+        <div className="relative" ref={dropdownWrapper}>
+          <label className={`text-content-secondary text-xs font-medium mb-1`}>
+            Withdraw From
+          </label>
+          <div
+            onClick={() => setToggleDropdown(!toggleDropdown)}
+            className="cursor-pointer relative text-content-primary"
+          >
+            <input
+              type="text"
+              value={withdrawFrom}
+              className={`cursor-pointer h-[40px] w-full !pr-12`}
+              readOnly
+            />
+            <Icons.CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
+          </div>
+          <CollapseDropdown
+            show={toggleDropdown}
+            className="mt-8 w-full z-[99]"
+            position="left"
+          >
+            <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+              {["Zebec Assets", "PDA Assets"].map((item) => (
+                <div
+                  className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
+                  key={item}
+                  onClick={() => {
+                    setWithdrawFrom(item)
+                    setToggleDropdown(false)
+                    setCurrentToken(tokenDetails[0])
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </CollapseDropdown>
+        </div>
+        {withdrawFrom === "PDA Assets" && (
+          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
+            <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
+            <span>Withdraw from PDA Assets will be available soon.</span>
+          </div>
+        )}
         <WithdrawDepositInput
           token={currentToken}
           setMaxAmount={setMaxAmount}
+          className="mt-4"
           toggle={toggle}
           setToggle={setToggle}
+          disabled={withdrawFrom === "PDA Assets"}
           {...register("amount")}
           errorMessage={`${errors.amount?.message || ""}`}
         >
           {/* Tokens Dropdown */}
           <TokensDropdown
-            walletTokens={walletTokens}
+            walletTokens={
+              withdrawFrom === "Zebec Assets" ? walletTokens : pdaTokens
+            }
             tokens={tokenDetails}
             show={show}
             toggleShow={setToggle}
@@ -198,7 +275,7 @@ const WithdrawTab: FC = () => {
         </WithdrawDepositInput>
 
         {showMaxInfo && (
-          <div className="mt-2 text-caption text-content-tertiary flex items-start gap-x-1">
+          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
             <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
             <span>
               {t("common:deposit-withdrawal.max-treasury-deposit-message")}
@@ -210,7 +287,7 @@ const WithdrawTab: FC = () => {
           title={`${t("common:buttons.withdraw")}`}
           variant="gradient"
           className="w-full mt-6"
-          disabled={loading}
+          disabled={loading || withdrawFrom === "PDA Assets"}
           loading={loading}
         />
       </form>
