@@ -5,7 +5,6 @@ import {
   resetTimedStatusTransactions,
   setPagination
 } from "features/transactions/transactionsSlice"
-import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useState } from "react"
 import * as Icons from "assets/icons"
@@ -37,7 +36,6 @@ const transactionTabs = [
 const Incoming: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
-  const { originalAddress } = useZebecWallet()
   const { isSigned } = useAppSelector((state) => state.common)
   const [activePage, setActivePage] = useState<number>(0)
 
@@ -45,7 +43,7 @@ const Incoming: FC = () => {
     if (isSigned) {
       dispatch(resetTimedStatusTransactions())
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
-      dispatch(fetchIncomingTransactions(originalAddress?.toString() || ""))
+      dispatch(fetchIncomingTransactions())
     }
   }, [dispatch, isSigned])
 
