@@ -273,6 +273,12 @@ const ContinuousTransactionsTableRow: FC<
                 startIcon={
                   <Icons.ArrowUpRightIcon className="text-content-contrast" />
                 }
+                loading={loading}
+                disabled={
+                  status === StatusType.CANCELLED ||
+                  amount ===
+                    parseFloat(latest_transaction_event.withdrawn || "0")
+                }
                 onClick={withdraw}
               />
               <IconButton

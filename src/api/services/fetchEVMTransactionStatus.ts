@@ -11,7 +11,7 @@ const fetchWormholeTransactionStatus = async (
     const { data } = await axios.get(
       `https://zebec-relayer.alishdahal.com.np/transaction/${chainId}/${emitterAddress.toLowerCase()}/${sequence}`
     )
-    if (data.data.status === "success") {
+    if (data.data.status === "success" || data?.transactions?.length >= 3) {
       return "success"
     }
     return "error"

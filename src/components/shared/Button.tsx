@@ -77,7 +77,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
           )}
           {...rest}
           ref={ref}
-          disabled={disabled}
+          disabled={disabled || loading}
         >
           {children ? (
             children
