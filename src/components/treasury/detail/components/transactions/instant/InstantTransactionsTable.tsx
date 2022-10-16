@@ -84,11 +84,13 @@ export const InstantTransactionsTable: FC<TransactionTableProps> = ({
           )}
         </TableBody>
       </Table>
-      <Pagination
-        pagination={pagination}
-        setPagination={setTreasuryTransactionPagination}
-        onChange={() => fetchTransactions()}
-      />
+      {transactions.results.length > 0 && (
+        <Pagination
+          pagination={pagination}
+          setPagination={setTreasuryTransactionPagination}
+          onChange={() => fetchTransactions()}
+        />
+      )}
     </>
   )
 }

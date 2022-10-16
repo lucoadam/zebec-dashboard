@@ -4,6 +4,7 @@ interface TabBaseProps {
   type: "solid" | "plain"
   isActive: boolean
   startIcon?: JSX.Element
+  endIcon?: JSX.Element
   count?: number
   className?: string
   onClick: MouseEventHandler<T>
