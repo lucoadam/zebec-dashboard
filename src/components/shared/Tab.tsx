@@ -24,6 +24,7 @@ export const Tab: FC<TabProps> = (props) => {
     children,
     title,
     startIcon,
+    endIcon,
     count,
     className,
     onClick
@@ -69,6 +70,16 @@ export const Tab: FC<TabProps> = (props) => {
               isActive ? "w-full ease-out" : "w-0 ease-in"
             }`}
           />
+        )}
+        {endIcon && (
+          <span
+            className={twMerge(
+              "text-xl w-max",
+              isActive ? "text-primary" : "text-content-contrast"
+            )}
+          >
+            {endIcon}
+          </span>
         )}
       </button>
     </>
