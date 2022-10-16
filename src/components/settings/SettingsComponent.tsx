@@ -2,42 +2,36 @@ import { useTranslation } from "next-i18next"
 import React, { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Breadcrumb, Button, CollapseDropdown, InputField } from "components/shared"
+import {
+  Breadcrumb,
+  Button,
+  CollapseDropdown,
+  InputField
+} from "components/shared"
 import { useClickOutside } from "hooks"
 import * as Icons from "assets/icons"
 import { settingsSchema } from "utils/validations/settingsSchema"
+import { saveExplorerSettings } from "features/settings/settingsSlice"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { explorers, getExplorer } from "constants/explorers"
 
-
-
-
-interface explorer {
-  name: string
-  key: number
-  icon: React.FC
-}
-
-export const Explorers: explorer[] = [
-  {
-    name: "SolScan",
-    key: 0,
-    icon: () => <Icons.Solscan />
-  },
-  {
-    name: "Solana Explorer",
-    key: 1,
-    icon: () => <Icons.SolanaExplorer />
-  },
-  {
-    name: "Solana FM",
-    key: 2,
-    icon: () => <Icons.SolanaFM />
+const getExplorerIcon = (name: string) => {
+  switch (name) {
+    case "SolScan":
+      return <Icons.Solscan />
+    case "Solana Explorer":
+      return <Icons.SolanaExplorer />
+    case "Solana FM":
+      return <Icons.SolanaFM />
+    default:
+      return <Icons.Solscan />
   }
-]
+}
 
 export function SettingsComponent() {
   const { t } = useTranslation("common")
-
-  const [currentExplorer, setCurrentExplorer] = useState<explorer>(Explorers[0])
+  const dispatch = useAppDispatch()
+  const { explorer } = useAppSelector((state) => state.settings)
 
   const {
     register,
@@ -47,8 +41,6 @@ export function SettingsComponent() {
     mode: "onChange" || "onSubmit",
     resolver: yupResolver(settingsSchema)
   })
-
- 
 
   const [toggleSettingsDropdown, setToggleSettingsDropdown] =
     useState<boolean>(false)
@@ -69,18 +61,14 @@ export function SettingsComponent() {
     //dispatch(saveEmailSettings(data))
   }
 
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onExplorerSubmit = (data: any) => {
-    console.log(data)
-    //dispatch(saveExplorerSettings(data.explorer))
+    dispatch(saveExplorerSettings(data))
   }
+
   return (
     <div className="container w-full">
-      
-
-        <Breadcrumb title={`${t("settings.settings")} `} className="pt-20"/>
-      
-
+      <Breadcrumb title={`${t("settings.settings")} `} className="pt-20" />
 
       <div className="rounded bg-background-secondary p-10 mt-12 max-w-96">
         <div className="text-subtitle text-content-primary font-semibold">{`${t(
@@ -134,15 +122,15 @@ export function SettingsComponent() {
         <div className="text-caption text-content-secondary pt-4 pl-2 pb-2">
           {`${t("settings.explorer")} `}
         </div>
-        <form onSubmit={handleSubmit(onExplorerSubmit)} autoComplete="off">
+        {/* <form onSubmit={handleSubmit(onExplorerSubmit)} autoComplete="off"> */}
         <div
           className={` cursor-pointer w-[400px] relative text-content-primary `}
           onClick={() => setToggleSettingsDropdown(!toggleSettingsDropdown)}
         >
           <div className="absolute flex gap-x-4 pt-3 pl-3 pr-3">
-            <div>{currentExplorer.icon({})}</div>
+            <div>{getExplorerIcon(explorer)}</div>
             <span className="text-caption text-content-primary">
-              {currentExplorer.name}
+              {getExplorer(explorer).name}
             </span>
           </div>
 
@@ -154,38 +142,37 @@ export function SettingsComponent() {
 
           <Icons.CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
         </div>
-        <div className="relative" ref={SettingsDropdownWrapperRef}>
+        <div className="relative mb-[200px]" ref={SettingsDropdownWrapperRef}>
           <CollapseDropdown
             show={toggleSettingsDropdown}
             className="w-[390px] left-1 top-4"
           >
-            {Explorers.map((explorer: explorer) => (
+            {explorers.map((item) => (
               <div
                 className="flex gap-x-4 h-12 w-full items-center bg-background- hover:bg-background-tertiary"
-                key={explorer.key}
+                key={item.name}
                 onClick={() => {
-                  setCurrentExplorer(explorer)
+                  onExplorerSubmit({ explorer: item.name })
                   setToggleSettingsDropdown(!toggleSettingsDropdown)
                 }}
               >
-                <div className="pl-4 ">{explorer.icon({})}</div>
+                <div className="pl-4 ">{getExplorerIcon(item.name)}</div>
                 <div className="text-caption text-content-primary">
-                  {explorer.name}
+                  {item.name}
                 </div>
               </div>
             ))}
-            </CollapseDropdown>
-            <div className="pb-10 pt-6">
+          </CollapseDropdown>
+          {/* <div className="pb-10 pt-6">
               <Button
                 className={`w-[390px] `}
                 variant="gradient"
                 type="submit"
                 title={`${t("common:settings.save-changes")}`}
               />
-            </div>
-          </div>
-          
-          </form>
+            </div> */}
+        </div>
+        {/* </form> */}
       </div>
     </div>
   )

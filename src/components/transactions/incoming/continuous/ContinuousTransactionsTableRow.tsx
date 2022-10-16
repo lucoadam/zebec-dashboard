@@ -1,4 +1,4 @@
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -17,9 +17,9 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
+import { getExplorerUrl } from "constants/explorers"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -36,6 +36,8 @@ const ContinuousTransactionsTableRow: FC<
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { explorer } = useAppSelector((state) => state.settings)
+
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [])
@@ -375,7 +377,7 @@ const ContinuousTransactionsTableRow: FC<
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >

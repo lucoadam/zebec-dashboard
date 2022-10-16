@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useEffect, useState } from "react"
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import { Button } from "../Button"
 import { Transition } from "@headlessui/react"
 import {
@@ -9,8 +9,8 @@ import {
 } from "features/toasts/toastsSlice.d"
 import { removeToast } from "features/toasts/toastsSlice"
 import { twMerge } from "tailwind-merge"
-import { RPC_NETWORK } from "constants/cluster"
 import * as Icons from "assets/icons"
+import { getExplorerUrl } from "constants/explorers"
 
 interface ActiveTostProps extends ToastProps {
   position: ToastPropertiesProps["position"]
@@ -35,6 +35,7 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
   const dispatch = useAppDispatch()
   const [showToast, setShowToast] = useState(false)
   const { type, id, title, message, transactionHash, autoClose } = toast
+  const { explorer } = useAppSelector((state) => state.settings)
 
   useEffect(() => {
     //set showToast to true for animation on load
@@ -119,7 +120,7 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
             </div>
             {transactionHash && (
               <a
-                href={`https://solana.fm/tx/${transactionHash}?cluster=${RPC_NETWORK}-solana`}
+                href={getExplorerUrl(explorer, transactionHash)}
                 target="_blank"
                 rel="noreferrer"
               >
