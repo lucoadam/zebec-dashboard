@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppDispatch } from "app/store"
 import { setLoading } from "features/modals/transferToVaultModalSlice"
 import { toast } from "features/toasts/toastsSlice"
