@@ -20,7 +20,6 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
 import {
   ApprovedRejectedUserProps,
   TreasuryApprovalType
@@ -29,6 +28,7 @@ import { showResumeModal } from "features/modals/resumeModalSlice"
 import { showPauseModal } from "features/modals/pauseModalSlice"
 import { showCancelModal } from "features/modals/cancelModalSlice"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { getExplorerUrl } from "constants/explorers"
 
 interface ScheduledTableRowProps {
   index: number
@@ -50,6 +50,7 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
   const { initiatedTransactions } = useAppSelector(
     (state) => state.treasuryTransactions
   )
+  const { explorer } = useAppSelector((state) => state.settings)
 
   const styles = {
     detailsRow: {
@@ -647,7 +648,7 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >
