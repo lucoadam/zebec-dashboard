@@ -199,14 +199,19 @@ const ContinuousTransactionsTableRow: FC<
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              <Button
-                size="small"
-                title="Withdraw"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={withdraw}
-              />
+              {status !== StatusType.SCHEDULED &&
+                status !== StatusType.CANCELLED &&
+                parseFloat(amount) !==
+                  parseFloat(latest_transaction_event.withdrawn) && (
+                  <Button
+                    size="small"
+                    title="Withdraw"
+                    startIcon={
+                      <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                    }
+                    onClick={withdraw}
+                  />
+                )}
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}

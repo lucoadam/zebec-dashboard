@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
@@ -128,7 +129,7 @@ const initialState: TransactionState = {
 export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
   "transactions/updateTransactionsStatus",
   async (uuid, {}) => {
-    await api.get(`/transaction/${uuid}/update-status/`)
+    await api.post(`/transaction/${uuid}/pre-cancel/`)
     return null
   }
 )
@@ -239,35 +240,27 @@ export const updateIncomingTransactions: any = createAsyncThunk<
   {
     transaction_type: "continuous" | "treasury_continuous"
     transaction_uuid: string
-    transaction_hash?: string
+    transaction_hash: string
+    completed: boolean
   },
   { dispatch: AppDispatch }
 >("transactions/updateIncomingTransactions", async (data, { dispatch }) => {
   if (data.transaction_type === "continuous") {
-    if (data.transaction_hash) {
-      await api.post(`/transaction/${data.transaction_uuid}/update-status/`, {
-        transaction_hash: data.transaction_hash
-      })
-    } else {
-      await api.post(`/transaction/${data.transaction_uuid}/update-status/`)
-    }
+    await api.post(`/transaction/${data.transaction_uuid}/update-status/`, {
+      transaction_hash: data.transaction_hash,
+      completed: data.completed
+    })
     setTimeout(() => {
       dispatch(fetchIncomingTransactions())
     }, constants.STREAM_FETCH_TIMEOUT)
   } else {
-    if (data.transaction_hash) {
-      await api.post(
-        `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`,
-        {
-          transaction_hash: data.transaction_hash
-        }
-      )
-    } else {
-      await api.post(
-        `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`
-      )
-    }
-
+    await api.post(
+      `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`,
+      {
+        transaction_hash: data.transaction_hash,
+        completed: data.completed
+      }
+    )
     setTimeout(() => {
       dispatch(fetchIncomingTreasuryContinuousTransactions())
     }, constants.STREAM_FETCH_TIMEOUT)
