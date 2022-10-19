@@ -203,8 +203,9 @@ const ContinuousTransactionsTableRow: FC<
             <div className="flex items-center justify-end float-right gap-x-6">
               {status !== StatusType.SCHEDULED &&
                 status !== StatusType.CANCELLED &&
-                parseFloat(amount) !==
-                  parseFloat(latest_transaction_event.withdrawn) && (
+                parseFloat(amount) -
+                  parseFloat(latest_transaction_event.withdrawn) >
+                  parseFloat(amount) * 0.0025 && (
                   <Button
                     size="small"
                     title="Withdraw"
