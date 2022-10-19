@@ -27,7 +27,8 @@ import {
   transferEvm,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient,
-  BSC_BRIDGE_ADDRESS
+  BSC_BRIDGE_ADDRESS,
+  getTargetAsset
 } from "@lucoadam/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
@@ -171,38 +172,14 @@ const DepositTab: FC = () => {
         const tokenAddress = currentToken.mint
         const recipientAddress = walletObject.publicKey?.toString() as string
         console.log("sourceChain", sourceChain)
+
         // find out target token address in solana
-        let targetTokenAddress: string
-        console.log(
-          "token bridge address",
-          sourceChain,
-          getTokenBridgeAddressForChain(sourceChain)
-        )
-        const originAssetInfo = await getOriginalAssetEth(
-          getTokenBridgeAddressForChain(sourceChain),
+        const targetTokenAddress = await getTargetAsset(
           signer,
           tokenAddress,
-          sourceChain
+          sourceChain,
+          targetChain
         )
-        console.log("originAssetInfo", originAssetInfo)
-        if (originAssetInfo.chainId === targetChain) {
-          targetTokenAddress = tryUint8ArrayToNative(
-            originAssetInfo.assetAddress,
-            toChainName(targetChain)
-          )
-        } else {
-          const foreignAsset = await getForeignAssetSolana(
-            connection,
-            SOL_TOKEN_BRIDGE_ADDRESS,
-            originAssetInfo.chainId,
-            originAssetInfo.assetAddress
-          )
-          if (!foreignAsset) {
-            throw new Error("Token is not attested in solana")
-          }
-          targetTokenAddress = foreignAsset
-        }
-
         // Create token account if doesn't exist
         console.log("targetTokenAddress", targetTokenAddress)
         const { data: response } = await axios.post(
