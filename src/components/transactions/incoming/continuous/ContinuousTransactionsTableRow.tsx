@@ -33,6 +33,7 @@ import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -181,6 +182,17 @@ const ContinuousTransactionsTableRow: FC<
     try {
       if (!signer) return
       setLoading(true)
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        setLoading(false)
+        return
+      }
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,

@@ -18,6 +18,7 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { toast } from "features/toasts/toastsSlice"
 import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -75,6 +76,18 @@ const CancelModal: FC = ({}) => {
     try {
       if (!signer) return
       dispatch(setLoading(true))
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        dispatch(setLoading(false))
+        return
+      }
+
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,

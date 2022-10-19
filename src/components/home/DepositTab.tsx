@@ -55,6 +55,7 @@ import {
 import { CheveronDownIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 // import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
@@ -371,10 +372,22 @@ const DepositTab: FC = () => {
     }
   }
 
-  const submit = (data: any) => {
+  const submit = async (data: any) => {
     if (walletObject.chainId === "solana") {
       handleSolanaSubmit(data)
     } else {
+      setLoading(true)
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        setLoading(false)
+        return
+      }
       if (depositFrom === "Wallet Assets") {
         handleEvmSubmit(data)
       } else {

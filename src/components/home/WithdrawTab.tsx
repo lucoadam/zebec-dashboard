@@ -29,6 +29,7 @@ import { toast } from "features/toasts/toastsSlice"
 import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useClickOutside } from "hooks"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -176,7 +177,7 @@ const WithdrawTab: FC = () => {
     console.log(data)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const submit = (data: any) => {
+  const submit = async (data: any) => {
     if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
       setError(
         "amount",
@@ -188,6 +189,18 @@ const WithdrawTab: FC = () => {
     if (walletObject.chainId === "solana") {
       handleSolanaSubmit(data)
     } else {
+      setLoading(true)
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        setLoading(false)
+        return
+      }
       if (withdrawFrom === "Zebec Assets") {
         handleEvmSubmit(data)
       } else {

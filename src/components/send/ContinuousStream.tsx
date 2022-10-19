@@ -12,6 +12,7 @@ import {
   ZebecEthBridgeClient
 } from "@lucoadam/zebec-wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import {
@@ -277,6 +278,17 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const handleEvmStream = async (data: ContinuousStreamFormData) => {
+    dispatch(toggleWalletApprovalMessageModal())
+    const isRelayerActive = await checkRelayerStatus()
+    if (!isRelayerActive) {
+      dispatch(toggleWalletApprovalMessageModal())
+      dispatch(
+        toast.error({
+          message: "Backend Service is currently down. Please try again later."
+        })
+      )
+      return
+    }
     console.log(data)
     if (!signer) return
     const formattedData = {
@@ -302,7 +314,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
     const sourceChain = getEVMToWormholeChain(walletObject.chainId)
 
-    dispatch(toggleWalletApprovalMessageModal())
     const messengerContract = new ZebecEthBridgeClient(
       BSC_ZEBEC_BRIDGE_ADDRESS,
       signer,
