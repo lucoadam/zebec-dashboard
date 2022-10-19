@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppDispatch } from "app/store"
 import { toast } from "features/toasts/toastsSlice"
 import { updateIncomingTransactions } from "features/transactions/transactionsSlice"
@@ -31,22 +32,14 @@ export const withdrawIncomingToken =
             transactionHash: response?.data?.transactionHash
           })
         )
-        if (data.hasTransactionEnd) {
-          dispatch(
-            updateIncomingTransactions({
-              transaction_type: data.transaction_kind,
-              transaction_uuid: data.transaction_uuid,
-              transaction_hash: response?.data?.transactionHash
-            })
-          )
-        } else {
-          dispatch(
-            updateIncomingTransactions({
-              transaction_type: data.transaction_kind,
-              transaction_uuid: data.transaction_uuid
-            })
-          )
-        }
+        dispatch(
+          updateIncomingTransactions({
+            transaction_type: data.transaction_kind,
+            transaction_uuid: data.transaction_uuid,
+            transaction_hash: response?.data?.transactionHash,
+            completed: data.hasTransactionEnd
+          })
+        )
       } else {
         dispatch(
           toast.error({

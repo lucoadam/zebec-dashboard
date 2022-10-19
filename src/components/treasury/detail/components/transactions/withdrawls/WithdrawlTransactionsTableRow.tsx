@@ -17,13 +17,13 @@ import ReactTooltip from "react-tooltip"
 import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
 import {
   ApprovedRejectedUserProps,
   TreasuryApprovalType,
   TreasuryTransactionType
 } from "components/treasury/treasury.d"
 import { useWallet } from "@solana/wallet-adapter-react"
+import { getExplorerUrl } from "constants/explorers"
 
 interface InstantTransactionsTableRowProps {
   index: number
@@ -42,6 +42,7 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
+  const { explorer } = useAppSelector((state) => state.settings)
 
   const styles = {
     detailsRow: {
@@ -350,7 +351,7 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >
