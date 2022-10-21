@@ -30,6 +30,7 @@ import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useClickOutside } from "hooks"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+// import axios from "axios"
 
 const WithdrawTab: FC = () => {
   const { t } = useTranslation()
@@ -157,7 +158,31 @@ const WithdrawTab: FC = () => {
         )
         console.log("response", response)
         if (response === "success") {
-          dispatch(toast.success({ message: "Withdrawal completed" }))
+          const receipt = await messengerContract.directTokenTransfer(
+            data.amount,
+            walletObject.originalAddress?.toString() as string,
+            currentToken.mint,
+            walletObject.originalAddress?.toString() as string
+          )
+          console.log("receipt", receipt)
+          const msgSequence = parseSequenceFromLogEth(
+            receipt,
+            BSC_BRIDGE_ADDRESS
+          )
+          console.log("msgSequence", msgSequence)
+          const response = await listenWormholeTransactionStatus(
+            msgSequence,
+            BSC_ZEBEC_BRIDGE_ADDRESS,
+            sourceChain
+          )
+          console.log("response", response)
+          if (response === "success") {
+            dispatch(toast.success({ message: "Withdrawal completed" }))
+          } else if (response === "timeout") {
+            dispatch(toast.error({ message: "Withdrawal timeout" }))
+          } else {
+            dispatch(toast.error({ message: "Error withdrawing token" }))
+          }
         } else if (response === "timeout") {
           dispatch(toast.error({ message: "Withdrawal timeout" }))
         } else {
@@ -173,12 +198,63 @@ const WithdrawTab: FC = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handlePdaWithdraw = (data: any) => {
-    console.log(data)
+  const handlePdaWithdraw = async (data: any) => {
+    try {
+      if (signer) {
+        setLoading(true)
+        const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+        const targetChain = 1
+        console.log(sourceChain, targetChain)
+        console.log("pda", walletObject.publicKey?.toString())
+        console.log("token mint", currentToken.mint)
+        console.log("withdrawer: ", walletObject.originalAddress?.toString())
+
+        const messengerContract = new ZebecEthBridgeClient(
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          signer,
+          sourceChain
+        )
+        const receipt = await messengerContract.directTokenTransfer(
+          data.amount,
+          walletObject.originalAddress?.toString() as string,
+          currentToken.mint,
+          walletObject.originalAddress?.toString() as string
+        )
+
+        console.log("receipt", receipt)
+        const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
+        console.log("msgSequence", msgSequence)
+        const response = await listenWormholeTransactionStatus(
+          msgSequence,
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          sourceChain
+        )
+        console.log("response", response)
+        if (response === "success") {
+          dispatch(toast.success({ message: "Withdrawal completed" }))
+        } else if (response === "timeout") {
+          dispatch(toast.error({ message: "Withdraw timeout" }))
+        } else {
+          dispatch(toast.error({ message: "Withdraw failed" }))
+        }
+        console.log("transfer successful")
+        setLoading(false)
+      }
+    } catch (e) {
+      console.log("error", e)
+      setLoading(false)
+      dispatch(toast.error({ message: "Error withdrawing token" }))
+    }
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = async (data: any) => {
-    if (Number(data.amount) > getBalance(walletTokens, currentToken.symbol)) {
+    if (
+      Number(data.amount) >
+      getBalance(
+        withdrawFrom === "Zebec Assets" ? walletTokens : pdaTokens,
+        currentToken.symbol
+      )
+    ) {
       setError(
         "amount",
         { type: "custom", message: "validation:withdraw-max-amount" },
@@ -259,19 +335,18 @@ const WithdrawTab: FC = () => {
             </div>
           </CollapseDropdown>
         </div>
-        {withdrawFrom === "PDA Assets" && (
+        {/* {withdrawFrom === "PDA Assets" && (
           <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
             <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
             <span>Withdraw from PDA Assets will be available soon.</span>
           </div>
-        )}
+        )} */}
         <WithdrawDepositInput
           token={currentToken}
           setMaxAmount={setMaxAmount}
           className="mt-4"
           toggle={toggle}
           setToggle={setToggle}
-          disabled={withdrawFrom === "PDA Assets"}
           {...register("amount")}
           errorMessage={`${errors.amount?.message || ""}`}
         >
@@ -300,7 +375,6 @@ const WithdrawTab: FC = () => {
           title={`${t("common:buttons.withdraw")}`}
           variant="gradient"
           className="w-full mt-6"
-          disabled={loading || withdrawFrom === "PDA Assets"}
           loading={loading}
         />
       </form>

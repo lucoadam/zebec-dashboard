@@ -26,11 +26,16 @@ import NavLink from "./NavLink"
 import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
 import WalletNotConnectedModal from "./WalletNotConnectedModal"
+import * as ethers from "ethers"
+import { useSigner } from "wagmi"
+import { TokenImplementation__factory } from "@certusone/wormhole-sdk"
+import { toast } from "features/toasts/toastsSlice"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
   const { t } = useTranslation()
   const useWalletObject = useZebecWallet()
+  const { data: signer } = useSigner()
   // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
@@ -142,6 +147,67 @@ const Navbar: FC = () => {
       dispatch(
         zbcAirdrop(useWalletObject.publicKey as PublicKey, setZBCAirdropLoading)
       )
+    } else {
+      setZBCAirdropLoading(true)
+      if (signer?.provider) {
+        const wallet = new ethers.Wallet(
+          "529ce94e6a3e489b4dfd61be6e5673c123de884f3f21a8f224a53c8b1676037b",
+          signer.provider
+        )
+        signer.provider.getGasPrice().then((currentGasPrice) => {
+          console.log(`gas_price: ${currentGasPrice.toString()}`)
+
+          const contract = TokenImplementation__factory.connect(
+            "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
+            wallet
+          )
+          // How many tokens?
+          const numberOfTokens = ethers.utils.parseUnits("2", 9)
+          console.log(`numberOfTokens: ${numberOfTokens}`)
+
+          // Send tokens
+          contract
+            .transfer(
+              useWalletObject.originalAddress?.toString() as string,
+              numberOfTokens,
+              {
+                gasPrice: currentGasPrice.toString(),
+                gasLimit: 1000000
+              }
+            )
+            .then((transferResult) => {
+              transferResult
+                .wait()
+                .then((receipt) => {
+                  console.log(receipt.transactionHash)
+                  setZBCAirdropLoading(false)
+                  dispatch(
+                    toast.success({
+                      message: "2 ZBC Airdrop Successful"
+                    })
+                  )
+                })
+                .catch((err) => {
+                  console.log(err)
+                  setZBCAirdropLoading(false)
+                  dispatch(
+                    toast.success({
+                      message: "ZBC Airdrop Failed"
+                    })
+                  )
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+              setZBCAirdropLoading(false)
+              dispatch(
+                toast.success({
+                  message: "ZBC Airdrop Failed"
+                })
+              )
+            })
+        })
+      }
     }
   }
 

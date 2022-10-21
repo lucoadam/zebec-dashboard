@@ -23,24 +23,20 @@ import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   getBridgeAddressForChain,
   getTokenBridgeAddressForChain,
-  SOL_TOKEN_BRIDGE_ADDRESS,
   transferEvm,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient,
   BSC_BRIDGE_ADDRESS,
-  getTargetAsset
+  getTargetAsset,
+  SOL_TOKEN_BRIDGE_ADDRESS
 } from "@lucoadam/zebec-wormhole-sdk"
-import { connection } from "constants/cluster"
 
 import {
-  getForeignAssetSolana,
-  getOriginalAssetEth,
-  toChainName,
-  tryUint8ArrayToNative,
   getEmitterAddressEth,
+  getIsTransferCompletedSolana,
   getSignedVAAWithRetry,
   parseSequenceFromLogEth,
-  getIsTransferCompletedSolana
+  setDefaultWasm
 } from "@certusone/wormhole-sdk"
 // import axios from "axios"
 import { toast } from "features/toasts/toastsSlice"
@@ -56,6 +52,7 @@ import { CheveronDownIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import { connection } from "constants/cluster"
 // import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
@@ -244,24 +241,17 @@ const DepositTab: FC = () => {
             let isTransferComplete = false
             let logMsg = "checking if transfer completed"
             let retry = 0
+            setDefaultWasm("bundler")
             do {
               logMsg = logMsg.concat(".")
               if (retry > 12) throw new Error("Deposit Timeout")
               retry++
               console.log(logMsg)
-              // isTransferComplete = await getIsTransferCompletedSolana(
-              //   SOL_TOKEN_BRIDGE_ADDRESS,
-              //   transferVaa,
-              //   connection
-              // )
-              const { data } = await await axios.post(
-                "/api/check-transfer-complete-solana",
-                {
-                  transferVaa: Buffer.from(transferVaa).toString("base64")
-                }
+              isTransferComplete = await getIsTransferCompletedSolana(
+                SOL_TOKEN_BRIDGE_ADDRESS,
+                transferVaa,
+                connection
               )
-              console.log("data", data)
-              isTransferComplete = data.isTransferComplete
               await new Promise((r) => setTimeout(r, 5000))
             } while (!isTransferComplete)
             console.log("transfer successful")

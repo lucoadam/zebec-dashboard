@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import {
+  parseSequenceFromLogEth,
+  setDefaultWasm
+} from "@certusone/wormhole-sdk"
 import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  getTargetAsset,
   ZebecEthBridgeClient
 } from "@lucoadam/zebec-wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
@@ -30,10 +34,12 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
+import { connection, RPC_NETWORK } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import axios from "axios"
+import { PublicKey } from "@solana/web3.js"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -194,12 +200,33 @@ const ContinuousTransactionsTableRow: FC<
         return
       }
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
+      // airdrop sol
+      const recipientAddress = walletObject.publicKey?.toString() as string
+      const recipientbalance = await connection.getBalance(
+        new PublicKey(recipientAddress)
+      )
+      console.log("recipientbalance", recipientbalance / 1e9)
+      if (recipientbalance / 1e9 < 0.1) {
+        console.log("requesting airdrop...")
+        try {
+          const res = await connection.requestAirdrop(
+            new PublicKey(recipientAddress),
+            0.2e9
+          )
+          console.log(res)
+        } catch (e) {
+          console.log("airdrop failed", e)
+        }
+      }
+      //
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,
         signer,
         sourceChain
       )
       console.log("transaction:", transaction)
+
       const tx = await messengerContract.withdrawFromTokenStream(
         transaction.sender,
         transaction.receiver,
