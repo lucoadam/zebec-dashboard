@@ -12,6 +12,7 @@ export const initStreamNative: any =
   async (dispatch: any) => {
     try {
       const response = await stream.init(data)
+
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
