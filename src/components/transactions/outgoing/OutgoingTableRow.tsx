@@ -173,7 +173,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{formatCurrency(streamedToken, "", 4)}
+                    -{formatCurrency(streamedToken, "", 4)}
                   </span>
                   &nbsp;{token}
                 </div>
