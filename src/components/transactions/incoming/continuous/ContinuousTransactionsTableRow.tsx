@@ -203,9 +203,8 @@ const ContinuousTransactionsTableRow: FC<
             <div className="flex items-center justify-end float-right gap-x-6">
               {status !== StatusType.SCHEDULED &&
                 status !== StatusType.CANCELLED &&
-                parseFloat(amount) -
-                  parseFloat(latest_transaction_event.withdrawn) >
-                  parseFloat(amount) * 0.0025 && (
+                Number(totalTransactionAmount) !==
+                  Number(latest_transaction_event.withdrawn) && (
                   <Button
                     size="small"
                     title="Withdraw"
@@ -245,7 +244,7 @@ const ContinuousTransactionsTableRow: FC<
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -348,7 +347,7 @@ const ContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -364,6 +363,20 @@ const ContinuousTransactionsTableRow: FC<
                           2
                         )}
                         %)
+                      </div>
+                    </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.withdrawn,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Status */}

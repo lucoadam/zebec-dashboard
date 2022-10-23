@@ -17,12 +17,12 @@ const ContinuousTransactions: FC = () => {
     {
       title: "Scheduled",
       component: <ScheduledContinuous />,
-      icon: <Icons.CloseCircleIcon />
+      icon: <Icons.CalenderIcon />
     },
     {
       title: "Ongoing",
       component: <OngoingContinuous />,
-      icon: <Icons.CalenderIcon />
+      icon: <Icons.DoubleCircleDottedLineIcon />
     },
     {
       title: "Completed",

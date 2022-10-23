@@ -11,6 +11,7 @@ import {
   Table,
   TableBody
 } from "components/shared"
+import { TransactionSkeleton } from "components/transactions/TransactionSkeleton"
 import {
   fetchAddressBook,
   saveAddressBook,
@@ -126,17 +127,6 @@ export default function IndividualAddresses() {
     }
   }, [addressBooks, setValue, trigger, getValues])
 
-  useEffect(() => {
-    dispatch(
-      setPagination({
-        ...pagination,
-        currentPage: 1,
-        limit: 10
-      })
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onEdit = (data: any) => {
     setIsEdit(true)
@@ -159,45 +149,51 @@ export default function IndividualAddresses() {
 
   return (
     <>
-      <div className="container w-full ">
+      <div className="w-full">
         <Breadcrumb title={`${t("addressBook:address-book")}`} />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 overflow-hidden">
-            {addressBooks.length > 0 || loading ? (
-              <>
-                <Table headers={headers}>
-                  <TableBody className="">
-                    {addressBooks?.map((addressBook, index) => {
-                      return (
-                        <IndividualAddresesTableRow
-                          key={index}
-                          addressBook={addressBook}
-                          onEdit={onEdit}
-                        />
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-
-                <Pagination
-                  // pages={Math.ceil(total / limit)}
-                  pagination={pagination}
-                  setPagination={setPagination}
-                  onChange={() => {
-                    dispatch(fetchAddressBook())
-                  }}
-                />
-              </>
-            ) : (
-              addressBooks.length === 0 &&
-              !loading && (
-                <EmptyDataState
-                  message={t("addressBook:empty-address-book")}
-                  padding={80}
-                  className="h-[386px] w-full mt-12 rounded !px-10 text-center !py-0 justify-center"
-                />
-              )
+          <div className="lg:col-span-2">
+            <Table headers={headers}>
+              <TableBody className="">
+                {loading ? (
+                  <tr>
+                    <td colSpan={headers.length}>
+                      <TransactionSkeleton />
+                    </td>
+                  </tr>
+                ) : addressBooks.length === 0 && !loading ? (
+                  <tr>
+                    <td colSpan={headers.length}>
+                      <EmptyDataState
+                        message={t("addressBook:empty-address-book")}
+                        padding={80}
+                        className="h-[386px] w-full mt-12 rounded !px-10 text-center !py-0 justify-center"
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  addressBooks?.map((addressBook, index) => {
+                    return (
+                      <IndividualAddresesTableRow
+                        key={index}
+                        addressBook={addressBook}
+                        onEdit={onEdit}
+                      />
+                    )
+                  })
+                )}
+              </TableBody>
+            </Table>
+            {addressBooks.length > 0 && (
+              <Pagination
+                // pages={Math.ceil(total / limit)}
+                pagination={pagination}
+                setPagination={setPagination}
+                onChange={() => {
+                  dispatch(fetchAddressBook())
+                }}
+              />
             )}
           </div>
 

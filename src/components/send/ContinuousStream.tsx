@@ -188,10 +188,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const initStreamCallback = (message: "success" | "error") => {
+    dispatch(toggleWalletApprovalMessageModal())
     if (message === "success") {
       resetForm()
+      if (type === "send") {
+        router.push("/transactions/outgoing")
+      }
     }
-    dispatch(toggleWalletApprovalMessageModal())
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
@@ -218,8 +221,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
       if (formattedData.token === "SOL")
-        stream && dispatch(initStreamNative(formattedData, stream, resetForm))
-      else token && dispatch(initStreamToken(formattedData, token, resetForm))
+        stream &&
+          dispatch(initStreamNative(formattedData, stream, initStreamCallback))
+      else
+        token &&
+          dispatch(initStreamToken(formattedData, token, initStreamCallback))
     } else {
       if (activeTreasury) {
         const treasuryFormattedData = {

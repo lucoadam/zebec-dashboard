@@ -24,7 +24,8 @@ const PauseModal: FC = ({}) => {
       const data = {
         sender: transaction.sender,
         receiver: transaction.receiver,
-        escrow: transaction.pda
+        escrow: transaction.pda,
+        token_mint_address: transaction.token_mint_address
       }
       const transaction_uuid = transaction.uuid
       if (transaction.token === "SOL")

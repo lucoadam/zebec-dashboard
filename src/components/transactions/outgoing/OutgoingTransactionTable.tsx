@@ -53,14 +53,13 @@ export const OutgoingTransactionTable: FC<TransactionTableProps> = ({
       {/* Table */}
       <Table headers={headers}>
         <TableBody>
-          {loading && !transactions.results.length && (
+          {loading ? (
             <tr>
               <td colSpan={headers.length}>
                 <TransactionSkeleton />
               </td>
             </tr>
-          )}
-          {transactions.results.length === 0 && !loading ? (
+          ) : transactions.results.length === 0 && !loading ? (
             <tr>
               <td colSpan={headers.length}>
                 <EmptyDataState
@@ -83,13 +82,15 @@ export const OutgoingTransactionTable: FC<TransactionTableProps> = ({
           )}
         </TableBody>
       </Table>
-      <Pagination
-        pagination={pagination}
-        setPagination={setPagination}
-        onChange={() => {
-          dispatch(fetchTransactions())
-        }}
-      />
+      {transactions.results.length > 0 && (
+        <Pagination
+          pagination={pagination}
+          setPagination={setPagination}
+          onChange={() => {
+            dispatch(fetchTransactions())
+          }}
+        />
+      )}
     </>
   )
 }

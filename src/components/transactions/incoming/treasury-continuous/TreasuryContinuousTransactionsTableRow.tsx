@@ -239,7 +239,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -342,7 +342,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -358,6 +358,20 @@ const TreasuryContinuousTransactionsTableRow: FC<
                           2
                         )}
                         %)
+                      </div>
+                    </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.withdrawn,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Status */}

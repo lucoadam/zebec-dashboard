@@ -81,7 +81,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -
+                    +
                     {status === TreasuryApprovalType.ACCEPTED
                       ? formatCurrency(amount, "", 4)
                       : 0}
@@ -116,7 +116,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
           </td>
         </tr>
         {/* Table Body Details Row */}
-
         <tr>
           <td colSpan={4}>
             <div
@@ -137,7 +136,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -223,6 +222,18 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {token} (
                         {status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
                         %)
+                      </div>
+                    </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {status === TreasuryApprovalType.ACCEPTED
+                          ? formatCurrency(amount, "", 4)
+                          : 0}{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Status */}
