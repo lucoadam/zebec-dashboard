@@ -127,17 +127,6 @@ export default function IndividualAddresses() {
     }
   }, [addressBooks, setValue, trigger, getValues])
 
-  useEffect(() => {
-    dispatch(
-      setPagination({
-        ...pagination,
-        currentPage: 1,
-        limit: 10
-      })
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onEdit = (data: any) => {
     setIsEdit(true)
