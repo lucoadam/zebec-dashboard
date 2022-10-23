@@ -90,7 +90,7 @@ export const Tokens: FC<{
   })
 
   return (
-    <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6 overflow-hidden">
+    <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6">
       <div className="flex relative justify-between items-center gap-x-6">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
           {t("common:balances.overall-activity")}
