@@ -7,7 +7,7 @@ export const constants = {
   STREAM_END_ADD: 2, // 2 minutes
   STREAM_FETCH_TIMEOUT: 10000,
   AVERAGE_TPS: 2500,
-  DEPOSIT_MAX_OFFSET: 0.001,
+  DEPOSIT_MAX_OFFSET: 0.01,
   ZEBEC_VERSIONS: [
     {
       title: "v1",
