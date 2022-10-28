@@ -11,12 +11,14 @@ export const OngoingOutgoing: FC = () => {
 
   const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.common)
+
   useEffect(() => {
-    if (isSigned && ongoingTransactions.count === null) {
+    if (isSigned) {
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
       dispatch(fetchOngoingTransactions("outgoing"))
     }
-  }, [dispatch, isSigned, ongoingTransactions.count])
+    // eslint-disable-next-line
+  }, [isSigned])
   return (
     <div>
       <OutgoingTransactionTable
