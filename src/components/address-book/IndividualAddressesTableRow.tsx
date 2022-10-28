@@ -24,19 +24,11 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   const { t } = useTranslation("addressBook")
   const dispatch = useAppDispatch()
   const router = useRouter()
-  // const dropdownWrapper = useRef(null)
-  // const [toggleDropdown, setToggleDropdown] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   function toggleModal() {
     setIsOpen(!isOpen)
   }
-
-  // useClickOutside(dropdownWrapper, {
-  //   onClickOutside: () => {
-  //     setToggleDropdown(false)
-  //   }
-  // })
 
   return (
     <>

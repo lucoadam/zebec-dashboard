@@ -13,11 +13,12 @@ export const ScheduledOutgoing: FC = () => {
   const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.common)
   useEffect(() => {
-    if (isSigned && scheduledTransactions.count === null) {
+    if (isSigned) {
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
       dispatch(fetchScheduledTransactions("outgoing"))
     }
-  }, [dispatch, isSigned, scheduledTransactions.count])
+    // eslint-disable-next-line
+  }, [isSigned])
   return (
     <div>
       <OutgoingTransactionTable

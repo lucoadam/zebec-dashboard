@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import { EmptyDataState, Pagination, Table, TableBody } from "components/shared"
 import {
   fetchCompletedTransactions,
-  fetchIncomingTransactions,
   fetchOngoingTransactions,
+  fetchOutgoingTransactions,
   fetchScheduledTransactions,
   setPagination
 } from "features/transactions/transactionsSlice"
@@ -21,7 +21,7 @@ export interface TransactionTableProps {
     results: any[]
   }
   fetchTransactions:
-    | typeof fetchIncomingTransactions
+    | typeof fetchOutgoingTransactions
     | typeof fetchCompletedTransactions
     | typeof fetchOngoingTransactions
     | typeof fetchScheduledTransactions

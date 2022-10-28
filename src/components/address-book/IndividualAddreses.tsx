@@ -11,7 +11,6 @@ import {
   Table,
   TableBody
 } from "components/shared"
-import { TransactionSkeleton } from "components/transactions/TransactionSkeleton"
 import {
   fetchAddressBook,
   saveAddressBook,
@@ -23,6 +22,7 @@ import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { addOwnersSchema } from "utils/validations/addOwnersSchema"
+import { AddressBookSkeleton } from "./AddressBookSkeleton"
 import IndividualAddresesTableRow from "./IndividualAddressesTableRow"
 
 export default function IndividualAddresses() {
@@ -153,13 +153,13 @@ export default function IndividualAddresses() {
         <Breadcrumb title={`${t("addressBook:address-book")}`} />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 overflow-x-hidden">
             <Table headers={headers}>
               <TableBody className="">
                 {loading ? (
                   <tr>
                     <td colSpan={headers.length}>
-                      <TransactionSkeleton />
+                      <AddressBookSkeleton />
                     </td>
                   </tr>
                 ) : addressBooks.length === 0 && !loading ? (

@@ -127,7 +127,7 @@ export const Pagination: FC<PaginationProps> = ({
   // For Rows per page
   const [toggleNoOfRows, settoggleNoofRows] = useState(false)
   const RowsDropdownWrapper = useRef(null)
-  const Options: number[] = pageOptions ? pageOptions : [1, 2, 3, 40, 50]
+  const Options: number[] = pageOptions ? pageOptions : [1, 2, 10, 25, 50]
 
   const handleClose = () => {
     settoggleNoofRows(false)
