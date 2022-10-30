@@ -3,7 +3,9 @@ import ZebecContext from "app/zebecContext"
 import Layout from "components/layouts/Layout"
 import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
+import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import ResumeModal from "components/modals/ResumeModal"
+import SignTransactionModal from "components/modals/SignTransactionModal"
 import { setActiveTreasury } from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
@@ -66,9 +68,13 @@ const TreasuryLayout = ({
     <>
       <Layout pageTitle={pageTitle}>
         <main>{children}</main>
+        {/* Pause Resume and Cancel */}
         <PauseModal />
         <CancelModal />
         <ResumeModal />
+        {/* Sign Reject Modals */}
+        <SignTransactionModal />
+        <RejectTransactionModal />
       </Layout>
     </>
   )

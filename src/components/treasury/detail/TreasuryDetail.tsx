@@ -4,8 +4,6 @@ import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Overview from "./components/overview/Overview"
-import RejectTransactionModal from "components/modals/RejectTransactionModal"
-import SignTransactionModal from "components/modals/SignTransactionModal"
 // import { NFTsList } from "./components/nfts/NFTsList"
 import Setting from "./components/settings/Setting"
 import { Transactions } from "./components/transactions/Transactions"
@@ -80,9 +78,6 @@ export default function TreasuryDetail() {
         </div>
         <div className=" mt-8">{categories[activePage].Component}</div>
       </div>
-      {/* Sign Reject Modals */}
-      <SignTransactionModal />
-      <RejectTransactionModal />
     </>
   )
 }
