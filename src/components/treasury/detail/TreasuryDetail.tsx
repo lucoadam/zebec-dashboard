@@ -52,8 +52,7 @@ export default function TreasuryDetail() {
         ReactTooltip.rebuild()
       }, 1000)
     } else {
-      const primarlyActiveTitle = categories[activePage].title
-      router.push(`#${primarlyActiveTitle}`, undefined, { shallow: false })
+      setActivePage(0)
     }
   }, [router.asPath])
 
