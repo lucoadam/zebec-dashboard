@@ -153,7 +153,7 @@ export default function IndividualAddresses() {
         <Breadcrumb title={`${t("addressBook:address-book")}`} />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 overflow-x-hidden">
+          <div className="lg:col-span-2">
             <Table headers={headers}>
               <TableBody className="">
                 {loading ? (
