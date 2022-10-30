@@ -79,9 +79,10 @@ export default function IndividualAddresses() {
               })
             )
             return
+          } else {
+            dispatch(toast.success({ message: t("addressBook:success-add") }))
           }
           reset()
-          dispatch(toast.success({ message: t("addressBook:success-add") }))
         }
       }
       dispatch(saveAddressBook(addressBookData))
@@ -99,15 +100,16 @@ export default function IndividualAddresses() {
                 message: t("addressBook:error-update")
               })
             )
+          } else {
+            dispatch(
+              toast.success({
+                message: t("addressBook:success-update")
+              })
+            )
           }
           setIsEdit(false)
           setEditAddressBookId("")
           reset()
-          dispatch(
-            toast.success({
-              message: t("addressBook:success-update")
-            })
-          )
         }
       }
       dispatch(updateAddressBook(addressBookData))
