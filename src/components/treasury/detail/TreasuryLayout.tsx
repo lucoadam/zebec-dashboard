@@ -30,8 +30,15 @@ const TreasuryLayout = ({
   )
 
   useEffect(() => {
-    if (treasuries.results.length > 0 && slug && typeof slug === "string") {
-      dispatch(setActiveTreasury(slug))
+    if (treasuries.count !== null && slug && typeof slug === "string") {
+      const isTreasuryValid = treasuries.results.some(
+        (treasury) => treasury.uuid === slug
+      )
+      if (isTreasuryValid) {
+        dispatch(setActiveTreasury(slug))
+      } else {
+        router.push("/404")
+      }
     }
     // eslint-disable-next-line
   }, [slug, treasuries])

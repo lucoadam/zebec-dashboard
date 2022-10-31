@@ -16,6 +16,7 @@ import { Token } from "components/shared/Token"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { FC, useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -33,6 +34,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const addressBook = useAppSelector((state) => state.address.addressBooks)
   const { treasury, treasuryToken } = useContext(ZebecContext)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
@@ -100,6 +102,9 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const initInstantStreamCallback = (message: "success" | "error") => {
     if (message === "success") {
       resetForm()
+      if (activeTreasury) {
+        router.push(`/treasury/${activeTreasury.uuid}/#transactions`)
+      }
     }
     dispatch(toggleWalletApprovalMessageModal())
   }
