@@ -88,7 +88,9 @@ const Setting = () => {
                   <div>
                     {toSubstring(activeTreasury?.treasury_address, 6, true)}
                   </div>
-                  <CopyButton content="23423sdfjsdlfjs234230423" />
+                  {activeTreasury?.treasury_address && (
+                    <CopyButton content={activeTreasury.treasury_address} />
+                  )}
                 </div>
               </div>
             </div>
