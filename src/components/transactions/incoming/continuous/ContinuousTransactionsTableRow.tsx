@@ -1,17 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  parseSequenceFromLogEth,
-  setDefaultWasm
-} from "@certusone/wormhole-sdk"
+import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
-  getTargetAsset,
   ZebecEthBridgeClient
 } from "@lucoadam/zebec-wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -34,11 +29,11 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { connection, RPC_NETWORK } from "constants/cluster"
+import { connection } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { checkRelayerStatus } from "api/services/pingRelayer"
-import axios from "axios"
+import { getExplorerUrl } from "constants/explorers"
 import { PublicKey } from "@solana/web3.js"
 
 interface ContinuousTransactionsTableRowProps {
@@ -59,6 +54,8 @@ const ContinuousTransactionsTableRow: FC<
   const { data: signer } = useSigner()
   const walletObject = useZebecWallet()
   const [loading, setLoading] = useState(false)
+  const { explorer } = useAppSelector((state) => state.settings)
+
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [])
@@ -306,20 +303,20 @@ const ContinuousTransactionsTableRow: FC<
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              <Button
-                size="small"
-                title="Withdraw"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                loading={loading}
-                disabled={
-                  status === StatusType.CANCELLED ||
-                  amount ===
-                    parseFloat(latest_transaction_event.withdrawn || "0")
-                }
-                onClick={withdraw}
-              />
+              {status !== StatusType.SCHEDULED &&
+                status !== StatusType.CANCELLED &&
+                Number(totalTransactionAmount) !==
+                  Number(latest_transaction_event.withdrawn) && (
+                  <Button
+                    size="small"
+                    title="Withdraw"
+                    startIcon={
+                      <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                    }
+                    onClick={withdraw}
+                    loading={loading}
+                  />
+                )}
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -350,7 +347,7 @@ const ContinuousTransactionsTableRow: FC<
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -453,7 +450,7 @@ const ContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -469,6 +466,20 @@ const ContinuousTransactionsTableRow: FC<
                           2
                         )}
                         %)
+                      </div>
+                    </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.withdrawn,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Status */}
@@ -488,7 +499,7 @@ const ContinuousTransactionsTableRow: FC<
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >

@@ -13,8 +13,9 @@ import ReactTooltip from "react-tooltip"
 import { formatCurrency, formatDateTime, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
 import { TreasuryApprovalType } from "components/treasury/treasury.d"
+import { getExplorerUrl } from "constants/explorers"
+import { useAppSelector } from "app/hooks"
 
 interface InstantTransactionsTableRowProps {
   index: number
@@ -32,7 +33,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
 }) => {
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
-
+  const { explorer } = useAppSelector((state) => state.settings)
   const styles = {
     detailsRow: {
       height:
@@ -80,7 +81,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -
+                    +
                     {status === TreasuryApprovalType.ACCEPTED
                       ? formatCurrency(amount, "", 4)
                       : 0}
@@ -115,7 +116,6 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
           </td>
         </tr>
         {/* Table Body Details Row */}
-
         <tr>
           <td colSpan={4}>
             <div
@@ -136,7 +136,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -224,6 +224,18 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         %)
                       </div>
                     </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {status === TreasuryApprovalType.ACCEPTED
+                          ? formatCurrency(amount, "", 4)
+                          : 0}{" "}
+                        {token}
+                      </div>
+                    </div>
                     {/* Status */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
@@ -251,7 +263,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >

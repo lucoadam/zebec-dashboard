@@ -8,6 +8,7 @@ import { Toasts } from "components/shared"
 // import { createVault } from "application/normal/createFeeVault"
 import { fetchAddressBook } from "features/address-book/addressBookSlice"
 import { setTPSValue } from "features/common/commonSlice"
+import { getPreferences } from "features/settings/settingsSlice"
 import {
   fetchTokens,
   fetchTokensPrice
@@ -105,6 +106,7 @@ const Common: FC<{
     if (isSigned) {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
+      dispatch(getPreferences())
       // TPS Value
       const fetchTPS = async () => {
         const tpsValue = await getRecentTPS()

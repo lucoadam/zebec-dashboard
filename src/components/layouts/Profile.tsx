@@ -5,6 +5,7 @@ import * as Icons from "../../assets/icons"
 import * as Images from "../../assets/images"
 import { toSubstring } from "../../utils"
 import { Button, CollapseDropdown } from "../shared"
+import jwt_decode from "jwt-decode"
 //hooks
 import CopyButton from "components/shared/CopyButton"
 import { useTranslation } from "next-i18next"
@@ -13,6 +14,14 @@ import { useClickOutside } from "../../hooks"
 import TokenService from "api/services/token.service"
 import { useZebecWallet } from "hooks/useWallet"
 import { titleCase } from "utils/titleCase"
+
+interface DecodedTokenProps {
+  token_type: string
+  exp: number
+  iat: number
+  jti: string
+  wallet_address: string
+}
 
 const Profile: FC = () => {
   const { t } = useTranslation()
@@ -52,6 +61,18 @@ const Profile: FC = () => {
       }, 500)
     }
   }, [useWalletObject, toggleProfileDropdown])
+
+  useEffect(() => {
+    const currentAccessToken = TokenService.getLocalAccessToken()
+    const currentConnectedWallet = useWalletObject.publicKey?.toString()
+    if (currentAccessToken && currentConnectedWallet) {
+      const decodedToken: DecodedTokenProps = jwt_decode(currentAccessToken)
+      if (decodedToken.wallet_address !== currentConnectedWallet) {
+        useWalletObject.disconnect()
+        TokenService.removeTokens()
+      }
+    }
+  }, [useWalletObject])
 
   return (
     <>

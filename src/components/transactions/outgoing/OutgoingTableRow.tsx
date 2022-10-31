@@ -8,7 +8,7 @@ import {
   UserAddress
 } from "components/shared"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
+import { getExplorerUrl } from "constants/explorers"
 import { showCancelModal } from "features/modals/cancelModalSlice"
 import { showPauseModal } from "features/modals/pauseModalSlice"
 import { showResumeModal } from "features/modals/resumeModalSlice"
@@ -38,6 +38,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { initiatedTransactions } = useAppSelector(
     (state) => state.transactions
   )
+  const { explorer } = useAppSelector((state) => state.settings)
 
   const {
     name,
@@ -172,7 +173,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{formatCurrency(streamedToken, "", 4)}
+                    -{formatCurrency(streamedToken, "", 4)}
                   </span>
                   &nbsp;{token}
                 </div>
@@ -405,7 +406,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >

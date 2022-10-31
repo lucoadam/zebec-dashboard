@@ -17,12 +17,12 @@ const TreasuryContinuousTransactions: FC = () => {
     {
       title: "Scheduled",
       component: <TreasuryScheduledContinuous />,
-      icon: <Icons.CloseCircleIcon />
+      icon: <Icons.CalenderIcon />
     },
     {
       title: "Ongoing",
       component: <TreasuryOngoingContinuous />,
-      icon: <Icons.CalenderIcon />
+      icon: <Icons.DoubleCircleDottedLineIcon />
     },
     {
       title: "Completed",

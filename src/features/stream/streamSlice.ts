@@ -24,7 +24,6 @@ export const sendContinuousStream: any = createAsyncThunk(
   async (data: any, { dispatch }) => {
     await api.post("/transaction/", data)
     dispatch(fetchOutgoingTransactions())
-    // dispatch(toggleWalletApprovalMessageModal())
     return
   }
 )

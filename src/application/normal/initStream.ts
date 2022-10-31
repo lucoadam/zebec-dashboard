@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
@@ -8,10 +7,15 @@ import {
 } from "zebec-anchor-sdk-npmtest/packages/stream"
 
 export const initStreamNative: any =
-  (data: any, stream: ZebecNativeStream, callback?: () => void) =>
+  (
+    data: any,
+    stream: ZebecNativeStream,
+    callback?: (message: "success" | "error") => void
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await stream.init(data)
+
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -25,7 +29,9 @@ export const initStreamNative: any =
           transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData)).then(() => {
-          if (callback) callback()
+          if (callback) {
+            callback("success")
+          }
         })
       } else {
         dispatch(
@@ -33,7 +39,9 @@ export const initStreamNative: any =
             message: response.message ?? "Unknown Error"
           })
         )
-        dispatch(toggleWalletApprovalMessageModal())
+        if (callback) {
+          callback("error")
+        }
       }
     } catch (error: any) {
       dispatch(
@@ -41,14 +49,20 @@ export const initStreamNative: any =
           message: error?.message ?? "Unknown Error"
         })
       )
-      dispatch(toggleWalletApprovalMessageModal())
+      if (callback) {
+        callback("error")
+      }
     }
 
     return null
   }
 
 export const initStreamToken: any =
-  (data: any, token: ZebecTokenStream, callback?: () => void) =>
+  (
+    data: any,
+    token: ZebecTokenStream,
+    callback?: (message: "success" | "error") => void
+  ) =>
   async (dispatch: any) => {
     try {
       const response = await token.init(data)
@@ -65,7 +79,9 @@ export const initStreamToken: any =
           transaction_hash: response?.data?.transactionHash
         }
         dispatch(sendContinuousStream(backendData)).then(() => {
-          if (callback) callback()
+          if (callback) {
+            callback("success")
+          }
         })
       } else {
         dispatch(
@@ -73,7 +89,9 @@ export const initStreamToken: any =
             message: response.message ?? "Unknown Error"
           })
         )
-        dispatch(toggleWalletApprovalMessageModal())
+        if (callback) {
+          callback("error")
+        }
       }
     } catch (error: any) {
       dispatch(
@@ -81,7 +99,9 @@ export const initStreamToken: any =
           message: error?.message ?? "Unknown Error"
         })
       )
-      dispatch(toggleWalletApprovalMessageModal())
+      if (callback) {
+        callback("error")
+      }
     }
 
     return null

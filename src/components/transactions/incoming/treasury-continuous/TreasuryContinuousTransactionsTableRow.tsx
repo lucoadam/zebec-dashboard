@@ -1,4 +1,4 @@
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
@@ -17,9 +17,9 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { RPC_NETWORK } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
+import { getExplorerUrl } from "constants/explorers"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -36,6 +36,8 @@ const TreasuryContinuousTransactionsTableRow: FC<
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { explorer } = useAppSelector((state) => state.settings)
+
   useEffect(() => {
     ReactTooltip.rebuild()
   }, [])
@@ -237,7 +239,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                     </div>
                   )}
                 </div>
-                <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
+                <div className="flex gap-x-44 pt-6 text-subtitle-sm font-medium">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
                     {/* Sender */}
@@ -340,7 +342,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -356,6 +358,20 @@ const TreasuryContinuousTransactionsTableRow: FC<
                           2
                         )}
                         %)
+                      </div>
+                    </div>
+                    {/* Withdrawn Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.withdrawn")}
+                      </div>
+                      <div className="text-content-primary">
+                        {formatCurrency(
+                          latest_transaction_event.withdrawn,
+                          "",
+                          4
+                        )}{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Status */}
@@ -375,7 +391,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                       </div>
                       <div className="text-content-primary">
                         <a
-                          href={`https://solana.fm/tx/${transaction_hash}?cluster=${RPC_NETWORK}-solana`}
+                          href={getExplorerUrl(explorer, transaction_hash)}
                           target="_blank"
                           rel="noreferrer"
                         >
