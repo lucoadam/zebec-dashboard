@@ -60,8 +60,6 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   }, [showAllRemaining])
 
   const {
-    name,
-    remarks,
     amount,
     token,
     status,
@@ -98,7 +96,7 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
       remainingOwners.some((owner) => owner === publicKey?.toString()) &&
       status === TreasuryApprovalType.PENDING
     )
-  }, [remainingOwners, publicKey])
+  }, [remainingOwners, publicKey, status])
 
   const isIncoming =
     transaction.transaction_type ===

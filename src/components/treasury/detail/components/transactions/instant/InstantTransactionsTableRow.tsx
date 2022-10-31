@@ -99,7 +99,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
       remainingOwners.some((owner) => owner === publicKey?.toString()) &&
       status === TreasuryApprovalType.PENDING
     )
-  }, [remainingOwners, publicKey])
+  }, [remainingOwners, publicKey, status])
 
   return (
     <>
