@@ -1,14 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import * as Icons from "assets/icons"
 import { Tab } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Overview from "./components/overview/Overview"
-import RejectTransactionModal from "components/modals/RejectTransactionModal"
-import SignTransactionModal from "components/modals/SignTransactionModal"
 // import { NFTsList } from "./components/nfts/NFTsList"
 import Setting from "./components/settings/Setting"
 import { Transactions } from "./components/transactions/Transactions"
+import { useRouter } from "next/router"
 
 const categories = [
   {
@@ -36,7 +35,24 @@ const categories = [
 
 export default function TreasuryDetail() {
   const { t } = useTranslation()
+  const router = useRouter()
   const [activePage, setActivePage] = useState<number>(0)
+
+  useEffect(() => {
+    const currentPath = router.asPath
+    const currentActiveTab = currentPath.split("#")[1]
+    if (currentActiveTab) {
+      const currentTabIndex = categories.findIndex(
+        (element) => element.title === currentActiveTab
+      )
+      setActivePage(currentTabIndex)
+      setTimeout(() => {
+        ReactTooltip.rebuild()
+      }, 1000)
+    } else {
+      setActivePage(0)
+    }
+  }, [router.asPath])
 
   return (
     <>
@@ -55,15 +71,13 @@ export default function TreasuryDetail() {
                   ReactTooltip.rebuild()
                 }, 1000)
                 setActivePage(index)
+                router.push(`#${category.title}`, undefined, { shallow: false })
               }}
             />
           ))}
         </div>
         <div className=" mt-8">{categories[activePage].Component}</div>
       </div>
-      {/* Sign Reject Modals */}
-      <SignTransactionModal />
-      <RejectTransactionModal />
     </>
   )
 }

@@ -26,9 +26,6 @@ const Treasury: NextPage = () => {
 
   const tokens = useAppSelector((state) => state.tokenDetails.tokens)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
-  const { pendingTransactions } = useAppSelector(
-    (state) => state.treasuryTransactions
-  )
 
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const dropdownWrapper = useRef(null)
@@ -43,13 +40,12 @@ const Treasury: NextPage = () => {
 
   useEffect(() => {
     if (tokens.length > 0 && activeTreasury) {
-      //Treasury Transactions
-      pendingTransactions.count === null &&
-        dispatch(
-          fetchTreasuryPendingTransactions({
-            treasury_uuid: activeTreasury.uuid
-          })
-        )
+      //Treasury Pending Transactions
+      dispatch(
+        fetchTreasuryPendingTransactions({
+          treasury_uuid: activeTreasury.uuid
+        })
+      )
     }
     // eslint-disable-next-line
   }, [tokens, activeTreasury])

@@ -2,12 +2,15 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { Button, EmptyDataState } from "components/shared"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { useEffect } from "react"
 import ReactTooltip from "react-tooltip"
 import { PendingConfirmationRow } from "./PendingConfirmationRow"
 
 export const PendingConfirmation = () => {
   const { t } = useTranslation()
+  const router = useRouter()
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
   const { pendingTransactions } = useAppSelector(
     (state) => state.treasuryTransactions
   )
@@ -26,6 +29,9 @@ export const PendingConfirmation = () => {
           size="small"
           title={`${t("common:buttons.view-all")}`}
           endIcon={<Icons.ArrowRightIcon />}
+          onClick={() =>
+            router.push(`/treasury/${activeTreasury?.uuid}/#transactions`)
+          }
         />
       </div>
       <div className="flex flex-col">

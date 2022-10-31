@@ -193,6 +193,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       resetForm()
       if (type === "send") {
         router.push("/transactions/outgoing")
+      } else if (type === "treasury" && activeTreasury) {
+        router.push(`/treasury/${activeTreasury.uuid}/#transactions`)
       }
     }
   }

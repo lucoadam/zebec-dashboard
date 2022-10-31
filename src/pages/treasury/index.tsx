@@ -28,7 +28,7 @@ const Treasury: NextPage = () => {
                     endIcon={<Icons.PlusIncircleIcon />}
                   />
                 </Link>
-                <Link href="/treasury/archived-safes">
+                <Link href="/treasury/archived-treasuries">
                   <Button
                     title={`${t("treasury:see-archived-safe")}`}
                     endIcon={<Icons.TrashIcon />}
