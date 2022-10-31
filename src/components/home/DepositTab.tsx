@@ -46,7 +46,9 @@ import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { getAssociatedTokenAddress } from "@solana/spl-token"
 import {
   switchxWalletApprovalMessageStep,
-  togglexWalletApprovalMessageModal
+  togglexWalletApprovalMessageModal,
+  setXModalMessage,
+  setXModalStepsList
 } from "features/modals/xWalletApprovalMessageSlice"
 import { CheveronDownIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
@@ -161,6 +163,24 @@ const DepositTab: FC = () => {
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
       try {
+        dispatch(
+          setXModalStepsList([
+            {
+              name: "Approve Deposit"
+            },
+            {
+              name: "Transfer to PDA"
+            },
+            {
+              name: "Transfer to Zebec Vault"
+            }
+          ])
+        )
+        dispatch(
+          setXModalMessage(
+            "Please complete all steps to ensure successful deposit of funds to your zebec vault"
+          )
+        )
         dispatch(switchxWalletApprovalMessageStep(0))
         dispatch(togglexWalletApprovalMessageModal())
         // dispatch(toggleWalletApprovalMessageModal())

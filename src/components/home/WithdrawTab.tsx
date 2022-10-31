@@ -30,6 +30,12 @@ import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useClickOutside } from "hooks"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import {
+  setXModalMessage,
+  setXModalStepsList,
+  switchxWalletApprovalMessageStep,
+  togglexWalletApprovalMessageModal
+} from "features/modals/xWalletApprovalMessageSlice"
 // import axios from "axios"
 
 const WithdrawTab: FC = () => {
@@ -131,6 +137,23 @@ const WithdrawTab: FC = () => {
     if (signer) {
       try {
         setLoading(true)
+        dispatch(
+          setXModalStepsList([
+            {
+              name: "Withdraw from Zebec Assets"
+            },
+            {
+              name: "Withdraw from PDA Assets"
+            }
+          ])
+        )
+        dispatch(
+          setXModalMessage(
+            "Please complete all steps to ensure successful withdrawal of funds from Zebec assets."
+          )
+        )
+        dispatch(switchxWalletApprovalMessageStep(0))
+        dispatch(togglexWalletApprovalMessageModal())
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
         console.log(sourceChain, targetChain)
@@ -158,6 +181,7 @@ const WithdrawTab: FC = () => {
         )
         console.log("response", response)
         if (response === "success") {
+          dispatch(switchxWalletApprovalMessageStep(1))
           const receipt = await messengerContract.directTokenTransfer(
             data.amount,
             walletObject.originalAddress?.toString() as string,
@@ -177,6 +201,8 @@ const WithdrawTab: FC = () => {
           )
           console.log("response", response)
           if (response === "success") {
+            dispatch(switchxWalletApprovalMessageStep(2))
+            await new Promise((resolve) => setTimeout(resolve, 1000))
             dispatch(toast.success({ message: "Withdrawal completed" }))
           } else if (response === "timeout") {
             dispatch(toast.error({ message: "Withdrawal timeout" }))
@@ -188,9 +214,11 @@ const WithdrawTab: FC = () => {
         } else {
           dispatch(toast.error({ message: "Error withdrawing token" }))
         }
+        dispatch(togglexWalletApprovalMessageModal())
         withdrawCallback()
       } catch (e) {
         console.log("error", e)
+        dispatch(togglexWalletApprovalMessageModal())
         dispatch(toast.error({ message: "Error withdrawing token" }))
       }
       setLoading(false)

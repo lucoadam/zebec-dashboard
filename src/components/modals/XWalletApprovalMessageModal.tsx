@@ -7,7 +7,9 @@ import * as Icons from "assets/icons"
 
 export const XWalletApprovalMessageModal: FC = () => {
   const dispatch = useAppDispatch()
-  const { show, step } = useAppSelector((state) => state.xWalletApprovalMessage)
+  const { show, step, StepsList, message } = useAppSelector(
+    (state) => state.xWalletApprovalMessage
+  )
 
   // const { t } = useTranslation("common")
 
@@ -20,17 +22,7 @@ export const XWalletApprovalMessageModal: FC = () => {
     }
     return isIcon ? index + 1 : "bg-content-contrast"
   }
-  const StepsList = [
-    {
-      name: "Approve Deposit"
-    },
-    {
-      name: "Transfer to PDA"
-    },
-    {
-      name: "Transfer to Zebec Vault"
-    }
-  ]
+
   return (
     <Modal
       show={show}
@@ -65,10 +57,7 @@ export const XWalletApprovalMessageModal: FC = () => {
         ))}
         <div className="flex items-center gap-x-[6px] justify-center text-warning">
           <Icons.SparkleIcon className="text-base opacity-100 w-4 h-4" />{" "}
-          <p className="text-body">
-            Please complete all steps to ensure successful deposit of funds to
-            your zebec vault
-          </p>
+          <p className="text-body">{message}</p>
         </div>
       </div>
     </Modal>
