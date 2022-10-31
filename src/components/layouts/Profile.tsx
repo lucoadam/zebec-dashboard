@@ -64,7 +64,7 @@ const Profile: FC = () => {
 
   useEffect(() => {
     const currentAccessToken = TokenService.getLocalAccessToken()
-    const currentConnectedWallet = useWalletObject.publicKey?.toString()
+    const currentConnectedWallet = useWalletObject.originalAddress?.toString()
     if (currentAccessToken && currentConnectedWallet) {
       const decodedToken: DecodedTokenProps = jwt_decode(currentAccessToken)
       if (decodedToken.wallet_address !== currentConnectedWallet) {
