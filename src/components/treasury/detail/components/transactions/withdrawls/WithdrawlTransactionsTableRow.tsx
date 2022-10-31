@@ -94,7 +94,10 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   }, [activeTreasury, transaction])
 
   const isRemaining = useMemo(() => {
-    return remainingOwners.some((owner) => owner === publicKey?.toString())
+    return (
+      remainingOwners.some((owner) => owner === publicKey?.toString()) &&
+      status === TreasuryApprovalType.PENDING
+    )
   }, [remainingOwners, publicKey])
 
   const isIncoming =

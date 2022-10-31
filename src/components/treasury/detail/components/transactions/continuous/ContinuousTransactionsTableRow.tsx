@@ -237,12 +237,18 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
   ])
 
   const isRemaining = useMemo(() => {
-    return remainingOwners.some((owner) => owner === publicKey?.toString())
+    return (
+      remainingOwners.some((owner) => owner === publicKey?.toString()) &&
+      approval_status === TreasuryApprovalType.PENDING
+    )
   }, [remainingOwners, publicKey])
 
   const isRemainingLatestTransaction = useMemo(() => {
-    return remainingLatestTransactionOwners.some(
-      (owner) => owner === publicKey?.toString()
+    return (
+      remainingLatestTransactionOwners.some(
+        (owner) => owner === publicKey?.toString()
+      ) &&
+      latest_transaction_event.approval_status === TreasuryApprovalType.PENDING
     )
   }, [remainingLatestTransactionOwners, publicKey])
 
