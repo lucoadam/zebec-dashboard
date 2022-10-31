@@ -14,10 +14,11 @@ import {
 } from "features/modals/transferToTreasuryModalSlice"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import ZebecContext from "app/zebecContext"
 import { withdrawFromTreasuryVault } from "application"
 import { CallbackMessageType } from "components/treasury/treasury"
+import * as Icons from "assets/icons"
 
 const TransferToTreasuryModal = () => {
   const { t } = useTranslation()
@@ -30,7 +31,10 @@ const TransferToTreasuryModal = () => {
   const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
   const treasuryVaultBalance =
     useAppSelector((state) => state.treasuryVaultBalance.treasury?.tokens) || []
+  const treasuryVaultStreamingTokensBalance =
+    useAppSelector((state) => state.treasuryStreamingBalance?.tokens) || []
   const { activeTreasury } = useAppSelector((state) => state.treasury)
+  const [showMaxInfo, setShowMaxInfo] = useState<boolean>(false)
 
   const {
     currentToken,
@@ -106,10 +110,19 @@ const TransferToTreasuryModal = () => {
   }
 
   const setMaxAmount = () => {
-    setValue(
-      "amount",
-      getBalance(treasuryVaultBalance, currentToken.symbol).toString()
-    )
+    const balance =
+      getBalance(treasuryVaultBalance, currentToken.symbol) -
+      getBalance(treasuryVaultStreamingTokensBalance, currentToken.symbol)
+
+    if (
+      getBalance(treasuryVaultStreamingTokensBalance, currentToken.symbol) > 0
+    ) {
+      setShowMaxInfo(true)
+    } else {
+      setShowMaxInfo(false)
+    }
+
+    setValue("amount", balance < 0 ? "0" : balance.toString())
     trigger("amount")
   }
 
@@ -154,6 +167,15 @@ const TransferToTreasuryModal = () => {
               setCurrentToken={setCurrentToken}
             />
           </WithdrawDepositInput>
+
+          {showMaxInfo && (
+            <div className="mt-2 text-caption text-content-tertiary flex items-start gap-x-1">
+              <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
+              <span>
+                {t("treasuryOverview:max-transfer-to-treasury-message")}
+              </span>
+            </div>
+          )}
 
           <Button
             title={`${t("treasuryOverview:transfer")}`}
