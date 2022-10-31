@@ -495,50 +495,54 @@ const DepositTab: FC = () => {
         className="flex flex-col"
         autoComplete="off"
       >
-        <div className="relative" ref={dropdownWrapper}>
-          <label className={`text-content-secondary text-xs font-medium mb-1`}>
-            Deposit From
-          </label>
-          <div
-            onClick={() => setToggleDropdown(!toggleDropdown)}
-            className="cursor-pointer relative text-content-primary"
-          >
-            <input
-              type="text"
-              value={depositFrom}
-              className={`cursor-pointer h-[40px] w-full !pr-12`}
-              readOnly
-            />
-            <CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
-          </div>
-          <CollapseDropdown
-            show={toggleDropdown}
-            className="mt-8 w-full z-[99]"
-            position="left"
-          >
-            <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-              {["Wallet Assets", "PDA Assets"].map((item) => (
-                <div
-                  className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
-                  key={item}
-                  onClick={() => {
-                    setDepositFrom(item)
-                    setToggleDropdown(false)
-                    if (item === "PDA Assets") {
-                      setCurrentToken(solanaTokenDetails[0])
-                    } else {
-                      setCurrentToken(tokenDetails[0])
-                    }
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
+        {walletObject.chainId !== "solana" && (
+          <div className="relative" ref={dropdownWrapper}>
+            <label
+              className={`text-content-secondary text-xs font-medium mb-1`}
+            >
+              Deposit From
+            </label>
+            <div
+              onClick={() => setToggleDropdown(!toggleDropdown)}
+              className="cursor-pointer relative text-content-primary"
+            >
+              <input
+                type="text"
+                value={depositFrom}
+                className={`cursor-pointer h-[40px] w-full !pr-12`}
+                readOnly
+              />
+              <CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
             </div>
-          </CollapseDropdown>
-        </div>
+            <CollapseDropdown
+              show={toggleDropdown}
+              className="mt-8 w-full z-[99]"
+              position="left"
+            >
+              <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+                {["Wallet Assets", "PDA Assets"].map((item) => (
+                  <div
+                    className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
+                    key={item}
+                    onClick={() => {
+                      setDepositFrom(item)
+                      setToggleDropdown(false)
+                      if (item === "PDA Assets") {
+                        setCurrentToken(solanaTokenDetails[0])
+                      } else {
+                        setCurrentToken(tokenDetails[0])
+                      }
+                    }}
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </CollapseDropdown>
+          </div>
+        )}
         <WithdrawDepositInput
-          className="mt-4"
+          className={walletObject.chainId !== "solana" ? "mt-4" : ""}
           token={currentToken}
           setMaxAmount={setMaxAmount}
           toggle={toggle}

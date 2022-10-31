@@ -325,54 +325,52 @@ const WithdrawTab: FC = () => {
         {t("common:deposit-withdrawal.withdraw-title")}
       </div>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col">
-        <div className="relative" ref={dropdownWrapper}>
-          <label className={`text-content-secondary text-xs font-medium mb-1`}>
-            Withdraw From
-          </label>
-          <div
-            onClick={() => setToggleDropdown(!toggleDropdown)}
-            className="cursor-pointer relative text-content-primary"
-          >
-            <input
-              type="text"
-              value={withdrawFrom}
-              className={`cursor-pointer h-[40px] w-full !pr-12`}
-              readOnly
-            />
-            <Icons.CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
-          </div>
-          <CollapseDropdown
-            show={toggleDropdown}
-            className="mt-8 w-full z-[99]"
-            position="left"
-          >
-            <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-              {["Zebec Assets", "PDA Assets"].map((item) => (
-                <div
-                  className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
-                  key={item}
-                  onClick={() => {
-                    setWithdrawFrom(item)
-                    setToggleDropdown(false)
-                    setCurrentToken(tokenDetails[0])
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
+        {walletObject.chainId !== "solana" && (
+          <div className="relative" ref={dropdownWrapper}>
+            <label
+              className={`text-content-secondary text-xs font-medium mb-1`}
+            >
+              Withdraw From
+            </label>
+            <div
+              onClick={() => setToggleDropdown(!toggleDropdown)}
+              className="cursor-pointer relative text-content-primary"
+            >
+              <input
+                type="text"
+                value={withdrawFrom}
+                className={`cursor-pointer h-[40px] w-full !pr-12`}
+                readOnly
+              />
+              <Icons.CheveronDownIcon className="absolute w-6 h-6 top-2 right-4" />
             </div>
-          </CollapseDropdown>
-        </div>
-        {/* {withdrawFrom === "PDA Assets" && (
-          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
-            <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
-            <span>Withdraw from PDA Assets will be available soon.</span>
+            <CollapseDropdown
+              show={toggleDropdown}
+              className="mt-8 w-full z-[99]"
+              position="left"
+            >
+              <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
+                {["Zebec Assets", "PDA Assets"].map((item) => (
+                  <div
+                    className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
+                    key={item}
+                    onClick={() => {
+                      setWithdrawFrom(item)
+                      setToggleDropdown(false)
+                      setCurrentToken(tokenDetails[0])
+                    }}
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </CollapseDropdown>
           </div>
-        )} */}
+        )}
         <WithdrawDepositInput
           token={currentToken}
           setMaxAmount={setMaxAmount}
-          className="mt-4"
+          className={walletObject.chainId !== "solana" ? "mt-4" : ""}
           toggle={toggle}
           setToggle={setToggle}
           {...register("amount")}
