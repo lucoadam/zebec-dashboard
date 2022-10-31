@@ -110,7 +110,10 @@ const TransferToVaultModal = () => {
   return (
     <Modal
       show={transferToVaultStates.show}
-      toggleModal={() => dispatch(toggleTransferToVaultModal())}
+      toggleModal={() => {
+        dispatch(toggleTransferToVaultModal())
+        reset()
+      }}
       className="rounded"
       hasCloseIcon={true}
       size="small"

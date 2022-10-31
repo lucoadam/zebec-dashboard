@@ -161,7 +161,10 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-4 min-w-50">
-            <UserAddress wallet={receiver} />
+            {transaction.transaction_type ===
+              TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+              <UserAddress wallet={receiver} />
+            )}
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -208,16 +211,6 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
-                <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
-                  <div className=" text-subtitle-sm font-medium text-content-primary">
-                    {name}
-                  </div>
-                  {remarks && (
-                    <div className="text-body text-content-secondary">
-                      {remarks}
-                    </div>
-                  )}
-                </div>
                 <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
@@ -253,20 +246,23 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.receiver")}
                       </div>
-                      <div className="flex items-center gap-x-2 text-content-primary">
-                        <Image
-                          layout="fixed"
-                          alt="Sender Logo"
-                          src={Images.Avatar3}
-                          height={24}
-                          width={24}
-                          className="rounded-full"
-                        />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                      {transaction.transaction_type ===
+                        TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+                        <div className="flex items-center gap-x-2 text-content-primary">
+                          <Image
+                            layout="fixed"
+                            alt="Sender Logo"
+                            src={Images.Avatar3}
+                            height={24}
+                            width={24}
+                            className="rounded-full"
+                          />
+                          <div className="" data-tip={receiver}>
+                            {toSubstring(receiver, 5, true)}
+                          </div>
+                          <CopyButton content={receiver} />
                         </div>
-                        <CopyButton content={receiver} />
-                      </div>
+                      )}
                     </div>
                     {/* End Date */}
                     <div className="flex items-center gap-x-8">

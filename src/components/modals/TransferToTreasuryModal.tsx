@@ -116,7 +116,10 @@ const TransferToTreasuryModal = () => {
   return (
     <Modal
       show={transferToTreasuryStates.show}
-      toggleModal={() => dispatch(toggleTransferToTreasuryModal())}
+      toggleModal={() => {
+        dispatch(toggleTransferToTreasuryModal())
+        reset()
+      }}
       className="rounded"
       hasCloseIcon={true}
       size="small"

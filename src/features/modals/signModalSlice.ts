@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { fetchTreasuryVaultTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import { constants } from "constants/constants"
 import {
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
