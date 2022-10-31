@@ -132,7 +132,11 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
         setStatus(transaction.status)
       }
     } else if (approval_status === TreasuryApprovalType.PENDING) {
-      setStatus(StatusType.SCHEDULED)
+      if (currentTime < end_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else {
+        setStatus(StatusType.CANCELLED)
+      }
     } else if (approval_status === TreasuryApprovalType.REJECTED) {
       setStatus(StatusType.CANCELLED)
     }
@@ -499,7 +503,9 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                     </div>
                     <div
                       className={`gap-x-4 py-6 ${
-                        !isRemainingLatestTransaction ? "hidden" : "flex"
+                        !isRemainingLatestTransaction || currentTime > end_time
+                          ? "hidden"
+                          : "flex"
                       }`}
                     >
                       <Button
@@ -768,7 +774,9 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                   </div>
                 </div>
                 <div
-                  className={`gap-x-4 py-6 ${!isRemaining ? "hidden" : "flex"}`}
+                  className={`gap-x-4 py-6 ${
+                    !isRemaining || currentTime > end_time ? "hidden" : "flex"
+                  }`}
                 >
                   <Button
                     startIcon={<Icons.EditIcon />}

@@ -20,6 +20,7 @@ import CopyButton from "components/shared/CopyButton"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { getExplorerUrl } from "constants/explorers"
+import { TreasuryApprovalType } from "components/treasury/treasury.d"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -65,6 +66,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
     pda,
     transaction_hash,
     file,
+    approval_status,
     latest_transaction_event
   } = transaction
 
@@ -97,19 +99,29 @@ const TreasuryContinuousTransactionsTableRow: FC<
   }, [currentTime, status])
 
   useEffect(() => {
-    if (
-      transaction.status !== StatusType.CANCELLED &&
-      transaction.status !== StatusType.PAUSED
-    ) {
-      if (currentTime < start_time) {
-        setStatus(StatusType.SCHEDULED)
-      } else if (currentTime >= start_time && currentTime < end_time) {
-        setStatus(StatusType.ONGOING)
-      } else if (currentTime >= end_time) {
-        setStatus(StatusType.COMPLETED)
+    if (approval_status === TreasuryApprovalType.ACCEPTED) {
+      if (
+        transaction.status !== StatusType.CANCELLED &&
+        transaction.status !== StatusType.PAUSED
+      ) {
+        if (currentTime < start_time) {
+          setStatus(StatusType.SCHEDULED)
+        } else if (currentTime >= start_time && currentTime < end_time) {
+          setStatus(StatusType.ONGOING)
+        } else if (currentTime >= end_time) {
+          setStatus(StatusType.COMPLETED)
+        }
+      } else {
+        setStatus(transaction.status)
       }
-    } else {
-      setStatus(transaction.status)
+    } else if (approval_status === TreasuryApprovalType.PENDING) {
+      if (currentTime < end_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else {
+        setStatus(StatusType.CANCELLED)
+      }
+    } else if (approval_status === TreasuryApprovalType.REJECTED) {
+      setStatus(StatusType.CANCELLED)
     }
     // eslint-disable-next-line
   }, [status, currentTime, transaction])
@@ -201,14 +213,17 @@ const TreasuryContinuousTransactionsTableRow: FC<
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              <Button
-                size="small"
-                title="Withdraw"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={withdraw}
-              />
+              {status !== StatusType.SCHEDULED &&
+                status !== StatusType.CANCELLED && (
+                  <Button
+                    size="small"
+                    title="Withdraw"
+                    startIcon={
+                      <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                    }
+                    onClick={withdraw}
+                  />
+                )}
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
