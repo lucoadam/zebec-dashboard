@@ -12,6 +12,7 @@ interface BreadcrumbProps {
   title: string
   className?: string
   arrowBack?: boolean
+  backTo?: string
   children?: BreadcrumbRightContentProps["children"]
 }
 
@@ -22,7 +23,7 @@ export const BreadcrumbRightContent: FC<BreadcrumbRightContentProps> = ({
 }
 
 export const Breadcrumb: FC<BreadcrumbProps> = (props) => {
-  const { title, className, arrowBack = false, children } = props
+  const { title, className, arrowBack = false, backTo, children } = props
 
   const router = useRouter()
 
@@ -39,7 +40,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = (props) => {
             <IconButton
               variant="plain"
               icon={<Icons.LeftArrowIcon />}
-              onClick={() => router.back()}
+              onClick={() => (backTo ? router.push(backTo) : router.back())}
             />
           )}
           <div className="text-heading-4 font-semibold">{title}</div>

@@ -60,6 +60,7 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
           <Breadcrumb
             title={activeTreasury?.name || ""}
             arrowBack={true}
+            backTo="/treasury"
             className="md:flex"
           >
             <BreadcrumbRightContent>
