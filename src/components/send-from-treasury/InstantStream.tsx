@@ -103,7 +103,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
     if (message === "success") {
       resetForm()
       if (activeTreasury) {
-        router.push(`/treasury/${activeTreasury.uuid}/#transactions`)
+        router.push(`/treasury/${activeTreasury.uuid}/transactions`)
       }
     }
     dispatch(toggleWalletApprovalMessageModal())

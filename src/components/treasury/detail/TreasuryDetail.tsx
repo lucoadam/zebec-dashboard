@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next"
 import Overview from "./components/overview/Overview"
 // import { NFTsList } from "./components/nfts/NFTsList"
 import Setting from "./components/settings/Setting"
-import { Transactions } from "./components/transactions/Transactions"
+import Transactions from "./components/transactions/Transactions"
 import { useRouter } from "next/router"
 
 const categories = [

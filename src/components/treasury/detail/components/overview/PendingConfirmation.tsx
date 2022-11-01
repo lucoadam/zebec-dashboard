@@ -30,7 +30,9 @@ export const PendingConfirmation = () => {
           title={`${t("common:buttons.view-all")}`}
           endIcon={<Icons.ArrowRightIcon />}
           onClick={() =>
-            router.push(`/treasury/${activeTreasury?.uuid}/#transactions`)
+            router.push(
+              `/treasury/${activeTreasury?.uuid}/transactions#withdrawals`
+            )
           }
         />
       </div>
