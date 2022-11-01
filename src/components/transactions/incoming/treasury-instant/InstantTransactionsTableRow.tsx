@@ -4,7 +4,8 @@ import {
   Button,
   CircularProgress,
   IconButton,
-  UserAddress
+  UserAddress,
+  ViewReferenceFile
 } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
@@ -283,15 +284,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
                         </div>
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.view-reference-file")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.OutsideLinkIcon className="text-content-contrast" />
-                            }
-                          />
-                        </div>
+                        <ViewReferenceFile file={file} />
                       </div>
                     )}
                   </div>

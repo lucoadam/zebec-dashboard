@@ -37,6 +37,7 @@ export type WithdrawDepositTransactionProps = {
   transaction_account: string
   transaction_type: TreasuryTransactionStatesType
   token: string
+  created_at: string
 }
 
 export enum TreasuryApprovalType {
