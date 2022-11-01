@@ -126,7 +126,10 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -
+                    {transaction.transaction_type ===
+                    TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT
+                      ? "+"
+                      : "-"}
                     {status === TreasuryApprovalType.ACCEPTED
                       ? formatCurrency(amount, "", 4)
                       : 0}

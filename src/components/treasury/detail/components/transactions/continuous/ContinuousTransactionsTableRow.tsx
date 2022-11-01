@@ -6,7 +6,8 @@ import {
   CircularProgress,
   IconButton,
   UserAddress,
-  SignerRow
+  SignerRow,
+  ViewReferenceFile
 } from "components/shared"
 import { showRejectModal } from "features/modals/rejectModalSlice"
 import { showSignModal } from "features/modals/signModalSlice"
@@ -684,15 +685,7 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
                         </div>
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.view-reference-file")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.OutsideLinkIcon className="text-content-contrast" />
-                            }
-                          />
-                        </div>
+                        <ViewReferenceFile file={file} />
                       </div>
                     )}
                   </div>

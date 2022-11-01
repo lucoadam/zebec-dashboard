@@ -5,7 +5,7 @@ import {
   WithdrawDepositTransactionProps,
   ApprovedRejectedUserProps
 } from "components/treasury/treasury.d"
-import { formatCurrency } from "utils"
+import { formatCurrency, formatDateTime } from "utils"
 import { useTranslation } from "next-i18next"
 import {
   Button,
@@ -122,7 +122,8 @@ export const PendingConfirmationRow: FC<PendingConfirmationRowProps> = ({
               showIcons={false}
             />
             &nbsp;
-            {t("treasuryOverview:on")}&nbsp;Mar 18, 2022, 12:00 PM
+            {t("treasuryOverview:on")}&nbsp;
+            {formatDateTime(transaction.created_at)}
           </span>
         </div>
       </div>
