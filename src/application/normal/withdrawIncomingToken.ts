@@ -16,6 +16,7 @@ interface WithdrawIncomingTokenProps {
     transaction_kind: string
     transaction_uuid: string
     hasTransactionEnd: boolean
+    safe_address?: string
   }
   stream: ZebecNativeStream | ZebecTokenStream
 }

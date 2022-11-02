@@ -4,6 +4,7 @@ import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
+  FormatCurrency,
   IconButton,
   UserAddress,
   ViewReferenceFile
@@ -12,7 +13,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, toSubstring } from "utils"
+import { formatDateTime, toSubstring } from "utils"
 import {
   StatusType,
   TransactionStatusType
@@ -190,14 +191,15 @@ const TreasuryContinuousTransactionsTableRow: FC<
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{formatCurrency(streamedToken, "", 4)}
+                    +<FormatCurrency amount={streamedToken} fix={4} />
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {" "}
-                  {formatCurrency(streamedToken, "", 4)} of{" "}
-                  {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                  <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                  {t("table.of")}{" "}
+                  <FormatCurrency amount={totalTransactionAmount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -206,7 +208,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
             <div className="text-caption text-content-primary">
               {formatDateTime(start_time)}
               <br />
-              to {formatDateTime(end_time)}
+              {t("table.to")} {formatDateTime(end_time)}
             </div>
           </td>
           <td className="px-6 py-4 min-w-60">
@@ -335,7 +337,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.streamed-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency amount={amount} fix={4} /> {token}
                       </div>
                     </div>
                     {/* Paused Amount */}
@@ -344,11 +346,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.paused-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(
-                          latest_transaction_event.paused_amt,
-                          "",
-                          4
-                        )}{" "}
+                        <FormatCurrency
+                          amount={latest_transaction_event.paused_amt}
+                          fix={4}
+                        />{" "}
                         {token}
                       </div>
                     </div>
@@ -358,7 +359,11 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                        <FormatCurrency
+                          amount={totalTransactionAmount}
+                          fix={4}
+                        />{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -367,12 +372,14 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(streamedToken, "", 4)} {token} (
-                        {formatCurrency(
-                          (streamedToken * 100) / totalTransactionAmount,
-                          "",
-                          2
-                        )}
+                        <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                        {token} (
+                        <FormatCurrency
+                          amount={
+                            (streamedToken * 100) / totalTransactionAmount
+                          }
+                          showTooltip={false}
+                        />
                         %)
                       </div>
                     </div>
@@ -382,11 +389,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.withdrawn")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(
-                          latest_transaction_event.withdrawn,
-                          "",
-                          4
-                        )}{" "}
+                        <FormatCurrency
+                          amount={latest_transaction_event.withdrawn}
+                          fix={4}
+                        />{" "}
                         {token}
                       </div>
                     </div>

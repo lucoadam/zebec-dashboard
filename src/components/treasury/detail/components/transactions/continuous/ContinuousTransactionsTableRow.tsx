@@ -7,7 +7,8 @@ import {
   IconButton,
   UserAddress,
   SignerRow,
-  ViewReferenceFile
+  ViewReferenceFile,
+  FormatCurrency
 } from "components/shared"
 import { showRejectModal } from "features/modals/rejectModalSlice"
 import { showSignModal } from "features/modals/signModalSlice"
@@ -15,7 +16,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
+import { formatDateTime, getTimesAgo, toSubstring } from "utils"
 import {
   StatusType,
   TransactionStatusType
@@ -271,14 +272,15 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -{formatCurrency(streamedToken, "", 4)}
+                    -<FormatCurrency amount={streamedToken} fix={4} />
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {formatCurrency(streamedToken, "", 4)}&nbsp;{t("table.of")}
-                  &nbsp;
-                  {formatCurrency(totalTransactionAmount, "", 4)}&nbsp;{token}
+                  <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                  {t("table.of")}{" "}
+                  <FormatCurrency amount={totalTransactionAmount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -624,13 +626,39 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                   </div>
                   {/* Right Column */}
                   <div className="flex flex-col gap-y-4">
+                    {/* Streamed Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.streamed-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        <FormatCurrency amount={amount} fix={4} /> {token}
+                      </div>
+                    </div>
+                    {/* Paused Amount */}
+                    <div className="flex items-center gap-x-8">
+                      <div className="w-32 text-content-secondary">
+                        {t("table.paused-amount")}
+                      </div>
+                      <div className="text-content-primary">
+                        <FormatCurrency
+                          amount={latest_transaction_event.paused_amt}
+                          fix={4}
+                        />{" "}
+                        {token}
+                      </div>
+                    </div>
                     {/* Total Amount */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency
+                          amount={totalTransactionAmount}
+                          fix={4}
+                        />{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -639,12 +667,14 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(streamedToken, "", 4)} {token}&nbsp;(
-                        {formatCurrency(
-                          (streamedToken * 100) / totalTransactionAmount,
-                          "",
-                          2
-                        )}
+                        <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                        {token}&nbsp;(
+                        <FormatCurrency
+                          amount={
+                            (streamedToken * 100) / totalTransactionAmount
+                          }
+                          showTooltip={false}
+                        />
                         %)
                       </div>
                     </div>
