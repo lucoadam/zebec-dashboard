@@ -9,7 +9,7 @@ export const formatCurrency = (
   return (
     before +
     Number(amount)
-      .toFixed(fix + 1)
+      .toFixed(fix + 2)
       .substring(0, Number(amount).toFixed(fix + 1).length - 1)
       .replace(/\d(?=(\d{3})+\.)/g, "$&,")
   )

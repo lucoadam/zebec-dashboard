@@ -6,6 +6,10 @@ import {
   ZebecNativeStream,
   ZebecTokenStream
 } from "zebec-anchor-sdk-npmtest/packages/stream"
+import {
+  ZebecNativeTreasury,
+  ZebecTokenTreasury
+} from "zebec-anchor-sdk-npmtest/packages/multisig"
 
 interface WithdrawIncomingTokenProps {
   data: {
@@ -16,8 +20,13 @@ interface WithdrawIncomingTokenProps {
     transaction_kind: string
     transaction_uuid: string
     hasTransactionEnd: boolean
+    safe_address?: string
   }
-  stream: ZebecNativeStream | ZebecTokenStream
+  stream:
+    | ZebecNativeStream
+    | ZebecTokenStream
+    | ZebecNativeTreasury
+    | ZebecTokenTreasury
 }
 
 export const withdrawIncomingToken =
