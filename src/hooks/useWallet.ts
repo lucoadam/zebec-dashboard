@@ -53,7 +53,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
       solAccount.publicKey ||
       (ethAccount.isConnected
         ? new PublicKey(
-            ZebecSolBridgeClient.getXChainUserKey(
+            ZebecSolBridgeClient.getProxyUserKey(
               tryNativeToUint8Array(
                 ethAccount.address as string,
                 wormholeChain
