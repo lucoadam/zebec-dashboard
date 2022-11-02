@@ -69,7 +69,8 @@ const TreasuryContinuousTransactionsTableRow: FC<
     transaction_hash,
     file,
     approval_status,
-    latest_transaction_event
+    latest_transaction_event,
+    treasury_address
   } = transaction
 
   const totalTransactionAmount = latest_transaction_event
@@ -160,7 +161,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
   }, [status, transaction])
 
   const withdraw = () => {
-    if (zebecCtx.stream && zebecCtx.token) {
+    if (zebecCtx.treasury && zebecCtx.treasuryToken) {
       const withdrawData = {
         data: {
           sender: sender,
@@ -169,9 +170,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
           token_mint_address: token_mint_address,
           transaction_kind: "treasury_continuous",
           transaction_uuid: uuid,
-          hasTransactionEnd: currentTime > end_time ? true : false
+          hasTransactionEnd: currentTime > end_time ? true : false,
+          safe_address: treasury_address
         },
-        stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
+        stream: token_mint_address ? zebecCtx.treasuryToken : zebecCtx.treasury
       }
       dispatch(withdrawIncomingToken(withdrawData))
     }
