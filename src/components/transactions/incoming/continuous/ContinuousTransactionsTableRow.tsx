@@ -13,7 +13,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, toSubstring } from "utils"
+import { formatDateTime, toSubstring } from "utils"
 import {
   StatusType,
   TransactionStatusType
