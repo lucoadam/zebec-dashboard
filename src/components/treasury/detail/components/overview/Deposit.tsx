@@ -72,7 +72,8 @@ export const Deposit = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = (data: any) => {
-    if (Number(data.amount) > getBalance(zebecBalance, currentToken.symbol)) {
+    const balance = calculateTokenAvailableBalance()
+    if (Number(data.amount) > balance) {
       setError(
         "amount",
         { type: "custom", message: "validation:max" },
@@ -111,18 +112,26 @@ export const Deposit = () => {
     // handle deposit
   }
 
-  const setMaxAmount = () => {
-    const balance =
-      getBalance(zebecBalance, currentToken.symbol) -
-      getBalance(zebecStreamingTokens, currentToken.symbol)
+  const calculateTokenAvailableBalance = () => {
+    const walletTokenBalance = getBalance(zebecBalance, currentToken.symbol)
+    const streamingTokenBalance = getBalance(
+      zebecStreamingTokens,
+      currentToken.symbol
+    )
 
-    if (getBalance(zebecStreamingTokens, currentToken.symbol) > 0) {
+    if (streamingTokenBalance > 0) {
       setShowMaxInfo(true)
     } else {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance.toString())
+    return walletTokenBalance - streamingTokenBalance
+  }
+
+  const setMaxAmount = () => {
+    const balance = calculateTokenAvailableBalance()
+
+    setValue("amount", balance < 0 ? "0" : balance.toString())
     trigger("amount")
   }
 
@@ -157,7 +166,9 @@ export const Deposit = () => {
         {showMaxInfo && (
           <div className="mt-2 text-caption text-content-tertiary flex items-start gap-x-1">
             <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
-            <span>{t("common:deposit-withdrawal.max-withdraw-message")}</span>
+            <span>
+              {t("common:deposit-withdrawal.max-treasury-deposit-message")}
+            </span>
           </div>
         )}
 

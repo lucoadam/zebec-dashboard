@@ -85,10 +85,12 @@ const Setting = () => {
                 </div>
                 <div className="flex gap-x-1.5 items-center text-sm font-normal text-content-primary">
                   <Icons.NotebookIcon className="text-sm font-normal" />
-                  <div>
+                  <div data-tip={activeTreasury?.treasury_address}>
                     {toSubstring(activeTreasury?.treasury_address, 6, true)}
                   </div>
-                  <CopyButton content="23423sdfjsdlfjs234230423" />
+                  {activeTreasury?.treasury_address && (
+                    <CopyButton content={activeTreasury.treasury_address} />
+                  )}
                 </div>
               </div>
             </div>
@@ -159,7 +161,7 @@ const Setting = () => {
                   loading={archiving}
                   disabled={archiving}
                   title={`${t("treasurySettings:yes-archive-safe")}`}
-                  startIcon={<Icons.TrashIcon />}
+                  endIcon={<Icons.TrashIcon />}
                   onClick={() =>
                     dispatch(
                       archiveTreasury({

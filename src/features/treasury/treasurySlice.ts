@@ -13,7 +13,7 @@ import { AppDispatch } from "app/store"
 const initialState: TreasuryState = {
   loading: false,
   treasuries: {
-    count: 0,
+    count: null,
     next: null,
     previous: null,
     results: []

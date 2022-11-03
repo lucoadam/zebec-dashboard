@@ -8,6 +8,7 @@ import InstantTransactions from "./instant/InstantTransactions"
 // import { WithdrawalTransactions } from "../WithdrawalTransactions"
 import WithdrawlTransactions from "./withdrawls/WithdrawlTransactions"
 import * as Icons from "assets/icons"
+import { useRouter } from "next/router"
 
 const transactionTabs = [
   {
@@ -36,14 +37,25 @@ const transactionTabs = [
   // }
 ]
 
-export const Transactions = () => {
+const Transactions = () => {
   const { t } = useTranslation("transactions")
-
+  const router = useRouter()
+  const { slug } = router.query
   const [activePage, setActivePage] = useState<number>(0)
 
   useEffect(() => {
+    const currentPath = router.asPath
+    const currentActiveTab = currentPath.split("#")[1]
+    if (currentActiveTab) {
+      const currentTabIndex = transactionTabs.findIndex(
+        (element) => element.title === currentActiveTab
+      )
+      setActivePage(currentTabIndex)
+    } else {
+      setActivePage(0)
+    }
     ReactTooltip.rebuild()
-  }, [activePage])
+  }, [activePage, router.asPath])
 
   return (
     <div className="w-full">
@@ -59,7 +71,16 @@ export const Transactions = () => {
                 title={`${t(transactionTab.title)}`}
                 isActive={activePage === index}
                 count={transactionTab.count}
-                onClick={() => setActivePage(index)}
+                onClick={() => {
+                  setActivePage(index)
+                  if (transactionTab.title === "instant") {
+                    router.push(`/treasury/${slug}/transactions`)
+                  } else {
+                    router.push(`#${transactionTab.title}`, undefined, {
+                      shallow: true
+                    })
+                  }
+                }}
                 startIcon={transactionTab.icon}
               />
             )
@@ -76,3 +97,5 @@ export const Transactions = () => {
     </div>
   )
 }
+
+export default Transactions

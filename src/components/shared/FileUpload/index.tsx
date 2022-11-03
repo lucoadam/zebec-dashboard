@@ -5,6 +5,7 @@ import { FileState, FileUploadProps } from "./index.d"
 import axios, { CancelTokenSource } from "axios"
 import { useTranslation } from "next-i18next"
 import { constants } from "constants/constants"
+import TokenService from "api/services/token.service"
 
 export const FileUpload: FC<FileUploadProps> = ({
   name,
@@ -70,16 +71,16 @@ export const FileUpload: FC<FileUploadProps> = ({
       }))
       const formData = new FormData()
       formData.append("file", data)
-      formData.append("token", "OGpbsp3SMcMOcXxXrz5UAoywdyuZgrFD")
       try {
+        const token = TokenService.getLocalAccessToken()
         const response = await axios.post(
-          "http://localhost:8000/uploads/",
+          `${process.env.DB_HOST}/uploads/`,
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data"
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`
             },
-            cancelToken: source?.token,
             onUploadProgress
           }
         )

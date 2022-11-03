@@ -55,8 +55,8 @@
     "deposit-withdrawal": {
         "deposit-title": "Deposit assets into your Zebec wallet.",
         "withdraw-title": "Withdraw deposited Zebec assets into your wallet.",
-        "max-withdraw-message": "Max balance is equals to the deposited balance minus streaming balance.",
-        "max-treasury-deposit-message": "Max balance is equals to the zebec wallet deposited balance minus zebec wallet streaming balance."
+        "max-withdraw-message": "Max withdrawable balance is equals to the zebec wallet deposited balance minus zebec wallet streaming balance.",
+        "max-treasury-deposit-message": "Max depositable balance is equals to the zebec wallet deposited balance minus zebec wallet streaming balance."
     },
     "wallet-not-connected": {
         "title": "Connect a wallet to continue",

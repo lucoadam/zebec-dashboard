@@ -10,9 +10,9 @@ const NavLink: FC<RouteProps> = (props) => {
   const { t } = useTranslation("common")
 
   //isActive state for active link
+  const currentPath = router.pathname.split("/")[1]
   const isActive =
-    router.pathname === path ||
-    (path !== "/" && router.pathname.includes(path?.split("/")[1]))
+    currentPath === "" ? name === "dashboard" : name === currentPath
 
   return (
     <>

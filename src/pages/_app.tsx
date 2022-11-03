@@ -148,7 +148,6 @@ MyApp.getInitialProps = async () => {
   let data = []
   try {
     const response = await axios.get(`${process.env.DB_HOST}/token/`)
-    console.log(response.data)
     data = response.data.map((item: TokenResponse) => ({
       ...item,
       network: "solana",

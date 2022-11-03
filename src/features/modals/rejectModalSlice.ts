@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import axios from "axios"
 import {
   fetchTreasuryPendingTransactions,
+  fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactions,
   fetchTreasuryVaultInstantTransactions
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
@@ -22,6 +22,7 @@ const initialState: RejectState = {
   loading: false,
   error: ""
 }
+
 export const rejectTransaction = createAsyncThunk<
   any,
   { uuid: string },
@@ -37,6 +38,12 @@ export const rejectTransaction = createAsyncThunk<
       dispatch(toggleRejectModal())
       dispatch(
         fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid })
+      )
+      dispatch(
+        fetchTreasuryTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
       )
       return
     }

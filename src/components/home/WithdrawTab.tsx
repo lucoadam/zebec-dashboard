@@ -45,7 +45,10 @@ const WithdrawTab: FC = () => {
   const dispatch = useAppDispatch()
   const { data: signer } = useSigner()
   const tokenDetails = useAppSelector((state) =>
-    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === "solana" && token.network === walletObject.network
+    )
   )
   const walletTokens =
     useAppSelector((state) => state.zebecBalance.tokens) || []
@@ -77,23 +80,29 @@ const WithdrawTab: FC = () => {
     type: "withdraw"
   })
 
-  const setMaxAmount = () => {
-    if (withdrawFrom === "PDA Assets") {
-      setValue("amount", getBalance(pdaTokens, currentToken.symbol).toString())
-      trigger("amount")
-      return
-    }
-    const balance =
-      getBalance(walletTokens, currentToken.symbol) -
-      getBalance(streamingTokens, currentToken.symbol)
+  const calculateTokenAvailableBalance = () => {
+    const walletTokenBalance = getBalance(
+      withdrawFrom === "PDA Assets" ? pdaTokens : walletTokens,
+      currentToken.symbol
+    )
+    const streamingTokenBalance = getBalance(
+      streamingTokens,
+      currentToken.symbol
+    )
 
-    if (getBalance(streamingTokens, currentToken.symbol) > 0) {
+    if (streamingTokenBalance > 0) {
       setShowMaxInfo(true)
     } else {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance.toString())
+    return walletTokenBalance - streamingTokenBalance
+  }
+
+  const setMaxAmount = () => {
+    const balance = calculateTokenAvailableBalance()
+
+    setValue("amount", balance < 0 ? "0" : balance.toString())
     trigger("amount")
   }
 
@@ -282,13 +291,8 @@ const WithdrawTab: FC = () => {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = async (data: any) => {
-    if (
-      Number(data.amount) >
-      getBalance(
-        withdrawFrom === "Zebec Assets" ? walletTokens : pdaTokens,
-        currentToken.symbol
-      )
-    ) {
+    const balance = calculateTokenAvailableBalance()
+    if (Number(data.amount) > balance) {
       setError(
         "amount",
         { type: "custom", message: "validation:withdraw-max-amount" },
@@ -397,9 +401,7 @@ const WithdrawTab: FC = () => {
         {showMaxInfo && (
           <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
             <Icons.InformationIcon className="w-5 h-5 flex-shrink-0" />
-            <span>
-              {t("common:deposit-withdrawal.max-treasury-deposit-message")}
-            </span>
+            <span>{t("common:deposit-withdrawal.max-withdraw-message")}</span>
           </div>
         )}
 
