@@ -67,14 +67,19 @@ const DepositTab: FC = () => {
 
   const tokenDetails = useAppSelector((state) =>
     state.tokenDetails.tokens.filter(
-      (token) => token.chainId === walletObject.chainId
+      (token) =>
+        token.chainId === walletObject.chainId &&
+        token.network === walletObject.network
     )
   )
 
   const walletTokens =
     useAppSelector((state) => state.walletBalance.tokens) || []
   const solanaTokenDetails = useAppSelector((state) =>
-    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === "solana" && token.network === walletObject.network
+    )
   )
   const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens) || []
 
@@ -114,11 +119,17 @@ const DepositTab: FC = () => {
   const depositCallback = () => {
     reset()
     setTimeout(() => {
-      dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+      dispatch(
+        fetchZebecBalance({
+          publicKey: walletObject.publicKey?.toString(),
+          network: walletObject.network
+        })
+      )
       dispatch(
         fetchWalletBalance({
           publicKey: walletObject.originalAddress,
           chainId: walletObject.chainId,
+          network: walletObject.network,
           signer: walletObject.chainId === "solana" && signer
         })
       )

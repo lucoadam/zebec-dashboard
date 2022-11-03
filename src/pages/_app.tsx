@@ -34,8 +34,65 @@ import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
-// import axios from "axios"
+import axios from "axios"
 import EthereumWalletProvider from "components/shared/Wallet/EthereumWalletProvider"
+
+const bscTokens = [
+  {
+    symbol: "WSOL",
+    name: "Wrapped Solana",
+    decimal: 9,
+    mint: "So11111111111111111111111111111111111111112",
+    coingeco_id: "solana",
+    chainId: "solana",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "WWSOL",
+    name: "Wormhole Wrapped SOL",
+    decimal: 9,
+    mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+    coingeco_id: "solana",
+    chainId: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "USDT",
+    name: "BSC USDT",
+    decimal: 18,
+    mint: "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    coingeco_id: "tether",
+    chainId: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "ZBC",
+    name: "Zebec",
+    decimal: 9,
+    mint: "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
+    coingeco_id: "zebec-protocol",
+    chainId: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "ZBC",
+    name: "Zebec",
+    decimal: 9,
+    mint: "AbLwGR8A1wvsiLWrzzA5eYPoQw51NVMcMMTPvAv5LTJ",
+    coingeco_id: "zebec-protocol",
+    chainId: "solana",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "USDT",
+    name: "BSC USDT",
+    decimal: 8,
+    mint: "F6d4we2yt9DxPwYbo18YG4bGDxMFpghQcgYWsoJTmtia",
+    coingeco_id: "tether",
+    chainId: "solana",
+    network: "Binance Smart Chain Testnet"
+  }
+]
 
 const MyApp = ({
   Component,
@@ -88,81 +145,20 @@ const MyApp = ({
 }
 
 MyApp.getInitialProps = async () => {
-  // let data = []
-  // try {
-  //   const response = await axios.get(`${process.env.DB_HOST}/token/`)
-  //   data = response.data
-  // } catch (error) {
-  //   data = []
-  // }
+  let data = []
+  try {
+    const response = await axios.get(`${process.env.DB_HOST}/token/`)
+    console.log(response.data)
+    data = response.data.map((item: TokenResponse) => ({
+      ...item,
+      network: "solana",
+      chainId: "solana"
+    }))
+  } catch (error) {
+    data = []
+  }
   return {
-    // tokenDetails: data as TokenResponse[]
-    tokenDetails: [
-      // {
-      //   symbol: "ZBC",
-      //   name: "ZEBEC",
-      //   decimal: 9,
-      //   mint: "2iB2oZaJZZBCmMecrz79wrMdu6Zn5UA2apUYdVy4jJUD",
-      //   coingeco_id: "zebec-protocol",
-      //   chainId: "solana"
-      // },
-      // {
-      //   symbol: "SOL",
-      //   name: "Solana",
-      //   decimal: 9,
-      //   mint: null,
-      //   coingeco_id: "solana",
-      //   chainId: "solana"
-      // },
-      {
-        symbol: "WSOL",
-        name: "Wrapped Solana",
-        decimal: 9,
-        mint: "So11111111111111111111111111111111111111112",
-        coingeco_id: "solana",
-        chainId: "solana"
-      },
-      {
-        symbol: "WWSOL",
-        name: "Wormhole Wrapped SOL",
-        decimal: 9,
-        mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
-        coingeco_id: "solana",
-        chainId: "97"
-      },
-      {
-        symbol: "USDT",
-        name: "USDT",
-        decimal: 18,
-        mint: "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
-        coingeco_id: "tether",
-        chainId: "97"
-      },
-      {
-        symbol: "ZBC",
-        name: "Zebec",
-        decimal: 9,
-        mint: "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
-        coingeco_id: "zebec-protocol",
-        chainId: "97"
-      },
-      {
-        symbol: "ZBC",
-        name: "Zebec",
-        decimal: 9,
-        mint: "AbLwGR8A1wvsiLWrzzA5eYPoQw51NVMcMMTPvAv5LTJ",
-        coingeco_id: "zebec-protocol",
-        chainId: "solana"
-      },
-      {
-        symbol: "USDT",
-        name: "USDT",
-        decimal: 8,
-        mint: "F6d4we2yt9DxPwYbo18YG4bGDxMFpghQcgYWsoJTmtia",
-        coingeco_id: "tether",
-        chainId: "solana"
-      }
-    ]
+    tokenDetails: [...data, ...bscTokens] as TokenResponse[]
   }
 }
 

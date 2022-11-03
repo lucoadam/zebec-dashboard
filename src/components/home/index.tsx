@@ -36,7 +36,10 @@ const HomePage: FC = () => {
   const walletObject = useZebecWallet()
   const tokenDetails = useAppSelector(
     (state) => state.tokenDetails.tokens
-  ).filter((token) => token.chainId === "solana")
+  ).filter(
+    (token) =>
+      token.chainId === "solana" && token.network === walletObject.network
+  )
   const { overallActivity, weeklyActivity } = useAppSelector(
     (state) => state.transactions
   )

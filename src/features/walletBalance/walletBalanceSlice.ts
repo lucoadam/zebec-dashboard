@@ -19,10 +19,12 @@ export const fetchWalletBalance: any = createAsyncThunk(
     {
       publicKey,
       chainId,
+      network,
       signer
     }: {
       publicKey: string
       chainId: string
+      network: string
       signer?: Signer
     },
     { getState }
@@ -44,14 +46,21 @@ export const fetchWalletBalance: any = createAsyncThunk(
     } else if (signer) {
       const tokensBalance = await getEVMTokenBalance(
         publicKey,
-        tokens.filter((token) => token.chainId === chainId),
+        tokens.filter(
+          (token) => token.chainId === chainId && token.network === network
+        ),
         signer
       )
-      return tokens.map((token) => ({
-        symbol: token.symbol,
-        balance: tokensBalance[token.mint] || 0,
-        chainId: token.chainId
-      }))
+      return tokens
+        .filter(
+          (token) => token.chainId === chainId && token.network === network
+        )
+        .map((token) => ({
+          symbol: token.symbol,
+          balance: tokensBalance[token.mint] || 0,
+          chainId: token.chainId,
+          network: token.network
+        }))
     }
   }
 )

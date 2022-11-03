@@ -17,4 +17,5 @@ export interface TreasuryState {
 export interface FetchTreasuryProps {
   address: string
   name: string
+  network: string
 }

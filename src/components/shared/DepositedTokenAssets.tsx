@@ -59,11 +59,17 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
     setRefreshClassName("animate-spin")
     if (walletObject && !refreshClassName) {
       dispatch(fetchTokensPrice())
-      dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+      dispatch(
+        fetchZebecBalance({
+          publicKey: walletObject.publicKey?.toString(),
+          network: walletObject.network
+        })
+      )
       // dispatch(fetchWalletBalance(publicKey?.toString()))
       fetchWalletBalance({
         publicKey: walletObject.originalAddress,
         chainId: walletObject.chainId,
+        network: walletObject.network,
         signer: walletObject.chainId === "solana" && signer
       })
       if (zebecContext.token && zebecContext.stream) {
@@ -71,7 +77,8 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
           fetchZebecStreamingBalance({
             wallet: walletObject.publicKey?.toString() || "",
             stream: zebecContext.stream,
-            token: zebecContext.token
+            token: zebecContext.token,
+            network: walletObject.network
           })
         )
       }

@@ -61,7 +61,8 @@ export const zbcAirdrop =
           dispatch(
             fetchWalletBalance({
               publicKey: walletPublicKey?.toString(),
-              chainId: "solana"
+              chainId: "solana",
+              network: "solana"
             })
           )
         }, constants.BALANCE_FETCH_TIMEOUT)

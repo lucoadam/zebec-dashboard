@@ -100,11 +100,17 @@ const WithdrawTab: FC = () => {
   const withdrawCallback = () => {
     reset()
     setTimeout(() => {
-      dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+      dispatch(
+        fetchZebecBalance({
+          publicKey: walletObject.publicKey?.toString(),
+          network: walletObject.network
+        })
+      )
       dispatch(
         fetchWalletBalance({
           publicKey: walletObject.publicKey?.toString(),
           chainId: walletObject.chainId,
+          network: walletObject.network,
           signer: walletObject.chainId === "solana" && signer
         })
       )

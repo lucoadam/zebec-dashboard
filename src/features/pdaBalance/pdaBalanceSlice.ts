@@ -13,19 +13,29 @@ const initialState: WalletTokenState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchPdaBalance: any = createAsyncThunk(
   "balance/fetchPdaBalance",
-  async (publicKey: string, { getState }) => {
+  async (
+    {
+      publicKey,
+      network
+    }: {
+      publicKey: string
+      network: string
+    },
+    { getState }
+  ) => {
     console.log("pda.....", publicKey)
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.chainId === "solana" && token.network === network
+    )
 
     // fetch wallet tokens
-    const tokensBalance = await getTokensBalanceOfWallet(
-      publicKey,
-      tokens.filter((token) => token.chainId === "solana")
-    )
+    const tokensBalance = await getTokensBalanceOfWallet(publicKey, tokens)
     return tokens.map((token) => ({
       symbol: token.symbol,
-      balance: tokensBalance[token.symbol] || 0
+      balance: tokensBalance[token.symbol] || 0,
+      network: token.network,
+      chainId: "solana"
     }))
   }
 )

@@ -55,10 +55,16 @@ export const Deposit = () => {
         dispatch(
           fetchTreasuryBalance({
             name: activeTreasury?.name,
-            address: activeTreasury?.treasury_address
+            address: activeTreasury?.treasury_address,
+            network: "solana"
           })
         )
-        dispatch(fetchZebecBalance(publicKey?.toString()))
+        dispatch(
+          fetchZebecBalance({
+            publicKey: publicKey?.toString(),
+            network: "solana"
+          })
+        )
       }, constants.BALANCE_FETCH_TIMEOUT)
     }
     setLoading(false)

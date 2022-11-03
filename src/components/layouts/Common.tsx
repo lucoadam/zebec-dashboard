@@ -69,14 +69,25 @@ const Common: FC<{
           fetchWalletBalance({
             publicKey: walletObject.originalAddress,
             chainId: walletObject.chainId,
+            network: walletObject.network,
             signer: walletObject.chainId !== "solana" && signer
           })
         )
       zebecBalances.length === 0 &&
-        dispatch(fetchZebecBalance(walletObject.publicKey.toString()))
+        dispatch(
+          fetchZebecBalance({
+            publicKey: walletObject.publicKey.toString(),
+            network: walletObject.network
+          })
+        )
       pdaBalances.length === 0 &&
         walletObject.chainId !== "solana" &&
-        dispatch(fetchPdaBalance(walletObject.publicKey.toString()))
+        dispatch(
+          fetchPdaBalance({
+            publicKey: walletObject.publicKey.toString(),
+            network: walletObject.network
+          })
+        )
 
       if (zebecContext.token && zebecContext.stream) {
         zebecStreamingBalances.length === 0 &&
@@ -84,7 +95,8 @@ const Common: FC<{
             fetchZebecStreamingBalance({
               wallet: walletObject.publicKey.toString(),
               stream: zebecContext.stream,
-              token: zebecContext.token
+              token: zebecContext.token,
+              network: walletObject.network
             })
           )
       }

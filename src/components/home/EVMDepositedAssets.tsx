@@ -38,7 +38,12 @@ export const EVMDepositedAssets: FC<{
   const refreshBalance = (title: string) => {
     if (title === "home:zebec-assets") {
       if (walletObject.publicKey && !refreshClassName[1]) {
-        dispatch(fetchZebecBalance(walletObject.publicKey?.toString()))
+        dispatch(
+          fetchZebecBalance({
+            publicKey: walletObject.publicKey?.toString(),
+            network: walletObject.network
+          })
+        )
       }
       setRefreshClassName((prev) => ({ ...prev, 1: "animate-spin" }))
       setTimeout(() => {
@@ -46,7 +51,12 @@ export const EVMDepositedAssets: FC<{
       }, constants.REFRESH_ANIMATION_DURATION)
     } else {
       if (walletObject && !refreshClassName[2]) {
-        dispatch(fetchPdaBalance(walletObject.publicKey?.toString()))
+        dispatch(
+          fetchPdaBalance({
+            publicKey: walletObject.publicKey?.toString(),
+            network: walletObject.network
+          })
+        )
       }
       setRefreshClassName((prev) => ({ ...prev, 2: "animate-spin" }))
       setTimeout(() => {

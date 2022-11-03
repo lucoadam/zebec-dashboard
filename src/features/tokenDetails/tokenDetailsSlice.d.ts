@@ -6,6 +6,7 @@ export interface TokenDetails {
   mint: string
   coingeckoId: string
   chainId: string
+  network: string
 }
 
 export interface TokenResponse {
@@ -15,6 +16,7 @@ export interface TokenResponse {
   decimal: number
   coingeco_id: string
   chainId: string
+  network?: string
 }
 
 export interface TokenDetailsState {

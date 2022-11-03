@@ -309,6 +309,12 @@ const Navbar: FC = () => {
             {getMainRoutes(width).map((route, index) => {
               switch (route.type) {
                 case "link":
+                  if (
+                    useWalletObject.chainId !== "solana" &&
+                    route.path === "/treasury"
+                  ) {
+                    return undefined
+                  }
                   return <NavLink key={index} {...route} />
                 case "group":
                   return <NavGroup key={index} {...route} />
