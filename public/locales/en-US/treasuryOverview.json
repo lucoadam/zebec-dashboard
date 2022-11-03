@@ -36,5 +36,6 @@
     "reject": "Reject",
     "confirmation": "Confirmation",
     "empty": "There are no pending confirmation transactions. The recent withdraw, deposit and transfer transactions you create will appear here.",
-    "max-transfer-to-treasury-message": "Max balance is equal to the deposited treasury vault balance minus streaming amount of vault balance."
+    "max-transfer-to-treasury-message": "Max balance is equal to the deposited treasury vault balance minus streaming amount of vault balance.",
+    "pending-deposit-withdrawls-confirmation": "Pending Deposit/Withdrawals Confirmation"
 }
