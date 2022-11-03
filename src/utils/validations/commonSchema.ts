@@ -29,8 +29,8 @@ export const wallet = {
 export const uniqueWallet = {
   wallet: Yup.string()
     .required("validation:wallet-required")
-    .test("is-valid-address", "validation:wallet-invalid", (value) =>
-      isValidWallet(value)
+    .test("is-valid-address", "validation:wallet-invalid", (value, context) =>
+      isValidWallet(value, context.parent?.chainId || "solana")
     )
     .test(
       "is-unique-wallet",

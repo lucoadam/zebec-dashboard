@@ -18,6 +18,7 @@ import {
   updateAddressBook
 } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -31,6 +32,7 @@ export default function IndividualAddresses() {
   )
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
 
   const [isEdit, setIsEdit] = useState(false)
   const [editAddressBookId, setEditAddressBookId] = useState<number | "">("")
@@ -63,6 +65,13 @@ export default function IndividualAddresses() {
     resolver: yupResolver(addOwnersSchema)
   })
 
+  const resetForm = () => {
+    reset()
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (!isEdit) {
@@ -80,7 +89,7 @@ export default function IndividualAddresses() {
             )
             return
           }
-          reset()
+          resetForm()
           dispatch(toast.success({ message: t("addressBook:success-add") }))
         }
       }
@@ -102,7 +111,7 @@ export default function IndividualAddresses() {
           }
           setIsEdit(false)
           setEditAddressBookId("")
-          reset()
+          resetForm()
           dispatch(
             toast.success({
               message: t("addressBook:success-update")
@@ -114,10 +123,6 @@ export default function IndividualAddresses() {
     }
   }
 
-  const resetForm = () => {
-    reset()
-  }
-
   useEffect(() => {
     if (addressBooks) {
       setValue(
@@ -126,6 +131,12 @@ export default function IndividualAddresses() {
       )
     }
   }, [addressBooks, setValue, trigger, getValues])
+
+  useEffect(() => {
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
+    }
+  }, [walletObject.chainId, setValue])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onEdit = (data: any) => {
@@ -210,7 +221,7 @@ export default function IndividualAddresses() {
                       }
                       onClick={() => {
                         setIsEdit(false)
-                        reset()
+                        resetForm()
                       }}
                     />
                   )}
