@@ -40,9 +40,9 @@ export const createTreasury = createAsyncThunk<
   {
     dispatch: AppDispatch
   }
->("treasury/createTreasury", async (data) => {
+>("treasury/createTreasury", async (data, { dispatch }) => {
   const { data: response } = await api.post(`/treasury/`, data.data)
-  // await dispatch(fetchTreasury())
+  await dispatch(fetchTreasury())
   data.callback()
   return response
 })
