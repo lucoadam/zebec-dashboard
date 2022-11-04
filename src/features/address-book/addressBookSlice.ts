@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import api from "api/api"
+import api, { CancelRequestAxios } from "api/api"
 import { RootState } from "app/store"
 import { PaginationInterface } from "components/shared"
 
@@ -15,8 +15,11 @@ interface AddressBookState {
   saving: boolean
   deleting: boolean
   pagination: PaginationInterface
+  filteredPagination: PaginationInterface
   addressBooks: AddressBook[]
+  filteredAddressBooks: AddressBook[]
   error: string
+  append?: boolean
 }
 
 interface DeleteProps {
@@ -32,7 +35,13 @@ const initialState: AddressBookState = {
     currentPage: 1,
     limit: 10
   },
+  filteredPagination: {
+    total: 0,
+    currentPage: 1,
+    limit: 10
+  },
   addressBooks: [],
+  filteredAddressBooks: [],
   error: ""
 }
 
@@ -49,6 +58,56 @@ export const fetchAddressBook: any = createAsyncThunk(
       addressBooks: response.results,
       pagination: {
         ...address.pagination,
+        total: response.count
+      }
+    }
+  }
+)
+
+const cancelFetchRequest = new CancelRequestAxios()
+
+export const fetchFilteredAddressBook: any = createAsyncThunk(
+  "addressBook/fetchFilteredAddressBook",
+  async (
+    {
+      search,
+      page,
+      append
+    }: {
+      search: string
+      page: number
+      append: boolean
+    },
+    { getState }
+  ) => {
+    const { address } = getState() as RootState
+    if (
+      address.filteredAddressBooks.length ===
+        address.filteredPagination.total &&
+      address.filteredAddressBooks.length > 0
+    ) {
+      return {
+        addressBooks: address.filteredAddressBooks,
+        pagination: address.filteredPagination
+      }
+    }
+    cancelFetchRequest.cancelAndCreateToken()
+
+    const { data: response } = await api.get(`/user/address/`, {
+      params: {
+        search,
+        limit: address.filteredPagination.limit,
+        offset: (Number(page) - 1) * address.filteredPagination.limit
+      },
+      cancelToken: cancelFetchRequest.cancelRequest.token
+    })
+    cancelFetchRequest.resetCancelToken()
+    return {
+      append,
+      addressBooks: response.results,
+      pagination: {
+        ...address.filteredPagination,
+        currentPage: page,
         total: response.count
       }
     }
@@ -139,6 +198,15 @@ const addressBookSlice = createSlice({
         ...state.pagination,
         ...action.payload
       }
+    },
+    setFilteredPagination: (
+      state,
+      action: PayloadAction<PaginationInterface>
+    ) => {
+      state.filteredPagination = {
+        ...state.filteredPagination,
+        ...action.payload
+      }
     }
   },
   extraReducers: (builder) => {
@@ -155,6 +223,29 @@ const addressBookSlice = createSlice({
       }
     )
     builder.addCase(fetchAddressBook.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    builder.addCase(fetchFilteredAddressBook.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      fetchFilteredAddressBook.fulfilled,
+      (state, action: PayloadAction<AddressBookState>) => {
+        state.loading = false
+        if (action.payload.append) {
+          state.filteredAddressBooks = [
+            ...state.filteredAddressBooks,
+            ...action.payload.addressBooks
+          ]
+        } else {
+          state.filteredAddressBooks = action.payload.addressBooks
+        }
+        state.filteredPagination = action.payload.pagination
+        state.error = ""
+      }
+    )
+    builder.addCase(fetchFilteredAddressBook.rejected, (state, action) => {
       state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
@@ -194,6 +285,6 @@ const addressBookSlice = createSlice({
   }
 })
 
-export const { setPagination } = addressBookSlice.actions
+export const { setPagination, setFilteredPagination } = addressBookSlice.actions
 
 export default addressBookSlice.reducer

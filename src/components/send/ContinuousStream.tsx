@@ -36,6 +36,10 @@ import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
+import {
+  fetchFilteredAddressBook,
+  setFilteredPagination
+} from "features/address-book/addressBookSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { sendContinuousStream } from "features/stream/streamSlice"
 import { toast } from "features/toasts/toastsSlice"
@@ -80,6 +84,9 @@ const intervals = [
   }
 ]
 
+let searchData = ""
+let addressCurrentPage = 1
+
 export const ContinuousStream: FC<ContinuousStreamProps> = ({
   setFormValues,
   tokenBalances,
@@ -95,7 +102,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
-  const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const {
+    filteredAddressBooks: addressBook,
+    addressBooks: mainAddressBook,
+    filteredPagination
+  } = useAppSelector((state) => state.address)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const {
@@ -126,7 +137,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
 
   const { prices } = useAppSelector((state) => state.tokenDetails)
   const tokenDetails = useAppSelector((state) =>
-    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === "solana" && token.network === walletObject.network
+    )
   )
   const [currentToken, setCurrentToken] = useState({
     symbol: "",
@@ -173,6 +187,54 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       setValue("receiver", router?.query.address.toString() || "")
     }
   }, [router, setValue])
+
+  useEffect(() => {
+    dispatch(
+      setFilteredPagination({
+        currentPage: 1,
+        limit: 4,
+        total: 0
+      })
+    )
+    searchData = receiverSearchData
+    addressCurrentPage = 1
+    dispatch(
+      fetchFilteredAddressBook({
+        search: receiverSearchData,
+        page: 1,
+        append: false
+      })
+    )
+  }, [dispatch, receiverSearchData])
+
+  useEffect(() => {
+    addressCurrentPage = Number(filteredPagination.currentPage)
+  }, [filteredPagination.currentPage])
+
+  useEffect(() => {
+    if (toggleReceiverDropdown) {
+      // detect end of scroll
+      setTimeout(() => {
+        const element = document.querySelector(
+          ".address-book-list"
+        ) as HTMLElement
+        element?.addEventListener("scroll", () => {
+          if (
+            element.scrollTop + element.clientHeight + 5 >=
+            element.scrollHeight
+          ) {
+            dispatch(
+              fetchFilteredAddressBook({
+                search: searchData,
+                page: addressCurrentPage + 1,
+                append: true
+              })
+            )
+          }
+        })
+      }, 200)
+    }
+  }, [toggleReceiverDropdown])
 
   const resetForm = () => {
     reset()
@@ -539,7 +601,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 position="left"
               >
                 <div className="rounded-lg bg-background-primary border border-outline">
-                  {addressBook.length > 0 ? (
+                  {mainAddressBook.length > 0 || receiverSearchData ? (
                     <>
                       <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                       <input
@@ -548,13 +610,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                         type="text"
                         onChange={(e) => setReceiverSearchData(e.target.value)}
                       />
-                      <div className="divide-y divide-outline max-h-[206px] overflow-auto">
+                      <div className="divide-y address-book-list divide-outline max-h-[206px] overflow-auto">
                         {addressBook
-                          .filter((user) =>
-                            user.name
-                              .toLowerCase()
-                              .includes(receiverSearchData.toLowerCase())
-                          )
+                          // .filter((user) =>
+                          //   user.name
+                          //     .toLowerCase()
+                          //     .includes(receiverSearchData.toLowerCase())
+                          // )
                           .map((user) => (
                             <div
                               key={user.address}
@@ -574,11 +636,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                               </div>
                             </div>
                           ))}
-                        {addressBook.filter((user) =>
-                          user.name
-                            .toLowerCase()
-                            .includes(receiverSearchData.toLowerCase())
-                        ).length === 0 && (
+                        {addressBook.length !== filteredPagination.total && (
+                          <div className="flex justify-center items-center py-3">
+                            <Icons.Loading className="text-content-primary" />
+                          </div>
+                        )}
+                        {addressBook.length === 0 && receiverSearchData && (
                           <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
                             <div className="text-content-contrast">
                               {t("common:no-receiver-found")}
