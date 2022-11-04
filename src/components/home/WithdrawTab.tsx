@@ -171,10 +171,10 @@ const WithdrawTab: FC = () => {
         dispatch(togglexWalletApprovalMessageModal())
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
-        console.log(sourceChain, targetChain)
-        console.log("pda", walletObject.publicKey?.toString())
-        console.log("token mint", currentToken.mint)
-        console.log("withdrawer: ", walletObject.originalAddress?.toString())
+        // commented console.log(sourceChain, targetChain)
+        // commented console.log("pda", walletObject.publicKey?.toString())
+        // commented console.log("token mint", currentToken.mint)
+        // commented console.log("withdrawer: ", walletObject.originalAddress?.toString())
 
         const messengerContract = new ZebecEthBridgeClient(
           BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -186,15 +186,15 @@ const WithdrawTab: FC = () => {
           walletObject.originalAddress?.toString() as string,
           currentToken.mint
         )
-        console.log("tx:", tx)
+        // commented console.log("tx:", tx)
         const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-        console.log("sequence:", sequence)
+        // commented console.log("sequence:", sequence)
         const response = await listenWormholeTransactionStatus(
           sequence,
           BSC_ZEBEC_BRIDGE_ADDRESS,
           sourceChain
         )
-        console.log("response", response)
+        // commented console.log("response", response)
         if (response === "success") {
           dispatch(switchxWalletApprovalMessageStep(1))
           const receipt = await messengerContract.directTokenTransfer(
@@ -203,18 +203,18 @@ const WithdrawTab: FC = () => {
             currentToken.mint,
             walletObject.originalAddress?.toString() as string
           )
-          console.log("receipt", receipt)
+          // commented console.log("receipt", receipt)
           const msgSequence = parseSequenceFromLogEth(
             receipt,
             BSC_BRIDGE_ADDRESS
           )
-          console.log("msgSequence", msgSequence)
+          // commented console.log("msgSequence", msgSequence)
           const response = await listenWormholeTransactionStatus(
             msgSequence,
             BSC_ZEBEC_BRIDGE_ADDRESS,
             sourceChain
           )
-          console.log("response", response)
+          // commented console.log("response", response)
           if (response === "success") {
             dispatch(switchxWalletApprovalMessageStep(2))
             await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -232,7 +232,7 @@ const WithdrawTab: FC = () => {
         dispatch(togglexWalletApprovalMessageModal())
         withdrawCallback()
       } catch (e) {
-        console.log("error", e)
+        // commented console.log("error", e)
         dispatch(togglexWalletApprovalMessageModal())
         dispatch(toast.error({ message: "Error withdrawing token" }))
       }
@@ -247,10 +247,10 @@ const WithdrawTab: FC = () => {
         setLoading(true)
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
-        console.log(sourceChain, targetChain)
-        console.log("pda", walletObject.publicKey?.toString())
-        console.log("token mint", currentToken.mint)
-        console.log("withdrawer: ", walletObject.originalAddress?.toString())
+        // commented console.log(sourceChain, targetChain)
+        // commented console.log("pda", walletObject.publicKey?.toString())
+        // commented console.log("token mint", currentToken.mint)
+        // commented console.log("withdrawer: ", walletObject.originalAddress?.toString())
 
         const messengerContract = new ZebecEthBridgeClient(
           BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -264,15 +264,15 @@ const WithdrawTab: FC = () => {
           walletObject.originalAddress?.toString() as string
         )
 
-        console.log("receipt", receipt)
+        // commented console.log("receipt", receipt)
         const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
-        console.log("msgSequence", msgSequence)
+        // commented console.log("msgSequence", msgSequence)
         const response = await listenWormholeTransactionStatus(
           msgSequence,
           BSC_ZEBEC_BRIDGE_ADDRESS,
           sourceChain
         )
-        console.log("response", response)
+        // commented console.log("response", response)
         if (response === "success") {
           dispatch(toast.success({ message: "Withdrawal completed" }))
         } else if (response === "timeout") {
@@ -280,11 +280,11 @@ const WithdrawTab: FC = () => {
         } else {
           dispatch(toast.error({ message: "Withdraw failed" }))
         }
-        console.log("transfer successful")
+        // commented console.log("transfer successful")
         setLoading(false)
       }
     } catch (e) {
-      console.log("error", e)
+      // commented console.log("error", e)
       setLoading(false)
       dispatch(toast.error({ message: "Error withdrawing token" }))
     }

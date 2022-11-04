@@ -37,14 +37,14 @@ export const login = async (walletObject: ZebecWalletContext) => {
 
       try {
         const response = await api.post(`/user/auth/login/`, data)
-        console.log(response)
+        // commented console.log(response)
         TokenService.setTokens(response.data)
         return response
       } catch (error) {
-        console.log(error)
+        // commented console.log(error)
       }
     } catch (error) {
-      console.log(error)
+      // commented console.log(error)
     }
   }
 }

@@ -57,7 +57,7 @@ export function SettingsComponent() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onEmailSubmit = (data: any) => {
-    console.log(data)
+    // commented console.log(data)
     //dispatch(saveEmailSettings(data))
   }
 

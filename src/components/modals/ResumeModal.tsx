@@ -93,22 +93,22 @@ const ResumeModal: FC = ({}) => {
         signer,
         sourceChain
       )
-      console.log("pda-data:", transaction)
+      // commented console.log("pda-data:", transaction)
       const tx = await messengerContract.pauseTokenStream(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,
         transaction.pda
       )
-      console.log("tx:", tx)
+      // commented console.log("tx:", tx)
       const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      console.log("sequence:", sequence)
+      // commented console.log("sequence:", sequence)
       const response = await listenWormholeTransactionStatus(
         sequence,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      console.log("response", response)
+      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream resumed" }))
       } else if (response === "timeout") {
@@ -119,7 +119,7 @@ const ResumeModal: FC = ({}) => {
       dispatch(setLoading(false))
       dispatch(toggleResumeModal())
     } catch (e) {
-      console.log("error:", e)
+      // commented console.log("error:", e)
       setLoading(false)
       dispatch(toggleResumeModal())
       dispatch(toast.error({ message: "Stream resume failed" }))

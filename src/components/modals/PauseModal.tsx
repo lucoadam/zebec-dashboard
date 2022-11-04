@@ -95,7 +95,7 @@ const PauseModal: FC = ({}) => {
         signer,
         sourceChain
       )
-      console.log("pda-data:", transaction)
+      // commented console.log("pda-data:", transaction)
       const tx = await messengerContract.pauseTokenStream(
         transaction.sender,
         transaction.receiver,
@@ -103,15 +103,15 @@ const PauseModal: FC = ({}) => {
         transaction.pda
       )
 
-      console.log("tx:", tx)
+      // commented console.log("tx:", tx)
       const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      console.log("sequence:", sequence)
+      // commented console.log("sequence:", sequence)
       const response = await listenWormholeTransactionStatus(
         sequence,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      console.log("response", response)
+      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream paused" }))
       } else if (response === "timeout") {
@@ -122,7 +122,7 @@ const PauseModal: FC = ({}) => {
       dispatch(setLoading(false))
       dispatch(togglePauseModal())
     } catch (e) {
-      console.log("error:", e)
+      // commented console.log("error:", e)
       setLoading(false)
       dispatch(togglePauseModal())
       dispatch(toast.error({ message: "Stream pause failed" }))

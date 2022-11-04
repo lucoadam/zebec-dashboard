@@ -155,7 +155,7 @@ const Navbar: FC = () => {
           signer.provider
         )
         signer.provider.getGasPrice().then((currentGasPrice) => {
-          console.log(`gas_price: ${currentGasPrice.toString()}`)
+          // commented console.log(`gas_price: ${currentGasPrice.toString()}`)
 
           const contract = TokenImplementation__factory.connect(
             "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
@@ -163,7 +163,7 @@ const Navbar: FC = () => {
           )
           // How many tokens?
           const numberOfTokens = ethers.utils.parseUnits("2", 9)
-          console.log(`numberOfTokens: ${numberOfTokens}`)
+          // commented console.log(`numberOfTokens: ${numberOfTokens}`)
 
           // Send tokens
           contract
@@ -179,7 +179,7 @@ const Navbar: FC = () => {
               transferResult
                 .wait()
                 .then((receipt) => {
-                  console.log(receipt.transactionHash)
+                  // commented console.log(receipt.transactionHash)
                   setZBCAirdropLoading(false)
                   dispatch(
                     toast.success({
@@ -188,7 +188,7 @@ const Navbar: FC = () => {
                   )
                 })
                 .catch((err) => {
-                  console.log(err)
+                  // commented console.log(err)
                   setZBCAirdropLoading(false)
                   dispatch(
                     toast.success({
@@ -198,7 +198,7 @@ const Navbar: FC = () => {
                 })
             })
             .catch((err) => {
-              console.log(err)
+              // commented console.log(err)
               setZBCAirdropLoading(false)
               dispatch(
                 toast.success({

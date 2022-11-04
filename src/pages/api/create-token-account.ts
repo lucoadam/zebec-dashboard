@@ -25,7 +25,7 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { recipientAddress, targetTokenAddress } = req.body
-      console.log("recipientAddress", recipientAddress)
+      // commented console.log("recipientAddress", recipientAddress)
       if (!recipientAddress || !targetTokenAddress) {
         res
           .status(400)
@@ -35,17 +35,17 @@ export default async function handler(
       const recipientbalance = await connection.getBalance(
         new PublicKey(recipientAddress)
       )
-      console.log("recipientbalance", recipientbalance / 1e9)
+      // commented console.log("recipientbalance", recipientbalance / 1e9)
       if (recipientbalance / 1e9 < 0.1) {
-        console.log("requesting airdrop...")
+        // commented console.log("requesting airdrop...")
         try {
           const res = await connection.requestAirdrop(
             new PublicKey(recipientAddress),
             0.2e9
           )
-          console.log(res)
+          // commented console.log(res)
         } catch (e) {
-          console.log("airdrop failed", e)
+          // commented console.log("airdrop failed", e)
         }
       }
       const recipientTokenAddress = await getAssociatedTokenAddress(
@@ -53,17 +53,17 @@ export default async function handler(
         new PublicKey(recipientAddress),
         true
       )
-      console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
+      // commented console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
       const receipientTokenAccountInfo = await connection.getAccountInfo(
         recipientTokenAddress,
         "confirmed"
       )
       if (receipientTokenAccountInfo) {
-        console.log("Recipient token account exist on solana")
+        // commented console.log("Recipient token account exist on solana")
         return res.status(200).json({ success: true })
       }
-      console.log("Recipient token account doesn't exist on solana")
+      // commented console.log("Recipient token account doesn't exist on solana")
       const txn = new Transaction()
       txn.add(
         createAssociatedTokenAccountInstruction(
@@ -87,7 +87,7 @@ export default async function handler(
       })
       res.status(200).json({ success: true })
     } catch (e) {
-      console.log(e)
+      // commented console.log(e)
       res.status(200).json({ success: false })
     }
   } else {

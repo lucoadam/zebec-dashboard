@@ -15,7 +15,7 @@ export const getTokensBalanceOfWallet = async (
       programId: TOKEN_PROGRAM_ID
     }
   )
-  console.log("accounts", accounts)
+  // commented console.log("accounts", accounts)
   const solBalance = await getSolBalanceOfWallet(wallet)
   const tokensBalance = Object.fromEntries([
     ["SOL", solBalance],

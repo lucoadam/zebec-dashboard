@@ -32,7 +32,7 @@ export const fetchWalletBalance: any = createAsyncThunk(
     const { tokenDetails } = getState() as RootState
     const tokens = tokenDetails.tokens
 
-    console.log("fetchWalletBalance", publicKey, chainId, signer)
+    // commented console.log("fetchWalletBalance", publicKey, chainId, signer)
     // fetch wallet tokens
     if (chainId === "solana") {
       const tokensBalance = await getTokensBalanceOfWallet(

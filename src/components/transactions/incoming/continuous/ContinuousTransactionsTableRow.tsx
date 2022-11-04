@@ -205,17 +205,17 @@ const ContinuousTransactionsTableRow: FC<
       const recipientbalance = await connection.getBalance(
         new PublicKey(recipientAddress)
       )
-      console.log("recipientbalance", recipientbalance / 1e9)
+      // commented console.log("recipientbalance", recipientbalance / 1e9)
       if (recipientbalance / 1e9 < 0.1) {
-        console.log("requesting airdrop...")
+        // commented console.log("requesting airdrop...")
         try {
           const res = await connection.requestAirdrop(
             new PublicKey(recipientAddress),
             0.2e9
           )
-          console.log(res)
+          // commented console.log(res)
         } catch (e) {
-          console.log("airdrop failed", e)
+          // commented console.log("airdrop failed", e)
         }
       }
       //
@@ -224,7 +224,7 @@ const ContinuousTransactionsTableRow: FC<
         signer,
         sourceChain
       )
-      console.log("transaction:", transaction)
+      // commented console.log("transaction:", transaction)
 
       const tx = await messengerContract.withdrawFromTokenStream(
         transaction.sender,
@@ -232,15 +232,15 @@ const ContinuousTransactionsTableRow: FC<
         transaction.token_mint_address,
         transaction.pda
       )
-      console.log("tx:", tx)
+      // commented console.log("tx:", tx)
       const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      console.log("sequence:", sequence)
+      // commented console.log("sequence:", sequence)
       const response = await listenWormholeTransactionStatus(
         sequence,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      console.log("response", response)
+      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream withdrawal completed" }))
       } else if (response === "timeout") {
@@ -250,7 +250,7 @@ const ContinuousTransactionsTableRow: FC<
       }
       setLoading(false)
     } catch (e: any) {
-      console.log("error:", e)
+      // commented console.log("error:", e)
       setLoading(false)
       dispatch(
         toast.error({

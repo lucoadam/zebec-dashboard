@@ -28,7 +28,7 @@ export const listenWormholeTransactionStatus = async (
   let retry = 0
   let response
   do {
-    console.log("listening for transaction status")
+    // commented console.log("listening for transaction status")
     response = await fetchWormholeTransactionStatus(
       sequence,
       emitterAddress,
@@ -38,7 +38,7 @@ export const listenWormholeTransactionStatus = async (
       return "error"
     }
     if (response === "success") {
-      console.log("transfer complete")
+      // commented console.log("transfer complete")
       return "success"
     }
     await new Promise((resolve) => setTimeout(resolve, 4000))

@@ -35,7 +35,7 @@ export const SolanaWallet: FC<WalletModalProps> = ({
   const { wallets, select } = useWallet()
   const data = useWallet()
   useEffect(() => {
-    console.log(data)
+    // commented console.log(data)
   }, [data])
   const { setVisible } = useWalletModal()
   const [expanded, setExpanded] = useState(false)

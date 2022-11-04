@@ -153,7 +153,7 @@ const DepositTab: FC = () => {
         token_mint_address:
           currentToken.symbol === "SOL" ? "" : currentToken.mint
       }
-      console.log("depositData", depositData)
+      // commented console.log("depositData", depositData)
       if (currentToken.symbol === "SOL")
         stream &&
           dispatch(
@@ -200,7 +200,7 @@ const DepositTab: FC = () => {
         const targetChain = 1
         const tokenAddress = currentToken.mint
         const recipientAddress = walletObject.publicKey?.toString() as string
-        console.log("sourceChain", sourceChain)
+        // commented console.log("sourceChain", sourceChain)
 
         // find out target token address in solana
         const targetTokenAddress = await getTargetAsset(
@@ -210,7 +210,7 @@ const DepositTab: FC = () => {
           targetChain
         )
         // Create token account if doesn't exist
-        console.log("targetTokenAddress", targetTokenAddress)
+        // commented console.log("targetTokenAddress", targetTokenAddress)
         const { data: response } = await axios.post(
           "/api/create-token-account",
           {
@@ -219,7 +219,7 @@ const DepositTab: FC = () => {
           }
         )
         if (!response.success) {
-          console.log("Error creating token account")
+          // commented console.log("Error creating token account")
           return
         }
 
@@ -228,10 +228,10 @@ const DepositTab: FC = () => {
           new PublicKey(recipientAddress),
           true
         )
-        console.log("recipientAddress", recipientAddress)
-        console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
+        // commented console.log("recipientAddress", recipientAddress)
+        // commented console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
-        console.log(
+        // commented console.log(
           "signer",
           signer,
           currentToken.mint,
@@ -251,7 +251,7 @@ const DepositTab: FC = () => {
           onApproved
         )
           .then(async (transferReceipt: any) => {
-            console.log("transferReceipt", transferReceipt)
+            // commented console.log("transferReceipt", transferReceipt)
 
             const sequence = parseSequenceFromLogEth(
               transferReceipt,
@@ -267,7 +267,7 @@ const DepositTab: FC = () => {
               transferEmitterAddress,
               sequence
             )
-            console.log("transferVaa", transferVaa)
+            // commented console.log("transferVaa", transferVaa)
             // check transfer complete
             let isTransferComplete = false
             let logMsg = "checking if transfer completed"
@@ -277,7 +277,7 @@ const DepositTab: FC = () => {
               logMsg = logMsg.concat(".")
               if (retry > 12) throw new Error("Deposit Timeout")
               retry++
-              console.log(logMsg)
+              // commented console.log(logMsg)
               isTransferComplete = await getIsTransferCompletedSolana(
                 SOL_TOKEN_BRIDGE_ADDRESS,
                 transferVaa,
@@ -285,7 +285,7 @@ const DepositTab: FC = () => {
               )
               await new Promise((r) => setTimeout(r, 5000))
             } while (!isTransferComplete)
-            console.log("transfer successful")
+            // commented console.log("transfer successful")
 
             dispatch(switchxWalletApprovalMessageStep(2))
             const messengerContract = new ZebecEthBridgeClient(
@@ -298,12 +298,12 @@ const DepositTab: FC = () => {
               walletObject.originalAddress?.toString() as string,
               targetTokenAddress
             )
-            console.log("receipt", receipt)
+            // commented console.log("receipt", receipt)
             const msgSequence = parseSequenceFromLogEth(
               receipt,
               BSC_BRIDGE_ADDRESS
             )
-            console.log("msgSequence", msgSequence)
+            // commented console.log("msgSequence", msgSequence)
 
             // check if message is relayed
             const response = await listenWormholeTransactionStatus(
@@ -311,7 +311,7 @@ const DepositTab: FC = () => {
               BSC_ZEBEC_BRIDGE_ADDRESS,
               sourceChain
             )
-            console.log("response", response)
+            // commented console.log("response", response)
             if (response === "success") {
               dispatch(switchxWalletApprovalMessageStep(3))
               await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -326,7 +326,7 @@ const DepositTab: FC = () => {
             dispatch(togglexWalletApprovalMessageModal())
           })
           .catch((err) => {
-            console.log("error", err)
+            // commented console.log("error", err)
             dispatch(
               toast.error({
                 message: "Error depositing token"
@@ -336,7 +336,7 @@ const DepositTab: FC = () => {
             dispatch(togglexWalletApprovalMessageModal())
           })
       } catch (e) {
-        console.log("error", e)
+        // commented console.log("error", e)
         dispatch(
           toast.error({
             message: "Error depositing token"
@@ -364,15 +364,15 @@ const DepositTab: FC = () => {
         walletObject.originalAddress?.toString() as string,
         currentToken.mint
       )
-      console.log("receipt", receipt)
+      // commented console.log("receipt", receipt)
       const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
-      console.log("msgSequence", msgSequence)
+      // commented console.log("msgSequence", msgSequence)
       const response = await listenWormholeTransactionStatus(
         msgSequence,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      console.log("response", response)
+      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Deposit completed" }))
       } else if (response === "timeout") {
@@ -383,7 +383,7 @@ const DepositTab: FC = () => {
       depositCallback()
       setLoading(false)
     } catch (e) {
-      console.log(e)
+      // commented console.log(e)
       dispatch(
         toast.error({
           message: "Error deposit token"
@@ -424,7 +424,7 @@ const DepositTab: FC = () => {
   //         "0x90e7676393d9c6db6c554bc4ff0a147ca0f6b1e8094ca50aa7a6a326807e1ae5"
   //       )
   //       .then(async (receipt: any) => {
-  //         console.log("receipt", receipt)
+  //         // commented console.log("receipt", receipt)
   //         const txs = await signer.provider?.getTransaction(
   //           "0x90e7676393d9c6db6c554bc4ff0a147ca0f6b1e8094ca50aa7a6a326807e1ae5"
   //         )
@@ -435,28 +435,28 @@ const DepositTab: FC = () => {
   //         const parsedTxs = iface.parseTransaction({
   //           data: txs?.data as string
   //         })
-  //         console.log("parsedTxs", parsedTxs.args)
+  //         // commented console.log("parsedTxs", parsedTxs.args)
   //         const tokenBridgeAddress = getTokenBridgeAddressForChain(4)
   //         const sequence = parseSequenceFromLogEth(
   //           receipt,
   //           getBridgeAddressForChain(4)
   //         )
   //         const emitterAddress = getEmitterAddressEth(tokenBridgeAddress)
-  //         console.log("emitterAddress", emitterAddress)
-  //         console.log("msgSequence", sequence)
+  //         // commented console.log("emitterAddress", emitterAddress)
+  //         // commented console.log("msgSequence", sequence)
   //         const { vaaBytes } = await getSignedVAAWithRetry(
   //           WORMHOLE_RPC_HOSTS,
   //           4,
   //           emitterAddress,
   //           sequence
   //         )
-  //         console.log("vaaBytes", Buffer.from(vaaBytes).toString("base64"))
+  //         // commented console.log("vaaBytes", Buffer.from(vaaBytes).toString("base64"))
   //         const isTransferComplete = await getIsTransferCompletedSolana(
   //           SOL_TOKEN_BRIDGE_ADDRESS,
   //           vaaBytes,
   //           connection
   //         )
-  //         console.log("isTransferComplete", isTransferComplete)
+  //         // commented console.log("isTransferComplete", isTransferComplete)
   //         if (!isTransferComplete) {
   //           const { data: response } = await axios.post(
   //             "http://localhost:4201/realyvaa",
@@ -465,7 +465,7 @@ const DepositTab: FC = () => {
   //             }
   //           )
   //           if (response.message !== "Scheduled") {
-  //             console.log("Not Scheduled")
+  //             // commented console.log("Not Scheduled")
   //             return
   //           }
   //         }
@@ -479,14 +479,14 @@ const DepositTab: FC = () => {
   //           walletObject.originalAddress?.toString() as string,
   //           "So11111111111111111111111111111111111111112"
   //         )
-  //         console.log("reciept", reciept)
+  //         // commented console.log("reciept", reciept)
   //       })
   //   }
   // }, [signer])
 
   useEffect(() => {
     if (walletObject.publicKey) {
-      console.log("walletObject.publicKey", walletObject.publicKey.toBase58())
+      // commented console.log("walletObject.publicKey", walletObject.publicKey.toBase58())
     }
   }, [walletObject.publicKey])
 

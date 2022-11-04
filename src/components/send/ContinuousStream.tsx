@@ -351,7 +351,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       )
       return
     }
-    console.log(data)
+    // commented console.log(data)
     if (!signer) return
     const formattedData = {
       name: data.transaction_name,
@@ -391,7 +391,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       true,
       formattedData.token_mint_address
     )
-    console.log("receipt", transferReceipt)
+    // commented console.log("receipt", transferReceipt)
     const sequence = parseSequenceFromLogEth(
       transferReceipt,
       BSC_BRIDGE_ADDRESS
@@ -400,7 +400,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       BSC_ZEBEC_BRIDGE_ADDRESS
     )
     console.debug("emitterAddress:", transferEmitterAddress)
-    console.log("sequence", sequence)
+    // commented console.log("sequence", sequence)
     const { vaaBytes } = await getSignedVAAWithRetry(
       WORMHOLE_RPC_HOSTS,
       "bsc",
@@ -420,7 +420,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      console.log("response", response)
+      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream started" }))
       } else if (response === "timeout") {
@@ -433,7 +433,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
-    console.log("data", data)
+    // commented console.log("data", data)
     if (walletObject.chainId === "solana") {
       handleSolanaStream(data)
     } else {

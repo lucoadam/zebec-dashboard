@@ -31,7 +31,7 @@ export const fetchZebecBalance: any = createAsyncThunk(
       [new PublicKey(publicKey).toBuffer()],
       base58PublicKey
     )
-    console.log("validProgramAddressPub", validProgramAddressPub.toString())
+    // commented console.log("validProgramAddressPub", validProgramAddressPub.toString())
     const { tokenDetails } = getState() as RootState
     const tokens = tokenDetails.tokens.filter(
       (token) => token.chainId === "solana" && token.network === network

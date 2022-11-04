@@ -18,7 +18,7 @@ export const withdrawFromTreasuryToWallet = createAsyncThunk<
 >(
   "withdrawFromTreasury/withdrawFromTreasuryToWallet",
   async (data, { dispatch }) => {
-    console.log(data)
+    // commented console.log(data)
     // const response = await api.post(`/`, data)
     return
   }
