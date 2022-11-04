@@ -4,9 +4,9 @@ import TreasuryDetailsLayout from "components/treasury/detail/TreasuryDetailsLay
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
 import { useZebecWallet } from "hooks/useWallet"
+import { useRouter } from "next/router"
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useRouter } from "next/router"
 import { useEffect } from "react"
 
 const Treasury: NextPage = () => {

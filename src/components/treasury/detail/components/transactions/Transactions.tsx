@@ -24,7 +24,7 @@ const transactionTabs = [
     icon: <Icons.DoubleCircleDottedLineIcon />
   },
   {
-    title: "withdrawals",
+    title: "deposit-withdrawals",
     count: 0,
     Component: <WithdrawlTransactions />,
     icon: <Icons.SwapArrowHorizontalIcon />
@@ -50,7 +50,11 @@ const Transactions = () => {
       const currentTabIndex = transactionTabs.findIndex(
         (element) => element.title === currentActiveTab
       )
-      setActivePage(currentTabIndex)
+      if (currentTabIndex === -1) {
+        router.push("/404")
+      } else {
+        setActivePage(currentTabIndex)
+      }
     } else {
       setActivePage(0)
     }

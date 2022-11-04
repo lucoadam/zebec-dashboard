@@ -23,7 +23,7 @@ export const PendingConfirmation = () => {
     <div className="p-6 rounded bg-background-secondary flex flex-col gap-y-2.5 h-full">
       <div className="flex justify-between items-center">
         <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
-          {t("treasuryOverview:pending-confirmation")}
+          {t("treasuryOverview:pending-deposit-withdrawls-confirmation")}
         </div>
         <Button
           size="small"
@@ -31,7 +31,7 @@ export const PendingConfirmation = () => {
           endIcon={<Icons.ArrowRightIcon />}
           onClick={() =>
             router.push(
-              `/treasury/${activeTreasury?.uuid}/transactions#withdrawals`
+              `/treasury/${activeTreasury?.uuid}/transactions#deposit-withdrawals`
             )
           }
         />
