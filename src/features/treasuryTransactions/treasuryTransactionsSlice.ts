@@ -139,7 +139,7 @@ export const fetchTreasuryVaultInstantTransactions = createAsyncThunk<
       `/treasury/${treasury_uuid}/vault-instant-transactions/`,
       {
         params: {
-          status: status ? status : "",
+          approval_status_fn: status ? status : "",
           limit: treasuryTransactions.pagination.limit,
           offset:
             (Number(treasuryTransactions.pagination.currentPage) - 1) *

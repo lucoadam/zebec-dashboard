@@ -201,7 +201,7 @@ export const fetchIncomingTreasuryInstantTransactions = createAsyncThunk<
           offset:
             (Number(transactions.pagination.currentPage) - 1) *
             transactions.pagination.limit,
-          status: status === "ALL" ? "" : status
+          approval_status_fn: status === "ALL" ? "" : status
         }
       }
     )
