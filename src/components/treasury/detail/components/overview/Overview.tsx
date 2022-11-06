@@ -80,13 +80,17 @@ const Overview = () => {
           )}
         />
         {/**
-         * Incoming/ Outgoing
+         * Incoming/ Outgoingpage
          */}
-        <Tokens currentToken={currentToken} setCurrentToken={setCurrentToken} />
+        <Tokens
+          currentToken={currentToken}
+          setCurrentToken={setCurrentToken}
+          page="treasury"
+        />
         {/**
          * Activity this week
          */}
-        <ActivityThisWeek currentToken={currentToken} />
+        <ActivityThisWeek currentToken={currentToken} page="treasury" />
       </div>
       {/**
        * Second Column

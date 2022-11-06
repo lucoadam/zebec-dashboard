@@ -6,7 +6,11 @@ import PauseModal from "components/modals/PauseModal"
 import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import ResumeModal from "components/modals/ResumeModal"
 import SignTransactionModal from "components/modals/SignTransactionModal"
-import { setActiveTreasury } from "features/treasury/treasurySlice"
+import {
+  fetchTreasuryOverallActivity,
+  fetchTreasuryWeeklyActivity,
+  setActiveTreasury
+} from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
 import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice"
@@ -68,6 +72,18 @@ const TreasuryLayout = ({
           stream: stream,
           token: token,
           network: "solana"
+        })
+      )
+      //Overall Activity
+      dispatch(
+        fetchTreasuryOverallActivity({
+          uuid: activeTreasury.uuid
+        })
+      )
+      //Weekly Activity
+      dispatch(
+        fetchTreasuryWeeklyActivity({
+          uuid: activeTreasury.uuid
         })
       )
     }

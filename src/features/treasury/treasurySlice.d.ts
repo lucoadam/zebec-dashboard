@@ -32,6 +32,8 @@ export interface TreasuryState {
   updatingError: string
   archiving: boolean
   archiveError: string
+  treasuryOverallActivity: any
+  treasuryWeeklyActivity: any
 }
 
 export interface UpdateTreasuryProps {

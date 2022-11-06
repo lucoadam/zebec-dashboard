@@ -59,6 +59,7 @@ const Transactions = () => {
       setActivePage(0)
     }
     ReactTooltip.rebuild()
+    // eslint-disable-next-line
   }, [activePage, router.asPath])
 
   return (
