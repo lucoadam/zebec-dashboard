@@ -135,13 +135,12 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           )
         }, 1000)
         return () => clearInterval(interval)
-      } else if (
-        status === StatusType.CANCELLED ||
-        status === StatusType.PAUSED
-      ) {
+      } else if (status === StatusType.CANCELLED) {
+        setStreamedToken(Number(latest_transaction_event.withdrawn))
+      } else if (status === StatusType.PAUSED) {
         setStreamedToken(
-          Number(latest_transaction_event.withdrawn) +
-            Number(latest_transaction_event.withdraw_limit)
+          Number(latest_transaction_event.withdraw_limit) -
+            Number(latest_transaction_event.paused_amt)
         )
       }
     }
