@@ -79,7 +79,7 @@ export const fetchTreasuryPendingTransactions = createAsyncThunk<
   const response = await api.get(`/treasury/${treasury_uuid}/transactions/`, {
     params: {
       limit: 6,
-      status: "PENDING",
+      approval_status_fn: "PENDING",
       offset: 0
     }
   })
@@ -97,7 +97,7 @@ export const fetchTreasuryTransactions = createAsyncThunk<
     const { treasuryTransactions } = getState() as RootState
     const response = await api.get(`/treasury/${treasury_uuid}/transactions/`, {
       params: {
-        status: status ? status : "",
+        approval_status_fn: status ? status : "",
         limit: treasuryTransactions.pagination.limit,
         offset:
           (Number(treasuryTransactions.pagination.currentPage) - 1) *
