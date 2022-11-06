@@ -178,7 +178,7 @@ const Navbar: FC = () => {
             .then((transferResult) => {
               transferResult
                 .wait()
-                .then((receipt) => {
+                .then(() => {
                   // commented console.log(receipt.transactionHash)
                   setZBCAirdropLoading(false)
                   dispatch(
@@ -188,7 +188,7 @@ const Navbar: FC = () => {
                   )
                 })
                 .catch((err) => {
-                  // commented console.log(err)
+                  console.log(err)
                   setZBCAirdropLoading(false)
                   dispatch(
                     toast.success({
@@ -198,7 +198,7 @@ const Navbar: FC = () => {
                 })
             })
             .catch((err) => {
-              // commented console.log(err)
+              console.log(err)
               setZBCAirdropLoading(false)
               dispatch(
                 toast.success({

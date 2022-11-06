@@ -37,7 +37,9 @@ export const fetchWalletBalance: any = createAsyncThunk(
     if (chainId === "solana") {
       const tokensBalance = await getTokensBalanceOfWallet(
         publicKey,
-        tokens.filter((token) => token.chainId === "solana")
+        tokens.filter(
+          (token) => token.chainId === "solana" && token.network === network
+        )
       )
       return tokens.map((token) => ({
         symbol: token.symbol,

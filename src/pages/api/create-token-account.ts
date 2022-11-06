@@ -39,7 +39,7 @@ export default async function handler(
       if (recipientbalance / 1e9 < 0.1) {
         // commented console.log("requesting airdrop...")
         try {
-          const res = await connection.requestAirdrop(
+          await connection.requestAirdrop(
             new PublicKey(recipientAddress),
             0.2e9
           )

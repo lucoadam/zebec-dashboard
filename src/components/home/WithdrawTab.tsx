@@ -170,7 +170,7 @@ const WithdrawTab: FC = () => {
         dispatch(switchxWalletApprovalMessageStep(0))
         dispatch(togglexWalletApprovalMessageModal())
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-        const targetChain = 1
+        // const targetChain = 1
         // commented console.log(sourceChain, targetChain)
         // commented console.log("pda", walletObject.publicKey?.toString())
         // commented console.log("token mint", currentToken.mint)
@@ -246,7 +246,7 @@ const WithdrawTab: FC = () => {
       if (signer) {
         setLoading(true)
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-        const targetChain = 1
+        // const targetChain = 1
         // commented console.log(sourceChain, targetChain)
         // commented console.log("pda", walletObject.publicKey?.toString())
         // commented console.log("token mint", currentToken.mint)

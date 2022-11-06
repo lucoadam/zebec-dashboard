@@ -232,14 +232,14 @@ const DepositTab: FC = () => {
         // commented console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
         // commented console.log(
-          "signer",
-          signer,
-          currentToken.mint,
-          sourceChain,
-          data.amount,
-          targetChain,
-          recipientAddress
-        )
+        //   "signer",
+        //   signer,
+        //   currentToken.mint,
+        //   sourceChain,
+        //   data.amount,
+        //   targetChain,
+        //   recipientAddress
+        // )
         transferEvm(
           signer,
           currentToken.mint,

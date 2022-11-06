@@ -79,7 +79,7 @@ export const SendNFT: FC<SendNFTProps> = ({
   })
 
   const onSubmit = (data: SendNFTFormData) => {
-    // commented console.log(data)
+    console.log(data)
     reset()
   }
 

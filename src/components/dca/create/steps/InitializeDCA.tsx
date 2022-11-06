@@ -38,7 +38,7 @@ export const InitializeDCA: FC<StepsComponentProps> = ({ dca }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    // commented console.log(data)
+    console.log(data)
   }
   return (
     <>
