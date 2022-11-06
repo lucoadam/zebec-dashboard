@@ -70,7 +70,8 @@ const TreasuryContinuousTransactionsTableRow: FC<
     file,
     approval_status,
     latest_transaction_event,
-    treasury_address
+    treasury_address,
+    withdrawable
   } = transaction
 
   const totalTransactionAmount = latest_transaction_event
@@ -147,13 +148,12 @@ const TreasuryContinuousTransactionsTableRow: FC<
         )
       }, 1000)
       return () => clearInterval(interval)
-    } else if (
-      status === StatusType.CANCELLED ||
-      status === StatusType.PAUSED
-    ) {
+    } else if (status === StatusType.CANCELLED) {
+      setStreamedToken(Number(latest_transaction_event.withdrawn))
+    } else if (status === StatusType.PAUSED) {
       setStreamedToken(
-        Number(latest_transaction_event.withdrawn) +
-          Number(latest_transaction_event.withdraw_limit)
+        Number(latest_transaction_event.withdraw_limit) -
+          Number(latest_transaction_event.paused_amt)
       )
     }
 
@@ -219,7 +219,8 @@ const TreasuryContinuousTransactionsTableRow: FC<
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
               {status !== StatusType.SCHEDULED &&
-                status !== StatusType.CANCELLED && (
+                status !== StatusType.CANCELLED &&
+                withdrawable && (
                   <Button
                     size="small"
                     title="Withdraw"
