@@ -148,11 +148,13 @@ MyApp.getInitialProps = async () => {
   let data = []
   try {
     const response = await axios.get(`${process.env.DB_HOST}/token/`)
-    data = response.data.map((item: TokenResponse) => ({
-      ...item,
-      network: "solana",
-      chainId: "solana"
-    }))
+    data = response.data
+      .filter((item: TokenResponse) => item.network === "solana")
+      .map((item: TokenResponse) => ({
+        ...item,
+        network: "solana",
+        chainId: "solana"
+      }))
   } catch (error) {
     data = []
   }
