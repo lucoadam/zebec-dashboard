@@ -97,7 +97,6 @@ export const fetchTreasuryOverallActivity = createAsyncThunk<
   {}
 >("treasury/fetchTreasuryOverallActivity", async (data, {}) => {
   const response = await api.get(`/treasury/${data.uuid}/total/`)
-  console.log(response)
   return response.data
 })
 
@@ -108,7 +107,6 @@ export const fetchTreasuryWeeklyActivity = createAsyncThunk<
   {}
 >("treasury/fetchTreasuryWeeklyActivity", async (data, {}) => {
   const response = await api.get(`/treasury/${data.uuid}/weekly/`)
-  console.log(response)
   return response.data
 })
 
