@@ -32,7 +32,6 @@ const Navbar: FC = () => {
 
   const [mounted, setMounted] = useState<boolean>(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [zbcAirdropLoading, setZBCAirdropLoading] = useState<boolean>(false)
 
   const width = useAppSelector((state) => state.layout.width)
   const dispatch = useAppDispatch()
@@ -130,14 +129,6 @@ const Navbar: FC = () => {
   const handleDisconnectWallet = () => {
     useWalletObject.disconnect()
     handleClose()
-  }
-
-  //ZBC Airdrop
-  const zbcAirdropToWallet = () => {
-    if (useWalletObject.publicKey) {
-      setZBCAirdropLoading(true)
-      dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
-    }
   }
 
   return (
@@ -266,13 +257,6 @@ const Navbar: FC = () => {
               ) : (
                 <div className="flex gap-x-4">
                   <NotificationsComponent />
-                  <Button
-                    title="ZBC Airdrop"
-                    variant="default"
-                    onClick={zbcAirdropToWallet}
-                    loading={zbcAirdropLoading}
-                    disabled={zbcAirdropLoading}
-                  />
                   <Profile />
                 </div>
               )}
