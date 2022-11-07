@@ -6,7 +6,8 @@ import {
   CircularProgress,
   IconButton,
   UserAddress,
-  SignerRow
+  SignerRow,
+  FormatCurrency
 } from "components/shared"
 import { showRejectModal } from "features/modals/rejectModalSlice"
 import { showSignModal } from "features/modals/signModalSlice"
@@ -14,7 +15,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
+import { formatDateTime, getTimesAgo, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
 import {
@@ -60,8 +61,6 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   }, [showAllRemaining])
 
   const {
-    name,
-    remarks,
     amount,
     token,
     status,
@@ -94,8 +93,11 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   }, [activeTreasury, transaction])
 
   const isRemaining = useMemo(() => {
-    return remainingOwners.some((owner) => owner === publicKey?.toString())
-  }, [remainingOwners, publicKey])
+    return (
+      remainingOwners.some((owner) => owner === publicKey?.toString()) &&
+      status === TreasuryApprovalType.PENDING
+    )
+  }, [remainingOwners, publicKey, status])
 
   const isIncoming =
     transaction.transaction_type ===
@@ -125,18 +127,26 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    -
-                    {status === TreasuryApprovalType.ACCEPTED
-                      ? formatCurrency(amount, "", 4)
-                      : 0}
+                    {transaction.transaction_type ===
+                    TreasuryTransactionType.DEPOSIT_TO_TREASURY_VAULT
+                      ? "+"
+                      : "-"}
+                    {status === TreasuryApprovalType.ACCEPTED ? (
+                      <FormatCurrency amount={amount} fix={4} />
+                    ) : (
+                      <FormatCurrency amount={0} fix={4} />
+                    )}
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {status === TreasuryApprovalType.ACCEPTED
-                    ? formatCurrency(amount, "", 4)
-                    : 0}{" "}
-                  of {formatCurrency(amount, "", 4)} {token}
+                  {status === TreasuryApprovalType.ACCEPTED ? (
+                    <FormatCurrency amount={amount} fix={4} />
+                  ) : (
+                    <FormatCurrency amount={0} fix={4} />
+                  )}{" "}
+                  {t("table.of")} <FormatCurrency amount={amount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -161,7 +171,10 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-4 min-w-50">
-            <UserAddress wallet={receiver} />
+            {transaction.transaction_type ===
+              TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+              <UserAddress wallet={receiver} />
+            )}
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -208,16 +221,6 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
               style={styles.detailsRow}
             >
               <div className="pt-4 pr-12 pb-6 pl-6">
-                <div className="flex flex-col gap-y-2 pb-6 border-b border-outline">
-                  <div className=" text-subtitle-sm font-medium text-content-primary">
-                    {name}
-                  </div>
-                  {remarks && (
-                    <div className="text-body text-content-secondary">
-                      {remarks}
-                    </div>
-                  )}
-                </div>
                 <div className="flex gap-x-44 py-6 text-subtitle-sm font-medium border-b border-outline">
                   {/* Left Column */}
                   <div className="flex flex-col gap-y-4">
@@ -253,20 +256,23 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       <div className="w-32 text-content-secondary">
                         {t("table.receiver")}
                       </div>
-                      <div className="flex items-center gap-x-2 text-content-primary">
-                        <Image
-                          layout="fixed"
-                          alt="Sender Logo"
-                          src={Images.Avatar3}
-                          height={24}
-                          width={24}
-                          className="rounded-full"
-                        />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                      {transaction.transaction_type ===
+                        TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+                        <div className="flex items-center gap-x-2 text-content-primary">
+                          <Image
+                            layout="fixed"
+                            alt="Sender Logo"
+                            src={Images.Avatar3}
+                            height={24}
+                            width={24}
+                            className="rounded-full"
+                          />
+                          <div className="" data-tip={receiver}>
+                            {toSubstring(receiver, 5, true)}
+                          </div>
+                          <CopyButton content={receiver} />
                         </div>
-                        <CopyButton content={receiver} />
-                      </div>
+                      )}
                     </div>
                     {/* End Date */}
                     <div className="flex items-center gap-x-8">
@@ -307,7 +313,7 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency amount={amount} fix={4} /> {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -316,11 +322,17 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {status === TreasuryApprovalType.ACCEPTED
-                          ? formatCurrency(amount, "", 4)
-                          : 0}{" "}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={amount} fix={4} />
+                        ) : (
+                          <FormatCurrency amount={0} fix={4} />
+                        )}{" "}
                         {token} (
-                        {status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={100} />
+                        ) : (
+                          <FormatCurrency amount={0} />
+                        )}
                         %)
                       </div>
                     </div>

@@ -3,14 +3,16 @@ import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
+  FormatCurrency,
   IconButton,
-  UserAddress
+  UserAddress,
+  ViewReferenceFile
 } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useRef } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, toSubstring } from "utils"
+import { formatDateTime, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
 import { TreasuryApprovalType } from "components/treasury/treasury.d"
@@ -82,17 +84,22 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
                     +
-                    {status === TreasuryApprovalType.ACCEPTED
-                      ? formatCurrency(amount, "", 4)
-                      : 0}
+                    {status === TreasuryApprovalType.ACCEPTED ? (
+                      <FormatCurrency amount={amount} fix={4} />
+                    ) : (
+                      <FormatCurrency amount={0} fix={4} />
+                    )}
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {status === TreasuryApprovalType.ACCEPTED
-                    ? formatCurrency(amount, "", 4)
-                    : 0}{" "}
-                  of {formatCurrency(amount, "", 4)} {token}
+                  {status === TreasuryApprovalType.ACCEPTED ? (
+                    <FormatCurrency amount={amount} fix={4} />
+                  ) : (
+                    <FormatCurrency amount={0} fix={4} />
+                  )}{" "}
+                  {t("table.of")} <FormatCurrency amount={amount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -207,7 +214,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency amount={amount} fix={4} /> {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -216,11 +223,17 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {status === TreasuryApprovalType.ACCEPTED
-                          ? formatCurrency(amount, "", 4)
-                          : 0}{" "}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={amount} fix={4} />
+                        ) : (
+                          <FormatCurrency amount={0} fix={4} />
+                        )}{" "}
                         {token} (
-                        {status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={100} />
+                        ) : (
+                          <FormatCurrency amount={0} />
+                        )}
                         %)
                       </div>
                     </div>
@@ -230,9 +243,11 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.withdrawn")}
                       </div>
                       <div className="text-content-primary">
-                        {status === TreasuryApprovalType.ACCEPTED
-                          ? formatCurrency(amount, "", 4)
-                          : 0}{" "}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={amount} fix={4} />
+                        ) : (
+                          <FormatCurrency amount={0} fix={4} />
+                        )}{" "}
                         {token}
                       </div>
                     </div>
@@ -283,15 +298,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
                         </div>
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.view-reference-file")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.OutsideLinkIcon className="text-content-contrast" />
-                            }
-                          />
-                        </div>
+                        <ViewReferenceFile file={file} />
                       </div>
                     )}
                   </div>

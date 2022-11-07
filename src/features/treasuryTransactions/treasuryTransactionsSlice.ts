@@ -79,7 +79,7 @@ export const fetchTreasuryPendingTransactions = createAsyncThunk<
   const response = await api.get(`/treasury/${treasury_uuid}/transactions/`, {
     params: {
       limit: 6,
-      status: "PENDING",
+      approval_status_fn: "PENDING",
       offset: 0
     }
   })
@@ -97,7 +97,7 @@ export const fetchTreasuryTransactions = createAsyncThunk<
     const { treasuryTransactions } = getState() as RootState
     const response = await api.get(`/treasury/${treasury_uuid}/transactions/`, {
       params: {
-        status: status ? status : "",
+        approval_status_fn: status ? status : "",
         limit: treasuryTransactions.pagination.limit,
         offset:
           (Number(treasuryTransactions.pagination.currentPage) - 1) *
@@ -139,7 +139,7 @@ export const fetchTreasuryVaultInstantTransactions = createAsyncThunk<
       `/treasury/${treasury_uuid}/vault-instant-transactions/`,
       {
         params: {
-          status: status ? status : "",
+          approval_status_fn: status ? status : "",
           limit: treasuryTransactions.pagination.limit,
           offset:
             (Number(treasuryTransactions.pagination.currentPage) - 1) *
@@ -315,8 +315,8 @@ export const treasuryTransactionsSlice = createSlice({
       state.error = action?.error?.message ?? "Something went wrong"
     })
     //Treasury Transactions By Id
-    builder.addCase(fetchTreasuryTransactionsById.pending, (state) => {
-      state.loading = true
+    builder.addCase(fetchTreasuryTransactionsById.pending, () => {
+      // state.loading = true
     })
     builder.addCase(
       fetchTreasuryTransactionsById.fulfilled,
@@ -327,13 +327,13 @@ export const treasuryTransactionsSlice = createSlice({
           }
           return item
         })
-        state.loading = false
+        // state.loading = false
         state.error = ""
         state.transactions.results = newTransactions
       }
     )
     builder.addCase(fetchTreasuryTransactionsById.rejected, (state, action) => {
-      state.loading = false
+      // state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
     //Save Treasury Withdraw Deposit Transactions
@@ -378,12 +378,9 @@ export const treasuryTransactionsSlice = createSlice({
       }
     )
     //Treasury Vault Instant Transactions By Id
-    builder.addCase(
-      fetchTreasuryVaultInstantTransactionsById.pending,
-      (state) => {
-        state.loading = true
-      }
-    )
+    builder.addCase(fetchTreasuryVaultInstantTransactionsById.pending, () => {
+      // state.loading = true
+    })
     builder.addCase(
       fetchTreasuryVaultInstantTransactionsById.fulfilled,
       (state, action) => {
@@ -394,7 +391,7 @@ export const treasuryTransactionsSlice = createSlice({
             }
             return item
           })
-        state.loading = false
+        // state.loading = false
         state.error = ""
         state.vaultInstantTransactions.results = newVaultInstantTransactions
       }
@@ -402,7 +399,7 @@ export const treasuryTransactionsSlice = createSlice({
     builder.addCase(
       fetchTreasuryVaultInstantTransactionsById.rejected,
       (state, action) => {
-        state.loading = false
+        // state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )
@@ -432,8 +429,8 @@ export const treasuryTransactionsSlice = createSlice({
     //Treasury Vault Continuous Transactions By Id
     builder.addCase(
       fetchTreasuryVaultContinuousTransactionsById.pending,
-      (state) => {
-        state.loading = true
+      () => {
+        // state.loading = true
       }
     )
     builder.addCase(
@@ -446,7 +443,7 @@ export const treasuryTransactionsSlice = createSlice({
             }
             return item
           })
-        state.loading = false
+        // state.loading = false
         state.error = ""
         state.vaultContinuousTransactions.results =
           newVaultContinuousTransactions
@@ -455,7 +452,7 @@ export const treasuryTransactionsSlice = createSlice({
     builder.addCase(
       fetchTreasuryVaultContinuousTransactionsById.rejected,
       (state, action) => {
-        state.loading = false
+        // state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )

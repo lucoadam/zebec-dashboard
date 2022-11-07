@@ -3,8 +3,14 @@ import ZebecContext from "app/zebecContext"
 import Layout from "components/layouts/Layout"
 import CancelModal from "components/modals/CancelModal"
 import PauseModal from "components/modals/PauseModal"
+import RejectTransactionModal from "components/modals/RejectTransactionModal"
 import ResumeModal from "components/modals/ResumeModal"
-import { setActiveTreasury } from "features/treasury/treasurySlice"
+import SignTransactionModal from "components/modals/SignTransactionModal"
+import {
+  fetchTreasuryOverallActivity,
+  fetchTreasuryWeeklyActivity,
+  setActiveTreasury
+} from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
 import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice"
@@ -28,8 +34,15 @@ const TreasuryLayout = ({
   )
 
   useEffect(() => {
-    if (treasuries.results.length > 0 && slug && typeof slug === "string") {
-      dispatch(setActiveTreasury(slug))
+    if (treasuries.count !== null && slug && typeof slug === "string") {
+      const isTreasuryValid = treasuries.results.some(
+        (treasury) => treasury.uuid === slug
+      )
+      if (isTreasuryValid) {
+        dispatch(setActiveTreasury(slug))
+      } else {
+        router.push("/404")
+      }
     }
     // eslint-disable-next-line
   }, [slug, treasuries])
@@ -58,6 +71,18 @@ const TreasuryLayout = ({
           token: token
         })
       )
+      //Overall Activity
+      dispatch(
+        fetchTreasuryOverallActivity({
+          uuid: activeTreasury.uuid
+        })
+      )
+      //Weekly Activity
+      dispatch(
+        fetchTreasuryWeeklyActivity({
+          uuid: activeTreasury.uuid
+        })
+      )
     }
     // eslint-disable-next-line
   }, [tokens, activeTreasury, stream, token])
@@ -66,9 +91,13 @@ const TreasuryLayout = ({
     <>
       <Layout pageTitle={pageTitle}>
         <main>{children}</main>
+        {/* Pause Resume and Cancel */}
         <PauseModal />
         <CancelModal />
         <ResumeModal />
+        {/* Sign Reject Modals */}
+        <SignTransactionModal />
+        <RejectTransactionModal />
       </Layout>
     </>
   )

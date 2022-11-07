@@ -4,14 +4,16 @@ import * as Images from "assets/images"
 import {
   Button,
   CircularProgress,
+  FormatCurrency,
   IconButton,
-  UserAddress
+  UserAddress,
+  ViewReferenceFile
 } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, toSubstring } from "utils"
+import { formatDateTime, toSubstring } from "utils"
 import {
   StatusType,
   TransactionStatusType
@@ -20,6 +22,7 @@ import CopyButton from "components/shared/CopyButton"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { getExplorerUrl } from "constants/explorers"
+import { TreasuryApprovalType } from "components/treasury/treasury.d"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -65,7 +68,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
     pda,
     transaction_hash,
     file,
-    latest_transaction_event
+    approval_status,
+    latest_transaction_event,
+    treasury_address,
+    withdrawable
   } = transaction
 
   const totalTransactionAmount = latest_transaction_event
@@ -97,19 +103,29 @@ const TreasuryContinuousTransactionsTableRow: FC<
   }, [currentTime, status])
 
   useEffect(() => {
-    if (
-      transaction.status !== StatusType.CANCELLED &&
-      transaction.status !== StatusType.PAUSED
-    ) {
-      if (currentTime < start_time) {
-        setStatus(StatusType.SCHEDULED)
-      } else if (currentTime >= start_time && currentTime < end_time) {
-        setStatus(StatusType.ONGOING)
-      } else if (currentTime >= end_time) {
-        setStatus(StatusType.COMPLETED)
+    if (approval_status === TreasuryApprovalType.ACCEPTED) {
+      if (
+        transaction.status !== StatusType.CANCELLED &&
+        transaction.status !== StatusType.PAUSED
+      ) {
+        if (currentTime < start_time) {
+          setStatus(StatusType.SCHEDULED)
+        } else if (currentTime >= start_time && currentTime < end_time) {
+          setStatus(StatusType.ONGOING)
+        } else if (currentTime >= end_time) {
+          setStatus(StatusType.COMPLETED)
+        }
+      } else {
+        setStatus(transaction.status)
       }
-    } else {
-      setStatus(transaction.status)
+    } else if (approval_status === TreasuryApprovalType.PENDING) {
+      if (currentTime < end_time) {
+        setStatus(StatusType.SCHEDULED)
+      } else {
+        setStatus(StatusType.CANCELLED)
+      }
+    } else if (approval_status === TreasuryApprovalType.REJECTED) {
+      setStatus(StatusType.CANCELLED)
     }
     // eslint-disable-next-line
   }, [status, currentTime, transaction])
@@ -132,13 +148,12 @@ const TreasuryContinuousTransactionsTableRow: FC<
         )
       }, 1000)
       return () => clearInterval(interval)
-    } else if (
-      status === StatusType.CANCELLED ||
-      status === StatusType.PAUSED
-    ) {
+    } else if (status === StatusType.CANCELLED) {
+      setStreamedToken(Number(latest_transaction_event.withdrawn))
+    } else if (status === StatusType.PAUSED) {
       setStreamedToken(
-        Number(latest_transaction_event.withdrawn) +
-          Number(latest_transaction_event.withdraw_limit)
+        Number(latest_transaction_event.withdraw_limit) -
+          Number(latest_transaction_event.paused_amt)
       )
     }
 
@@ -146,7 +161,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
   }, [status, transaction])
 
   const withdraw = () => {
-    if (zebecCtx.stream && zebecCtx.token) {
+    if (zebecCtx.treasury && zebecCtx.treasuryToken) {
       const withdrawData = {
         data: {
           sender: sender,
@@ -155,9 +170,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
           token_mint_address: token_mint_address,
           transaction_kind: "treasury_continuous",
           transaction_uuid: uuid,
-          hasTransactionEnd: currentTime > end_time ? true : false
+          hasTransactionEnd: currentTime > end_time ? true : false,
+          safe_address: treasury_address
         },
-        stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
+        stream: token_mint_address ? zebecCtx.treasuryToken : zebecCtx.treasury
       }
       dispatch(withdrawIncomingToken(withdrawData))
     }
@@ -177,14 +193,15 @@ const TreasuryContinuousTransactionsTableRow: FC<
               <div className="flex flex-col gap-y-1 text-content-contrast">
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
-                    +{formatCurrency(streamedToken, "", 4)}
+                    +<FormatCurrency amount={streamedToken} fix={4} />
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {" "}
-                  {formatCurrency(streamedToken, "", 4)} of{" "}
-                  {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                  <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                  {t("table.of")}{" "}
+                  <FormatCurrency amount={totalTransactionAmount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -193,7 +210,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
             <div className="text-caption text-content-primary">
               {formatDateTime(start_time)}
               <br />
-              to {formatDateTime(end_time)}
+              {t("table.to")} {formatDateTime(end_time)}
             </div>
           </td>
           <td className="px-6 py-4 min-w-60">
@@ -201,14 +218,18 @@ const TreasuryContinuousTransactionsTableRow: FC<
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
-              <Button
-                size="small"
-                title="Withdraw"
-                startIcon={
-                  <Icons.ArrowUpRightIcon className="text-content-contrast" />
-                }
-                onClick={withdraw}
-              />
+              {status !== StatusType.SCHEDULED &&
+                status !== StatusType.CANCELLED &&
+                withdrawable && (
+                  <Button
+                    size="small"
+                    title="Withdraw"
+                    startIcon={
+                      <Icons.ArrowUpRightIcon className="text-content-contrast" />
+                    }
+                    onClick={withdraw}
+                  />
+                )}
               <IconButton
                 variant="plain"
                 icon={<Icons.CheveronDownIcon />}
@@ -319,7 +340,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.streamed-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency amount={amount} fix={4} /> {token}
                       </div>
                     </div>
                     {/* Paused Amount */}
@@ -328,11 +349,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.paused-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(
-                          latest_transaction_event.paused_amt,
-                          "",
-                          4
-                        )}{" "}
+                        <FormatCurrency
+                          amount={latest_transaction_event.paused_amt}
+                          fix={4}
+                        />{" "}
                         {token}
                       </div>
                     </div>
@@ -342,7 +362,11 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(totalTransactionAmount, "", 4)} {token}
+                        <FormatCurrency
+                          amount={totalTransactionAmount}
+                          fix={4}
+                        />{" "}
+                        {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -351,12 +375,14 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(streamedToken, "", 4)} {token} (
-                        {formatCurrency(
-                          (streamedToken * 100) / totalTransactionAmount,
-                          "",
-                          2
-                        )}
+                        <FormatCurrency amount={streamedToken} fix={4} />{" "}
+                        {token} (
+                        <FormatCurrency
+                          amount={
+                            (streamedToken * 100) / totalTransactionAmount
+                          }
+                          showTooltip={false}
+                        />
                         %)
                       </div>
                     </div>
@@ -366,11 +392,10 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         {t("table.withdrawn")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(
-                          latest_transaction_event.withdrawn,
-                          "",
-                          4
-                        )}{" "}
+                        <FormatCurrency
+                          amount={latest_transaction_event.withdrawn}
+                          fix={4}
+                        />{" "}
                         {token}
                       </div>
                     </div>
@@ -411,15 +436,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
                         </div>
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.view-reference-file")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.OutsideLinkIcon className="text-content-contrast" />
-                            }
-                          />
-                        </div>
+                        <ViewReferenceFile file={file} />
                       </div>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 export const constants = {
   MAX_OWNERS: 11,
-  PROGRAM_ID: "zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T",
+  PROGRAM_ID: "3QR2HYqZPPn4P6Xh2eaujTnQUQRenFeRR8e3by6DZoa1",
   ALLOWED_FILES: ["jpeg", "jpg", "png", "pdf", "docx", "doc"],
   MAX_FILE_SIZE: 200 * 1024, // 200KB
   STREAM_START_ADD: 2, // 2 minutes

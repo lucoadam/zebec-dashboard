@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { fetchTreasuryVaultTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import { constants } from "constants/constants"
 import {
+  fetchTreasuryPendingTransactions,
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
   fetchTreasuryVaultInstantTransactionsById
@@ -34,6 +34,9 @@ export const signTransaction = createAsyncThunk<
     if (treasury.activeTreasury?.uuid) {
       const treasury_uuid = treasury.activeTreasury.uuid
       await api.get(`/treasury/${treasury_uuid}/transactions/${uuid}/approve/`)
+      dispatch(
+        fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid })
+      )
       dispatch(
         fetchTreasuryTransactionsById({
           treasury_uuid: treasury_uuid,

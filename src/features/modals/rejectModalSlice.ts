@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
-import axios from "axios"
 import {
   fetchTreasuryPendingTransactions,
-  fetchTreasuryVaultContinuousTransactions,
-  fetchTreasuryVaultInstantTransactions
+  fetchTreasuryTransactionsById,
+  fetchTreasuryVaultContinuousTransactionsById,
+  fetchTreasuryVaultInstantTransactionsById
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 //declare types for state
@@ -22,6 +22,7 @@ const initialState: RejectState = {
   loading: false,
   error: ""
 }
+
 export const rejectTransaction = createAsyncThunk<
   any,
   { uuid: string },
@@ -33,11 +34,16 @@ export const rejectTransaction = createAsyncThunk<
     if (treasury.activeTreasury?.uuid) {
       const treasury_uuid = treasury.activeTreasury.uuid
       await api.get(`/treasury/${treasury_uuid}/transactions/${uuid}/reject/`)
-
-      dispatch(toggleRejectModal())
       dispatch(
         fetchTreasuryPendingTransactions({ treasury_uuid: treasury_uuid })
       )
+      dispatch(
+        fetchTreasuryTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
+      )
+      dispatch(toggleRejectModal())
       return
     }
     return
@@ -57,10 +63,13 @@ export const vaultRejectTransaction = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-instant-transactions/${uuid}/reject/`
       )
-      dispatch(toggleRejectModal())
       dispatch(
-        fetchTreasuryVaultInstantTransactions({ treasury_uuid: treasury_uuid })
+        fetchTreasuryVaultInstantTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
       )
+      dispatch(toggleRejectModal())
       return
     }
     return
@@ -80,12 +89,13 @@ export const vaultContinuousRejectTransaction = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/reject/`
       )
-      dispatch(toggleRejectModal())
       dispatch(
-        fetchTreasuryVaultContinuousTransactions({
-          treasury_uuid: treasury_uuid
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
         })
       )
+      dispatch(toggleRejectModal())
       return
     }
     return
@@ -105,12 +115,13 @@ export const vaultContinuousRejectTransactionLatestEvent = createAsyncThunk<
       await api.get(
         `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/events/${event_id}/reject/`
       )
-      dispatch(toggleRejectModal())
       dispatch(
-        fetchTreasuryVaultContinuousTransactions({
-          treasury_uuid: treasury_uuid
+        fetchTreasuryVaultContinuousTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
         })
       )
+      dispatch(toggleRejectModal())
       return
     }
     return

@@ -21,7 +21,7 @@ export interface Treasury {
 export interface TreasuryState {
   loading: boolean
   treasuries: {
-    count: number
+    count: number | null
     next: string | null
     previous: string | null
     results: Treasury[]
@@ -32,6 +32,8 @@ export interface TreasuryState {
   updatingError: string
   archiving: boolean
   archiveError: string
+  treasuryOverallActivity: any
+  treasuryWeeklyActivity: any
 }
 
 export interface UpdateTreasuryProps {

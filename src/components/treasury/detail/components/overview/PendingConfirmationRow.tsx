@@ -5,13 +5,14 @@ import {
   WithdrawDepositTransactionProps,
   ApprovedRejectedUserProps
 } from "components/treasury/treasury.d"
-import { formatCurrency } from "utils"
+import { formatDateTime } from "utils"
 import { useTranslation } from "next-i18next"
 import {
   Button,
   CollapseDropdown,
   UserAddress,
-  SignerRow
+  SignerRow,
+  FormatCurrency
 } from "components/shared"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import { showSignModal } from "features/modals/signModalSlice"
@@ -94,7 +95,7 @@ export const PendingConfirmationRow: FC<PendingConfirmationRowProps> = ({
             <div className="">
               <span className=" text-content-primary font-semibold text-subtitle">
                 {isIncoming ? "+" : "-"}
-                {formatCurrency(transaction.amount, "", 4)}
+                <FormatCurrency amount={transaction.amount} fix={4} />
               </span>
               <span className="text-content-contrast font-medium text-subtitle-sm ml-1">
                 {transaction.token_symbol}
@@ -122,7 +123,8 @@ export const PendingConfirmationRow: FC<PendingConfirmationRowProps> = ({
               showIcons={false}
             />
             &nbsp;
-            {t("treasuryOverview:on")}&nbsp;Mar 18, 2022, 12:00 PM
+            {t("treasuryOverview:on")}&nbsp;
+            {formatDateTime(transaction.created_at)}
           </span>
         </div>
       </div>

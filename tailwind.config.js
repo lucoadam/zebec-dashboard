@@ -195,12 +195,12 @@ module.exports = {
             maxWidth: "100%"
           },
           "@screen lg": {
-            maxWidth: "1024px"
+            maxWidth: "1232px"
           },
           "@screen xl": {
             maxWidth: "1280px",
-            paddingLeft: "5rem",
-            paddingRight: "5rem"
+            paddingLeft: "3rem",
+            paddingRight: "3rem"
           },
           "@screen 2xl": {
             maxWidth: "1536px",

@@ -13,7 +13,7 @@ import { AppDispatch } from "app/store"
 const initialState: TreasuryState = {
   loading: false,
   treasuries: {
-    count: 0,
+    count: null,
     next: null,
     previous: null,
     results: []
@@ -23,7 +23,9 @@ const initialState: TreasuryState = {
   updating: false,
   updatingError: "",
   archiving: false,
-  archiveError: ""
+  archiveError: "",
+  treasuryOverallActivity: {},
+  treasuryWeeklyActivity: {}
 }
 
 export const fetchTreasury = createAsyncThunk(
@@ -86,6 +88,26 @@ export const archiveTreasury = createAsyncThunk<
   dispatch(fetchTreasury())
   data.callback()
   return null
+})
+
+//Overall Activity
+export const fetchTreasuryOverallActivity = createAsyncThunk<
+  any,
+  { uuid: string },
+  {}
+>("treasury/fetchTreasuryOverallActivity", async (data, {}) => {
+  const response = await api.get(`/treasury/${data.uuid}/total/`)
+  return response.data
+})
+
+//Weekly Activity
+export const fetchTreasuryWeeklyActivity = createAsyncThunk<
+  any,
+  { uuid: string },
+  {}
+>("treasury/fetchTreasuryWeeklyActivity", async (data, {}) => {
+  const response = await api.get(`/treasury/${data.uuid}/weekly/`)
+  return response.data
 })
 
 const treasurySlice = createSlice({
@@ -157,6 +179,30 @@ const treasurySlice = createSlice({
     builder.addCase(archiveTreasury.rejected, (state, action) => {
       state.archiving = false
       state.archiveError = action.error.message ?? "Something went wrong"
+    })
+    //Overall Activity
+    builder.addCase(fetchTreasuryOverallActivity.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchTreasuryOverallActivity.fulfilled, (state, action) => {
+      state.loading = false
+      state.treasuryOverallActivity = action.payload
+    })
+    builder.addCase(fetchTreasuryOverallActivity.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
+    //Weekly Activity
+    builder.addCase(fetchTreasuryWeeklyActivity.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchTreasuryWeeklyActivity.fulfilled, (state, action) => {
+      state.loading = false
+      state.treasuryWeeklyActivity = action.payload
+    })
+    builder.addCase(fetchTreasuryWeeklyActivity.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
     })
   }
 })

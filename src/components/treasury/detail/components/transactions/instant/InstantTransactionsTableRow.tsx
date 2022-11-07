@@ -6,7 +6,9 @@ import {
   CircularProgress,
   IconButton,
   UserAddress,
-  SignerRow
+  SignerRow,
+  ViewReferenceFile,
+  FormatCurrency
 } from "components/shared"
 import { showRejectModal } from "features/modals/rejectModalSlice"
 import { showSignModal } from "features/modals/signModalSlice"
@@ -14,7 +16,7 @@ import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import { formatCurrency, formatDateTime, getTimesAgo, toSubstring } from "utils"
+import { formatDateTime, getTimesAgo, toSubstring } from "utils"
 import { StatusType } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
 import {
@@ -95,8 +97,11 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
   }, [activeTreasury, transaction])
 
   const isRemaining = useMemo(() => {
-    return remainingOwners.some((owner) => owner === publicKey?.toString())
-  }, [remainingOwners, publicKey])
+    return (
+      remainingOwners.some((owner) => owner === publicKey?.toString()) &&
+      status === TreasuryApprovalType.PENDING
+    )
+  }, [remainingOwners, publicKey, status])
 
   return (
     <>
@@ -119,17 +124,22 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                 <div className="flex items-center text-subtitle-sm font-medium">
                   <span className="text-subtitle text-content-primary font-semibold">
                     -
-                    {status === TreasuryApprovalType.ACCEPTED
-                      ? formatCurrency(amount, "", 4)
-                      : 0}
+                    {status === TreasuryApprovalType.ACCEPTED ? (
+                      <FormatCurrency amount={amount} fix={4} />
+                    ) : (
+                      <FormatCurrency amount={0} fix={4} />
+                    )}
                   </span>
                   &nbsp;{token}
                 </div>
                 <div className="text-caption">
-                  {status === TreasuryApprovalType.ACCEPTED
-                    ? formatCurrency(amount, "", 4)
-                    : 0}{" "}
-                  of {formatCurrency(amount, "", 4)} {token}
+                  {status === TreasuryApprovalType.ACCEPTED ? (
+                    <FormatCurrency amount={amount} fix={4} />
+                  ) : (
+                    <FormatCurrency amount={0} fix={4} />
+                  )}{" "}
+                  {t("table.of")} <FormatCurrency amount={amount} fix={4} />{" "}
+                  {token}
                 </div>
               </div>
             </div>
@@ -273,7 +283,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.total-amount")}
                       </div>
                       <div className="text-content-primary">
-                        {formatCurrency(amount, "", 4)} {token}
+                        <FormatCurrency amount={amount} fix={4} /> {token}
                       </div>
                     </div>
                     {/* Amount Received */}
@@ -282,11 +292,17 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         {t("table.amount-received")}
                       </div>
                       <div className="text-content-primary">
-                        {status === TreasuryApprovalType.ACCEPTED
-                          ? formatCurrency(amount, "", 4)
-                          : 0}{" "}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={amount} fix={4} />
+                        ) : (
+                          <FormatCurrency amount={0} fix={4} />
+                        )}{" "}
                         {token} (
-                        {status === TreasuryApprovalType.ACCEPTED ? 100 : 0}
+                        {status === TreasuryApprovalType.ACCEPTED ? (
+                          <FormatCurrency amount={100} />
+                        ) : (
+                          <FormatCurrency amount={0} />
+                        )}
                         %)
                       </div>
                     </div>
@@ -301,7 +317,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         ) : (
                           <Icons.OutgoingIcon className="w-5 h-5" />
                         )}
-                        <span>
+                        <span className="capitalize">
                           {status === TreasuryApprovalType.PENDING
                             ? StatusType.SCHEDULED
                             : status === TreasuryApprovalType.ACCEPTED
@@ -337,15 +353,7 @@ const InstantTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                         <div className="w-32 text-content-secondary">
                           {t("table.reference")}
                         </div>
-                        <div className="text-content-primary">
-                          <Button
-                            title={`${t("table.view-reference-file")}`}
-                            size="small"
-                            endIcon={
-                              <Icons.OutsideLinkIcon className="text-content-contrast" />
-                            }
-                          />
-                        </div>
+                        <ViewReferenceFile file={file} />
                       </div>
                     )}
                   </div>

@@ -79,9 +79,10 @@ export default function IndividualAddresses() {
               })
             )
             return
+          } else {
+            dispatch(toast.success({ message: t("addressBook:success-add") }))
           }
           reset()
-          dispatch(toast.success({ message: t("addressBook:success-add") }))
         }
       }
       dispatch(saveAddressBook(addressBookData))
@@ -99,15 +100,16 @@ export default function IndividualAddresses() {
                 message: t("addressBook:error-update")
               })
             )
+          } else {
+            dispatch(
+              toast.success({
+                message: t("addressBook:success-update")
+              })
+            )
           }
           setIsEdit(false)
           setEditAddressBookId("")
           reset()
-          dispatch(
-            toast.success({
-              message: t("addressBook:success-update")
-            })
-          )
         }
       }
       dispatch(updateAddressBook(addressBookData))
@@ -153,7 +155,7 @@ export default function IndividualAddresses() {
         <Breadcrumb title={`${t("addressBook:address-book")}`} />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 overflow-x-hidden">
+          <div className="lg:col-span-2">
             <Table headers={headers}>
               <TableBody className="">
                 {loading ? (
