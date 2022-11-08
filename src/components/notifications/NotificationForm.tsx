@@ -47,21 +47,22 @@ export const NotificationForm: React.FC<NotificationProps> = (
         <div className="text-content-secondary text-caption pb-4 pt-1 border-b border-outline mb-8">{`${t(
           "common:notifications.notification-subtitle"
         )} `}</div>
-
-        <NotifiContext
-          dappAddress="zebec.io"
-          walletBlockchain="SOLANA"
-          env="Development"
-          signer={adapter as MessageSigner}
-          walletPublicKey={publicKey}
-          connection={connection}
-          sendTransaction={sendTransaction}
-        >
-          <NotifiSubscriptionCard
-            cardId={`${process.env.NOTIFI_CARD_ID}`}
-            darkMode
-          />
-        </NotifiContext>
+        <div className="min-h-[168px] grid items-end">
+          <NotifiContext
+            dappAddress="zebec.io"
+            walletBlockchain="SOLANA"
+            env="Development"
+            signer={adapter as MessageSigner}
+            walletPublicKey={publicKey}
+            connection={connection}
+            sendTransaction={sendTransaction}
+          >
+            <NotifiSubscriptionCard
+              cardId={`${process.env.NOTIFI_CARD_ID}`}
+              darkMode
+            />
+          </NotifiContext>
+        </div>
 
         {/* <NotificationFormComponent
           onSubmit={onSubmit}
