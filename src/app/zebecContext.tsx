@@ -11,7 +11,7 @@ import {
 import { createContext, FC, useState } from "react"
 import { CLUSTER_API_URL } from "constants/cluster"
 
-const feeReceiverWallet = "9r2hAV7zM4P8GTJnYXD3HaFzHqTDoZSuusB2NMAs1TsE"
+const feeReceiverWallet = "HWERzRzAUKpt1yCDBRUz1sxUGiGUkGpc9Y1CP7M1Dvpo"
 
 interface ZebecContextProps {
   stream: ZebecNativeStream | null
