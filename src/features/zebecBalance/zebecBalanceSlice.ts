@@ -26,9 +26,7 @@ export const fetchZebecBalance: any = createAsyncThunk(
     },
     { getState }
   ) => {
-    const base58PublicKey = new PublicKey(
-      network === "solana" ? constants.PROGRAM_ID : constants.PROGRAM_ID_2
-    )
+    const base58PublicKey = new PublicKey(constants.PROGRAM_ID)
     const validProgramAddressPub = await PublicKey.findProgramAddress(
       [new PublicKey(publicKey).toBuffer()],
       base58PublicKey

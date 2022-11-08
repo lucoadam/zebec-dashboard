@@ -1883,10 +1883,10 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-6.10.0.tgz#c012c1ecc1a0e53d50e6af381618dca5268461c1"
   integrity sha512-lLseUPEhSFUXYTKj6q7s2O3s2vW2ebgA11vMAlKodXGf5AFw4zUoEbTz9CoFOC9jS6xY4Qr8BmRnxP/odT4Uuw==
 
-"@lucoadam/zebec-wormhole-sdk@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@lucoadam/zebec-wormhole-sdk/-/zebec-wormhole-sdk-0.0.14.tgz#21f4b6afa3525e2de5b359b0c8986048cf36fce9"
-  integrity sha512-nDU4XIUJT2ORAZPhTZ63UJTVBiMFfI+FdArLpP03J8Zf6pA+wJVXsyLMfUFbUEo6Ky94HwqIvNJwccTNxJ9Sew==
+"@lucoadam/zebec-wormhole-sdk@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@lucoadam/zebec-wormhole-sdk/-/zebec-wormhole-sdk-0.0.15.tgz#43395b1c0e55a77e7b8657056810512a4642d907"
+  integrity sha512-QRjJk38I4HoHEsn7lw8uvhTWaA+ApayzBNswC09SFUhxHB55GMnxNTDU0xb2esSAfsiB3cn6V7kU9g31SyL/Dg==
   dependencies:
     "@certusone/wormhole-sdk" "^0.6.2"
     "@project-serum/anchor" "^0.24.2"
