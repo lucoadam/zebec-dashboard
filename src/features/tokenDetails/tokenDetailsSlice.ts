@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import api from "api/api"
 import { RootState } from "app/store"
 import { getTokensUSDPrice } from "utils/getTokensPrice"
 import { TokenDetailsState, TokenResponse } from "./tokenDetailsSlice.d"
@@ -13,9 +14,11 @@ const initialState: TokenDetailsState = {
 
 //Generates pending, fulfilled and rejected action types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const fetchTokens: any = createAsyncThunk(
+export const fetchTokens = createAsyncThunk<any, void, {}>(
   "token/fetchTokens",
-  async (tokenDetails: TokenResponse[]) => {
+  async () => {
+    const response = await api.get(`/token/`)
+    const tokenDetails: TokenResponse[] = response.data
     const tokens = tokenDetails.map((res) => ({
       name: res.name,
       symbol: res.symbol,
