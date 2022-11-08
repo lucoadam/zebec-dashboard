@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getIsTransferCompletedSolana } from "@certusone/wormhole-sdk"
-import { SOL_TOKEN_BRIDGE_ADDRESS } from "@lucoadam/zebec-wormhole-sdk"
+import { SOL_TOKEN_BRIDGE_ADDRESS } from "@subasshrestha/zebec-wormhole-sdk"
 import { connection } from "constants/cluster"
 
 type Data = {

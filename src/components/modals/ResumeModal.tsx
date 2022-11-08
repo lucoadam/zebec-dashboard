@@ -11,7 +11,7 @@ import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@lucoadam/zebec-wormhole-sdk"
+} from "@subasshrestha/zebec-wormhole-sdk"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
 import { resumeStreamTreasury } from "application"

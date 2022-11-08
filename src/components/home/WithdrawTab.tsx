@@ -24,7 +24,7 @@ import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@lucoadam/zebec-wormhole-sdk"
+} from "@subasshrestha/zebec-wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
 import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"

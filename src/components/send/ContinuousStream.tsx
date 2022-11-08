@@ -10,7 +10,7 @@ import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "@lucoadam/zebec-wormhole-sdk"
+} from "@subasshrestha/zebec-wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { useAppDispatch, useAppSelector } from "app/hooks"
