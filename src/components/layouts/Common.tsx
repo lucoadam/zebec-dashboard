@@ -19,10 +19,7 @@ import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebec
 import { FC, useContext, useEffect } from "react"
 import { getRecentTPS } from "utils"
 
-const Common: FC<{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tokenDetails: any
-}> = ({ tokenDetails }) => {
+const Common: FC = () => {
   const walletObject = useWallet()
   const dispatch = useAppDispatch()
   const { tokens } = useAppSelector((state) => state.tokenDetails)
@@ -37,9 +34,9 @@ const Common: FC<{
   const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
-    dispatch(fetchTokens(tokenDetails))
+    dispatch(fetchTokens())
     // eslint-disable-next-line
-  }, [tokenDetails])
+  }, [])
 
   useEffect(() => {
     if (walletObject.connected) {
