@@ -343,13 +343,15 @@ const Navbar: FC = () => {
               ) : (
                 <div className="flex gap-x-4">
                   <NotificationsComponent />
-                  <Button
-                    title="ZBC Airdrop"
-                    variant="default"
-                    onClick={zbcAirdropToWallet}
-                    loading={zbcAirdropLoading}
-                    disabled={zbcAirdropLoading}
-                  />
+                  {process.env.NODE_ENV === "development" && (
+                    <Button
+                      title="ZBC Airdrop"
+                      variant="default"
+                      onClick={zbcAirdropToWallet}
+                      loading={zbcAirdropLoading}
+                      disabled={zbcAirdropLoading}
+                    />
+                  )}
                   <Profile />
                 </div>
               )}

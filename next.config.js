@@ -9,7 +9,10 @@ const nextConfig = {
     RPC_NETWORK: process.env.RPC_NETWORK,
     DB_HOST: process.env.DB_HOST,
     ZBC_AIRDROP: process.env.ZBC_AIRDROP,
-    NOTIFI_CARD_ID: process.env.NOTIFI_CARD_ID
+    NOTIFI_CARD_ID: process.env.NOTIFI_CARD_ID,
+    SYNDICA_API: process.env.SYNDICA_API,
+    PROGRAM_ID: process.env.PROGRAM_ID,
+    FEE_RECEIVER_WALLET: process.env.FEE_RECEIVER_WALLET
   },
   i18n,
   webpack(config) {

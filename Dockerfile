@@ -1,5 +1,26 @@
 # Install dependencies only when needed
-FROM node:16-alpine AS deps
+
+FROM node:16-alpine as env-setter
+
+ARG RPC_NETWORK
+ARG DB_HOST
+ARG NOTIFI_CARD_ID
+ARG ZBC_AIRDROP
+ARG SYNDICA_API
+ARG NODE_ENV
+ARG PROGRAM_ID
+ARG FEE_RECEIVER_WALLET
+
+ENV RPC_NETWORK=$RPC_NETWORK
+ENV DB_HOST=$DB_HOST
+ENV NOTIFI_CARD_ID=$NOTIFI_CARD_ID
+ENV ZBC_AIRDROP=$ZBC_AIRDROP
+ENV SYNDICA_API=$SYNDICA_API
+ENV NODE_ENV=$NODE_ENV
+ENV PROGRAM_ID=$PROGRAM_ID
+ENV FEE_RECEIVER_WALLET=$FEE_RECEIVER_WALLET
+
+FROM env-setter AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -15,19 +36,8 @@ RUN \
 
 
 # Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+FROM env-setter AS builder
 
-ARG RPC_NETWORK=devnet
-ARG DB_HOST
-ARG ZBC_AIRDROP
-ARG NODE_ENV
-ARG NOTIFI_CARD_ID
-
-ENV RPC_NETWORK $RPC_NETWORK
-ENV DB_HOST $DB_HOST
-ENV ZBC_AIRDROP $ZBC_AIRDROP
-ENV NODE_ENV $NODE_ENV
-ENV NOTIFI_CARD_ID $NOTIFI_CARD_ID
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -44,16 +54,8 @@ RUN yarn build
 # RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM env-setter AS runner
 WORKDIR /app
-
-ENV NODE_ENV production
-
-ARG RPC_NETWORK=devnet
-ARG DB_HOST
-
-ENV RPC_NETWORK $RPC_NETWORK
-ENV DB_HOST $DB_HOST
 
 RUN npm i -g sharp
 
