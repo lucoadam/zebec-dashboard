@@ -85,7 +85,8 @@ const ContinuousTransactionsTableRow: FC<
     pda,
     transaction_hash,
     file,
-    latest_transaction_event
+    latest_transaction_event,
+    withdrawable
   } = transaction
 
   const totalTransactionAmount =
@@ -151,13 +152,12 @@ const ContinuousTransactionsTableRow: FC<
         )
       }, 1000)
       return () => clearInterval(interval)
-    } else if (
-      status === StatusType.CANCELLED ||
-      status === StatusType.PAUSED
-    ) {
+    } else if (status === StatusType.CANCELLED) {
+      setStreamedToken(Number(latest_transaction_event.withdrawn))
+    } else if (status === StatusType.PAUSED) {
       setStreamedToken(
-        Number(latest_transaction_event.withdrawn) +
-          Number(latest_transaction_event.withdraw_limit)
+        Number(latest_transaction_event.withdraw_limit) -
+          Number(latest_transaction_event.paused_amt)
       )
     }
 
@@ -306,7 +306,8 @@ const ContinuousTransactionsTableRow: FC<
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
               {status !== StatusType.SCHEDULED &&
-                status !== StatusType.CANCELLED && (
+                status !== StatusType.CANCELLED &&
+                withdrawable && (
                   <Button
                     size="small"
                     title="Withdraw"

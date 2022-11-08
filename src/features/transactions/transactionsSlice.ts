@@ -194,6 +194,16 @@ export const fetchIncomingTransactions = createAsyncThunk<
     return response
   }
 )
+
+export const fetchIncomingTransactionsById = createAsyncThunk<
+  any,
+  { uuid: string },
+  {}
+>("transactions/fetchIncomingTransactionsById", async ({ uuid }, {}) => {
+  const response = await api.get(`/transaction/${uuid}`)
+  return response.data
+})
+
 //Incoming Vault Instant Transactions
 export const fetchIncomingTreasuryInstantTransactions = createAsyncThunk<
   any,
@@ -211,7 +221,7 @@ export const fetchIncomingTreasuryInstantTransactions = createAsyncThunk<
           offset:
             (Number(transactions.pagination.currentPage) - 1) *
             transactions.pagination.limit,
-          status: status === "ALL" ? "" : status
+          approval_status_fn: status === "ALL" ? "" : status
         }
       }
     )
@@ -241,6 +251,20 @@ export const fetchIncomingTreasuryContinuousTransactions = createAsyncThunk<
       }
     )
     return response
+  }
+)
+
+export const fetchIncomingTreasuryContinuousTransactionsById = createAsyncThunk<
+  any,
+  { uuid: string },
+  {}
+>(
+  "transactions/fetchIncomingTreasuryContinuousTransactionsById",
+  async ({ uuid }, {}) => {
+    const response = await api.get(
+      `/incoming/treasury-vault-streaming-transactions/${uuid}/`
+    )
+    return response.data
   }
 )
 
