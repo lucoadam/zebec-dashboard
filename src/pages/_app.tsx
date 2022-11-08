@@ -17,18 +17,12 @@ import { ThemeProvider } from "next-themes"
 import type { AppProps } from "next/app"
 import { useMemo } from "react"
 import { Provider } from "react-redux"
-import { TokenResponse } from "features/tokenDetails/tokenDetailsSlice.d"
 import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
-import axios from "axios"
 
-const MyApp = ({
-  Component,
-  pageProps,
-  tokenDetails
-}: AppProps & { tokenDetails: TokenResponse[] }) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
   const network = RPC_NETWORK
   // You can also provide a custom RPC endpoint
@@ -50,7 +44,7 @@ const MyApp = ({
             <ThemeProvider>
               <ZebecContextProvider>
                 <Component {...pageProps} />
-                <Common tokenDetails={tokenDetails} />
+                <Common />
               </ZebecContextProvider>
             </ThemeProvider>
           </WalletModalProvider>
@@ -58,19 +52,6 @@ const MyApp = ({
       </ConnectionProvider>
     </Provider>
   )
-}
-
-MyApp.getInitialProps = async () => {
-  let data = []
-  try {
-    const response = await axios.get(`${process.env.DB_HOST}/token/`)
-    data = response.data
-  } catch (error) {
-    data = []
-  }
-  return {
-    tokenDetails: data as TokenResponse[]
-  }
 }
 
 export default appWithTranslation(MyApp)
