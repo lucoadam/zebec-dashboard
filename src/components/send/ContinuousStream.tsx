@@ -340,96 +340,107 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const handleEvmStream = async (data: ContinuousStreamFormData) => {
-    dispatch(toggleWalletApprovalMessageModal())
-    const isRelayerActive = await checkRelayerStatus()
-    if (!isRelayerActive) {
+    try {
+      dispatch(toggleWalletApprovalMessageModal())
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        return
+      }
+      // commented console.log(data)
+      if (!signer) return
+      const formattedData = {
+        name: data.transaction_name,
+        transaction_type: "continuous",
+        token: data.symbol,
+        remarks: data.remarks || "",
+        amount: Number(data.amount),
+        receiver: data.receiver,
+        sender: walletObject.publicKey?.toString() || "",
+        start_time: moment(
+          `${data.startDate} ${data.startTime}`,
+          "DD/MM/YYYY LT"
+        ).unix(),
+        end_time: moment(
+          `${data.endDate} ${data.endTime}`,
+          "DD/MM/YYYY LT"
+        ).unix(),
+        token_mint_address:
+          currentToken.mint === "solana" ? "" : currentToken.mint,
+        file: data.file
+      }
+
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      const transferReceipt = await messengerContract.startTokenStream(
+        formattedData.start_time.toString(),
+        formattedData.end_time.toString(),
+        formattedData.amount.toString(),
+        formattedData.receiver,
+        walletObject.originalAddress?.toString() || "",
+        true,
+        true,
+        formattedData.token_mint_address
+      )
+      // commented console.log("receipt", transferReceipt)
+      const sequence = parseSequenceFromLogEth(
+        transferReceipt,
+        BSC_BRIDGE_ADDRESS
+      )
+      const transferEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      console.debug("emitterAddress:", transferEmitterAddress)
+      // commented console.log("sequence", sequence)
+      const { vaaBytes } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        "bsc",
+        transferEmitterAddress,
+        sequence
+      )
+      const backendData = {
+        ...formattedData,
+        sender: walletObject.originalAddress?.toString() || "",
+        receiver: data.receiver,
+        vaa: Buffer.from(vaaBytes).toString("hex")
+      }
+      dispatch(sendContinuousStream(backendData)).then(async () => {
+        resetForm()
+        const response = await listenWormholeTransactionStatus(
+          sequence,
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          sourceChain
+        )
+        // commented console.log("response", response)
+        if (response === "success") {
+          dispatch(toast.success({ message: "Stream started" }))
+        } else if (response === "timeout") {
+          dispatch(toast.error({ message: "Stream timeout" }))
+        } else {
+          dispatch(toast.error({ message: "Stream failed" }))
+        }
+        dispatch(toggleWalletApprovalMessageModal())
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       dispatch(toggleWalletApprovalMessageModal())
       dispatch(
         toast.error({
-          message: "Backend Service is currently down. Please try again later."
+          message: "Failed to initiate stream"
         })
       )
-      return
     }
-    // commented console.log(data)
-    if (!signer) return
-    const formattedData = {
-      name: data.transaction_name,
-      transaction_type: "continuous",
-      token: data.symbol,
-      remarks: data.remarks || "",
-      amount: Number(data.amount),
-      receiver: data.receiver,
-      sender: walletObject.publicKey?.toString() || "",
-      start_time: moment(
-        `${data.startDate} ${data.startTime}`,
-        "DD/MM/YYYY LT"
-      ).unix(),
-      end_time: moment(
-        `${data.endDate} ${data.endTime}`,
-        "DD/MM/YYYY LT"
-      ).unix(),
-      token_mint_address:
-        currentToken.mint === "solana" ? "" : currentToken.mint,
-      file: data.file
-    }
-
-    const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-
-    const messengerContract = new ZebecEthBridgeClient(
-      BSC_ZEBEC_BRIDGE_ADDRESS,
-      signer,
-      sourceChain
-    )
-    const transferReceipt = await messengerContract.startTokenStream(
-      formattedData.start_time.toString(),
-      formattedData.end_time.toString(),
-      formattedData.amount.toString(),
-      formattedData.receiver,
-      walletObject.originalAddress?.toString() || "",
-      true,
-      true,
-      formattedData.token_mint_address
-    )
-    // commented console.log("receipt", transferReceipt)
-    const sequence = parseSequenceFromLogEth(
-      transferReceipt,
-      BSC_BRIDGE_ADDRESS
-    )
-    const transferEmitterAddress = getEmitterAddressEth(
-      BSC_ZEBEC_BRIDGE_ADDRESS
-    )
-    console.debug("emitterAddress:", transferEmitterAddress)
-    // commented console.log("sequence", sequence)
-    const { vaaBytes } = await getSignedVAAWithRetry(
-      WORMHOLE_RPC_HOSTS,
-      "bsc",
-      transferEmitterAddress,
-      sequence
-    )
-    const backendData = {
-      ...formattedData,
-      sender: walletObject.originalAddress?.toString() || "",
-      receiver: data.receiver,
-      vaa: Buffer.from(vaaBytes).toString("hex")
-    }
-    dispatch(sendContinuousStream(backendData)).then(async () => {
-      resetForm()
-      const response = await listenWormholeTransactionStatus(
-        sequence,
-        BSC_ZEBEC_BRIDGE_ADDRESS,
-        sourceChain
-      )
-      // commented console.log("response", response)
-      if (response === "success") {
-        dispatch(toast.success({ message: "Stream started" }))
-      } else if (response === "timeout") {
-        dispatch(toast.error({ message: "Stream timeout" }))
-      } else {
-        dispatch(toast.error({ message: "Stream failed" }))
-      }
-      dispatch(toggleWalletApprovalMessageModal())
-    })
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {

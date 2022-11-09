@@ -77,7 +77,10 @@ export const fetchTokens = createAsyncThunk<any, void, {}>(
     const response = await api.get(`/token/`)
     const tokenDetails: TokenResponse[] = response.data
     console.log("tokenDetails", tokenDetails)
-    const tokens = [...tokenDetails, ...bscTokens].map((res) => ({
+    const tokens = [
+      ...tokenDetails.filter((token) => token.network === "solana"),
+      ...bscTokens
+    ].map((res) => ({
       name: res.name,
       symbol: res.symbol,
       decimal: res.decimal,

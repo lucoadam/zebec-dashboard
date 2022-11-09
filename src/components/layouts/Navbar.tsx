@@ -30,6 +30,7 @@ import * as ethers from "ethers"
 import { useSigner } from "wagmi"
 import { TokenImplementation__factory } from "@certusone/wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
@@ -186,6 +187,14 @@ const Navbar: FC = () => {
                       message: "2 ZBC Airdrop Successful"
                     })
                   )
+                  setTimeout(() => {
+                    fetchWalletBalance({
+                      publicKey: useWalletObject.originalAddress,
+                      chainId: useWalletObject.chainId,
+                      network: useWalletObject.network,
+                      signer: useWalletObject.chainId !== "solana" && signer
+                    })
+                  }, constants.BALANCE_FETCH_TIMEOUT)
                 })
                 .catch((err) => {
                   console.log(err)
@@ -343,16 +352,15 @@ const Navbar: FC = () => {
               ) : (
                 <div className="flex gap-x-4">
                   <NotificationsComponent />
-                  {RPC_NETWORK === "devnet" ||
-                    (RPC_NETWORK === "testnet" && (
-                      <Button
-                        title="ZBC Airdrop"
-                        variant="default"
-                        onClick={zbcAirdropToWallet}
-                        loading={zbcAirdropLoading}
-                        disabled={zbcAirdropLoading}
-                      />
-                    ))}
+                  {(RPC_NETWORK === "devnet" || RPC_NETWORK === "testnet") && (
+                    <Button
+                      title="ZBC Airdrop"
+                      variant="default"
+                      onClick={zbcAirdropToWallet}
+                      loading={zbcAirdropLoading}
+                      disabled={zbcAirdropLoading}
+                    />
+                  )}
                   <Profile />
                 </div>
               )}

@@ -23,11 +23,13 @@ export const useWithdrawDepositForm = ({
     symbol: string
     image: string
     mint: string
+    decimal: number
   }>(
     tokens[0] || {
       symbol: "",
       image: "",
-      mint: ""
+      mint: "",
+      decimal: 0
     }
   )
 

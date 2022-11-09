@@ -66,12 +66,14 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
         })
       )
       // dispatch(fetchWalletBalance(publicKey?.toString()))
-      fetchWalletBalance({
-        publicKey: walletObject.originalAddress,
-        chainId: walletObject.chainId,
-        network: walletObject.network,
-        signer: walletObject.chainId === "solana" && signer
-      })
+      dispatch(
+        fetchWalletBalance({
+          publicKey: walletObject.originalAddress,
+          chainId: walletObject.chainId,
+          network: walletObject.network,
+          signer: walletObject.chainId !== "solana" && signer
+        })
+      )
       if (zebecContext.token && zebecContext.stream) {
         dispatch(
           fetchZebecStreamingBalance({

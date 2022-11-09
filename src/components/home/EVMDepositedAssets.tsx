@@ -12,6 +12,8 @@ import { useZebecWallet } from "hooks/useWallet"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { constants } from "constants/constants"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
+import { useSigner } from "wagmi"
 
 export const EVMDepositedAssets: FC<{
   tokens?: TokenDetails[]
@@ -34,6 +36,7 @@ export const EVMDepositedAssets: FC<{
   })
   const dispatch = useAppDispatch()
   const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
 
   const refreshBalance = (title: string) => {
     if (title === "home:zebec-assets") {
@@ -42,6 +45,14 @@ export const EVMDepositedAssets: FC<{
           fetchZebecBalance({
             publicKey: walletObject.publicKey?.toString(),
             network: walletObject.network
+          })
+        )
+        dispatch(
+          fetchWalletBalance({
+            publicKey: walletObject.originalAddress,
+            chainId: walletObject.chainId,
+            network: walletObject.network,
+            signer: walletObject.chainId !== "solana" && signer
           })
         )
       }
@@ -55,6 +66,14 @@ export const EVMDepositedAssets: FC<{
           fetchPdaBalance({
             publicKey: walletObject.publicKey?.toString(),
             network: walletObject.network
+          })
+        )
+        dispatch(
+          fetchWalletBalance({
+            publicKey: walletObject.originalAddress,
+            chainId: walletObject.chainId,
+            network: walletObject.network,
+            signer: walletObject.chainId !== "solana" && signer
           })
         )
       }

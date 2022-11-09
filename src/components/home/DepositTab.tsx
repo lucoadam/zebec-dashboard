@@ -55,6 +55,7 @@ import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { connection } from "constants/cluster"
+import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 // import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 // import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
@@ -107,11 +108,17 @@ const DepositTab: FC = () => {
   })
 
   const setMaxAmount = () => {
-    const balance =
-      getBalance(
-        depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
-        currentToken.symbol
-      ) - constants.DEPOSIT_MAX_OFFSET
+    const balance = Number(
+      (
+        getBalance(
+          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+          currentToken.symbol
+        ) -
+          (depositFrom === "Wallet Assets"
+            ? constants.DEPOSIT_MAX_OFFSET
+            : 0) || 0
+      ).toFixed(6) || 0
+    )
     setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
@@ -130,9 +137,17 @@ const DepositTab: FC = () => {
           publicKey: walletObject.originalAddress,
           chainId: walletObject.chainId,
           network: walletObject.network,
-          signer: walletObject.chainId === "solana" && signer
+          signer: walletObject.chainId !== "solana" && signer
         })
       )
+      if (walletObject.chainId !== "solana") {
+        dispatch(
+          fetchPdaBalance({
+            publicKey: walletObject.publicKey?.toString(),
+            network: walletObject.network
+          })
+        )
+      }
     }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
@@ -223,11 +238,11 @@ const DepositTab: FC = () => {
           return
         }
 
-        const recipientTokenAddress = await getAssociatedTokenAddress(
-          new PublicKey(targetTokenAddress),
-          new PublicKey(recipientAddress),
-          true
-        )
+        // const recipientTokenAddress = await getAssociatedTokenAddress(
+        //   new PublicKey(targetTokenAddress),
+        //   new PublicKey(recipientAddress),
+        //   true
+        // )
         // commented console.log("recipientAddress", recipientAddress)
         // commented console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 

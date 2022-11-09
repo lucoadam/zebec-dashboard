@@ -117,10 +117,10 @@ const WithdrawTab: FC = () => {
       )
       dispatch(
         fetchWalletBalance({
-          publicKey: walletObject.publicKey?.toString(),
+          publicKey: walletObject.originalAddress?.toString(),
           chainId: walletObject.chainId,
           network: walletObject.network,
-          signer: walletObject.chainId === "solana" && signer
+          signer: walletObject.chainId !== "solana" && signer
         })
       )
     }, constants.BALANCE_FETCH_TIMEOUT)
@@ -230,7 +230,6 @@ const WithdrawTab: FC = () => {
           dispatch(toast.error({ message: "Error withdrawing token" }))
         }
         dispatch(togglexWalletApprovalMessageModal())
-        withdrawCallback()
       } catch (e) {
         // commented console.log("error", e)
         dispatch(togglexWalletApprovalMessageModal())
