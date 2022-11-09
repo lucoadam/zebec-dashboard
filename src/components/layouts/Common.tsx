@@ -25,10 +25,7 @@ import { getRecentTPS } from "utils"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 
-const Common: FC<{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tokenDetails: any
-}> = ({ tokenDetails }) => {
+const Common: FC = () => {
   const walletObject = useZebecWallet()
   const solanaWalletObject = useWallet()
   const dispatch = useAppDispatch()
@@ -46,9 +43,9 @@ const Common: FC<{
   const zebecContext = useContext(ZebecContext)
 
   useEffect(() => {
-    dispatch(fetchTokens(tokenDetails))
+    dispatch(fetchTokens())
     // eslint-disable-next-line
-  }, [tokenDetails])
+  }, [])
 
   useEffect(() => {
     if (solanaWalletObject.connected) {

@@ -15,7 +15,7 @@ export interface TokenResponse {
   mint: string
   decimal: number
   coingeco_id: string
-  chainId: string
+  chain_id: string
   network?: string
 }
 

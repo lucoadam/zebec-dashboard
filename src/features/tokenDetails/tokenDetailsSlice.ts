@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import api from "api/api"
 import { RootState } from "app/store"
 import { getTokensUSDPrice } from "utils/getTokensPrice"
 import { TokenDetailsState, TokenResponse } from "./tokenDetailsSlice.d"
@@ -11,18 +12,78 @@ const initialState: TokenDetailsState = {
   error: ""
 }
 
+const bscTokens = [
+  {
+    symbol: "WSOL",
+    name: "Wrapped Solana",
+    decimal: 9,
+    mint: "So11111111111111111111111111111111111111112",
+    coingeco_id: "solana",
+    chain_id: "solana",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "WWSOL",
+    name: "Wormhole Wrapped SOL",
+    decimal: 9,
+    mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+    coingeco_id: "solana",
+    chain_id: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "USDT",
+    name: "BSC USDT",
+    decimal: 18,
+    mint: "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    coingeco_id: "tether",
+    chain_id: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "ZBC",
+    name: "Zebec",
+    decimal: 9,
+    mint: "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
+    coingeco_id: "zebec-protocol",
+    chain_id: "97",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "ZBC",
+    name: "Zebec",
+    decimal: 9,
+    mint: "AbLwGR8A1wvsiLWrzzA5eYPoQw51NVMcMMTPvAv5LTJ",
+    coingeco_id: "zebec-protocol",
+    chain_id: "solana",
+    network: "Binance Smart Chain Testnet"
+  },
+  {
+    symbol: "USDT",
+    name: "BSC USDT",
+    decimal: 8,
+    mint: "F6d4we2yt9DxPwYbo18YG4bGDxMFpghQcgYWsoJTmtia",
+    coingeco_id: "tether",
+    chain_id: "solana",
+    network: "Binance Smart Chain Testnet"
+  }
+]
+
 //Generates pending, fulfilled and rejected action types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const fetchTokens: any = createAsyncThunk(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
+export const fetchTokens = createAsyncThunk<any, void, {}>(
   "token/fetchTokens",
-  async (tokenDetails: TokenResponse[]) => {
-    const tokens = tokenDetails.map((res) => ({
+  async () => {
+    const response = await api.get(`/token/`)
+    const tokenDetails: TokenResponse[] = response.data
+    console.log("tokenDetails", tokenDetails)
+    const tokens = [...tokenDetails, ...bscTokens].map((res) => ({
       name: res.name,
       symbol: res.symbol,
       decimal: res.decimal,
       mint: res.mint,
       coingeckoId: res.coingeco_id,
-      chainId: res.chainId,
+      chainId: res.chain_id,
       network: res.network
     }))
 
