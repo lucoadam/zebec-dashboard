@@ -9,7 +9,7 @@ import {
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
 import { createContext, FC, useState } from "react"
-import { CLUSTER_API_URL } from "constants/cluster"
+import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 
 const feeReceiverWallet = process.env.FEE_RECEIVER_WALLET || ""
 
@@ -42,9 +42,11 @@ export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
   const [treasuryToken, setTreasuryToken] = useState<ZebecTokenTreasury | null>(
     null
   )
+
   const initializeHandler = (walletObject: any) => {
     //Logger
-    const logger = process.env.NODE_ENV === "development" ? true : false
+    const logger =
+      RPC_NETWORK === "devnet" || RPC_NETWORK === "testnet" ? true : false
     //Provider
     const provider = initAnchorProvider(walletObject, CLUSTER_API_URL)
     //Normal
