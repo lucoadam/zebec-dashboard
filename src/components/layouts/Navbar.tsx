@@ -266,16 +266,15 @@ const Navbar: FC = () => {
               ) : (
                 <div className="flex gap-x-4">
                   <NotificationsComponent />
-                  {RPC_NETWORK === "devnet" ||
-                    (RPC_NETWORK === "testnet" && (
-                      <Button
-                        title="ZBC Airdrop"
-                        variant="default"
-                        onClick={zbcAirdropToWallet}
-                        loading={zbcAirdropLoading}
-                        disabled={zbcAirdropLoading}
-                      />
-                    ))}
+                  {RPC_NETWORK === "devnet" && (
+                    <Button
+                      title="ZBC Airdrop"
+                      variant="default"
+                      onClick={zbcAirdropToWallet}
+                      loading={zbcAirdropLoading}
+                      disabled={zbcAirdropLoading}
+                    />
+                  )}
                   <Profile />
                 </div>
               )}
