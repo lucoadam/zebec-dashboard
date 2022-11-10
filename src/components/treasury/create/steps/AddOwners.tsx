@@ -322,7 +322,12 @@ const AddOwners: FC<StepsComponentProps> = ({
         <p className="text-content-primary font-normal text-sm mt-6 mb-3">
           {t("createTreasury:added-owners")}
         </p>
-        <OwnerLists className="w-full" owners={owners} setOwners={setOwners} />
+        <OwnerLists
+          className="w-full"
+          owners={owners}
+          setOwners={setOwners}
+          setTreasury={setTreasury}
+        />
         <p className="text-content-primary font-normal text-sm mt-[32px] mb-[12px]">
           {t("createTreasury:min-confirmation-required-text")}
         </p>

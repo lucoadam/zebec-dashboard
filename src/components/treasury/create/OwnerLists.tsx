@@ -6,7 +6,7 @@ import CopyButton from "components/shared/CopyButton"
 import Image, { StaticImageData } from "next/image"
 import { FC } from "react"
 import { toSubstring } from "utils"
-import { Owner } from "./CreateTreasury.d"
+import { Owner, Treasury } from "./CreateTreasury.d"
 
 const OwnerLists: FC<{
   maxItems?: number
@@ -14,7 +14,15 @@ const OwnerLists: FC<{
   setOwners?: (owners: Owner[]) => void
   showCopy?: boolean
   className?: string
-}> = ({ owners, setOwners, maxItems = 3, showCopy, className = "" }) => {
+  setTreasury?: React.Dispatch<React.SetStateAction<Treasury>>
+}> = ({
+  owners,
+  setOwners,
+  maxItems = 3,
+  showCopy,
+  className = "",
+  setTreasury
+}) => {
   const { publicKey } = useWallet()
   const Avatars: StaticImageData[] = [
     AvatarImages.Avatar2,
@@ -68,6 +76,18 @@ const OwnerLists: FC<{
                   <IconButton
                     onClick={() => {
                       setOwners(owners.filter((o) => o.wallet !== owner.wallet))
+                      if (setTreasury) {
+                        setTreasury((treasury) => ({
+                          ...treasury,
+                          owners: owners.filter(
+                            (o) => o.wallet !== owner.wallet
+                          ),
+                          minValidator:
+                            owners.length > treasury.minValidator
+                              ? treasury.minValidator
+                              : treasury.minValidator - 1
+                        }))
+                      }
                     }}
                     type="button"
                     className="w-7 h-7 grid place-content-center border border-outline rounded-full cursor-pointer bg-background-secondary"
