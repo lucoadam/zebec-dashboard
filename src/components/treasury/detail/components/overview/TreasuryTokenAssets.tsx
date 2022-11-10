@@ -63,14 +63,14 @@ export const TreasuryTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
             className="flex flex-col overflow-hidden"
             style={{ maxHeight: tableMaxHeight, minHeight: "300px" }}
           >
-            <div className="overflow-auto">
+            <div className="hover:overflow-auto">
               <table className="w-full">
                 <tbody className="w-full border-separate">
                   {/* SOL */}
                   {filterTokens().length > 0 &&
                     filterTokens().map((token) => (
                       <tr key={token.symbol} className="">
-                        <td className="whitespace-nowrap pb-5">
+                        <td className="whitespace-nowrap pb-4">
                           <div className="flex items-center gap-x-2">
                             <div className="w-8 h-8 grid place-content-center rounded-lg bg-background-primary">
                               <Token
@@ -83,7 +83,7 @@ export const TreasuryTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                           </div>
                         </td>
-                        <td className="pl-4 pb-5">
+                        <td className="px-4 pb-4">
                           <div className="flex flex-col items-end">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span

@@ -219,7 +219,7 @@ export const Tokens: FC<{
               </div>
             </div>
             <div className="text-subtitle-sm text-content-contrast ml-5">
-              {tokenBalances[currentToken]?.outgoing ?? 0} {currentToken}
+              {tokenBalances[currentToken]?.withdrawals ?? 0} {currentToken}
             </div>
           </div>
         </div>
@@ -344,20 +344,18 @@ export const ActivityThisWeek: FC<{
                     <span
                       data-tip={displayExponentialNumber(
                         (tokenPrices[currentToken] ?? 0) *
-                          (weeklyBalances[currentToken]?.incoming_withdrawn ??
-                            0)
+                          (weeklyBalances[currentToken]?.withdrawals ?? 0)
                       )}
                     >
                       {formatCurrency(
                         (tokenPrices[currentToken] ?? 0) *
-                          (weeklyBalances[currentToken]?.incoming_withdrawn ??
-                            0),
+                          (weeklyBalances[currentToken]?.withdrawals ?? 0),
                         "$"
                       )}
                     </span>
                   </div>
                   <div className=" text-subtitle-sm text-content-contrast">
-                    {weeklyBalances[currentToken]?.incoming_withdrawn ?? 0}{" "}
+                    {weeklyBalances[currentToken]?.withdrawals ?? 0}{" "}
                     {currentToken}
                   </div>
                 </div>

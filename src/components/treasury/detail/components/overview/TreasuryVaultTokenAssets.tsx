@@ -56,7 +56,7 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
           className
         )}
       >
-        <div className="flex flex-col gap-y-6">
+        <div className="flex flex-col gap-y-4">
           {/* Assets Table */}
           <div className="w-full border border-outline  bg-background-primary overflow-hidden rounded-md">
             <div className="flex items-center px-4.5 border-b border-outline">
@@ -77,7 +77,7 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
             className="flex flex-col gap-y-8 overflow-hidden"
             style={{ maxHeight: tableMaxHeight, minHeight: "300px" }}
           >
-            <div className="overflow-auto">
+            <div className="hover:overflow-auto">
               <table className="w-full">
                 <thead className="sticky top-0">
                   <tr className="bg-background-secondary">
@@ -95,7 +95,7 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
                   {filterTokens().length > 0 &&
                     filterTokens().map((token) => (
                       <tr key={token.symbol} className="">
-                        <td className="whitespace-nowrap w-[1%] pb-6">
+                        <td className="whitespace-nowrap w-[1%] pb-4">
                           <div className="flex flex-col items-center gap-y-1">
                             <div className="w-8 h-8 grid place-content-center rounded-full bg-background-primary">
                               <Token
@@ -108,7 +108,7 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
                             </div>
                           </div>
                         </td>
-                        <td className="pl-4 pb-6">
+                        <td className="pl-4 pb-4">
                           <div className="flex flex-col gap-y-2 mt-1">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
@@ -148,7 +148,7 @@ export const TreasuryVaultTokenAssets: FC<DepositedTokenAssetsProps> = (
                             </div>
                           </div>
                         </td>
-                        <td className="pl-4 pr-1.5 pb-6">
+                        <td className="pl-4 pr-1.5 pb-4">
                           <div className="flex flex-col gap-y-2 mt-1">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
