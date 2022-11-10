@@ -1,0 +1,132 @@
+{
+  "tps-header": {
+    "sol/usd": "سول/دولار أمريكي",
+    "network": "شبكة سولانا",
+    "description": "تعمل شبكة Solana حاليا بسعة محدودة ، وقد زادت إجراءاتك على السلسلة من فرصة الفشل."
+  },
+  "nav": {
+    "dashboard": "لوحه القياده",
+    "treasury": "الخزانه",
+    "transactions": "المعاملات",
+    "yeild-farming": "فلاحة",
+    "dca": "دي سي إيه",
+    "more": "أكثر",
+    "address-book": "دفتر العناوين",
+    "settings": "اعدادات"
+  },
+  "create-new": "إنشاء جديد",
+  "buttons": {
+    "continue": "استمر",
+    "deposit": "أودع",
+    "add-funds": "إضافة أموال",
+    "withdraw": "سحب",
+    "go-back": "الرجوع للخلف",
+    "view-all": "عرض الكل",
+    "max": "..MAX",
+    "half": "نصف",
+    "confirm": "أكد",
+    "confirm-and-create-treasury": "تأكيد وإنشاء الخزينة",
+    "deposit-and-create-dca": "الإيداع وإنشاء DCA",
+    "confirm-and-start-dca": "تأكيد وبدء DCA",
+    "go-to-homepage": "انتقل إلى الصفحة الرئيسية",
+    "change-wallet": "تغيير المحفظة",
+    "disconnect-wallet": "افصل المحفظة",
+    "connect-wallet": "ربط المحفظة",
+    "select-another-nft": "حدد NFT آخر"
+  },
+  "balances": {
+    "deposited-balance": "زيبيك بالانس",
+    "total-withdrawable-amount": "إجمالي الرصيد القابل للسحب",
+    "available-deposited-balance": "الرصيد المودع المتاح",
+    "token": "رمز مميز",
+    "overall-activity": "النشاط العام",
+    "total-incoming": "إجمالي الوارد",
+    "total-outgoing": "إجمالي الصادر",
+    "total-deposited": "إجمالي المودعة",
+    "activity-this-week": "النشاط هذا الأسبوع",
+    "incoming": "الوارده",
+    "outgoing": "الصادره",
+    "withdrawn": "سحب",
+    "view": "منظر",
+    "zebec-despoited-balance-detail": "الرصيد المودع هو المبلغ الإجمالي لجميع الرموز المودعة على Zebec. قد لا يكون هذا الرصيد دقيقا لأن معدل الرصيد غير متوفر لجميع الرموز المميزة.",
+    "treasury-despoited-balance-detail": "الرصيد المودع هو المبلغ الإجمالي لجميع الرموز المودعة في هذه الخزانة. قد لا يكون هذا الرصيد دقيقا لأن معدل الرصيد غير متوفر لجميع الرموز المميزة.",
+    "total-withdrawable-amount-detail": "كلما تلقيت رمزا مميزا ، يجب عليك سحبه بشكل فردي لكل معاملة. انتقل إلى علامة التبويب وارد ثم تابع إلى سحب."
+  },
+  "deposit-withdrawal": {
+    "deposit-title": "قم بإيداع الأصول في محفظة Zebec الخاصة بك.",
+    "withdraw-title": "اسحب أصول Zebec المودعة في محفظتك.",
+    "max-withdraw-message": "الحد الأقصى للرصيد يساوي الرصيد المودع مطروحا منه رصيد البث.",
+    "max-treasury-deposit-message": "الحد الأقصى للرصيد يساوي رصيد محفظة zebec المودع مطروحا منه رصيد تدفق محفظة zebec."
+  },
+  "wallet-not-connected": {
+    "title": "المحفظة غير متصلة!",
+    "description": "يبدو أن محفظتك غير متصلة. يرجى توصيل محفظتك لمواصلة استخدام Zebec.",
+    "connect-previous-wallet": "تواصل مع المحفظة السابقة",
+    "connect-different-wallet": "استخدام محفظة مختلفة",
+    "connect-wallet": "ربط المحفظة",
+    "sign-message": "توقيع الرسالة"
+  },
+  "support": {
+    "zebec-help": "زيبيك مساعدة",
+    "treasury-help": "Zebec الخزينة مساعدة",
+    "zebec-dca-help": "Zebec DCA مساعدة",
+    "streaming-help": "تعليمات البث",
+    "zebec-help-description": "تصفح مقالات الدعم الخاصة بنا أو تواصل مع فريق الدعم لدينا من خلال Discord.",
+    "treasury-help-description": "تصفح مقالات الدعم الخاصة بنا أو تواصل مع فريق الدعم لدينا من خلال Discord.",
+    "streaming-help-details": "تصفح مقالات الدعم الخاصة بنا للتعرف على البث أو التواصل مع فريق الدعم لدينا من خلال Discord.",
+    "check-faq": "تحقق من الأسئلة الشائعة",
+    "join-discord": "انضم إلى Discord",
+    "build-with-zebec": "بناء مع زيبيك",
+    "build-description": "استخدم SDKs الخاصة بنا لتنفيذ ميزات Zebec Pay بسهولة مباشرة في مشاريعك.",
+    "check-documentation": "التحقق من الوثائق",
+    "send-feedback": "أرسل لنا ملاحظاتك",
+    "feedback-description": "سنكون سعداء إذا كان لديك اقتراحات حول كيفية تحسين Zebec.",
+    "send-us-message": "أرسل لنا رسالة",
+    "github": "جيت هب",
+    "telegram": "برقية"
+  },
+  "notifications": {
+    "notification-header": "إعداد الإشعارات",
+    "notification-subtitle": "احصل على إشعار حول المعاملات في بريدك الإلكتروني.",
+    "powered-by": "يعمل بواسطة",
+    "notifications": "الاخطارات",
+    "notified-on": "تم الإخطار بتاريخ",
+    "email-address": "عنوان البريد الإلكتروني",
+    "telegram-username": "اسم مستخدم تيليجرام",
+    "unsubscribe": "إلغاء الاشتراك",
+    "unsubscribe-description": "لا تريد تلقي أي رسائل بريد إلكتروني أو رسالة برقية حول معاملاتك؟",
+    "subscribe": "اشترك",
+    "update": "تحديث",
+    "only-show-unread": "إظهار غير مقروء فقط",
+    "new": "الجديد",
+    "mark-all-as-read": "وضع علامة على الكل كمقروءة",
+    "earlier": "أسبق",
+    "view-on-explorer": "عرض على المستكشف"
+  },
+  "settings": {
+    "settings": "اعدادات",
+    "email": "عنوان البريد الإلكتروني",
+    "email-subtitle": "هذا هو السبب في أننا بحاجة إليها وكيف سيتم استخدامها.",
+    "save-changes": "حفظ التغييرات",
+    "balance-warning-range": "نطاق تحذير الرصيد",
+    "default-explorer": "المستكشف الافتراضي",
+    "default-explorer-details": "اختر مستكشفا افتراضيا لعرض معاملاتك.",
+    "explorer": "مستكشف"
+  },
+  "modal-actions": {
+    "wallet-approval-message": "بعد الموافقة على محفظتك ، ستكتمل معاملتك في بضع ثوان",
+    "do-not-close-this-window": "لا تغلق هذه النافذة"
+  },
+  "deposited-assets": {
+    "deposited-assets": "الأصول المودعة",
+    "search-token": "مثل. سول",
+    "no-tokens-found": "لم يتم العثور على رمز مميز. حاول البحث باستخدام كلمة رئيسية مختلفة.",
+    "balance": "توازن",
+    "streaming": "تدفق"
+  },
+  "page-not-found-message": "عفوا ، تعذر العثور على الصفحة التي تبحث عنها! يرجى الاستمتاع بهذا الرسم التوضيحي القط لطيف.",
+  "search-token": "رمز البحث",
+  "eg-sol": "مثل. سول",
+  "no-tokens-found": "لم يتم العثور على رمز مميز.",
+  "no-receiver-found": "لم يتم العثور على محفظة استقبال مع استعلام معين."
+}
