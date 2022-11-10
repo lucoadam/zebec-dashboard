@@ -1,0 +1,88 @@
+name: ECS Deployment (Prod)
+
+on:
+  push:
+    branches:
+      - "master"
+
+env:
+  ECR_REPOSITORY: prod-saas-zebec
+  ECS_SERVICE: prod-frontend-svc
+  ECS_CLUSTER: prod-saas-cluster
+  ECS_TASK_DEFINITION: prod-frontend
+  CONTAINER_NAME: main
+
+  RPC_NETWORK: mainnet
+  DB_HOST: https://api-v2.zebec.io
+  NOTIFI_CARD_ID: 0f3b7131f0414b34a5f36300799e4a39
+  SYNDICA_API: https://solana-api.syndica.io/access-token/yAUHU1ihWDJSfUyija0OLGdw9vrNTtaVdzxAZEYmHpI25sYHho96DOJi8aWKTqlp
+  ZBC_AIRDROP: ""
+  NODE_ENV: production
+  PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
+  FEE_RECEIVER_WALLET: Bh2ksmMBjvb9cAqzwBZNn9Zs7mZNLHRxvGLiL4xAwsnQ
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-2"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: fe-${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg RPC_NETWORK=${RPC_NETWORK} \
+            --build-arg DB_HOST=${DB_HOST} \
+            --build-arg NOTIFI_CARD_ID=${NOTIFI_CARD_ID} \
+            --build-arg ZBC_AIRDROP=${ZBC_AIRDROP} \
+            --build-arg SYNDICA_API=${SYNDICA_API} \
+            --build-arg NODE_ENV=${NODE_ENV} \
+            --build-arg PROGRAM_ID=${PROGRAM_ID} \
+            --build-arg FEE_RECEIVER_WALLET=${FEE_RECEIVER_WALLET} \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Fetch Task Definition from Amazon ECS.
+        id: fetch-task-def
+        run: |
+          aws ecs describe-task-definition --task-definition ${ECS_TASK_DEFINITION} \
+          --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          force-new-deployment: true
