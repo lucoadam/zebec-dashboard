@@ -121,14 +121,6 @@ export const TreasuryDepositedAssets: FC<{
                       }
                     />
                   </span>
-                  // <IconButton
-                  //   data-tip="Refresh"
-                  //   icon={
-
-                  //   }
-                  //   className="w-7 h-7"
-                  //   onClick={() => refreshBalance(tab.title)}
-                  // />
                 }
                 className="w-1/2 justify-center"
               />

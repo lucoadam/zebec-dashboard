@@ -81,7 +81,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
           className
         )}
       >
-        <div className="flex flex-col gap-y-6">
+        <div className="flex flex-col gap-y-4">
           <div className="flex justify-between items-center text-caption text-content-contrast font-semibold uppercase tracking-1">
             {t("deposited-assets.deposited-assets")}
             <IconButton
@@ -111,11 +111,15 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
             className="flex flex-col gap-y-8 overflow-hidden"
             style={{ maxHeight: tableMaxHeight }}
           >
-            <div className="overflow-auto">
-              <table className="w-full">
+            <div className="hover:overflow-auto">
+              <table className="w-full dashboard-assets-table">
                 <thead className="sticky top-0">
                   <tr className="bg-background-secondary">
-                    <td className="pb-3"></td>
+                    <td
+                      className={`pb-3 ${
+                        filterTokens().length === 0 && "w-[64px]"
+                      }`}
+                    ></td>
                     <td className="pl-4 text-left text-caption text-content-contrast pb-3">
                       {t("deposited-assets.balance")}
                     </td>
@@ -129,7 +133,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                   {filterTokens().length > 0 &&
                     filterTokens().map((token) => (
                       <tr key={token.symbol} className="">
-                        <td className="whitespace-nowrap w-[1%] pb-6 pt-3">
+                        <td className="whitespace-nowrap w-[1%] pb-4">
                           <div className="flex flex-col items-center gap-y-1">
                             <div className="w-8 h-8 grid place-content-center rounded-full bg-background-primary">
                               <Token
@@ -142,7 +146,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                           </div>
                         </td>
-                        <td className="pl-4 pb-6 pt-3">
+                        <td className="pl-4 pb-4">
                           <div className="flex flex-col gap-y-2 mt-1">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
@@ -182,7 +186,7 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                           </div>
                         </td>
-                        <td className="pl-4 pr-1.5 pb-6 pt-3">
+                        <td className="pl-4 pr-1.5 pb-4">
                           <div className="flex flex-col gap-y-2 mt-1">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
