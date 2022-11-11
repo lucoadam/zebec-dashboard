@@ -308,7 +308,7 @@ const DepositTab: FC = () => {
               signer,
               sourceChain
             )
-            const receipt = await messengerContract.depositToken(
+            const receipt = await messengerContract.deposit(
               data.amount,
               walletObject.originalAddress?.toString() as string,
               targetTokenAddress
@@ -374,7 +374,7 @@ const DepositTab: FC = () => {
         signer,
         sourceChain
       )
-      const receipt = await messengerContract.depositToken(
+      const receipt = await messengerContract.deposit(
         data.amount,
         walletObject.originalAddress?.toString() as string,
         currentToken.mint

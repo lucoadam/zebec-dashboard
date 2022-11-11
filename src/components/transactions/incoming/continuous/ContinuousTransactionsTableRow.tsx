@@ -225,7 +225,7 @@ const ContinuousTransactionsTableRow: FC<
       )
       // commented console.log("transaction:", transaction)
 
-      const tx = await messengerContract.withdrawFromTokenStream(
+      const tx = await messengerContract.withdrawStreamed(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,

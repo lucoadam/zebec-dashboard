@@ -94,7 +94,7 @@ const ResumeModal: FC = ({}) => {
         sourceChain
       )
       // commented console.log("pda-data:", transaction)
-      const tx = await messengerContract.pauseTokenStream(
+      const tx = await messengerContract.pauseResumeStream(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,

@@ -95,7 +95,7 @@ const CancelModal: FC = ({}) => {
         sourceChain
       )
       // commented console.log("transaction:", transaction)
-      const tx = await messengerContract.cancelTokenStream(
+      const tx = await messengerContract.cancelStream(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,

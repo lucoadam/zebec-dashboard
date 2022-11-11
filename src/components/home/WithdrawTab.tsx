@@ -181,7 +181,7 @@ const WithdrawTab: FC = () => {
           signer,
           sourceChain
         )
-        const tx = await messengerContract.withdrawToken(
+        const tx = await messengerContract.withdraw(
           data.amount,
           walletObject.originalAddress?.toString() as string,
           currentToken.mint
@@ -197,7 +197,7 @@ const WithdrawTab: FC = () => {
         // commented console.log("response", response)
         if (response === "success") {
           dispatch(switchxWalletApprovalMessageStep(1))
-          const receipt = await messengerContract.directTokenTransfer(
+          const receipt = await messengerContract.directTransfer(
             data.amount,
             walletObject.originalAddress?.toString() as string,
             currentToken.mint,
@@ -256,7 +256,7 @@ const WithdrawTab: FC = () => {
           signer,
           sourceChain
         )
-        const receipt = await messengerContract.directTokenTransfer(
+        const receipt = await messengerContract.directTransfer(
           data.amount,
           walletObject.originalAddress?.toString() as string,
           currentToken.mint,

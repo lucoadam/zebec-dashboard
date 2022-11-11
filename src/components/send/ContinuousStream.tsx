@@ -383,7 +383,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         signer,
         sourceChain
       )
-      const transferReceipt = await messengerContract.startTokenStream(
+      const transferReceipt = await messengerContract.initStream(
         formattedData.start_time.toString(),
         formattedData.end_time.toString(),
         formattedData.amount.toString(),
