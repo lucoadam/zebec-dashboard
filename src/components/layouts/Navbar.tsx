@@ -230,7 +230,7 @@ const Navbar: FC = () => {
                 {RPC_NETWORK}
               </div>
             </div>
-            <div className="hidden md:block">{themeChanger()}</div>
+            <div className="hidden">{themeChanger()}</div>
           </div>
 
           {/* NavLinks */}
@@ -325,7 +325,7 @@ const Navbar: FC = () => {
                       content={useWalletObject?.publicKey?.toString() ?? ""}
                     />
                   </div>
-                  <div>{themeChanger()}</div>
+                  <div className="hidden">{themeChanger()}</div>
                 </div>
               </div>
               {getMenuRoutes(width).map((route, index) => (

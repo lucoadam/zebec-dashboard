@@ -39,7 +39,7 @@
     "redux-thunk": "2.4.1",
     "tailwind-merge": "^1.3.0",
     "yup": "^0.32.11",
-    "zebec-anchor-sdk-npmtest": "^1.5.7"
+    "zebec-anchor-sdk-npmtest": "^1.5.8"
   },
   "devDependencies": {
     "@notifi-network/notifi-core": "^0.35.0",

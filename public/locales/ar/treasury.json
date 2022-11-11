@@ -1,0 +1,29 @@
+{
+  "title": "الخزانه",
+  "create-new-treasury": "إنشاء خزانة جديدة",
+  "see-archived-safe": "انظر المؤرشفة آمنة",
+  "no-treasury": "ليس لديك خزانة حتى الآن.",
+  "treasury-name": "اسم الخزينة",
+  "name-placeholder": "أدخل اسم الخزينة",
+  "overview": "نظره عامه",
+  "transactions": "المعاملات",
+  "settings": "اعدادات",
+  "send-from-treasury": "إرسال من الخزينة",
+  "nft": "إن إف تي",
+  "deposit-nft": "إيداع NFT",
+  "deposit-nft-in": "إيداع NFT في",
+  "nft-address": "عنوان NFT",
+  "choose-nft": "اختر NFT",
+  "enter-nft-address": "أدخل عنوان NFT",
+  "nft-description": "سيتلقى جهاز الاستقبال الخاص بك على الفور NFT الذي تم توقيع المعاملة من قبل جميع المالكين.",
+  "steps": {
+    "first-step": {
+      "title": "حدد NFT's",
+      "description": "اختر NFT للإيداع"
+    },
+    "second-step": {
+      "title": "مراجعة وتأكيد",
+      "description": "مراجعة NFT وتأكيد الإيداع"
+    }
+  }
+}
