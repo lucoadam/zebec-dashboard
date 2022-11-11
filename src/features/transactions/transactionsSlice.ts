@@ -275,7 +275,7 @@ export const updateIncomingTransactions: any = createAsyncThunk<
       completed: data.completed
     })
     setTimeout(() => {
-      dispatch(fetchIncomingTransactions())
+      dispatch(fetchIncomingTransactionsById({ uuid: data.transaction_uuid }))
     }, constants.STREAM_FETCH_TIMEOUT)
   } else {
     await api.post(
@@ -286,7 +286,11 @@ export const updateIncomingTransactions: any = createAsyncThunk<
       }
     )
     setTimeout(() => {
-      dispatch(fetchIncomingTreasuryContinuousTransactions())
+      dispatch(
+        fetchIncomingTreasuryContinuousTransactionsById({
+          uuid: data.transaction_uuid
+        })
+      )
     }, constants.STREAM_FETCH_TIMEOUT)
   }
   return null
@@ -420,9 +424,7 @@ const transactionsSlice = createSlice({
       state.error = action?.error?.message ?? "Something went wrong"
     })
     //fetchOutgoingTransactionsById
-    builder.addCase(fetchOutgoingTransactionsById.pending, (state) => {
-      state.loading = true
-    })
+    builder.addCase(fetchOutgoingTransactionsById.pending, () => {})
     builder.addCase(
       fetchOutgoingTransactionsById.fulfilled,
       (state, action) => {
@@ -434,18 +436,15 @@ const transactionsSlice = createSlice({
             return item
           }
         )
-        state.loading = false
         state.error = ""
-        // state.outgoingTransactions = action.payload
         state.outgoingTransactions.results = newOutgoingTransactions
         state.pagination.total = action.payload.count
       }
     )
     builder.addCase(fetchOutgoingTransactionsById.rejected, (state, action) => {
-      state.loading = false
       state.error = action?.error?.message ?? "Something went wrong"
     })
-    //incomingTransactions
+    //Incoming Transactions
     builder.addCase(fetchIncomingTransactions.pending, (state) => {
       state.loading = true
     })
@@ -457,6 +456,27 @@ const transactionsSlice = createSlice({
     })
     builder.addCase(fetchIncomingTransactions.rejected, (state, action) => {
       state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    //Incoming Transactions By Id
+    builder.addCase(fetchIncomingTransactionsById.pending, () => {})
+    builder.addCase(
+      fetchIncomingTransactionsById.fulfilled,
+      (state, action) => {
+        const newIncomingTransactions = state.incomingTransactions.results.map(
+          (item) => {
+            if (item.id === action.payload.id) {
+              return action.payload
+            }
+            return item
+          }
+        )
+        state.error = ""
+        state.incomingTransactions.results = newIncomingTransactions
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(fetchIncomingTransactionsById.rejected, (state, action) => {
       state.error = action?.error?.message ?? "Something went wrong"
     })
     //Incoming Treasury Instant Transactions
@@ -502,6 +522,33 @@ const transactionsSlice = createSlice({
       fetchIncomingTreasuryContinuousTransactions.rejected,
       (state, action) => {
         state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Incoming Treasury Continuous Transactions By Id
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactionsById.pending,
+      () => {}
+    )
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactionsById.fulfilled,
+      (state, action) => {
+        const newIncomingTreasuryContinuousTransactions =
+          state.incomingTreasuryContinuousTransactions.results.map((item) => {
+            if (item.id === action.payload.id) {
+              return action.payload
+            }
+            return item
+          })
+        state.error = ""
+        state.incomingTreasuryContinuousTransactions.results =
+          newIncomingTreasuryContinuousTransactions
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryContinuousTransactionsById.rejected,
+      (state, action) => {
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )
