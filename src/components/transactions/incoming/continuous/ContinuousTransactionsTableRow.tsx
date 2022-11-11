@@ -22,6 +22,7 @@ import CopyButton from "components/shared/CopyButton"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { getExplorerUrl } from "constants/explorers"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -161,6 +162,7 @@ const ContinuousTransactionsTableRow: FC<
         },
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
+      dispatch(toggleWalletApprovalMessageModal())
       dispatch(withdrawIncomingToken(withdrawData))
     }
   }

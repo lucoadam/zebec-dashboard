@@ -10,6 +10,7 @@ import {
   ZebecNativeTreasury,
   ZebecTokenTreasury
 } from "zebec-anchor-sdk-npmtest/packages/multisig"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 interface WithdrawIncomingTokenProps {
   data: {
@@ -55,6 +56,7 @@ export const withdrawIncomingToken =
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleWalletApprovalMessageModal())
       }
     } catch (error: any) {
       dispatch(
@@ -62,5 +64,6 @@ export const withdrawIncomingToken =
           message: error?.message ?? "Unknown Error"
         })
       )
+      dispatch(toggleWalletApprovalMessageModal())
     }
   }

@@ -5,6 +5,7 @@ import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
 import { PaginationInterface } from "components/shared"
 import { constants } from "constants/constants"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 interface TransactionState {
   loading: boolean
@@ -293,6 +294,7 @@ export const updateIncomingTransactions: any = createAsyncThunk<
       )
     }, constants.STREAM_FETCH_TIMEOUT)
   }
+  dispatch(toggleWalletApprovalMessageModal())
   return null
 })
 
