@@ -2643,23 +2643,6 @@
     eventemitter3 "^4.0.7"
     uuid "^8.3.2"
 
-"@subasshrestha/zebec-wormhole-sdk@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@subasshrestha/zebec-wormhole-sdk/-/zebec-wormhole-sdk-0.0.19.tgz#fb794c26c8b79017593b500216081f4d6c6c5ba8"
-  integrity sha512-kplvrIWR9XVgezhXRxshUySWV5D6tNz78icD1b0f+qUv4RCFRDD59B7jP0IHKFaqPYjNEemxj/l8RFxW6MZJYA==
-  dependencies:
-    "@certusone/wormhole-sdk" "^0.6.2"
-    "@project-serum/anchor" "^0.24.2"
-    "@solana/spl-token" "^0.3.4"
-    "@solana/web3.js" "^1.47.4"
-    "@types/node" "^18.7.15"
-    byteify "^2.0.10"
-    ethereum-abi-types-generator "^1.3.2"
-    ethers "^5.7.2"
-    google-protobuf "^3.14.0"
-    js-sha3 "^0.8.0"
-    keccak256 "^1.0.6"
-
 "@svgr/babel-plugin-add-jsx-attribute@^6.3.1":
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-6.3.1.tgz#b9a5d84902be75a05ede92e70b338d28ab63fa74"
@@ -5222,15 +5205,7 @@ ethereum-cryptography@^0.1.3:
     secp256k1 "^4.0.1"
     setimmediate "^1.0.5"
 
-ethereumjs-abi@^0.6.8:
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz#71bc152db099f70e62f108b7cdfca1b362c6fcae"
-  integrity sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==
-  dependencies:
-    bn.js "^4.11.8"
-    ethereumjs-util "^6.0.0"
-
-"ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
+ethereumjs-abi@^0.6.8, "ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
   version "0.6.8"
   resolved "git+https://github.com/ethereumjs/ethereumjs-abi.git#ee3994657fa7a427238e6ba92a84d0b529bbcde0"
   dependencies:
@@ -5274,7 +5249,7 @@ ethereumjs-util@^6.0.0, ethereumjs-util@^6.2.1:
     ethjs-util "0.1.6"
     rlp "^2.2.3"
 
-ethers@5.7.2, ethers@^5.6.4, ethers@^5.7.2, "ethersv5@npm:ethers@^5.0.32":
+ethers@5.7.2, ethers@^5.6.4, ethers@^5.7.0, ethers@^5.7.2, "ethersv5@npm:ethers@^5.0.32":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -8676,6 +8651,23 @@ zebec-anchor-sdk-npmtest@^1.5.6:
   version "1.5.6"
   resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.5.6.tgz#899fa455675eb84a743ece03703c796c470f8c85"
   integrity sha512-k2BhyEb/3CqhJhSYq30lfkjUrOiBb22/dtV3e6+aGqI33b7Y66ENv4aWs/16ir0zAgpQJ2p//hoVBK0Xnwmigw==
+
+zebec-wormhole-sdk-test@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/zebec-wormhole-sdk-test/-/zebec-wormhole-sdk-test-0.0.1.tgz#f1cb8a46af8953241379a14ce2aadb86f83165db"
+  integrity sha512-fkhC5FjEpMdPoDy3y0zxJDagoHr1NXXqZ3mhDk3tn2+aSWdp2o7AjQXMsS/agPuvrl3BOu8DAETAthS2S/HxFw==
+  dependencies:
+    "@certusone/wormhole-sdk" "^0.6.2"
+    "@project-serum/anchor" "^0.24.2"
+    "@solana/spl-token" "^0.3.4"
+    "@solana/web3.js" "^1.47.4"
+    "@types/node" "^18.7.15"
+    byteify "^2.0.10"
+    ethereum-abi-types-generator "^1.3.2"
+    ethers "^5.7.0"
+    google-protobuf "^3.14.0"
+    js-sha3 "^0.8.0"
+    keccak256 "^1.0.6"
 
 zen-observable-ts@^1.2.5:
   version "1.2.5"

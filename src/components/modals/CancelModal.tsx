@@ -10,7 +10,7 @@ import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@subasshrestha/zebec-wormhole-sdk"
+} from "zebec-wormhole-sdk-test"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { cancelStreamTreasury } from "application"

@@ -29,7 +29,7 @@ import {
   BSC_BRIDGE_ADDRESS,
   getTargetAsset,
   SOL_TOKEN_BRIDGE_ADDRESS
-} from "@subasshrestha/zebec-wormhole-sdk"
+} from "zebec-wormhole-sdk-test"
 
 import {
   getEmitterAddressEth,

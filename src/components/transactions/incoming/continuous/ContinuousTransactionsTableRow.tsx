@@ -4,7 +4,7 @@ import {
   BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "@subasshrestha/zebec-wormhole-sdk"
+} from "zebec-wormhole-sdk-test"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"

@@ -1,5 +1,5 @@
 // import { ChainId } from "@certusone/wormhole-sdk"
-// import { getTokenBridgeAddressForChain } from "@subasshrestha/zebec-wormhole-sdk"
+// import { getTokenBridgeAddressForChain } from "zebec-wormhole-sdk-test"
 import axios from "axios"
 
 const fetchWormholeTransactionStatus = async (
