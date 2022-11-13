@@ -23,6 +23,7 @@ import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { getExplorerUrl } from "constants/explorers"
 import { TreasuryApprovalType } from "components/treasury/treasury.d"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -175,6 +176,7 @@ const TreasuryContinuousTransactionsTableRow: FC<
         },
         stream: token_mint_address ? zebecCtx.treasuryToken : zebecCtx.treasury
       }
+      dispatch(toggleWalletApprovalMessageModal())
       dispatch(withdrawIncomingToken(withdrawData))
     }
   }
