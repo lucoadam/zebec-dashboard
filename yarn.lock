@@ -2643,10 +2643,10 @@
     eventemitter3 "^4.0.7"
     uuid "^8.3.2"
 
-"@subasshrestha/zebec-wormhole-sdk@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@subasshrestha/zebec-wormhole-sdk/-/zebec-wormhole-sdk-0.0.18.tgz#e42261160e3dabb64f11ba7657a741c86e8a3c25"
-  integrity sha512-kVVgXo0QnSsDBSV2lARTbqtfunX2RC3FmQwx3Yc2KVfy3B4hSXuZnsTewWlGVSGKeAduaK27LCU5EdE5gH5Tww==
+"@subasshrestha/zebec-wormhole-sdk@^0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@subasshrestha/zebec-wormhole-sdk/-/zebec-wormhole-sdk-0.0.19.tgz#fb794c26c8b79017593b500216081f4d6c6c5ba8"
+  integrity sha512-kplvrIWR9XVgezhXRxshUySWV5D6tNz78icD1b0f+qUv4RCFRDD59B7jP0IHKFaqPYjNEemxj/l8RFxW6MZJYA==
   dependencies:
     "@certusone/wormhole-sdk" "^0.6.2"
     "@project-serum/anchor" "^0.24.2"

@@ -12,7 +12,8 @@ const nextConfig = {
     NOTIFI_CARD_ID: process.env.NOTIFI_CARD_ID,
     SYNDICA_API: process.env.SYNDICA_API,
     PROGRAM_ID: process.env.PROGRAM_ID,
-    FEE_RECEIVER_WALLET: process.env.FEE_RECEIVER_WALLET
+    FEE_RECEIVER_WALLET: process.env.FEE_RECEIVER_WALLET,
+    SDK_ENV: process.env.SDK_ENV,
   },
   i18n,
   webpack(config) {
