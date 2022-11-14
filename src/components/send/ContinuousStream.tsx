@@ -361,8 +361,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         token: data.symbol,
         remarks: data.remarks || "",
         amount: Number(data.amount),
-        receiver: data.receiver,
+        receiver: walletObject
+          .getCorrespondingWalletAddress(data.receiver)
+          .toString(),
+        receiverEvm: data.receiver,
         sender: walletObject.publicKey?.toString() || "",
+        senderEvm: walletObject.originalAddress?.toString() || "",
         start_time: moment(
           `${data.startDate} ${data.startTime}`,
           "DD/MM/YYYY LT"
@@ -387,8 +391,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         formattedData.start_time.toString(),
         formattedData.end_time.toString(),
         formattedData.amount.toString(),
-        formattedData.receiver,
-        walletObject.originalAddress?.toString() || "",
+        formattedData.receiverEvm,
+        formattedData.senderEvm,
         true,
         true,
         formattedData.token_mint_address
@@ -398,6 +402,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         transferReceipt,
         BSC_BRIDGE_ADDRESS
       )
+      console.log("parsed Sequenec", sequence)
       const transferEmitterAddress = getEmitterAddressEth(
         BSC_ZEBEC_BRIDGE_ADDRESS
       )
@@ -411,8 +416,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       )
       const backendData = {
         ...formattedData,
-        sender: walletObject.originalAddress?.toString() || "",
-        receiver: data.receiver,
         vaa: Buffer.from(vaaBytes).toString("hex")
       }
       dispatch(sendContinuousStream(backendData)).then(async () => {
