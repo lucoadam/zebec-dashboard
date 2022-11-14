@@ -32,7 +32,8 @@
     "change-wallet": "تغيير المحفظة",
     "disconnect-wallet": "افصل المحفظة",
     "connect-wallet": "ربط المحفظة",
-    "select-another-nft": "حدد NFT آخر"
+    "select-another-nft": "حدد NFT آخر",
+    "send": "ارسل"
   },
   "balances": {
     "deposited-balance": "زيبيك بالانس",

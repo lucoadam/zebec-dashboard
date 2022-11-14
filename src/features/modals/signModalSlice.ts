@@ -10,6 +10,7 @@ import {
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
   fetchTreasuryVaultInstantTransactionsById,
+  preCancelTreasuryVaultContinuousTransaction,
   updateTreasuryVaultContinuousTransactionsStatus
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
@@ -149,15 +150,7 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
           uuid: uuid
         })
       )
-      if (transaction_hash) {
-        dispatch(
-          updateTreasuryVaultContinuousTransactionsStatus({
-            treasury_uuid: treasury_uuid,
-            uuid: uuid,
-            transaction_hash: transaction_hash
-          })
-        )
-      }
+
       dispatch(toggleSignModal())
       // After last sign fetch transactions after certain timeout
       if (
@@ -166,6 +159,22 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
           1 >=
         treasury.activeTreasury.min_confirmations
       ) {
+        if (transaction_hash) {
+          dispatch(
+            updateTreasuryVaultContinuousTransactionsStatus({
+              treasury_uuid: treasury_uuid,
+              uuid: uuid,
+              transaction_hash: transaction_hash
+            })
+          )
+        } else {
+          dispatch(
+            preCancelTreasuryVaultContinuousTransaction({
+              treasury_uuid: treasury_uuid,
+              uuid: uuid
+            })
+          )
+        }
         const latestInitiatedStatus =
           signTransaction.transaction.latest_transaction_event.status
         dispatch(

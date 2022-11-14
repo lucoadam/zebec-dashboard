@@ -248,7 +248,7 @@ const Navbar: FC = () => {
 
             <Link href="/send">
               <Button
-                title="Send"
+                title={`${t("common:buttons.send")}`}
                 variant="gradient"
                 endIcon={<Icons.ArrowUpRightIcon />}
               />
@@ -259,7 +259,7 @@ const Navbar: FC = () => {
             <div className="flex items-center gap-x-[27px]">
               {!useWalletObject.connected ? (
                 <Button
-                  title="Connect Wallet"
+                  title={`${t("common:buttons.connect-wallet")}`}
                   variant="gradient"
                   onClick={handleConnectWallet}
                 />
