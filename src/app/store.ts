@@ -39,6 +39,7 @@ import transferToVaultModalSlice from "features/modals/transferToVaultModalSlice
 import transferToTreasuryModalSlice from "features/modals/transferToTreasuryModalSlice"
 import treasuryTransactionsSlice from "features/treasuryTransactions/treasuryTransactionsSlice"
 import pdaBalanceSlice from "features/pdaBalance/pdaBalanceSlice"
+import pdaInitializeModalSlice from "features/modals/pdaInitializeModalSlice"
 
 const combineReducer = combineReducers({
   counter: counterSlice,
@@ -75,7 +76,8 @@ const combineReducer = combineReducers({
   withdrawFromTreasury: withdrawFromTreasurySlice,
   transferToVault: transferToVaultModalSlice,
   transferToTreasury: transferToTreasuryModalSlice,
-  treasuryTransactions: treasuryTransactionsSlice
+  treasuryTransactions: treasuryTransactionsSlice,
+  pdaInitialize: pdaInitializeModalSlice
 })
 
 const rootReducer = (state: any, action: any) => {

@@ -31,12 +31,12 @@ import {
   TransactionStatusType
 } from "components/transactions/transactions.d"
 import CopyButton from "components/shared/CopyButton"
-import { connection } from "constants/cluster"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { getExplorerUrl } from "constants/explorers"
-import { PublicKey } from "@solana/web3.js"
+import { checkPDAinitialized } from "utils/checkPDAinitialized"
+import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -183,6 +183,7 @@ const ContinuousTransactionsTableRow: FC<
       setLoading(false)
     }
   }
+
   const handleEVMWithdraw = async () => {
     try {
       if (!signer) return
@@ -200,30 +201,21 @@ const ContinuousTransactionsTableRow: FC<
       }
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
 
-      // airdrop sol
-      const recipientAddress = walletObject.publicKey?.toString() as string
-      const recipientbalance = await connection.getBalance(
-        new PublicKey(recipientAddress)
+      // Initialize PDA
+      const check = await checkPDAinitialized(
+        walletObject.publicKey?.toString() || ""
       )
-      // commented console.log("recipientbalance", recipientbalance / 1e9)
-      if (recipientbalance / 1e9 < 0.1) {
-        // commented console.log("requesting airdrop...")
-        try {
-          await connection.requestAirdrop(
-            new PublicKey(recipientAddress),
-            0.2e9
-          )
-        } catch (e) {
-          // commented console.log("airdrop failed", e)
-        }
+      if (!check) {
+        dispatch(setShowPdaInitialize(true))
+        setLoading(false)
+        return
       }
-      //
+
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,
         signer,
         sourceChain
       )
-      // commented console.log("transaction:", transaction)
 
       const tx = await messengerContract.withdrawStreamed(
         transaction.sender,
@@ -231,15 +223,12 @@ const ContinuousTransactionsTableRow: FC<
         transaction.token_mint_address,
         transaction.pda
       )
-      // commented console.log("tx:", tx)
       const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      // commented console.log("sequence:", sequence)
       const response = await listenWormholeTransactionStatus(
         sequence,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      // commented console.log("response", response)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream withdrawal completed" }))
       } else if (response === "timeout") {
@@ -249,7 +238,6 @@ const ContinuousTransactionsTableRow: FC<
       }
       setLoading(false)
     } catch (e: any) {
-      // commented console.log("error:", e)
       setLoading(false)
       dispatch(
         toast.error({
