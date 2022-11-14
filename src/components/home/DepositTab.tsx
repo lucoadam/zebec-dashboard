@@ -16,7 +16,7 @@ import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useEffect, useRef, useState } from "react"
+import { FC, useContext, useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
 import {
@@ -38,12 +38,8 @@ import {
   parseSequenceFromLogEth,
   setDefaultWasm
 } from "@certusone/wormhole-sdk"
-// import axios from "axios"
 import { toast } from "features/toasts/toastsSlice"
-// import { ethers } from "ethers"
-import axios from "axios"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
-import { getAssociatedTokenAddress } from "@solana/spl-token"
 import {
   switchxWalletApprovalMessageStep,
   togglexWalletApprovalMessageModal,
@@ -58,8 +54,6 @@ import { connection } from "constants/cluster"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
 import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
-// import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
-// import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
