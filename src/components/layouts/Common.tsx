@@ -24,6 +24,9 @@ import { useSigner } from "wagmi"
 import { getRecentTPS } from "utils"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
+import { InitializePDAModal } from "components/modals/InitializePDAModal"
+import { checkPDAinitialized } from "utils/checkPDAinitialized"
+import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
 
 const Common: FC = () => {
   const walletObject = useZebecWallet()
@@ -114,6 +117,17 @@ const Common: FC = () => {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
       dispatch(getPreferences())
+      if (walletObject.chainId !== "solana") {
+        checkPDAinitialized(walletObject.publicKey?.toString() || "").then(
+          (res) => {
+            if (!res) {
+              dispatch(setShowPdaInitialize(true))
+            } else {
+              dispatch(setShowPdaInitialize(false))
+            }
+          }
+        )
+      }
       // TPS Value
       const fetchTPS = async () => {
         const tpsValue = await getRecentTPS()
@@ -132,12 +146,12 @@ const Common: FC = () => {
   //   }
   //   if (zebecContext.stream) await createVault(data, zebecContext.stream)
   // }
-
   return (
     <>
       {/* Common Modals */}
       <WalletApprovalMessageModal />
       <XWalletApprovalMessageModal />
+      <InitializePDAModal />
       {/* Fixed Divs */}
       <Toasts />
     </>
