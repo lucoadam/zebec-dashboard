@@ -32,7 +32,8 @@
         "change-wallet": "Change Wallet",
         "disconnect-wallet": "Disconnect Wallet",
         "connect-wallet": "Connect Wallet",
-        "select-another-nft": "Select Another NFT"
+        "select-another-nft": "Select Another NFT",
+        "send": "Send"
     },
     "balances": {
         "deposited-balance": "ZEBEC BALANCE",
