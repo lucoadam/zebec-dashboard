@@ -15,6 +15,7 @@ export interface ZebecWalletContext {
   chainId: string | undefined
   originalAddress: string | PublicKey | undefined
   signMessage: (message: string) => Promise<string | null>
+  getCorrespondingWalletAddress: (address: string) => PublicKey | undefined
   disconnect: () => void
 }
 export const useZebecWallet = (): ZebecWalletContext => {
@@ -105,6 +106,16 @@ export const useZebecWallet = (): ZebecWalletContext => {
       return signed
     }
   }
+
+  const getCorrespondingWalletAddress = (ethAddress: string) => {
+    return new PublicKey(
+      ZebecSolBridgeClient.getXChainUserKey(
+        tryNativeToUint8Array(ethAddress as string, wormholeChain),
+        wormholeChain
+      ).toString()
+    )
+  }
+
   return {
     connected,
     publicKey,
@@ -113,6 +124,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
     chainId,
     originalAddress,
     signMessage,
-    disconnect: disconnectWallet
+    disconnect: disconnectWallet,
+    getCorrespondingWalletAddress
   }
 }
