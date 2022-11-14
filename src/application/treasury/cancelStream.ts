@@ -44,7 +44,7 @@ interface ExecuteCancelStreamDataProps {
     token_mint_address?: string
     signer: string
   }
-  callback?: (message: CallbackMessageType) => void
+  callback?: (message: CallbackMessageType, transaction_hash?: string) => void
 }
 type ExecuteCancelStreamProps = ExecuteCancelStreamDataProps &
   (
@@ -116,7 +116,7 @@ export const executeCancelStreamTreasury =
           })
         )
         if (callback) {
-          callback("success")
+          callback("success", response?.data?.transactionHash)
         }
       } else {
         dispatch(
