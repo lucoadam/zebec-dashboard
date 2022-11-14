@@ -50,7 +50,7 @@ export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
     //Provider
     const provider = initAnchorProvider(walletObject, CLUSTER_API_URL, {
       commitment: "finalized",
-      preflightCommitment: "confirmed"
+      preflightCommitment: "finalized"
     })
     //Normal
     const streamCtx = new ZebecNativeStream(provider, feeReceiverWallet, logger)
