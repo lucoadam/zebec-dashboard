@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -54,6 +53,7 @@ import { connection } from "constants/cluster"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
 import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import { checkTokenAccountCreated } from "utils/checkTokenAccountCreated"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -184,36 +184,16 @@ const DepositTab: FC = () => {
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
       try {
-        const check = await checkPDAinitialized(
+        // check if proxy pda is initialized
+        const checkProxyPDA = await checkPDAinitialized(
           walletObject.publicKey?.toString() || ""
         )
-        if (!check) {
+        if (!checkProxyPDA) {
           dispatch(setShowPdaInitialize(true))
           setLoading(false)
           return
         }
-        dispatch(
-          setXModalStepsList([
-            {
-              name: "Approve Deposit"
-            },
-            {
-              name: "Transfer to PDA"
-            },
-            {
-              name: "Transfer to Zebec Vault"
-            }
-          ])
-        )
-        dispatch(
-          setXModalMessage(
-            "Please complete all steps to ensure successful deposit of funds to your zebec vault"
-          )
-        )
-        dispatch(switchxWalletApprovalMessageStep(0))
-        dispatch(togglexWalletApprovalMessageModal())
-        // dispatch(toggleWalletApprovalMessageModal())
-        setLoading(true)
+
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
         const targetChain = 1
         const tokenAddress = currentToken.mint
@@ -227,6 +207,80 @@ const DepositTab: FC = () => {
           targetChain
         )
 
+        // check and create token account if doesn't exists
+        const checkTokenAccount = await checkTokenAccountCreated(
+          targetTokenAddress,
+          recipientAddress
+        )
+        let steps = [
+          {
+            name: "Approve Deposit"
+          },
+          {
+            name: "Transfer to PDA"
+          },
+          {
+            name: "Transfer to Zebec Vault"
+          }
+        ]
+        if (!checkTokenAccount) {
+          steps = [
+            {
+              name: "Creating Token Account"
+            },
+            ...steps
+          ]
+        }
+        dispatch(setXModalStepsList(steps))
+        dispatch(
+          setXModalMessage(
+            "Please complete all steps to ensure successful deposit of funds to your zebec vault"
+          )
+        )
+        let currentStep = 0
+        dispatch(switchxWalletApprovalMessageStep(currentStep))
+        dispatch(togglexWalletApprovalMessageModal())
+        setLoading(true)
+
+        // initialize messenger contract
+        const messengerContract = new ZebecEthBridgeClient(
+          BSC_ZEBEC_BRIDGE_ADDRESS,
+          signer,
+          sourceChain
+        )
+
+        if (!checkTokenAccount) {
+          await messengerContract.createTokenAccount(
+            walletObject.originalAddress?.toString() as string,
+            targetTokenAddress
+          )
+          let retry = 0
+          while (true) {
+            const isCreated = await checkTokenAccountCreated(
+              targetTokenAddress,
+              recipientAddress
+            )
+            if (isCreated) {
+              break
+            }
+            if (retry > 30) {
+              dispatch(
+                toast.error({
+                  message: "Failed to create token account"
+                })
+              )
+              setLoading(false)
+              dispatch(togglexWalletApprovalMessageModal())
+              return
+            }
+            await new Promise((resolve) => setTimeout(resolve, 4000))
+            retry += 1
+          }
+
+          // step success
+          currentStep += 1
+          dispatch(switchxWalletApprovalMessageStep(currentStep))
+        }
         transferEvm(
           signer,
           currentToken.mint,
@@ -268,13 +322,8 @@ const DepositTab: FC = () => {
               )
               await new Promise((r) => setTimeout(r, 5000))
             } while (!isTransferComplete)
-
-            dispatch(switchxWalletApprovalMessageStep(2))
-            const messengerContract = new ZebecEthBridgeClient(
-              BSC_ZEBEC_BRIDGE_ADDRESS,
-              signer,
-              sourceChain
-            )
+            currentStep += 1
+            dispatch(switchxWalletApprovalMessageStep(currentStep))
             const receipt = await messengerContract.deposit(
               data.amount,
               walletObject.originalAddress?.toString() as string,
@@ -292,7 +341,8 @@ const DepositTab: FC = () => {
               sourceChain
             )
             if (response === "success") {
-              dispatch(switchxWalletApprovalMessageStep(3))
+              currentStep += 1
+              dispatch(switchxWalletApprovalMessageStep(currentStep))
               await new Promise((resolve) => setTimeout(resolve, 1000))
               dispatch(toast.success({ message: "Deposit completed" }))
             } else if (response === "timeout") {
@@ -304,7 +354,7 @@ const DepositTab: FC = () => {
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
           })
-          .catch((err) => {
+          .catch(() => {
             dispatch(
               toast.error({
                 message: "Error depositing token"

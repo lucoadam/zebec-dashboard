@@ -31,11 +31,7 @@ export const login = async (walletObject: ZebecWalletContext) => {
         signature: b64,
         message: messagetob,
         network,
-        ...(network !== "solana"
-          ? {
-              evm_address
-            }
-          : {})
+        evm_address
       }
 
       try {
