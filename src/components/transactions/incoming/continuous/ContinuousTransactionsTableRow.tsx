@@ -92,7 +92,9 @@ const ContinuousTransactionsTableRow: FC<
     transaction_hash,
     file,
     latest_transaction_event,
-    withdrawable
+    withdrawable,
+    senderEvm,
+    receiverEvm
   } = transaction
 
   const totalTransactionAmount =
@@ -225,8 +227,8 @@ const ContinuousTransactionsTableRow: FC<
       )
 
       const receipt = await messengerContract.withdrawStreamed(
-        transaction.sender,
-        transaction.receiver,
+        transaction.senderEvm,
+        transaction.receiverEvm,
         transaction.token_mint_address,
         transaction.pda
       )
@@ -259,6 +261,7 @@ const ContinuousTransactionsTableRow: FC<
       }
       setLoading(false)
     } catch (e: any) {
+      console.debug(e)
       setLoading(false)
       dispatch(
         toast.error({
@@ -310,7 +313,7 @@ const ContinuousTransactionsTableRow: FC<
             </div>
           </td>
           <td className="px-6 py-4 min-w-60">
-            <UserAddress wallet={sender} />
+            <UserAddress wallet={senderEvm || sender} />
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -374,10 +377,10 @@ const ContinuousTransactionsTableRow: FC<
                           width={24}
                           className="rounded-full"
                         />
-                        <div data-tip={sender} className="">
-                          {toSubstring(sender, 5, true)}
+                        <div data-tip={senderEvm || sender} className="">
+                          {toSubstring(senderEvm || sender, 5, true)}
                         </div>
-                        <CopyButton content={sender} />
+                        <CopyButton content={senderEvm || sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -394,10 +397,10 @@ const ContinuousTransactionsTableRow: FC<
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                        <div className="" data-tip={receiverEvm || receiver}>
+                          {toSubstring(receiverEvm || receiver, 5, true)}
                         </div>
-                        <CopyButton content={receiver} />
+                        <CopyButton content={receiverEvm || receiver} />
                       </div>
                     </div>
                     {/* Start Date */}

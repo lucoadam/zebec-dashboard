@@ -100,8 +100,8 @@ const ResumeModal: FC = ({}) => {
       )
       // commented console.log("pda-data:", transaction)
       const receipt = await messengerContract.pauseResumeStream(
-        transaction.sender,
-        transaction.receiver,
+        transaction.senderEvm,
+        transaction.receiverEvm,
         transaction.token_mint_address,
         transaction.pda
       )

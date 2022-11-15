@@ -324,12 +324,10 @@ const DepositTab: FC = () => {
             )
             // check transfer complete
             let isTransferComplete = false
-            let logMsg = "checking if transfer completed"
             let retry = 0
             setDefaultWasm("bundler")
             do {
-              logMsg = logMsg.concat(".")
-              if (retry > 30) throw new Error("Deposit Timeout")
+              if (retry > 60) throw new Error("Deposit Timeout")
               retry++
               isTransferComplete = await getIsTransferCompletedSolana(
                 SOL_TOKEN_BRIDGE_ADDRESS,
