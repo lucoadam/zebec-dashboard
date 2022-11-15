@@ -329,14 +329,14 @@ const DepositTab: FC = () => {
             setDefaultWasm("bundler")
             do {
               logMsg = logMsg.concat(".")
-              if (retry > 12) throw new Error("Deposit Timeout")
+              if (retry > 30) throw new Error("Deposit Timeout")
               retry++
               isTransferComplete = await getIsTransferCompletedSolana(
                 SOL_TOKEN_BRIDGE_ADDRESS,
                 transferVaa,
                 connection
               )
-              await new Promise((r) => setTimeout(r, 5000))
+              await new Promise((r) => setTimeout(r, 4000))
             } while (!isTransferComplete)
             currentStep += 1
             dispatch(switchxWalletApprovalMessageStep(currentStep))
