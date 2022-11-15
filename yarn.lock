@@ -1601,13 +1601,13 @@
     "@improbable-eng/grpc-web" "^0.13.0"
     google-protobuf "^3.13.0"
 
-"@injectivelabs/exceptions@^1.0.25", "@injectivelabs/exceptions@^1.0.7":
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/@injectivelabs/exceptions/-/exceptions-1.0.25.tgz#30d5130d924af05ccfe28f38a59e6b9fe05cc107"
-  integrity sha512-k/8dfPnbm0qFlEkDKIboC75g40eL8DEwkmnyfWFq/XzMVTOOH28FNSNVr/8POnorRY7Y7Hi3xNepgw02nTElqQ==
+"@injectivelabs/exceptions@^1.0.27", "@injectivelabs/exceptions@^1.0.7":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@injectivelabs/exceptions/-/exceptions-1.0.27.tgz#3bc22a7a5494e3b3b6d7cf41779dd9ce4b87febd"
+  integrity sha512-0IAQRMGI0v2CxEO6F7DlTDKjIiXxgEu7S12RWtTwNLLIM7XsoM8QaU4iW3J9yVdoZ3fR1PtSJP29HjXCF7kk2Q==
   dependencies:
     "@improbable-eng/grpc-web" "^0.15.0"
-    "@injectivelabs/ts-types" "^1.0.14"
+    "@injectivelabs/ts-types" "^1.0.16"
     http-status-codes "^2.2.0"
     link-module-alias "^1.2.0"
     shx "^0.3.2"
@@ -1636,13 +1636,13 @@
     "@improbable-eng/grpc-web" "^0.14.0"
     google-protobuf "^3.14.0"
 
-"@injectivelabs/networks@^1.0.12", "@injectivelabs/networks@^1.0.37":
-  version "1.0.37"
-  resolved "https://registry.yarnpkg.com/@injectivelabs/networks/-/networks-1.0.37.tgz#cdb4c7864d9363d9a7762ef65dd866b271ab6c1a"
-  integrity sha512-OUXMrJpOls18ksOhJJU00di1YXmaEQfIGo0BKVv9XFFAbi5d10hV4mrVfL/7Pnt4dALmBeXn8B0IalEr4HeCOw==
+"@injectivelabs/networks@^1.0.12", "@injectivelabs/networks@^1.0.39":
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/@injectivelabs/networks/-/networks-1.0.39.tgz#6bece35aef7b68e457ebffb32bc0fc9b8857bdc0"
+  integrity sha512-vRm/br12A4jwm8+0P7aMxNUMgCI6M0Ywi7ov7KMQKm55AE8AfKvxhe9ENUkp5iI2mV2cyTRLA5eu6WMQn4nYjw==
   dependencies:
-    "@injectivelabs/exceptions" "^1.0.25"
-    "@injectivelabs/utils" "^1.0.31"
+    "@injectivelabs/exceptions" "^1.0.27"
+    "@injectivelabs/utils" "^1.0.33"
     link-module-alias "^1.2.0"
     shx "^0.3.2"
 
@@ -1680,12 +1680,12 @@
     snakecase-keys "^5.4.1"
 
 "@injectivelabs/token-metadata@^1.0.15":
-  version "1.0.51"
-  resolved "https://registry.yarnpkg.com/@injectivelabs/token-metadata/-/token-metadata-1.0.51.tgz#5ac87e07fe8e12dbe098ee346140845a9b25e393"
-  integrity sha512-HoIVU0VDwplPa8hkNivRflhXQ8GVPvikru153GHpOhxTwpEkA3xHrNxp6x7/+eFbIf1DsdUl0MwRIWiqyGF0RA==
+  version "1.0.53"
+  resolved "https://registry.yarnpkg.com/@injectivelabs/token-metadata/-/token-metadata-1.0.53.tgz#f416c60c7a83ae7f40f6285c852092b2d5c87e32"
+  integrity sha512-pv4FHjyYhuHxAuiCxTvAfVt8utJxlQIWQdhwsenSdFyY5lU6Hbp/hh1CYZQbUoEswuQiJI4xLzO09lG9m+9plA==
   dependencies:
-    "@injectivelabs/networks" "^1.0.37"
-    "@injectivelabs/ts-types" "^1.0.14"
+    "@injectivelabs/networks" "^1.0.39"
+    "@injectivelabs/ts-types" "^1.0.16"
     "@types/lodash.values" "^4.3.6"
     copyfiles "^2.4.1"
     jsonschema "^1.4.0"
@@ -1694,21 +1694,21 @@
     lodash.values "^4.3.0"
     shx "^0.3.2"
 
-"@injectivelabs/ts-types@^1.0.14", "@injectivelabs/ts-types@^1.0.6":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@injectivelabs/ts-types/-/ts-types-1.0.14.tgz#a1dacc5faf4aae2fb4d58ab8ebd75ca53b939e18"
-  integrity sha512-dSnY7/z3GA3RJBLodd0wTqXxUDrNpwBHT9Ftr7Z2rWcnLj8oXpTrGCc6aEr5+yZ5n18e3kqF+m8BFEfGkzHqzg==
+"@injectivelabs/ts-types@^1.0.16", "@injectivelabs/ts-types@^1.0.6":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@injectivelabs/ts-types/-/ts-types-1.0.16.tgz#888ac6a480ab197d7e466765cc0dd778ba89d2a0"
+  integrity sha512-hoHqr4DeUGUt7Ljh7V6+2twW9Lb6YvORzOXO+vbWFwMamlY8FxxM1C4CPFR5qcx44QFRd6EHVK1NzBay6+4UBQ==
   dependencies:
     link-module-alias "^1.2.0"
     shx "^0.3.2"
 
-"@injectivelabs/utils@^1.0.10", "@injectivelabs/utils@^1.0.31":
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/@injectivelabs/utils/-/utils-1.0.31.tgz#b9eba972a35483b36d20025d62831237958785ff"
-  integrity sha512-x75W57m0V64JDNg7uak54A37yLQwKDVxQ/1bsX+itgW9i+6HEx2cPXOp7fpReNydP3tI0bzDeioxASKp4RkGRA==
+"@injectivelabs/utils@^1.0.10", "@injectivelabs/utils@^1.0.33":
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@injectivelabs/utils/-/utils-1.0.33.tgz#8df232a0395452aed3e78fc7b1c1e16e98308c08"
+  integrity sha512-GDhtu3Vc0ZXRMQ8cUuImPiUMmQJwyLONDYs7VW/Ln262wHNvbImeuGGeJ+HQjON7feRfA0xXCqv2ZISdfVBIIg==
   dependencies:
-    "@injectivelabs/exceptions" "^1.0.25"
-    "@injectivelabs/ts-types" "^1.0.14"
+    "@injectivelabs/exceptions" "^1.0.27"
+    "@injectivelabs/ts-types" "^1.0.16"
     axios "^0.21.1"
     bignumber.js "^9.0.1"
     link-module-alias "^1.2.0"
@@ -2754,36 +2754,36 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tanstack/query-core@4.14.5":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.14.5.tgz#f8c061a9dd4d7a87f9992db4ddda35c479e93c4a"
-  integrity sha512-Su1AyrPb6xnm7wXTvpN5tt+B7LViYSh9k04vvuc6+eMVH0HkE9ktZTXibRrTvV83BI1KP5MG7v/k90ne/4zQzw==
+"@tanstack/query-core@4.15.1":
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.15.1.tgz#a282f04fe5e612b50019e1cfaf0efabd220e00ce"
+  integrity sha512-+UfqJsNbPIVo0a9ANW0ZxtjiMfGLaaoIaL9vZeVycvmBuWywJGtSi7fgPVMCPdZQFOzMsaXaOsDtSKQD5xLRVQ==
 
-"@tanstack/query-persist-client-core@4.14.5":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.14.5.tgz#938b86c14956ce5451894d36f5b8e4a00bab2fd9"
-  integrity sha512-L3PKTR4XEyEwPSAmtWq5ZGd5O5MGo5/BTLidhfW/nr9+updlsHTQfDAHMmE1aaWehU+PYbFH8ws1qBpJiJ/S8g==
+"@tanstack/query-persist-client-core@4.15.1":
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.15.1.tgz#27e459a531de16454755a515b8d3dc4a0b99c7bb"
+  integrity sha512-ldoGHNJ4Du83CT1CvJQqaJtQXEz4CdGcDmexVoyRG2q8DV9PAfYi+zls462ZbIWxlni93pkEgG1/q4mZVk2nqQ==
 
 "@tanstack/query-sync-storage-persister@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.14.5.tgz#bace9e4b5044248dfbf8a5a58dd05f6bdc93934d"
-  integrity sha512-+ZqGzAUQOTqPASCqUgzbRU9TszCK50wojwV8Hy4lfBms6SXUSN8suioOi8ZuADkHL810LBMTbhM++nbvEA5Pyw==
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.15.1.tgz#a2a1407178cf429a21cf1f8e36a2e7d65d8bbc9c"
+  integrity sha512-uMk8VCTkxTS9F99nSjbJRIsNalv6cwAtBJ6HgX41dYW2BCQR4ZQrM52oohIMbZo8DqlE/gGRtplbCbQ3NDfx4g==
   dependencies:
-    "@tanstack/query-persist-client-core" "4.14.5"
+    "@tanstack/query-persist-client-core" "4.15.1"
 
 "@tanstack/react-query-persist-client@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.14.5.tgz#c4b093c0ad9a7aaccebe95f019a3b55e5c9d59b7"
-  integrity sha512-RG39cq4t9bfR+K/xvrpJIoHqYU3MPeZoUFPzy0QR2sWE35Y4Cx8+IuRxGoxhjbZVD1aiB1TJFQtJy958puFYEw==
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.16.1.tgz#ab54352fe8435e88961cda48c75b844ab6e6e559"
+  integrity sha512-7i1Dj9amEDdRz34UMslf11uFs7QSpGqNRT9nFwc17pcJ4I3X7tSiEN1pgrAMg05eqnfGJgnSTZg+RpFR1Nsy+w==
   dependencies:
-    "@tanstack/query-persist-client-core" "4.14.5"
+    "@tanstack/query-persist-client-core" "4.15.1"
 
 "@tanstack/react-query@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.14.5.tgz#e2ff6419ee94426ec5e0eecf9bf77efbeb1a0e4b"
-  integrity sha512-CuWl/SxSB0zHhHaTja8LNhy9Vdk+vk9IkW3Oiq3lo4gPnTguHmbUzfjEA1x3RfvPeHfPMuq/pYMSbV+CX4aDQA==
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.16.1.tgz#077006b8eb2c87fbe8d1597c1a0083a2d218b791"
+  integrity sha512-PDE9u49wSDykPazlCoLFevUpceLjQ0Mm8i6038HgtTEKb/aoVnUZdlUP7C392ds3Cd75+EGlHU7qpEX06R7d9Q==
   dependencies:
-    "@tanstack/query-core" "4.14.5"
+    "@tanstack/query-core" "4.15.1"
     use-sync-external-store "^1.2.0"
 
 "@terra-money/legacy.proto@npm:@terra-money/terra.proto@^0.1.7":
@@ -2991,9 +2991,9 @@
     "@types/lodash" "*"
 
 "@types/lodash@*":
-  version "4.14.188"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
-  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
+  version "4.14.189"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.189.tgz#975ff8c38da5ae58b751127b19ad5e44b5b7f6d2"
+  integrity sha512-kb9/98N6X8gyME9Cf7YaqIMvYGnBSWqEci6tiettE6iJWH1XdJz/PO8LB0GtLCG7x8dU3KWhZT+lA1a35127tA==
 
 "@types/lodash@^4.14.175":
   version "4.14.184"
@@ -4266,9 +4266,9 @@ convert-source-map@^1.7.0:
     safe-buffer "~5.1.1"
 
 copy-to-clipboard@^3.3.1:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.2.tgz#5b263ec2366224b100181dded7ce0579b340c107"
-  integrity sha512-Vme1Z6RUDzrb6xAI7EZlVZ5uvOk2F//GaxKUxajDqm9LhOVM1inxNAD2vy+UZDYsd0uyA9s7b3/FVZPSxqrCfg==
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz#55ac43a1db8ae639a4bd99511c148cdd1b83a1b0"
+  integrity sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==
   dependencies:
     toggle-selection "^1.0.6"
 
@@ -4294,9 +4294,9 @@ core-js-compat@^3.21.0, core-js-compat@^3.22.1:
     semver "7.0.0"
 
 core-js-compat@^3.25.1:
-  version "3.26.0"
-  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.26.0.tgz#94e2cf8ba3e63800c4956ea298a6473bc9d62b44"
-  integrity sha512-piOX9Go+Z4f9ZiBFLnZ5VrOpBl0h7IGCkiFUN11QTe6LjAvOT3ifL/5TdoizMh99hcGy5SoLyWbapIY/PIb/3A==
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.26.1.tgz#0e710b09ebf689d719545ac36e49041850f943df"
+  integrity sha512-622/KzTudvXCDLRw70iHW4KKs1aGpcRcowGWyYJr2DEBfRrd6hNJybxSWJFuZYD4ma86xhrwDDHxmDaIq4EA8A==
   dependencies:
     browserslist "^4.21.4"
 
@@ -6987,9 +6987,9 @@ preact@10.4.1:
   integrity sha512-WKrRpCSwL2t3tpOOGhf2WfTpcmbpxaWtDbdJdKdjd0aEiTkvOmS4NBkG6kzlaAHI9AkQ3iVqbFWM3Ei7mZ4o1Q==
 
 preact@^10.5.9:
-  version "10.11.2"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.11.2.tgz#e43f2a2f2985dedb426bb4c765b7bb037734f8a8"
-  integrity sha512-skAwGDFmgxhq1DCBHke/9e12ewkhc7WYwjuhHB8HHS8zkdtITXLRmUMTeol2ldxvLwYtwbFeifZ9uDDWuyL4Iw==
+  version "10.11.3"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.11.3.tgz#8a7e4ba19d3992c488b0785afcc0f8aa13c78d19"
+  integrity sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -8647,10 +8647,10 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zebec-anchor-sdk-npmtest@^1.5.6:
-  version "1.5.6"
-  resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.5.6.tgz#899fa455675eb84a743ece03703c796c470f8c85"
-  integrity sha512-k2BhyEb/3CqhJhSYq30lfkjUrOiBb22/dtV3e6+aGqI33b7Y66ENv4aWs/16ir0zAgpQJ2p//hoVBK0Xnwmigw==
+zebec-anchor-sdk-npmtest@^1.5.9:
+  version "1.5.9"
+  resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.5.9.tgz#45aea5becf5b36ee856ff07a31ebc16bacdb64fe"
+  integrity sha512-1t8iMBme5wg2gy3xK2IByzm+YCMg69lrbWJUcu0wNNd6bW5bZOvHv8EvSC2SAELEQdPxArV2kG7hyqw9mJ+h1A==
 
 zebec-wormhole-sdk-test@^0.0.1:
   version "0.0.1"

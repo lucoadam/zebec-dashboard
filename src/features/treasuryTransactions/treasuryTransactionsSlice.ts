@@ -218,13 +218,18 @@ export const updateTreasuryVaultContinuousTransactionsStatus = createAsyncThunk<
   {
     treasury_uuid: string
     uuid: string
+    transaction_hash: string
   },
   {}
 >(
   "treasuryTransactions/updateTreasuryVaultContinuousTransactionsStatus",
-  async ({ treasury_uuid, uuid }, {}) => {
-    await api.get(
-      `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/update-status/`
+  async ({ treasury_uuid, uuid, transaction_hash }, {}) => {
+    await api.post(
+      `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/update-status/`,
+      {
+        transaction_hash: transaction_hash,
+        completed: true
+      }
     )
     return
   }
@@ -245,6 +250,24 @@ export const saveTreasuryWithdrawDepositTransactions = createAsyncThunk<
       dispatch(fetchTreasuryPendingTransactions({ treasury_uuid: uuid }))
       return null
     }
+    return
+  }
+)
+
+// Pre Cancel Treasury Vault Continuous Transactions
+export const preCancelTreasuryVaultContinuousTransaction = createAsyncThunk<
+  any,
+  {
+    treasury_uuid: string
+    uuid: string
+  },
+  {}
+>(
+  "treasuryTransactions/preCancelTreasuryVaultContinuousTransaction",
+  async ({ treasury_uuid, uuid }, {}) => {
+    await api.post(
+      `/treasury/${treasury_uuid}/vault-streaming-transactions/${uuid}/pre-cancel/`
+    )
     return
   }
 )
@@ -459,21 +482,21 @@ export const treasuryTransactionsSlice = createSlice({
     //Treasury Vault Update Continuous Transactions Status
     builder.addCase(
       updateTreasuryVaultContinuousTransactionsStatus.pending,
-      (state) => {
-        state.loading = true
+      () => {
+        // state.loading = true
       }
     )
     builder.addCase(
       updateTreasuryVaultContinuousTransactionsStatus.fulfilled,
       (state) => {
-        state.loading = false
+        // state.loading = false
         state.error = ""
       }
     )
     builder.addCase(
       updateTreasuryVaultContinuousTransactionsStatus.rejected,
       (state, action) => {
-        state.loading = false
+        // state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )

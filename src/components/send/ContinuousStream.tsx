@@ -361,9 +361,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         token: data.symbol,
         remarks: data.remarks || "",
         amount: Number(data.amount),
-        receiver: walletObject
-          .getCorrespondingWalletAddress(data.receiver)
-          .toString(),
+        receiver:
+          walletObject
+            .getCorrespondingWalletAddress(data.receiver)
+            ?.toString() || "",
         receiverEvm: data.receiver,
         sender: walletObject.publicKey?.toString() || "",
         senderEvm: walletObject.originalAddress?.toString() || "",

@@ -1,0 +1,16 @@
+{
+  "export-report": "تقرير التصدير",
+  "export-modal-subtitle": "تصدير تقرير المعاملات الواردة.",
+  "from": "من",
+  "to": "ل",
+  "select-report-format": "تحديد تنسيق تقرير",
+  "csv-format": "CSV - قيم منفصلة بفواصل",
+  "pdf-format": "PDF - تنسيق المستند المحمول",
+  "prepare-report": "إعداد التقرير",
+  "preparing-report": "إعداد تقريرك",
+  "preparing-report-description": "يمكن أن تصل إلى 2 دقيقة لإعداد تقريرك",
+  "please-dont-close-window": "يرجى عدم إغلاق نافذتك.",
+  "report-ready": "تقريرك جاهز",
+  "report-ready-description": "يجب أن يبدأ التنزيل تلقائيا. إذا لم يحدث ذلك ، فانقر فوق الزر أدناه.",
+  "download-report": "تحميل التقرير"
+}

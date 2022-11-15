@@ -29,7 +29,7 @@ import {
 } from "application"
 import ZebecContext from "app/zebecContext"
 import { StatusType } from "components/transactions/transactions.d"
-import { updateTreasuryVaultContinuousTransactionsStatus } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import { preCancelTreasuryVaultContinuousTransaction } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 const SignTransactionModal: FC = ({}) => {
   const { publicKey } = useWallet()
@@ -66,13 +66,15 @@ const SignTransactionModal: FC = ({}) => {
     }
   }
   const vaultSignContinuousTransactionLatestEventCallback = (
-    message: CallbackMessageType
+    message: CallbackMessageType,
+    transaction_hash?: string
   ) => {
     if (message === "success") {
       dispatch(
         vaultContinuousSignTransactionLatestEvent({
           uuid: transaction.uuid,
-          event_id: transaction.latest_transaction_event.id
+          event_id: transaction.latest_transaction_event.id,
+          transaction_hash: transaction_hash
         })
       )
     } else {
@@ -245,7 +247,7 @@ const SignTransactionModal: FC = ({}) => {
               StatusType.CANCELLED
             ) {
               dispatch(
-                updateTreasuryVaultContinuousTransactionsStatus({
+                preCancelTreasuryVaultContinuousTransaction({
                   treasury_uuid: activeTreasury.uuid,
                   uuid: transaction.uuid
                 })

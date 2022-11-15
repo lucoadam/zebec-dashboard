@@ -1,0 +1,23 @@
+{
+  "title": "فلاحة",
+  "description": "حصة LP الرموز وكسب مكافآت رمزية.",
+  "all-farms": "جميع المزارع",
+  "staked-farms": "مزارع مرهونة",
+  "search-farms": "البحث في المزارع",
+  "pending-rewards": "المكافآت المعلقة",
+  "stake": "وتد",
+  "unstake": "غير حصة",
+  "harvest": "حصاد",
+  "add-liquidity": "إضافة سيولة",
+  "back-to-farms": "العودة إلى المزارع",
+  "add-liquidity-description": "أضف السيولة لكسب رموز LP إلى الحصة.",
+  "base": "قاعدة",
+  "max-amount": "الحد الأقصى للمبلغ",
+  "pool-liquidity": "سيولة المجمع",
+  "lp-supply": "توريد LP",
+  "more-information": "معلومات اكثر",
+  "liquidity-help": "سوف تكسب LP Tokens بعد الإيداع",
+  "less-information": "معلومات أقل",
+  "slippage-tolerance": "تحمل الانزلاق",
+  "addresses": "عناوين"
+}

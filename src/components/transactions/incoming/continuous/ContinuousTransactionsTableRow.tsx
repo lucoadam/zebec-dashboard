@@ -37,6 +37,7 @@ import { checkRelayerStatus } from "api/services/pingRelayer"
 import { getExplorerUrl } from "constants/explorers"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
 import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -179,6 +180,7 @@ const ContinuousTransactionsTableRow: FC<
         },
         stream: token_mint_address ? zebecCtx.token : zebecCtx.stream
       }
+      dispatch(toggleWalletApprovalMessageModal())
       dispatch(withdrawIncomingToken(withdrawData))
       setLoading(false)
     }

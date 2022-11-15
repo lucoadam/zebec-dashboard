@@ -1,0 +1,31 @@
+{
+  "title": "دي سي إيه",
+  "see-canceled-dca": "انظر DCA الملغاة",
+  "create-new-dca": "إنشاء DCA جديد",
+  "next": "مقبل",
+  "buttons": {
+    "cancel-dca": "إلغاء DCA",
+    "withdraw": "سحب",
+    "deposit": "أودع"
+  },
+  "tabs": {
+    "transactions": "المعاملات",
+    "overview": "نظره عامه"
+  },
+  "table": {
+    "quantity": "كم",
+    "transaction-date": "تاريخ المعاملة",
+    "action": "فعل",
+    "value": "قيمة"
+  },
+  "add-funds-description": "زيادة الأموال في DCA.",
+  "next-investment-on": "الاستثمار التالي في",
+  "frequency": "تردد",
+  "add-funds-dca": "أضف أموالاً إلى DCA",
+  "add-funds-from": "إضافة أموال من",
+  "withdraw-description": "سحب الأموال من DCA",
+  "cancel-modal-header": "هل أنت متأكد أنك تريد إلغاء DCA؟",
+  "cancel-content": "سيؤدي إحباط dca إلى إزالة أموالك من DCA. سوف تستفيد بشكل خاص من استخدام DCA.",
+  "yes-cancel-dca": "نعم ، قم بإلغاء DCA",
+  "cancel": "يلغي"
+}

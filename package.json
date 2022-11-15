@@ -43,8 +43,8 @@
     "tailwind-merge": "^1.3.0",
     "wagmi": "^0.6.4",
     "yup": "^0.32.11",
-    "zebec-anchor-sdk-npmtest": "^1.5.6",
-    "zebec-wormhole-sdk-test": "^0.0.1"
+    "zebec-wormhole-sdk-test": "^0.0.1",
+    "zebec-anchor-sdk-npmtest": "^1.5.9"
   },
   "devDependencies": {
     "@notifi-network/notifi-core": "^0.35.0",

@@ -48,7 +48,10 @@ export const ZebecContextProvider: FC<ZebecContextProviderProps> = ({
     const logger =
       RPC_NETWORK === "devnet" || RPC_NETWORK === "testnet" ? true : false
     //Provider
-    const provider = initAnchorProvider(walletObject, CLUSTER_API_URL)
+    const provider = initAnchorProvider(walletObject, CLUSTER_API_URL, {
+      commitment: "finalized",
+      preflightCommitment: "finalized"
+    })
     //Normal
     const streamCtx = new ZebecNativeStream(provider, feeReceiverWallet, logger)
     setStream(streamCtx)

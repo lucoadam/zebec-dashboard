@@ -394,3 +394,7 @@ input[type="radio"]:hover::after {
 .NotifiFooter__container {
   display: none;
 }
+/* Tables */
+.dashboard-assets-table tbody tr:first-child td {
+  padding-top: 8px;
+}

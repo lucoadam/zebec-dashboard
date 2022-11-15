@@ -252,12 +252,12 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                       </div>
                     </div>
                     {/* Receiver */}
-                    <div className="flex items-center gap-x-8">
-                      <div className="w-32 text-content-secondary">
-                        {t("table.receiver")}
-                      </div>
-                      {transaction.transaction_type ===
-                        TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+                    {transaction.transaction_type ===
+                      TreasuryTransactionType.WITHDRAW_FROM_TREASURY && (
+                      <div className="flex items-center gap-x-8">
+                        <div className="w-32 text-content-secondary">
+                          {t("table.receiver")}
+                        </div>
                         <div className="flex items-center gap-x-2 text-content-primary">
                           <Image
                             layout="fixed"
@@ -272,8 +272,8 @@ const WithdrawlTransactionsTableRow: FC<InstantTransactionsTableRowProps> = ({
                           </div>
                           <CopyButton content={receiver} />
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                     {/* End Date */}
                     <div className="flex items-center gap-x-8">
                       <div className="w-32 text-content-secondary">

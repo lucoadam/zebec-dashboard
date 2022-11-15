@@ -1,0 +1,24 @@
+{
+  "first-steper": {
+    "title": "إنشاء DCA",
+    "description": "رمز الإيداع لإنشاء DCA. يمكنك دائما إضافة أموال إضافية.",
+    "step": {
+      "name": "إنشاء DCA",
+      "description": "قم بإيداع الرمز المميز لإنشاء DCA"
+    }
+  },
+  "second-steper": {
+    "title": "تهيئة DCA",
+    "description": "تعيين قيم DCA الخاص بك",
+    "step": {
+      "name": "تهيئة DCA",
+      "description": "تعيين الرمز المميز والمبلغ والتكرار"
+    }
+  },
+  "form": {
+    "enter-amount": "أدخل المبلغ",
+    "deposit-from": "إيداع من",
+    "token-to-buy": "الرمز المميز للشراء",
+    "token-to-deposit": "الرمز المميز للإيداع"
+  }
+}
