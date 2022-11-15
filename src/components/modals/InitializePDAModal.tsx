@@ -40,7 +40,7 @@ export const InitializePDAModal: FC = () => {
           if (isRegistered) {
             break
           }
-          if (retry > 30) {
+          if (retry > 60) {
             throw new Error("PDA not initialized")
           }
           await new Promise((resolve) => setTimeout(resolve, 4000))
