@@ -14,7 +14,7 @@ import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useRef, useState } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import * as Icons from "assets/icons"
 import { useSigner } from "wagmi"
@@ -55,11 +55,13 @@ const WithdrawTab: FC = () => {
         token.chainId === "solana" && token.network === walletObject.network
     )
   )
-  const walletTokens =
-    useAppSelector((state) => state.zebecBalance.tokens) || []
-  const streamingTokens =
-    useAppSelector((state) => state.zebecStreamingBalance.tokens) || []
-  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens) || []
+  const walletTokens = useAppSelector(
+    (state) => state.zebecBalance.tokens || []
+  )
+  const streamingTokens = useAppSelector(
+    (state) => state.zebecStreamingBalance.tokens || []
+  )
+  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens || [])
 
   const [loading, setLoading] = useState<boolean>(false)
   const [showMaxInfo, setShowMaxInfo] = useState<boolean>(false)
@@ -110,6 +112,26 @@ const WithdrawTab: FC = () => {
     setValue("amount", balance < 0 ? "0" : balance.toString())
     trigger("amount")
   }
+
+  useEffect(() => {
+    const walletTokenBalance = getBalance(
+      withdrawFrom === "PDA Assets" ? pdaTokens : walletTokens,
+      currentToken.symbol
+    )
+    const streamingTokenBalance = getBalance(
+      streamingTokens,
+      currentToken.symbol
+    )
+    const balance = walletTokenBalance - streamingTokenBalance
+    setValue("balance", balance.toString())
+  }, [
+    currentToken,
+    walletTokens,
+    streamingTokens,
+    pdaTokens,
+    setValue,
+    withdrawFrom
+  ])
 
   const withdrawCallback = () => {
     reset()

@@ -15,7 +15,7 @@ import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
-import { FC, useContext, useRef, useState } from "react"
+import { FC, useContext, useEffect, useRef, useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { useSigner } from "wagmi"
 import {
@@ -69,15 +69,17 @@ const DepositTab: FC = () => {
     )
   )
 
-  const walletTokens =
-    useAppSelector((state) => state.walletBalance.tokens) || []
+  const walletTokens = useAppSelector(
+    (state) => state.walletBalance.tokens || []
+  )
+
   const solanaTokenDetails = useAppSelector((state) =>
     state.tokenDetails.tokens.filter(
       (token) =>
         token.chainId === "solana" && token.network === walletObject.network
     )
   )
-  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens) || []
+  const pdaTokens = useAppSelector((state) => state.pdaBalance.tokens || [])
 
   const [loading, setLoading] = useState<boolean>(false)
   const [toggleDropdown, setToggleDropdown] = useState(false)
@@ -117,6 +119,21 @@ const DepositTab: FC = () => {
     setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
+
+  useEffect(() => {
+    const balance = Number(
+      (
+        getBalance(
+          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+          currentToken.symbol
+        ) -
+          (depositFrom === "Wallet Assets"
+            ? constants.DEPOSIT_MAX_OFFSET
+            : 0) || 0
+      ).toFixed(6) || 0
+    )
+    setValue("balance", balance.toString())
+  }, [currentToken, depositFrom, setValue, walletTokens, pdaTokens])
 
   const depositCallback = () => {
     reset()

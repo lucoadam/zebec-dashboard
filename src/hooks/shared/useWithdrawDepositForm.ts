@@ -13,6 +13,7 @@ interface UseWithdrawDepositFormOptions {
 
 interface InputData {
   amount: string
+  balance: string
 }
 
 export const useWithdrawDepositForm = ({
@@ -42,6 +43,7 @@ export const useWithdrawDepositForm = ({
   const [show, toggle, setToggle] = useToggle(false)
 
   const validationSchema = Yup.object().shape({
+    balance: Yup.string(),
     amount: Yup.string()
       .required(`transactions:${type}.enter-${type}-amount`)
       .test(
@@ -49,6 +51,11 @@ export const useWithdrawDepositForm = ({
         `transactions:${type}.not-zero`,
         (value) => typeof value === "string" && parseFloat(value) > 0
       )
+      .test("max-amount", `validation:${type}-max-amount`, (value, context) => {
+        return (
+          !context.parent.balance || Number(value) <= context.parent.balance
+        )
+      })
   })
 
   const {
