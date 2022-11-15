@@ -25,7 +25,6 @@ import {
   transferEvm,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient,
-  BSC_BRIDGE_ADDRESS,
   getTargetAsset,
   SOL_TOKEN_BRIDGE_ADDRESS
 } from "zebec-wormhole-sdk-test"
@@ -331,12 +330,21 @@ const DepositTab: FC = () => {
             )
             const msgSequence = parseSequenceFromLogEth(
               receipt,
-              BSC_BRIDGE_ADDRESS
+              getBridgeAddressForChain(sourceChain)
+            )
+            const messageEmitterAddress = getEmitterAddressEth(
+              BSC_ZEBEC_BRIDGE_ADDRESS
+            )
+            const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+              WORMHOLE_RPC_HOSTS,
+              sourceChain,
+              messageEmitterAddress,
+              msgSequence
             )
 
             // check if message is relayed
             const response = await listenWormholeTransactionStatus(
-              msgSequence,
+              signedVaa,
               BSC_ZEBEC_BRIDGE_ADDRESS,
               sourceChain
             )
@@ -345,8 +353,6 @@ const DepositTab: FC = () => {
               dispatch(switchxWalletApprovalMessageStep(currentStep))
               await new Promise((resolve) => setTimeout(resolve, 1000))
               dispatch(toast.success({ message: "Deposit completed" }))
-            } else if (response === "timeout") {
-              dispatch(toast.error({ message: "Deposit timeout" }))
             } else {
               dispatch(toast.error({ message: "Deposit failed" }))
             }
@@ -391,9 +397,23 @@ const DepositTab: FC = () => {
         walletObject.originalAddress?.toString() as string,
         currentToken.mint
       )
-      const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
       const response = await listenWormholeTransactionStatus(
-        msgSequence,
+        signedVaa,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
@@ -402,7 +422,7 @@ const DepositTab: FC = () => {
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Deposit timeout" }))
       } else {
-        dispatch(toast.error({ message: "Deposit failed" }))
+        dispatch(toast.error({ message: "Error Deposit token" }))
       }
       depositCallback()
       setLoading(false)

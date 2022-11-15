@@ -21,12 +21,17 @@ import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 
 import {
-  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
 } from "zebec-wormhole-sdk-test"
 import { toast } from "features/toasts/toastsSlice"
-import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useClickOutside } from "hooks"
 import { checkRelayerStatus } from "api/services/pingRelayer"
@@ -181,20 +186,32 @@ const WithdrawTab: FC = () => {
           signer,
           sourceChain
         )
-        const tx = await messengerContract.withdraw(
+        const receipt = await messengerContract.withdraw(
           data.amount,
           walletObject.originalAddress?.toString() as string,
           currentToken.mint
         )
-        // commented console.log("tx:", tx)
-        const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-        // commented console.log("sequence:", sequence)
+        const msgSequence = parseSequenceFromLogEth(
+          receipt,
+          getBridgeAddressForChain(sourceChain)
+        )
+        const messageEmitterAddress = getEmitterAddressEth(
+          BSC_ZEBEC_BRIDGE_ADDRESS
+        )
+        const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+          WORMHOLE_RPC_HOSTS,
+          sourceChain,
+          messageEmitterAddress,
+          msgSequence
+        )
+
+        // check if message is relayed
         const response = await listenWormholeTransactionStatus(
-          sequence,
+          signedVaa,
           BSC_ZEBEC_BRIDGE_ADDRESS,
           sourceChain
         )
-        // commented console.log("response", response)
+
         if (response === "success") {
           dispatch(switchxWalletApprovalMessageStep(1))
           const receipt = await messengerContract.directTransfer(
@@ -203,18 +220,26 @@ const WithdrawTab: FC = () => {
             currentToken.mint,
             walletObject.originalAddress?.toString() as string
           )
-          // commented console.log("receipt", receipt)
           const msgSequence = parseSequenceFromLogEth(
             receipt,
-            BSC_BRIDGE_ADDRESS
+            getBridgeAddressForChain(sourceChain)
           )
-          // commented console.log("msgSequence", msgSequence)
+          const messageEmitterAddress = getEmitterAddressEth(
+            BSC_ZEBEC_BRIDGE_ADDRESS
+          )
+          const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+            WORMHOLE_RPC_HOSTS,
+            sourceChain,
+            messageEmitterAddress,
+            msgSequence
+          )
+
+          // check if message is relayed
           const response = await listenWormholeTransactionStatus(
-            msgSequence,
+            signedVaa,
             BSC_ZEBEC_BRIDGE_ADDRESS,
             sourceChain
           )
-          // commented console.log("response", response)
           if (response === "success") {
             dispatch(switchxWalletApprovalMessageStep(2))
             await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -263,15 +288,26 @@ const WithdrawTab: FC = () => {
           walletObject.originalAddress?.toString() as string
         )
 
-        // commented console.log("receipt", receipt)
-        const msgSequence = parseSequenceFromLogEth(receipt, BSC_BRIDGE_ADDRESS)
-        // commented console.log("msgSequence", msgSequence)
+        const msgSequence = parseSequenceFromLogEth(
+          receipt,
+          getBridgeAddressForChain(sourceChain)
+        )
+        const messageEmitterAddress = getEmitterAddressEth(
+          BSC_ZEBEC_BRIDGE_ADDRESS
+        )
+        const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+          WORMHOLE_RPC_HOSTS,
+          sourceChain,
+          messageEmitterAddress,
+          msgSequence
+        )
+
+        // check if message is relayed
         const response = await listenWormholeTransactionStatus(
-          msgSequence,
+          signedVaa,
           BSC_ZEBEC_BRIDGE_ADDRESS,
           sourceChain
         )
-        // commented console.log("response", response)
         if (response === "success") {
           dispatch(toast.success({ message: "Withdrawal completed" }))
         } else if (response === "timeout") {

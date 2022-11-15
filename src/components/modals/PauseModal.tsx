@@ -7,8 +7,9 @@ import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
 import { useZebecWallet } from "hooks/useWallet"
 import {
-  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
 } from "zebec-wormhole-sdk-test"
 import { useSigner } from "wagmi"
@@ -16,7 +17,11 @@ import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
 import { pauseStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 
@@ -96,22 +101,34 @@ const PauseModal: FC = ({}) => {
         sourceChain
       )
       // commented console.log("pda-data:", transaction)
-      const tx = await messengerContract.pauseResumeStream(
+      const receipt = await messengerContract.pauseResumeStream(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,
         transaction.pda
       )
 
-      // commented console.log("tx:", tx)
-      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
-      // commented console.log("sequence:", sequence)
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
       const response = await listenWormholeTransactionStatus(
-        sequence,
+        signedVaa,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
-      // commented console.log("response", response)
+
       if (response === "success") {
         dispatch(toast.success({ message: "Stream paused" }))
       } else if (response === "timeout") {

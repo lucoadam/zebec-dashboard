@@ -6,8 +6,8 @@ import {
 } from "@certusone/wormhole-sdk"
 import { yupResolver } from "@hookform/resolvers/yup"
 import {
-  BSC_BRIDGE_ADDRESS,
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
 } from "zebec-wormhole-sdk-test"
@@ -398,18 +398,16 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         true,
         formattedData.token_mint_address
       )
-      // commented console.log("receipt", transferReceipt)
       const sequence = parseSequenceFromLogEth(
         transferReceipt,
-        BSC_BRIDGE_ADDRESS
+        getBridgeAddressForChain(sourceChain)
       )
-      console.log("parsed Sequenec", sequence)
       const transferEmitterAddress = getEmitterAddressEth(
         BSC_ZEBEC_BRIDGE_ADDRESS
       )
       console.debug("emitterAddress:", transferEmitterAddress)
       // commented console.log("sequence", sequence)
-      const { vaaBytes } = await getSignedVAAWithRetry(
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
         WORMHOLE_RPC_HOSTS,
         "bsc",
         transferEmitterAddress,
@@ -417,16 +415,16 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       )
       const backendData = {
         ...formattedData,
-        vaa: Buffer.from(vaaBytes).toString("hex")
+        vaa: Buffer.from(signedVaa).toString("hex")
       }
       dispatch(sendContinuousStream(backendData)).then(async () => {
         resetForm()
+        // check if message is relayed
         const response = await listenWormholeTransactionStatus(
-          sequence,
+          signedVaa,
           BSC_ZEBEC_BRIDGE_ADDRESS,
           sourceChain
         )
-        // commented console.log("response", response)
         if (response === "success") {
           dispatch(toast.success({ message: "Stream started" }))
         } else if (response === "timeout") {

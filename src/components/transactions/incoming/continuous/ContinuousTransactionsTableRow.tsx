@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { parseSequenceFromLogEth } from "@certusone/wormhole-sdk"
 import {
-  BSC_BRIDGE_ADDRESS,
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
+import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
 } from "zebec-wormhole-sdk-test"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
@@ -219,15 +224,29 @@ const ContinuousTransactionsTableRow: FC<
         sourceChain
       )
 
-      const tx = await messengerContract.withdrawStreamed(
+      const receipt = await messengerContract.withdrawStreamed(
         transaction.sender,
         transaction.receiver,
         transaction.token_mint_address,
         transaction.pda
       )
-      const sequence = parseSequenceFromLogEth(tx, BSC_BRIDGE_ADDRESS)
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
       const response = await listenWormholeTransactionStatus(
-        sequence,
+        signedVaa,
         BSC_ZEBEC_BRIDGE_ADDRESS,
         sourceChain
       )
