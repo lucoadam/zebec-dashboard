@@ -19,7 +19,7 @@ env:
   SYNDICA_API: ""
   NODE_ENV: production
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
-  FEE_RECEIVER_WALLET: 9r2hAV7zM4P8GTJnYXD3HaFzHqTDoZSuusB2NMAs1TsE
+  FEE_RECEIVER_WALLET: E6kpHgWce3JhbEkeBvqGRmrefFAcWdqewUYaK5RaVQoz
 
 permissions:
   contents: read
