@@ -8592,10 +8592,10 @@ zebec-anchor-sdk-npmtest@^1.5.9:
   resolved "https://registry.yarnpkg.com/zebec-anchor-sdk-npmtest/-/zebec-anchor-sdk-npmtest-1.5.9.tgz#45aea5becf5b36ee856ff07a31ebc16bacdb64fe"
   integrity sha512-1t8iMBme5wg2gy3xK2IByzm+YCMg69lrbWJUcu0wNNd6bW5bZOvHv8EvSC2SAELEQdPxArV2kG7hyqw9mJ+h1A==
 
-zebec-wormhole-sdk-test@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/zebec-wormhole-sdk-test/-/zebec-wormhole-sdk-test-0.0.6.tgz#8336ef69d90395f5b0aec470746d1d2e393178bf"
-  integrity sha512-LC1d3q2cTY6QwzBSiGkNmPam0xwEhPt3M5MrWbEqoTWFenu+mrqOZKXwCyFudvfYp4UVogu5FyzYJmHaqHTxAA==
+zebec-wormhole-sdk-test@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/zebec-wormhole-sdk-test/-/zebec-wormhole-sdk-test-0.0.9.tgz#fa3ca338ff958c319fe994211ac9489f8e6180e4"
+  integrity sha512-iEJ6bjjU0oB1t9pUFXVbfVUGsNK9rG0xkyfuWSNlykSthimMF9wJMWzXao2qr8jPbzpBc5sZRKp1W5kQ+e6BvA==
   dependencies:
     "@certusone/wormhole-sdk" "^0.6.2"
     "@project-serum/anchor" "^0.24.2"
