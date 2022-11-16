@@ -44,7 +44,6 @@ import { checkPDAinitialized } from "utils/checkPDAinitialized"
 import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchIncomingTransactionsById } from "features/transactions/transactionsSlice"
-import { constants } from "constants/constants"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -256,9 +255,7 @@ const ContinuousTransactionsTableRow: FC<
       )
       if (response === "success") {
         dispatch(toast.success({ message: "Stream withdrawal completed" }))
-        setTimeout(() => {
-          dispatch(fetchIncomingTransactionsById({ uuid }))
-        }, constants.STREAM_FETCH_TIMEOUT)
+        dispatch(fetchIncomingTransactionsById({ uuid }))
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Stream withdrawal timeout" }))
       } else {
