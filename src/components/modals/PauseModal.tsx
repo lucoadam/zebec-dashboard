@@ -24,6 +24,7 @@ import {
 } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import { fetchTransactionsById } from "api"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -131,6 +132,7 @@ const PauseModal: FC = ({}) => {
 
       if (response === "success") {
         dispatch(toast.success({ message: "Stream paused" }))
+        dispatch(fetchTransactionsById(transaction.uuid, "pause"))
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Stream pause timeout" }))
       } else {

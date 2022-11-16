@@ -24,6 +24,7 @@ import {
 } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import { fetchTransactionsById } from "api"
 
 const CancelModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -128,6 +129,7 @@ const CancelModal: FC = ({}) => {
       )
       if (response === "success") {
         dispatch(toast.success({ message: "Stream cancelled" }))
+        dispatch(fetchTransactionsById(transaction.uuid, "cancel"))
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Stream cancel timeout" }))
       } else {

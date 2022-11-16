@@ -24,6 +24,7 @@ import {
 } from "@certusone/wormhole-sdk"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
+import { fetchTransactionsById } from "api"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
@@ -127,6 +128,7 @@ const ResumeModal: FC = ({}) => {
       )
       if (response === "success") {
         dispatch(toast.success({ message: "Stream resumed" }))
+        dispatch(fetchTransactionsById(transaction.uuid, "resume"))
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Stream resume timeout" }))
       } else {
