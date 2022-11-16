@@ -33,6 +33,7 @@ export {
   LpusdIcon as lpUSD,
   LpfiIcon as LPFi,
   ZbcIcon as ZBC,
+  ZbcIcon as WZBC,
   WagIcon as WAG,
   WnzIcon as $WNZ,
   UsdcIcon as USDC,

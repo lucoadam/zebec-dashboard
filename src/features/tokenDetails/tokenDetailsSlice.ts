@@ -41,8 +41,8 @@ const bscTokens = [
     network: "Binance Smart Chain Testnet"
   },
   {
-    symbol: "ZBC",
-    name: "Zebec",
+    symbol: "WZBC",
+    name: "Wormhole Zebec",
     decimal: 9,
     mint: "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
     coingeco_id: "zebec-protocol",
@@ -50,8 +50,8 @@ const bscTokens = [
     network: "Binance Smart Chain Testnet"
   },
   {
-    symbol: "ZBC",
-    name: "Zebec",
+    symbol: "WZBC",
+    name: "Wormhole Zebec",
     decimal: 9,
     mint: "AbLwGR8A1wvsiLWrzzA5eYPoQw51NVMcMMTPvAv5LTJ",
     coingeco_id: "zebec-protocol",

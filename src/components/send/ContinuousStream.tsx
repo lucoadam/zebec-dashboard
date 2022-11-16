@@ -60,6 +60,7 @@ import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
+import { checkPDAinitialized } from "utils/checkPDAinitialized"
 
 const intervals = [
   {
@@ -353,6 +354,21 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         )
         return
       }
+
+      const receiver =
+        walletObject.getCorrespondingWalletAddress(data.receiver)?.toString() ||
+        ""
+      // is receiver proxy initialized
+      const check = await checkPDAinitialized(receiver)
+      if (!check) {
+        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(
+          toast.error({
+            message: "'Receiver's proxy pda is not initialized."
+          })
+        )
+        return
+      }
       // commented console.log(data)
       if (!signer) return
       const formattedData = {
@@ -361,10 +377,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         token: data.symbol,
         remarks: data.remarks || "",
         amount: Number(data.amount),
-        receiver:
-          walletObject
-            .getCorrespondingWalletAddress(data.receiver)
-            ?.toString() || "",
+        receiver,
         receiverEvm: data.receiver,
         sender: walletObject.publicKey?.toString() || "",
         senderEvm: walletObject.originalAddress?.toString() || "",
@@ -380,7 +393,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           currentToken.mint === "solana" ? "" : currentToken.mint,
         file: data.file
       }
-
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
 
       const messengerContract = new ZebecEthBridgeClient(
