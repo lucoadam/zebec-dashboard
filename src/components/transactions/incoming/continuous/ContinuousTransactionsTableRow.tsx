@@ -249,7 +249,7 @@ const ContinuousTransactionsTableRow: FC<
       // check if message is relayed
       const response = await listenWormholeTransactionStatus(
         signedVaa,
-        BSC_ZEBEC_BRIDGE_ADDRESS,
+        walletObject.originalAddress?.toString() as string,
         sourceChain
       )
       if (response === "success") {

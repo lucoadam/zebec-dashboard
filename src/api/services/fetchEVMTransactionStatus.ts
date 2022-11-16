@@ -24,7 +24,6 @@ export const listenWormholeTransactionStatus = async (
         SOL_ZEBEC_BRIDGE_ADDRESS,
         "bundler"
       )
-      console.log("isRelayCompleted", response)
       if (response) {
         return "success"
       }

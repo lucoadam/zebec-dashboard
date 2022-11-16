@@ -193,10 +193,6 @@ const DepositTab: FC = () => {
     }
   }
 
-  const onApproved = () => {
-    dispatch(switchxWalletApprovalMessageStep(1))
-  }
-
   const handleEvmSubmit = async (data: any) => {
     if (signer) {
       try {
@@ -305,7 +301,10 @@ const DepositTab: FC = () => {
           targetChain,
           recipientAddress,
           "0.01",
-          onApproved
+          () => {
+            currentStep += 1
+            dispatch(switchxWalletApprovalMessageStep(currentStep))
+          }
         )
           .then(async (transferReceipt: any) => {
             const sequence = parseSequenceFromLogEth(
@@ -360,7 +359,7 @@ const DepositTab: FC = () => {
             // check if message is relayed
             const response = await listenWormholeTransactionStatus(
               signedVaa,
-              BSC_ZEBEC_BRIDGE_ADDRESS,
+              walletObject.originalAddress?.toString() as string,
               sourceChain
             )
             if (response === "success") {
@@ -401,7 +400,6 @@ const DepositTab: FC = () => {
       if (!signer) return
       setLoading(true)
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,
         signer,
@@ -419,6 +417,7 @@ const DepositTab: FC = () => {
       const messageEmitterAddress = getEmitterAddressEth(
         BSC_ZEBEC_BRIDGE_ADDRESS
       )
+
       const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
         WORMHOLE_RPC_HOSTS,
         sourceChain,
@@ -429,7 +428,7 @@ const DepositTab: FC = () => {
       // check if message is relayed
       const response = await listenWormholeTransactionStatus(
         signedVaa,
-        BSC_ZEBEC_BRIDGE_ADDRESS,
+        walletObject.originalAddress?.toString() as string,
         sourceChain
       )
       if (response === "success") {
