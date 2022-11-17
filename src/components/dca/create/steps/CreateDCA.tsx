@@ -67,7 +67,7 @@ export const CreateDCA: FC<StepsComponentProps> = ({
   })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data)
+    // commented console.log(data)
     setDCA({
       depositFrom,
       symbol: currentToken.symbol,

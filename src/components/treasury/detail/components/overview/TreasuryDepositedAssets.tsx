@@ -44,10 +44,16 @@ export const TreasuryDepositedAssets: FC<{
         dispatch(
           fetchTreasuryBalance({
             name: activeTreasury?.name,
-            address: activeTreasury?.treasury_address
+            address: activeTreasury?.treasury_address,
+            network: "solana"
           })
         )
-        dispatch(fetchZebecBalance(publicKey?.toString()))
+        dispatch(
+          fetchZebecBalance({
+            publicKey: publicKey?.toString(),
+            network: "solana"
+          })
+        )
       }
       setTimeout(() => {
         setRefreshClassName((prev) => ({ ...prev, 1: "" }))
@@ -58,7 +64,8 @@ export const TreasuryDepositedAssets: FC<{
         dispatch(
           fetchTreasuryVaultBalance({
             name: activeTreasury?.name,
-            address: activeTreasury?.treasury_vault_address
+            address: activeTreasury?.treasury_vault_address,
+            network: "solana"
           })
         )
       }

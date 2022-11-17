@@ -17,6 +17,7 @@ export interface ContinuousStreamFormData {
   tokenAmount?: string
   interval?: string
   file?: string
+  chainId?: string
 }
 
 export type FormKeys = keyof ContinuousStreamFormData

@@ -57,4 +57,27 @@ api.interceptors.response.use(
   }
 )
 
+export class CancelRequestAxios {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cancelRequest: any
+
+  constructor() {
+    // reference to API call
+    this.cancelRequest = null
+  }
+
+  // Cancel API call if reference is there and create a new cancelToken for new API call
+  cancelAndCreateToken = () => {
+    if (this.cancelRequest) {
+      this.cancelRequest.cancel()
+    }
+    this.cancelRequest = axios.CancelToken.source()
+  }
+
+  // reset Cancel token
+  resetCancelToken = () => {
+    this.cancelRequest = null
+  }
+}
+
 export default api

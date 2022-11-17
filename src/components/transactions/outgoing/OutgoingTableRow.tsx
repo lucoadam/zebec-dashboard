@@ -53,7 +53,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     transaction_type,
     transaction_hash,
     file,
-    latest_transaction_event
+    latest_transaction_event,
+    receiverEvm,
+    senderEvm
   } = transaction
 
   const totalTransactionAmount =
@@ -194,7 +196,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet={receiver} />
+            <UserAddress wallet={receiverEvm || receiver} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
@@ -283,10 +285,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div data-tip={sender} className="">
-                          {toSubstring(sender, 5, true)}
+                        <div data-tip={senderEvm || sender} className="">
+                          {toSubstring(senderEvm || sender, 5, true)}
                         </div>
-                        <CopyButton content={sender} />
+                        <CopyButton content={senderEvm || sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -303,10 +305,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                        <div className="" data-tip={receiverEvm || receiver}>
+                          {toSubstring(receiverEvm || receiver, 5, true)}
                         </div>
-                        <CopyButton content={receiver} />
+                        <CopyButton content={receiverEvm || receiver} />
                       </div>
                     </div>
                     {/* Start Date */}

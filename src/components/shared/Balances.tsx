@@ -89,7 +89,9 @@ export const Tokens: FC<{
       : normalOverallActivityBalances
 
   const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+  )
   const { t } = useTranslation()
   const [show, toggle, setToggle] = useToggle(false)
   const tokensDropdownWrapperRef = useRef<HTMLDivElement>(null)

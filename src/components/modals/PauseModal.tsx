@@ -5,18 +5,39 @@ import { setLoading, togglePauseModal } from "features/modals/pauseModalSlice"
 import { pauseStreamNative, pauseStreamToken } from "application/normal"
 import { Modal, Button } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { useZebecWallet } from "hooks/useWallet"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
+  ZebecEthBridgeClient
+} from "zebec-wormhole-sdk-test"
+import { useSigner } from "wagmi"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
 import { pauseStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
+import { fetchTransactionsById } from "api"
 
 const PauseModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
+
   const { publicKey } = useWallet()
   const { show, loading, transaction } = useAppSelector((state) => state.pause)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
-  const handlePauseTransaction = () => {
+  const handleSolanaPause = async () => {
     dispatch(setLoading(true))
 
     if (!transaction.approval_status) {
@@ -56,6 +77,82 @@ const PauseModal: FC = ({}) => {
           })
         )
       }
+    }
+  }
+  const handleEVMPause = async () => {
+    try {
+      if (!signer) return
+      dispatch(setLoading(true))
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        dispatch(setLoading(false))
+        return
+      }
+      dispatch(setLoading(true))
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      // commented console.log("pda-data:", transaction)
+      const receipt = await messengerContract.pauseResumeStream(
+        transaction.senderEvm,
+        transaction.receiverEvm,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
+      const response = await listenWormholeTransactionStatus(
+        signedVaa,
+        walletObject.originalAddress?.toString() as string,
+        sourceChain
+      )
+
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream paused" }))
+        dispatch(fetchTransactionsById(transaction.uuid, "pause"))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream pause timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream pause failed" }))
+      }
+      dispatch(setLoading(false))
+      dispatch(togglePauseModal())
+    } catch (e) {
+      // commented console.log("error:", e)
+      setLoading(false)
+      dispatch(togglePauseModal())
+      dispatch(toast.error({ message: "Stream pause failed" }))
+    }
+  }
+
+  const handlePauseTransaction = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaPause()
+    } else {
+      handleEVMPause()
     }
   }
 

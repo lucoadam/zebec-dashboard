@@ -144,3 +144,5 @@ export {
   TelegramLogo,
   CloseCircleIcon
 }
+
+export * from "./wallet-adapter-icons"

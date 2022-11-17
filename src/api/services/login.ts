@@ -1,10 +1,10 @@
-import { WalletContextState } from "@solana/wallet-adapter-react"
 import api from "api/api"
+import { ZebecWalletContext } from "hooks/useWallet"
 import TokenService from "./token.service"
 
-export const login = async (walletObject: WalletContextState) => {
-  const { publicKey, signMessage } = walletObject
-  if (publicKey && signMessage) {
+export const login = async (walletObject: ZebecWalletContext) => {
+  const { publicKey, signMessage, network, originalAddress } = walletObject
+  if (publicKey && originalAddress && signMessage) {
     try {
       const message =
         "Zebec Wallet Verification" +
@@ -12,29 +12,38 @@ export const login = async (walletObject: WalletContextState) => {
         `${Math.floor(Date.now() / 1000)}` +
         ")" +
         ":" +
-        `${publicKey.toString()}`
+        `${originalAddress.toString()}`
 
       const encodedMessage = new TextEncoder().encode(message)
 
-      const signedMessage = await signMessage(encodedMessage)
+      const b64 = await signMessage(message)
 
-      const b64 = Buffer.from(signedMessage).toString("base64")
-      const pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
+      const pubKey = Buffer.from(publicKey.toBytes()).toString("base64")
+
+      const evm_address = Buffer.from(
+        new TextEncoder().encode(originalAddress.toString())
+      ).toString("base64")
+
       const messagetob = Buffer.from(encodedMessage).toString("base64")
 
       const data = {
-        wallet_address: pubkey,
+        wallet_address: pubKey,
         signature: b64,
-        message: messagetob
+        message: messagetob,
+        network,
+        evm_address
       }
 
       try {
         const response = await api.post(`/user/auth/login/`, data)
+        // commented console.log(response)
         TokenService.setTokens(response.data)
         return response
       } catch (error) {
-        console.log(error)
+        // commented console.log(error)
       }
-    } catch (error) {}
+    } catch (error) {
+      // commented console.log(error)
+    }
   }
 }

@@ -10,6 +10,7 @@ interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: JSX.Element
   endIcon?: JSX.Element
   loading?: boolean
+  childrenClassName?: string
 }
 
 interface ButtonChildrenProps extends ButtonBaseProps {

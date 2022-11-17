@@ -13,11 +13,13 @@ import { AllOutgoing } from "./tabs/AllIOutgoing"
 import { OngoingOutgoing } from "./tabs/OngoingOutgoing"
 import { ScheduledOutgoing } from "./tabs/ScheduledOutgoing"
 import { CompletedOutgoing } from "./tabs/CompletedOutgoing"
+import { useZebecWallet } from "hooks/useWallet"
 
 const Outgoing: FC = () => {
   const { t } = useTranslation("transactions")
   const dispatch = useAppDispatch()
   const { isSigned } = useAppSelector((state) => state.common)
+  const { originalAddress } = useZebecWallet()
   const [activeTab, setActiveTab] = useState(0)
 
   const tabs: Tab[] = [
@@ -46,7 +48,7 @@ const Outgoing: FC = () => {
     if (isSigned) {
       dispatch(resetTimedStatusTransactions())
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
-      dispatch(fetchOutgoingTransactions())
+      dispatch(fetchOutgoingTransactions(originalAddress?.toString() || ""))
     }
   }, [dispatch, isSigned])
 

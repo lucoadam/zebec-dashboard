@@ -1,6 +1,7 @@
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
 import { WalletToken } from "features/walletBalance/walletBalanceSlice.d"
 
+// TODO: also add chainId to filter exact token
 export const getBalance = (
   walletTokens: WalletToken[] | TreasuryToken[],
   symbol: string

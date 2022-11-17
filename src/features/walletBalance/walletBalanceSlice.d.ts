@@ -1,6 +1,7 @@
 export interface WalletToken {
   symbol: string
   balance: number
+  chainId: string
 }
 
 export interface WalletTokenState {

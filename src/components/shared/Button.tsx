@@ -56,6 +56,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       size = "medium",
       variant = "default",
       className,
+      childrenClassName,
       startIcon,
       endIcon,
       loading,
@@ -76,12 +77,17 @@ export const Button: FC<ButtonProps> = React.forwardRef<
           )}
           {...rest}
           ref={ref}
-          disabled={disabled}
+          disabled={disabled || loading}
         >
           {children ? (
             children
           ) : (
-            <div className={`flex items-center justify-center ${sizeStyles}`}>
+            <div
+              className={twMerge(
+                `flex items-center justify-center ${sizeStyles}`,
+                childrenClassName ?? ""
+              )}
+            >
               {startIcon && (
                 <span className={`${iconSizeStyles}`}>{startIcon}</span>
               )}

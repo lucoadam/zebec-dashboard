@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import { saveAddressBook } from "features/address-book/addressBookSlice"
 import { toast } from "features/toasts/toastsSlice"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { FC, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -23,7 +24,7 @@ export const UserAddress: FC<{
   const isInAddressBook = addressBooks.some((item) => item.address === wallet)
 
   const { t } = useTranslation()
-
+  const { chainId } = useZebecWallet()
   const dispatch = useAppDispatch()
 
   const [toggleAddressDropdown, setToggleAddressDropdown] =
@@ -41,7 +42,8 @@ export const UserAddress: FC<{
 
   useEffect(() => {
     setValue("wallet", wallet)
-  }, [setValue, wallet])
+    setValue("chainId", chainId || "")
+  }, [setValue, wallet, chainId])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {

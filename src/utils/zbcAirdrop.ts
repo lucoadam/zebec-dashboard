@@ -22,6 +22,7 @@ export const zbcAirdrop =
   ) =>
   async (dispatch: AppDispatch) => {
     try {
+      // commented console.log("zbcAirdrop", walletPublicKey, setZBCAirdropLoading)
       const mint = new PublicKey("6vvKBoSx7p33YER66LQ8VokTRHUcmxwz3iA1GSbexC5i")
       const privateKey = process.env.ZBC_AIRDROP
 
@@ -57,7 +58,13 @@ export const zbcAirdrop =
           })
         )
         setTimeout(() => {
-          dispatch(fetchWalletBalance(walletPublicKey?.toString()))
+          dispatch(
+            fetchWalletBalance({
+              publicKey: walletPublicKey?.toString(),
+              chainId: "solana",
+              network: "solana"
+            })
+          )
         }, constants.BALANCE_FETCH_TIMEOUT)
       }
     } catch (error) {
