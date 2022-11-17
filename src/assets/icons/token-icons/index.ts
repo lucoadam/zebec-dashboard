@@ -19,6 +19,26 @@ import WagIcon from "./wag.svg"
 import WnzIcon from "./wnz.svg"
 import ZbcIcon from "./zbc.svg"
 import EthIcon from "./eth.svg"
+import HawkIcon from "./hawk.svg"
+import MwmIcon from "./mwm.svg"
+import MadIcon from "./mad.svg"
+import CraftIcon from "./craft.svg"
+import HogIcon from "./hog.svg"
+import CredIcon from "./cred.svg"
+import SolarIcon from "./solar.svg"
+import IvnIcon from "./ivn.svg"
+import SypIcon from "./syp.svg"
+import LarixIcon from "./larix.svg"
+import PipIcon from "./pip.svg"
+import PkudoIcon from "./pkudo.svg"
+import EpctIcon from "./epct.svg"
+import BelaIcon from "./bela.svg"
+import SfoIcon from "./sfo.svg"
+import BknIcon from "./bkn.svg"
+import MhtIcon from "./mht.svg"
+import LaxIcon from "./lax.svg"
+import PhxIcon from "./phx.svg"
+import MiaIcon from "./mia.svg"
 
 export {
   SolIcon as SOL,
@@ -26,7 +46,7 @@ export {
   SolIcon as WWSOL,
   ScyIcon as SCY,
   SerIcon as SER,
-  PusdIcon as PUSD,
+  PusdIcon as pUSDC,
   PuffIcon as PUFF,
   NxdfIcon as NXDF,
   LraIcon as LRA,
@@ -44,5 +64,25 @@ export {
   AllIcon as $ALL,
   RayIcon as RAY,
   UxdIcon as UXD,
-  EthIcon as ETH
+  EthIcon as ETH,
+  HawkIcon as HAWK,
+  MwmIcon as MWM,
+  MadIcon as MAD,
+  CraftIcon as CRAFT,
+  HogIcon as HOG,
+  CredIcon as CRED,
+  SolarIcon as Solar,
+  IvnIcon as IVN,
+  SypIcon as SYP,
+  LarixIcon as LARIX,
+  PipIcon as PIP,
+  PkudoIcon as PKUDO,
+  EpctIcon as EPCT,
+  BelaIcon as BELA,
+  SfoIcon as SFO,
+  BknIcon as BKN,
+  MhtIcon as MHT,
+  LaxIcon as LAX,
+  PhxIcon as PHX,
+  MiaIcon as MIA
 }
