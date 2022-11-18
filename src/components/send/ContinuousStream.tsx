@@ -448,6 +448,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
+      console.debug("stream error", e)
       dispatch(toggleWalletApprovalMessageModal())
       dispatch(
         toast.error({

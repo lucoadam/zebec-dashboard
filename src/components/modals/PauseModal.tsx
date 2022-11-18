@@ -141,7 +141,7 @@ const PauseModal: FC = ({}) => {
       dispatch(setLoading(false))
       dispatch(togglePauseModal())
     } catch (e) {
-      // commented console.log("error:", e)
+      console.debug("pause stream error", e)
       setLoading(false)
       dispatch(togglePauseModal())
       dispatch(toast.error({ message: "Stream pause failed" }))

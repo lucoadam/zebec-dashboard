@@ -137,7 +137,7 @@ const ResumeModal: FC = ({}) => {
       dispatch(setLoading(false))
       dispatch(toggleResumeModal())
     } catch (e) {
-      // commented console.log("error:", e)
+      console.debug("resume stream error:", e)
       setLoading(false)
       dispatch(toggleResumeModal())
       dispatch(toast.error({ message: "Stream resume failed" }))

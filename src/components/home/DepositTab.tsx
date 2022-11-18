@@ -314,7 +314,6 @@ const DepositTab: FC = () => {
             const transferEmitterAddress = getEmitterAddressEth(
               getTokenBridgeAddressForChain(sourceChain)
             )
-            console.debug("emitterAddress:", transferEmitterAddress)
             const { vaaBytes: transferVaa } = await getSignedVAAWithRetry(
               WORMHOLE_RPC_HOSTS,
               sourceChain,
@@ -337,11 +336,25 @@ const DepositTab: FC = () => {
             } while (!isTransferComplete)
             currentStep += 1
             dispatch(switchxWalletApprovalMessageStep(currentStep))
-            const receipt = await messengerContract.deposit(
-              data.amount,
-              walletObject.originalAddress?.toString() as string,
-              targetTokenAddress
-            )
+            let receipt
+            try {
+              receipt = await messengerContract.deposit(
+                data.amount,
+                walletObject.originalAddress?.toString() as string,
+                targetTokenAddress
+              )
+            } catch (e) {
+              console.debug("deposit error", e)
+              dispatch(
+                toast.success({
+                  message: "Token deposited into pda only"
+                })
+              )
+              depositCallback()
+              setLoading(false)
+              dispatch(togglexWalletApprovalMessageModal())
+              return
+            }
             const msgSequence = parseSequenceFromLogEth(
               receipt,
               getBridgeAddressForChain(sourceChain)
@@ -380,7 +393,8 @@ const DepositTab: FC = () => {
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
           })
-          .catch(() => {
+          .catch((e) => {
+            console.debug("deposit error", e)
             dispatch(
               toast.error({
                 message: "Error depositing token"
@@ -390,6 +404,7 @@ const DepositTab: FC = () => {
             dispatch(togglexWalletApprovalMessageModal())
           })
       } catch (e) {
+        console.debug("deposit error", e)
         dispatch(
           toast.error({
             message: "Error depositing token"
@@ -447,6 +462,7 @@ const DepositTab: FC = () => {
       depositCallback()
       setLoading(false)
     } catch (e) {
+      console.debug("deposit error", e)
       dispatch(
         toast.error({
           message: "Error deposit token"

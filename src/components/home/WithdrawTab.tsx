@@ -41,6 +41,7 @@ import {
   switchxWalletApprovalMessageStep,
   togglexWalletApprovalMessageModal
 } from "features/modals/xWalletApprovalMessageSlice"
+import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 // import axios from "axios"
 
 const WithdrawTab: FC = () => {
@@ -150,6 +151,14 @@ const WithdrawTab: FC = () => {
           signer: walletObject.chainId !== "solana" && signer
         })
       )
+      if (walletObject.chainId !== "solana") {
+        dispatch(
+          fetchPdaBalance({
+            publicKey: walletObject.publicKey?.toString(),
+            network: walletObject.network
+          })
+        )
+      }
     }, constants.BALANCE_FETCH_TIMEOUT)
   }
 
@@ -197,11 +206,6 @@ const WithdrawTab: FC = () => {
         dispatch(switchxWalletApprovalMessageStep(0))
         dispatch(togglexWalletApprovalMessageModal())
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-        // const targetChain = 1
-        // commented console.log(sourceChain, targetChain)
-        // commented console.log("pda", walletObject.publicKey?.toString())
-        // commented console.log("token mint", currentToken.mint)
-        // commented console.log("withdrawer: ", walletObject.originalAddress?.toString())
 
         const messengerContract = new ZebecEthBridgeClient(
           BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -236,12 +240,24 @@ const WithdrawTab: FC = () => {
 
         if (response === "success") {
           dispatch(switchxWalletApprovalMessageStep(1))
-          const receipt = await messengerContract.directTransfer(
-            data.amount,
-            walletObject.originalAddress?.toString() as string,
-            currentToken.mint,
-            walletObject.originalAddress?.toString() as string
-          )
+          let receipt
+          try {
+            receipt = await messengerContract.directTransfer(
+              data.amount,
+              walletObject.originalAddress?.toString() as string,
+              currentToken.mint,
+              walletObject.originalAddress?.toString() as string
+            )
+          } catch (e) {
+            console.debug("withdraw error", e)
+            withdrawCallback()
+            dispatch(
+              toast.success({ message: "Token withdrawn into pda only" })
+            )
+            setLoading(false)
+            dispatch(togglexWalletApprovalMessageModal())
+            return
+          }
           const msgSequence = parseSequenceFromLogEth(
             receipt,
             getBridgeAddressForChain(sourceChain)
@@ -263,10 +279,12 @@ const WithdrawTab: FC = () => {
             sourceChain
           )
           if (response === "success") {
+            withdrawCallback()
             dispatch(switchxWalletApprovalMessageStep(2))
             await new Promise((resolve) => setTimeout(resolve, 1000))
             dispatch(toast.success({ message: "Withdrawal completed" }))
           } else if (response === "timeout") {
+            withdrawCallback()
             dispatch(
               toast.success({ message: "Token withdrawn into pda only" })
             )
@@ -280,7 +298,7 @@ const WithdrawTab: FC = () => {
         }
         dispatch(togglexWalletApprovalMessageModal())
       } catch (e) {
-        // commented console.log("error", e)
+        console.debug("withdraw error", e)
         dispatch(togglexWalletApprovalMessageModal())
         dispatch(toast.error({ message: "Error withdrawing token" }))
       }
@@ -294,11 +312,6 @@ const WithdrawTab: FC = () => {
       if (signer) {
         setLoading(true)
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
-        // const targetChain = 1
-        // commented console.log(sourceChain, targetChain)
-        // commented console.log("pda", walletObject.publicKey?.toString())
-        // commented console.log("token mint", currentToken.mint)
-        // commented console.log("withdrawer: ", walletObject.originalAddress?.toString())
 
         const messengerContract = new ZebecEthBridgeClient(
           BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -333,17 +346,17 @@ const WithdrawTab: FC = () => {
           sourceChain
         )
         if (response === "success") {
+          withdrawCallback()
           dispatch(toast.success({ message: "Withdrawal completed" }))
         } else if (response === "timeout") {
           dispatch(toast.error({ message: "Withdraw timeout" }))
         } else {
           dispatch(toast.error({ message: "Withdraw failed" }))
         }
-        // commented console.log("transfer successful")
         setLoading(false)
       }
     } catch (e) {
-      // commented console.log("error", e)
+      console.debug("withdraw error", e)
       setLoading(false)
       dispatch(toast.error({ message: "Error withdrawing token" }))
     }

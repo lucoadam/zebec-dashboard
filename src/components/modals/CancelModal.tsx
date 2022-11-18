@@ -138,7 +138,7 @@ const CancelModal: FC = ({}) => {
       dispatch(setLoading(false))
       dispatch(toggleCancelModal())
     } catch (e) {
-      // commented console.log("error:", e)
+      console.debug("cancel stream error:", e)
       setLoading(false)
       dispatch(toggleCancelModal())
       dispatch(toast.error({ message: "Stream cancel failed" }))

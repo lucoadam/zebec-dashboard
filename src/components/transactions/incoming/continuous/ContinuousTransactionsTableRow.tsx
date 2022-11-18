@@ -263,7 +263,7 @@ const ContinuousTransactionsTableRow: FC<
       }
       setLoading(false)
     } catch (e: any) {
-      console.debug(e)
+      console.debug("withdraw stream error", e)
       setLoading(false)
       dispatch(
         toast.error({
