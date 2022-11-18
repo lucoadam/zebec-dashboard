@@ -19,8 +19,8 @@
   "withdrawls": "Withdrawls",
   "deposit-withdrawls": "Deposit / Withdrawals",
   "nfts": "NFT's",
-  "treasury-instant": "Treasury Instant",
-  "treasury-continuous": "Treasury Continuous",
+  "treasury-instant": "Instant Treasury",
+  "treasury-continuous": "Continuous Treasury",
   "withdraw-from-treasury-vault": "Withdraw from Treasury Vault",
   "withdraw": {
     "withdraw-modal-header": "Withdraw Incoming Balance",

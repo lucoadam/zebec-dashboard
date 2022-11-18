@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { fetchTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
+import { fetchOutgoingTransactionsById } from "features/transactions/transactionsSlice"
 import { fetchTreasuryVaultContinuousTransactionsById } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 //declare types for state
@@ -24,8 +24,10 @@ export const resumeTransaction = createAsyncThunk(
     const response = await api.patch(`/transaction/${uuid}/`, {
       status: "ready"
     })
+
+    await dispatch(fetchOutgoingTransactionsById(uuid))
     dispatch(toggleResumeModal())
-    dispatch(fetchTransactionsById(uuid, "resume"))
+
     return response.data
   }
 )
