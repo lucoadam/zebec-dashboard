@@ -17,6 +17,7 @@ export interface ZebecWalletContext {
   signMessage: (message: string) => Promise<string | null>
   getCorrespondingWalletAddress: (address: string) => PublicKey | undefined
   disconnect: () => void
+  isSupportedChain: boolean
 }
 export const useZebecWallet = (): ZebecWalletContext => {
   const ethAccount = useAccount()
@@ -46,13 +47,17 @@ export const useZebecWallet = (): ZebecWalletContext => {
       : ""
   }, [solAccount.connected, ethAccount.isConnected, chain])
 
+  const isSupportedChain = supportedEVMChains
+    .map((c) => c.chainId)
+    .includes(chainId.toString())
+
   const wormholeChain = EVMToWormholeChainMapping[
     chain?.id as keyof typeof EVMToWormholeChainMapping
   ] as ChainId
   const publicKey = useMemo(() => {
     const pubKey =
       solAccount.publicKey ||
-      (ethAccount.isConnected
+      (ethAccount.isConnected && isSupportedChain
         ? new PublicKey(
             ZebecSolBridgeClient.getXChainUserKey(
               tryNativeToUint8Array(
@@ -68,7 +73,8 @@ export const useZebecWallet = (): ZebecWalletContext => {
     ethAccount.address,
     ethAccount.isConnected,
     solAccount.publicKey,
-    wormholeChain
+    wormholeChain,
+    isSupportedChain
   ])
 
   const originalAddress = useMemo(() => {
@@ -125,6 +131,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
     originalAddress,
     signMessage,
     disconnect: disconnectWallet,
-    getCorrespondingWalletAddress
+    getCorrespondingWalletAddress,
+    isSupportedChain
   }
 }

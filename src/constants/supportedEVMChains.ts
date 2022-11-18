@@ -1,25 +1,14 @@
 export const supportedEVMChains = [
   {
-    chainId: "1",
-    chainName: "Ethereum Mainnet",
+    chainId: "solana",
+    chainName: "Solana",
     nativeCurrency: {
-      name: "Ether",
-      symbol: "ETH",
-      decimals: 18
+      name: "SOL",
+      symbol: "SOL",
+      decimals: 9
     },
-    rpcUrls: ["https://mainnet.infura.io/v3/"],
-    blockExplorerUrls: ["https://etherscan.io/"]
-  },
-  {
-    chainId: "3",
-    chainName: "Ropsten Testnet",
-    nativeCurrency: {
-      name: "Ropsten Ether",
-      symbol: "ROP",
-      decimals: 18
-    },
-    rpcUrls: ["https://ropsten.infura.io/v3/"],
-    blockExplorerUrls: ["https://ropsten.etherscan.io/"]
+    rpcUrls: ["https://api.mainnet-beta.solana.com"],
+    blockExplorerUrls: ["https://explorer.solana.com"]
   },
   {
     chainId: "97",
@@ -42,16 +31,5 @@ export const supportedEVMChains = [
     },
     rpcUrls: ["https://bsc-dataseed.binance.org/"],
     blockExplorerUrls: ["https://bscscan.com/"]
-  },
-  {
-    chainId: "137",
-    chainName: "Polygon",
-    nativeCurrency: {
-      name: "Matic",
-      symbol: "MATIC",
-      decimals: 18
-    },
-    rpcUrls: ["https://rpc-mainnet.maticvigil.com/"],
-    blockExplorerUrls: ["https://polygonscan.com/"]
   }
 ]

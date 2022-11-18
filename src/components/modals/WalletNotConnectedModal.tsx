@@ -84,7 +84,11 @@ const WalletNotConnectedModal: NextPage = () => {
     <>
       {isInitialized && (
         <Modal
-          show={!walletObject.connected || !isSigned}
+          show={
+            !walletObject.connected ||
+            !isSigned ||
+            !walletObject.isSupportedChain
+          }
           toggleModal={() => null}
           className="rounded-2xl pb-6 max-w-[398px] text-center"
           hasCloseIcon={false}

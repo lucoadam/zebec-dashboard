@@ -38,6 +38,9 @@ export const EthereumWallet = () => {
           childrenClassName="flex items-center justify-start"
         />
       ))}
+      {!walletObject.isSupportedChain && walletObject.connected && (
+        <div className="text-error">Unsupported chain.</div>
+      )}
     </div>
   )
 }
