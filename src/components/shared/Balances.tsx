@@ -2,9 +2,10 @@ import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 // import { tokenBalances, weeklyBalances } from "fakedata"
 import { useClickOutside, useToggle } from "hooks"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import Link from "next/link"
-import { FC, useRef } from "react"
+import { FC, useEffect, useRef } from "react"
 import { displayExponentialNumber, formatCurrency, splitNumber } from "utils"
 import { DepositedBalanceProps } from "./Balances.d"
 import { Button } from "./Button"
@@ -89,8 +90,12 @@ export const Tokens: FC<{
       : normalOverallActivityBalances
 
   const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
+  const walletObject = useZebecWallet()
   const tokenDetails = useAppSelector((state) =>
-    state.tokenDetails.tokens.filter((token) => token.chainId === "solana")
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === "solana" && token.network === walletObject.network
+    )
   )
   const { t } = useTranslation()
   const [show, toggle, setToggle] = useToggle(false)
@@ -99,6 +104,12 @@ export const Tokens: FC<{
   useClickOutside(tokensDropdownWrapperRef, {
     onClickOutside: () => setToggle(false)
   })
+
+  useEffect(() => {
+    if (tokenDetails.length > 0) {
+      setCurrentToken(tokenDetails[0].symbol)
+    }
+  }, [tokenDetails, setCurrentToken])
 
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6">

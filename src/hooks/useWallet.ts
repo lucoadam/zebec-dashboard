@@ -2,9 +2,12 @@ import { useAccount, useSignMessage, useDisconnect, useNetwork } from "wagmi"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 import { supportedEVMChains } from "constants/supportedEVMChains"
-import { ZebecSolBridgeClient } from "zebec-wormhole-sdk-test"
+import {
+  SOL_ZEBEC_BRIDGE_ADDRESS,
+  ZebecSolBridgeClient
+} from "zebec-wormhole-sdk-test"
 import { EVMToWormholeChainMapping } from "constants/wormholeChains"
-import { ChainId, tryNativeToUint8Array } from "@certusone/wormhole-sdk"
+import { ChainId } from "@certusone/wormhole-sdk"
 import { useMemo } from "react"
 
 export interface ZebecWalletContext {
@@ -59,12 +62,10 @@ export const useZebecWallet = (): ZebecWalletContext => {
       solAccount.publicKey ||
       (ethAccount.isConnected && isSupportedChain
         ? new PublicKey(
-            ZebecSolBridgeClient.getXChainUserKey(
-              tryNativeToUint8Array(
-                ethAccount.address as string,
-                wormholeChain
-              ),
-              wormholeChain
+            ZebecSolBridgeClient.getProxyUserKey(
+              ethAccount.address as string,
+              wormholeChain,
+              SOL_ZEBEC_BRIDGE_ADDRESS
             ).toString()
           )
         : undefined)
@@ -115,9 +116,10 @@ export const useZebecWallet = (): ZebecWalletContext => {
 
   const getCorrespondingWalletAddress = (ethAddress: string) => {
     return new PublicKey(
-      ZebecSolBridgeClient.getXChainUserKey(
-        tryNativeToUint8Array(ethAddress as string, wormholeChain),
-        wormholeChain
+      ZebecSolBridgeClient.getProxyUserKey(
+        ethAddress as string,
+        wormholeChain,
+        SOL_ZEBEC_BRIDGE_ADDRESS
       ).toString()
     )
   }
