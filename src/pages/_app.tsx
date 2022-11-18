@@ -7,7 +7,8 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import {
   PhantomWalletAdapter,
   SlopeWalletAdapter,
-  SolflareWalletAdapter
+  SolflareWalletAdapter,
+  LedgerWalletAdapter
 } from "@solana/wallet-adapter-wallets"
 import { store } from "app/store"
 import { ZebecContextProvider } from "app/zebecContext"
@@ -32,7 +33,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     () => [
       new PhantomWalletAdapter(),
       new SlopeWalletAdapter(),
-      new SolflareWalletAdapter({ network })
+      new SolflareWalletAdapter({ network }),
+      new LedgerWalletAdapter()
     ],
     [network]
   )
