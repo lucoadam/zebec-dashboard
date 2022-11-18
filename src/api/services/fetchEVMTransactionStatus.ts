@@ -16,7 +16,7 @@ export const listenWormholeTransactionStatus = async (
 ) => {
   try {
     let retry = 0
-    while (retry < 60) {
+    while (retry < 45) {
       const response = await getIsRelayCompleted(
         signedVaa,
         tryNativeToUint8Array(sender, toChainName(chainId)),

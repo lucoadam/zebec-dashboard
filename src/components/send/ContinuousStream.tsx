@@ -430,7 +430,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         vaa: Buffer.from(signedVaa).toString("hex")
       }
       dispatch(sendContinuousStream(backendData)).then(async () => {
-        resetForm()
         // check if message is relayed
         const response = await listenWormholeTransactionStatus(
           signedVaa,
@@ -438,13 +437,14 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
           sourceChain
         )
         if (response === "success") {
-          dispatch(toast.success({ message: "Stream started" }))
+          dispatch(toast.success({ message: "Stream started successfully" }))
+          initStreamCallback("success")
         } else if (response === "timeout") {
-          dispatch(toast.error({ message: "Stream timeout" }))
+          dispatch(toast.error({ message: "Stream initiate timeout" }))
         } else {
-          dispatch(toast.error({ message: "Stream failed" }))
+          dispatch(toast.error({ message: "Failed to initiate stream" }))
+          dispatch(toggleWalletApprovalMessageModal())
         }
-        dispatch(toggleWalletApprovalMessageModal())
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {

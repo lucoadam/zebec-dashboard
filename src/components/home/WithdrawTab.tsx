@@ -267,7 +267,9 @@ const WithdrawTab: FC = () => {
             await new Promise((resolve) => setTimeout(resolve, 1000))
             dispatch(toast.success({ message: "Withdrawal completed" }))
           } else if (response === "timeout") {
-            dispatch(toast.error({ message: "Withdrawal timeout" }))
+            dispatch(
+              toast.success({ message: "Token withdrawn into pda only" })
+            )
           } else {
             dispatch(toast.error({ message: "Error withdrawing token" }))
           }

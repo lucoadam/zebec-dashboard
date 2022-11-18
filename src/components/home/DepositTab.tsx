@@ -275,7 +275,7 @@ const DepositTab: FC = () => {
             if (isCreated) {
               break
             }
-            if (retry > 30) {
+            if (retry > 45) {
               dispatch(
                 toast.error({
                   message: "Failed to create token account"
@@ -326,7 +326,7 @@ const DepositTab: FC = () => {
             let retry = 0
             setDefaultWasm("bundler")
             do {
-              if (retry > 60) throw new Error("Deposit Timeout")
+              if (retry > 45) throw new Error("Deposit Timeout")
               retry++
               isTransferComplete = await getIsTransferCompletedSolana(
                 SOL_TOKEN_BRIDGE_ADDRESS,
@@ -366,9 +366,15 @@ const DepositTab: FC = () => {
               currentStep += 1
               dispatch(switchxWalletApprovalMessageStep(currentStep))
               await new Promise((resolve) => setTimeout(resolve, 1000))
-              dispatch(toast.success({ message: "Deposit completed" }))
+              dispatch(
+                toast.success({ message: "Deposit completed successfully" })
+              )
             } else {
-              dispatch(toast.error({ message: "Deposit failed" }))
+              dispatch(
+                toast.success({
+                  message: "Token deposited into pda only"
+                })
+              )
             }
             depositCallback()
             setLoading(false)
@@ -432,7 +438,7 @@ const DepositTab: FC = () => {
         sourceChain
       )
       if (response === "success") {
-        dispatch(toast.success({ message: "Deposit completed" }))
+        dispatch(toast.success({ message: "Deposit completed successfully" }))
       } else if (response === "timeout") {
         dispatch(toast.error({ message: "Deposit timeout" }))
       } else {
