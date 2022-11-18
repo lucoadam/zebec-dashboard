@@ -40,7 +40,13 @@ export const login = async (
           tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
           const signedTx = await walletObject.signTransaction(tx)
 
+          const encodedMessage = new TextEncoder().encode(message)
+          const pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
+          const messagetob = Buffer.from(encodedMessage).toString("base64")
+
           const data = {
+            wallet_address: pubkey,
+            message: messagetob,
             serialized_tx: signedTx.serialize(),
             is_ledger_wallet: true
           }
