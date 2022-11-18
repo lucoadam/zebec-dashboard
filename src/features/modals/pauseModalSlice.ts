@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
-import { fetchTransactionsById } from "api"
 import { AppDispatch, RootState } from "app/store"
 import { fetchTreasuryVaultContinuousTransactionsById } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import { fetchOutgoingTransactionsById } from "features/transactions/transactionsSlice"
 //declare types for state
 interface PauseState {
   transaction: any
@@ -26,8 +26,10 @@ export const pauseTransaction = createAsyncThunk<
   await api.patch(`/transaction/${uuid}/`, {
     status: "paused"
   })
+
+  await dispatch(fetchOutgoingTransactionsById(uuid))
   dispatch(togglePauseModal())
-  dispatch(fetchTransactionsById(uuid, "pause"))
+
   return
 })
 

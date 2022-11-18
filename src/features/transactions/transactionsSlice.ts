@@ -191,7 +191,7 @@ export const fetchIncomingTransactionsById = createAsyncThunk<
   { uuid: string },
   {}
 >("transactions/fetchIncomingTransactionsById", async ({ uuid }, {}) => {
-  const response = await api.get(`/transaction/${uuid}`)
+  const response = await api.get(`/transaction/${uuid}/`)
   return response.data
 })
 
@@ -275,9 +275,8 @@ export const updateIncomingTransactions: any = createAsyncThunk<
       transaction_hash: data.transaction_hash,
       completed: data.completed
     })
-    setTimeout(() => {
-      dispatch(fetchIncomingTransactionsById({ uuid: data.transaction_uuid }))
-    }, constants.STREAM_FETCH_TIMEOUT)
+    dispatch(fetchIncomingTransactionsById({ uuid: data.transaction_uuid }))
+    setTimeout(() => {}, constants.STREAM_FETCH_TIMEOUT)
   } else {
     await api.post(
       `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`,
