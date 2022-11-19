@@ -49,7 +49,7 @@ export const login = async (
           const data = {
             wallet_address: pubkey,
             message: messagetob,
-            signature: signedTx.serialize(),
+            signature: signedTx.serialize().toString("base64"),
             is_ledger_wallet: true
           }
 
