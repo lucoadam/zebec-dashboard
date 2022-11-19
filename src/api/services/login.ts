@@ -6,7 +6,9 @@ import TokenService from "./token.service"
 
 export const createSignMessageTx = (message: string) => {
   const tx = new Transaction()
-  const programIdPublicKey = new PublicKey(process.env.PROGRAM_ID || "")
+  const programIdPublicKey = new PublicKey(
+    process.env.PROGRAM_ID || "zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T"
+  )
   tx.add(
     new TransactionInstruction({
       programId: programIdPublicKey,
@@ -47,7 +49,7 @@ export const login = async (
           const data = {
             wallet_address: pubkey,
             message: messagetob,
-            serialized_tx: signedTx.serialize(),
+            signature: signedTx.serialize(),
             is_ledger_wallet: true
           }
 
