@@ -46,23 +46,23 @@ const WalletNotConnectedModal: NextPage = () => {
     // eslint-disable-next-line
   }, [walletObject.connected])
 
-  // useEffect(() => {
-  //   if (walletObject.connected) {
-  //     const token = TokenService.getLocalAccessToken()
-  //     if (!token) handleLogin()
-  //     else {
-  //       const decodedToken: DecodedTokenProps = jwt_decode(token)
-  //       if (
-  //         decodedToken.wallet_address === walletObject.publicKey?.toString()
-  //       ) {
-  //         dispatch(changeSignState(!!token))
-  //       } else {
-  //         handleLogin()
-  //       }
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [walletObject.connected, isSigned])
+  useEffect(() => {
+    if (walletObject.connected) {
+      const token = TokenService.getLocalAccessToken()
+      if (!token) handleLogin()
+      else {
+        const decodedToken: DecodedTokenProps = jwt_decode(token)
+        if (
+          decodedToken.wallet_address === walletObject.publicKey?.toString()
+        ) {
+          dispatch(changeSignState(!!token))
+        } else {
+          handleLogin()
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletObject.connected, isSigned])
 
   const handleConnectWallet: () => void = () => {
     walletObject.wallet
