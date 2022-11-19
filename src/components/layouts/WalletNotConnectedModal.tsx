@@ -28,8 +28,6 @@ const WalletNotConnectedModal: NextPage = () => {
   const { isSigned } = useAppSelector((state) => state.common)
   const dispatch = useAppDispatch()
 
-  console.log(walletObject)
-
   const handleLogin: () => void = async () => {
     const response = await login(walletObject, isLedgerWallet)
     if (response?.status === 200) {
@@ -49,7 +47,7 @@ const WalletNotConnectedModal: NextPage = () => {
   useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
-      if (!token) handleLogin()
+      if (!token) null
       else {
         const decodedToken: DecodedTokenProps = jwt_decode(token)
         if (
