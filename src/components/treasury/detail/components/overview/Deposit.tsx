@@ -14,13 +14,21 @@ import { useContext } from "react"
 import { useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
+import { useZebecWallet } from "hooks/useWallet"
 
 export const Deposit = () => {
   const { t } = useTranslation()
   const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
   const { treasury, treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === walletObject.chainId &&
+        token.network === walletObject.network
+    )
+  )
   const zebecBalance =
     useAppSelector((state) => state.zebecBalance.tokens) || []
   const { activeTreasury } = useAppSelector((state) => state.treasury)
@@ -55,10 +63,16 @@ export const Deposit = () => {
         dispatch(
           fetchTreasuryBalance({
             name: activeTreasury?.name,
-            address: activeTreasury?.treasury_address
+            address: activeTreasury?.treasury_address,
+            network: "solana"
           })
         )
-        dispatch(fetchZebecBalance(publicKey?.toString()))
+        dispatch(
+          fetchZebecBalance({
+            publicKey: publicKey?.toString(),
+            network: "solana"
+          })
+        )
       }, constants.BALANCE_FETCH_TIMEOUT)
     }
     setLoading(false)

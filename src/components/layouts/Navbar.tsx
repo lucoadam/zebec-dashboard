@@ -1,5 +1,5 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
@@ -9,6 +9,7 @@ import { RPC_NETWORK } from "constants/cluster"
 import { constants } from "constants/constants"
 import { updateWidth } from "features/layout/layoutSlice"
 import { useClickOutside } from "hooks"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useTheme } from "next-themes"
 import Image from "next/image"
@@ -16,19 +17,27 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { FC, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { toSubstring, zbcAirdrop } from "utils"
+import { titleCase } from "utils/titleCase"
 import { Button, CollapseDropdown, IconButton, Sidebar } from "../shared"
 import NavGroup from "./NavGroup"
 import NavLink from "./NavLink"
 import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
 import WalletNotConnectedModal from "./WalletNotConnectedModal"
+import * as ethers from "ethers"
+import { useSigner } from "wagmi"
+import { TokenImplementation__factory } from "@certusone/wormhole-sdk"
+import { toast } from "features/toasts/toastsSlice"
+import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 
 const Navbar: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme()
   const { t } = useTranslation()
-  const useWalletObject = useWallet()
-  const useWalletModalObject = useWalletModal()
+  const useWalletObject = useZebecWallet()
+  const { data: signer } = useSigner()
+  // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -105,9 +114,9 @@ const Navbar: FC = () => {
   }, [useWalletObject, dispatch])
 
   const handleConnectWallet: () => void = () => {
-    useWalletObject.wallet
-      ? useWalletObject.connect()
-      : useWalletModalObject.setVisible(!useWalletModalObject.visible)
+    // useWalletObject.wallet
+    //   ? useWalletObject.connect()
+    //   : useWalletModalObject.setVisible(!useWalletModalObject.visible)
   }
 
   useClickOutside(dropdownWrapperRef, {
@@ -121,10 +130,10 @@ const Navbar: FC = () => {
   }
 
   //handle change wallet
-  const handleChangeWallet = () => {
-    useWalletModalObject.setVisible(!useWalletModalObject.visible)
-    handleClose()
-  }
+  // const handleChangeWallet = () => {
+  //   useWalletModalObject.setVisible(!useWalletModalObject.visible)
+  //   handleClose()
+  // }
 
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
@@ -134,9 +143,80 @@ const Navbar: FC = () => {
 
   //ZBC Airdrop
   const zbcAirdropToWallet = () => {
-    if (useWalletObject.publicKey) {
+    if (useWalletObject.publicKey && useWalletObject.chainId === "solana") {
       setZBCAirdropLoading(true)
-      dispatch(zbcAirdrop(useWalletObject.publicKey, setZBCAirdropLoading))
+      dispatch(
+        zbcAirdrop(useWalletObject.publicKey as PublicKey, setZBCAirdropLoading)
+      )
+    } else {
+      setZBCAirdropLoading(true)
+      if (signer?.provider) {
+        const wallet = new ethers.Wallet(
+          "529ce94e6a3e489b4dfd61be6e5673c123de884f3f21a8f224a53c8b1676037b",
+          signer.provider
+        )
+        signer.provider.getGasPrice().then((currentGasPrice) => {
+          // commented console.log(`gas_price: ${currentGasPrice.toString()}`)
+
+          const contract = TokenImplementation__factory.connect(
+            "0xe12823c93D6E7B7f56e5740a8ba0eF8EDC82D1eb",
+            wallet
+          )
+          // How many tokens?
+          const numberOfTokens = ethers.utils.parseUnits("2", 9)
+          // commented console.log(`numberOfTokens: ${numberOfTokens}`)
+
+          // Send tokens
+          contract
+            .transfer(
+              useWalletObject.originalAddress?.toString() as string,
+              numberOfTokens,
+              {
+                gasPrice: currentGasPrice.toString(),
+                gasLimit: 1000000
+              }
+            )
+            .then((transferResult) => {
+              transferResult
+                .wait()
+                .then(() => {
+                  // commented console.log(receipt.transactionHash)
+                  setZBCAirdropLoading(false)
+                  dispatch(
+                    toast.success({
+                      message: "2 ZBC Airdrop Successful"
+                    })
+                  )
+                  setTimeout(() => {
+                    fetchWalletBalance({
+                      publicKey: useWalletObject.originalAddress,
+                      chainId: useWalletObject.chainId,
+                      network: useWalletObject.network,
+                      signer: useWalletObject.chainId !== "solana" && signer
+                    })
+                  }, constants.BALANCE_FETCH_TIMEOUT)
+                })
+                .catch((err) => {
+                  console.log(err)
+                  setZBCAirdropLoading(false)
+                  dispatch(
+                    toast.success({
+                      message: "ZBC Airdrop Failed"
+                    })
+                  )
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+              setZBCAirdropLoading(false)
+              dispatch(
+                toast.success({
+                  message: "ZBC Airdrop Failed"
+                })
+              )
+            })
+        })
+      }
     }
   }
 
@@ -238,6 +318,12 @@ const Navbar: FC = () => {
             {getMainRoutes(width).map((route, index) => {
               switch (route.type) {
                 case "link":
+                  if (
+                    useWalletObject.chainId !== "solana" &&
+                    route.path === "/treasury"
+                  ) {
+                    return undefined
+                  }
                   return <NavLink key={index} {...route} />
                 case "group":
                   return <NavGroup key={index} {...route} />
@@ -306,23 +392,25 @@ const Navbar: FC = () => {
                   >
                     <div className="flex flex-col justify-between h-full">
                       <div
-                        data-tip={useWalletObject?.publicKey?.toString()}
+                        data-tip={useWalletObject?.originalAddress?.toString()}
                         className="text-avatar-title font-medium text-content-primary"
                       >
                         {toSubstring(
-                          useWalletObject?.publicKey?.toString(),
+                          useWalletObject?.originalAddress?.toString(),
                           4,
                           true
                         )}
                       </div>
                       <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                        {useWalletObject?.wallet?.adapter.name} Wallet
+                        {titleCase(`${useWalletObject?.adapter} Wallet`)}
                       </div>
                     </div>
                     <CopyButton
                       disabled={!useWalletObject.connected}
                       className="text-content-primary"
-                      content={useWalletObject?.publicKey?.toString() ?? ""}
+                      content={
+                        useWalletObject?.originalAddress?.toString() ?? ""
+                      }
                     />
                   </div>
                   <div className="hidden">{themeChanger()}</div>
@@ -351,7 +439,7 @@ const Navbar: FC = () => {
                       title={`${t("common:buttons.change-wallet")}`}
                       startIcon={<Icons.RefreshIcon />}
                       className="w-full mb-3 bg-background-primary"
-                      onClick={handleChangeWallet}
+                      onClick={handleDisconnectWallet}
                     />
                     <Button
                       title={`${t("common:buttons.disconnect-wallet")}`}

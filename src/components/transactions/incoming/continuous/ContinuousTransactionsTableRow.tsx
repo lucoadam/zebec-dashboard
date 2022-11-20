@@ -1,3 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
+  ZebecEthBridgeClient
+} from "zebec-wormhole-sdk-test"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import * as Images from "assets/images"
@@ -9,10 +22,14 @@ import {
   UserAddress,
   ViewReferenceFile
 } from "components/shared"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, Fragment, useContext, useEffect, useRef, useState } from "react"
 import ReactTooltip from "react-tooltip"
+import { useSigner } from "wagmi"
 import { formatDateTime, toSubstring } from "utils"
 import {
   StatusType,
@@ -21,8 +38,12 @@ import {
 import CopyButton from "components/shared/CopyButton"
 import { withdrawIncomingToken } from "application"
 import ZebecContext from "app/zebecContext"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 import { getExplorerUrl } from "constants/explorers"
+import { checkPDAinitialized } from "utils/checkPDAinitialized"
+import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { fetchIncomingTransactionsById } from "features/transactions/transactionsSlice"
 
 interface ContinuousTransactionsTableRowProps {
   index: number
@@ -39,6 +60,9 @@ const ContinuousTransactionsTableRow: FC<
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const { data: signer } = useSigner()
+  const walletObject = useZebecWallet()
+  const [loading, setLoading] = useState(false)
   const { explorer } = useAppSelector((state) => state.settings)
 
   useEffect(() => {
@@ -69,12 +93,13 @@ const ContinuousTransactionsTableRow: FC<
     transaction_hash,
     file,
     latest_transaction_event,
-    withdrawable
+    withdrawable,
+    senderEvm,
+    receiverEvm
   } = transaction
 
-  const totalTransactionAmount = latest_transaction_event
-    ? amount - Number(latest_transaction_event.paused_amt)
-    : amount
+  const totalTransactionAmount =
+    amount - Number(latest_transaction_event.paused_amt)
 
   const totalTimeInSec = end_time - start_time
   const streamRatePerSec = amount / totalTimeInSec
@@ -148,8 +173,9 @@ const ContinuousTransactionsTableRow: FC<
     // eslint-disable-next-line
   }, [status, transaction])
 
-  const withdraw = () => {
+  const handleSolanaWithdraw = () => {
     if (zebecCtx.stream && zebecCtx.token) {
+      setLoading(true)
       const withdrawData = {
         data: {
           sender: sender,
@@ -164,6 +190,93 @@ const ContinuousTransactionsTableRow: FC<
       }
       dispatch(toggleWalletApprovalMessageModal())
       dispatch(withdrawIncomingToken(withdrawData))
+      setLoading(false)
+    }
+  }
+
+  const handleEVMWithdraw = async () => {
+    try {
+      if (!signer) return
+      setLoading(true)
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        setLoading(false)
+        return
+      }
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
+      // Initialize PDA
+      const check = await checkPDAinitialized(
+        walletObject.publicKey?.toString() || ""
+      )
+      if (!check) {
+        dispatch(setShowPdaInitialize(true))
+        setLoading(false)
+        return
+      }
+
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+
+      const receipt = await messengerContract.withdrawStreamed(
+        transaction.senderEvm,
+        transaction.receiverEvm,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
+      const response = await listenWormholeTransactionStatus(
+        signedVaa,
+        walletObject.originalAddress?.toString() as string,
+        sourceChain
+      )
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream withdrawal completed" }))
+        dispatch(fetchIncomingTransactionsById({ uuid }))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream withdrawal timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream withdrawal failed" }))
+      }
+      setLoading(false)
+    } catch (e: any) {
+      console.debug("withdraw stream error", e)
+      setLoading(false)
+      dispatch(
+        toast.error({
+          message: "Stream withdrawal failed"
+        })
+      )
+    }
+  }
+  const withdraw = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaWithdraw()
+    } else {
+      handleEVMWithdraw()
     }
   }
 
@@ -202,7 +315,7 @@ const ContinuousTransactionsTableRow: FC<
             </div>
           </td>
           <td className="px-6 py-4 min-w-60">
-            <UserAddress wallet={sender} />
+            <UserAddress wallet={senderEvm || sender} />
           </td>
           <td className="px-6 py-4 w-full">
             <div className="flex items-center justify-end float-right gap-x-6">
@@ -216,6 +329,7 @@ const ContinuousTransactionsTableRow: FC<
                       <Icons.ArrowUpRightIcon className="text-content-contrast" />
                     }
                     onClick={withdraw}
+                    loading={loading}
                   />
                 )}
               <IconButton
@@ -265,10 +379,10 @@ const ContinuousTransactionsTableRow: FC<
                           width={24}
                           className="rounded-full"
                         />
-                        <div data-tip={sender} className="">
-                          {toSubstring(sender, 5, true)}
+                        <div data-tip={senderEvm || sender} className="">
+                          {toSubstring(senderEvm || sender, 5, true)}
                         </div>
-                        <CopyButton content={sender} />
+                        <CopyButton content={senderEvm || sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -285,10 +399,10 @@ const ContinuousTransactionsTableRow: FC<
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                        <div className="" data-tip={receiverEvm || receiver}>
+                          {toSubstring(receiverEvm || receiver, 5, true)}
                         </div>
-                        <CopyButton content={receiver} />
+                        <CopyButton content={receiverEvm || receiver} />
                       </div>
                     </div>
                     {/* Start Date */}

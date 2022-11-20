@@ -1,6 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useWallet } from "@solana/wallet-adapter-react"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
+  ZebecEthBridgeClient
+} from "zebec-wormhole-sdk-test"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import {
@@ -23,8 +35,16 @@ import {
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
 import { constants } from "constants/constants"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import {
+  fetchFilteredAddressBook,
+  setFilteredPagination
+} from "features/address-book/addressBookSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { sendContinuousStream } from "features/stream/streamSlice"
+import { toast } from "features/toasts/toastsSlice"
 import { useClickOutside } from "hooks"
+import { useZebecWallet } from "hooks/useWallet"
 import moment from "moment"
 import { useTranslation } from "next-i18next"
 import { useRouter } from "next/router"
@@ -35,10 +55,12 @@ import { toSubstring } from "utils"
 import { formatCurrency } from "utils/formatCurrency"
 import { getBalance } from "utils/getBalance"
 import { continuousSchema } from "utils/validations/continuousStreamSchema"
+import { useSigner } from "wagmi"
 import {
   ContinuousStreamFormData,
   ContinuousStreamProps
 } from "./ContinuousStream.d"
+import { checkPDAinitialized } from "utils/checkPDAinitialized"
 
 const intervals = [
   {
@@ -63,6 +85,9 @@ const intervals = [
   }
 ]
 
+let searchData = ""
+let addressCurrentPage = 1
+
 export const ContinuousStream: FC<ContinuousStreamProps> = ({
   setFormValues,
   tokenBalances,
@@ -73,10 +98,16 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
+
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
 
-  const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const {
+    filteredAddressBooks: addressBook,
+    addressBooks: mainAddressBook,
+    filteredPagination
+  } = useAppSelector((state) => state.address)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const {
@@ -105,17 +136,18 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   const [toggleIntervalDropdown, setToggleIntervalDropdown] = useState(false)
   // const [resetFile, setResetFile] = useState(false)
 
-  const { tokens: tokenDetails, prices } = useAppSelector(
-    (state) => state.tokenDetails
+  const { prices } = useAppSelector((state) => state.tokenDetails)
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === "solana" && token.network === walletObject.network
+    )
   )
-
-  const [currentToken, setCurrentToken] = useState(
-    tokenDetails[0] || {
-      symbol: "",
-      image: "",
-      mint: ""
-    }
-  )
+  const [currentToken, setCurrentToken] = useState({
+    symbol: "",
+    image: "",
+    mint: ""
+  })
 
   const handleTokensClose = () => {
     setToggleTokensDropdown(false)
@@ -139,23 +171,71 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
 
   useEffect(() => {
-    if (tokenDetails.length > 0) {
+    if (tokenDetails.length > 0 && !currentToken.symbol) {
       setCurrentToken(tokenDetails[0])
       setValue("symbol", tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setValue])
+  }, [tokenDetails, setValue, currentToken.symbol])
 
   useEffect(() => {
-    if (publicKey) {
-      setValue("wallet", publicKey.toString())
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
     }
-  }, [publicKey, setValue])
+  }, [walletObject.chainId, setValue])
 
   useEffect(() => {
     if (router?.query.address) {
       setValue("receiver", router?.query.address.toString() || "")
     }
   }, [router, setValue])
+
+  useEffect(() => {
+    dispatch(
+      setFilteredPagination({
+        currentPage: 1,
+        limit: 4,
+        total: 0
+      })
+    )
+    searchData = receiverSearchData
+    addressCurrentPage = 1
+    dispatch(
+      fetchFilteredAddressBook({
+        search: receiverSearchData,
+        page: 1,
+        append: false
+      })
+    )
+  }, [dispatch, receiverSearchData])
+
+  useEffect(() => {
+    addressCurrentPage = Number(filteredPagination.currentPage)
+  }, [filteredPagination.currentPage])
+
+  useEffect(() => {
+    if (toggleReceiverDropdown) {
+      // detect end of scroll
+      setTimeout(() => {
+        const element = document.querySelector(
+          ".address-book-list"
+        ) as HTMLElement
+        element?.addEventListener("scroll", () => {
+          if (
+            element.scrollTop + element.clientHeight + 5 >=
+            element.scrollHeight
+          ) {
+            dispatch(
+              fetchFilteredAddressBook({
+                search: searchData,
+                page: addressCurrentPage + 1,
+                append: true
+              })
+            )
+          }
+        })
+      }, 200)
+    }
+  }, [toggleReceiverDropdown])
 
   const resetForm = () => {
     reset()
@@ -181,6 +261,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         .add(constants.STREAM_START_ADD + constants.STREAM_END_ADD, "minutes")
         .format("hh:mm A")
     )
+    if (walletObject.chainId) {
+      setValue("chainId", walletObject.chainId)
+    }
     trigger("startDate")
     trigger("startTime")
     trigger("endDate")
@@ -199,7 +282,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     }
   }
 
-  const onSubmit = async (data: ContinuousStreamFormData) => {
+  const handleSolanaStream = async (data: ContinuousStreamFormData) => {
     const formattedData = {
       name: data.transaction_name,
       transaction_type: "continuous",
@@ -207,7 +290,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       remarks: data.remarks || "",
       amount: Number(data.amount),
       receiver: data.receiver,
-      sender: data.wallet,
+      sender: walletObject.publicKey?.toString() || "",
       start_time: moment(
         `${data.startDate} ${data.startTime}`,
         "DD/MM/YYYY LT"
@@ -254,6 +337,133 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               })
             )
       }
+    }
+  }
+
+  const handleEvmStream = async (data: ContinuousStreamFormData) => {
+    try {
+      dispatch(toggleWalletApprovalMessageModal())
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        return
+      }
+
+      const receiver =
+        walletObject.getCorrespondingWalletAddress(data.receiver)?.toString() ||
+        ""
+      // is receiver proxy initialized
+      const check = await checkPDAinitialized(receiver)
+      if (!check) {
+        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(
+          toast.error({
+            message: "Receiver's proxy pda is not initialized."
+          })
+        )
+        return
+      }
+      // commented console.log(data)
+      if (!signer) return
+      const formattedData = {
+        name: data.transaction_name,
+        transaction_type: "continuous",
+        token: data.symbol,
+        remarks: data.remarks || "",
+        amount: Number(data.amount),
+        receiver,
+        receiverEvm: data.receiver,
+        sender: walletObject.publicKey?.toString() || "",
+        senderEvm: walletObject.originalAddress?.toString() || "",
+        start_time: moment(
+          `${data.startDate} ${data.startTime}`,
+          "DD/MM/YYYY LT"
+        ).unix(),
+        end_time: moment(
+          `${data.endDate} ${data.endTime}`,
+          "DD/MM/YYYY LT"
+        ).unix(),
+        token_mint_address:
+          currentToken.mint === "solana" ? "" : currentToken.mint,
+        file: data.file
+      }
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      const transferReceipt = await messengerContract.initStream(
+        formattedData.start_time.toString(),
+        formattedData.end_time.toString(),
+        formattedData.amount.toString(),
+        formattedData.receiverEvm,
+        formattedData.senderEvm,
+        true,
+        true,
+        formattedData.token_mint_address
+      )
+      const sequence = parseSequenceFromLogEth(
+        transferReceipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const transferEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      console.debug("emitterAddress:", transferEmitterAddress)
+      // commented console.log("sequence", sequence)
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        "bsc",
+        transferEmitterAddress,
+        sequence
+      )
+      const backendData = {
+        ...formattedData,
+        vaa: Buffer.from(signedVaa).toString("hex")
+      }
+      dispatch(sendContinuousStream(backendData)).then(async () => {
+        // check if message is relayed
+        const response = await listenWormholeTransactionStatus(
+          signedVaa,
+          walletObject.originalAddress?.toString() as string,
+          sourceChain
+        )
+        if (response === "success") {
+          dispatch(toast.success({ message: "Stream started successfully" }))
+          initStreamCallback("success")
+        } else if (response === "timeout") {
+          dispatch(toast.error({ message: "Stream initiate timeout" }))
+        } else {
+          dispatch(toast.error({ message: "Failed to initiate stream" }))
+          dispatch(toggleWalletApprovalMessageModal())
+        }
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.debug("stream error", e)
+      dispatch(toggleWalletApprovalMessageModal())
+      dispatch(
+        toast.error({
+          message: "Failed to initiate stream"
+        })
+      )
+    }
+  }
+
+  const onSubmit = async (data: ContinuousStreamFormData) => {
+    // commented console.log("data", data)
+    if (walletObject.chainId === "solana") {
+      handleSolanaStream(data)
+    } else {
+      handleEvmStream(data)
     }
   }
 
@@ -417,7 +627,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 position="left"
               >
                 <div className="rounded-lg bg-background-primary border border-outline">
-                  {addressBook.length > 0 ? (
+                  {mainAddressBook.length > 0 || receiverSearchData ? (
                     <>
                       <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
                       <input
@@ -426,13 +636,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                         type="text"
                         onChange={(e) => setReceiverSearchData(e.target.value)}
                       />
-                      <div className="divide-y divide-outline max-h-[206px] overflow-auto">
+                      <div className="divide-y address-book-list divide-outline max-h-[206px] overflow-auto">
                         {addressBook
-                          .filter((user) =>
-                            user.name
-                              .toLowerCase()
-                              .includes(receiverSearchData.toLowerCase())
-                          )
+                          // .filter((user) =>
+                          //   user.name
+                          //     .toLowerCase()
+                          //     .includes(receiverSearchData.toLowerCase())
+                          // )
                           .map((user) => (
                             <div
                               key={user.address}
@@ -452,11 +662,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                               </div>
                             </div>
                           ))}
-                        {addressBook.filter((user) =>
-                          user.name
-                            .toLowerCase()
-                            .includes(receiverSearchData.toLowerCase())
-                        ).length === 0 && (
+                        {addressBook.length !== filteredPagination.total && (
+                          <div className="flex justify-center items-center py-3">
+                            <Icons.Loading className="text-content-primary" />
+                          </div>
+                        )}
+                        {addressBook.length === 0 && receiverSearchData && (
                           <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
                             <div className="text-content-contrast">
                               {t("common:no-receiver-found")}

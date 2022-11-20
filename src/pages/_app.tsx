@@ -22,6 +22,7 @@ import { CLUSTER_API_URL, RPC_NETWORK } from "constants/cluster"
 //Styles
 import "@solana/wallet-adapter-react-ui/styles.css"
 import "styles/globals.css"
+import EthereumWalletProvider from "components/shared/Wallet/EthereumWalletProvider"
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
@@ -40,18 +41,20 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   )
   return (
     <Provider store={store}>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
-            <ThemeProvider>
-              <ZebecContextProvider>
-                <Component {...pageProps} />
-                <Common />
-              </ZebecContextProvider>
-            </ThemeProvider>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
+      <EthereumWalletProvider>
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+            <WalletModalProvider>
+              <ThemeProvider>
+                <ZebecContextProvider>
+                  <Component {...pageProps} />
+                  <Common />
+                </ZebecContextProvider>
+              </ThemeProvider>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      </EthereumWalletProvider>
     </Provider>
   )
 }

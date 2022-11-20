@@ -1,6 +1,7 @@
 import * as Yup from "yup"
 import {
   amount,
+  chainId,
   endDate,
   endTime,
   file,
@@ -31,5 +32,6 @@ export const continuousSchema = Yup.object().shape({
   ...noOfTimes,
   ...tokenAmount,
   ...interval,
-  ...file
+  ...file,
+  ...chainId
 })

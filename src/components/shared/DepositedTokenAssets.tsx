@@ -9,13 +9,14 @@ import { Token } from "./Token"
 import { twMerge } from "tailwind-merge"
 import { useTranslation } from "next-i18next"
 import { IconButton } from "./IconButton"
-import { useWallet } from "@solana/wallet-adapter-react"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
 import { fetchZebecStreamingBalance } from "features/zebecStreamingBalance/zebecStreamingSlice"
 import ZebecContext from "app/zebecContext"
 import { fetchTokensPrice } from "features/tokenDetails/tokenDetailsSlice"
 import { constants } from "constants/constants"
+import { useZebecWallet } from "hooks/useWallet"
+import { useSigner } from "wagmi"
 
 interface DepositedTokenAssetsProps {
   tableMaxHeight: number
@@ -27,8 +28,10 @@ interface DepositedTokenAssetsProps {
 
 export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
   const { t } = useTranslation("common")
-  const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
   const dispatch = useAppDispatch()
+  const { data: signer } = useSigner()
+
   const {
     tableMaxHeight,
     tokens,
@@ -54,16 +57,30 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
 
   const refreshBalance = () => {
     setRefreshClassName("animate-spin")
-    if (publicKey && !refreshClassName) {
+    if (walletObject && !refreshClassName) {
       dispatch(fetchTokensPrice())
-      dispatch(fetchZebecBalance(publicKey?.toString()))
-      dispatch(fetchWalletBalance(publicKey?.toString()))
+      dispatch(
+        fetchZebecBalance({
+          publicKey: walletObject.publicKey?.toString(),
+          network: walletObject.network
+        })
+      )
+      // dispatch(fetchWalletBalance(publicKey?.toString()))
+      dispatch(
+        fetchWalletBalance({
+          publicKey: walletObject.originalAddress,
+          chainId: walletObject.chainId,
+          network: walletObject.network,
+          signer: walletObject.chainId !== "solana" && signer
+        })
+      )
       if (zebecContext.token && zebecContext.stream) {
         dispatch(
           fetchZebecStreamingBalance({
-            wallet: publicKey.toString(),
+            wallet: walletObject.publicKey?.toString() || "",
             stream: zebecContext.stream,
-            token: zebecContext.token
+            token: zebecContext.token,
+            network: walletObject.network
           })
         )
       }

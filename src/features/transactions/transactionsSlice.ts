@@ -127,6 +127,7 @@ const initialState: TransactionState = {
   initiatedTransactions: []
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
   "transactions/updateTransactionsStatus",
   async (uuid, {}) => {
@@ -138,7 +139,7 @@ export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (_, { getState }) => {
+  async (wallet: string, { getState }) => {
     const { transactions } = getState() as RootState
     const { data: response } = await api.get("/transaction/", {
       params: {
@@ -149,6 +150,15 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
           transactions.pagination.limit
       }
     })
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${wallet}`
+    // )
+    // return {
+    //   count: response.length,
+    //   next: "",
+    //   previous: "",
+    //   results: response
+    // }
     return response
   }
 )

@@ -16,9 +16,11 @@ const initialState: TreasuryState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchTreasuryBalance: any = createAsyncThunk(
   "balance/fetchTreasuryBalance",
-  async ({ name, address }: FetchTreasuryProps, { getState }) => {
+  async ({ name, address, network }: FetchTreasuryProps, { getState }) => {
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.network === network && token.chainId === "solana"
+    )
 
     // fetch treasury tokens
     const tokensBalance = await getTokensBalanceOfWallet(address, tokens)

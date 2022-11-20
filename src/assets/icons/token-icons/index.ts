@@ -18,6 +18,7 @@ import UxdIcon from "./uxd.svg"
 import WagIcon from "./wag.svg"
 import WnzIcon from "./wnz.svg"
 import ZbcIcon from "./zbc.svg"
+import EthIcon from "./eth.svg"
 import HawkIcon from "./hawk.svg"
 import MwmIcon from "./mwm.svg"
 import MadIcon from "./mad.svg"
@@ -42,6 +43,8 @@ import HtoIcon from "./hto.svg"
 
 export {
   SolIcon as SOL,
+  SolIcon as WSOL,
+  SolIcon as WWSOL,
   ScyIcon as SCY,
   SerIcon as SER,
   PusdIcon as pUSDC,
@@ -51,6 +54,7 @@ export {
   LpusdIcon as lpUSD,
   LpfiIcon as LPFi,
   ZbcIcon as ZBC,
+  ZbcIcon as WZBC,
   WagIcon as WAG,
   WnzIcon as $WNZ,
   UsdcIcon as USDC,
@@ -61,6 +65,7 @@ export {
   AllIcon as $ALL,
   RayIcon as RAY,
   UxdIcon as UXD,
+  EthIcon as ETH,
   HawkIcon as HAWK,
   MwmIcon as MWM,
   MadIcon as MAD,

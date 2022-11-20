@@ -1,7 +1,7 @@
-import { WalletContextState } from "@solana/wallet-adapter-react"
 import { PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js"
 import api from "api/api"
 import { connection } from "constants/cluster"
+import { ZebecWalletContext } from "hooks/useWallet"
 import TokenService from "./token.service"
 
 export const createSignMessageTx = (message: string) => {
@@ -21,11 +21,11 @@ export const createSignMessageTx = (message: string) => {
 }
 
 export const login = async (
-  walletObject: WalletContextState,
+  walletObject: ZebecWalletContext,
   isLedgerWallet: boolean
 ) => {
-  const { publicKey, signMessage } = walletObject
-  if (publicKey && signMessage) {
+  const { publicKey, signMessage, originalAddress, network } = walletObject
+  if (publicKey && originalAddress && signMessage) {
     try {
       const message =
         "Zebec Wallet Verification" +
@@ -49,8 +49,10 @@ export const login = async (
           const data = {
             wallet_address: pubkey,
             message: messagetob,
-            signature: signedTx.serialize().toString("base64"),
-            is_ledger_wallet: true
+            signature: signedTx?.serialize().toString("base64"),
+            is_ledger_wallet: true,
+            network: "solana",
+            evm_address: pubkey.toString()
           }
 
           try {
@@ -63,16 +65,20 @@ export const login = async (
         }
       } else {
         const encodedMessage = new TextEncoder().encode(message)
-        const signedMessage = await signMessage(encodedMessage)
-        const b64 = Buffer.from(signedMessage).toString("base64")
+        const b64 = await signMessage(message)
         const pubkey = Buffer.from(publicKey.toBytes()).toString("base64")
         const messagetob = Buffer.from(encodedMessage).toString("base64")
 
+        const evm_address = Buffer.from(
+          new TextEncoder().encode(originalAddress.toString())
+        ).toString("base64")
         const data = {
           wallet_address: pubkey,
           signature: b64,
           message: messagetob,
-          is_ledger_wallet: false
+          is_ledger_wallet: false,
+          network,
+          evm_address
         }
 
         try {

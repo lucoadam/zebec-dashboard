@@ -1,6 +1,7 @@
 export interface StreamingToken {
   symbol: string
   balance: number
+  chainId: string
 }
 
 export interface StreamingTokenState {

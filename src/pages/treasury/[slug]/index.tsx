@@ -3,6 +3,8 @@ import Overview from "components/treasury/detail/components/overview/Overview"
 import TreasuryDetailsLayout from "components/treasury/detail/TreasuryDetailsLayout"
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { fetchTreasuryPendingTransactions } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import { useZebecWallet } from "hooks/useWallet"
+import { useRouter } from "next/router"
 import type { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import { useEffect } from "react"
@@ -23,6 +25,15 @@ const Treasury: NextPage = () => {
     }
     // eslint-disable-next-line
   }, [tokens, activeTreasury])
+
+  const history = useRouter()
+  const walletObject = useZebecWallet()
+
+  useEffect(() => {
+    if (walletObject.chainId !== "solana") {
+      history.replace("/")
+    }
+  }, [walletObject, history])
 
   return (
     <TreasuryLayout pageTitle="Zebec - Treasury">

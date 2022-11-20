@@ -272,6 +272,16 @@ input[type="number"] {
   content: none;
 }
 
+.steps-container-modal {
+  @apply relative;
+}
+.steps-container-modal::after {
+  content: "";
+  @apply absolute left-[12px] h-1 w-px top-8 bg-outline;
+}
+.steps-container-modal.last::after {
+  content: none;
+}
 /* Toggle */
 .toggle-bg:after {
   content: "";

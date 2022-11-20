@@ -13,6 +13,7 @@ import { useState } from "react"
 import { Deposit } from "./Deposit"
 import { Withdrawal } from "./Withdrawal"
 import { PendingConfirmation } from "./PendingConfirmation"
+import { useZebecWallet } from "hooks/useWallet"
 
 const fundTransferTabs = [
   {
@@ -30,7 +31,14 @@ const fundTransferTabs = [
 ]
 
 const Overview = () => {
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const walletObject = useZebecWallet()
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === walletObject.chainId &&
+        token.network === walletObject.network
+    )
+  )
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   const treasuryVaultTokens =
@@ -90,7 +98,6 @@ const Overview = () => {
        * **/}
       <div className="grid gap-y-6">
         <TreasuryDepositedAssets
-          tableMaxHeight={517}
           balanceTokens={treasuryTokens}
           vaultBalanceTokens={treasuryVaultTokens}
           streamingBalanceTokens={treasuryVaultStreamingTokensBalance}
