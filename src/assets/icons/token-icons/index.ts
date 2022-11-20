@@ -39,6 +39,7 @@ import MhtIcon from "./mht.svg"
 import LaxIcon from "./lax.svg"
 import PhxIcon from "./phx.svg"
 import MiaIcon from "./mia.svg"
+import HtoIcon from "./hto.svg"
 
 export {
   SolIcon as SOL,
@@ -84,5 +85,6 @@ export {
   MhtIcon as MHT,
   LaxIcon as LAX,
   PhxIcon as PHX,
-  MiaIcon as MIA
+  MiaIcon as MIA,
+  HtoIcon as HTO
 }

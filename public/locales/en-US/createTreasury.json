@@ -4,7 +4,7 @@
     "description": "Let’s start by giving a name to your treasury",
     "step": {
       "name": "Name",
-      "description": "Give your treasury name."
+      "description": "Give your treasury a name."
     }
   },
   "second-steper": {

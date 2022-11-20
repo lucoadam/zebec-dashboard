@@ -43,21 +43,28 @@ const WalletNotConnectedModal: NextPage = () => {
 
   // const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isLedgerWallet, setIsLedgerWallet] = useState(false)
   const { isSigned } = useAppSelector((state) => state.common)
   const dispatch = useAppDispatch()
 
   const handleLogin: () => void = async () => {
-    const response = await login(walletObject)
+    const response = await login(walletObject, isLedgerWallet)
     if (response?.status === 200) {
       dispatch(changeSignState(true))
     }
   }
 
   useEffect(() => {
+    if (walletObject.connected && walletObject.adapter === "Ledger")
+      setIsLedgerWallet(true)
+    // eslint-disable-next-line
+  }, [walletObject.connected])
+
+  useEffect(() => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
       if (!token) {
-        if (walletObject.adapter) {
+        if (walletObject.adapter && walletObject.network !== "solana") {
           handleLogin()
         }
       } else {
@@ -84,11 +91,7 @@ const WalletNotConnectedModal: NextPage = () => {
     <>
       {isInitialized && (
         <Modal
-          show={
-            !walletObject.connected ||
-            !isSigned ||
-            !walletObject.isSupportedChain
-          }
+          show={!walletObject.connected || !isSigned}
           toggleModal={() => null}
           className="rounded-2xl pb-6 max-w-[398px] text-center"
           hasCloseIcon={false}

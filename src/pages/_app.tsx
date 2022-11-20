@@ -8,18 +8,7 @@ import {
   PhantomWalletAdapter,
   SlopeWalletAdapter,
   SolflareWalletAdapter,
-  BackpackWalletAdapter,
-  ExodusWalletAdapter,
-  SolletExtensionWalletAdapter,
-  TorusWalletAdapter,
-  CloverWalletAdapter,
-  Coin98WalletAdapter,
-  LedgerWalletAdapter,
-  SolongWalletAdapter,
-  MathWalletAdapter,
-  GlowWalletAdapter,
-  SpotWalletAdapter,
-  BitKeepWalletAdapter
+  LedgerWalletAdapter
 } from "@solana/wallet-adapter-wallets"
 import { store } from "app/store"
 import { ZebecContextProvider } from "app/zebecContext"
@@ -46,18 +35,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       new PhantomWalletAdapter(),
       new SlopeWalletAdapter(),
       new SolflareWalletAdapter({ network }),
-      new BackpackWalletAdapter(),
-      new ExodusWalletAdapter(),
-      new SolletExtensionWalletAdapter(),
-      new TorusWalletAdapter(),
-      new CloverWalletAdapter(),
-      new Coin98WalletAdapter(),
-      new LedgerWalletAdapter(),
-      new SolongWalletAdapter(),
-      new MathWalletAdapter(),
-      new GlowWalletAdapter(),
-      new SpotWalletAdapter(),
-      new BitKeepWalletAdapter()
+      new LedgerWalletAdapter()
     ],
     [network]
   )

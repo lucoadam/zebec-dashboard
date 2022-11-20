@@ -19,6 +19,13 @@ import { Collapse } from "./Collapse"
 import { WalletSVG } from "./WalletSVG"
 import * as Icons from "assets/icons"
 import { useZebecWallet } from "hooks/useWallet"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import { Toggle } from "../Toggle"
+import { toSubstring } from "utils"
+import { login } from "api"
+import { changeSignState } from "features/common/commonSlice"
+import { useTranslation } from "next-i18next"
+import { useDisconnect } from "wagmi"
 
 export interface WalletModalProps {
   className?: string
@@ -34,9 +41,15 @@ export const SolanaWallet: FC<WalletModalProps> = ({
   const walletObject = useZebecWallet()
 
   const { setVisible } = useWalletModal()
+
+  const [isLedgerWallet, setIsLedgerWallet] = useState(false)
+  const { isSigned } = useAppSelector((state) => state.common)
+  const { disconnect } = useDisconnect()
+
   const [expanded, setExpanded] = useState(false)
-  const [fadeIn, setFadeIn] = useState(false)
-  const [portal, setPortal] = useState<Element | null>(null)
+
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation("common")
 
   const [installedWallets, otherWallets] = useMemo(() => {
     const installed: Wallet[] = []
@@ -57,7 +70,6 @@ export const SolanaWallet: FC<WalletModalProps> = ({
   }, [wallets])
 
   const hideModal = useCallback(() => {
-    setFadeIn(false)
     setTimeout(() => setVisible(false), 150)
   }, [setVisible])
 
@@ -123,7 +135,6 @@ export const SolanaWallet: FC<WalletModalProps> = ({
     // Get original overflow
     const { overflow } = window.getComputedStyle(document.body)
     // Hack to enable fade in animation after mount
-    setTimeout(() => setFadeIn(true), 0)
     // Prevent scrolling on mount
     document.body.style.overflow = "hidden"
     // Listen for keydown events
@@ -136,10 +147,12 @@ export const SolanaWallet: FC<WalletModalProps> = ({
     }
   }, [hideModal, handleTabKey])
 
-  useLayoutEffect(
-    () => setPortal(document.querySelector(container)),
-    [container]
-  )
+  const handleLogin: () => void = async () => {
+    const response = await login(walletObject, isLedgerWallet)
+    if (response?.status === 200) {
+      dispatch(changeSignState(true))
+    }
+  }
 
   return (
     <div className={twMerge("text-content-primary", className)}>
@@ -153,28 +166,32 @@ export const SolanaWallet: FC<WalletModalProps> = ({
           </div>
         </>
       )}
-      {installedWallets.map((wallet) => (
-        <Button
-          key={wallet.adapter.name}
-          className="w-full justify-between mb-2"
-          startIcon={
-            <>
-              <i className="wallet-adapter-button-start-icon">
-                <WalletIcon wallet={wallet} />
-              </i>
-            </>
-          }
-          variant="gradient"
-          endIcon={<span className="text-[10px] font-normal">Detected</span>}
-          title={wallet.adapter.name}
-          onClick={(event) => {
-            wallet
-            handleWalletClick(event, wallet.adapter.name)
-          }}
-          childrenClassName="flex items-center justify-start"
-        />
-      ))}
-      {otherWallets.length ? (
+      {(!walletObject.connected ||
+        (!isSigned && walletObject.network !== "solana")) &&
+        installedWallets.map((wallet) => (
+          <Button
+            key={wallet.adapter.name}
+            className="w-full justify-between mb-2"
+            startIcon={
+              <>
+                <i className="wallet-adapter-button-start-icon">
+                  <WalletIcon wallet={wallet} />
+                </i>
+              </>
+            }
+            variant="gradient"
+            endIcon={<span className="text-[10px] font-normal">Detected</span>}
+            title={wallet.adapter.name}
+            onClick={(event) => {
+              wallet
+              handleWalletClick(event, wallet.adapter.name)
+            }}
+            childrenClassName="flex items-center justify-start"
+          />
+        ))}
+      {(!walletObject.connected ||
+        (!isSigned && walletObject.network !== "solana")) &&
+      otherWallets.length ? (
         <button
           className="flex text-content-primary items-center gap-x-1 mt-6 ml-auto"
           onClick={handleCollapseClick}
@@ -222,6 +239,75 @@ export const SolanaWallet: FC<WalletModalProps> = ({
           <></>
         )}
       </Collapse>
+
+      {walletObject.connected &&
+        !isSigned &&
+        walletObject.network === "solana" && (
+          <>
+            <div className="flex flex-col mt-8">
+              {/* Step 1 */}
+              <div className="flex gap-x-6">
+                <div className="shrink-0 w-6 h-6 rounded-full bg-primary text-content-primary text-xs grid place-content-center">
+                  1
+                </div>
+                <div className="flex flex-col gap-y-1">
+                  <h4 className="leading-6 font-medium text-sm text-content-primary text-start">
+                    Connected wallet
+                  </h4>
+                  <p className="text-content-secondary bg-background-muted text-sm py-1 px-3 rounded-xl">
+                    {toSubstring(walletObject?.publicKey?.toString(), 10, true)}
+                  </p>
+                </div>
+              </div>
+              {/* Divider */}
+              <div className="h-12 w-px bg-background-light ml-3 transform -translate-y-4"></div>
+              {/* Step 2 */}
+              <div className="flex gap-x-6">
+                <div className="shrink-0 w-6 h-6 rounded-full bg-content-contrast  text-content-primary text-xs grid place-content-center">
+                  2
+                </div>
+                <div className="flex flex-col gap-y-1">
+                  <h4 className="leading-6 font-medium text-sm text-content-primary text-start">
+                    Sign {isLedgerWallet ? "transaction" : "message"}
+                  </h4>
+                  <p className="text-content-secondary text-xs text-start">
+                    {isLedgerWallet
+                      ? "Signed transaction is not sent to blockchain and only serves for ownership verification"
+                      : "Message signed by your wallet only serves for ownership verification"}
+                  </p>
+                  <div className="text-content-secondary text-sm mt-2">
+                    <Toggle
+                      text="Are you using Ledger?"
+                      onChange={() => setIsLedgerWallet(!isLedgerWallet)}
+                      checked={isLedgerWallet}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      {walletObject.connected &&
+        !isSigned &&
+        walletObject.network === "solana" && (
+          <>
+            <Button
+              className="w-full mt-10"
+              title={t("wallet-not-connected.sign-message").toString()}
+              variant="gradient"
+              onClick={handleLogin}
+            />
+            <Button
+              className="w-full mt-3"
+              title={`Disconnect`}
+              variant="default"
+              onClick={() => {
+                walletObject.disconnect()
+                disconnect()
+              }}
+            />
+          </>
+        )}
     </div>
   )
 }

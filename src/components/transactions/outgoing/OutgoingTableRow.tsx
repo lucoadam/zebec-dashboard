@@ -36,9 +36,6 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-  const { initiatedTransactions } = useAppSelector(
-    (state) => state.transactions
-  )
   const { explorer } = useAppSelector((state) => state.settings)
 
   const {
@@ -104,50 +101,32 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   }, [status, currentTime, transaction])
 
   useEffect(() => {
-    if (
-      initiatedTransactions.some(
-        (initiatedTrx) => initiatedTrx === transaction.uuid
+    if (status === StatusType.COMPLETED) {
+      setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
+    } else if (status === StatusType.ONGOING) {
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
       )
-    ) {
-      if (currentTime < start_time) {
-        setStreamedToken(0)
-      } else {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
+      const interval = setInterval(() => {
+        setStreamedToken((prevStreamedToken: number) =>
+          prevStreamedToken + streamRatePerSec > amount
+            ? amount
+            : prevStreamedToken + streamRatePerSec
         )
-      }
-    } else {
-      if (status === StatusType.COMPLETED) {
-        setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
-      } else if (status === StatusType.ONGOING) {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
-        )
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > amount
-              ? amount
-              : prevStreamedToken + streamRatePerSec
-          )
-        }, 1000)
-        return () => clearInterval(interval)
-      } else if (status === StatusType.CANCELLED) {
-        setStreamedToken(Number(latest_transaction_event.withdrawn))
-      } else if (status === StatusType.PAUSED) {
-        setStreamedToken(
-          Number(latest_transaction_event.withdraw_limit) -
-            Number(latest_transaction_event.paused_amt)
-        )
-      }
+      }, 1000)
+      return () => clearInterval(interval)
+    } else if (status === StatusType.CANCELLED) {
+      setStreamedToken(Number(latest_transaction_event.withdrawn))
+    } else if (status === StatusType.PAUSED) {
+      setStreamedToken(
+        Number(latest_transaction_event.withdraw_limit) -
+          Number(latest_transaction_event.paused_amt)
+      )
     }
-    // eslint-disable-next-line
-  }, [status, transaction, initiatedTransactions])
+  }, [status, transaction])
 
   const styles = {
     detailsRow: {

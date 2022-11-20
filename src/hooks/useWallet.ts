@@ -1,6 +1,6 @@
 import { useAccount, useSignMessage, useDisconnect, useNetwork } from "wagmi"
 import { useWallet } from "@solana/wallet-adapter-react"
-import { PublicKey } from "@solana/web3.js"
+import { PublicKey, Transaction } from "@solana/web3.js"
 import { supportedEVMChains } from "constants/supportedEVMChains"
 import {
   SOL_ZEBEC_BRIDGE_ADDRESS,
@@ -18,6 +18,7 @@ export interface ZebecWalletContext {
   chainId: string | undefined
   originalAddress: string | PublicKey | undefined
   signMessage: (message: string) => Promise<string | null>
+  signTransaction: (transaction: Transaction) => Promise<Transaction | null>
   getCorrespondingWalletAddress: (address: string) => PublicKey | undefined
   disconnect: () => void
   isSupportedChain: boolean
@@ -114,6 +115,13 @@ export const useZebecWallet = (): ZebecWalletContext => {
     }
   }
 
+  const signTransaction = async (transaction: Transaction) => {
+    if (network === "solana" && solAccount.signTransaction) {
+      return solAccount.signTransaction(transaction)
+    }
+    return null
+  }
+
   const getCorrespondingWalletAddress = (ethAddress: string) => {
     return new PublicKey(
       ZebecSolBridgeClient.getProxyUserKey(
@@ -132,6 +140,7 @@ export const useZebecWallet = (): ZebecWalletContext => {
     chainId,
     originalAddress,
     signMessage,
+    signTransaction,
     disconnect: disconnectWallet,
     getCorrespondingWalletAddress,
     isSupportedChain
