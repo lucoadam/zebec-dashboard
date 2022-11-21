@@ -20,6 +20,7 @@ env:
   NODE_ENV: production
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
   FEE_RECEIVER_WALLET: E6kpHgWce3JhbEkeBvqGRmrefFAcWdqewUYaK5RaVQoz
+  SDK_ENV: development
 
 permissions:
   contents: read
@@ -60,6 +61,7 @@ jobs:
             --build-arg NODE_ENV=${NODE_ENV} \
             --build-arg PROGRAM_ID=${PROGRAM_ID} \
             --build-arg FEE_RECEIVER_WALLET=${FEE_RECEIVER_WALLET} \
+            --build-arg SDK_ENV=${SDK_ENV} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
