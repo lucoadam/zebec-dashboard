@@ -15,7 +15,9 @@ export const getEVMTokenBalance = async (
   const balance: any = await signer.provider.getBalance(address)
   const tokenBalances = await Promise.all(
     tokens
-      .filter((token) => token.mint !== "binancecoin")
+      .filter(
+        (token) => token.mint !== "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+      )
       .map(async (token) => {
         const contract = new ethers.Contract(token.mint, EVMTokenABI, signer)
         const balance = await contract.balanceOf(address)
@@ -24,7 +26,10 @@ export const getEVMTokenBalance = async (
   )
 
   return Object.fromEntries([
-    ["binancecoin", balance.toString() / 10 ** 18],
+    [
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      balance.toString() / 10 ** 18
+    ],
     ...tokenBalances
   ])
 }

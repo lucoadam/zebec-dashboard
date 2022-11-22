@@ -92,7 +92,7 @@ const bscTokensMainnet = [
     symbol: "BNB",
     name: "Binance Coin",
     decimal: 18,
-    mint: "binancecoin",
+    mint: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
     coingeco_id: "binancecoin",
     chain_id: "56",
     network: "Binance Smart Chain Mainnet"
