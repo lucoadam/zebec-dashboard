@@ -127,6 +127,7 @@ const initialState: TransactionState = {
   initiatedTransactions: []
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
   "transactions/updateTransactionsStatus",
   async (uuid, {}) => {
@@ -138,7 +139,7 @@ export const updateTransactionsStatus = createAsyncThunk<null, string, {}>(
 export const fetchOutgoingTransactions: any = createAsyncThunk(
   "transactions/fetchOutgoingTransactions",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async (_, { getState }) => {
+  async (wallet: string, { getState }) => {
     const { transactions } = getState() as RootState
     const { data: response } = await api.get("/transaction/", {
       params: {
@@ -149,6 +150,15 @@ export const fetchOutgoingTransactions: any = createAsyncThunk(
           transactions.pagination.limit
       }
     })
+    // const { data: response } = await axios.get(
+    //   `https://internal-ten-cherry.glitch.me/transactions?sender=${wallet}`
+    // )
+    // return {
+    //   count: response.length,
+    //   next: "",
+    //   previous: "",
+    //   results: response
+    // }
     return response
   }
 )
@@ -191,7 +201,7 @@ export const fetchIncomingTransactionsById = createAsyncThunk<
   { uuid: string },
   {}
 >("transactions/fetchIncomingTransactionsById", async ({ uuid }, {}) => {
-  const response = await api.get(`/transaction/${uuid}`)
+  const response = await api.get(`/transaction/${uuid}/`)
   return response.data
 })
 
@@ -275,9 +285,8 @@ export const updateIncomingTransactions: any = createAsyncThunk<
       transaction_hash: data.transaction_hash,
       completed: data.completed
     })
-    setTimeout(() => {
-      dispatch(fetchIncomingTransactionsById({ uuid: data.transaction_uuid }))
-    }, constants.STREAM_FETCH_TIMEOUT)
+    dispatch(fetchIncomingTransactionsById({ uuid: data.transaction_uuid }))
+    setTimeout(() => {}, constants.STREAM_FETCH_TIMEOUT)
   } else {
     await api.post(
       `/incoming/treasury-vault-streaming-transactions/${data.transaction_uuid}/update-status/`,

@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { getTokensBalanceOfWallet } from "utils/getTokensBalance"
 import { RootState } from "app/store"
 import { WalletTokenState } from "./walletBalanceSlice.d"
+import { getEVMTokenBalance } from "utils/getEVMTokenBalance"
+import { Signer } from "ethers"
 
 const initialState: WalletTokenState = {
   loading: false,
@@ -13,17 +15,55 @@ const initialState: WalletTokenState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchWalletBalance: any = createAsyncThunk(
   "balance/fetchWalletBalance",
-  async (wallet: string, { getState }) => {
+  async (
+    {
+      publicKey,
+      chainId,
+      network,
+      signer
+    }: {
+      publicKey: string
+      chainId: string
+      network: string
+      signer?: Signer
+    },
+    { getState }
+  ) => {
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
-
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.chainId === chainId && token.network === network
+    )
     // fetch wallet tokens
-    const tokensBalance = await getTokensBalanceOfWallet(wallet, tokens)
-
-    return tokens.map((token) => ({
-      symbol: token.symbol,
-      balance: tokensBalance[token.symbol] || 0
-    }))
+    if (network === "solana") {
+      const tokensBalance = await getTokensBalanceOfWallet(
+        publicKey,
+        tokens.filter(
+          (token) => token.chainId === "solana" && token.network === network
+        )
+      )
+      return tokens.map((token) => ({
+        symbol: token.symbol,
+        balance: tokensBalance[token.symbol] || 0
+      }))
+    } else if (signer) {
+      const tokensBalance = await getEVMTokenBalance(
+        publicKey,
+        tokens.filter(
+          (token) => token.chainId === chainId && token.network === network
+        ),
+        signer
+      )
+      return tokens
+        .filter(
+          (token) => token.chainId === chainId && token.network === network
+        )
+        .map((token) => ({
+          symbol: token.symbol,
+          balance: tokensBalance[token.mint] || 0,
+          chainId: token.chainId,
+          network: token.network
+        }))
+    }
   }
 )
 

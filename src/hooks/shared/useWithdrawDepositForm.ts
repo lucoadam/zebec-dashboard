@@ -13,6 +13,7 @@ interface UseWithdrawDepositFormOptions {
 
 interface InputData {
   amount: string
+  balance: string
 }
 
 export const useWithdrawDepositForm = ({
@@ -23,23 +24,28 @@ export const useWithdrawDepositForm = ({
     symbol: string
     image: string
     mint: string
+    decimal: number
+    coingeckoId: string
   }>(
     tokens[0] || {
       symbol: "",
       image: "",
-      mint: ""
+      mint: "",
+      decimal: 0,
+      coingeckoId: ""
     }
   )
 
   useEffect(() => {
-    if (tokens.length > 0) {
+    if (tokens.length > 0 && currentToken.symbol === "") {
       setCurrentToken(tokens[0])
     }
-  }, [tokens])
+  }, [tokens, currentToken])
 
   const [show, toggle, setToggle] = useToggle(false)
 
   const validationSchema = Yup.object().shape({
+    balance: Yup.string(),
     amount: Yup.string()
       .required(`transactions:${type}.enter-${type}-amount`)
       .test(
@@ -47,6 +53,11 @@ export const useWithdrawDepositForm = ({
         `transactions:${type}.not-zero`,
         (value) => typeof value === "string" && parseFloat(value) > 0
       )
+      .test("max-amount", `validation:${type}-max-amount`, (value, context) => {
+        return (
+          !context.parent.balance || Number(value) <= context.parent.balance
+        )
+      })
   })
 
   const {

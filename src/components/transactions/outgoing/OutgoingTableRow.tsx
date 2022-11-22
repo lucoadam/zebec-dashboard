@@ -36,9 +36,6 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   const { t } = useTranslation("transactions")
   const detailsRowRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-  const { initiatedTransactions } = useAppSelector(
-    (state) => state.transactions
-  )
   const { explorer } = useAppSelector((state) => state.settings)
 
   const {
@@ -53,7 +50,9 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     transaction_type,
     transaction_hash,
     file,
-    latest_transaction_event
+    latest_transaction_event,
+    receiverEvm,
+    senderEvm
   } = transaction
 
   const totalTransactionAmount =
@@ -102,50 +101,32 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
   }, [status, currentTime, transaction])
 
   useEffect(() => {
-    if (
-      initiatedTransactions.some(
-        (initiatedTrx) => initiatedTrx === transaction.uuid
+    if (status === StatusType.COMPLETED) {
+      setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
+    } else if (status === StatusType.ONGOING) {
+      setStreamedToken(
+        latest_transaction_event.paused_amt
+          ? streamRatePerSec * (currentTime - start_time) -
+              Number(latest_transaction_event.paused_amt)
+          : streamRatePerSec * (currentTime - start_time)
       )
-    ) {
-      if (currentTime < start_time) {
-        setStreamedToken(0)
-      } else {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
+      const interval = setInterval(() => {
+        setStreamedToken((prevStreamedToken: number) =>
+          prevStreamedToken + streamRatePerSec > amount
+            ? amount
+            : prevStreamedToken + streamRatePerSec
         )
-      }
-    } else {
-      if (status === StatusType.COMPLETED) {
-        setStreamedToken(amount - Number(latest_transaction_event.paused_amt))
-      } else if (status === StatusType.ONGOING) {
-        setStreamedToken(
-          latest_transaction_event.paused_amt
-            ? streamRatePerSec * (currentTime - start_time) -
-                Number(latest_transaction_event.paused_amt)
-            : streamRatePerSec * (currentTime - start_time)
-        )
-        const interval = setInterval(() => {
-          setStreamedToken((prevStreamedToken: number) =>
-            prevStreamedToken + streamRatePerSec > amount
-              ? amount
-              : prevStreamedToken + streamRatePerSec
-          )
-        }, 1000)
-        return () => clearInterval(interval)
-      } else if (status === StatusType.CANCELLED) {
-        setStreamedToken(Number(latest_transaction_event.withdrawn))
-      } else if (status === StatusType.PAUSED) {
-        setStreamedToken(
-          Number(latest_transaction_event.withdraw_limit) -
-            Number(latest_transaction_event.paused_amt)
-        )
-      }
+      }, 1000)
+      return () => clearInterval(interval)
+    } else if (status === StatusType.CANCELLED) {
+      setStreamedToken(Number(latest_transaction_event.withdrawn))
+    } else if (status === StatusType.PAUSED) {
+      setStreamedToken(
+        Number(latest_transaction_event.withdraw_limit) -
+          Number(latest_transaction_event.paused_amt)
+      )
     }
-    // eslint-disable-next-line
-  }, [status, transaction, initiatedTransactions])
+  }, [status, transaction])
 
   const styles = {
     detailsRow: {
@@ -194,7 +175,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
             </div>
           </td>
           <td className="px-6 py-5 min-w-61">
-            <UserAddress wallet={receiver} />
+            <UserAddress wallet={receiverEvm || receiver} />
           </td>
           <td className="px-6 py-5 w-full">
             <div className="flex items-center float-right gap-x-6">
@@ -283,10 +264,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div data-tip={sender} className="">
-                          {toSubstring(sender, 5, true)}
+                        <div data-tip={senderEvm || sender} className="">
+                          {toSubstring(senderEvm || sender, 5, true)}
                         </div>
-                        <CopyButton content={sender} />
+                        <CopyButton content={senderEvm || sender} />
                       </div>
                     </div>
                     {/* Receiver */}
@@ -303,10 +284,10 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                           width={24}
                           className="rounded-full"
                         />
-                        <div className="" data-tip={receiver}>
-                          {toSubstring(receiver, 5, true)}
+                        <div className="" data-tip={receiverEvm || receiver}>
+                          {toSubstring(receiverEvm || receiver, 5, true)}
                         </div>
-                        <CopyButton content={receiver} />
+                        <CopyButton content={receiverEvm || receiver} />
                       </div>
                     </div>
                     {/* Start Date */}

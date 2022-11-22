@@ -6,9 +6,12 @@ import TreasuryInstantStream from "components/send-from-treasury/TreasuryInstant
 import { Breadcrumb, Tab } from "components/shared"
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
+import { useZebecWallet } from "hooks/useWallet"
 import type { GetStaticPaths, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const transferTabs = [
   {
@@ -33,6 +36,15 @@ const transferTabs = [
 
 const SendFromTreasury: NextPage = () => {
   const { t } = useTranslation("common")
+
+  const history = useRouter()
+  const walletObject = useZebecWallet()
+
+  useEffect(() => {
+    if (walletObject.chainId !== "solana") {
+      history.replace("/")
+    }
+  }, [walletObject, history])
 
   const activePage = useAppSelector(
     (state) => state.common.treasurySendActiveTab

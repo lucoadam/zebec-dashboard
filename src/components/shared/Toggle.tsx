@@ -22,7 +22,11 @@ export const Toggle: FC<ToggleProps> = (props) => {
             onChange={props.onChange}
             {...{ checked }}
           />
-          <div className="toggle-bg bg-background-primary border border-outline h-[18px] w-9 rounded-full"></div>
+          <div
+            className={`toggle-bg border border-outline h-5 w-10 rounded-full transition duration-200 ${
+              checked ? "bg-primary" : "bg-background-primary"
+            }`}
+          ></div>
           <span className="ml-[10px] text-sm font-medium text-content-primary">
             {text}
           </span>

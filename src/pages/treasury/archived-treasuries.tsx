@@ -4,9 +4,20 @@ import { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Layout from "components/layouts/Layout"
+import { useRouter } from "next/router"
+import { useZebecWallet } from "hooks/useWallet"
+import { useEffect } from "react"
 
 const ArchiveSafePage: NextPage = () => {
   const { t } = useTranslation()
+  const history = useRouter()
+  const walletObject = useZebecWallet()
+
+  useEffect(() => {
+    if (walletObject.chainId !== "solana") {
+      history.replace("/")
+    }
+  }, [walletObject, history])
 
   return (
     <Layout pageTitle="Zebec - Archived Safes">

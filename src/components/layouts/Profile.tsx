@@ -1,5 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react"
-import { useWalletModal } from "@solana/wallet-adapter-react-ui"
+// import { useWalletModal } from "@solana/wallet-adapter-react-ui"
 import Image from "next/image"
 import { FC, useEffect, useRef, useState } from "react"
 import * as Icons from "../../assets/icons"
@@ -13,6 +12,8 @@ import { useTranslation } from "next-i18next"
 import ReactTooltip from "react-tooltip"
 import { useClickOutside } from "../../hooks"
 import TokenService from "api/services/token.service"
+import { useZebecWallet } from "hooks/useWallet"
+import { titleCase } from "utils/titleCase"
 
 interface DecodedTokenProps {
   token_type: string
@@ -24,8 +25,8 @@ interface DecodedTokenProps {
 
 const Profile: FC = () => {
   const { t } = useTranslation()
-  const useWalletObject = useWallet()
-  const useWalletModalObject = useWalletModal()
+  const useWalletObject = useZebecWallet()
+  // const useWalletModalObject = useWalletModal()
   const profileDropdownWrapperRef = useRef(null)
 
   const [toggleProfileDropdown, setToggleProfileDropdown] =
@@ -41,10 +42,10 @@ const Profile: FC = () => {
   })
 
   //handle change wallet
-  const handleChangeWallet = () => {
-    useWalletModalObject.setVisible(!useWalletModalObject.visible)
-    handleClose()
-  }
+  // const handleChangeWallet = () => {
+  //   useWalletModalObject.setVisible(!useWalletModalObject.visible)
+  //   handleClose()
+  // }
 
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
@@ -93,10 +94,14 @@ const Profile: FC = () => {
             <div className="flex items-center gap-x-3">
               <div className="flex flex-col items-start justify-between h-full">
                 <div className="text-avatar-title font-medium text-content-primary">
-                  {toSubstring(useWalletObject?.publicKey?.toString(), 4, true)}
+                  {toSubstring(
+                    useWalletObject?.originalAddress?.toString(),
+                    4,
+                    true
+                  )}
                 </div>
                 <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                  {useWalletObject?.wallet?.adapter.name} Wallet
+                  {titleCase(`${useWalletObject.adapter}`)}
                 </div>
               </div>
               <Icons.CheveronDownIcon className="w-5 h-5 text-content-secondary" />
@@ -120,22 +125,22 @@ const Profile: FC = () => {
               <div className="flex items-center gap-x-3">
                 <div className="flex flex-col justify-between h-full">
                   <div
-                    data-tip={useWalletObject?.publicKey?.toString()}
+                    data-tip={useWalletObject?.originalAddress?.toString()}
                     className="text-avatar-title font-medium text-content-primary"
                   >
                     {toSubstring(
-                      useWalletObject?.publicKey?.toString(),
+                      useWalletObject?.originalAddress?.toString(),
                       4,
                       true
                     )}
                   </div>
                   <div className="text-caption leading-[14px] text-content-contrast whitespace-nowrap">
-                    {useWalletObject?.wallet?.adapter.name} Wallet
+                    {titleCase(`${useWalletObject.network}`)}
                   </div>
                 </div>
                 <CopyButton
                   className="text-content-primary"
-                  content={useWalletObject?.publicKey?.toString() ?? ""}
+                  content={useWalletObject?.originalAddress?.toString() ?? ""}
                 />
               </div>
             </div>
@@ -144,7 +149,7 @@ const Profile: FC = () => {
                 title={`${t("common:buttons.change-wallet")}`}
                 startIcon={<Icons.RefreshIcon />}
                 className="w-full mb-3"
-                onClick={handleChangeWallet}
+                onClick={handleDisconnectWallet}
               />
               <Button
                 title={`${t("common:buttons.disconnect-wallet")}`}

@@ -16,12 +16,19 @@ const initialState: StreamingTokenState = {
 //Generates pending, fulfilled and rejected action types
 export const fetchZebecStreamingBalance = createAsyncThunk<
   any,
-  { wallet: string; stream: ZebecNativeStream; token: ZebecTokenStream },
+  {
+    wallet: string
+    stream: ZebecNativeStream
+    token: ZebecTokenStream
+    network?: string
+  },
   { state: RootState }
 >("balance/fetchZebecStreamingBalance", async (data, { getState }) => {
   try {
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.network === data.network && token.chainId === "solana"
+    )
     const streamingBalance: {
       symbol: string
       balance: number

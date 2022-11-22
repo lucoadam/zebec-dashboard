@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { fetchTransactionsById } from "api"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
+import { fetchOutgoingTransactionsById } from "features/transactions/transactionsSlice"
 import { fetchTreasuryVaultContinuousTransactionsById } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface CancelState {
@@ -28,8 +28,9 @@ export const cancelTransaction = createAsyncThunk<
     ...data
   })
 
+  await dispatch(fetchOutgoingTransactionsById(data.uuid))
   dispatch(toggleCancelModal())
-  dispatch(fetchTransactionsById(data.uuid, "cancel"))
+
   return response.data
 })
 

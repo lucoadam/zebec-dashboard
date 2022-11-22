@@ -57,7 +57,13 @@ export const zbcAirdrop =
           })
         )
         setTimeout(() => {
-          dispatch(fetchWalletBalance(walletPublicKey?.toString()))
+          dispatch(
+            fetchWalletBalance({
+              publicKey: walletPublicKey?.toString(),
+              chainId: "solana",
+              network: "solana"
+            })
+          )
         }, constants.BALANCE_FETCH_TIMEOUT)
       }
     } catch (error) {

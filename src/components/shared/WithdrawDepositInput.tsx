@@ -81,13 +81,13 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                 >
                   {token?.symbol ?? "SOL"}{" "}
                 </span>
-                <Icons.CheveronDownIcon className="text-base text-content-secondary" />
+                <Icons.CheveronDownIcon className="text-base text-content-secondary w-4 h-4" />
               </div>
               <div className="w-full flex items-center">
                 <input
                   type="number"
                   step={"any"}
-                  className={`!pl-[104px] !pr-14 w-full h-[40px] ${
+                  className={`!pl-[115px] !pr-14 w-full h-[40px] ${
                     errorMessage && "error"
                   }`}
                   placeholder="Enter Amount"

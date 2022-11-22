@@ -16,14 +16,25 @@ const initialState: ZebecTokenState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchZebecBalance: any = createAsyncThunk(
   "balance/fetchZebecBalance",
-  async (wallet: string, { getState }) => {
+  async (
+    {
+      publicKey,
+      network
+    }: {
+      publicKey: string
+      network: string
+    },
+    { getState }
+  ) => {
     const base58PublicKey = new PublicKey(constants.PROGRAM_ID)
     const validProgramAddressPub = await PublicKey.findProgramAddress(
-      [new PublicKey(wallet).toBuffer()],
+      [new PublicKey(publicKey).toBuffer()],
       base58PublicKey
     )
     const { tokenDetails } = getState() as RootState
-    const tokens = tokenDetails.tokens
+    const tokens = tokenDetails.tokens.filter(
+      (token) => token.chainId === "solana" && token.network === network
+    )
 
     // fetch wallet tokens
     const tokensBalance = await getTokensBalanceOfWallet(

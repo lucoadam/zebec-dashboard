@@ -3,7 +3,7 @@ export const constants = {
   PROGRAM_ID: process.env.PROGRAM_ID || "",
   ALLOWED_FILES: ["jpeg", "jpg", "png", "pdf", "docx", "doc"],
   MAX_FILE_SIZE: 200 * 1024, // 200KB
-  STREAM_START_ADD: 2, // 2 minutes
+  STREAM_START_ADD: 3, // 2 minutes
   STREAM_END_ADD: 2, // 2 minutes
   STREAM_FETCH_TIMEOUT: 15000,
   AVERAGE_TPS: 2500,
@@ -22,5 +22,7 @@ export const constants = {
   ],
   TEST_ZBC_AMOUNT: 2,
   BALANCE_FETCH_TIMEOUT: 15000,
-  REFRESH_ANIMATION_DURATION: 2000
+  REFRESH_ANIMATION_DURATION: 2000,
+  RELAYER_FEE_IN_USD: 2.5,
+  MIN_SOL_BALANCE_IN_SOLANA_ACCOUNT: 0.003
 }

@@ -1,6 +1,7 @@
 export interface TreasuryToken {
   symbol: string
   balance: number
+  chainId: string
 }
 
 export interface TreasuryState {
@@ -16,4 +17,5 @@ export interface TreasuryState {
 export interface FetchTreasuryProps {
   address: string
   name: string
+  network: string
 }

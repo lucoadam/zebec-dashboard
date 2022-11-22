@@ -53,14 +53,16 @@ const TreasuryLayout = ({
       dispatch(
         fetchTreasuryBalance({
           name: activeTreasury.name,
-          address: activeTreasury.treasury_address
+          address: activeTreasury.treasury_address,
+          network: "solana"
         })
       )
       //Treasury Vault Balance
       dispatch(
         fetchTreasuryVaultBalance({
           name: activeTreasury.name,
-          address: activeTreasury.treasury_vault_address
+          address: activeTreasury.treasury_vault_address,
+          network: "solana"
         })
       )
       //Treasury Vault Streaming Balance
@@ -68,7 +70,8 @@ const TreasuryLayout = ({
         fetchTreasuryStreamingBalance({
           wallet: activeTreasury.treasury_address,
           stream: stream,
-          token: token
+          token: token,
+          network: "solana"
         })
       )
       //Overall Activity

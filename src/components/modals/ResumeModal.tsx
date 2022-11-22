@@ -5,18 +5,38 @@ import { setLoading, toggleResumeModal } from "features/modals/resumeModalSlice"
 import { resumeStreamNative, resumeStreamToken } from "application/normal"
 import { Button, Modal } from "components/shared"
 import ZebecContext from "app/zebecContext"
+import { useZebecWallet } from "hooks/useWallet"
+import { useSigner } from "wagmi"
+import {
+  BSC_ZEBEC_BRIDGE_ADDRESS,
+  getBridgeAddressForChain,
+  WORMHOLE_RPC_HOSTS,
+  ZebecEthBridgeClient
+} from "@zebec-protocol/wormhole-bridge"
+import { getEVMToWormholeChain } from "constants/wormholeChains"
+import { toast } from "features/toasts/toastsSlice"
 import { resumeStreamTreasury } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
+import {
+  getEmitterAddressEth,
+  getSignedVAAWithRetry,
+  parseSequenceFromLogEth
+} from "@certusone/wormhole-sdk"
+import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
+import { checkRelayerStatus } from "api/services/pingRelayer"
+import { fetchTransactionsById } from "api"
 
 const ResumeModal: FC = ({}) => {
   const { t } = useTranslation("transactions")
   const { stream, token, treasury, treasuryToken } = useContext(ZebecContext)
   const { show, loading, transaction } = useAppSelector((state) => state.resume)
   const dispatch = useAppDispatch()
+  const walletObject = useZebecWallet()
+  const { data: signer } = useSigner()
   const { publicKey } = useWallet()
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
-  const handleResumeTransaction = () => {
+  const handleSolanaResume = async () => {
     dispatch(setLoading(true))
     // data
     if (!transaction.approval_status) {
@@ -55,6 +75,79 @@ const ResumeModal: FC = ({}) => {
           })
         )
       }
+    }
+  }
+
+  const handleEVMResume = async () => {
+    try {
+      if (!signer) return
+      dispatch(setLoading(true))
+      const isRelayerActive = await checkRelayerStatus()
+      if (!isRelayerActive) {
+        dispatch(
+          toast.error({
+            message:
+              "Backend Service is currently down. Please try again later."
+          })
+        )
+        dispatch(setLoading(false))
+        return
+      }
+      const sourceChain = getEVMToWormholeChain(walletObject.chainId)
+      const messengerContract = new ZebecEthBridgeClient(
+        BSC_ZEBEC_BRIDGE_ADDRESS,
+        signer,
+        sourceChain
+      )
+      const receipt = await messengerContract.pauseResumeStream(
+        transaction.senderEvm,
+        transaction.receiverEvm,
+        transaction.token_mint_address,
+        transaction.pda
+      )
+      const msgSequence = parseSequenceFromLogEth(
+        receipt,
+        getBridgeAddressForChain(sourceChain)
+      )
+      const messageEmitterAddress = getEmitterAddressEth(
+        BSC_ZEBEC_BRIDGE_ADDRESS
+      )
+      const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
+        WORMHOLE_RPC_HOSTS,
+        sourceChain,
+        messageEmitterAddress,
+        msgSequence
+      )
+
+      // check if message is relayed
+      const response = await listenWormholeTransactionStatus(
+        signedVaa,
+        walletObject.originalAddress?.toString() as string,
+        sourceChain
+      )
+      if (response === "success") {
+        dispatch(toast.success({ message: "Stream resumed" }))
+        dispatch(fetchTransactionsById(transaction.uuid, "resume"))
+      } else if (response === "timeout") {
+        dispatch(toast.error({ message: "Stream resume timeout" }))
+      } else {
+        dispatch(toast.error({ message: "Stream resume failed" }))
+      }
+      dispatch(setLoading(false))
+      dispatch(toggleResumeModal())
+    } catch (e) {
+      console.debug("resume stream error:", e)
+      setLoading(false)
+      dispatch(toggleResumeModal())
+      dispatch(toast.error({ message: "Stream resume failed" }))
+    }
+  }
+
+  const handleResumeTransaction = () => {
+    if (walletObject.chainId === "solana") {
+      handleSolanaResume()
+    } else {
+      handleEVMResume()
     }
   }
 

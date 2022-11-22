@@ -2,14 +2,24 @@ import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
 import { Breadcrumb, BreadcrumbRightContent, Button } from "components/shared"
 import TreasuryLists from "components/treasury/TreasuryLists"
+import { useZebecWallet } from "hooks/useWallet"
 import type { NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const Treasury: NextPage = () => {
   const { t } = useTranslation()
+  const history = useRouter()
+  const walletObject = useZebecWallet()
 
+  useEffect(() => {
+    if (walletObject.chainId !== "solana") {
+      history.replace("/")
+    }
+  }, [walletObject, history])
   return (
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">

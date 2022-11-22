@@ -9,7 +9,7 @@ const Farms: FC = () => {
   const { t } = useTranslation()
   return (
     <>
-      <div className="farms p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-[264px]">
+      <div className="farms p-6 rounded bg-background-secondary flex flex-col gap-y-6 h-full">
         <div className="flex justify-between items-center">
           <div className="text-caption text-content-contrast font-semibold uppercase tracking-1">
             {t("home:farms.title")}

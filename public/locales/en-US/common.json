@@ -56,11 +56,12 @@
     "deposit-withdrawal": {
         "deposit-title": "Deposit assets into your Zebec wallet.",
         "withdraw-title": "Withdraw deposited Zebec assets into your wallet.",
+        "withdraw-title-solana-assets": "Withdraw deposited Solana assets into your wallet.",
         "max-withdraw-message": "Max withdrawable balance is equals to the zebec wallet deposited balance minus zebec wallet streaming balance.",
         "max-treasury-deposit-message": "Max depositable balance is equals to the zebec wallet deposited balance minus zebec wallet streaming balance."
     },
     "wallet-not-connected": {
-        "title": "Wallet not connected!",
+        "title": "Connect a wallet to continue",
         "description": "Looks like your wallet is not connected. Please connect your wallet to keep using Zebec.",
         "connect-previous-wallet": "Connect with Previous Wallet",
         "connect-different-wallet": "Use a Different Wallet",

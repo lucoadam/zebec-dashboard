@@ -5,6 +5,7 @@ import ZebecContext from "app/zebecContext"
 import { withdrawFromTreasury } from "application"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
+import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useContext, useState } from "react"
 import { getBalance } from "utils/getBalance"
@@ -12,9 +13,16 @@ import { getBalance } from "utils/getBalance"
 export const Withdrawal = () => {
   const { t } = useTranslation()
   const { publicKey } = useWallet()
+  const walletObject = useZebecWallet()
   const { treasury, treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
-  const tokenDetails = useAppSelector((state) => state.tokenDetails.tokens)
+  const tokenDetails = useAppSelector((state) =>
+    state.tokenDetails.tokens.filter(
+      (token) =>
+        token.chainId === walletObject.chainId &&
+        token.network === walletObject.network
+    )
+  )
   const treasuryTokens =
     useAppSelector((state) => state.treasuryBalance.treasury?.tokens) || []
   const { activeTreasury } = useAppSelector((state) => state.treasury)
