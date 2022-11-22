@@ -252,7 +252,9 @@ const WithdrawTab: FC = () => {
             console.debug("withdraw error", e)
             withdrawCallback()
             dispatch(
-              toast.success({ message: "Token withdrawn into pda only" })
+              toast.success({
+                message: "Token withdrawn into Solana Assets only"
+              })
             )
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
@@ -286,7 +288,9 @@ const WithdrawTab: FC = () => {
           } else if (response === "timeout") {
             withdrawCallback()
             dispatch(
-              toast.success({ message: "Token withdrawn into pda only" })
+              toast.success({
+                message: "Token withdrawn into Solana Assets only"
+              })
             )
           } else {
             dispatch(toast.error({ message: "Error withdrawing token" }))
