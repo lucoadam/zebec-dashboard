@@ -395,7 +395,7 @@ const DepositTab: FC = () => {
               console.debug("deposit error", e)
               dispatch(
                 toast.success({
-                  message: "Token deposited into pda only"
+                  message: "Token deposited into Solana Assets only"
                 })
               )
               depositCallback()
@@ -433,7 +433,7 @@ const DepositTab: FC = () => {
             } else {
               dispatch(
                 toast.success({
-                  message: "Token deposited into pda only"
+                  message: "Token deposited into Solana Assets only"
                 })
               )
             }
