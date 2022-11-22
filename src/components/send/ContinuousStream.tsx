@@ -364,7 +364,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         dispatch(toggleWalletApprovalMessageModal())
         dispatch(
           toast.error({
-            message: "Receiver's proxy pda is not initialized."
+            message: "Receiver's solana account is not initialized."
           })
         )
         return

@@ -88,7 +88,7 @@ const DepositTab: FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false)
   const [toggleDropdown, setToggleDropdown] = useState(false)
-  const [depositFrom, setDepositFrom] = useState("Wallet Assets")
+  const [depositFrom, setDepositFrom] = useState("Wallet")
   const dropdownWrapper = useRef(null)
   const [relayerFee, setRelayerFee] = useState(0)
 
@@ -117,21 +117,18 @@ const DepositTab: FC = () => {
       balance = Number(
         (
           getBalance(
-            depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+            depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
             currentToken.symbol
-          ) - (depositFrom === "Wallet Assets" ? relayerFee : 0) || 0
+          ) - (depositFrom === "Wallet" ? relayerFee : 0) || 0
         ).toFixed(6) || 0
       )
     } else {
       balance = Number(
         (
           getBalance(
-            depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+            depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
             currentToken.symbol
-          ) -
-            (depositFrom === "Wallet Assets"
-              ? constants.DEPOSIT_MAX_OFFSET
-              : 0) || 0
+          ) - (depositFrom === "Wallet" ? constants.DEPOSIT_MAX_OFFSET : 0) || 0
         ).toFixed(6) || 0
       )
     }
@@ -151,21 +148,20 @@ const DepositTab: FC = () => {
           balance = Number(
             (
               getBalance(
-                depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+                depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
                 currentToken.symbol
-              ) - (depositFrom === "Wallet Assets" ? relayerFee : 0) || 0
+              ) - (depositFrom === "Wallet" ? relayerFee : 0) || 0
             ).toFixed(6) || 0
           )
         } else {
           balance = Number(
             (
               getBalance(
-                depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+                depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
                 currentToken.symbol
               ) -
-                (depositFrom === "Wallet Assets"
-                  ? constants.DEPOSIT_MAX_OFFSET
-                  : 0) || 0
+                (depositFrom === "Wallet" ? constants.DEPOSIT_MAX_OFFSET : 0) ||
+              0
             ).toFixed(6) || 0
           )
         }
@@ -540,7 +536,7 @@ const DepositTab: FC = () => {
         setLoading(false)
         return
       }
-      if (depositFrom === "Wallet Assets") {
+      if (depositFrom === "Wallet") {
         handleEvmSubmit(data)
       } else {
         handlePDADeposit(data)
@@ -589,14 +585,14 @@ const DepositTab: FC = () => {
               position="left"
             >
               <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-                {["Wallet Assets", "PDA Assets"].map((item) => (
+                {["Wallet", "Solana Assets"].map((item) => (
                   <div
                     className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
                     key={item}
                     onClick={() => {
                       setDepositFrom(item)
                       setToggleDropdown(false)
-                      if (item === "PDA Assets") {
+                      if (item === "Solana Assets") {
                         setCurrentToken(solanaTokenDetails[0])
                       } else {
                         setCurrentToken(tokenDetails[0])
@@ -622,10 +618,12 @@ const DepositTab: FC = () => {
           {/* Tokens Dropdown */}
           <TokensDropdown
             walletTokens={
-              depositFrom === "PDA Assets" ? pdaTokens : walletTokens
+              depositFrom === "Solana Assets" ? pdaTokens : walletTokens
             }
             tokens={
-              depositFrom === "PDA Assets" ? solanaTokenDetails : tokenDetails
+              depositFrom === "Solana Assets"
+                ? solanaTokenDetails
+                : tokenDetails
             }
             show={show}
             toggleShow={setToggle}

@@ -89,13 +89,15 @@ export const InitializePDAModal: FC = () => {
         <div className="flex items-center gap-x-[6px] justify-center text-content-primary">
           <p className="text-body">
             {balance === 0
-              ? "Your PDA is not initialized. Please initialize it."
-              : "Your PDA has insufficient fee. Please load it."}
+              ? "Your Solana account is not initialized. Please initialize it."
+              : "Your Solana account has insufficient fee. Please load it."}
           </p>
         </div>
         <Button
           className="w-full mt-8"
-          title={balance === 0 ? "Initialize PDA" : "Load PDA fee"}
+          title={
+            balance === 0 ? "Initialize Solana account" : "Load account fee"
+          }
           variant="gradient"
           onClick={check}
           loading={loading}

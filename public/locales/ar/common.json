@@ -56,6 +56,7 @@
   "deposit-withdrawal": {
     "deposit-title": "قم بإيداع الأصول في محفظة Zebec الخاصة بك.",
     "withdraw-title": "اسحب أصول Zebec المودعة في محفظتك.",
+    "withdraw-title-solana-assets": "اسحب أصول سولانا المودعة إلى محفظتك.",
     "max-withdraw-message": "الحد الأقصى للرصيد يساوي الرصيد المودع مطروحا منه رصيد البث.",
     "max-treasury-deposit-message": "الحد الأقصى للرصيد يساوي رصيد محفظة zebec المودع مطروحا منه رصيد تدفق محفظة zebec."
   },
