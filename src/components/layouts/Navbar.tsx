@@ -27,7 +27,7 @@ import Profile from "./Profile"
 import { getMainRoutes, getMenuRoutes } from "./routes"
 import WalletNotConnectedModal from "./WalletNotConnectedModal"
 import * as ethers from "ethers"
-import { useSigner } from "wagmi"
+import { useDisconnect, useSigner } from "wagmi"
 import { TokenImplementation__factory } from "@certusone/wormhole-sdk"
 import { toast } from "features/toasts/toastsSlice"
 import { fetchWalletBalance } from "features/walletBalance/walletBalanceSlice"
@@ -37,6 +37,7 @@ const Navbar: FC = () => {
   const { t } = useTranslation()
   const useWalletObject = useZebecWallet()
   const { data: signer } = useSigner()
+  const { disconnect } = useDisconnect()
   // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
@@ -138,6 +139,7 @@ const Navbar: FC = () => {
   //handle disconnect wallet
   const handleDisconnectWallet = () => {
     useWalletObject.disconnect()
+    disconnect()
     handleClose()
   }
 
