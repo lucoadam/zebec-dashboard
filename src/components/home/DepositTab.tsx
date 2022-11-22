@@ -272,10 +272,10 @@ const DepositTab: FC = () => {
             name: "Approve Deposit"
           },
           {
-            name: "Transfer to PDA"
+            name: "Transfer to Solana Assets"
           },
           {
-            name: "Transfer to Zebec Vault"
+            name: "Transfer to Zebec Assets"
           }
         ]
         if (!checkTokenAccount) {
