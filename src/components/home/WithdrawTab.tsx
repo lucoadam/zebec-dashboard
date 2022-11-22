@@ -25,7 +25,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { toast } from "features/toasts/toastsSlice"
 import {
   getEmitterAddressEth,

@@ -76,7 +76,6 @@ export const fetchTokens = createAsyncThunk<any, void, {}>(
   async () => {
     const response = await api.get(`/token/`)
     const tokenDetails: TokenResponse[] = response.data
-    console.log("tokenDetails", tokenDetails)
     const tokens = [
       ...tokenDetails.filter((token) => token.network === "solana"),
       ...bscTokens

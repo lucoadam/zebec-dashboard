@@ -9,7 +9,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"

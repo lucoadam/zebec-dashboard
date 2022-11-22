@@ -22,7 +22,6 @@ export const zbcAirdrop =
   ) =>
   async (dispatch: AppDispatch) => {
     try {
-      // commented console.log("zbcAirdrop", walletPublicKey, setZBCAirdropLoading)
       const mint = new PublicKey("6vvKBoSx7p33YER66LQ8VokTRHUcmxwz3iA1GSbexC5i")
       const privateKey = process.env.ZBC_AIRDROP
 

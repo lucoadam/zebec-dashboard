@@ -27,7 +27,7 @@ import {
   ZebecEthBridgeClient,
   getTargetAsset,
   SOL_TOKEN_BRIDGE_ADDRESS
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 
 import {
   getEmitterAddressEth,

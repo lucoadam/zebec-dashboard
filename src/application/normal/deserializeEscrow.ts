@@ -25,7 +25,6 @@ export const deserializeStreamEscrow = async (
     }
     return deserializedObject
   } catch (error) {
-    // commented console.log(error)
     return null
   }
 }

@@ -10,7 +10,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -369,7 +369,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         )
         return
       }
-      // commented console.log(data)
       if (!signer) return
       const formattedData = {
         name: data.transaction_name,
@@ -418,7 +417,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         BSC_ZEBEC_BRIDGE_ADDRESS
       )
       console.debug("emitterAddress:", transferEmitterAddress)
-      // commented console.log("sequence", sequence)
       const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
         WORMHOLE_RPC_HOSTS,
         "bsc",
@@ -459,7 +457,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
-    // commented console.log("data", data)
     if (walletObject.chainId === "solana") {
       handleSolanaStream(data)
     } else {

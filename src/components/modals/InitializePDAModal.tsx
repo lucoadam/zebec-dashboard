@@ -3,7 +3,7 @@ import { Button, Modal } from "components/shared"
 import {
   BSC_ZEBEC_BRIDGE_ADDRESS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { useSigner } from "wagmi"
 import { useZebecWallet } from "hooks/useWallet"

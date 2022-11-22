@@ -5,7 +5,7 @@ import { supportedEVMChains } from "constants/supportedEVMChains"
 import {
   SOL_ZEBEC_BRIDGE_ADDRESS,
   ZebecSolBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { EVMToWormholeChainMapping } from "constants/wormholeChains"
 import { ChainId } from "@certusone/wormhole-sdk"
 import { useMemo } from "react"

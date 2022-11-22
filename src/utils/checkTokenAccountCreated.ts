@@ -15,6 +15,5 @@ export const checkTokenAccountCreated = async (
     recipientTokenAddress,
     "confirmed"
   )
-  console.log(receipientTokenAccountInfo)
   return !!receipientTokenAccountInfo
 }

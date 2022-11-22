@@ -11,7 +11,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { useSigner } from "wagmi"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { cancelStreamTreasury } from "application"
@@ -100,7 +100,6 @@ const CancelModal: FC = ({}) => {
         signer,
         sourceChain
       )
-      // commented console.log("transaction:", transaction)
       const receipt = await messengerContract.cancelStream(
         transaction.senderEvm,
         transaction.receiverEvm,

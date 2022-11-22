@@ -60,7 +60,7 @@ export const login = async (
             TokenService.setTokens(response.data)
             return response
           } catch (error) {
-            console.log(error)
+            console.debug("login-ledger", error)
           }
         }
       } else {
@@ -86,7 +86,7 @@ export const login = async (
           TokenService.setTokens(response.data)
           return response
         } catch (error) {
-          console.log(error)
+          console.debug("login", error)
         }
       }
     } catch (error) {}
