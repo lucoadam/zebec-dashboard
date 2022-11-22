@@ -1033,6 +1033,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             <Toggle
               text={t("send:enable-stream-rate")}
               onChange={toggleStreamRate}
+              checked={getValues().enableStreamRate}
             />
             {addFile && (
               <FileUpload

@@ -12,12 +12,12 @@ export const Toggle: FC<ToggleProps> = (props) => {
     <>
       <div>
         <label
-          htmlFor="toggle"
+          htmlFor={`toggle-${text}`}
           className="w-max flex items-center cursor-pointer relative"
         >
           <input
             type="checkbox"
-            id="toggle"
+            id={`toggle-${text}`}
             className="sr-only"
             onChange={props.onChange}
             {...{ checked }}
