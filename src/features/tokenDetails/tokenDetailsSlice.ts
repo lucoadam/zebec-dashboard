@@ -83,7 +83,7 @@ const bscTokensMainnet = [
     symbol: "WWSOL",
     name: "Wormhole Wrapped SOL",
     decimal: 9,
-    mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+    mint: "0xfA54fF1a158B5189Ebba6ae130CEd6bbd3aEA76e",
     coingeco_id: "solana",
     chain_id: "56",
     network: "Binance Smart Chain Mainnet"
@@ -92,7 +92,7 @@ const bscTokensMainnet = [
     symbol: "BNB",
     name: "Binance Coin",
     decimal: 18,
-    mint: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+    mint: "binancecoin",
     coingeco_id: "binancecoin",
     chain_id: "56",
     network: "Binance Smart Chain Mainnet"
