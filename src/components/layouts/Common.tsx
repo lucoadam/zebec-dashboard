@@ -26,7 +26,10 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { InitializePDAModal } from "components/modals/InitializePDAModal"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 
 const Common: FC = () => {
   const walletObject = useZebecWallet()
@@ -120,8 +123,9 @@ const Common: FC = () => {
       if (walletObject.chainId !== "solana") {
         checkPDAinitialized(walletObject.publicKey?.toString() || "").then(
           (res) => {
-            if (!res) {
+            if (res.isBalanceRequired) {
               dispatch(setShowPdaInitialize(true))
+              dispatch(setPdaBalance(res.balance))
             } else {
               dispatch(setShowPdaInitialize(false))
             }

@@ -44,15 +44,19 @@ import {
   setXModalMessage,
   setXModalStepsList
 } from "features/modals/xWalletApprovalMessageSlice"
-import { CheveronDownIcon } from "assets/icons"
+import { CheveronDownIcon, InformationIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { connection } from "constants/cluster"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 import { checkTokenAccountCreated } from "utils/checkTokenAccountCreated"
+import { getRelayerFee } from "utils/getRelayerFee"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -68,6 +72,7 @@ const DepositTab: FC = () => {
         token.network === walletObject.network
     )
   )
+  const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
 
   const walletTokens = useAppSelector(
     (state) => state.walletBalance.tokens || []
@@ -85,6 +90,7 @@ const DepositTab: FC = () => {
   const [toggleDropdown, setToggleDropdown] = useState(false)
   const [depositFrom, setDepositFrom] = useState("Wallet Assets")
   const dropdownWrapper = useRef(null)
+  const [relayerFee, setRelayerFee] = useState(0)
 
   const {
     currentToken,
@@ -104,36 +110,76 @@ const DepositTab: FC = () => {
     type: "deposit"
   })
 
-  const setMaxAmount = () => {
-    const balance = Number(
-      (
-        getBalance(
-          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
-          currentToken.symbol
-        ) -
-          (depositFrom === "Wallet Assets"
-            ? constants.DEPOSIT_MAX_OFFSET
-            : 0) || 0
-      ).toFixed(6) || 0
-    )
+  const setMaxAmount = async () => {
+    let balance = 0
+    if (process.env.SDK_ENV === "production") {
+      const relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
+      balance = Number(
+        (
+          getBalance(
+            depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+            currentToken.symbol
+          ) - (depositFrom === "Wallet Assets" ? relayerFee : 0) || 0
+        ).toFixed(6) || 0
+      )
+    } else {
+      balance = Number(
+        (
+          getBalance(
+            depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+            currentToken.symbol
+          ) -
+            (depositFrom === "Wallet Assets"
+              ? constants.DEPOSIT_MAX_OFFSET
+              : 0) || 0
+        ).toFixed(6) || 0
+      )
+    }
     setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
 
   useEffect(() => {
-    const balance = Number(
-      (
-        getBalance(
-          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
-          currentToken.symbol
-        ) -
-          (depositFrom === "Wallet Assets"
-            ? constants.DEPOSIT_MAX_OFFSET
-            : 0) || 0
-      ).toFixed(6) || 0
-    )
-    setValue("balance", balance.toString())
-  }, [currentToken, depositFrom, setValue, walletTokens, pdaTokens])
+    if (currentToken.mint) {
+      ;(async () => {
+        let balance = 0
+        if (process.env.SDK_ENV === "production") {
+          const relayerFee = await getRelayerFee(
+            tokenPrices[currentToken.symbol]
+          )
+          setRelayerFee(relayerFee)
+          balance = Number(
+            (
+              getBalance(
+                depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+                currentToken.symbol
+              ) - (depositFrom === "Wallet Assets" ? relayerFee : 0) || 0
+            ).toFixed(6) || 0
+          )
+        } else {
+          balance = Number(
+            (
+              getBalance(
+                depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
+                currentToken.symbol
+              ) -
+                (depositFrom === "Wallet Assets"
+                  ? constants.DEPOSIT_MAX_OFFSET
+                  : 0) || 0
+            ).toFixed(6) || 0
+          )
+        }
+        setValue("balance", balance.toString())
+      })()
+    }
+  }, [
+    currentToken,
+    depositFrom,
+    setValue,
+    walletTokens,
+    pdaTokens,
+    tokenPrices
+  ])
 
   const depositCallback = () => {
     reset()
@@ -200,8 +246,9 @@ const DepositTab: FC = () => {
         const checkProxyPDA = await checkPDAinitialized(
           walletObject.publicKey?.toString() || ""
         )
-        if (!checkProxyPDA) {
+        if (checkProxyPDA.isBalanceRequired) {
           dispatch(setShowPdaInitialize(true))
+          dispatch(setPdaBalance(checkProxyPDA.balance))
           setLoading(false)
           return
         }
@@ -293,6 +340,11 @@ const DepositTab: FC = () => {
           currentStep += 1
           dispatch(switchxWalletApprovalMessageStep(currentStep))
         }
+        let relayerFee = 0.01
+        if (process.env.SDK_ENV === "production") {
+          relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
+        }
+
         transferEvm(
           signer,
           currentToken.mint,
@@ -300,7 +352,7 @@ const DepositTab: FC = () => {
           data.amount,
           targetChain,
           recipientAddress,
-          "0.01",
+          relayerFee.toString(),
           () => {
             currentStep += 1
             dispatch(switchxWalletApprovalMessageStep(currentStep))
@@ -580,6 +632,15 @@ const DepositTab: FC = () => {
             setCurrentToken={setCurrentToken}
           />
         </WithdrawDepositInput>
+        {process.env.SDK_ENV === "production" && (
+          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
+            <InformationIcon className="w-5 h-5 flex-shrink-0" />
+            <span>
+              Approx. {Number(relayerFee.toFixed(5))} {currentToken.symbol} will
+              be applied for relayer fee.
+            </span>
+          </div>
+        )}
         <Button
           title={`${t("common:buttons.deposit")}`}
           variant="gradient"

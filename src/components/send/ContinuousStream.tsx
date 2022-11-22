@@ -360,7 +360,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         ""
       // is receiver proxy initialized
       const check = await checkPDAinitialized(receiver)
-      if (!check) {
+      if (check.isBalanceRequired) {
         dispatch(toggleWalletApprovalMessageModal())
         dispatch(
           toast.error({

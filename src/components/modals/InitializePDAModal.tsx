@@ -8,12 +8,17 @@ import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { useSigner } from "wagmi"
 import { useZebecWallet } from "hooks/useWallet"
 import { useAppDispatch, useAppSelector } from "app/hooks"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 import { toast } from "features/toasts/toastsSlice"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
 
 export const InitializePDAModal: FC = () => {
-  const { showPdaInitialize } = useAppSelector((state) => state.pdaInitialize)
+  const { showPdaInitialize, balance } = useAppSelector(
+    (state) => state.pdaInitialize
+  )
   const dispatch = useAppDispatch()
   const { data: signer } = useSigner()
   const walletObject = useZebecWallet()
@@ -33,11 +38,12 @@ export const InitializePDAModal: FC = () => {
           walletObject.originalAddress?.toString() || ""
         )
         let retry = 0
+        let checkPda
         while (true) {
-          const isRegistered = await checkPDAinitialized(
+          checkPda = await checkPDAinitialized(
             walletObject.publicKey?.toString() || ""
           )
-          if (isRegistered) {
+          if (!checkPda.isBalanceRequired) {
             break
           }
           if (retry > 60) {
@@ -48,9 +54,13 @@ export const InitializePDAModal: FC = () => {
         }
         dispatch(
           toast.success({
-            message: "PDA initialized successfully"
+            message:
+              balance === 0
+                ? "PDA initialized successfully"
+                : "PDA fee loaded successfully"
           })
         )
+        dispatch(setPdaBalance(checkPda.balance))
         setLoading(false)
         dispatch(setShowPdaInitialize(false))
       }
@@ -58,7 +68,10 @@ export const InitializePDAModal: FC = () => {
       setLoading(false)
       dispatch(
         toast.error({
-          message: "Failed to initialize PDA"
+          message:
+            balance === 0
+              ? "Failed to initialize PDA"
+              : "Failed to load PDA fee"
         })
       )
       dispatch(setShowPdaInitialize(false))
@@ -75,12 +88,14 @@ export const InitializePDAModal: FC = () => {
       <div className="flex-none px-6 py-[50px]">
         <div className="flex items-center gap-x-[6px] justify-center text-content-primary">
           <p className="text-body">
-            Your PDA is not initialized. Please initialize it.
+            {balance === 0
+              ? "Your PDA is not initialized. Please initialize it."
+              : "Your PDA has insufficient fee. Please load it."}
           </p>
         </div>
         <Button
           className="w-full mt-8"
-          title="Initialize PDA"
+          title={balance === 0 ? "Initialize PDA" : "Load PDA fee"}
           variant="gradient"
           onClick={check}
           loading={loading}

@@ -41,7 +41,10 @@ import ZebecContext from "app/zebecContext"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { getExplorerUrl } from "constants/explorers"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchIncomingTransactionsById } from "features/transactions/transactionsSlice"
 
@@ -215,8 +218,9 @@ const ContinuousTransactionsTableRow: FC<
       const check = await checkPDAinitialized(
         walletObject.publicKey?.toString() || ""
       )
-      if (!check) {
+      if (check.isBalanceRequired) {
         dispatch(setShowPdaInitialize(true))
+        dispatch(setPdaBalance(check.balance))
         setLoading(false)
         return
       }

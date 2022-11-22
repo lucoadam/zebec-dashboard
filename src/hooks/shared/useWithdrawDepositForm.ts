@@ -25,12 +25,14 @@ export const useWithdrawDepositForm = ({
     image: string
     mint: string
     decimal: number
+    coingeckoId: string
   }>(
     tokens[0] || {
       symbol: "",
       image: "",
       mint: "",
-      decimal: 0
+      decimal: 0,
+      coingeckoId: ""
     }
   )
 
