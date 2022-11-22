@@ -33,7 +33,6 @@ export const fetchWalletBalance: any = createAsyncThunk(
     const tokens = tokenDetails.tokens.filter(
       (token) => token.chainId === chainId && token.network === network
     )
-    // commented console.log("fetchWalletBalance", publicKey, chainId, signer)
     // fetch wallet tokens
     if (network === "solana") {
       const tokensBalance = await getTokensBalanceOfWallet(

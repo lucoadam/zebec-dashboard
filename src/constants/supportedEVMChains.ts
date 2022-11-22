@@ -23,7 +23,7 @@ export const supportedEVMChains = [
   },
   {
     chainId: "56",
-    chainName: "Binance Smart Chain",
+    chainName: "Binance Smart Chain Mainnet",
     nativeCurrency: {
       name: "Binance Coin",
       symbol: "BNB",

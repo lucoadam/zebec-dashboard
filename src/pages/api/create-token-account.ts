@@ -25,7 +25,6 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { recipientAddress, targetTokenAddress } = req.body
-      // commented console.log("recipientAddress", recipientAddress)
       if (!recipientAddress || !targetTokenAddress) {
         res
           .status(400)
@@ -35,25 +34,19 @@ export default async function handler(
       const recipientbalance = await connection.getBalance(
         new PublicKey(recipientAddress)
       )
-      // commented console.log("recipientbalance", recipientbalance / 1e9)
       if (recipientbalance / 1e9 < 0.1) {
-        // commented console.log("requesting airdrop...")
         try {
           await connection.requestAirdrop(
             new PublicKey(recipientAddress),
             0.2e9
           )
-          // commented console.log(res)
-        } catch (e) {
-          // commented console.log("airdrop failed", e)
-        }
+        } catch (e) {}
       }
       const recipientTokenAddress = await getAssociatedTokenAddress(
         new PublicKey(targetTokenAddress),
         new PublicKey(recipientAddress),
         true
       )
-      // commented console.log("recipientTokenAddress", recipientTokenAddress.toBase58())
 
       const receipientTokenAccountInfo = await connection.getAccountInfo(
         recipientTokenAddress,

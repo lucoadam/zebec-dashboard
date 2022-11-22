@@ -9,7 +9,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
@@ -41,7 +41,10 @@ import ZebecContext from "app/zebecContext"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { getExplorerUrl } from "constants/explorers"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { fetchIncomingTransactionsById } from "features/transactions/transactionsSlice"
 
@@ -215,8 +218,9 @@ const ContinuousTransactionsTableRow: FC<
       const check = await checkPDAinitialized(
         walletObject.publicKey?.toString() || ""
       )
-      if (!check) {
+      if (check.isBalanceRequired) {
         dispatch(setShowPdaInitialize(true))
+        dispatch(setPdaBalance(check.balance))
         setLoading(false)
         return
       }

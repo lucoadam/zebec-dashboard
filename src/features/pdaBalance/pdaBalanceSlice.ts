@@ -23,7 +23,6 @@ export const fetchPdaBalance: any = createAsyncThunk(
     },
     { getState }
   ) => {
-    // commented console.log("pda.....", publicKey)
     const { tokenDetails } = getState() as RootState
     const tokens = tokenDetails.tokens.filter(
       (token) => token.chainId === "solana" && token.network === network

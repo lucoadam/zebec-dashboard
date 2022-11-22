@@ -7,7 +7,7 @@ import { connection } from "constants/cluster"
 import {
   getIsRelayCompleted,
   SOL_ZEBEC_BRIDGE_ADDRESS
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 
 export const listenWormholeTransactionStatus = async (
   signedVaa: Uint8Array,
@@ -32,7 +32,7 @@ export const listenWormholeTransactionStatus = async (
     }
     return "timeout"
   } catch (e) {
-    console.log(e)
+    console.debug("fetchEVMTransactionStatus", e)
     return "error"
   }
 }

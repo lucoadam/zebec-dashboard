@@ -27,7 +27,7 @@ import {
   ZebecEthBridgeClient,
   getTargetAsset,
   SOL_TOKEN_BRIDGE_ADDRESS
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 
 import {
   getEmitterAddressEth,
@@ -44,15 +44,19 @@ import {
   setXModalMessage,
   setXModalStepsList
 } from "features/modals/xWalletApprovalMessageSlice"
-import { CheveronDownIcon } from "assets/icons"
+import { CheveronDownIcon, InformationIcon } from "assets/icons"
 import { useClickOutside } from "hooks"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { connection } from "constants/cluster"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
-import { setShowPdaInitialize } from "features/modals/pdaInitializeModalSlice"
+import {
+  setPdaBalance,
+  setShowPdaInitialize
+} from "features/modals/pdaInitializeModalSlice"
 import { checkTokenAccountCreated } from "utils/checkTokenAccountCreated"
+import { getRelayerFee } from "utils/getRelayerFee"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -68,6 +72,7 @@ const DepositTab: FC = () => {
         token.network === walletObject.network
     )
   )
+  const tokenPrices = useAppSelector((state) => state.tokenDetails.prices)
 
   const walletTokens = useAppSelector(
     (state) => state.walletBalance.tokens || []
@@ -83,8 +88,9 @@ const DepositTab: FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false)
   const [toggleDropdown, setToggleDropdown] = useState(false)
-  const [depositFrom, setDepositFrom] = useState("Wallet Assets")
+  const [depositFrom, setDepositFrom] = useState("Wallet")
   const dropdownWrapper = useRef(null)
+  const [relayerFee, setRelayerFee] = useState(0)
 
   const {
     currentToken,
@@ -104,36 +110,72 @@ const DepositTab: FC = () => {
     type: "deposit"
   })
 
-  const setMaxAmount = () => {
-    const balance = Number(
-      (
-        getBalance(
-          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
-          currentToken.symbol
-        ) -
-          (depositFrom === "Wallet Assets"
-            ? constants.DEPOSIT_MAX_OFFSET
-            : 0) || 0
-      ).toFixed(6) || 0
-    )
+  const setMaxAmount = async () => {
+    let balance = 0
+    if (process.env.SDK_ENV === "production") {
+      const relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
+      balance = Number(
+        (
+          getBalance(
+            depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
+            currentToken.symbol
+          ) - (depositFrom === "Wallet" ? relayerFee : 0) || 0
+        ).toFixed(6) || 0
+      )
+    } else {
+      balance = Number(
+        (
+          getBalance(
+            depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
+            currentToken.symbol
+          ) - (depositFrom === "Wallet" ? constants.DEPOSIT_MAX_OFFSET : 0) || 0
+        ).toFixed(6) || 0
+      )
+    }
     setValue("amount", balance > 0 ? balance.toString() : "0")
     trigger("amount")
   }
 
   useEffect(() => {
-    const balance = Number(
-      (
-        getBalance(
-          depositFrom === "PDA Assets" ? pdaTokens : walletTokens,
-          currentToken.symbol
-        ) -
-          (depositFrom === "Wallet Assets"
-            ? constants.DEPOSIT_MAX_OFFSET
-            : 0) || 0
-      ).toFixed(6) || 0
-    )
-    setValue("balance", balance.toString())
-  }, [currentToken, depositFrom, setValue, walletTokens, pdaTokens])
+    if (currentToken.mint) {
+      ;(async () => {
+        let balance = 0
+        if (process.env.SDK_ENV === "production") {
+          const relayerFee = await getRelayerFee(
+            tokenPrices[currentToken.symbol]
+          )
+          setRelayerFee(relayerFee)
+          balance = Number(
+            (
+              getBalance(
+                depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
+                currentToken.symbol
+              ) - (depositFrom === "Wallet" ? relayerFee : 0) || 0
+            ).toFixed(6) || 0
+          )
+        } else {
+          balance = Number(
+            (
+              getBalance(
+                depositFrom === "Solana Assets" ? pdaTokens : walletTokens,
+                currentToken.symbol
+              ) -
+                (depositFrom === "Wallet" ? constants.DEPOSIT_MAX_OFFSET : 0) ||
+              0
+            ).toFixed(6) || 0
+          )
+        }
+        setValue("balance", balance.toString())
+      })()
+    }
+  }, [
+    currentToken,
+    depositFrom,
+    setValue,
+    walletTokens,
+    pdaTokens,
+    tokenPrices
+  ])
 
   const depositCallback = () => {
     reset()
@@ -200,8 +242,9 @@ const DepositTab: FC = () => {
         const checkProxyPDA = await checkPDAinitialized(
           walletObject.publicKey?.toString() || ""
         )
-        if (!checkProxyPDA) {
+        if (checkProxyPDA.isBalanceRequired) {
           dispatch(setShowPdaInitialize(true))
+          dispatch(setPdaBalance(checkProxyPDA.balance))
           setLoading(false)
           return
         }
@@ -293,6 +336,11 @@ const DepositTab: FC = () => {
           currentStep += 1
           dispatch(switchxWalletApprovalMessageStep(currentStep))
         }
+        let relayerFee = 0.01
+        if (process.env.SDK_ENV === "production") {
+          relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
+        }
+
         transferEvm(
           signer,
           currentToken.mint,
@@ -300,7 +348,7 @@ const DepositTab: FC = () => {
           data.amount,
           targetChain,
           recipientAddress,
-          "0.01",
+          relayerFee.toString(),
           () => {
             currentStep += 1
             dispatch(switchxWalletApprovalMessageStep(currentStep))
@@ -488,7 +536,7 @@ const DepositTab: FC = () => {
         setLoading(false)
         return
       }
-      if (depositFrom === "Wallet Assets") {
+      if (depositFrom === "Wallet") {
         handleEvmSubmit(data)
       } else {
         handlePDADeposit(data)
@@ -537,14 +585,14 @@ const DepositTab: FC = () => {
               position="left"
             >
               <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-                {["Wallet Assets", "PDA Assets"].map((item) => (
+                {["Wallet", "Solana Assets"].map((item) => (
                   <div
                     className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
                     key={item}
                     onClick={() => {
                       setDepositFrom(item)
                       setToggleDropdown(false)
-                      if (item === "PDA Assets") {
+                      if (item === "Solana Assets") {
                         setCurrentToken(solanaTokenDetails[0])
                       } else {
                         setCurrentToken(tokenDetails[0])
@@ -570,16 +618,27 @@ const DepositTab: FC = () => {
           {/* Tokens Dropdown */}
           <TokensDropdown
             walletTokens={
-              depositFrom === "PDA Assets" ? pdaTokens : walletTokens
+              depositFrom === "Solana Assets" ? pdaTokens : walletTokens
             }
             tokens={
-              depositFrom === "PDA Assets" ? solanaTokenDetails : tokenDetails
+              depositFrom === "Solana Assets"
+                ? solanaTokenDetails
+                : tokenDetails
             }
             show={show}
             toggleShow={setToggle}
             setCurrentToken={setCurrentToken}
           />
         </WithdrawDepositInput>
+        {process.env.SDK_ENV === "production" && (
+          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
+            <InformationIcon className="w-5 h-5 flex-shrink-0" />
+            <span>
+              Approx. {Number(relayerFee.toFixed(5))} {currentToken.symbol} will
+              be applied for relayer fee.
+            </span>
+          </div>
+        )}
         <Button
           title={`${t("common:buttons.deposit")}`}
           variant="gradient"

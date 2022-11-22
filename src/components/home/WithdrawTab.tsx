@@ -25,7 +25,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { toast } from "features/toasts/toastsSlice"
 import {
   getEmitterAddressEth,
@@ -90,7 +90,7 @@ const WithdrawTab: FC = () => {
 
   const calculateTokenAvailableBalance = () => {
     const walletTokenBalance = getBalance(
-      withdrawFrom === "PDA Assets" ? pdaTokens : walletTokens,
+      withdrawFrom === "Solana Assets" ? pdaTokens : walletTokens,
       currentToken.symbol
     )
     const streamingTokenBalance = getBalance(
@@ -116,7 +116,7 @@ const WithdrawTab: FC = () => {
 
   useEffect(() => {
     const walletTokenBalance = getBalance(
-      withdrawFrom === "PDA Assets" ? pdaTokens : walletTokens,
+      withdrawFrom === "Solana Assets" ? pdaTokens : walletTokens,
       currentToken.symbol
     )
     const streamingTokenBalance = getBalance(
@@ -194,7 +194,7 @@ const WithdrawTab: FC = () => {
               name: "Withdraw from Zebec Assets"
             },
             {
-              name: "Withdraw from PDA Assets"
+              name: "Withdraw from Solana Assets"
             }
           ])
         )
@@ -404,7 +404,9 @@ const WithdrawTab: FC = () => {
   return (
     <div className="withdraw-from-zebec-wallet px-6 pt-6 pb-8 flex flex-col gap-y-6">
       <div className="text-caption text-content-tertiary">
-        {t("common:deposit-withdrawal.withdraw-title")}
+        {withdrawFrom === "Zebec Assets"
+          ? t("common:deposit-withdrawal.withdraw-title")
+          : t("common:deposit-withdrawal.withdraw-title-solana-assets")}
       </div>
       <form onSubmit={handleSubmit(submit)} className="flex flex-col">
         {walletObject.chainId !== "solana" && (
@@ -432,7 +434,7 @@ const WithdrawTab: FC = () => {
               position="left"
             >
               <div className="bg-background-primary border border-outline rounded-lg divide-y divide-outline max-h-[206px] overflow-auto">
-                {["Zebec Assets", "PDA Assets"].map((item) => (
+                {["Zebec Assets", "Solana Assets"].map((item) => (
                   <div
                     className="text-content-primary text-sm font-medium px-4 py-3 cursor-pointer hover:bg-background-light"
                     key={item}

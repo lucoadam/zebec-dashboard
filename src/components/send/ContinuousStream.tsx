@@ -10,7 +10,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { listenWormholeTransactionStatus } from "api/services/fetchEVMTransactionStatus"
 import { checkRelayerStatus } from "api/services/pingRelayer"
 import { useAppDispatch, useAppSelector } from "app/hooks"
@@ -360,16 +360,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         ""
       // is receiver proxy initialized
       const check = await checkPDAinitialized(receiver)
-      if (!check) {
+      if (check.isBalanceRequired) {
         dispatch(toggleWalletApprovalMessageModal())
         dispatch(
           toast.error({
-            message: "Receiver's proxy pda is not initialized."
+            message: "Receiver's solana account is not initialized."
           })
         )
         return
       }
-      // commented console.log(data)
       if (!signer) return
       const formattedData = {
         name: data.transaction_name,
@@ -418,7 +417,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         BSC_ZEBEC_BRIDGE_ADDRESS
       )
       console.debug("emitterAddress:", transferEmitterAddress)
-      // commented console.log("sequence", sequence)
       const { vaaBytes: signedVaa } = await getSignedVAAWithRetry(
         WORMHOLE_RPC_HOSTS,
         "bsc",
@@ -459,7 +457,6 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }
 
   const onSubmit = async (data: ContinuousStreamFormData) => {
-    // commented console.log("data", data)
     if (walletObject.chainId === "solana") {
       handleSolanaStream(data)
     } else {

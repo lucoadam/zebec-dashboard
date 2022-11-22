@@ -69,6 +69,62 @@ const bscTokens = [
   }
 ]
 
+const bscTokensMainnet = [
+  {
+    symbol: "WSOL",
+    name: "Wrapped Solana",
+    decimal: 9,
+    mint: "So11111111111111111111111111111111111111112",
+    coingeco_id: "solana",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WWSOL",
+    name: "Wormhole Wrapped SOL",
+    decimal: 9,
+    mint: "0x30f19eBba919954FDc020B8A20aEF13ab5e02Af0",
+    coingeco_id: "solana",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "BNB",
+    name: "Binance Coin",
+    decimal: 18,
+    mint: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+    coingeco_id: "binancecoin",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WBNB",
+    name: "Wormhole Binance Coin",
+    decimal: 8,
+    mint: "9gP2kCy3wA1ctvYWQk75guqXuHfrEomqydHLtcTCqiLa",
+    coingeco_id: "binancecoin",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "ZBC",
+    name: "Zebec Token",
+    decimal: 9,
+    mint: "0x37a56cdcD83Dce2868f721De58cB3830C44C6303",
+    coingeco_id: "zebec-protocol",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WZBC",
+    name: "Wormhole Zebec Token",
+    decimal: 9,
+    mint: "wzbcJyhGhQDLTV1S99apZiiBdE4jmYfbw99saMMdP59",
+    coingeco_id: "zebec-protocol",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  }
+]
 //Generates pending, fulfilled and rejected action types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
 export const fetchTokens = createAsyncThunk<any, void, {}>(
@@ -76,10 +132,9 @@ export const fetchTokens = createAsyncThunk<any, void, {}>(
   async () => {
     const response = await api.get(`/token/`)
     const tokenDetails: TokenResponse[] = response.data
-    console.log("tokenDetails", tokenDetails)
     const tokens = [
       ...tokenDetails.filter((token) => token.network === "solana"),
-      ...bscTokens
+      ...(process.env.SDK_ENV === "development" ? bscTokens : bscTokensMainnet)
     ].map((res) => ({
       name: res.name,
       symbol: res.symbol,

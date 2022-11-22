@@ -12,7 +12,7 @@ import {
   getBridgeAddressForChain,
   WORMHOLE_RPC_HOSTS,
   ZebecEthBridgeClient
-} from "zebec-wormhole-sdk-test"
+} from "@zebec-protocol/wormhole-bridge"
 import { getEVMToWormholeChain } from "constants/wormholeChains"
 import { toast } from "features/toasts/toastsSlice"
 import { resumeStreamTreasury } from "application"
@@ -99,7 +99,6 @@ const ResumeModal: FC = ({}) => {
         signer,
         sourceChain
       )
-      // commented console.log("pda-data:", transaction)
       const receipt = await messengerContract.pauseResumeStream(
         transaction.senderEvm,
         transaction.receiverEvm,
