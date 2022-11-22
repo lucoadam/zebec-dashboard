@@ -56,8 +56,8 @@ export const InitializePDAModal: FC = () => {
           toast.success({
             message:
               balance === 0
-                ? "PDA initialized successfully"
-                : "PDA fee loaded successfully"
+                ? "Solana account initialized successfully"
+                : "Account fee loaded successfully"
           })
         )
         dispatch(setPdaBalance(checkPda.balance))
@@ -70,8 +70,8 @@ export const InitializePDAModal: FC = () => {
         toast.error({
           message:
             balance === 0
-              ? "Failed to initialize PDA"
-              : "Failed to load PDA fee"
+              ? "Failed to initialize Solana account"
+              : "Failed to load account fee"
         })
       )
       dispatch(setShowPdaInitialize(false))
