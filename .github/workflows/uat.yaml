@@ -20,7 +20,7 @@ env:
   NODE_ENV: production
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
   FEE_RECEIVER_WALLET: HWERzRzAUKpt1yCDBRUz1sxUGiGUkGpc9Y1CP7M1Dvpo
-  SDK_ENV: development
+  SDK_ENV: production
 
 permissions:
   contents: read
