@@ -17,6 +17,7 @@ env:
   NOTIFI_CARD_ID: 0f3b7131f0414b34a5f36300799e4a39
   ZBC_AIRDROP: "[216,92,116,3,169,53,194,202,30,224,200,213,13,1,223,233,254,225,142,23,72,208,10,148,210,216,244,234,90,208,87,186,79,10,182,221,94,205,76,169,73,236,85,197,250,73,18,132,153,126,114,248,106,221,214,133,209,64,149,239,79,28,249,168]"
   SYNDICA_API: https://solana-api.syndica.io/access-token/9gj2FpNSRgnUu3ub4uSb7G9gSvPrwgQox3fPl81lory9ZwWPslzhicFkR07nhcjE
+  SOLANA_API_URL: https://solana-api.syndica.io/access-token/9gj2FpNSRgnUu3ub4uSb7G9gSvPrwgQox3fPl81lory9ZwWPslzhicFkR07nhcjE
   NODE_ENV: production
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
   FEE_RECEIVER_WALLET: HWERzRzAUKpt1yCDBRUz1sxUGiGUkGpc9Y1CP7M1Dvpo
@@ -58,6 +59,7 @@ jobs:
             --build-arg NOTIFI_CARD_ID=${NOTIFI_CARD_ID} \
             --build-arg ZBC_AIRDROP=${ZBC_AIRDROP} \
             --build-arg SYNDICA_API=${SYNDICA_API} \
+            --build-arg SOLANA_API_URL=${SOLANA_API_URL} \
             --build-arg NODE_ENV=${NODE_ENV} \
             --build-arg PROGRAM_ID=${PROGRAM_ID} \
             --build-arg FEE_RECEIVER_WALLET=${FEE_RECEIVER_WALLET} \
