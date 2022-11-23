@@ -57,7 +57,6 @@ import {
 } from "features/modals/pdaInitializeModalSlice"
 import { checkTokenAccountCreated } from "utils/checkTokenAccountCreated"
 import { getRelayerFee } from "utils/getRelayerFee"
-import { formatCurrency } from "utils"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -341,8 +340,7 @@ const DepositTab: FC = () => {
         if (process.env.SDK_ENV === "production") {
           relayerFee = (
             await getRelayerFee(tokenPrices[currentToken.symbol])
-          ).toString()
-          relayerFee = formatCurrency(relayerFee, "", currentToken.decimal)
+          ).toFixed(6)
         }
 
         transferEvm(
