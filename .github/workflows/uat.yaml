@@ -62,7 +62,6 @@ jobs:
             --build-arg PROGRAM_ID=${PROGRAM_ID} \
             --build-arg FEE_RECEIVER_WALLET=${FEE_RECEIVER_WALLET} \
             --build-arg SDK_ENV=${SDK_ENV} \
-            --build-arg SOLANA_API_URL=${SYNDICA_API} \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
