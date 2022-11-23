@@ -11,6 +11,7 @@ import { SolanaWallet } from "components/shared/Wallet/SolanaWallet"
 import { EthereumWallet } from "components/shared/Wallet/EthereumWallet"
 import { Token } from "components/shared/Token"
 import { useZebecWallet } from "hooks/useWallet"
+import { useSwitchNetwork } from "wagmi"
 
 interface DecodedTokenProps {
   token_type: string
@@ -35,13 +36,16 @@ const tabs = [
   }
 ]
 
+const chainId = process.env.SDK_ENV === "production" ? "56" : "97"
+
 const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
   const walletObject = useZebecWallet()
-
   const [activeTab, setActiveTab] = useState<number>(0)
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: Number(chainId)
+  })
 
-  // const walletModalObject = useWalletModal()
   const [isInitialized, setIsInitialized] = useState(false)
   const [isLedgerWallet, setIsLedgerWallet] = useState(false)
   const { isSigned } = useAppSelector((state) => state.common)
@@ -64,8 +68,15 @@ const WalletNotConnectedModal: NextPage = () => {
     if (walletObject.connected) {
       const token = TokenService.getLocalAccessToken()
       if (!token) {
-        if (walletObject.adapter && walletObject.network !== "solana") {
+        if (
+          walletObject.adapter &&
+          walletObject.network !== "solana" &&
+          walletObject.chainId === chainId
+        ) {
           handleLogin()
+        }
+        if (walletObject.chainId !== chainId) {
+          switchNetwork?.()
         }
       } else {
         const decodedToken: DecodedTokenProps = jwt_decode(token)
