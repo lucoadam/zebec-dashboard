@@ -423,9 +423,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         transferEmitterAddress,
         sequence
       )
+      const vaa = `${transferEmitterAddress}-${sequence}-${sourceChain}`
       const backendData = {
         ...formattedData,
-        vaa: Buffer.from(signedVaa).toString("hex")
+        vaa
       }
       dispatch(sendContinuousStream(backendData)).then(async () => {
         // check if message is relayed
