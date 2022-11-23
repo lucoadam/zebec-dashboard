@@ -14,6 +14,7 @@ const nextConfig = {
     PROGRAM_ID: process.env.PROGRAM_ID,
     FEE_RECEIVER_WALLET: process.env.FEE_RECEIVER_WALLET,
     SDK_ENV: process.env.SDK_ENV,
+    SOLANA_API_URL: process.env.SOLANA_API_URL,
   },
   i18n,
   webpack(config) {
