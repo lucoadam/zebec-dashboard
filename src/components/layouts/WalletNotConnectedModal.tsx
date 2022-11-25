@@ -36,7 +36,7 @@ const tabs = [
   }
 ]
 
-const chainId = process.env.SDK_ENV === "production" ? "56" : "97"
+const chainId = process.env.RPC_NETWORK === "mainnet" ? "56" : "97"
 
 const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
