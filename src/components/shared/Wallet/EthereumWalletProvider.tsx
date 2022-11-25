@@ -9,7 +9,7 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 
 const binanceMainnet: Chain = {
   id: 56,
-  name: "Binance Smart Chain",
+  name: "Binance Smart Chain Mainnet",
   network: "binance",
   nativeCurrency: {
     decimals: 18,

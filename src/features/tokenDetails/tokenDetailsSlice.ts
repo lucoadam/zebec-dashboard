@@ -134,7 +134,7 @@ export const fetchTokens = createAsyncThunk<any, void, {}>(
     const tokenDetails: TokenResponse[] = response.data
     const tokens = [
       ...tokenDetails.filter((token) => token.network === "solana"),
-      ...(process.env.RPC_NETWORK === "mainnet" ? bscTokens : bscTokensMainnet)
+      ...(process.env.RPC_NETWORK === "mainnet" ? bscTokensMainnet : bscTokens)
     ].map((res) => ({
       name: res.name,
       symbol: res.symbol,
