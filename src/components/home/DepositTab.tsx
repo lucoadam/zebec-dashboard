@@ -112,7 +112,10 @@ const DepositTab: FC = () => {
 
   const setMaxAmount = async () => {
     let balance = 0
-    if (process.env.RPC_NETWORK === "mainnet") {
+    if (
+      process.env.RPC_NETWORK === "mainnet" &&
+      walletObject.chainId !== "solana"
+    ) {
       const relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
       balance = Number(
         (
@@ -140,7 +143,10 @@ const DepositTab: FC = () => {
     if (currentToken.mint) {
       ;(async () => {
         let balance = 0
-        if (process.env.RPC_NETWORK === "mainnet") {
+        if (
+          process.env.RPC_NETWORK === "mainnet" &&
+          walletObject.chainId !== "solana"
+        ) {
           const relayerFee = await getRelayerFee(
             tokenPrices[currentToken.symbol]
           )
@@ -174,7 +180,8 @@ const DepositTab: FC = () => {
     setValue,
     walletTokens,
     pdaTokens,
-    tokenPrices
+    tokenPrices,
+    walletObject.chainId
   ])
 
   const depositCallback = () => {
@@ -632,15 +639,16 @@ const DepositTab: FC = () => {
             setCurrentToken={setCurrentToken}
           />
         </WithdrawDepositInput>
-        {process.env.RPC_NETWORK === "mainnet" && (
-          <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
-            <InformationIcon className="w-5 h-5 flex-shrink-0" />
-            <span>
-              Approx. {Number(relayerFee.toFixed(5))} {currentToken.symbol} will
-              be applied for relayer fee.
-            </span>
-          </div>
-        )}
+        {process.env.RPC_NETWORK === "mainnet" &&
+          walletObject.chainId !== "solana" && (
+            <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
+              <InformationIcon className="w-5 h-5 flex-shrink-0" />
+              <span>
+                Approx. {Number(relayerFee.toFixed(5))} {currentToken.symbol}{" "}
+                will be applied for relayer fee.
+              </span>
+            </div>
+          )}
         <Button
           title={`${t("common:buttons.deposit")}`}
           variant="gradient"
