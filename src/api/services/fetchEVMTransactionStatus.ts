@@ -22,6 +22,7 @@ export const listenWormholeTransactionStatus = async (
         tryNativeToUint8Array(sender, toChainName(chainId)),
         connection,
         SOL_ZEBEC_BRIDGE_ADDRESS,
+        "finalized",
         "bundler"
       )
       if (response) {
