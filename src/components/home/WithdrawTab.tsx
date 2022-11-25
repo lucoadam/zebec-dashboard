@@ -98,13 +98,16 @@ const WithdrawTab: FC = () => {
       currentToken.symbol
     )
 
-    if (streamingTokenBalance > 0) {
+    if (streamingTokenBalance > 0 && withdrawFrom === "Zebec Assets") {
       setShowMaxInfo(true)
     } else {
       setShowMaxInfo(false)
     }
 
-    return walletTokenBalance - streamingTokenBalance
+    return (
+      walletTokenBalance -
+      (withdrawFrom === "Zebec Assets" ? streamingTokenBalance : 0)
+    )
   }
 
   const setMaxAmount = () => {
@@ -123,7 +126,9 @@ const WithdrawTab: FC = () => {
       streamingTokens,
       currentToken.symbol
     )
-    const balance = walletTokenBalance - streamingTokenBalance
+    const balance =
+      walletTokenBalance -
+      (withdrawFrom === "Zebec Assets" ? streamingTokenBalance : 0)
     setValue("balance", balance.toString())
   }, [
     currentToken,

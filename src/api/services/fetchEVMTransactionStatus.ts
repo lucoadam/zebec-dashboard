@@ -16,18 +16,19 @@ export const listenWormholeTransactionStatus = async (
 ) => {
   try {
     let retry = 0
-    while (retry < 45) {
+    while (retry < 36) {
       const response = await getIsRelayCompleted(
         signedVaa,
         tryNativeToUint8Array(sender, toChainName(chainId)),
         connection,
         SOL_ZEBEC_BRIDGE_ADDRESS,
+        "finalized",
         "bundler"
       )
       if (response) {
         return "success"
       }
-      await new Promise((resolve) => setTimeout(resolve, 4000))
+      await new Promise((resolve) => setTimeout(resolve, 5000))
       retry += 1
     }
     return "timeout"

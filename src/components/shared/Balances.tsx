@@ -106,10 +106,10 @@ export const Tokens: FC<{
   })
 
   useEffect(() => {
-    if (tokenDetails.length > 0) {
+    if (tokenDetails.length > 0 && !currentToken) {
       setCurrentToken(tokenDetails[0].symbol)
     }
-  }, [tokenDetails, setCurrentToken])
+  }, [tokenDetails, setCurrentToken, currentToken])
 
   return (
     <div className="token p-6 rounded bg-background-secondary flex flex-col gap-y-6">
@@ -144,7 +144,9 @@ export const Tokens: FC<{
             tokens={tokenDetails}
             show={show}
             toggleShow={setToggle}
-            setCurrentToken={(token) => setCurrentToken(token?.symbol)}
+            setCurrentToken={(token) => {
+              setCurrentToken(token?.symbol)
+            }}
             className="top-8"
           />
         </div>

@@ -1,9 +1,8 @@
 import axios from "axios"
 
 export const checkRelayerStatus = () => {
-  const url = `https://zebec-relayer.alishdahal.com.np/ping`
   return axios
-    .get(url)
+    .get(`${process.env.RELAYER_API_URL}/ping`)
     .then(() => {
       return true
     })
