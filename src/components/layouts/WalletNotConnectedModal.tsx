@@ -11,7 +11,7 @@ import { SolanaWallet } from "components/shared/Wallet/SolanaWallet"
 import { EthereumWallet } from "components/shared/Wallet/EthereumWallet"
 import { Token } from "components/shared/Token"
 import { useZebecWallet } from "hooks/useWallet"
-import { useSwitchNetwork } from "wagmi"
+import { useAccount, useConnect, useDisconnect, useSwitchNetwork } from "wagmi"
 
 interface DecodedTokenProps {
   token_type: string
@@ -42,8 +42,17 @@ const WalletNotConnectedModal: NextPage = () => {
   const { t } = useTranslation("common")
   const walletObject = useZebecWallet()
   const [activeTab, setActiveTab] = useState<number>(0)
+  const { disconnect } = useDisconnect()
+  const { connect } = useConnect()
+  const { connector } = useAccount()
   const { switchNetwork } = useSwitchNetwork({
-    chainId: Number(chainId)
+    chainId: Number(chainId),
+    onSuccess: () => {
+      disconnect()
+      setTimeout(() => {
+        connect({ connector })
+      }, 500)
+    }
   })
 
   const [isInitialized, setIsInitialized] = useState(false)
@@ -79,6 +88,13 @@ const WalletNotConnectedModal: NextPage = () => {
           switchNetwork?.()
         }
       } else {
+        if (
+          walletObject.network !== "solana" &&
+          walletObject.chainId !== chainId
+        ) {
+          switchNetwork?.()
+          return
+        }
         const decodedToken: DecodedTokenProps = jwt_decode(token)
         if (
           decodedToken.wallet_address === walletObject.publicKey?.toString()

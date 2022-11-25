@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react"
-import { useWallet } from "@solana/wallet-adapter-react"
 import * as Icons from "assets/icons"
 
 import { CircularProgress } from "components/shared"
@@ -10,6 +9,7 @@ import {
 } from "components/transactions/transactions.d"
 import { formatCurrency } from "utils"
 import { useAppSelector } from "app/hooks"
+import { useZebecWallet } from "hooks/useWallet"
 
 interface RecentTransactionRowProps {
   transaction: any
@@ -18,7 +18,7 @@ interface RecentTransactionRowProps {
 export const RecentTransactionRow: FC<RecentTransactionRowProps> = ({
   transaction
 }) => {
-  const walletObject = useWallet()
+  const walletObject = useZebecWallet()
 
   const { initiatedTransactions } = useAppSelector(
     (state) => state.transactions

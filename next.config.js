@@ -15,6 +15,7 @@ const nextConfig = {
     FEE_RECEIVER_WALLET: process.env.FEE_RECEIVER_WALLET,
     SDK_ENV: process.env.SDK_ENV,
     SOLANA_API_URL: process.env.SOLANA_API_URL,
+    RELAYER_API_URL: process.env.RELAYER_API_URL
   },
   i18n,
   webpack(config) {
