@@ -112,7 +112,7 @@ const DepositTab: FC = () => {
 
   const setMaxAmount = async () => {
     let balance = 0
-    if (process.env.SDK_ENV === "production") {
+    if (process.env.RPC_NETWORK === "mainnet") {
       const relayerFee = await getRelayerFee(tokenPrices[currentToken.symbol])
       balance = Number(
         (
@@ -140,7 +140,7 @@ const DepositTab: FC = () => {
     if (currentToken.mint) {
       ;(async () => {
         let balance = 0
-        if (process.env.SDK_ENV === "production") {
+        if (process.env.RPC_NETWORK === "mainnet") {
           const relayerFee = await getRelayerFee(
             tokenPrices[currentToken.symbol]
           )
@@ -337,7 +337,7 @@ const DepositTab: FC = () => {
           dispatch(switchxWalletApprovalMessageStep(currentStep))
         }
         let relayerFee = "0.01"
-        if (process.env.SDK_ENV === "production") {
+        if (process.env.RPC_NETWORK === "mainnet") {
           relayerFee = (
             await getRelayerFee(tokenPrices[currentToken.symbol])
           ).toFixed(6)
@@ -632,7 +632,7 @@ const DepositTab: FC = () => {
             setCurrentToken={setCurrentToken}
           />
         </WithdrawDepositInput>
-        {process.env.SDK_ENV === "production" && (
+        {process.env.RPC_NETWORK === "mainnet" && (
           <div className="mt-2 text-caption text-content-tertiary flex items-center gap-x-1">
             <InformationIcon className="w-5 h-5 flex-shrink-0" />
             <span>
