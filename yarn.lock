@@ -3432,10 +3432,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@zebec-protocol/wormhole-bridge@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@zebec-protocol/wormhole-bridge/-/wormhole-bridge-1.0.6.tgz#d458d73645f1592d17370ae15a6e6d2098517edd"
-  integrity sha512-R5iZ7WGl9fHBjcyg78KtUjL2KCzFZEEvY8L0HEEhlZOfJBsbZAhLayLEuNuOSpToU0PjJ9oA7eAgvunc4vPTjw==
+"@zebec-protocol/wormhole-bridge@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@zebec-protocol/wormhole-bridge/-/wormhole-bridge-1.0.7.tgz#5dde9b151c4de5d728db2f1235ecbb679b3f3878"
+  integrity sha512-8MP8gPmwWVchcpWvf1kkiZoXO7UcjPJX2Ts1JnQ8fu3GvbMfLEJuGDMLxlk5DAb35lsdlR7nIAQVfcBIuKjW0Q==
   dependencies:
     "@certusone/wormhole-sdk" "^0.6.2"
     "@project-serum/anchor" "^0.24.2"
