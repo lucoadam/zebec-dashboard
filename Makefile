@@ -8,7 +8,7 @@ HELM_PATH := $(APP_ROOT)/helm/zebec-app
 update-kubeconfig:
 	@aws eks update-kubeconfig --name $(EKS_CLUSTER_NAME) --region $(AWS_REGION)
 
-deploy-helm:
+deploy-helm: update-kubeconfig
 		@$(HELM_CMD) upgrade --install zebec-app $(HELM_PATH) \
 		--namespace $(STAGE)-zebec-app \
 		--create-namespace --wait --set \
