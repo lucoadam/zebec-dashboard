@@ -12,4 +12,4 @@ deploy-helm:
 		@$(HELM_CMD) upgrade --install zebec-app $(HELM_PATH) \
 		--namespace $(STAGE)-zebec-app \
 		--create-namespace --wait --set \
-		backend.imageUri=$(ECR_REPO_URI):$(BUDDY_PROJECT_NAME)-$(BUDDY_EXECUTION_REVISION_SHORT)
+		frontend.imageUri=$(ECR_REPO_URI):$(BUDDY_PROJECT_NAME)-$(BUDDY_EXECUTION_REVISION_SHORT)
