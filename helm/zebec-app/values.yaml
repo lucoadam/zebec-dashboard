@@ -1,0 +1,9 @@
+frontend:
+  imageUri: regmicmahesh/echo-server:3000
+  replicas: 1
+frontendService:
+  port: 3000
+  containerPort: 3000
+frontendIngress:
+  hostname: dev.zebec.io
+  certificateArn: arn:aws:acm:us-east-1:721574006748:certificate/bea1991c-51cc-4b27-986a-04f10a0f46fe
