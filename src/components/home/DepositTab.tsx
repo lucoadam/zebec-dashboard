@@ -140,7 +140,7 @@ const DepositTab: FC = () => {
   }
 
   useEffect(() => {
-    if (currentToken.mint) {
+    if (currentToken.symbol) {
       ;(async () => {
         let balance = 0
         if (
