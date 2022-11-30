@@ -1,0 +1,6 @@
+apiVersion: v2
+name: zebec-app
+description: Helm Chart of Zebec App
+type: application
+version: 1.0.0
+appVersion: "1.16.0"
