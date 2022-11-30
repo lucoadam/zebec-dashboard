@@ -123,6 +123,61 @@ const bscTokensMainnet = [
     coingeco_id: "zebec-protocol",
     chain_id: "solana",
     network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "BUSD",
+    name: "Binance Coin",
+    decimal: 18,
+    mint: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+    coingeco_id: "binance-usd",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WBUSD",
+    name: "Wormhole Binance Coin",
+    decimal: 8,
+    mint: "5RpUwQ8wtdPCZHhu6MERp2RGrpobsbZ6MH5dDHkUjs2",
+    coingeco_id: "binance-usd",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "USDT",
+    name: "Binance USDT Coin",
+    decimal: 18,
+    mint: "0x55d398326f99059fF775485246999027B3197955",
+    coingeco_id: "tether",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WUSDT",
+    name: "Wormhole USDT Coin",
+    decimal: 8,
+    mint: "8qJSyQprMC57TWKaYEmetUR3UUiTP2M3hXdcvFhkZdmv",
+    coingeco_id: "tether",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  },
+
+  {
+    symbol: "HAY",
+    name: "Hay DestableCoin",
+    decimal: 18,
+    mint: "0x0782b6d8c4551B9760e74c0545a9bCD90bdc41E5",
+    coingeco_id: "helio-protocol-hay",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WHAY",
+    name: "Wormhole Hay Destable Coin",
+    decimal: 8,
+    mint: "Eh4ZP3fJQRCX3xeGUvrbNtajGumFgT978A1pWZURqYuw",
+    coingeco_id: "helio-protocol-hay",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
   }
 ]
 //Generates pending, fulfilled and rejected action types
