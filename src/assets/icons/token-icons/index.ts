@@ -41,6 +41,8 @@ import PhxIcon from "./phx.svg"
 import MiaIcon from "./mia.svg"
 import HtoIcon from "./hto.svg"
 import BNBIcon from "./bnb.svg"
+import BNBUSDIcon from "./bnb-usd.svg"
+import HayDestableIcon from "./hay-destable.svg"
 
 export {
   SolIcon as SOL,
@@ -60,6 +62,7 @@ export {
   WnzIcon as $WNZ,
   UsdcIcon as USDC,
   TetherIcon as USDT,
+  TetherIcon as WUSDT,
   SrmIcon as SRM,
   ArbIcon as ARB,
   BlockIcon as BLOCK,
@@ -89,5 +92,9 @@ export {
   MiaIcon as MIA,
   HtoIcon as HTO,
   BNBIcon as BNB,
-  BNBIcon as WBNB
+  BNBIcon as WBNB,
+  BNBUSDIcon as BUSD,
+  BNBUSDIcon as WBUSD,
+  HayDestableIcon as HAY,
+  HayDestableIcon as WHAY
 }
