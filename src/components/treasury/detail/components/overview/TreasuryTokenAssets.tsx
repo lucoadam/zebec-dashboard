@@ -3,7 +3,7 @@ import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
 import { FC, useEffect, useState } from "react"
-import { formatCurrency } from "utils"
+import { displayExponentialNumber, formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "components/shared"
 import { twMerge } from "tailwind-merge"
@@ -88,10 +88,12 @@ export const TreasuryTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
                                 data-tip={formatCurrency(
-                                  getUsdBalance(
-                                    tokensPrice,
-                                    balanceTokens,
-                                    token.symbol
+                                  displayExponentialNumber(
+                                    getUsdBalance(
+                                      tokensPrice,
+                                      balanceTokens,
+                                      token.symbol
+                                    )
                                   ),
                                   "$"
                                 )}
@@ -108,9 +110,8 @@ export const TreasuryTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                             <div className=" text-caption text-content-contrast">
                               <span
-                                data-tip={getBalance(
-                                  balanceTokens,
-                                  token.symbol
+                                data-tip={displayExponentialNumber(
+                                  getBalance(balanceTokens, token.symbol)
                                 )}
                               >
                                 {formatCurrency(

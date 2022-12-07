@@ -15,6 +15,7 @@ import { useState } from "react"
 import { getBalance } from "utils/getBalance"
 import { fetchZebecBalance } from "features/zebecBalance/zebecBalanceSlice"
 import { useZebecWallet } from "hooks/useWallet"
+import { displayExponentialNumber } from "utils"
 
 export const Deposit = () => {
   const { t } = useTranslation()
@@ -139,7 +140,10 @@ export const Deposit = () => {
   const setMaxAmount = () => {
     const balance = calculateTokenAvailableBalance()
 
-    setValue("amount", balance < 0 ? "0" : balance.toString())
+    setValue(
+      "amount",
+      displayExponentialNumber(balance < 0 ? "0" : balance.toString())
+    )
     trigger("amount")
   }
 

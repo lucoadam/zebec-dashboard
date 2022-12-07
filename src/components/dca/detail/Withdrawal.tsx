@@ -2,6 +2,7 @@ import { useAppSelector } from "app/hooks"
 import { Button, TokensDropdown, WithdrawDepositInput } from "components/shared"
 import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useTranslation } from "next-i18next"
+import { displayExponentialNumber } from "utils"
 import { getBalance } from "utils/getBalance"
 
 export const Withdrawal = () => {
@@ -42,7 +43,9 @@ export const Withdrawal = () => {
   const setMaxAmount = () => {
     setValue(
       "amount",
-      getBalance(treasuryTokens, currentToken.symbol).toString()
+      displayExponentialNumber(
+        getBalance(treasuryTokens, currentToken.symbol).toString()
+      )
     )
     trigger("amount")
   }
