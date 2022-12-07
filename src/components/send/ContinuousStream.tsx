@@ -858,6 +858,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     step="any"
                     disabled={getValues().enableStreamRate}
                     {...register("amount")}
+                    onKeyDown={(event) => {
+                      const regex = new RegExp(
+                        /(^\d*\.?\d*$)|(Backspace|Tab|Delete|ArrowLeft|ArrowRight)/
+                      )
+                      return !event.key.match(regex) && event.preventDefault()
+                    }}
                   />
                   {!getValues().enableStreamRate && (
                     <Button
