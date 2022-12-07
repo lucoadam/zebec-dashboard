@@ -201,6 +201,7 @@ const ContinuousTransactionsTableRow: FC<
     try {
       if (!signer) return
       setLoading(true)
+      dispatch(toggleWalletApprovalMessageModal())
       const isRelayerActive = await checkRelayerStatus()
       if (!isRelayerActive) {
         dispatch(
@@ -266,14 +267,20 @@ const ContinuousTransactionsTableRow: FC<
         dispatch(toast.error({ message: "Stream withdrawal failed" }))
       }
       setLoading(false)
+      dispatch(toggleWalletApprovalMessageModal())
     } catch (e: any) {
       console.debug("withdraw stream error", e)
       setLoading(false)
-      dispatch(
-        toast.error({
-          message: "Stream withdrawal failed"
-        })
-      )
+      dispatch(toggleWalletApprovalMessageModal())
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(
+          toast.error({
+            message: "Stream withdrawal failed"
+          })
+        )
+      }
     }
   }
   const withdraw = () => {

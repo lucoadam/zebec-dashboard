@@ -139,11 +139,16 @@ const PauseModal: FC = ({}) => {
       }
       dispatch(setLoading(false))
       dispatch(togglePauseModal())
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       console.debug("pause stream error", e)
       setLoading(false)
       dispatch(togglePauseModal())
-      dispatch(toast.error({ message: "Stream pause failed" }))
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(toast.error({ message: "Stream pause failed" }))
+      }
     }
   }
 

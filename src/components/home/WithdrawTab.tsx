@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
@@ -42,6 +43,8 @@ import {
   togglexWalletApprovalMessageModal
 } from "features/modals/xWalletApprovalMessageSlice"
 import { fetchPdaBalance } from "features/pdaBalance/pdaBalanceSlice"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { displayExponentialNumber } from "utils"
 // import axios from "axios"
 
 const WithdrawTab: FC = () => {
@@ -113,7 +116,10 @@ const WithdrawTab: FC = () => {
   const setMaxAmount = () => {
     const balance = calculateTokenAvailableBalance()
 
-    setValue("amount", balance < 0 ? "0" : balance.toString())
+    setValue(
+      "amount",
+      displayExponentialNumber(balance < 0 ? "0" : balance.toString())
+    )
     trigger("amount")
   }
 
@@ -253,14 +259,23 @@ const WithdrawTab: FC = () => {
               currentToken.mint,
               walletObject.originalAddress?.toString() as string
             )
-          } catch (e) {
+          } catch (e: any) {
             console.debug("withdraw error", e)
             withdrawCallback()
-            dispatch(
-              toast.success({
-                message: "Token withdrawn into Solana Assets only"
-              })
-            )
+            let timeout = 0
+            if (e?.code === "ACTION_REJECTED") {
+              timeout = 1500
+              dispatch(
+                toast.error({ message: "User rejected the transaction" })
+              )
+            }
+            setTimeout(() => {
+              dispatch(
+                toast.success({
+                  message: "Token withdrawn into Solana Assets only"
+                })
+              )
+            }, timeout)
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
             return
@@ -306,10 +321,14 @@ const WithdrawTab: FC = () => {
           dispatch(toast.error({ message: "Error withdrawing token" }))
         }
         dispatch(togglexWalletApprovalMessageModal())
-      } catch (e) {
+      } catch (e: any) {
         console.debug("withdraw error", e)
         dispatch(togglexWalletApprovalMessageModal())
-        dispatch(toast.error({ message: "Error withdrawing token" }))
+        if (e?.code === "ACTION_REJECTED") {
+          dispatch(toast.error({ message: "User rejected the transaction" }))
+        } else {
+          dispatch(toast.error({ message: "Error withdrawing token" }))
+        }
       }
       setLoading(false)
     }
@@ -320,6 +339,7 @@ const WithdrawTab: FC = () => {
     try {
       if (signer) {
         setLoading(true)
+        dispatch(toggleWalletApprovalMessageModal())
         const sourceChain = getEVMToWormholeChain(walletObject.chainId)
 
         const messengerContract = new ZebecEthBridgeClient(
@@ -363,11 +383,17 @@ const WithdrawTab: FC = () => {
           dispatch(toast.error({ message: "Withdraw failed" }))
         }
         setLoading(false)
+        dispatch(toggleWalletApprovalMessageModal())
       }
-    } catch (e) {
+    } catch (e: any) {
       console.debug("withdraw error", e)
       setLoading(false)
-      dispatch(toast.error({ message: "Error withdrawing token" }))
+      dispatch(toggleWalletApprovalMessageModal())
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(toast.error({ message: "Error withdrawing token" }))
+      }
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
