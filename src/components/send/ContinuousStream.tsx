@@ -180,8 +180,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   useEffect(() => {
     if (walletObject.chainId) {
       setValue("chainId", walletObject.chainId)
+      setValue("wallet", walletObject.originalAddress?.toString() || "")
     }
-  }, [walletObject.chainId, setValue])
+  }, [walletObject.chainId, walletObject.originalAddress, setValue])
 
   useEffect(() => {
     if (router?.query.address) {
