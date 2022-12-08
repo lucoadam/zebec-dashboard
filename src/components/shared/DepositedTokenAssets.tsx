@@ -3,7 +3,7 @@ import * as Icons from "assets/icons"
 import { TokenDetails } from "features/tokenDetails/tokenDetailsSlice.d"
 import { TreasuryToken } from "features/treasuryBalance/treasuryBalanceSlice.d"
 import { FC, useContext, useState } from "react"
-import { formatCurrency } from "utils"
+import { displayExponentialNumber, formatCurrency } from "utils"
 import { getBalance, getUsdBalance } from "utils/getBalance"
 import { Token } from "./Token"
 import { twMerge } from "tailwind-merge"
@@ -168,10 +168,12 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
                                 data-tip={formatCurrency(
-                                  getUsdBalance(
-                                    tokensPrice,
-                                    balanceTokens,
-                                    token.symbol
+                                  displayExponentialNumber(
+                                    getUsdBalance(
+                                      tokensPrice,
+                                      balanceTokens,
+                                      token.symbol
+                                    )
                                   ),
                                   "$"
                                 )}
@@ -188,9 +190,8 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                             <div className=" text-caption text-content-contrast">
                               <span
-                                data-tip={getBalance(
-                                  balanceTokens,
-                                  token.symbol
+                                data-tip={displayExponentialNumber(
+                                  getBalance(balanceTokens, token.symbol)
                                 )}
                               >
                                 {formatCurrency(
@@ -207,10 +208,12 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                           <div className="flex flex-col gap-y-2 mt-1">
                             <div className=" text-subtitle-sm text-content-primary font-medium">
                               <span
-                                data-tip={getUsdBalance(
-                                  tokensPrice,
-                                  streamingBalanceTokens,
-                                  token.symbol
+                                data-tip={displayExponentialNumber(
+                                  getUsdBalance(
+                                    tokensPrice,
+                                    streamingBalanceTokens,
+                                    token.symbol
+                                  )
                                 )}
                               >
                                 {formatCurrency(
@@ -225,9 +228,11 @@ export const DepositedTokenAssets: FC<DepositedTokenAssetsProps> = (props) => {
                             </div>
                             <div className=" text-caption text-content-contrast">
                               <span
-                                data-tip={getBalance(
-                                  streamingBalanceTokens,
-                                  token.symbol
+                                data-tip={displayExponentialNumber(
+                                  getBalance(
+                                    streamingBalanceTokens,
+                                    token.symbol
+                                  )
                                 )}
                               >
                                 {formatCurrency(

@@ -19,6 +19,7 @@ import ZebecContext from "app/zebecContext"
 import { withdrawFromTreasuryVault } from "application"
 import { CallbackMessageType } from "components/treasury/treasury"
 import * as Icons from "assets/icons"
+import { displayExponentialNumber } from "utils"
 
 const TransferToTreasuryModal = () => {
   const { t } = useTranslation()
@@ -122,7 +123,10 @@ const TransferToTreasuryModal = () => {
       setShowMaxInfo(false)
     }
 
-    setValue("amount", balance < 0 ? "0" : balance.toString())
+    setValue(
+      "amount",
+      displayExponentialNumber(balance < 0 ? "0" : balance.toString())
+    )
     trigger("amount")
   }
 

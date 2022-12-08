@@ -135,11 +135,16 @@ const ResumeModal: FC = ({}) => {
       }
       dispatch(setLoading(false))
       dispatch(toggleResumeModal())
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       console.debug("resume stream error:", e)
       setLoading(false)
       dispatch(toggleResumeModal())
-      dispatch(toast.error({ message: "Stream resume failed" }))
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(toast.error({ message: "Stream resume failed" }))
+      }
     }
   }
 

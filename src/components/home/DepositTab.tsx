@@ -57,6 +57,8 @@ import {
 } from "features/modals/pdaInitializeModalSlice"
 import { checkTokenAccountCreated } from "utils/checkTokenAccountCreated"
 import { getRelayerFee } from "utils/getRelayerFee"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { displayExponentialNumber } from "utils"
 
 const DepositTab: FC = () => {
   const { t } = useTranslation()
@@ -135,7 +137,10 @@ const DepositTab: FC = () => {
         ).toFixed(6) || 0
       )
     }
-    setValue("amount", balance > 0 ? balance.toString() : "0")
+    setValue(
+      "amount",
+      displayExponentialNumber(balance > 0 ? balance.toString() : "0")
+    )
     trigger("amount")
   }
 
@@ -400,13 +405,23 @@ const DepositTab: FC = () => {
                 walletObject.originalAddress?.toString() as string,
                 targetTokenAddress
               )
-            } catch (e) {
+            } catch (e: any) {
               console.debug("deposit error", e)
-              dispatch(
-                toast.success({
-                  message: "Token deposited into Solana Assets only"
-                })
-              )
+              let timeout = 0
+              if (e?.code === "ACTION_REJECTED") {
+                timeout = 1500
+                dispatch(
+                  toast.error({ message: "User rejected the transaction" })
+                )
+              }
+              setTimeout(() => {
+                dispatch(
+                  toast.success({
+                    message: "Token deposited into Solana Assets only"
+                  })
+                )
+              }, timeout)
+
               depositCallback()
               setLoading(false)
               dispatch(togglexWalletApprovalMessageModal())
@@ -452,21 +467,31 @@ const DepositTab: FC = () => {
           })
           .catch((e) => {
             console.debug("deposit error", e)
-            dispatch(
-              toast.error({
-                message: "Error depositing token"
-              })
-            )
+            if (e?.code === "ACTION_REJECTED") {
+              dispatch(
+                toast.error({ message: "User rejected the transaction" })
+              )
+            } else {
+              dispatch(
+                toast.error({
+                  message: "Error depositing token"
+                })
+              )
+            }
             setLoading(false)
             dispatch(togglexWalletApprovalMessageModal())
           })
-      } catch (e) {
+      } catch (e: any) {
         console.debug("deposit error", e)
-        dispatch(
-          toast.error({
-            message: "Error depositing token"
-          })
-        )
+        if (e?.code === "ACTION_REJECTED") {
+          dispatch(toast.error({ message: "User rejected the transaction" }))
+        } else {
+          dispatch(
+            toast.error({
+              message: "Error depositing token"
+            })
+          )
+        }
         setLoading(false)
         dispatch(togglexWalletApprovalMessageModal())
       }
@@ -477,6 +502,7 @@ const DepositTab: FC = () => {
     try {
       if (!signer) return
       setLoading(true)
+      dispatch(toggleWalletApprovalMessageModal())
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
       const messengerContract = new ZebecEthBridgeClient(
         BSC_ZEBEC_BRIDGE_ADDRESS,
@@ -518,14 +544,20 @@ const DepositTab: FC = () => {
       }
       depositCallback()
       setLoading(false)
-    } catch (e) {
+      dispatch(toggleWalletApprovalMessageModal())
+    } catch (e: any) {
       console.debug("deposit error", e)
-      dispatch(
-        toast.error({
-          message: "Error deposit token"
-        })
-      )
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(
+          toast.error({
+            message: "Error deposit token"
+          })
+        )
+      }
       setLoading(false)
+      dispatch(toggleWalletApprovalMessageModal())
     }
   }
 

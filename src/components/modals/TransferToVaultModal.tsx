@@ -18,6 +18,7 @@ import { useContext } from "react"
 import ZebecContext from "app/zebecContext"
 import { depositToTreasuryVault } from "application"
 import { CallbackMessageType } from "components/treasury/treasury"
+import { displayExponentialNumber } from "utils"
 
 const TransferToVaultModal = () => {
   const { t } = useTranslation()
@@ -102,7 +103,9 @@ const TransferToVaultModal = () => {
   const setMaxAmount = () => {
     setValue(
       "amount",
-      getBalance(treasuryBalance, currentToken.symbol).toString()
+      displayExponentialNumber(
+        getBalance(treasuryBalance, currentToken.symbol).toString()
+      )
     )
     trigger("amount")
   }
