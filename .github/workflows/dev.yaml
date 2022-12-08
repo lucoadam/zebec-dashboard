@@ -21,7 +21,7 @@ env:
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T
   FEE_RECEIVER_WALLET: E6kpHgWce3JhbEkeBvqGRmrefFAcWdqewUYaK5RaVQoz
   SDK_ENV: development
-  RELAYER_API_URL: https://relayer-dev.zebec.io
+  RELAYER_API_URL: https://relayer.dev.zebec.io
 
 permissions:
   contents: read

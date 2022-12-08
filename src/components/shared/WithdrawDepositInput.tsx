@@ -94,6 +94,12 @@ export const WithdrawDepositInput: FC<WithdrawDepositInputProps> =
                   {...rest}
                   ref={ref}
                   autoComplete="off"
+                  onKeyDown={(event) => {
+                    const regex = new RegExp(
+                      /(^\d*\.?\d*$)|(Backspace|Tab|Delete|ArrowLeft|ArrowRight)/
+                    )
+                    return !event.key.match(regex) && event.preventDefault()
+                  }}
                 />
                 <Button
                   type="button"

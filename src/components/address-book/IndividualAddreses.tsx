@@ -35,6 +35,7 @@ export default function IndividualAddresses() {
   const walletObject = useZebecWallet()
 
   const [isEdit, setIsEdit] = useState(false)
+  const [loadingButton, setLoadingButton] = useState(false)
   const [editAddressBookId, setEditAddressBookId] = useState<number | "">("")
 
   const headers = [
@@ -74,6 +75,7 @@ export default function IndividualAddresses() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
+    setLoadingButton(true)
     if (!isEdit) {
       const addressBookData = {
         data: {
@@ -92,6 +94,7 @@ export default function IndividualAddresses() {
             dispatch(toast.success({ message: t("addressBook:success-add") }))
           }
           resetForm()
+          setLoadingButton(false)
         }
       }
       dispatch(saveAddressBook(addressBookData))
@@ -119,6 +122,7 @@ export default function IndividualAddresses() {
           setIsEdit(false)
           setEditAddressBookId("")
           resetForm()
+          setLoadingButton(false)
         }
       }
       dispatch(updateAddressBook(addressBookData))
@@ -291,6 +295,7 @@ export default function IndividualAddresses() {
                     className={`w-full`}
                     variant="gradient"
                     type="submit"
+                    loading={loadingButton}
                     title={`${
                       isEdit
                         ? t("addressBook:update-address")

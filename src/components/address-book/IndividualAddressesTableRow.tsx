@@ -25,6 +25,7 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
   const dispatch = useAppDispatch()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -151,7 +152,9 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                     variant="danger"
                     endIcon={<Icons.TrashIcon />}
                     title={`${t("yes-delete")}`}
-                    onClick={() =>
+                    loading={deleteLoading}
+                    onClick={() => {
+                      setDeleteLoading(true)
                       dispatch(
                         deleteAddressBook({
                           id: addressBook.id,
@@ -170,10 +173,11 @@ const IndividualAddresesTableRow: FC<IndividualAddresesTableRow> = ({
                                 message: t("addressBook:success-delete")
                               })
                             )
+                            setDeleteLoading(false)
                           }
                         })
                       )
-                    }
+                    }}
                   />
                 </div>
                 <div className="">

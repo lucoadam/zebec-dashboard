@@ -116,7 +116,7 @@
         "explorer": "Explorer"
     },
     "modal-actions": {
-        "wallet-approval-message": "After your wallet approval, your transaction will be complete in a few seconds",
+        "wallet-approval-message": "After your wallet approval, your transaction will be completed in a few seconds",
         "do-not-close-this-window": "Do not close this window"
     },
     "deposited-assets": {

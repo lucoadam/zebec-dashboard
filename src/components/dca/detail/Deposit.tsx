@@ -14,7 +14,7 @@ import { useTranslation } from "next-i18next"
 import Image, { StaticImageData } from "next/image"
 import { useRef, useState } from "react"
 import { twMerge } from "tailwind-merge"
-import { formatCurrency } from "utils"
+import { displayExponentialNumber, formatCurrency } from "utils"
 import { getBalance } from "utils/getBalance"
 
 export const Deposit = () => {
@@ -78,12 +78,16 @@ export const Deposit = () => {
     if (depositFrom === "Wallet") {
       setValue(
         "amount",
-        getBalance(walletBalance, currentToken.symbol).toString()
+        displayExponentialNumber(
+          getBalance(walletBalance, currentToken.symbol).toString()
+        )
       )
     } else if (depositFrom === "Zebec balance") {
       setValue(
         "amount",
-        getBalance(zebecBalance, currentToken.symbol).toString()
+        displayExponentialNumber(
+          getBalance(zebecBalance, currentToken.symbol).toString()
+        )
       )
     }
     trigger("amount")

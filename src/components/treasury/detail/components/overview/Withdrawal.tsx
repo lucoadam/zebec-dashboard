@@ -8,6 +8,7 @@ import { useWithdrawDepositForm } from "hooks/shared/useWithdrawDepositForm"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useContext, useState } from "react"
+import { displayExponentialNumber } from "utils"
 import { getBalance } from "utils/getBalance"
 
 export const Withdrawal = () => {
@@ -99,7 +100,9 @@ export const Withdrawal = () => {
   const setMaxAmount = () => {
     setValue(
       "amount",
-      getBalance(treasuryTokens, currentToken.symbol).toString()
+      displayExponentialNumber(
+        getBalance(treasuryTokens, currentToken.symbol).toString()
+      )
     )
     trigger("amount")
   }

@@ -180,8 +180,9 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   useEffect(() => {
     if (walletObject.chainId) {
       setValue("chainId", walletObject.chainId)
+      setValue("wallet", walletObject.originalAddress?.toString() || "")
     }
-  }, [walletObject.chainId, setValue])
+  }, [walletObject.chainId, walletObject.originalAddress, setValue])
 
   useEffect(() => {
     if (router?.query.address) {
@@ -857,6 +858,12 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                     step="any"
                     disabled={getValues().enableStreamRate}
                     {...register("amount")}
+                    onKeyDown={(event) => {
+                      const regex = new RegExp(
+                        /(^\d*\.?\d*$)|(Backspace|Tab|Delete|ArrowLeft|ArrowRight)/
+                      )
+                      return !event.key.match(regex) && event.preventDefault()
+                    }}
                   />
                   {!getValues().enableStreamRate && (
                     <Button
