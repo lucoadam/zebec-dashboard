@@ -11,7 +11,7 @@
     /* Background */
     --bg-primary: rgba(255, 255, 255, 1);
     --bg-secondary: rgba(255, 255, 255, 1);
-    --bg-tertiary: rgba(245, 245, 245, 1);
+    --bg-tertiary: rgba(235, 235, 235, 1);
     --bg-light: rgba(235, 235, 235, 1);
     --bg-muted: rgba(235, 235, 235, 1);
     --bg-backdrop: rgba(0, 0, 0, 0.64);
@@ -150,6 +150,22 @@
   label {
     @apply text-caption text-content-secondary font-medium mb-1;
   }
+
+  .skeleton-background {
+    background: linear-gradient(
+      90deg,
+      rgba(43, 45, 51, 0.8) 0%,
+      rgba(43, 45, 51, 0.48) 100%
+    );
+  }
+}
+
+.skeleton-background {
+  background: linear-gradient(
+    90deg,
+    rgba(235, 235, 235, 1) 0%,
+    rgba(245, 245, 245, 1) 100%
+  );
 }
 
 /* Custom classes */
@@ -355,13 +371,6 @@ input[type="radio"]:hover::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-}
-.skeleton-background {
-  background: linear-gradient(
-    90deg,
-    rgba(43, 45, 51, 0.8) 0%,
-    rgba(43, 45, 51, 0.48) 100%
-  );
 }
 
 /* Notifi */

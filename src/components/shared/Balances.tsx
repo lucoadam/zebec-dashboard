@@ -120,7 +120,7 @@ export const Tokens: FC<{
         {/* Tokens  Dropdown*/}
         <div
           ref={tokensDropdownWrapperRef}
-          className="flex bg-background-primary px-2 py-1 rounded-md overflow-x-auto"
+          className="flex bg-background-primary border border-outline px-2 py-1 rounded-md overflow-x-auto"
         >
           <div
             className="cursor-pointer  flex items-center text-content-primary gap-1.5"

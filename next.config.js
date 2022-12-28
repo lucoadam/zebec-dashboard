@@ -41,8 +41,7 @@ const nextConfig = {
     return config
   },
   experimental: {
-    outputStandalone: true,
-    styledComponents: true
+    outputStandalone: true
   },
   async headers() {
     return [

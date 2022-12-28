@@ -32,7 +32,14 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       <TPSHeader />
       <Navbar />
 
-      <main className={`pb-20 ${currentTheme !== "dark" && "bg-[#F5F5F5]"}`}>
+      <main
+        className={`pb-20 ${
+          currentTheme === "dark"
+            ? "bg-background-primary border-t border-[#202021]"
+            : "bg-[#F5F5F5]"
+        }`}
+        style={{ minHeight: "calc(100vh - 108px)" }}
+      >
         {children}
       </main>
 
