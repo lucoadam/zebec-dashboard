@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
 import Navbar from "./Navbar"
 import TPSHeader from "./TPSHeader"
+import { useCurrentTheme } from "hooks"
 
 interface LayoutProps {
   pageTitle: string
@@ -11,6 +12,8 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
   const [isMounted, setIsMounted] = useState(false)
+  const [currentTheme] = useCurrentTheme()
+
   useEffect(() => {
     setIsMounted(true)
     setTimeout(() => {
@@ -29,7 +32,9 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       <TPSHeader />
       <Navbar />
 
-      <main className="pb-20">{children}</main>
+      <main className={`pb-20 ${currentTheme !== "dark" && "bg-[#F5F5F5]"}`}>
+        {children}
+      </main>
 
       {isMounted && (
         <ReactTooltip
