@@ -150,14 +150,6 @@
   label {
     @apply text-caption text-content-secondary font-medium mb-1;
   }
-
-  .skeleton-background {
-    background: linear-gradient(
-      90deg,
-      rgba(43, 45, 51, 0.8) 0%,
-      rgba(43, 45, 51, 0.48) 100%
-    );
-  }
 }
 
 .skeleton-background {
@@ -165,6 +157,22 @@
     90deg,
     rgba(235, 235, 235, 1) 0%,
     rgba(245, 245, 245, 1) 100%
+  );
+}
+.main-background,
+.tps-header-background {
+  @apply bg-[#F5F5F5];
+}
+
+html[data-theme="dark"] .main-background,
+html[data-theme="dark"] .tps-header-background {
+  @apply bg-background-primary border-t border-[#202021];
+}
+html[data-theme="dark"] .skeleton-background {
+  background: linear-gradient(
+    90deg,
+    rgba(43, 45, 51, 0.8) 0%,
+    rgba(43, 45, 51, 0.48) 100%
   );
 }
 
