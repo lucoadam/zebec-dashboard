@@ -263,7 +263,7 @@ export const SolanaWallet: FC<WalletModalProps> = ({
               <div className="h-12 w-px bg-background-light ml-3 transform -translate-y-4"></div>
               {/* Step 2 */}
               <div className="flex gap-x-6">
-                <div className="shrink-0 w-6 h-6 rounded-full bg-content-contrast  text-content-primary text-xs grid place-content-center">
+                <div className="shrink-0 w-6 h-6 rounded-full bg-background-contrast  text-content-primary text-xs grid place-content-center">
                   2
                 </div>
                 <div className="flex flex-col gap-y-1">
