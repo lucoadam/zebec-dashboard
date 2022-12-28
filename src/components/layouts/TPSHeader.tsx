@@ -29,7 +29,7 @@ const TPSHeader = () => {
     <>
       <div
         className={`px-6  ${
-          currentTheme === "dark" ? "bg-[#F5F5F5]" : "bg-background-secondary"
+          currentTheme === "dark" ? "bg-background-secondary" : "bg-[#F5F5F5]"
         }`}
       >
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
