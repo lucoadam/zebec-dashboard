@@ -5,7 +5,7 @@ import Link from "next/link"
 import { CollapseDropdown } from "../shared"
 import * as Icons from "../../assets/icons"
 //hooks
-import { useClickOutside, useCurrentTheme } from "../../hooks"
+import { useClickOutside } from "../../hooks"
 import { formatCurrency } from "utils"
 import { constants } from "constants/constants"
 import { useAppSelector } from "app/hooks"
@@ -13,7 +13,6 @@ import { useAppSelector } from "app/hooks"
 const TPSHeader = () => {
   const router = useRouter()
   const { t } = useTranslation("common")
-  const [currentTheme] = useCurrentTheme()
   const languageDropdownWrapperRef = useRef(null)
 
   const [toggleDropdown, setToggleDropdown] = useState<boolean>(false)
@@ -27,11 +26,7 @@ const TPSHeader = () => {
 
   return (
     <>
-      <div
-        className={`px-6  ${
-          currentTheme === "dark" ? "bg-background-secondary" : "bg-[#F5F5F5]"
-        }`}
-      >
+      <div className={`px-6 tps-header-background`}>
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
           <div className="flex">
             <span className="mr-4 uppercase">
