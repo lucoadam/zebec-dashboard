@@ -11,6 +11,7 @@
     /* Background */
     --bg-primary: rgba(255, 255, 255, 1);
     --bg-secondary: rgba(255, 255, 255, 1);
+    --bg-secondary-light: rgba(245, 245, 245, 1);
     --bg-tertiary: rgba(235, 235, 235, 1);
     --bg-light: rgba(235, 235, 235, 1);
     --bg-muted: rgba(235, 235, 235, 1);
@@ -159,15 +160,7 @@
     rgba(245, 245, 245, 1) 100%
   );
 }
-.main-background,
-.tps-header-background {
-  @apply bg-[#F5F5F5];
-}
 
-html[data-theme="dark"] .main-background,
-html[data-theme="dark"] .tps-header-background {
-  @apply bg-background-primary border-t border-[#202021];
-}
 html[data-theme="dark"] .skeleton-background {
   background: linear-gradient(
     90deg,
@@ -383,7 +376,7 @@ input[type="radio"]:hover::after {
 
 /* Notifi */
 .NotifiEmailInput__input {
-  @apply w-full border-none text-sm box-border flex order-1 flex-col flex-none flex-grow-0 self-stretch items-start px-5 py-3 mb-5 text-content-primary bg-background-primary border-outline border-[1px] rounded-lg;
+  @apply w-full border text-sm box-border flex order-1 flex-col flex-none flex-grow-0 self-stretch items-start px-5 py-3 mb-5 text-content-primary bg-background-primary border-outline border-[1px] rounded-lg;
 }
 .NotifiEmailInput__input:focus {
   outline: none;
@@ -407,13 +400,22 @@ input[type="radio"]:hover::after {
 .NotifiSubscribeButton__button {
   margin-top: 40px;
   height: 40px;
+  @apply border-2 border-transparent bg-origin-border rounded-lg w-full text-content-primary text-button font-semibold transition-all duration-300;
+}
+[data-theme="light"] .NotifiSubscribeButton__button {
+  background: var(--primary-main);
+}
+[data-theme="dark"] .NotifiSubscribeButton__button {
   background-clip: content-box, border-box;
-  @apply border-2 border-transparent bg-origin-border rounded-lg w-full text-content-primary text-button font-semibold;
   background-image: linear-gradient(var(--bg-secondary), var(--bg-secondary)),
     var(--primary-gradient);
 }
-.NotifiSubscribeButton__button:hover,
-.NotifiSubscribeButton__button:focus {
+[data-theme="light"] .NotifiSubscribeButton__button:hover,
+[data-theme="light"] .NotifiSubscribeButton__button:focus {
+  background: var(--primary-dark);
+}
+[data-theme="dark"] .NotifiSubscribeButton__button:hover,
+[data-theme="dark"] .NotifiSubscribeButton__button:focus {
   background-image: linear-gradient(var(--bg-tertiary), var(--bg-tertiary)),
     var(--primary-gradient-hover);
 }

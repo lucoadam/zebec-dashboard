@@ -126,12 +126,12 @@ const WalletNotConnectedModal: NextPage = () => {
           <span className="text-content-primary text-2xl font-semibold">
             {t("wallet-not-connected.title")}
           </span>
-          <div className="flex items-center border-b border-outline pt-2">
+          <div className="flex items-center pt-2">
             {tabs.map((tab, index) => {
               return (
                 <Tab
                   key={tab.title}
-                  type="plain"
+                  type="solid"
                   title={`${t(tab.title)}`}
                   isActive={activeTab === index}
                   onClick={() => setActiveTab(index)}

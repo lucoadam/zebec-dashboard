@@ -10,5 +10,5 @@ export const useCurrentTheme = () => {
     setCurrentTheme(definedTheme ? definedTheme : "light")
   }, [theme, systemTheme])
 
-  return [currentTheme]
+  return { currentTheme }
 }

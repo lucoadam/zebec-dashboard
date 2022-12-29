@@ -2,6 +2,7 @@ import { useConnect } from "wagmi"
 import { Button } from "components/shared"
 import * as Icons from "assets/icons"
 import { useZebecWallet } from "hooks/useWallet"
+import { useCurrentTheme } from "hooks"
 
 const getAdapterIcon = (name: string) => {
   switch (name) {
@@ -18,6 +19,7 @@ const getAdapterIcon = (name: string) => {
 export const EthereumWallet = () => {
   const { connect, connectors } = useConnect()
   const walletObject = useZebecWallet()
+  const { currentTheme } = useCurrentTheme()
 
   return (
     <div className="flex flex-col mt-6 text-content-primary">
@@ -33,7 +35,7 @@ export const EthereumWallet = () => {
             }, 200)
           }}
           title={connector.name}
-          variant="gradient"
+          variant={currentTheme === "dark" ? "gradient" : "default"}
           className="w-full mb-2"
           childrenClassName="flex items-center justify-start"
         />

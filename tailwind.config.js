@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class", '[data-theme="dark"]'],
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -26,7 +27,10 @@ module.exports = {
         // Background
         background: {
           primary: "var(--bg-primary)",
-          secondary: "var(--bg-secondary)",
+          secondary: {
+            DEFAULT: "var(--bg-secondary)",
+            light: "var(--bg-secondary-light)"
+          },
           tertiary: "var(--bg-tertiary)",
           light: "var(--bg-light)",
           muted: "var(--bg-muted)",
