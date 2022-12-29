@@ -68,6 +68,7 @@ export * from "./nav-icons"
 export * as TokenIcons from "./token-icons"
 import SolanaFM from "./other-icons/solanafm.svg"
 import SkeletonCircle from "./other-icons/skeleton-circle.svg"
+import SkeletonCircleLight from "./other-icons/skeleton-circle-light.svg"
 import EmptyStateIllustrator from "./other-icons/empty-state-illustrator.svg"
 import GithubLogo from "./other-icons/github.svg"
 import TelegramLogo from "./other-icons/telegram.svg"
@@ -139,6 +140,7 @@ export {
   ChevronUpIcon,
   PlusIcon,
   SkeletonCircle,
+  SkeletonCircleLight,
   EmptyStateIllustrator,
   GithubLogo,
   TelegramLogo,

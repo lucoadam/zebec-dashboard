@@ -110,7 +110,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
 
   const positionStyle = getPositionStyle(position)
   const variantStyles = getVariantStyle(variant)
-  const defaultClasses = `divide-y divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
+  const defaultClasses = `divide-y divide-outline dark:divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
 
   return (
     <div ref={setDropdownWrapper}>
