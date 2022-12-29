@@ -116,7 +116,7 @@ const Common: FC = () => {
   }, [walletObject.publicKey, tokens, isSigned, zebecContext, signer])
 
   useEffect(() => {
-    if (isSigned) {
+    if (isSigned && signer) {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
       dispatch(getPreferences())
@@ -142,7 +142,7 @@ const Common: FC = () => {
       return () => clearInterval(interval)
     }
     // eslint-disable-next-line
-  }, [isSigned])
+  }, [isSigned, signer])
 
   // const createVaultFunction = async () => {
   //   const data = {
