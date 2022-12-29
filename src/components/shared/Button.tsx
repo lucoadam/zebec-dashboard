@@ -40,7 +40,7 @@ const getButtonVariantStyles = (
     case "gradient":
       return theme === "dark"
         ? `primary-gradient-border focus:outline-0`
-        : `bg-primary p-0.5`
+        : `bg-primary hover:bg-primary-dark p-0.5`
     case "danger":
       return `bg-error focus:outline-0`
     default:
@@ -69,7 +69,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       disabled,
       ...rest
     } = props
-    const [currentTheme] = useCurrentTheme()
+    const { currentTheme } = useCurrentTheme()
 
     const sizeStyles = getButtonSizeStyles(size, variant)
     const iconSizeStyles = getButtonIconStyles(size)
@@ -79,7 +79,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       <>
         <button
           className={twMerge(
-            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
+            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary disabled:text-content-secondary dark:disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
             className ?? ""
           )}
           {...rest}

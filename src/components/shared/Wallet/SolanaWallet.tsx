@@ -26,6 +26,7 @@ import { login } from "api"
 import { changeSignState } from "features/common/commonSlice"
 import { useTranslation } from "next-i18next"
 import { useDisconnect } from "wagmi"
+import { useCurrentTheme } from "hooks"
 
 export interface WalletModalProps {
   className?: string
@@ -39,8 +40,8 @@ export const SolanaWallet: FC<WalletModalProps> = ({
   const ref = useRef<HTMLDivElement>(null)
   const { wallets, select } = useWallet()
   const walletObject = useZebecWallet()
-
   const { setVisible } = useWalletModal()
+  const { currentTheme } = useCurrentTheme()
 
   const [isLedgerWallet, setIsLedgerWallet] = useState(false)
   const { isSigned } = useAppSelector((state) => state.common)
@@ -81,12 +82,15 @@ export const SolanaWallet: FC<WalletModalProps> = ({
     [hideModal]
   )
 
+  const closeExpandedCollapse = useCallback(() => setExpanded(false), [])
+
   const handleWalletClick = useCallback(
     (event: MouseEvent, walletName: WalletName) => {
       select(walletName)
       handleClose(event)
+      closeExpandedCollapse()
     },
-    [select, handleClose]
+    [select, handleClose, closeExpandedCollapse]
   )
 
   const handleCollapseClick = useCallback(
@@ -179,7 +183,7 @@ export const SolanaWallet: FC<WalletModalProps> = ({
                 </i>
               </>
             }
-            variant="gradient"
+            variant={currentTheme === "dark" ? "gradient" : "default"}
             endIcon={<span className="text-[10px] font-normal">Detected</span>}
             title={wallet.adapter.name}
             onClick={(event) => {
@@ -223,7 +227,7 @@ export const SolanaWallet: FC<WalletModalProps> = ({
                   </>
                 }
                 className="w-full mb-2"
-                variant="gradient"
+                variant={currentTheme === "dark" ? "gradient" : "default"}
                 title={wallet.adapter.name}
                 onClick={(event) => {
                   walletObject.disconnect()
@@ -263,7 +267,11 @@ export const SolanaWallet: FC<WalletModalProps> = ({
               <div className="h-12 w-px bg-background-light ml-3 transform -translate-y-4"></div>
               {/* Step 2 */}
               <div className="flex gap-x-6">
-                <div className="shrink-0 w-6 h-6 rounded-full bg-background-contrast  text-content-primary text-xs grid place-content-center">
+                <div
+                  className={`shrink-0 w-6 h-6 rounded-full text-content-primary text-xs grid place-content-center ${
+                    isLedgerWallet ? "bg-primary " : "bg-background-contrast"
+                  }`}
+                >
                   2
                 </div>
                 <div className="flex flex-col gap-y-1">

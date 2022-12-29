@@ -29,7 +29,7 @@ const getVariantStyle = (variant: "default" | "light") => {
     case "light":
       return `bg-background-primary`
     case "default":
-      return `bg-background-light`
+      return `bg-background-primary border border-outline dark:border-0 shadow-3 dark:shadow-none dark:bg-background-light`
     default:
       return null
   }

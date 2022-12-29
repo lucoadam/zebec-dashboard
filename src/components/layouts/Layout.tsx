@@ -31,7 +31,7 @@ const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
       <Navbar />
 
       <main
-        className={`pb-20 main-background`}
+        className={`pb-20 bg-background-secondary-light border-t border-outline dark:bg-background-primary dark:border-[#202021]`}
         style={{ minHeight: "calc(100vh - 108px)" }}
       >
         {children}

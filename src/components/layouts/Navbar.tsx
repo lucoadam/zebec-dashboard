@@ -38,7 +38,7 @@ const Navbar: FC = () => {
   const useWalletObject = useZebecWallet()
   const { data: signer } = useSigner()
   const { disconnect } = useDisconnect()
-  const [currentTheme] = useCurrentTheme()
+  const { currentTheme } = useCurrentTheme()
   // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
