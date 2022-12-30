@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/hooks"
 import { Breadcrumb } from "components/shared"
 import DepositNFT from "components/treasury/detail/components/DepositNFT"
 import { useZebecWallet } from "hooks/useWallet"
@@ -12,12 +13,13 @@ const DepositNFTPage: NextPage = () => {
   const { t } = useTranslation()
   const history = useRouter()
   const walletObject = useZebecWallet()
+  const { isSigned } = useAppSelector((state) => state.common)
 
   useEffect(() => {
-    if (walletObject.chainId !== "solana") {
+    if (isSigned && walletObject.chainId !== "solana") {
       history.replace("/")
     }
-  }, [walletObject, history])
+  }, [isSigned, walletObject, history])
   return (
     <Layout pageTitle="Zebec - Create Treasury">
       <div className="pt-[76px]">
