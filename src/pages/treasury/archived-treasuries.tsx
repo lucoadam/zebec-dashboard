@@ -7,17 +7,19 @@ import Layout from "components/layouts/Layout"
 import { useRouter } from "next/router"
 import { useZebecWallet } from "hooks/useWallet"
 import { useEffect } from "react"
+import { useAppSelector } from "app/hooks"
 
 const ArchiveSafePage: NextPage = () => {
   const { t } = useTranslation()
   const history = useRouter()
   const walletObject = useZebecWallet()
+  const { isSigned } = useAppSelector((state) => state.common)
 
   useEffect(() => {
-    if (walletObject.chainId !== "solana") {
+    if (isSigned && walletObject.chainId !== "solana") {
       history.replace("/")
     }
-  }, [walletObject, history])
+  }, [isSigned, walletObject, history])
 
   return (
     <Layout pageTitle="Zebec - Archived Safes">

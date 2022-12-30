@@ -54,6 +54,12 @@ const Common: FC = () => {
   }, [])
 
   useEffect(() => {
+    if (isSigned && tokens.length === 0) {
+      dispatch(fetchTokens())
+    }
+  }, [isSigned, tokens])
+
+  useEffect(() => {
     zebecContext.initialize(solanaWalletObject)
     // eslint-disable-next-line
   }, [solanaWalletObject.connected])
