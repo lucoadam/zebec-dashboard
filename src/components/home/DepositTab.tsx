@@ -442,7 +442,11 @@ const DepositTab: FC = () => {
             )
 
             // check if message is relayed
-            const response = await listenWormholeTransactionStatus(signedVaa)
+            const response = await listenWormholeTransactionStatus(
+              signedVaa,
+              walletObject.originalAddress?.toString() as string,
+              sourceChain
+            )
             if (response === "success") {
               currentStep += 1
               dispatch(switchxWalletApprovalMessageStep(currentStep))
@@ -526,7 +530,11 @@ const DepositTab: FC = () => {
       )
 
       // check if message is relayed
-      const response = await listenWormholeTransactionStatus(signedVaa)
+      const response = await listenWormholeTransactionStatus(
+        signedVaa,
+        walletObject.originalAddress?.toString() as string,
+        sourceChain
+      )
       if (response === "success") {
         dispatch(toast.success({ message: "Deposit completed successfully" }))
       } else if (response === "timeout") {

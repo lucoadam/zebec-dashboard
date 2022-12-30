@@ -431,7 +431,11 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       }
       dispatch(sendContinuousStream(backendData)).then(async () => {
         // check if message is relayed
-        const response = await listenWormholeTransactionStatus(signedVaa)
+        const response = await listenWormholeTransactionStatus(
+          signedVaa,
+          walletObject.originalAddress?.toString() as string,
+          sourceChain
+        )
         if (response === "success") {
           dispatch(toast.success({ message: "Stream started successfully" }))
           initStreamCallback("success")
