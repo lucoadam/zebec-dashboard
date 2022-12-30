@@ -8,7 +8,7 @@ import CopyButton from "components/shared/CopyButton"
 import { RPC_NETWORK } from "constants/cluster"
 import { constants } from "constants/constants"
 import { updateWidth } from "features/layout/layoutSlice"
-import { useClickOutside } from "hooks"
+import { useClickOutside, useCurrentTheme } from "hooks"
 import { useZebecWallet } from "hooks/useWallet"
 import { useTranslation } from "next-i18next"
 import { useTheme } from "next-themes"
@@ -38,6 +38,7 @@ const Navbar: FC = () => {
   const useWalletObject = useZebecWallet()
   const { data: signer } = useSigner()
   const { disconnect } = useDisconnect()
+  const { currentTheme } = useCurrentTheme()
   // const useWalletModalObject = useWalletModal()
 
   const [mounted, setMounted] = useState<boolean>(false)
@@ -228,7 +229,11 @@ const Navbar: FC = () => {
                 <Link href="/">
                   <a className="h-6">
                     <Image
-                      src={Images.ZebecLogo}
+                      src={
+                        currentTheme === "dark"
+                          ? Images.ZebecLogo
+                          : Images.ZebecLightLogo
+                      }
                       alt="Zebec Logo"
                       layout="fixed"
                       width={87}
@@ -307,7 +312,7 @@ const Navbar: FC = () => {
                 {RPC_NETWORK}
               </div>
             </div>
-            <div className="hidden">{themeChanger()}</div>
+            <div className="">{themeChanger()}</div>
           </div>
 
           {/* NavLinks */}
@@ -410,7 +415,7 @@ const Navbar: FC = () => {
                       }
                     />
                   </div>
-                  <div className="hidden">{themeChanger()}</div>
+                  <div className="">{themeChanger()}</div>
                 </div>
               </div>
               {getMenuRoutes(width).map((route, index) => (

@@ -29,7 +29,7 @@ const getVariantStyle = (variant: "default" | "light") => {
     case "light":
       return `bg-background-primary`
     case "default":
-      return `bg-background-light`
+      return `bg-background-primary border border-outline dark:border-0 shadow-3 dark:shadow-none dark:bg-background-light`
     default:
       return null
   }
@@ -110,7 +110,7 @@ export const CollapseDropdown: FC<CollapseDropdownProps> = (props) => {
 
   const positionStyle = getPositionStyle(position)
   const variantStyles = getVariantStyle(variant)
-  const defaultClasses = `divide-y divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
+  const defaultClasses = `divide-y divide-outline dark:divide-outline-secondary top-10 z-10 ${positionStyle} ${variantStyles}`
 
   return (
     <div ref={setDropdownWrapper}>

@@ -26,7 +26,9 @@ const TPSHeader = () => {
 
   return (
     <>
-      <div className="px-6  bg-background-secondary">
+      <div
+        className={`px-6 bg-background-secondary-light dark:bg-background-secondary`}
+      >
         <div className="flex justify-center py-2 text-caption text-content-secondary relative">
           <div className="flex">
             <span className="mr-4 uppercase">

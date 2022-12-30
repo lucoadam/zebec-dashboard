@@ -66,7 +66,7 @@ export const Modal: FC<ModalProps> = (props) => {
               >
                 <Dialog.Panel
                   className={twMerge(
-                    `w-full transform overflow-visible rounded-lg bg-background-secondary px-6 pt-6 pb-10 text-left shadow-backdrop align-middle transition-all ${sizeStyle}`,
+                    `w-full transform overflow-visible rounded-lg bg-background-secondary-light dark:bg-background-secondary px-6 pt-6 pb-10 text-left shadow-backdrop align-middle transition-all ${sizeStyle}`,
                     className
                   )}
                 >
