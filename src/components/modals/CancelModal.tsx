@@ -121,11 +121,7 @@ const CancelModal: FC = ({}) => {
       )
 
       // check if message is relayed
-      const response = await listenWormholeTransactionStatus(
-        signedVaa,
-        walletObject.originalAddress?.toString() as string,
-        sourceChain
-      )
+      const response = await listenWormholeTransactionStatus(signedVaa)
       if (response === "success") {
         dispatch(toast.success({ message: "Stream cancelled" }))
         dispatch(fetchTransactionsById(transaction.uuid, "cancel"))
