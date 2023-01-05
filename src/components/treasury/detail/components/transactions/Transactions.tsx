@@ -7,6 +7,7 @@ import ContinuousTransactions from "./continuous/ContinuousTransactions"
 import InstantTransactions from "./instant/InstantTransactions"
 // import { WithdrawalTransactions } from "../WithdrawalTransactions"
 import WithdrawlTransactions from "./withdrawls/WithdrawlTransactions"
+import NftTransactions from "./nfts/NftTransactions"
 import * as Icons from "assets/icons"
 import { useRouter } from "next/router"
 
@@ -28,13 +29,13 @@ const transactionTabs = [
     count: 0,
     Component: <WithdrawlTransactions />,
     icon: <Icons.SwapArrowHorizontalIcon />
+  },
+  {
+    title: "nfts",
+    count: 0,
+    Component: <NftTransactions />,
+    icon: <Icons.SquareBlockMove />
   }
-  // {
-  //   title: "nfts",
-  //   count: 0,
-  //   Component: <WithdrawalTransactions />,
-  //   icon: <Icons.SquareBlockMove />
-  // }
 ]
 
 const Transactions = () => {

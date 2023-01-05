@@ -39,12 +39,13 @@ export const DepositNFTEach: FC<NFTEachProps> = ({
         )}
       >
         <Image
-          src={detail.image}
+          src={`https://res.cloudinary.com/demo/image/fetch/${detail.image}`}
           className="min-w-[140.33px] h-[140.33px] rounded"
           width={140.33}
           height={140.33}
           alt={detail.name}
         />
+        <div className="">{detail.name}</div>
       </div>
     </div>
   )

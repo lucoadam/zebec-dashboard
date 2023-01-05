@@ -99,7 +99,8 @@
     "pause": "Pause",
     "resume": "Resume",
     "cancel": "Cancel",
-    "withdrawn": "Withdrawn"
+    "withdrawn": "Withdrawn",
+    "nft-name": "Nft Name"
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",

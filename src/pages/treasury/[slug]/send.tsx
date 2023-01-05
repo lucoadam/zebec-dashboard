@@ -2,16 +2,16 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import TreasuryContinuousStream from "components/send-from-treasury/TreasuryContinuousStream"
 import TreasuryInstantStream from "components/send-from-treasury/TreasuryInstantStream"
-// import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
+import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
 import { Breadcrumb, Tab } from "components/shared"
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
-import { useZebecWallet } from "hooks/useWallet"
+// import { useZebecWallet } from "hooks/useWallet"
 import type { GetStaticPaths, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-import { useRouter } from "next/router"
-import { useEffect } from "react"
+// import { useRouter } from "next/router"
+// import { useEffect } from "react"
 
 const transferTabs = [
   {
@@ -25,26 +25,26 @@ const transferTabs = [
     icon: <Icons.DoubleCircleDottedLineIcon />,
     count: 0,
     Component: <TreasuryInstantStream />
+  },
+  {
+    title: "send:nft",
+    icon: <Icons.SquareBlockMove />,
+    count: 0,
+    Component: <TreasuryNFTStream />
   }
-  // {
-  //   title: "send:nft",
-  //   icon: <Icons.SquareBlockMove />,
-  //   count: 0,
-  //   Component: <TreasuryNFTStream />
-  // }
 ]
 
 const SendFromTreasury: NextPage = () => {
   const { t } = useTranslation("common")
 
-  const history = useRouter()
-  const walletObject = useZebecWallet()
+  // const history = useRouter()
+  // const walletObject = useZebecWallet()
 
-  useEffect(() => {
-    if (walletObject.chainId !== "solana") {
-      history.replace("/")
-    }
-  }, [walletObject, history])
+  // useEffect(() => {
+  //   if (walletObject.connected && walletObject.chainId !== "solana") {
+  //     history.replace("/")
+  //   }
+  // }, [walletObject, history])
 
   const activePage = useAppSelector(
     (state) => state.common.treasurySendActiveTab

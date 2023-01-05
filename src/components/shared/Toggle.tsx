@@ -4,16 +4,17 @@ interface ToggleProps {
   text: string
   onChange: () => void
   checked?: boolean
+  disabled?: boolean
 }
 
 export const Toggle: FC<ToggleProps> = (props) => {
-  const { text, checked } = props
+  const { text, checked, disabled } = props
   return (
     <>
       <div>
         <label
           htmlFor={`toggle-${text}`}
-          className="w-max flex items-center cursor-pointer relative"
+          className="w-max flex items-center cursor-pointer disabled:cursor-not-allowed relative"
         >
           <input
             type="checkbox"
@@ -21,6 +22,7 @@ export const Toggle: FC<ToggleProps> = (props) => {
             className="sr-only"
             onChange={props.onChange}
             {...{ checked }}
+            disabled={disabled}
           />
           <div
             className={`toggle-bg border border-outline h-5 w-10 rounded-full transition duration-200 ${

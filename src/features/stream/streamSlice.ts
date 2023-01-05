@@ -6,7 +6,8 @@ import { AppDispatch, RootState } from "app/store"
 import { fetchOutgoingTransactions } from "features/transactions/transactionsSlice"
 import {
   fetchTreasuryVaultContinuousTransactions,
-  fetchTreasuryVaultInstantTransactions
+  fetchTreasuryVaultInstantTransactions,
+  fetchTreasuryNftTransactions
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
 
 interface SendState {
@@ -53,6 +54,22 @@ export const sendTreasuryInstantTransfer = createAsyncThunk<
     const uuid = treasury.activeTreasury.uuid
     await api.post(`/treasury/${uuid}/vault-instant-transactions/`, data)
     dispatch(fetchTreasuryVaultInstantTransactions({ treasury_uuid: uuid }))
+    return
+  }
+  return
+})
+
+export const sendNftTransfer = createAsyncThunk<
+  any,
+  any,
+  { dispatch: AppDispatch; state: RootState }
+>("stream/sendNftTransfer", async (data, { dispatch, getState }) => {
+  const { treasury } = getState()
+  if (treasury.activeTreasury?.uuid) {
+    console.log(data)
+    const uuid = treasury.activeTreasury.uuid
+    await api.post(`/treasury/${uuid}/nft-transactions/`, data)
+    dispatch(fetchTreasuryNftTransactions({ treasury_uuid: uuid }))
     return
   }
   return

@@ -9,6 +9,7 @@ import {
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
   fetchTreasuryVaultInstantTransactionsById,
+  fetchTreasuryNftTransactionsById,
   preCancelTreasuryVaultContinuousTransaction,
   updateTreasuryVaultContinuousTransactionsStatus
 } from "features/treasuryTransactions/treasuryTransactionsSlice"
@@ -181,6 +182,32 @@ export const vaultContinuousSignTransactionLatestEvent = createAsyncThunk<
   }
 )
 
+export const signNftTransaction = createAsyncThunk<
+  any,
+  { uuid: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "signTransaction/signNftTransaction",
+  async ({ uuid }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(
+        `/treasury/${treasury_uuid}/nft-transactions/${uuid}/approve/`
+      )
+      await dispatch(
+        fetchTreasuryNftTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
+      )
+      dispatch(toggleSignModal())
+      return
+    }
+    return
+  }
+)
+
 export const signModalSlice = createSlice({
   name: "signTransaction",
   initialState,
@@ -259,6 +286,18 @@ export const signModalSlice = createSlice({
         state.error = action.error.message ?? "Something went wrong"
       }
     )
+    //NFT Sign
+    builder.addCase(signNftTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(signNftTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(signNftTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
   }
 })
 

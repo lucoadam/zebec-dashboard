@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { i18n } = require("./next-i18next.config");
+const { i18n } = require("./next-i18next.config")
 
 const nextConfig = {
   reactStrictMode: true,
@@ -18,13 +18,16 @@ const nextConfig = {
     RELAYER_API_URL: process.env.RELAYER_API_URL
   },
   i18n,
+  images: {
+    domains: ["res.cloudinary.com"]
+  },
   webpack(config) {
-    config.experiments.asyncWebAssembly = true;
+    config.experiments.asyncWebAssembly = true
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       encoding: false
-    };
+    }
     config.module.rules.push(
       {
         test: /\.svg$/i,
@@ -37,8 +40,8 @@ const nextConfig = {
         resourceQuery: { not: [/url/] },
         use: [{ loader: "@svgr/webpack", options: { icon: true } }]
       }
-    );
-    return config;
+    )
+    return config
   },
   experimental: {
     outputStandalone: true
@@ -49,15 +52,15 @@ const nextConfig = {
         source: "/:path*",
         headers: securityHeaders
       }
-    ];
+    ]
   }
-};
+}
 
 const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: "frame-ancestors https://magic.store"
   }
-];
+]
 
-module.exports = nextConfig;
+module.exports = nextConfig

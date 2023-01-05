@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import {
   setLoading,
+  signNftTransaction,
   signTransaction,
   toggleSignModal,
   vaultContinuousSignTransaction,
@@ -24,6 +25,7 @@ import {
   executeInitStreamTreasury,
   executePauseStreamTreasury,
   executeResumeStreamTreasury,
+  executeTransferNftFromTreasury,
   executeWithdrawFromTreasury,
   executeWithdrawFromTreasuryVault
 } from "application"
@@ -77,6 +79,15 @@ const SignTransactionModal: FC = ({}) => {
           transaction_hash: transaction_hash
         })
       )
+    } else {
+      dispatch(setLoading(false))
+    }
+  }
+
+  const signNftTransactionCallback = (message: CallbackMessageType) => {
+    if (message === "success") {
+      alert("Success")
+      dispatch(signNftTransaction({ uuid: transaction.uuid }))
     } else {
       dispatch(setLoading(false))
     }
@@ -325,6 +336,22 @@ const SignTransactionModal: FC = ({}) => {
               }
             }
           }
+        } else if (
+          transaction.transaction_type === TreasuryTransactionType.NFT
+        ) {
+          const signData = {
+            ...data,
+            amount: 1,
+            token_mint_address: transaction.nft_address
+          }
+          treasuryToken &&
+            dispatch(
+              executeTransferNftFromTreasury({
+                data: signData,
+                callback: signNftTransactionCallback,
+                treasuryToken: treasuryToken
+              })
+            )
         }
       }
     }

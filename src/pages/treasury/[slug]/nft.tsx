@@ -1,16 +1,16 @@
-import Transactions from "components/treasury/detail/components/transactions/Transactions"
 import TreasuryDetailsLayout from "components/treasury/detail/TreasuryDetailsLayout"
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
+import { NFTsList } from "components/treasury/detail/components/nfts/NFTsList"
 import { NextPage } from "next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
 
-const TreasyryTransactions: NextPage = () => {
+const TreasyryNFT: NextPage = () => {
   return (
     <>
-      <TreasuryLayout pageTitle="Zebec - Treasury Transactions">
+      <TreasuryLayout pageTitle="Zebec - Treasury NFTs">
         <TreasuryDetailsLayout>
-          {/* Transactions */}
-          <Transactions />
+          {/* NFTs List */}
+          <NFTsList />
         </TreasuryDetailsLayout>
       </TreasuryLayout>
     </>
@@ -28,11 +28,10 @@ export async function getServerSideProps({ locale }: { locale: string }) {
         "validation",
         "transactions",
         "exportReport",
-        "send",
-        "addressBook"
+        "send"
       ]))
     }
   }
 }
 
-export default TreasyryTransactions
+export default TreasyryNFT

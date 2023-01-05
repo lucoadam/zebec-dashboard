@@ -1,10 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
 import * as Icons from "assets/icons"
 import { Button } from "components/shared"
 import { useTranslation } from "next-i18next"
-import { FC, FormEvent, FormEventHandler, useState } from "react"
+import {
+  FC,
+  FormEvent,
+  FormEventHandler,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 import { twMerge } from "tailwind-merge"
 import { DepositNFTProps } from "./DepositNFT.d"
+import { initDepositNft } from "application"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 
 const StepsList = [
   {
@@ -19,13 +31,47 @@ const StepsList = [
 
 export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
   const { t } = useTranslation()
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+  const { token } = useContext(ZebecContext)
+  const { publicKey } = useWallet()
+  const dispatch = useAppDispatch()
   const [currentStep, setCurrentStep] = useState(0)
+  const [error, setError] = useState(false)
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (
     e: FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault()
+    if (currentStep === 0) {
+      if (nft) {
+        setCurrentStep(1)
+        error && setError(false)
+      } else {
+        setError(true)
+      }
+    } else {
+      if (publicKey && activeTreasury && nft && token) {
+        const data = {
+          sender: publicKey.toString(),
+          receiver: activeTreasury.treasury_address,
+          token_mint_address: nft.address,
+          amount: 1
+        }
+        dispatch(toggleWalletApprovalMessageModal())
+        dispatch(
+          initDepositNft({
+            data,
+            token
+          })
+        )
+      }
+      error && setError(false)
+    }
   }
+
+  useEffect(() => {
+    if (nft && error) setError(false)
+  }, [nft])
 
   const getStepState = (index: number, isIcon = false) => {
     if (index === currentStep) {
@@ -63,7 +109,13 @@ export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
                 <h4 className="leading-6 font-medium text-sm text-content-primary">
                   {t(`treasury:steps.${step.name}`)}
                 </h4>
-                <p className="text-content-secondary">
+                <p
+                  className={`${
+                    index === 0 && error
+                      ? "text-error"
+                      : "text-content-secondary"
+                  }`}
+                >
                   {t(`treasury:steps.${step.subHeading}`)}
                 </p>
               </div>
@@ -74,13 +126,6 @@ export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
             <Button
               className="w-full"
               variant="gradient"
-              onClick={() => {
-                if (currentStep === 0) {
-                  if (nft) {
-                    setCurrentStep(1)
-                  }
-                }
-              }}
               title={`${t(
                 currentStep === 0
                   ? "common:buttons.continue"

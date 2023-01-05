@@ -99,7 +99,8 @@
     "pause": "يوقف",
     "resume": "سيرة ذاتية",
     "cancel": "يلغي",
-    "withdrawn": "منسحب"
+    "withdrawn": "منسحب",
+    "nft-name": "اسم NFT"
   },
   "modal-actions": {
     "pause-modal-header": "هل أنت متأكد أنك تريد إيقاف الصفقة مؤقتًا؟",

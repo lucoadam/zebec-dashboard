@@ -39,7 +39,7 @@ export const NFTEach: FC<NFTEachProps> = ({
       }}
     >
       <Image
-        src={detail.image}
+        src={`https://res.cloudinary.com/demo/image/fetch/${detail.image}`}
         className={twMerge(
           "min-w-[140.33px] h-[140.33px] rounded",
           isChoosed ? "primary-gradient-border" : ""

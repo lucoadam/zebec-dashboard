@@ -31,6 +31,12 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  nftTransactions: {
+    count: number | null
+    next: string
+    previous: string
+    results: any[]
+  }
   initiatedTransactions: string[]
   pagination: PaginationInterface
 }
@@ -57,6 +63,12 @@ const initialState: TransactionState = {
     results: []
   },
   vaultContinuousTransactions: {
+    count: null,
+    next: "",
+    previous: "",
+    results: []
+  },
+  nftTransactions: {
     count: null,
     next: "",
     previous: "",
@@ -232,6 +244,49 @@ export const updateTreasuryVaultContinuousTransactionsStatus = createAsyncThunk<
       }
     )
     return
+  }
+)
+
+// Fetch Nft
+export const fetchTreasuryNftTransactions = createAsyncThunk<
+  any,
+  { treasury_uuid: string; status?: "PENDING" | "ACCEPTED" | "REJECTED" },
+  {}
+>(
+  "treasuryTransactions/fetchTreasuryNftTransactions",
+  async ({ treasury_uuid, status }, { getState }) => {
+    const { treasuryTransactions } = getState() as RootState
+    const response: any = await api.get(
+      `/treasury/${treasury_uuid}/nft-transactions/`,
+      {
+        params: {
+          approval_status_fn: status ? status : "",
+          limit: treasuryTransactions.pagination.limit,
+          offset:
+            (Number(treasuryTransactions.pagination.currentPage) - 1) *
+            treasuryTransactions.pagination.limit
+        }
+      }
+    )
+    return response.data
+  }
+)
+
+//Fetch Nft By Id
+export const fetchTreasuryNftTransactionsById = createAsyncThunk<
+  any,
+  {
+    treasury_uuid: string
+    uuid: string
+  },
+  {}
+>(
+  "treasuryTransactions/fetchTreasuryNftTransactionsById",
+  async ({ treasury_uuid, uuid }, {}) => {
+    const response = await api.get(
+      `/treasury/${treasury_uuid}/nft-transactions/${uuid}/`
+    )
+    return response.data
   }
 )
 
@@ -497,6 +552,41 @@ export const treasuryTransactionsSlice = createSlice({
       updateTreasuryVaultContinuousTransactionsStatus.rejected,
       (state, action) => {
         // state.loading = false
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Treasury Nft Transactions
+    builder.addCase(fetchTreasuryNftTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(fetchTreasuryNftTransactions.fulfilled, (state, action) => {
+      state.loading = false
+      state.error = ""
+      state.nftTransactions = action.payload
+      state.pagination.total = action.payload.count
+    })
+    builder.addCase(fetchTreasuryNftTransactions.rejected, (state, action) => {
+      state.loading = false
+      state.error = action?.error?.message ?? "Something went wrong"
+    })
+    //Treasury Nft Transactions By Id
+    builder.addCase(fetchTreasuryNftTransactionsById.pending, () => {})
+    builder.addCase(
+      fetchTreasuryNftTransactionsById.fulfilled,
+      (state, action) => {
+        const newNftTransactions = state.nftTransactions.results.map((item) => {
+          if (item.id === action.payload.id) {
+            return action.payload
+          }
+          return item
+        })
+        state.error = ""
+        state.nftTransactions.results = newNftTransactions
+      }
+    )
+    builder.addCase(
+      fetchTreasuryNftTransactionsById.rejected,
+      (state, action) => {
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )

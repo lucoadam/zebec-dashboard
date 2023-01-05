@@ -37,7 +37,7 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, eachWidth, ...rest }) => {
       {...rest}
     >
       <Image
-        src={detail.image}
+        src={`https://res.cloudinary.com/demo/image/fetch/${detail.image}`}
         className="rounded"
         alt={detail.name}
         width={eachWidth ?? 314}

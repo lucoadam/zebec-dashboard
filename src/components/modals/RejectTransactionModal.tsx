@@ -10,7 +10,8 @@ import {
   toggleRejectModal,
   vaultContinuousRejectTransaction,
   vaultContinuousRejectTransactionLatestEvent,
-  vaultRejectTransaction
+  vaultRejectTransaction,
+  rejectNftTransaction
 } from "features/modals/rejectModalSlice"
 import {
   TreasuryApprovalType,
@@ -44,6 +45,8 @@ const RejectTransactionModal: FC = ({}) => {
       } else {
         dispatch(vaultContinuousRejectTransaction({ uuid: transaction.uuid }))
       }
+    } else if (transaction.transaction_type === TreasuryTransactionType.NFT) {
+      dispatch(rejectNftTransaction({ uuid: transaction.uuid }))
     } else {
       dispatch(rejectTransaction({ uuid: transaction.uuid }))
     }

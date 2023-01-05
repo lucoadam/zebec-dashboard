@@ -1,9 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { PublicKey } from "@solana/web3.js"
+import { useAppDispatch, useAppSelector } from "app/hooks"
+import ZebecContext from "app/zebecContext"
+import { initTransferNftFromTreasury } from "application"
 import * as Icons from "assets/icons"
-import { Button, CollapseDropdown, InputField, Toggle } from "components/shared"
+import {
+  Button,
+  CollapseDropdown,
+  EmptyDataState,
+  InputField,
+  Toggle
+} from "components/shared"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
+import { useContext } from "react"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
@@ -11,44 +23,26 @@ import { toSubstring } from "utils"
 import { sendNFTSchema } from "utils/validations/sendNFTSchema"
 import { SendNFTFormData, SendNFTProps } from "./TreasuryNFTStream.d"
 
-const addressBook = [
-  {
-    name: "Alice",
-    address: "22fY53fd1PYwh8ZJS2iEwH72s6P1cT8oFjcSpp5atczv"
-  },
-  {
-    name: "Bob",
-    address: "6PXSmiqxFx3HHJyjAvA6Ub9aacTQCzeqQGd6Tp9jG6wZ"
-  },
-  {
-    name: "Charlie",
-    address: "EzQ3YybP36LpYUHaDSfXtJTpzXAkHEoML6QPoJfX2NQ6"
-  },
-  {
-    name: "Dave",
-    address: "2EEHxWqc1QcURMTrtdBUKCLonvYRkrGTdG6bcKfwZf7V"
-  }
-]
-
-export const SendNFT: FC<SendNFTProps> = ({
-  setFormValues,
-  className,
-  nft,
-  changeNFT
-}) => {
+export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
   const { t } = useTranslation()
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
+  const { publicKey } = useWallet()
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+  const {
+    filteredAddressBooks: addressBook,
+    addressBooks: mainAddressBook,
+    filteredPagination
+  } = useAppSelector((state) => state.address)
+  const { treasuryToken } = useContext(ZebecContext)
 
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
-    getValues,
     trigger,
     resetField,
-    reset,
-    watch
+    reset
   } = useForm<SendNFTFormData>({
     mode: "onChange",
     resolver: yupResolver(sendNFTSchema)
@@ -67,10 +61,12 @@ export const SendNFT: FC<SendNFTProps> = ({
   useEffect(() => {
     if (nft) {
       setValue("nftAddress", nft.address)
+      setValue("nftImageUrl", nft.image)
+      setValue("nftName", nft.name)
       setToggleChooseNFT(true)
     } else {
       resetField("nftAddress")
-      setToggleChooseNFT(false)
+      setToggleChooseNFT(true)
     }
   }, [nft, setValue, trigger, resetField])
 
@@ -79,18 +75,23 @@ export const SendNFT: FC<SendNFTProps> = ({
   })
 
   const onSubmit = (data: SendNFTFormData) => {
-    console.log(data)
+    const transferNftData = {
+      sender: (publicKey as PublicKey).toString(),
+      safe_address: activeTreasury?.treasury_address || "",
+      safe_data_account: activeTreasury?.treasury_escrow || "",
+      receiver: data.receiver,
+      amount: 1,
+      token_mint_address: data.nftAddress,
+      nft_name: data.nftName,
+      nft_img_url: data.nftImageUrl,
+      transaction_name: data.transactionName
+    }
+    if (treasuryToken)
+      dispatch(
+        initTransferNftFromTreasury({ data: transferNftData, treasuryToken })
+      )
     reset()
   }
-
-  useEffect(() => {
-    const subscription = watch(() => {
-      if (setFormValues) {
-        setFormValues(getValues())
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [watch, setFormValues, getValues])
 
   const toggleNFT = () => {
     resetField("nftAddress")
@@ -171,50 +172,58 @@ export const SendNFT: FC<SendNFTProps> = ({
               className="mt-8 w-full z-[99]"
               position="left"
             >
-              <div className="rounded-t-lg bg-background-primary border border-outline">
-                <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
-                <input
-                  className="is-search w-full h-[48px] bg-background-primary"
-                  placeholder={t("send:search-wallet")}
-                  type="text"
-                  onChange={(e) => setReceiverSearchData(e.target.value)}
-                />
-                <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                  {addressBook
-                    .filter((user) =>
-                      user.name
-                        .toLowerCase()
-                        .includes(receiverSearchData.toLowerCase())
-                    )
-                    .map((user) => (
-                      <div
-                        key={user.address}
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          setToggleReceiverDropdown(false)
-                          setValue("receiver", user.address)
-                          trigger("receiver")
-                        }}
-                        className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                      >
-                        <div className="text-content-primary">{user.name}</div>
-                        <div className="text-caption text-content-tertiary">
-                          {toSubstring(user.address, 28, false)}
+              <div className="rounded-lg bg-background-primary border border-outline">
+                {mainAddressBook.length > 0 || receiverSearchData ? (
+                  <>
+                    <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+                    <input
+                      className="is-search w-full h-[48px] bg-background-primary"
+                      placeholder={t("send:search-wallet")}
+                      type="text"
+                      onChange={(e) => setReceiverSearchData(e.target.value)}
+                    />
+                    <div className="divide-y address-book-list divide-outline max-h-[206px] overflow-auto">
+                      {addressBook.map((user) => (
+                        <div
+                          key={user.address}
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            setToggleReceiverDropdown(false)
+                            setValue("receiver", user.address)
+                            trigger("receiver")
+                          }}
+                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                        >
+                          <div className="text-sm text-content-primary">
+                            {user.name}
+                          </div>
+                          <div className="text-caption text-content-tertiary">
+                            {toSubstring(user.address, 28, false)}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  {addressBook.filter((user) =>
-                    user.name
-                      .toLowerCase()
-                      .includes(receiverSearchData.toLowerCase())
-                  ).length === 0 && (
-                    <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
-                      <div className="text-content-contrast">
-                        {t("common:no-receiver-found")}
-                      </div>
+                      ))}
+                      {addressBook.length !== filteredPagination.total && (
+                        <div className="flex justify-center items-center py-3">
+                          <Icons.Loading className="text-content-primary" />
+                        </div>
+                      )}
+                      {addressBook.length === 0 && receiverSearchData && (
+                        <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
+                          <div className="text-content-contrast">
+                            {t("common:no-receiver-found")}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <EmptyDataState
+                    message={t(
+                      "createTreasury:second-steper.empty-address-book"
+                    )}
+                    className="h-fit w-full rounded !px-10 !py-10 bg-background-primary text-center"
+                  />
+                )}
               </div>
             </CollapseDropdown>
           </div>
@@ -247,6 +256,7 @@ export const SendNFT: FC<SendNFTProps> = ({
               checked={toggleChooseNFT}
               text={t("send:choose-nft")}
               onChange={toggleNFT}
+              disabled={true}
             />
           </div>
           {/* Send button */}

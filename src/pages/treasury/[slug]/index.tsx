@@ -30,7 +30,7 @@ const Treasury: NextPage = () => {
   const walletObject = useZebecWallet()
 
   useEffect(() => {
-    if (walletObject.chainId !== "solana") {
+    if (walletObject.connected && walletObject.chainId !== "solana") {
       history.replace("/")
     }
   }, [walletObject, history])

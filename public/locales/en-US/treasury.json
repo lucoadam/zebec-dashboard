@@ -25,5 +25,7 @@
       "title": "Review & Confirm",
       "description": "Review the NFT’s and confirm the deposit"
     }
-  }
+  },
+  "no-nft-in-treasury": "You don’t have any NFT deposited in treasury yet.",
+  "no-nft-in-wallet": "You don’t have any NFT in wallet."
 }
