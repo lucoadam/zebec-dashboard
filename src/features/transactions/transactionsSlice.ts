@@ -34,6 +34,12 @@ interface TransactionState {
     previous: string
     results: any[]
   }
+  incomingTreasuryNftTransactions: {
+    count: number | null
+    next: string
+    previous: string
+    results: any[]
+  }
   recentTransactions: {
     count: number | null
     next: string
@@ -87,6 +93,12 @@ const initialState: TransactionState = {
     results: []
   },
   incomingTreasuryContinuousTransactions: {
+    count: null,
+    next: "",
+    previous: "",
+    results: []
+  },
+  incomingTreasuryNftTransactions: {
     count: null,
     next: "",
     previous: "",
@@ -306,6 +318,31 @@ export const updateIncomingTransactions: any = createAsyncThunk<
   dispatch(toggleWalletApprovalMessageModal())
   return null
 })
+
+//Incoming Treasury NFT Transactions
+export const fetchIncomingTreasuryNftTransactions = createAsyncThunk<
+  any,
+  "PENDING" | "ACCEPTED" | "REJECTED" | "ALL" | undefined,
+  { state: RootState }
+>(
+  "transactions/fetchIncomingTreasuryNftTransactions",
+  async (status, { getState }) => {
+    const { transactions } = getState() as RootState
+    const { data: response } = await api.get(
+      "/incoming/treasury-nft-transactions/",
+      {
+        params: {
+          limit: transactions.pagination.limit,
+          offset:
+            (Number(transactions.pagination.currentPage) - 1) *
+            transactions.pagination.limit,
+          approval_status_fn: status === "ALL" ? "" : status
+        }
+      }
+    )
+    return response
+  }
+)
 
 //Recent Transactions
 export const fetchRecentTransactions: any = createAsyncThunk(
@@ -560,6 +597,26 @@ const transactionsSlice = createSlice({
     builder.addCase(
       fetchIncomingTreasuryContinuousTransactionsById.rejected,
       (state, action) => {
+        state.error = action?.error?.message ?? "Something went wrong"
+      }
+    )
+    //Incoming Treasury Nft Transactions
+    builder.addCase(fetchIncomingTreasuryNftTransactions.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(
+      fetchIncomingTreasuryNftTransactions.fulfilled,
+      (state, action) => {
+        state.loading = false
+        state.error = ""
+        state.incomingTreasuryNftTransactions = action.payload
+        state.pagination.total = action.payload.count
+      }
+    )
+    builder.addCase(
+      fetchIncomingTreasuryNftTransactions.rejected,
+      (state, action) => {
+        state.loading = false
         state.error = action?.error?.message ?? "Something went wrong"
       }
     )

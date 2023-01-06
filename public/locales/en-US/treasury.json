@@ -27,5 +27,6 @@
     }
   },
   "no-nft-in-treasury": "You don’t have any NFT deposited in treasury yet.",
-  "no-nft-in-wallet": "You don’t have any NFT in wallet."
+  "no-nft-in-wallet": "You don’t have any NFT in wallet.",
+  "withdraw-to-your-wallet": "Withdraw to your wallet"
 }

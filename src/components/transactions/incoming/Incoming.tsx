@@ -11,6 +11,7 @@ import * as Icons from "assets/icons"
 import InstantTransactions from "./treasury-instant/InstantTransactions"
 import ContinuousTransactions from "./continuous/ContinuousTransactions"
 import TreasuryContinuousTransactions from "./treasury-continuous/TreasuryContinuousTransactions"
+import NftTransactions from "./treasury-nft/NftTransactions"
 
 const transactionTabs = [
   {
@@ -30,6 +31,12 @@ const transactionTabs = [
     count: 0,
     Component: <InstantTransactions />,
     icon: <Icons.ThunderIcon />
+  },
+  {
+    title: "treasury-nft",
+    count: 0,
+    Component: <NftTransactions />,
+    icon: <Icons.SquareBlockMove />
   }
 ]
 

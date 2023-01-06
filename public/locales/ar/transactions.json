@@ -22,6 +22,7 @@
   "treasury-instant": "الخزانة الفورية",
   "treasury-continuous": "الخزانة مستمرة",
   "withdraw-from-treasury-vault": "الانسحاب من Treasury Vault",
+  "treasury-nft": "الخزانة NFT",
   "withdraw": {
     "withdraw-modal-header": "سحب الرصيد الوارد",
     "withdraw-modal-subtitle": "سحب الرصيد إلى محفظة zebec الخاصة بك.",
