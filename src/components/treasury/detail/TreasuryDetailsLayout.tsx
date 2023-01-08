@@ -104,7 +104,7 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
                       </Link>
                     </div>
                     <div className="py-2">
-                      <Link href={`/treasury/${slug}/send`}>
+                      <Link href={`/treasury/${slug}/send#instant-transfer`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(1))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
@@ -115,7 +115,7 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
                       </Link>
                     </div>
                     <div className="pt-2">
-                      <Link href={`/treasury/${slug}/send`}>
+                      <Link href={`/treasury/${slug}/send#nft`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(2))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"

@@ -6,27 +6,29 @@ import TreasuryNFTStream from "components/send-from-treasury/TreasuryNFTStream"
 import { Breadcrumb, Tab } from "components/shared"
 import TreasuryLayout from "components/treasury/detail/TreasuryLayout"
 import { setTreasurySendActiveTab } from "features/common/commonSlice"
-// import { useZebecWallet } from "hooks/useWallet"
 import type { GetStaticPaths, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
-// import { useRouter } from "next/router"
-// import { useEffect } from "react"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const transferTabs = [
   {
+    key: "continuous-stream",
     title: "send:continuous-stream",
     icon: <Icons.CalenderIcon />,
     count: 0,
     Component: <TreasuryContinuousStream />
   },
   {
+    key: "instant-transfer",
     title: "send:instant-transfer",
     icon: <Icons.DoubleCircleDottedLineIcon />,
     count: 0,
     Component: <TreasuryInstantStream />
   },
   {
+    key: "nft",
     title: "send:nft",
     icon: <Icons.SquareBlockMove />,
     count: 0,
@@ -36,6 +38,31 @@ const transferTabs = [
 
 const SendFromTreasury: NextPage = () => {
   const { t } = useTranslation("common")
+  const router = useRouter()
+  const { slug } = router.query
+  const dispatch = useAppDispatch()
+  const activePage = useAppSelector(
+    (state) => state.common.treasurySendActiveTab
+  )
+  const { activeTreasury } = useAppSelector((state) => state.treasury)
+
+  useEffect(() => {
+    const currentPath = router.asPath
+    const currentActiveTab = currentPath.split("#")[1]
+    if (currentActiveTab) {
+      const currentTabIndex = transferTabs.findIndex(
+        (element) => element.key === currentActiveTab
+      )
+      if (currentTabIndex === -1) {
+        router.push("/404")
+      } else {
+        dispatch(setTreasurySendActiveTab(currentTabIndex))
+      }
+    } else {
+      dispatch(setTreasurySendActiveTab(0))
+    }
+    // eslint-disable-next-line
+  }, [activePage, router.asPath])
 
   // const history = useRouter()
   // const walletObject = useZebecWallet()
@@ -45,12 +72,6 @@ const SendFromTreasury: NextPage = () => {
   //     history.replace("/")
   //   }
   // }, [walletObject, history])
-
-  const activePage = useAppSelector(
-    (state) => state.common.treasurySendActiveTab
-  )
-  const { activeTreasury } = useAppSelector((state) => state.treasury)
-  const dispatch = useAppDispatch()
 
   return (
     <TreasuryLayout pageTitle="Zebec - Treasury Send">
@@ -65,7 +86,16 @@ const SendFromTreasury: NextPage = () => {
               isActive={activePage === index}
               startIcon={transactionTab.icon}
               count={transactionTab.count}
-              onClick={() => dispatch(setTreasurySendActiveTab(index))}
+              onClick={() => {
+                dispatch(setTreasurySendActiveTab(index))
+                if (transactionTab.key === transferTabs[0].key) {
+                  router.push(`/treasury/${slug}/send`)
+                } else {
+                  router.push(`#${transactionTab.key}`, undefined, {
+                    shallow: true
+                  })
+                }
+              }}
               className="md:px-[108px]"
             />
           )
@@ -76,6 +106,7 @@ const SendFromTreasury: NextPage = () => {
           title={activeTreasury?.name || ""}
           arrowBack={true}
           className="mt-10 mb-9"
+          backTo={`/treasury/${slug}`}
         />
 
         {/* Active Tab */}
@@ -92,6 +123,7 @@ export async function getStaticProps({ locale }: { locale: string }) {
         "common",
         "validation",
         "send",
+        "treasury",
         "createTreasury"
       ]))
     }

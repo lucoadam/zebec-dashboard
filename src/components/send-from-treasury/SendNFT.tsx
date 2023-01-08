@@ -13,6 +13,10 @@ import {
   InputField,
   Toggle
 } from "components/shared"
+import {
+  fetchFilteredAddressBook,
+  setFilteredPagination
+} from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
 import { useContext } from "react"
@@ -33,6 +37,7 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
     addressBooks: mainAddressBook,
     filteredPagination
   } = useAppSelector((state) => state.address)
+  const { isSigned } = useAppSelector((state) => state.common)
   const { treasuryToken } = useContext(ZebecContext)
 
   const {
@@ -53,6 +58,8 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
   const [receiverSearchData, setReceiverSearchData] = useState("")
   const [toggleChooseNFT, setToggleChooseNFT] = useState(true)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
+  let searchData = ""
+  let addressCurrentPage = 1
 
   const handleReceiverClose = () => {
     setToggleReceiverDropdown(false)
@@ -100,6 +107,56 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
     }
     setToggleChooseNFT(!toggleChooseNFT)
   }
+
+  useEffect(() => {
+    if (isSigned) {
+      dispatch(
+        setFilteredPagination({
+          currentPage: 1,
+          limit: 4,
+          total: 0
+        })
+      )
+      searchData = receiverSearchData
+      addressCurrentPage = 1
+      dispatch(
+        fetchFilteredAddressBook({
+          search: receiverSearchData,
+          page: 1,
+          append: false
+        })
+      )
+    }
+  }, [dispatch, receiverSearchData, isSigned])
+
+  useEffect(() => {
+    addressCurrentPage = Number(filteredPagination.currentPage)
+  }, [filteredPagination.currentPage])
+
+  useEffect(() => {
+    if (toggleReceiverDropdown) {
+      // detect end of scroll
+      setTimeout(() => {
+        const element = document.querySelector(
+          ".address-book-list"
+        ) as HTMLElement
+        element?.addEventListener("scroll", () => {
+          if (
+            element.scrollTop + element.clientHeight + 5 >=
+            element.scrollHeight
+          ) {
+            dispatch(
+              fetchFilteredAddressBook({
+                search: searchData,
+                page: addressCurrentPage + 1,
+                append: true
+              })
+            )
+          }
+        })
+      }, 200)
+    }
+  }, [toggleReceiverDropdown])
 
   return (
     <>

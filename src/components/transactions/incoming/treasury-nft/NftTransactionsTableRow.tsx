@@ -2,7 +2,6 @@ import * as Icons from "assets/icons"
 import * as Images from "assets/images"
 import {
   Button,
-  CircularProgress,
   FormatCurrency,
   IconButton,
   UserAddress,

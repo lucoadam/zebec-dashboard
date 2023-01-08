@@ -108,6 +108,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     addressBooks: mainAddressBook,
     filteredPagination
   } = useAppSelector((state) => state.address)
+  const { isSigned } = useAppSelector((state) => state.common)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const {
@@ -190,23 +191,25 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }, [router, setValue])
 
   useEffect(() => {
-    dispatch(
-      setFilteredPagination({
-        currentPage: 1,
-        limit: 4,
-        total: 0
-      })
-    )
-    searchData = receiverSearchData
-    addressCurrentPage = 1
-    dispatch(
-      fetchFilteredAddressBook({
-        search: receiverSearchData,
-        page: 1,
-        append: false
-      })
-    )
-  }, [dispatch, receiverSearchData])
+    if (isSigned) {
+      dispatch(
+        setFilteredPagination({
+          currentPage: 1,
+          limit: 4,
+          total: 0
+        })
+      )
+      searchData = receiverSearchData
+      addressCurrentPage = 1
+      dispatch(
+        fetchFilteredAddressBook({
+          search: receiverSearchData,
+          page: 1,
+          append: false
+        })
+      )
+    }
+  }, [dispatch, receiverSearchData, isSigned])
 
   useEffect(() => {
     addressCurrentPage = Number(filteredPagination.currentPage)
