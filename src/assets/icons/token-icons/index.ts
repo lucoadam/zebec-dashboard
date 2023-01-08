@@ -43,6 +43,7 @@ import HtoIcon from "./hto.svg"
 import BNBIcon from "./bnb.svg"
 import BNBUSDIcon from "./bnb-usd.svg"
 import HayDestableIcon from "./hay-destable.svg"
+import LeonIcon from "./leon.svg"
 
 export {
   SolIcon as SOL,
@@ -96,5 +97,7 @@ export {
   BNBUSDIcon as BUSD,
   BNBUSDIcon as WBUSD,
   HayDestableIcon as HAY,
-  HayDestableIcon as WHAY
+  HayDestableIcon as WHAY,
+  LeonIcon as LEON,
+  LeonIcon as WLEON
 }
