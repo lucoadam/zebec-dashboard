@@ -50,7 +50,8 @@ const Outgoing: FC = () => {
       dispatch(setPagination({ currentPage: 1, limit: 10, total: 0 }))
       dispatch(fetchOutgoingTransactions(originalAddress?.toString() || ""))
     }
-  }, [dispatch, isSigned])
+    // eslint-disable-next-line
+  }, [isSigned])
 
   return (
     <>

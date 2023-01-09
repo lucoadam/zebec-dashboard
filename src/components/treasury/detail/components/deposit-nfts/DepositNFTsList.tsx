@@ -27,6 +27,7 @@ export const DepositNFTsList: FC<{
         })
       )
     }
+    // eslint-disable-next-line
   }, [walletObject.publicKey])
 
   return (

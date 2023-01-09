@@ -4,6 +4,7 @@ import { FC, useState } from "react"
 import { TransactionSkeleton } from "components/transactions/TransactionSkeleton"
 import ContinuousTransactionsTableRow from "./ContinuousTransactionsTableRow"
 import { setTreasuryTransactionPagination } from "features/treasuryTransactions/treasuryTransactionsSlice"
+import { useTranslation } from "next-i18next"
 
 export interface TransactionTableProps {
   transactions: {
@@ -20,6 +21,7 @@ export const ContinuousTransactionsTable: FC<TransactionTableProps> = ({
   transactions,
   fetchTransactions
 }) => {
+  const { t } = useTranslation()
   const { loading, pagination } = useAppSelector(
     (state) => state.treasuryTransactions
   )
@@ -66,7 +68,11 @@ export const ContinuousTransactionsTable: FC<TransactionTableProps> = ({
           {transactions.results.length === 0 && !loading ? (
             <tr>
               <td colSpan={headers.length}>
-                <EmptyDataState message="There are no incoming transactions. The payments you receive will appear here." />
+                <EmptyDataState
+                  message={t(
+                    "transactions:table.treasury-continuous-transactions-empty"
+                  )}
+                />
               </td>
             </tr>
           ) : (

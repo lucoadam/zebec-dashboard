@@ -68,7 +68,7 @@ export const initDepositNft =
   }
 
 export const initTransferNftFromTreasury =
-  ({ data, treasuryToken }: TransferNFTFromSafeProps) =>
+  ({ data, treasuryToken, callback }: TransferNFTFromSafeProps) =>
   async (dispatch: AppDispatch) => {
     dispatch(toggleWalletApprovalMessageModal())
     try {
@@ -94,13 +94,19 @@ export const initTransferNftFromTreasury =
           nft_name: data.nft_name,
           nft_image_url: data.nft_img_url
         }
-        dispatch(sendNftTransfer(payloadData))
+        dispatch(sendNftTransfer(payloadData)).then(() => {
+          if (callback) {
+            callback("success")
+            dispatch(toggleWalletApprovalMessageModal())
+          }
+        })
       } else {
         dispatch(
           toast.error({
             message: response.message ?? "Unknown Error"
           })
         )
+        dispatch(toggleWalletApprovalMessageModal())
       }
     } catch (error: any) {
       dispatch(
@@ -108,7 +114,6 @@ export const initTransferNftFromTreasury =
           message: error?.message ?? "Unknown Error"
         })
       )
-    } finally {
       dispatch(toggleWalletApprovalMessageModal())
     }
   }

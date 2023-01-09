@@ -31,6 +31,9 @@ import { getBalance } from "utils/getBalance"
 import { instantStreamSchema } from "utils/validations/instantStreamSchema"
 import { InstantStreamFormData, InstantStreamProps } from "./InstantStream.d"
 
+let searchData = ""
+let addressCurrentPage = 1
+
 export const InstantStream: FC<InstantStreamProps> = ({
   setFormValues,
   tokenBalances,
@@ -73,8 +76,6 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
   const [showRemarks, setShowRemarks] = useState(false)
   const [resetFile, setResetFile] = useState(false)
-  let searchData = ""
-  let addressCurrentPage = 1
 
   const { publicKey } = useWallet()
 
@@ -159,6 +160,7 @@ export const InstantStream: FC<InstantStreamProps> = ({
         })
       }, 200)
     }
+    // eslint-disable-next-line
   }, [toggleReceiverDropdown])
 
   const initInstantStreamCallback = (message: "success" | "error") => {

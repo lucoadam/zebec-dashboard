@@ -238,6 +238,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         })
       }, 200)
     }
+    // eslint-disable-next-line
   }, [toggleReceiverDropdown])
 
   const resetForm = () => {

@@ -101,7 +101,11 @@
     "resume": "سيرة ذاتية",
     "cancel": "يلغي",
     "withdrawn": "منسحب",
-    "nft-name": "اسم NFT"
+    "nft-name": "اسم NFT",
+    "treasury-continuous-transactions-empty": "لا توجد معاملات خزينة مستمرة. ستظهر هنا المدفوعات المستمرة التي بدأتها من خلال الخزانة.",
+    "treasury-instant-transactions-empty": "لا توجد معاملات خزينة فورية. ستظهر هنا المدفوعات الفورية التي بدأتها من خلال الخزانة.",
+    "treasury-deposit-withdrawls-empty": "لا توجد معاملات إيداع أو سحب على الخزينة. ستظهر المدفوعات التي بدأتها هنا.",
+    "treasury-nfts-transactions-empty": "لا توجد معاملات nfts للخزينة. ستظهر هنا معاملات nfts التي بدأتها."
   },
   "modal-actions": {
     "pause-modal-header": "هل أنت متأكد أنك تريد إيقاف الصفقة مؤقتًا؟",

@@ -126,6 +126,7 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
           Number(latest_transaction_event.paused_amt)
       )
     }
+    // eslint-disable-next-line
   }, [status, transaction])
 
   const styles = {

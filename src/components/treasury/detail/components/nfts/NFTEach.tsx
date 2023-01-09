@@ -10,6 +10,7 @@ import { PublicKey } from "@solana/web3.js"
 import { useAppDispatch, useAppSelector } from "app/hooks"
 import ZebecContext from "app/zebecContext"
 import { initTransferNftFromTreasury } from "application"
+import { useRouter } from "next/router"
 
 interface NFTDetail {
   name: string
@@ -27,9 +28,16 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, eachWidth, ...rest }) => {
   const { publicKey } = useWallet()
   const { treasuryToken } = useContext(ZebecContext)
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const [showOverlay, setShowOverlay] = useState(false)
+
+  const sendNftCallback = (message: "success" | "error") => {
+    if (message === "success" && activeTreasury) {
+      router.push(`/treasury/${activeTreasury.uuid}/transactions#nfts`)
+    }
+  }
 
   const withdrawNftToYourWallet = () => {
     if (activeTreasury) {
@@ -48,10 +56,13 @@ export const NFTEach: FC<NFTEachProps> = ({ detail, eachWidth, ...rest }) => {
           true
         )}`
       }
-      console.log(transferData)
       if (treasuryToken)
         dispatch(
-          initTransferNftFromTreasury({ data: transferData, treasuryToken })
+          initTransferNftFromTreasury({
+            data: transferData,
+            treasuryToken,
+            callback: sendNftCallback
+          })
         )
     }
   }

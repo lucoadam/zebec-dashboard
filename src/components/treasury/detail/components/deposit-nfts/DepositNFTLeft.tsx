@@ -71,7 +71,7 @@ export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
 
   useEffect(() => {
     if (nft && error) setError(false)
-  }, [nft])
+  }, [nft, error])
 
   const getStepState = (index: number, isIcon = false) => {
     if (index === currentStep) {

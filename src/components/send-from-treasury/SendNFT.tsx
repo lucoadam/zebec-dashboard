@@ -19,6 +19,7 @@ import {
 } from "features/address-book/addressBookSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
+import { useRouter } from "next/router"
 import { useContext } from "react"
 import { FC, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -26,6 +27,9 @@ import { twMerge } from "tailwind-merge"
 import { toSubstring } from "utils"
 import { sendNFTSchema } from "utils/validations/sendNFTSchema"
 import { SendNFTFormData, SendNFTProps } from "./TreasuryNFTStream.d"
+
+let searchData = ""
+let addressCurrentPage = 1
 
 export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
   const { t } = useTranslation()
@@ -39,6 +43,7 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
   } = useAppSelector((state) => state.address)
   const { isSigned } = useAppSelector((state) => state.common)
   const { treasuryToken } = useContext(ZebecContext)
+  const router = useRouter()
 
   const {
     register,
@@ -58,8 +63,6 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
   const [receiverSearchData, setReceiverSearchData] = useState("")
   const [toggleChooseNFT, setToggleChooseNFT] = useState(true)
   const [toggleReceiverDropdown, setToggleReceiverDropdown] = useState(false)
-  let searchData = ""
-  let addressCurrentPage = 1
 
   const handleReceiverClose = () => {
     setToggleReceiverDropdown(false)
@@ -81,6 +84,14 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
     onClickOutside: handleReceiverClose
   })
 
+  const sendNftCallback = (message: "success" | "error") => {
+    if (message === "success" && activeTreasury) {
+      reset()
+      changeNFT && changeNFT(undefined)
+      router.push(`/treasury/${activeTreasury.uuid}/transactions#nfts`)
+    }
+  }
+
   const onSubmit = (data: SendNFTFormData) => {
     const transferNftData = {
       sender: (publicKey as PublicKey).toString(),
@@ -95,9 +106,12 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
     }
     if (treasuryToken)
       dispatch(
-        initTransferNftFromTreasury({ data: transferNftData, treasuryToken })
+        initTransferNftFromTreasury({
+          data: transferNftData,
+          treasuryToken,
+          callback: sendNftCallback
+        })
       )
-    reset()
   }
 
   const toggleNFT = () => {
@@ -156,6 +170,7 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
         })
       }, 200)
     }
+    // eslint-disable-next-line
   }, [toggleReceiverDropdown])
 
   return (

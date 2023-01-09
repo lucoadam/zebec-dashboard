@@ -101,7 +101,11 @@
     "resume": "Resume",
     "cancel": "Cancel",
     "withdrawn": "Withdrawn",
-    "nft-name": "Nft Name"
+    "nft-name": "Nft Name",
+    "treasury-continuous-transactions-empty": "There are no treasury continuous transactions. The continuous payments you initiated through treasury will appear here.",
+    "treasury-instant-transactions-empty": "There are no treasury instant transactions. The instant payments you initiated through treasury will appear here.",
+    "treasury-deposit-withdrawls-empty": "There are no deposit or withdrawls transactions on treasury. The payments you initiated will appear here.",
+    "treasury-nfts-transactions-empty": "There are no treasury nfts transactions. The nfts transactions you initiated will appear here."
   },
   "modal-actions": {
     "pause-modal-header": "Are you sure you want to pause the transaction?",
