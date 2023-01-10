@@ -28,7 +28,8 @@ export async function getServerSideProps({ locale }: { locale: string }) {
         "validation",
         "transactions",
         "exportReport",
-        "send"
+        "send",
+        "addressBook"
       ]))
     }
   }

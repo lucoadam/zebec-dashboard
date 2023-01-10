@@ -42,7 +42,10 @@ const getButtonVariantStyles = (
         ? `primary-gradient-border focus:outline-0`
         : `bg-primary hover:bg-primary-dark p-0.5`
     case "danger":
-      return `bg-error focus:outline-0`
+      return `bg-error focus:outline-0 ${
+        theme === "light" &&
+        `text-background-primary disabled:text-background-tertiary`
+      }`
     default:
       return null
   }

@@ -15,7 +15,7 @@ env:
   RPC_NETWORK: mainnet
   DB_HOST: https://api-v2.zebec.io
   NOTIFI_CARD_ID: 0f3b7131f0414b34a5f36300799e4a39
-  SYNDICA_API: https://solana-api.syndica.io/access-token/wx7FvEiiIrIt4iwKg6fUkbhS2EtRiuWVkXSHWNP7mRNRtHHoGzxt9hnfIGWpWTD0/rpc
+  SYNDICA_API: https://solana-api.syndica.io/access-token/A9WoYrT93XcXcUCLpwnjyYMZKldD94f36lVbGC7YZJ84czo0HbvUv9Nb4z2oZJiZ/rpc
   ZBC_AIRDROP: ""
   NODE_ENV: production
   PROGRAM_ID: zbcKGdAmXfthXY3rEPBzexVByT2cqRqCZb9NwWdGQ2T

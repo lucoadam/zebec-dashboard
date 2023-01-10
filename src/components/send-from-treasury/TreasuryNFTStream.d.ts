@@ -3,7 +3,9 @@ import { NFTDetail } from "./NFTEach"
 export interface SendNFTFormData {
   transactionName: string
   receiver: string
-  nftAddress?: string
+  nftAddress: string
+  nftImageUrl: string
+  nftName: string
   chooseNFT?: boolean
 }
 

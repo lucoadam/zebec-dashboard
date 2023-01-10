@@ -1,6 +1,6 @@
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
-import { Button } from "components/shared"
-import { nftLists } from "fakedata"
+import { Button, EmptyDataState } from "components/shared"
 import { useTranslation } from "next-i18next"
 import Image from "next/image"
 import { FC, useState } from "react"
@@ -13,6 +13,7 @@ export const NFTsList: FC<{
   nft: NFTDetail | undefined
   onChange?: (detail: NFTDetail | undefined) => void
 }> = ({ className, onChange, nft }) => {
+  const { treasuryNfts, loading } = useAppSelector((state) => state.treasuryNft)
   const [nftChoosed, setNFTChoosed] = useState<NFTDetail>()
   const { t } = useTranslation()
   return (
@@ -23,24 +24,40 @@ export const NFTsList: FC<{
       )}
     >
       {(!nft || nft?.address === "") && (
-        <div className="flex flex-wrap justify-start gap-4">
-          {nftLists.map((item) => (
-            <NFTEach
-              key={item.address}
-              detail={item}
-              onChange={(detail) => onChange && onChange(detail)}
-              onChoose={(detail) => setNFTChoosed(detail)}
-              isChoosed={nftChoosed?.address === item.address}
-            />
-          ))}
-        </div>
+        <>
+          {loading ? (
+            <></>
+          ) : treasuryNfts.length > 0 ? (
+            <div className="flex flex-wrap justify-start gap-4">
+              {treasuryNfts.map((item) => (
+                <NFTEach
+                  key={item.address}
+                  detail={item}
+                  onChange={(detail) => onChange && onChange(detail)}
+                  onChoose={(detail) => setNFTChoosed(detail)}
+                  isChoosed={nftChoosed?.address === item.address}
+                />
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="w-full h-full">
+                <EmptyDataState
+                  message={t("treasury:no-nft-in-treasury")}
+                  padding={120}
+                  className="h-full w-full rounded !px-10 text-center !py-0 justify-center"
+                />
+              </div>
+            </>
+          )}
+        </>
       )}
       {nft?.address && (
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="text-content-secondary">NFT Info:</div>
           <div>
             <Image
-              src={nft.image}
+              src={`https://res.cloudinary.com/demo/image/fetch/${nft.image}`}
               className="rounded"
               alt={nft.name}
               width={262}

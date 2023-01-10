@@ -1,5 +1,4 @@
 import { AppDispatch } from "app/store"
-import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { toast } from "features/toasts/toastsSlice"
 import {
   ZebecNativeTreasury,
@@ -71,7 +70,7 @@ export const initInstantStreamTreasury =
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
-            message: response.message ?? "Deposit to treasury success.",
+            message: response.message ?? "Instant stream initiated success.",
             transactionHash: response?.data?.transactionHash
           })
         )

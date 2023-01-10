@@ -4,7 +4,8 @@ export enum TreasuryTransactionType {
   WITHDRAW_FROM_TREASURY = "withdraw_treasury",
   WITHDRAW_FROM_TREASURY_VAULT = "withdraw_treasury_vault",
   INSTANT = "instant",
-  CONTINUOUS = "continuous"
+  CONTINUOUS = "continuous",
+  NFT = "nft"
 }
 
 export type TreasuryTransactionStatesType =
@@ -14,6 +15,7 @@ export type TreasuryTransactionStatesType =
   | TreasuryTransactionType.WITHDRAW_FROM_TREASURY_VAULT
   | TreasuryTransactionType.INSTANT
   | TreasuryTransactionType.CONTINUOUS
+  | TreasuryTransactionType.NFT
 
 export type CallbackMessageType = "success" | "error"
 

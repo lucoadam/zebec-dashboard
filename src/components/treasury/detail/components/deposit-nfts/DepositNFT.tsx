@@ -5,11 +5,7 @@ import { DepositNFTLeft } from "./DepositNFTLeft"
 import { DepositNFTsList } from "./DepositNFTsList"
 
 const DepositNFT: NextPage = () => {
-  const [selectedNFT, setNFT] = useState<NFTDetail | undefined>({
-    address: "",
-    name: "",
-    image: ""
-  })
+  const [selectedNFT, setNFT] = useState<NFTDetail | undefined>(undefined)
 
   return (
     <div className="grid bg-background-secondary rounded-[4px] p-10 lg:flex">

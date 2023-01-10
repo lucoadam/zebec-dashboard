@@ -13,6 +13,7 @@ import {
 } from "features/treasury/treasurySlice"
 import { fetchTreasuryBalance } from "features/treasuryBalance/treasuryBalanceSlice"
 import { fetchTreasuryVaultBalance } from "features/treasuryBalance/treasuryVaultBalanceSlice"
+import { fetchAssociatedNfts } from "features/treasuryNft/treasuryNftSlice"
 import { fetchTreasuryStreamingBalance } from "features/treasuryStreamingBalance/treasuryStreamingSlice"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect } from "react"
@@ -84,6 +85,14 @@ const TreasuryLayout = ({
       dispatch(
         fetchTreasuryWeeklyActivity({
           uuid: activeTreasury.uuid
+        })
+      )
+
+      // Treasury NFTs
+      dispatch(
+        fetchAssociatedNfts({
+          address: activeTreasury.treasury_address,
+          type: "treasury"
         })
       )
     }

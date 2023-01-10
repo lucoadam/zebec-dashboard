@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import api from "api/api"
 import { AppDispatch, RootState } from "app/store"
 import {
+  fetchTreasuryNftTransactionsById,
   fetchTreasuryPendingTransactions,
   fetchTreasuryTransactionsById,
   fetchTreasuryVaultContinuousTransactionsById,
@@ -128,6 +129,32 @@ export const vaultContinuousRejectTransactionLatestEvent = createAsyncThunk<
   }
 )
 
+export const rejectNftTransaction = createAsyncThunk<
+  any,
+  { uuid: string },
+  { dispatch: AppDispatch; state: RootState }
+>(
+  "rejectTransaction/rejectNftTransaction",
+  async ({ uuid }, { dispatch, getState }) => {
+    const { treasury } = getState()
+    if (treasury.activeTreasury?.uuid) {
+      const treasury_uuid = treasury.activeTreasury.uuid
+      await api.get(
+        `/treasury/${treasury_uuid}/nft-transactions/${uuid}/reject/`
+      )
+      await dispatch(
+        fetchTreasuryNftTransactionsById({
+          treasury_uuid: treasury_uuid,
+          uuid: uuid
+        })
+      )
+      dispatch(toggleRejectModal())
+      return
+    }
+    return
+  }
+)
+
 export const rejectModalSlice = createSlice({
   name: "rejectTransaction",
   initialState,
@@ -209,6 +236,18 @@ export const rejectModalSlice = createSlice({
         state.error = action.error.message ?? "Something went wrong"
       }
     )
+    //Nft Transaction
+    builder.addCase(rejectNftTransaction.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(rejectNftTransaction.fulfilled, (state) => {
+      state.loading = false
+      state.error = ""
+    })
+    builder.addCase(rejectNftTransaction.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message ?? "Something went wrong"
+    })
   }
 })
 

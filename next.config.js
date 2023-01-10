@@ -18,6 +18,9 @@ const nextConfig = {
     RELAYER_API_URL: process.env.RELAYER_API_URL
   },
   i18n,
+  images: {
+    domains: ["res.cloudinary.com"]
+  },
   webpack(config) {
     config.experiments.asyncWebAssembly = true
     config.resolve.fallback = {

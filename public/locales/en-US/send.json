@@ -41,5 +41,7 @@
   "enter-nft-address": "Enter NFT address",
   "nft-description": "Your receiver will instantly receive the NFT one the transaction is signed by all owners.",
   "once-approved": "once the transaction is approved.",
-  "overview-receiver-wallet": "receiver wallet"
+  "overview-receiver-wallet": "receiver wallet",
+  "note": "Note:",
+  "continuous-stream-note": "We only support streams to wallets on {{ecosystem}}. Tokens streamed to exchange wallets can't be withdrawn."
 }

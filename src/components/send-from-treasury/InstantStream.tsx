@@ -8,11 +8,16 @@ import * as Icons from "assets/icons"
 import {
   Button,
   CollapseDropdown,
+  EmptyDataState,
   IconButton,
   InputField
 } from "components/shared"
 import { FileUpload } from "components/shared/FileUpload"
 import { Token } from "components/shared/Token"
+import {
+  fetchFilteredAddressBook,
+  setFilteredPagination
+} from "features/address-book/addressBookSlice"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
 import { useClickOutside } from "hooks"
 import { useTranslation } from "next-i18next"
@@ -26,6 +31,9 @@ import { getBalance } from "utils/getBalance"
 import { instantStreamSchema } from "utils/validations/instantStreamSchema"
 import { InstantStreamFormData, InstantStreamProps } from "./InstantStream.d"
 
+let searchData = ""
+let addressCurrentPage = 1
+
 export const InstantStream: FC<InstantStreamProps> = ({
   setFormValues,
   tokenBalances,
@@ -35,7 +43,12 @@ export const InstantStream: FC<InstantStreamProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const addressBook = useAppSelector((state) => state.address.addressBooks)
+  const {
+    filteredAddressBooks: addressBook,
+    addressBooks: mainAddressBook,
+    filteredPagination
+  } = useAppSelector((state) => state.address)
+  const { isSigned } = useAppSelector((state) => state.common)
   const { treasury, treasuryToken } = useContext(ZebecContext)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
@@ -98,6 +111,57 @@ export const InstantStream: FC<InstantStreamProps> = ({
       setValue("symbol", tokenDetails[0].symbol)
     }
   }, [tokenDetails, setValue])
+
+  useEffect(() => {
+    if (isSigned) {
+      dispatch(
+        setFilteredPagination({
+          currentPage: 1,
+          limit: 4,
+          total: 0
+        })
+      )
+      searchData = receiverSearchData
+      addressCurrentPage = 1
+      dispatch(
+        fetchFilteredAddressBook({
+          search: receiverSearchData,
+          page: 1,
+          append: false
+        })
+      )
+    }
+  }, [dispatch, receiverSearchData, isSigned])
+
+  useEffect(() => {
+    addressCurrentPage = Number(filteredPagination.currentPage)
+  }, [filteredPagination.currentPage])
+
+  useEffect(() => {
+    if (toggleReceiverDropdown) {
+      // detect end of scroll
+      setTimeout(() => {
+        const element = document.querySelector(
+          ".address-book-list"
+        ) as HTMLElement
+        element?.addEventListener("scroll", () => {
+          if (
+            element.scrollTop + element.clientHeight + 5 >=
+            element.scrollHeight
+          ) {
+            dispatch(
+              fetchFilteredAddressBook({
+                search: searchData,
+                page: addressCurrentPage + 1,
+                append: true
+              })
+            )
+          }
+        })
+      }, 200)
+    }
+    // eslint-disable-next-line
+  }, [toggleReceiverDropdown])
 
   const initInstantStreamCallback = (message: "success" | "error") => {
     if (message === "success") {
@@ -253,51 +317,57 @@ export const InstantStream: FC<InstantStreamProps> = ({
                 position="left"
               >
                 <div className="rounded-lg bg-background-primary border border-outline">
-                  <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
-                  <input
-                    className="is-search w-full h-[48px] bg-background-primary"
-                    placeholder={t("send:search-wallet")}
-                    type="text"
-                    onChange={(e) => setReceiverSearchData(e.target.value)}
-                  />
-                  <div className="divide-y divide-outline max-h-[206px] overflow-auto">
-                    {addressBook
-                      .filter((user) =>
-                        user.name
-                          .toLowerCase()
-                          .includes(receiverSearchData.toLowerCase())
-                      )
-                      .map((user) => (
-                        <div
-                          key={user.address}
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            setToggleReceiverDropdown(false)
-                            setValue("receiver", user.address)
-                            trigger("receiver")
-                          }}
-                          className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
-                        >
-                          <div className="text-content-primary">
-                            {user.name}
+                  {mainAddressBook.length > 0 || receiverSearchData ? (
+                    <>
+                      <Icons.SearchIcon className="text-lg absolute left-[20px] top-[16px] text-content-secondary" />
+                      <input
+                        className="is-search w-full h-[48px] bg-background-primary"
+                        placeholder={t("send:search-wallet")}
+                        type="text"
+                        onChange={(e) => setReceiverSearchData(e.target.value)}
+                      />
+                      <div className="divide-y address-book-list divide-outline max-h-[206px] overflow-auto">
+                        {addressBook.map((user) => (
+                          <div
+                            key={user.address}
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              setToggleReceiverDropdown(false)
+                              setValue("receiver", user.address)
+                              trigger("receiver")
+                            }}
+                            className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center hover:bg-background-light"
+                          >
+                            <div className="text-sm text-content-primary">
+                              {user.name}
+                            </div>
+                            <div className="text-caption text-content-tertiary">
+                              {toSubstring(user.address, 28, false)}
+                            </div>
                           </div>
-                          <div className="text-caption text-content-tertiary">
-                            {toSubstring(user.address, 28, false)}
+                        ))}
+                        {addressBook.length !== filteredPagination.total && (
+                          <div className="flex justify-center items-center py-3">
+                            <Icons.Loading className="text-content-primary" />
                           </div>
-                        </div>
-                      ))}
-                    {addressBook.filter((user) =>
-                      user.name
-                        .toLowerCase()
-                        .includes(receiverSearchData.toLowerCase())
-                    ).length === 0 && (
-                      <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
-                        <div className="text-content-contrast">
-                          {t("common:no-receiver-found")}
-                        </div>
+                        )}
+                        {addressBook.length === 0 && receiverSearchData && (
+                          <div className="border-outline cursor-pointer overflow-hidden p-4 justify-start items-center">
+                            <div className="text-content-contrast">
+                              {t("common:no-receiver-found")}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  ) : (
+                    <EmptyDataState
+                      message={t(
+                        "createTreasury:second-steper.empty-address-book"
+                      )}
+                      className="h-fit w-full rounded !px-10 !py-10 bg-background-primary text-center"
+                    />
+                  )}
                 </div>
               </CollapseDropdown>
             </div>

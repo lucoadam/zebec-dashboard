@@ -57,6 +57,7 @@ const Common: FC = () => {
     if (isSigned && tokens.length === 0) {
       dispatch(fetchTokens())
     }
+    // eslint-disable-next-line
   }, [isSigned, tokens])
 
   useEffect(() => {
@@ -122,11 +123,11 @@ const Common: FC = () => {
   }, [walletObject.publicKey, tokens, isSigned, zebecContext, signer])
 
   useEffect(() => {
-    if (isSigned && signer) {
+    if (isSigned) {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
       dispatch(getPreferences())
-      if (walletObject.chainId !== "solana") {
+      if (walletObject.chainId !== "solana" && signer) {
         checkPDAinitialized(walletObject.publicKey?.toString() || "").then(
           (res) => {
             if (res.isBalanceRequired) {

@@ -108,6 +108,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
     addressBooks: mainAddressBook,
     filteredPagination
   } = useAppSelector((state) => state.address)
+  const { isSigned } = useAppSelector((state) => state.common)
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
   const {
@@ -191,23 +192,25 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   }, [router, setValue])
 
   useEffect(() => {
-    dispatch(
-      setFilteredPagination({
-        currentPage: 1,
-        limit: 4,
-        total: 0
-      })
-    )
-    searchData = receiverSearchData
-    addressCurrentPage = 1
-    dispatch(
-      fetchFilteredAddressBook({
-        search: receiverSearchData,
-        page: 1,
-        append: false
-      })
-    )
-  }, [dispatch, receiverSearchData])
+    if (isSigned) {
+      dispatch(
+        setFilteredPagination({
+          currentPage: 1,
+          limit: 4,
+          total: 0
+        })
+      )
+      searchData = receiverSearchData
+      addressCurrentPage = 1
+      dispatch(
+        fetchFilteredAddressBook({
+          search: receiverSearchData,
+          page: 1,
+          append: false
+        })
+      )
+    }
+  }, [dispatch, receiverSearchData, isSigned])
 
   useEffect(() => {
     addressCurrentPage = Number(filteredPagination.currentPage)
@@ -236,6 +239,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         })
       }, 200)
     }
+    // eslint-disable-next-line
   }, [toggleReceiverDropdown])
 
   const resetForm = () => {
@@ -560,9 +564,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         <div className="text-caption text-content-tertiary font-normal pt-2">
           {t("send:continuous-stream-description")}
         </div>
+        <div className="text-caption text-content-primary font-normal pt-2">
+          <span className="text-warning">{t("send:note")}&nbsp;</span>
+          {t("send:continuous-stream-note", {
+            ecosystem: `${
+              walletObject.chainId === "solana"
+                ? "Solana ecosystem"
+                : "Binance chain"
+            }`
+          })}
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Transaction Name and Receiver Wallet */}
-          <div className="mt-12 grid lg:grid-cols-2 gap-3">
+          <div className="mt-10 grid lg:grid-cols-2 gap-3">
             <div>
               <InputField
                 label={t("send:transaction-name")}

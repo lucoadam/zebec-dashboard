@@ -15,6 +15,8 @@ import { setTreasurySendActiveTab } from "features/common/commonSlice"
 import Overview from "./components/overview/Overview"
 import Transactions from "./components/transactions/Transactions"
 import Setting from "./components/settings/Setting"
+import { useClickOutside } from "hooks"
+import { NFTsList } from "./components/nfts/NFTsList"
 
 const categories = [
   {
@@ -28,23 +30,22 @@ const categories = [
     Component: <Transactions />
   },
   {
+    title: "nft",
+    icon: <Icons.SquareBlockMove />,
+    Component: <NFTsList />
+  },
+  {
     title: "settings",
     icon: <Icons.GearringIcon />,
     Component: <Setting />
   }
-  // {
-  //   title: "nft",
-  //   count: 0,
-  //   icon: <Icons.SquareBlockMove />,
-  //   Component: <NFTsList />
-  // }
 ]
 
 const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
   const { slug } = router.query
   const { t } = useTranslation()
-  const dropdownWrapper = useRef(null)
+  const dropdownWrapperRef = useRef(null)
   const dispatch = useAppDispatch()
   const { activeTreasury } = useAppSelector((state) => state.treasury)
 
@@ -52,6 +53,12 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
 
   //Get current path name [last key of pathname]
   const currentPath = router.asPath.split("/").slice(-1)[0]
+
+  useClickOutside(dropdownWrapperRef, {
+    onClickOutside: () => {
+      setToggleDropdown(false)
+    }
+  })
 
   return (
     <>
@@ -66,14 +73,14 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
             <BreadcrumbRightContent>
               {/* Deposit NFT and Send from treasury */}
               <div className="flex gap-4">
-                {/* <Link href="/treasury/deposit-nft">
-              <Button
-                title={`${t("treasury:deposit-nft")}`}
-                endIcon={<Icons.PlusIncircleIcon />}
-                type="button"
-              />
-            </Link> */}
-                <div ref={dropdownWrapper} className="relative">
+                <Link href={`/treasury/${slug}/deposit-nft`}>
+                  <Button
+                    title={`${t("treasury:deposit-nft")}`}
+                    endIcon={<Icons.PlusIncircleIcon />}
+                    type="button"
+                  />
+                </Link>
+                <div ref={dropdownWrapperRef} className="relative">
                   <Button
                     title={`${t("send:send-from-treasury-vault")}`}
                     variant="gradient"
@@ -96,8 +103,8 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
                         </div>
                       </Link>
                     </div>
-                    <div className="pt-2">
-                      <Link href={`/treasury/${slug}/send`}>
+                    <div className="py-2">
+                      <Link href={`/treasury/${slug}/send#instant-transfer`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(1))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
@@ -107,8 +114,8 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
                         </div>
                       </Link>
                     </div>
-                    <div className="pt-2 hidden">
-                      <Link href={`/treasury/${slug}/send`}>
+                    <div className="pt-2">
+                      <Link href={`/treasury/${slug}/send#nft`}>
                         <div
                           onClick={() => dispatch(setTreasurySendActiveTab(2))}
                           className="flex gap-2 px-5 py-3 text-content-primary items-center hover:bg-background-tertiary rounded-lg cursor-pointer"
@@ -138,6 +145,8 @@ const TreasuryDetailsLayout = ({ children }: { children: React.ReactNode }) => {
                       ? category.title === "overview"
                       : currentPath === "settings"
                       ? category.title === "settings"
+                      : currentPath === "nft"
+                      ? category.title === "nft"
                       : category.title === "transactions"
                   }
                   startIcon={category.icon}

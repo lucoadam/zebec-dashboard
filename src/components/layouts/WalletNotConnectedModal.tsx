@@ -111,7 +111,7 @@ const WalletNotConnectedModal: NextPage = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsInitialized(true)
-    }, 800)
+    }, 1000)
   }, [])
 
   return (

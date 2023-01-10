@@ -25,5 +25,8 @@
       "title": "مراجعة وتأكيد",
       "description": "مراجعة NFT وتأكيد الإيداع"
     }
-  }
+  },
+  "no-nft-in-treasury": "ليس لديك أي NFT مودعة في الخزانة حتى الآن.",
+  "no-nft-in-wallet": "ليس لديك أي NFT في المحفظة.",
+  "withdraw-to-your-wallet": "سحب إلى محفظتك"
 }
