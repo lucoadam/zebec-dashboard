@@ -57,6 +57,7 @@ const Common: FC = () => {
     if (isSigned && tokens.length === 0) {
       dispatch(fetchTokens())
     }
+    // eslint-disable-next-line
   }, [isSigned, tokens])
 
   useEffect(() => {
