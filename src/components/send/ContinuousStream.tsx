@@ -564,9 +564,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         <div className="text-caption text-content-tertiary font-normal pt-2">
           {t("send:continuous-stream-description")}
         </div>
+        <div className="text-caption text-content-primary font-normal pt-2">
+          <span className="text-warning">{t("send:note")}&nbsp;</span>
+          {t("send:continuous-stream-note", {
+            ecosystem: `${
+              walletObject.chainId === "solana"
+                ? "Solana ecosystem"
+                : "Binance chain"
+            }`
+          })}
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           {/* Transaction Name and Receiver Wallet */}
-          <div className="mt-12 grid lg:grid-cols-2 gap-3">
+          <div className="mt-10 grid lg:grid-cols-2 gap-3">
             <div>
               <InputField
                 label={t("send:transaction-name")}

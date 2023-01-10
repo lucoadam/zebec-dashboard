@@ -10,7 +10,7 @@ export const TransactionSkeleton: FC<TransactionSkeletonProps> = ({
 }) => {
   const { currentTheme } = useCurrentTheme()
   return (
-    <div className="px-6 space-y-4 w-full divide-y divide-outline shadow dark:shadow-none animate-pulse pb-6">
+    <div className="px-6 space-y-4 w-full divide-y divide-outline dark:shadow animate-pulse pb-6">
       {new Array(count).fill(Math.random()).map((_, index) => (
         <div key={index} className="flex items-center gap-8">
           <div className="flex items-center mt-4 space-x-3">

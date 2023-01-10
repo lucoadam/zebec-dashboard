@@ -10,6 +10,7 @@ import {
   Button,
   CollapseDropdown,
   EmptyDataState,
+  IconButton,
   InputField,
   Toggle
 } from "components/shared"
@@ -173,6 +174,11 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
     // eslint-disable-next-line
   }, [toggleReceiverDropdown])
 
+  const resetForm = () => {
+    reset()
+    changeNFT && changeNFT(undefined)
+  }
+
   return (
     <>
       <div
@@ -181,9 +187,18 @@ export const SendNFT: FC<SendNFTProps> = ({ className, nft, changeNFT }) => {
           className ?? ""
         )}
       >
-        <div className="text-heading-4 text-content-primary font-semibold">
-          {t("send:nft")}
+        <div className="flex justify-between">
+          <div className="text-heading-4 text-content-primary font-semibold">
+            {t("send:nft")}
+          </div>
+          <IconButton
+            data-tip="Reset"
+            icon={<Icons.RefreshIcon />}
+            className="w-7 h-7"
+            onClick={resetForm}
+          />
         </div>
+
         <div className="text-caption text-content-tertiary font-normal pt-2">
           {t("send:nft-description")}
         </div>

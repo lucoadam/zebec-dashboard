@@ -41,5 +41,7 @@
   "enter-nft-address": "أدخل عنوان NFT",
   "nft-description": "سيتلقى المستلم الخاص بك على الفور NFT واحد يتم توقيع المعاملة من قبل جميع المالكين.",
   "once-approved": "بمجرد الموافقة على المعاملة.",
-  "overview-receiver-wallet": "محفظة الاستقبال"
+  "overview-receiver-wallet": "محفظة الاستقبال",
+  "note": "ملحوظة:",
+  "continuous-stream-note": "نحن ندعم التدفقات إلى المحافظ على النظام البيئي {{ecosystem}}. لا يمكن سحب الرموز المتدفقة إلى محافظ الصرف."
 }
