@@ -45,7 +45,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <ConnectionProvider endpoint={endpoint}>
           <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>
-              <ThemeProvider>
+              <ThemeProvider
+                enableSystem={false}
+                disableTransitionOnChange={true}
+              >
                 <ZebecContextProvider>
                   <Component {...pageProps} />
                   <Common />

@@ -87,8 +87,8 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
         leaveFrom="transform opacity-100 translate-x-0"
         leaveTo={`transform opacity-100 ${positionStyle}`}
       >
-        <div className="rounded-t-md shadow-toaster overflow-hidden">
-          <div className="px-4 pt-4 pb-5 flex items-center gap-x-3 bg-outline backdrop-blur-[120px]">
+        <div className="rounded-t-md shadow-3 dark:shadow-toaster overflow-hidden">
+          <div className="px-4 pt-4 pb-5 flex items-center gap-x-3 bg-background-primary rounded-t-md border border-b-0 border-outline dark:border-0 dark:bg-outline dark:backdrop-blur-[120px]">
             <div
               className={twMerge(
                 `h-7 w-7 rounded-xl grid place-content-center text-content-primary flex-shrink-0`,
@@ -132,7 +132,7 @@ export const Toast: FC<ActiveTostProps> = ({ position, ...toast }) => {
               </a>
             )}
           </div>
-          <div className="w-full h-0.5 bg-content-contrast relative">
+          <div className="w-full h-0.5 bg-background-light dark:bg-content-contrast relative">
             <div
               className={twMerge(
                 `absolute h-full w-0 bg-success animate-progress`,

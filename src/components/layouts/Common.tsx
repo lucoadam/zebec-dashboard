@@ -54,6 +54,12 @@ const Common: FC = () => {
   }, [])
 
   useEffect(() => {
+    if (isSigned && tokens.length === 0) {
+      dispatch(fetchTokens())
+    }
+  }, [isSigned, tokens])
+
+  useEffect(() => {
     zebecContext.initialize(solanaWalletObject)
     // eslint-disable-next-line
   }, [solanaWalletObject.connected])
@@ -116,7 +122,7 @@ const Common: FC = () => {
   }, [walletObject.publicKey, tokens, isSigned, zebecContext, signer])
 
   useEffect(() => {
-    if (isSigned) {
+    if (isSigned && signer) {
       dispatch(fetchAddressBook())
       dispatch(fetchTreasury())
       dispatch(getPreferences())
@@ -142,7 +148,7 @@ const Common: FC = () => {
       return () => clearInterval(interval)
     }
     // eslint-disable-next-line
-  }, [isSigned])
+  }, [isSigned, signer])
 
   // const createVaultFunction = async () => {
   //   const data = {

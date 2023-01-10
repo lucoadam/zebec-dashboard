@@ -26,7 +26,7 @@ export const EVMDepositedAssets: FC<{
   balanceTokens = [],
   pdaBalanceTokens = [],
   streamingBalanceTokens = [],
-  tableMaxHeight = 402
+  tableMaxHeight = 620
 }) => {
   const { t } = useTranslation("treasuryOverview")
   const [activeTab, setActiveTab] = useState<number>(0)

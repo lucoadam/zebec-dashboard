@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/hooks"
 import * as Icons from "assets/icons"
 import Layout from "components/layouts/Layout"
 import { Breadcrumb, BreadcrumbRightContent, Button } from "components/shared"
@@ -14,12 +15,13 @@ const Treasury: NextPage = () => {
   const { t } = useTranslation()
   const history = useRouter()
   const walletObject = useZebecWallet()
+  const { isSigned } = useAppSelector((state) => state.common)
 
   useEffect(() => {
-    if (walletObject.chainId !== "solana") {
+    if (isSigned && walletObject.chainId !== "solana") {
       history.replace("/")
     }
-  }, [walletObject, history])
+  }, [isSigned, walletObject, history])
   return (
     <Layout pageTitle="Zebec - Treasury">
       <div className="pt-[76px]">

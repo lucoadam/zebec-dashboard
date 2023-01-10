@@ -136,11 +136,16 @@ const CancelModal: FC = ({}) => {
       }
       dispatch(setLoading(false))
       dispatch(toggleCancelModal())
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       console.debug("cancel stream error:", e)
       setLoading(false)
       dispatch(toggleCancelModal())
-      dispatch(toast.error({ message: "Stream cancel failed" }))
+      if (e?.code === "ACTION_REJECTED") {
+        dispatch(toast.error({ message: "User rejected the transaction" }))
+      } else {
+        dispatch(toast.error({ message: "Stream cancel failed" }))
+      }
     }
   }
 

@@ -64,7 +64,7 @@ export const IconButton: FC<IconButtonProps> = (props) => {
     <>
       <button
         className={twMerge(
-          `grid place-content-center text-content-primary hover:text-primary-contrast text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles}`,
+          `grid place-content-center text-content-primary text-sm focus:outline-0 ${sizeStyles} ${variantStyles} ${shapeStyles}`,
           className ?? ""
         )}
         {...rest}

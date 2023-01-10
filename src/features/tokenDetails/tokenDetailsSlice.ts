@@ -160,7 +160,6 @@ const bscTokensMainnet = [
     chain_id: "solana",
     network: "Binance Smart Chain Mainnet"
   },
-
   {
     symbol: "HAY",
     name: "Hay DestableCoin",
@@ -176,6 +175,24 @@ const bscTokensMainnet = [
     decimal: 8,
     mint: "Eh4ZP3fJQRCX3xeGUvrbNtajGumFgT978A1pWZURqYuw",
     coingeco_id: "helio-protocol-hay",
+    chain_id: "solana",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "LEON",
+    name: "Leon Token",
+    decimal: 18,
+    mint: "0x27E873bee690C8E161813DE3566E9E18a64b0381",
+    coingeco_id: "leon-token",
+    chain_id: "56",
+    network: "Binance Smart Chain Mainnet"
+  },
+  {
+    symbol: "WLEON",
+    name: "Wormhole Leon Token",
+    decimal: 9,
+    mint: "CKcFJYasJFgLwvgFJrk4zgAZhwiR7z4jb4s7iFrkvQ8M",
+    coingeco_id: "leon-token",
     chain_id: "solana",
     network: "Binance Smart Chain Mainnet"
   }

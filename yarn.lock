@@ -3485,7 +3485,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@zebec-protocol/wormhole-bridge@^1.0.9":
+"@zebec-protocol/wormhole-bridge@1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@zebec-protocol/wormhole-bridge/-/wormhole-bridge-1.0.9.tgz#b8b76646634a10c878585acc95d9ae0fb4f6a0b5"
   integrity sha512-KSE+97AmiRyO+1pVnAGLDBVH/EmqM7DUtKlWC6/1orcN0Z/v5gU/n8K9X2imd64Vbq9XrM12xqnG7gIZ//JtUA==

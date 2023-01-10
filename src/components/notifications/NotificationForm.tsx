@@ -74,7 +74,7 @@ export const NotificationForm: React.FC<NotificationProps> = (
             {t("common:notifications.powered-by")}
           </div>
           <div className="pb-4">
-            <Icons.Notif className="w-16" />
+            <Icons.Notif className="w-16 text-content-primary dark:text-[#F5F6FB]" />
           </div>
         </div>
       </div>

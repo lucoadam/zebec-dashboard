@@ -2,6 +2,7 @@ import React, { FC } from "react"
 import { twMerge } from "tailwind-merge"
 import { ButtonProps, ButtonSize, ButtonVariant } from "./Button.d"
 import * as Icons from "assets/icons"
+import { useCurrentTheme } from "hooks"
 
 const getButtonSizeStyles = (size: ButtonSize, variant: ButtonVariant) => {
   switch (size) {
@@ -29,12 +30,17 @@ const getButtonIconStyles = (size: ButtonSize) => {
   }
 }
 
-const getButtonVariantStyles = (variant: ButtonVariant) => {
+const getButtonVariantStyles = (
+  variant: ButtonVariant,
+  theme: string | undefined
+) => {
   switch (variant) {
     case "default":
       return `outline outline-1 outline-outline outline-offset-[-1px] bg-background-secondary focus:bg-background-tertiary hover:bg-background-tertiary`
     case "gradient":
-      return `primary-gradient-border focus:outline-0`
+      return theme === "dark"
+        ? `primary-gradient-border focus:outline-0`
+        : `bg-primary hover:bg-primary-dark p-0.5`
     case "danger":
       return `bg-error focus:outline-0`
     default:
@@ -63,16 +69,17 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       disabled,
       ...rest
     } = props
+    const { currentTheme } = useCurrentTheme()
 
     const sizeStyles = getButtonSizeStyles(size, variant)
     const iconSizeStyles = getButtonIconStyles(size)
-    const variantStyles = getButtonVariantStyles(variant)
+    const variantStyles = getButtonVariantStyles(variant, currentTheme)
 
     return (
       <>
         <button
           className={twMerge(
-            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary hover:text-primary-contrast disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
+            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary disabled:text-content-secondary dark:disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
             className ?? ""
           )}
           {...rest}
