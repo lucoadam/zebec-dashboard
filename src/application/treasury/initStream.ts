@@ -23,6 +23,8 @@ interface InitStreamDataProps {
     token: string
     remarks: string
     file?: string
+    can_cancel: boolean
+    can_update: boolean
   }
   callback?: (message: "success" | "error") => void
 }
@@ -92,7 +94,8 @@ export const initStreamTreasury =
           pda: response?.data?.stream_data_account,
           transaction_account: response?.data?.transaction_account,
           transaction_hash: response?.data?.transactionHash,
-          file: data.file
+          file: data.file,
+          can_cancel: data.can_cancel
         }
         if (!data.token_mint_address) {
           const backendData = payloadData

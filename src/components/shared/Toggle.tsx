@@ -8,7 +8,8 @@ interface ToggleProps {
 }
 
 export const Toggle: FC<ToggleProps> = (props) => {
-  const { text, checked, disabled } = props
+  const { text, checked, disabled, onChange } = props
+
   return (
     <>
       <div>
@@ -20,8 +21,8 @@ export const Toggle: FC<ToggleProps> = (props) => {
             type="checkbox"
             id={`toggle-${text}`}
             className="sr-only"
-            onChange={props.onChange}
-            {...{ checked }}
+            onChange={onChange}
+            checked={checked || false}
             disabled={disabled}
           />
           <div

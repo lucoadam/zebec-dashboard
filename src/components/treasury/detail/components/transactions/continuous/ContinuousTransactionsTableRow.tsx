@@ -87,7 +87,8 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
     transaction_hash,
     file,
     approval_status,
-    latest_transaction_event
+    latest_transaction_event,
+    can_cancel
   } = transaction
 
   const totalTransactionAmount =
@@ -338,17 +339,22 @@ const ContinuousTransactionsTableRow: FC<ScheduledTableRowProps> = ({
                         }}
                       />
                     )}
-                    {status !== StatusType.CANCELLED && currentTime < end_time && (
-                      <Button
-                        title={`${t("table.cancel")}`}
-                        size="small"
-                        startIcon={
-                          <Icons.CrossIcon className="text-content-contrast" />
-                        }
-                        onClick={() => {
-                          dispatch(showCancelModal(transaction))
-                        }}
-                      />
+                    {can_cancel === true && (
+                      <>
+                        {status !== StatusType.CANCELLED &&
+                          currentTime < end_time && (
+                            <Button
+                              title={`${t("table.cancel")}`}
+                              size="small"
+                              startIcon={
+                                <Icons.CrossIcon className="text-content-contrast" />
+                              }
+                              onClick={() => {
+                                dispatch(showCancelModal(transaction))
+                              }}
+                            />
+                          )}
+                      </>
                     )}
                   </>
                 )}

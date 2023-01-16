@@ -43,5 +43,6 @@
   "once-approved": "once the transaction is approved.",
   "overview-receiver-wallet": "receiver wallet",
   "note": "Note:",
-  "continuous-stream-note": "We only support streams to wallets on {{ecosystem}}. Tokens streamed to exchange wallets can't be withdrawn."
+  "continuous-stream-note": "We only support streams to wallets on {{ecosystem}}. Tokens streamed to exchange wallets can't be withdrawn.",
+  "enable-cancellation": "Enable cancellation"
 }
