@@ -66,7 +66,6 @@ export const sendNftTransfer = createAsyncThunk<
 >("stream/sendNftTransfer", async (data, { dispatch, getState }) => {
   const { treasury } = getState()
   if (treasury.activeTreasury?.uuid) {
-    console.log(data)
     const uuid = treasury.activeTreasury.uuid
     await api.post(`/treasury/${uuid}/nft-transactions/`, data)
     dispatch(fetchTreasuryNftTransactions({ treasury_uuid: uuid }))

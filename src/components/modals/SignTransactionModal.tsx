@@ -86,7 +86,6 @@ const SignTransactionModal: FC = ({}) => {
 
   const signNftTransactionCallback = (message: CallbackMessageType) => {
     if (message === "success") {
-      alert("Success")
       dispatch(signNftTransaction({ uuid: transaction.uuid }))
     } else {
       dispatch(setLoading(false))
