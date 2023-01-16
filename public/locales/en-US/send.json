@@ -44,5 +44,6 @@
   "overview-receiver-wallet": "receiver wallet",
   "note": "Note:",
   "continuous-stream-note": "We only support streams to wallets on {{ecosystem}}. Tokens streamed to exchange wallets can't be withdrawn.",
-  "enable-cancellation": "Enable cancellation"
+  "enable-cancellation": "Enable cancellation",
+  "enable-cancellation-info": "The stream can only be cancelled if its initiated with enable cancellation true."
 }
