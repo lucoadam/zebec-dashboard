@@ -44,5 +44,6 @@
   "overview-receiver-wallet": "محفظة الاستقبال",
   "note": "ملحوظة:",
   "continuous-stream-note": "نحن ندعم التدفقات إلى المحافظ على النظام البيئي {{ecosystem}}. لا يمكن سحب الرموز المتدفقة إلى محافظ الصرف.",
-  "enable-cancellation": "تمكين الإلغاء"
+  "enable-cancellation": "تمكين الإلغاء",
+  "enable-cancellation-info": "لا يمكن إلغاء الدفق إلا إذا بدأ مع تمكين الإلغاء صحيحًا."
 }

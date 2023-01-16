@@ -1090,12 +1090,7 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
                 onChange={toggleEdit}
                 checked={getValues().enableCancellation}
               />
-              <div
-                data-tip={
-                  "The stream can only be cancelled if its initiated with enable cancellation true."
-                }
-                className=""
-              >
+              <div data-tip={t("send:enable-cancellation-info")} className="">
                 <Icons.Info className="w-4 h-4" />
               </div>
             </div>
