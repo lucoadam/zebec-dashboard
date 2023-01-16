@@ -17,6 +17,8 @@ import { DepositNFTProps } from "./DepositNFT.d"
 import { initDepositNft } from "application"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { toggleWalletApprovalMessageModal } from "features/modals/walletApprovalMessageSlice"
+import { useRouter } from "next/router"
+import { fetchAssociatedNfts } from "features/treasuryNft/treasuryNftSlice"
 
 const StepsList = [
   {
@@ -31,12 +33,29 @@ const StepsList = [
 
 export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { activeTreasury } = useAppSelector((state) => state.treasury)
   const { token } = useContext(ZebecContext)
   const { publicKey } = useWallet()
   const dispatch = useAppDispatch()
   const [currentStep, setCurrentStep] = useState(0)
   const [error, setError] = useState(false)
+
+  const depositNftCallback = (message: "success" | "error") => {
+    if (message === "success") {
+      if (activeTreasury && publicKey) {
+        router.push(`/treasury/${activeTreasury.uuid}/nft`)
+        fetchAssociatedNfts({
+          address: activeTreasury.treasury_address,
+          type: "treasury"
+        })
+        fetchAssociatedNfts({
+          address: publicKey.toString(),
+          type: "wallet"
+        })
+      }
+    }
+  }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (
     e: FormEvent<HTMLFormElement>
@@ -61,7 +80,8 @@ export const DepositNFTLeft: FC<DepositNFTProps> = ({ className, nft }) => {
         dispatch(
           initDepositNft({
             data,
-            token
+            token,
+            callback: depositNftCallback
           })
         )
       }

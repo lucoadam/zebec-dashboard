@@ -13,6 +13,7 @@ interface ExecuteDepositNftDataProps {
     amount: number
   }
   token: ZebecTokenStream
+  callback?: (message: "success" | "error") => void
 }
 
 interface TransferNFTFromSafeProps {
@@ -34,13 +35,11 @@ interface TransferNFTFromSafeProps {
 }
 
 export const initDepositNft =
-  ({ data, token }: ExecuteDepositNftDataProps) =>
+  ({ data, token, callback }: ExecuteDepositNftDataProps) =>
   async (dispatch: AppDispatch) => {
     try {
-      console.log(data)
       let response
       response = await token.directTransfer(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
@@ -48,6 +47,9 @@ export const initDepositNft =
             transactionHash: response?.data?.transactionHash
           })
         )
+        if (callback) {
+          callback("success")
+        }
       } else {
         dispatch(
           toast.error({
@@ -56,7 +58,6 @@ export const initDepositNft =
         )
       }
     } catch (error: any) {
-      console.log(error)
       dispatch(
         toast.error({
           message: error?.message ?? "Unknown Error"
@@ -74,7 +75,6 @@ export const initTransferNftFromTreasury =
     try {
       let response
       response = await treasuryToken.transferTokenFromSafe(data)
-      console.log(response)
       if (response.status.toLocaleLowerCase() === "success") {
         dispatch(
           toast.success({
