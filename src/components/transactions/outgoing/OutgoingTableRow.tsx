@@ -52,7 +52,8 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
     file,
     latest_transaction_event,
     receiverEvm,
-    senderEvm
+    senderEvm,
+    can_cancel
   } = transaction
 
   const totalTransactionAmount =
@@ -206,17 +207,21 @@ const OutgoingTableRow: FC<OutgoingTableRowProps> = ({
                   />
                 )}
 
-                {status !== StatusType.CANCELLED && currentTime < end_time && (
-                  <Button
-                    title="Cancel"
-                    size="small"
-                    startIcon={
-                      <Icons.CrossIcon className="text-content-contrast" />
-                    }
-                    onClick={() => {
-                      dispatch(showCancelModal(transaction))
-                    }}
-                  />
+                {can_cancel === true && (
+                  <>
+                    {status !== StatusType.CANCELLED && currentTime < end_time && (
+                      <Button
+                        title="Cancel"
+                        size="small"
+                        startIcon={
+                          <Icons.CrossIcon className="text-content-contrast" />
+                        }
+                        onClick={() => {
+                          dispatch(showCancelModal(transaction))
+                        }}
+                      />
+                    )}
+                  </>
                 )}
               </div>
               <IconButton

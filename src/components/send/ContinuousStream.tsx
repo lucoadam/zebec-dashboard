@@ -61,6 +61,7 @@ import {
   ContinuousStreamProps
 } from "./ContinuousStream.d"
 import { checkPDAinitialized } from "utils/checkPDAinitialized"
+import ReactTooltip from "react-tooltip"
 
 const intervals = [
   {
@@ -172,9 +173,15 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
   })
 
   useEffect(() => {
+    ReactTooltip.rebuild()
+  }, [router])
+
+  useEffect(() => {
     if (tokenDetails.length > 0 && !currentToken.symbol) {
       setCurrentToken(tokenDetails[0])
       setValue("symbol", tokenDetails[0].symbol)
+      setValue("enableStreamRate", false)
+      setValue("enableCancellation", true)
     }
   }, [tokenDetails, setValue, currentToken.symbol])
 
@@ -306,7 +313,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
       ).unix(),
       token_mint_address:
         currentToken.symbol === "SOL" ? "" : currentToken.mint,
-      file: data.file
+      file: data.file,
+      can_cancel:
+        data.enableCancellation === undefined ? true : data.enableCancellation,
+      can_update: true
     }
     dispatch(toggleWalletApprovalMessageModal())
     if (type === "send") {
@@ -530,6 +540,10 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         .format("hh:mm A")
     )
     setValue("enableStreamRate", !getValues().enableStreamRate)
+  }
+
+  const toggleEdit = () => {
+    setValue("enableCancellation", !getValues().enableCancellation)
   }
 
   useEffect(() => {
@@ -1050,6 +1064,19 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
             </div>
           </div>
 
+          {/* Add file */}
+          {addFile && (
+            <div className="grid lg:grid-cols-2 gap-3 mt-4">
+              <div className=""></div>
+              <FileUpload
+                name={"file"}
+                setValue={setValue}
+                resetField={resetField}
+                // isReset={resetFile}
+              />
+            </div>
+          )}
+
           {/* Toggle stream rate and Add file*/}
           <div className="mt-4 grid lg:grid-cols-2 gap-3">
             <Toggle
@@ -1057,14 +1084,21 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
               onChange={toggleStreamRate}
               checked={getValues().enableStreamRate}
             />
-            {addFile && (
-              <FileUpload
-                name={"file"}
-                setValue={setValue}
-                resetField={resetField}
-                // isReset={resetFile}
+            <div className="flex items-center gap-x-1.5">
+              <Toggle
+                text={t("send:enable-cancellation")}
+                onChange={toggleEdit}
+                checked={getValues().enableCancellation}
               />
-            )}
+              <div
+                data-tip={
+                  "The stream can only be cancelled if its initiated with enable cancellation true."
+                }
+                className=""
+              >
+                <Icons.Info className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           {/* Stream rate field */}

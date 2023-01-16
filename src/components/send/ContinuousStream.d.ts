@@ -13,6 +13,7 @@ export interface ContinuousStreamFormData {
   startTime: string
   endTime: string
   enableStreamRate?: boolean
+  enableCancellation?: boolean
   noOfTimes?: string
   tokenAmount?: string
   interval?: string
