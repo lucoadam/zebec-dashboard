@@ -12,7 +12,7 @@ export const constants = {
     {
       title: "v1",
       display: "v1",
-      url: "https://zebec.io"
+      url: "https://zebec.io/connect-wallet"
     },
     {
       title: "v2 (beta)",
