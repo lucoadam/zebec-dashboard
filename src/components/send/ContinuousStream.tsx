@@ -405,7 +405,13 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         ).unix(),
         token_mint_address:
           currentToken.mint === "solana" ? "" : currentToken.mint,
-        file: data.file
+        file: data.file,
+        can_cancel:
+          data.enableCancellation === undefined
+            ? true
+            : data.enableCancellation,
+        can_update:
+          data.enableCancellation === undefined ? true : data.enableCancellation
       }
       const sourceChain = getEVMToWormholeChain(walletObject.chainId)
 
@@ -420,8 +426,8 @@ export const ContinuousStream: FC<ContinuousStreamProps> = ({
         formattedData.amount.toString(),
         formattedData.receiverEvm,
         formattedData.senderEvm,
-        true,
-        true,
+        data.enableCancellation === undefined ? true : data.enableCancellation,
+        data.enableCancellation === undefined ? true : data.enableCancellation,
         formattedData.token_mint_address
       )
       const sequence = parseSequenceFromLogEth(
