@@ -44,6 +44,8 @@ import BNBIcon from "./bnb.svg"
 import BNBUSDIcon from "./bnb-usd.svg"
 import HayDestableIcon from "./hay-destable.svg"
 import LeonIcon from "./leon.svg"
+import YRDXPIcon from "./yrdxp.svg"
+import Liracon from "./lira.svg"
 
 export {
   SolIcon as SOL,
@@ -99,5 +101,7 @@ export {
   HayDestableIcon as HAY,
   HayDestableIcon as WHAY,
   LeonIcon as LEON,
-  LeonIcon as WLEON
+  LeonIcon as WLEON,
+  YRDXPIcon as YRDXP,
+  Liracon as Lira
 }
