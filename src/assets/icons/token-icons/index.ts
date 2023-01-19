@@ -103,5 +103,5 @@ export {
   LeonIcon as LEON,
   LeonIcon as WLEON,
   YRDXPIcon as YRDXP,
-  Liracon as Lira
+  Liracon as LIRA
 }
