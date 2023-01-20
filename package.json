@@ -45,7 +45,10 @@
     "tailwind-merge": "^1.3.0",
     "wagmi": "^0.6.4",
     "yup": "^0.32.11",
-    "zebec-anchor-sdk-npmtest": "^1.6.1"
+    "zebec-anchor-sdk-npmtest": "^1.5.9",
+    "@safe-global/safe-core-sdk": "^3.2.2",
+    "@safe-global/safe-core-sdk-types": "^1.8.0",
+    "@safe-global/safe-ethers-lib": "^1.8.0"
   },
   "devDependencies": {
     "@notifi-network/notifi-core": "^0.35.0",
