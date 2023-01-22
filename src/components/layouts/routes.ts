@@ -15,6 +15,12 @@ const routesArray: RoutesArrayProps[] = [
     type: "link"
   },
   {
+    name: "safes",
+    path: "/safes",
+    Icon: NavIcons.BoxFrameIcon,
+    type: "link"
+  },
+  {
     name: "transactions",
     path: "/transactions/incoming",
     Icon: NavIcons.TransactionIcon,
@@ -83,17 +89,17 @@ const deviceRoutes: DeviceRoutes[] = [
     width: 1024,
     main: [],
     more: [],
-    menu: ["dashboard", "transactions", "treasury", "address-book"]
+    menu: ["dashboard", "transactions", "treasury", "safes", "address-book"]
   },
   {
     width: 1280,
     main: ["dashboard", "transactions"],
-    more: ["treasury", "address-book"],
+    more: ["treasury", "safes", "address-book"],
     menu: []
   },
   {
     width: Number.MAX_VALUE,
-    main: ["dashboard", "transactions", "treasury", "address-book"],
+    main: ["dashboard", "transactions", "treasury", "safes", "address-book"],
     more: [],
     menu: []
   }

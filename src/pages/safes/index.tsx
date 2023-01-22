@@ -25,7 +25,7 @@ const Treasury: NextPage = () => {
           >
             <BreadcrumbRightContent>
               <div className="md:flex gap-x-3 pt-4 md:pt-0">
-                <Link href="/treasury/create">
+                <Link href="/safes/create">
                   <Button
                     title={`${t("treasury:create-new-treasury")}`}
                     variant="gradient"

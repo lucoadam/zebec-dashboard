@@ -27,7 +27,6 @@ const AddOwners: FC<StepsComponentProps> = ({
   treasury
 }) => {
   const receiverDropdownWrapper = useRef(null)
-  const useWalletObject = useWallet()
   const walletObject = useZebecWallet()
   const addressBook = useAppSelector((state) => state.address.addressBooks)
 
@@ -56,9 +55,9 @@ const AddOwners: FC<StepsComponentProps> = ({
 
   useEffect(() => {
     if (owners.length === 0) {
-      setValue("wallet", useWalletObject?.publicKey?.toString())
+      setValue("wallet", walletObject?.originalAddress?.toString())
     }
-  }, [useWalletObject, owners, setValue])
+  }, [walletObject, owners, setValue])
 
   useEffect(() => {
     if (walletObject.chainId) {

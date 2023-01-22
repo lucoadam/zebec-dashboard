@@ -269,10 +269,9 @@ const Navbar: FC = () => {
                             className="w-full"
                           >
                             <div
-                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
-                                version.display === currentVersion.display &&
+                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${version.display === currentVersion.display &&
                                 "bg-background-tertiary"
-                              } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                                } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
                             >
                               {version.display === currentVersion.display && (
                                 <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
@@ -290,10 +289,9 @@ const Navbar: FC = () => {
                           >
                             <div
                               onClick={() => setToggleDropdown(!toggleDropdown)}
-                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${
-                                version.display === currentVersion.display &&
+                              className={`justify-center flex gap-x-2 w-full px-4 py-[10px] mb-[2px] items-center ${version.display === currentVersion.display &&
                                 "bg-background-tertiary"
-                              } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
+                                } hover:bg-background-tertiary rounded-lg cursor-pointer text-content-primary`}
                             >
                               {version.display === currentVersion.display && (
                                 <Icons.CheckCircleIcon className="w-5 h-5 text-primary" />
@@ -321,8 +319,10 @@ const Navbar: FC = () => {
               switch (route.type) {
                 case "link":
                   if (
-                    useWalletObject.chainId !== "solana" &&
-                    route.path === "/treasury"
+                    (useWalletObject.chainId !== "solana" &&
+                      route.path === "/treasury") ||
+                    (useWalletObject.chainId === "solana" &&
+                      route.path === "/safes")
                   ) {
                     return undefined
                   }
@@ -388,9 +388,8 @@ const Navbar: FC = () => {
                 />
                 <div className="flex flex-1 justify-between items-center">
                   <div
-                    className={`flex items-center gap-x-3 ${
-                      !useWalletObject.connected && "blur-[2px]"
-                    }`}
+                    className={`flex items-center gap-x-3 ${!useWalletObject.connected && "blur-[2px]"
+                      }`}
                   >
                     <div className="flex flex-col justify-between h-full">
                       <div
@@ -421,13 +420,12 @@ const Navbar: FC = () => {
               {getMenuRoutes(width).map((route, index) => (
                 <div
                   className={`
-                ${
-                  (router.pathname === route.path ||
-                    (route.path !== "/" &&
-                      route.path &&
-                      router.pathname.includes(route.path.split("/")[1]))) &&
-                  "bg-background-primary"
-                }
+                ${(router.pathname === route.path ||
+                      (route.path !== "/" &&
+                        route.path &&
+                        router.pathname.includes(route.path.split("/")[1]))) &&
+                    "bg-background-primary"
+                    }
                 py-2 px-2 rounded-[4px]`}
                   key={index}
                 >

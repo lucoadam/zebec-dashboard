@@ -4,7 +4,7 @@
   "editor.tabSize": 2,
   "svg.preview.background": "editor",
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"

@@ -82,7 +82,7 @@ export const Button: FC<ButtonProps> = React.forwardRef<
       <>
         <button
           className={twMerge(
-            `rounded-lg whitespace-nowrap transition duration-300 text-content-primary disabled:text-content-secondary dark:disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
+            `rounded-lg whitespace-nowrap transition duration-300 text-white disabled:text-content-secondary dark:disabled:text-[#ffffff80] disabled:cursor-not-allowed ${variantStyles}`,
             className ?? ""
           )}
           {...rest}

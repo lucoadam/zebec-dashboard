@@ -1,11 +1,11 @@
 import { useAppDispatch } from "app/hooks"
-import ZebecContext from "app/zebecContext"
 import { CreatingTreasuryGif } from "assets/images"
-import { createTreasury } from "application"
 import { useRouter } from "next/router"
-import { FC, useContext, useEffect } from "react"
+import { FC, useEffect } from "react"
 import { Treasury } from "../CreateTreasury.d"
 import Image from "next/image"
+import { createSafeEvm } from "application/safe-evm/createTreasury"
+import { useSigner } from "wagmi"
 
 interface CreatingTreasuryProps {
   treasury: Treasury
@@ -16,18 +16,22 @@ const CreatingTreasury: FC<CreatingTreasuryProps> = ({
   treasury,
   setCurrentStep
 }) => {
-  const zebecCtx = useContext(ZebecContext)
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const { data: signer } = useSigner()
 
   useEffect(() => {
-    zebecCtx.treasury &&
+    signer &&
       dispatch(
-        createTreasury({
-          data: treasury,
-          treasury: zebecCtx.treasury,
+        createSafeEvm({
+          data: {
+            name: treasury.name,
+            minValidator: treasury.minValidator,
+            owners: treasury.owners.map(each => each.wallet)
+          },
+          signer,
           callback: () => {
-            router.push("/treasury")
+            router.push("/safes")
           },
           errorCallback: () => {
             setCurrentStep(2)
@@ -36,7 +40,7 @@ const CreatingTreasury: FC<CreatingTreasuryProps> = ({
       )
 
     // eslint-disable-next-line
-  }, [zebecCtx.treasury])
+  }, [signer])
 
   return (
     <>
