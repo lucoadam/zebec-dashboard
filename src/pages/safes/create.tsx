@@ -16,7 +16,7 @@ const CreateTreasuryPage: NextPage = () => {
   const { isSigned } = useAppSelector((state) => state.common)
 
   useEffect(() => {
-    if (isSigned && walletObject.chainId !== "solana") {
+    if (isSigned && walletObject.chainId === "solana") {
       history.replace("/")
     }
   }, [isSigned, walletObject, history])
