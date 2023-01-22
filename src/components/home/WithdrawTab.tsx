@@ -243,11 +243,7 @@ const WithdrawTab: FC = () => {
         )
 
         // check if message is relayed
-        const response = await listenWormholeTransactionStatus(
-          signedVaa,
-          walletObject.originalAddress?.toString() as string,
-          sourceChain
-        )
+        const response = await listenWormholeTransactionStatus(signedVaa)
 
         if (response === "success") {
           dispatch(switchxWalletApprovalMessageStep(1))
@@ -295,11 +291,7 @@ const WithdrawTab: FC = () => {
           )
 
           // check if message is relayed
-          const response = await listenWormholeTransactionStatus(
-            signedVaa,
-            walletObject.originalAddress?.toString() as string,
-            sourceChain
-          )
+          const response = await listenWormholeTransactionStatus(signedVaa)
           if (response === "success") {
             withdrawCallback()
             dispatch(switchxWalletApprovalMessageStep(2))
@@ -369,11 +361,7 @@ const WithdrawTab: FC = () => {
         )
 
         // check if message is relayed
-        const response = await listenWormholeTransactionStatus(
-          signedVaa,
-          walletObject.originalAddress?.toString() as string,
-          sourceChain
-        )
+        const response = await listenWormholeTransactionStatus(signedVaa)
         if (response === "success") {
           withdrawCallback()
           dispatch(toast.success({ message: "Withdrawal completed" }))

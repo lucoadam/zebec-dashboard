@@ -1,8 +1,3 @@
-import {
-  ChainId,
-  toChainName,
-  tryNativeToUint8Array
-} from "@certusone/wormhole-sdk"
 import { connection } from "constants/cluster"
 import {
   getIsRelayCompleted,
@@ -10,16 +5,13 @@ import {
 } from "@zebec-protocol/wormhole-bridge"
 
 export const listenWormholeTransactionStatus = async (
-  signedVaa: Uint8Array,
-  sender: string,
-  chainId: ChainId = 4
+  signedVaa: Uint8Array
 ) => {
   try {
     let retry = 0
     while (retry < 36) {
       const response = await getIsRelayCompleted(
         signedVaa,
-        tryNativeToUint8Array(sender, toChainName(chainId)),
         connection,
         SOL_ZEBEC_BRIDGE_ADDRESS,
         "bundler",
